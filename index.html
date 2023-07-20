@@ -1,9 +1,29 @@
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<!DOCTYPE html>
+<html>
 <head>
-    <title>My Website Home Page</title>
+    <title>Interactive X and Y Table</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <h1>Welcome to my website</h1>
-  <p>Now hosted on Amazon S3!</p>
+    <div class="table-container">
+        <table id="xy-table">
+            <thead>
+                <tr>
+                    <th>X</th>
+                    <th>Y</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" class="x-value" value=""></td>
+                    <td><input type="text" class="y-value" value=""></td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="add-row-btn">Add Row</button>
+        <button id="save-state-btn">Save State</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
