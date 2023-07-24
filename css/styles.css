@@ -10996,7 +10996,7 @@ html {
     font-size: 1.5rem;
   }
 }
-.students .students-item {
+.student .student-item {
   cursor: pointer;
   position: relative;
   display: block;
@@ -11004,7 +11004,7 @@ html {
   border-radius: 0.5rem;
   overflow: hidden;
 }
-.students .students-item .students-item-caption {
+.student .student-item .student-item-caption {
   position: absolute;
   top: 0;
   left: 0;
@@ -11012,24 +11012,24 @@ html {
   opacity: 0;
   background-color: rgba(26, 188, 156, 0.9);
 }
-.students .students-item .students-item-caption:hover {
+.student .student-item .student-item-caption:hover {
   opacity: 1;
 }
-.students .students-item .students-item-caption .students-item-caption-content {
+.student .student-item .student-item-caption .student-item-caption-content {
   font-size: 1.5rem;
 }
 
-.students-modal .btn-close {
+.student-modal .btn-close {
   color: #1abc9c;
   font-size: 2rem;
   padding: 1rem;
 }
-.students-modal .students-modal-title {
+.student-modal .student-modal-title {
   font-size: 2.25rem;
   line-height: 2rem;
 }
 @media (min-width: 992px) {
-  .students-modal .students-modal-title {
+  .student-modal .student-modal-title {
     font-size: 3rem;
     line-height: 2.5rem;
   }
