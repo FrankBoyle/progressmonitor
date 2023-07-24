@@ -10973,20 +10973,20 @@ html {
   padding-bottom: 3rem;
 }
 .masthead .masthead-heading {
-  font-size: 2.75rem;
-  line-height: 2.75rem;
+  font-size: 2.0rem;
+  line-height: 2.25rem;
 }
 .masthead .masthead-subheading {
   font-size: 1.25rem;
 }
 .masthead .masthead-avatar {
-  width: 15rem;
+  width: 10rem;
 }
 
 @media (min-width: 992px) {
   .masthead {
-    padding-top: calc(6rem + 104px);
-    padding-bottom: 6rem;
+    padding-top: calc(6rem + 5px);
+    padding-bottom: 2rem;
   }
   .masthead .masthead-heading {
     font-size: 4rem;
