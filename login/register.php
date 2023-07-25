@@ -1,7 +1,7 @@
 <?php
 session_start();
 //connect to database
-$db=mysqli_connect("54.144.214.46","root","","LoginSystem");
+$db=mysqli_connect("54.144.214.46","fboyle","Fjb08084$&","LoginSystem");
 if(isset($_POST['register_btn']))
 {
     $username=mysqli_real_escape_string($db,$_POST['username']);

@@ -2,7 +2,7 @@
 session_start();
 
 //connect to database
-$db=mysqli_connect("54.144.214.46","root","","LoginSystem");
+$db=mysqli_connect("54.144.214.46","fboyle","Fjb08084$&","LoginSystem");
 
 
 ?>
