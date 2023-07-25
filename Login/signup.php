@@ -15,16 +15,16 @@
                <p class="success"><?php echo $_GET['success']; ?></p>
           <?php } ?>
 
-          <label>Name</label>
-          <?php if (isset($_GET['name'])) { ?>
+          <label>Email</label>
+          <?php if (isset($_GET['email'])) { ?>
                <input type="text" 
-                      name="name" 
-                      placeholder="Name"
-                      value="<?php echo $_GET['name']; ?>"><br>
+                      name="email" 
+                      placeholder="Email"
+                      value="<?php echo $_GET['email']; ?>"><br>
           <?php }else{ ?>
                <input type="text" 
-                      name="name" 
-                      placeholder="Name"><br>
+                      name="email" 
+                      placeholder="Email"><br>
           <?php }?>
 
           <label>User Name</label>
@@ -45,10 +45,10 @@
                  name="password" 
                  placeholder="Password"><br>
 
-          <label>Re Password</label>
+          <label>Password</label>
           <input type="password" 
                  name="re_password" 
-                 placeholder="Re_Password"><br>
+                 placeholder="Password"><br>
 
      	<button type="submit">Sign Up</button>
           <a href="index.php" class="ca">Already have an account?</a>
