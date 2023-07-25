@@ -2,7 +2,7 @@
 session_start(); 
 include "db_conn.php";
 
-if (isset($_POST['uname']) && isset($_POST['password'])) {
+if (isset($_POST['username']) && isset($_POST['password'])) {
 
 	function validate($data){
        $data = trim($data);
@@ -11,10 +11,10 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
 	   return $data;
 	}
 
-	$uname = validate($_POST['uname']);
+	$username = validate($_POST['username']);
 	$pass = validate($_POST['password']);
 
-	if (empty($uname)) {
+	if (empty($username)) {
 		header("Location: index.php?error=User Name is required");
 	    exit();
 	}else if(empty($pass)){
@@ -25,14 +25,14 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
         $pass = md5($pass);
 
         
-		$sql = "SELECT * FROM accounts WHERE user_name='$uname' AND password='$pass'";
+		$sql = "SELECT * FROM accounts WHERE username='$username' AND password='$pass'";
 
 		$result = mysqli_query($conn, $sql);
 
 		if (mysqli_num_rows($result) === 1) {
 			$row = mysqli_fetch_assoc($result);
-            if ($row['user_name'] === $uname && $row['password'] === $pass) {
-            	$_SESSION['user_name'] = $row['user_name'];
+            if ($row['username'] === $username && $row['password'] === $pass) {
+            	$_SESSION['username'] = $row['username'];
             	$_SESSION['email'] = $row['email'];
             	$_SESSION['id'] = $row['id'];
             	header("Location: home.php");

@@ -28,14 +28,14 @@
           <?php }?>
 
           <label>User Name</label>
-          <?php if (isset($_GET['uname'])) { ?>
+          <?php if (isset($_GET['username'])) { ?>
                <input type="text" 
-                      name="uname" 
+                      name="username" 
                       placeholder="User Name"
-                      value="<?php echo $_GET['uname']; ?>"><br>
+                      value="<?php echo $_GET['username']; ?>"><br>
           <?php }else{ ?>
                <input type="text" 
-                      name="uname" 
+                      name="username" 
                       placeholder="User Name"><br>
           <?php }?>
 
