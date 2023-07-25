@@ -1,3 +1,8 @@
+<?php
+require('db.php');
+include("auth_session.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -30,6 +35,7 @@
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#student">Students</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">About</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Contact</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#logout"><a href="logout.php">Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -40,7 +46,7 @@
                 <!-- Masthead Avatar Image-->
                 <img class="masthead-avatar mb-5" src="assets/img/9721645.png" alt="..." />
                 <!-- Masthead Heading-->
-                <h1 class="masthead-heading text-uppercase mb-0">Progress Monitor</h1>
+                <h1 class="masthead-heading text-uppercase mb-0">Hey, <?php echo $_SESSION['username']; ?>!</h1>
                 <!-- Icon Divider-->
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
