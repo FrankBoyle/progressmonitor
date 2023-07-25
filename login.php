@@ -61,7 +61,7 @@
         }
     } else {
 ?>
-      <header class="bg-primary text-white text-center">
+      <header class="masthead bg-primary text-white text-center">
         <form class="form" method="post" name="login">
           <h1 class="login-title">Login</h1>
           <input type="text" class="login-input" name="username" placeholder="Username" autofocus="true"/>

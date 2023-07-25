@@ -64,7 +64,7 @@
         }
     } else {
 ?>
-    <header class="bg-primary text-white text-center">
+    <header class="masthead bg-primary text-white text-center">
         <form class="form" action="" method="post">
             <h1 class="login-title">Registration</h1>
             <input type="text" class="login-input" name="username" placeholder="Username" required />
