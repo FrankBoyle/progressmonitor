@@ -21,7 +21,7 @@ h1.login-title {
   color: #ffffff;
   margin: 0px auto 25px;
   font-size: 25px;
-  font-weight: 300;
+  font-weight: bold;
   text-align: center;
 }
 .login-input {
