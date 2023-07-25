@@ -19,11 +19,11 @@ class DataSource
 
     const HOST = 'localhost';
 
-    const USERNAME = 'root';
+    const USERNAME = 'fboyle';
 
-    const PASSWORD = '';
+    const PASSWORD = 'Fjb08084$&';
 
-    const DATABASENAME = 'blog_eg';
+    const DATABASENAME = 'accounts';
 
     private $conn;
 
