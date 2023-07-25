@@ -19,9 +19,9 @@ class DataSource
 
     const HOST = 'localhost';
 
-    const USERNAME = 'fboyle';
+    const USERNAME = 'root';
 
-    const PASSWORD = 'Fjb08084$&';
+    const PASSWORD = '';
 
     const DATABASENAME = 'accounts';
 
