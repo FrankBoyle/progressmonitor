@@ -3,7 +3,7 @@ session_start();
 include "db_conn.php";
 
 if (isset($_POST['uname']) && isset($_POST['password'])
-    && isset($_POST['name']) && isset($_POST['re_password'])) {
+    && isset($_POST['email']) && isset($_POST['re_password'])) {
 
 	function validate($data){
        $data = trim($data);
@@ -16,7 +16,7 @@ if (isset($_POST['uname']) && isset($_POST['password'])
 	$pass = validate($_POST['password']);
 
 	$re_pass = validate($_POST['re_password']);
-	$name = validate($_POST['email']);
+	$email = validate($_POST['email']);
 
 	$user_data = 'uname='. $uname. '&email='. $email;
 
@@ -34,12 +34,12 @@ if (isset($_POST['uname']) && isset($_POST['password'])
 	}
 
 	else if(empty($email)){
-        header("Location: signup.php?error=Name is required&$user_data");
+        header("Location: signup.php?error=Email is required&$user_data");
 	    exit();
 	}
 
 	else if($pass !== $re_pass){
-        header("Location: signup.php?error=The confirmation password  does not match&$user_data");
+        header("Location: signup.php?error=The confirmation password does not match&$user_data");
 	    exit();
 	}
 
