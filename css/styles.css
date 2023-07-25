@@ -20,8 +20,8 @@
 h1.login-title {
   color: #ffffff;
   margin: 0px auto 25px;
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 40px;
+  font-weight: bolder;
   text-align: center;
 }
 .login-input {
