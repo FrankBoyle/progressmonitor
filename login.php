@@ -62,7 +62,6 @@
     } else {
 ?>
       <header class="masthead bg-primary text-white text-center">
-      <div class="container d-flex align-items-center flex-column">
         <form class="form" method="post" name="login">
           <h1 class="login-title">Login</h1>
           <input type="text" class="login-input" name="username" placeholder="Username" autofocus="true"/>
@@ -70,7 +69,6 @@
           <input type="submit" value="Login" name="submit" class="login-button"/>
           <p class="link"><a href="registration.php">New Registration</a></p>
         </form>
-      </div>
       </header>
 <?php
     }
