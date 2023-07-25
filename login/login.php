@@ -6,7 +6,7 @@ if(  isset($_SESSION['username']) )
   die();
 }
 //connect to database
-$db=mysqli_connect("54.144.214.46","fboyle","Fjb08084$&","LoginSystem");
+$db=mysqli_connect("localhost","fboyle","Fjb08084$&","LoginSystem");
 if($db)
 {
   if(isset($_POST['login_btn']))
