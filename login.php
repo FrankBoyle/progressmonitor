@@ -61,7 +61,6 @@
            }
          } else {
       ?>
-      </body>
       <header class="masthead bg-primary text-white text-center">
         <form class="form" method="post" name="login">
           <h1 class="login-title">Login</h1>
@@ -74,5 +73,5 @@
 <?php
     }
 ?>
-
+</body>
 </html>
