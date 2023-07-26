@@ -35,6 +35,7 @@
                 </div>
             </div>
         </nav>
+    </body>
       <?php
         require('db.php');
         session_start();
@@ -73,5 +74,4 @@
 <?php
     }
 ?>
-</body>
 </html>
