@@ -98,7 +98,7 @@ include("auth_session.php");
                         </div>
                     </div>
                     <!-- Students Item 4-->
-                    <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
+                    <div class="col-md-6 col-lg-4 mb-5">
                         <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal4">
                             <div class="student-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -107,7 +107,7 @@ include("auth_session.php");
                         </div>
                     </div>
                     <!-- Students Item 5-->
-                    <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
+                    <div class="col-md-6 col-lg-4 mb-5">
                         <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal5">
                             <div class="student-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -116,7 +116,7 @@ include("auth_session.php");
                         </div>
                     </div>
                     <!-- Students Item 6-->
-                    <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
+                    <div class="col-md-6 col-lg-4 mb-5">
                         <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal6">
                             <div class="student-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -125,7 +125,7 @@ include("auth_session.php");
                         </div>
                     </div>
                     <!-- Students Item 7-->
-                    <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
+                    <div class="col-md-6 col-lg-4 mb-5">
                         <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal6">
                             <div class="student-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -134,7 +134,7 @@ include("auth_session.php");
                         </div>
                     </div>
                     <!-- Students Item 8-->
-                    <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
+                    <div class="col-md-6 col-lg-4 mb-5">
                         <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal6">
                             <div class="student-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
