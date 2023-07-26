@@ -10872,8 +10872,7 @@ html {
 }
 
 .page-section {
-  padding: 0; /*6rem 0;*/
-
+  padding: 6rem 0;
 }
 
 .page-section .page-section-heading {
