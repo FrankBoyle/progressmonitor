@@ -72,11 +72,11 @@ include("auth_session.php");
                 <div class="row justify-content-center">
                     <!-- Students Item 1-->
                     <div class="col-md-6 col-lg-4 mb-5">
-                        <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal1">
+                        <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal1" href="student1.php">
                             <div class="student-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/Students/Susy.jpg" alt="..." href="student1.php"/>
+                            <img class="img-fluid" src="assets/img/portfolio/Students/Susy.jpg" alt="..."/>
                         </div>
                     </div>
                     <!-- Students Item 2-->
