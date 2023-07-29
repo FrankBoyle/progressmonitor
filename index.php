@@ -279,10 +279,10 @@ include("auth_session.php");
         </div>
         <!-- Students Modals-->
         <!-- Students Modal 1-->
-        <div class="student-modal modal fade" id="studentModal1" tabindex="-1" aria-labelledby="studentModal1" aria-hidden="true">
+        <div class="student-modal modal fade" id="studentModal1" tabindex="-1" aria-labelledby="studentModal1" aria-hidden="true" href="student1.php">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" href="student1.php"></button></div>
+                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
                     <div class="modal-body text-center pb-5">
                         <div class="container">
                             <div class="row justify-content-center">
