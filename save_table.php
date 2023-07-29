@@ -26,7 +26,7 @@ $mergedData = array_merge($existingData, $newData);
 $jsonData = json_encode($mergedData);
 
 // Save the JSON data to the database
-$sql = "INSERT INTO custom_table_data (json_data) VALUES ('$jsonData')";
+$sql = "INSERT INTO StudentData (json_data) VALUES ('$jsonData')";
 
 if ($conn->query($sql) === TRUE) {
     echo "Table data saved successfully.";
