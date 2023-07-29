@@ -11086,7 +11086,7 @@ html {
 }
 
 
-table {
+table.studentarray {
   border-collapse: collapse;
   width: 100%;
 }
