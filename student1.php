@@ -41,6 +41,23 @@ include("auth_session.php");
                 </div>
             </div>
         </nav>
+        <!-- Masthead-->
+        <header class="masthead bg-primary text-white text-center">
+            <div class="container d-flex align-items-center flex-column">
+                <!-- Masthead Avatar Image-->
+                <img class="masthead-avatar mb-5" src="assets/img/9721645.png" alt="..." />
+                <!-- Masthead Heading-->
+                <h1 class="masthead-heading text-uppercase mb-0">Hey, <?php echo $_SESSION['username']; ?>!</h1>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- Masthead Subheading-->
+                <p class="masthead-subheading font-weight-light mb-0">Data Collection & Analysis</p>
+            </div>
+        </header>
         <section class="page-section student" id="student">
             <div class="container">
                 <!-- Students Section Heading-->
@@ -51,19 +68,45 @@ include("auth_session.php");
                     <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                     <div class="divider-custom-line"></div>
                 </div>
-        <title>Array Display with Edit</title>
-        <!-- Students Section-->
-      <h1>Array Display with Edit</h1>
-        <table id="arrayTable">
-          <thead>
+                <h1>Customizable Table</h1>
+    <table id="editableTable">
+        <thead>
             <tr>
-              <th>Index</th>
-              <th>Value</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Action</th>
             </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+        </thead>
+        <tbody>
+            <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <button onclick="addRow()">Add Row</button>
+
+    <script>
+        // JavaScript code for handling table editing
+        function addRow() {
+            const tableBody = document.querySelector("#editableTable tbody");
+            const newRow = document.createElement("tr");
+
+            // Customize the number of columns and their content based on your requirements
+            newRow.innerHTML = `
+                <td contenteditable="true">John Doe</td>
+                <td contenteditable="true">30</td>
+                <td contenteditable="true">johndoe@example.com</td>
+                <td><button onclick="deleteRow(this)">Delete</button></td>
+            `;
+
+            tableBody.appendChild(newRow);
+        }
+
+        function deleteRow(button) {
+            const rowToDelete = button.closest("tr");
+            rowToDelete.remove();
+        }
+    </script>
 </section>
     </body>
 </html>
