@@ -4,7 +4,6 @@ include("auth_session.php");
 ?>
 
 <?php
-
 // Retrieve the existing JSON data from the database
 $sql = "SELECT json_data FROM student1_data ORDER BY id DESC LIMIT 1";
 $result = $conn->query($sql);
@@ -26,7 +25,7 @@ $mergedData = array_merge($existingData, $newData);
 $jsonData = json_encode($mergedData);
 
 // Save the JSON data to the database
-$sql = "INSERT INTO StudentData (json_data) VALUES ('$jsonData')";
+$sql = "INSERT INTO student1_data (json_data) VALUES ('$jsonData')";
 
 if ($conn->query($sql) === TRUE) {
     echo "Table data saved successfully.";
