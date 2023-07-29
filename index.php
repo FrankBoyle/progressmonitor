@@ -74,7 +74,7 @@ include("auth_session.php");
                     <div class="col-md-6 col-lg-4 mb-5">
                         <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal1" href="student1.php">
                             <div class="student-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x" href="student1.php"></i></div>
+                                <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
                             <img class="img-fluid" src="assets/img/portfolio/Students/Susy.jpg" alt="..."/>
                         </div>
@@ -298,10 +298,12 @@ include("auth_session.php");
                                     <!-- Students Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cabin.png" alt="..." />
                                     <!-- Students Modal - Text-->
-                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <p class="mb-4">Goal 1</p>
+                                    <p class="mb-4">Goal 2</p>
+                                    <p class="mb-4">Goal 3</p>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
-                                        <i class="fas fa-xmark fa-fw"></i>
-                                        Close Window
+                                        <i class="fas fa-xmark fa-fw" href="student1.php"></i>
+                                        Student Page
                                     </button>
                                 </div>
                             </div>
