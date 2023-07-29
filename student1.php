@@ -40,6 +40,16 @@ include("auth_session.php");
                 </div>
             </div>
         </nav>
+        <section class="page-section student" id="student">
+            <div class="container">
+                <!-- Students Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Students</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
         <title>Array Display with Edit</title>
         <!-- Students Section-->
       <h1>Array Display with Edit</h1>
@@ -53,5 +63,6 @@ include("auth_session.php");
           <tbody>
           </tbody>
         </table>
+</section>
     </body>
 </html>
