@@ -43,7 +43,7 @@ include("auth_session.php");
         <title>Array Display with Edit</title>
         <!-- Students Section-->
       <h1>Array Display with Edit</h1>
-        <table id="arrayTable">
+        <table class="studentarray" id="arrayTable">
           <thead>
             <tr>
               <th>Index</th>
