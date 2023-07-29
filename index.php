@@ -298,12 +298,12 @@ include("auth_session.php");
                                     <!-- Students Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cabin.png" alt="..." />
                                     <!-- Students Modal - Text-->
-                                    <p class="mb-4">Goal 1</p>
+                                    <p class="mb-4" href="./student1.php">Goal 1</p>
                                     <p class="mb-4">Goal 2</p>
                                     <p class="mb-4">Goal 3</p>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
-                                        <i class="fas fa-xmark fa-fw" href="student1.php"></i>
-                                        Student Page
+                                        <i class="fas fa-xmark fa-fw"></i>
+                                        Close Window
                                     </button>
                                 </div>
                             </div>
