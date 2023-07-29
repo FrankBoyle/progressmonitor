@@ -74,7 +74,7 @@ include("auth_session.php");
                     <div class="col-md-6 col-lg-4 mb-5">
                         <div class="student-item mx-auto" data-bs-toggle="modal" data-bs-target="#studentModal1" href="student1.php">
                             <div class="student-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                                <div class="student-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x" href="student1.php"></i></div>
                             </div>
                             <img class="img-fluid" src="assets/img/portfolio/Students/Susy.jpg" alt="..."/>
                         </div>
@@ -279,7 +279,7 @@ include("auth_session.php");
         </div>
         <!-- Students Modals-->
         <!-- Students Modal 1-->
-        <div class="student-modal modal fade" id="studentModal1" tabindex="-1" aria-labelledby="studentModal1" aria-hidden="true" href="student1.php">
+        <div class="student-modal modal fade" id="studentModal1" tabindex="-1" aria-labelledby="studentModal1" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
