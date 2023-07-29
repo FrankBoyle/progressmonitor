@@ -298,7 +298,7 @@ include("auth_session.php");
                                     <!-- Students Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cabin.png" alt="..." />
                                     <!-- Students Modal - Text-->
-                                    <p class="mb-4" href="./student1.php">Goal 1</p>
+                                    <p class="mb-4"><a href="student1.php">Goal 1</a></p>
                                     <p class="mb-4">Goal 2</p>
                                     <p class="mb-4">Goal 3</p>
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
