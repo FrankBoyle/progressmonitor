@@ -84,6 +84,7 @@ include("auth_session.php");
     </table>
 
     <button onclick="addRow()">Add Row</button>
+    <button onclick="saveTableData()">Save Table</button>
 
     <script>
         // JavaScript code for handling table editing
@@ -106,7 +107,60 @@ include("auth_session.php");
             const rowToDelete = button.closest("tr");
             rowToDelete.remove();
         }
+
+        function saveTableData() {
+            const tableData = [];
+            const rows = document.querySelectorAll("#editableTable tbody tr");
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                const rowData = {
+                    name: cells[0].textContent,
+                    age: cells[1].textContent,
+                    email: cells[2].textContent
+                };
+                tableData.push(rowData);
+            });
+
+            // Convert the table data to a JSON string
+            const jsonData = JSON.stringify(tableData);
+
+            // Send the JSON data to the server using an HTTP request (e.g., using fetch or XMLHttpRequest)
+            // In this example, we will use fetch to send a POST request to the server
+
+            fetch('save_table.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Load table data from the server when the page is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Send a request to the server to get the table data
+            fetch('get_table.php')
+            .then(response => response.json())
+            .then(tableData => {
+                const tableBody = document.querySelector("#editableTable tbody");
+
+                tableData.forEach(rowData => {
+                    const newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                        <td contenteditable="true">${rowData.name}</td>
+                        <td contenteditable="true">${rowData.age}</td>
+                        <td contenteditable="true">${rowData.email}</td>
+                        <td><button onclick="deleteRow(this)">Delete</button></td>
+                    `;
+                    tableBody.appendChild(newRow);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        });
     </script>
-</section>
     </body>
 </html>
