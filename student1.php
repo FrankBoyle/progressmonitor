@@ -40,6 +40,7 @@ include("auth_session.php");
                 </div>
             </div>
         </nav>
+        <title>Array Display with Edit</title>
         <!-- Students Section-->
       <h1>Array Display with Edit</h1>
         <table id="arrayTable">
