@@ -69,12 +69,17 @@ include("auth_session.php");
                     <div class="divider-custom-line"></div>
                 </div>
                 <h1>Customizable Table</h1>
+    <div>
+        <label for="columnName">New Column Name:</label>
+        <input type="text" id="columnName" />
+        <button onclick="addColumn()">Add Column</button>
+    </div>
     <table id="editableTable">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>Age</th>
-                <th>Email</th>
+            <tr id="headerRow">
+                <th contenteditable="true">Name</th>
+                <th contenteditable="true">Age</th>
+                <th contenteditable="true">Email</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -106,6 +111,21 @@ include("auth_session.php");
         function deleteRow(button) {
             const rowToDelete = button.closest("tr");
             rowToDelete.remove();
+        }
+
+        function addColumn() {
+            const columnNameInput = document.getElementById("columnName");
+            const newColumnName = columnNameInput.value.trim();
+            if (newColumnName !== "") {
+                const headerRow = document.getElementById("headerRow");
+                const newHeaderCell = document.createElement("th");
+                newHeaderCell.contentEditable = true;
+                newHeaderCell.textContent = newColumnName;
+                headerRow.appendChild(newHeaderCell);
+
+                // Clear the input field after adding the column
+                columnNameInput.value = "";
+            }
         }
 
         function saveTableData() {
