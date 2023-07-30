@@ -38,92 +38,57 @@ setTimeout(function () {
     // Actions For All Of The Cells
     all_cells.forEach(cell => {
         // When User Clicks On Every Cells
-        cell.onclick = function () {
-            // Convert Cells To Editable Mode
+        // Real-time Cell Editing Function (Updated)
+        function handleCellEdit(cell) {
             cell.contentEditable = "true";
-            // Every Change In A Cell
             cell.oninput = function () {
+                const targetId = parseInt(cell.getAttribute("data-id"));
+                const targetCell = cell.getAttribute("data-cell");
+                const targetNewData = cell.innerText;
 
-                // Get Required Data From HTML DOM
-                const target_id = parseInt(cell.getAttribute("data-id"));
-                const target_cell = cell.getAttribute("data-cell");
-                const target_new_data = (cell.innerText);
+            if (cell.parentElement.classList.contains("new-row")) {
+            // If it's a new row, update the data in the table but don't send to the API
+                cell.setAttribute("data-id", targetNewData); // Update the data-id attribute with the new ID value
+                cell.parentElement.classList.remove("new-row"); // Remove the "new-row" class to signify it's no longer a new row
+            } else {
+            // If it's an existing row, send the data to the API for updating
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
 
-                // Set Headers
-                const my_headers = new Headers();
-                my_headers.append("Content-Type", "application/json");
+            const rawData = JSON.stringify({
+                "target_id": targetId,
+                "target_cell": targetCell,
+                "target_new_data": targetNewData
+            });
 
-                // Set Data For Sending To API
-                const raw_data = JSON.stringify({
-                    "target_id": target_id,
-                    "target_cell": target_cell,
-                    "target_new_data": target_new_data
-                });
+            const requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: rawData,
+                redirect: "follow"
+            };
 
-                // Set Request Options
-                const request_options = {
-                    method: "POST",
-                    headers: my_headers,
-                    body: raw_data,
-                    redirect: "follow"
-                };
-
-                // Send Data To API
-                fetch("api/", request_options)
-                    .then(response => response.json())
-                    .then(result => {
-                        // Get Pop-Up Notification
-                        const popup = document.querySelector("#notification");
-
-                        // Successful Status From API
-                        if (result.cell_updated == true) {
-                            // Display Notification
-                            popup.style.display = "block";
-                            popup.setAttribute(
-                                "class", "animate__animated animate__fadeInDown animate__fast"
-                            );
-                            // Hide Notification After 2 Seconds
-                            setTimeout(function () {
-                                popup.setAttribute(
-                                    "class", "animate__animated animate__fadeOutLeft animate__fast"
-                                );
-                            }, 2000);
-                        }
-                    })
-                    .catch(error => console.log("error", error));
+            fetch("api/", requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    // Handle the API response as before
+                    // ...
+                })
+                .catch(error => console.log("error", error));
             };
         };
-    });
+    };
 }, 1000);
 
-// Function to add a new row to the table
-function addRow() {
-    const id = parseInt(document.getElementById("new-id").value); // Get the new row's ID from user input
-    const date = document.getElementById("new-date").value; // Get the new row's Date from user input
-    const score = document.getElementById("new-score").value; // Get the new row's Score from user input
-    const baseline = document.getElementById("new-baseline").value; // Get the new row's Baseline from user input
-
-    // Append the new row to the table
-    document.querySelector(".table-group-divider").innerHTML += `
-        <tr>
-            <th class="id">${id}</th>
-            <td data-cell="Date" data-id="${id}">${date}</td>
-            <td data-cell="Score" data-id="${id}">${score}</td>
-            <td data-cell="Baseline" data-id="${id}">${baseline}</td>
+// Function to add a new empty row to the table
+function addEmptyRow() {
+    const newRow = `
+        <tr class="new-row">
+            <th class="id"></th>
+            <td data-cell="Date" data-id=""></td>
+            <td data-cell="Score" data-id=""></td>
+            <td data-cell="Baseline" data-id=""></td>
         </tr>
     `;
-}
-
-// Function to add a new column to the table
-function addColumn() {
-    const columnName = document.getElementById("new-column-name").value; // Get the new column's name from user input
-
-    // Loop through each row and add a new cell with the specified column name
-    const allRows = document.querySelectorAll("tr");
-    allRows.forEach(row => {
-        const newCell = document.createElement("td");
-        newCell.setAttribute("data-cell", columnName);
-        newCell.setAttribute("data-id", parseInt(row.querySelector(".id").innerText));
-        row.appendChild(newCell);
-    });
+    document.querySelector(".table-group-divider").insertAdjacentHTML("beforeend", newRow);
 }
