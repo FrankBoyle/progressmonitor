@@ -62,14 +62,6 @@ td[contenteditable="true"]:focus {
     filter: drop-shadow(0 4px 6px #444);
 }
 
-.animation {
-    background: linear-gradient(270deg, #6c6fff, #83acff, #a081ff, #d16dff, #6d9dff);
-    background-size: 800% 800%;
-    -webkit-animation: background-animation 19s ease infinite;
-    -moz-animation: background-animation 19s ease infinite;
-    -o-animation: background-animation 19s ease infinite;
-    animation: background-animation 19s ease infinite;
-}
 
 @-webkit-keyframes background-animation {
     0% {
