@@ -1,5 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-
 // Function to create a new row with empty cells
 function createEmptyRow() {
     const newRow = document.createElement("tr");
@@ -142,4 +140,3 @@ setTimeout(function () {
         };
     });
 }, 1000);
-}
