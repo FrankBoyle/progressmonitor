@@ -73,7 +73,7 @@ class Database
 // Connect To Database
 $db = new Database(
     "localhost",         // Host Name
-    "Student_Data", // Database Name
+    "StudentData", // Database Name
     "root",              // Username
     ""                   // Password
 );
