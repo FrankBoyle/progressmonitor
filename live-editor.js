@@ -1,48 +1,3 @@
-// Function to create a new row with empty cells
-function createEmptyRow() {
-    const newRow = document.createElement("tr");
-    newRow.innerHTML = `
-        <td class="id">New</td>
-        <td data-cell="Date" data-id="New" contenteditable="true"></td>
-        <td data-cell="Score" data-id="New" contenteditable="true"></td>
-        <td data-cell="Baseline" data-id="New" contenteditable="true"></td>
-    `;
-    return newRow;
-}
-
-// Function to add a new row to the table
-function addRow() {
-    const tableBody = document.querySelector(".table-group-divider tbody");
-    tableBody.appendChild(createEmptyRow());
-}
-
-// Function to add a new column to the table
-function addColumn() {
-    const table = document.querySelector(".table-group-divider");
-    const headerRow = table.querySelector("thead tr");
-    const newColumnHeader = document.createElement("th");
-    const columnHeaderName = prompt("Enter the column header name:");
-    newColumnHeader.textContent = columnHeaderName || "New Column";
-    headerRow.appendChild(newColumnHeader);
-
-    const dataRows = table.querySelectorAll("tbody tr");
-    dataRows.forEach(row => {
-        const newCell = document.createElement("td");
-        newCell.setAttribute("data-cell", columnHeaderName || "NewColumn");
-        newCell.setAttribute("data-id", row.querySelector(".id").textContent);
-        newCell.setAttribute("contenteditable", "true");
-        row.appendChild(newCell);
-    });
-}
-
-// Add event listeners to the "Add Row" and "Add Column" buttons
-document.getElementById("addRowBtn").addEventListener("click", addRow);
-document.getElementById("addColumnBtn").addEventListener("click", addColumn);
-
-// ... The rest of your existing code for fetching data, displaying it in the table,
-// and allowing real-time cell editing (as shown in your original code) ...
-
-
 /* -------------------------------- */
 /* -------------------------------- */
 /* GET DATA FROM API AND DISPLAY IT */
@@ -140,3 +95,35 @@ setTimeout(function () {
         };
     });
 }, 1000);
+
+// Function to add a new row to the table
+function addRow() {
+    const id = parseInt(document.getElementById("new-id").value); // Get the new row's ID from user input
+    const date = document.getElementById("new-date").value; // Get the new row's Date from user input
+    const score = document.getElementById("new-score").value; // Get the new row's Score from user input
+    const baseline = document.getElementById("new-baseline").value; // Get the new row's Baseline from user input
+
+    // Append the new row to the table
+    document.querySelector(".table-group-divider").innerHTML += `
+        <tr>
+            <th class="id">${id}</th>
+            <td data-cell="Date" data-id="${id}">${date}</td>
+            <td data-cell="Score" data-id="${id}">${score}</td>
+            <td data-cell="Baseline" data-id="${id}">${baseline}</td>
+        </tr>
+    `;
+}
+
+// Function to add a new column to the table
+function addColumn() {
+    const columnName = document.getElementById("new-column-name").value; // Get the new column's name from user input
+
+    // Loop through each row and add a new cell with the specified column name
+    const allRows = document.querySelectorAll("tr");
+    allRows.forEach(row => {
+        const newCell = document.createElement("td");
+        newCell.setAttribute("data-cell", columnName);
+        newCell.setAttribute("data-id", parseInt(row.querySelector(".id").innerText));
+        row.appendChild(newCell);
+    });
+}
