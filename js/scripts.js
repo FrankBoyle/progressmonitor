@@ -53,38 +53,3 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-// Sample array data
-    let dataArray = ['Apple', 'Banana', 'Orange', 'Grapes', 'Mango'];
-
-// Function to update the display of the array in the table
-    function updateArrayDisplay() {
-      const tableBody = document.querySelector("#arrayTable tbody");
-      tableBody.innerHTML = "";
-
-      dataArray.forEach((value, index) => {
-        const row = document.createElement("tr");
-        const indexCell = document.createElement("td");
-        const valueCell = document.createElement("td");
-
-        // Make both index and value cells editable
-        indexCell.textContent = index;
-        indexCell.contentEditable = true;
-        indexCell.addEventListener("input", (event) => {
-          dataArray[index] = event.target.textContent;
-        });
-
-        valueCell.textContent = value;
-        valueCell.contentEditable = true;
-        valueCell.addEventListener("input", (event) => {
-          dataArray[index] = event.target.textContent;
-        });
-
-        row.appendChild(indexCell);
-        row.appendChild(valueCell);
-
-        tableBody.appendChild(row);
-      });
-    }
-
-    // Call the function to display the initial array
-    updateArrayDisplay();

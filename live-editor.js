@@ -12,9 +12,9 @@ fetch("api/", { method: "GET" })
             document.querySelector(".table-group-divider").innerHTML += `
                 <tr>
                     <th class="id">` + data.id + `</th>
-                    <td data-cell="fruit" data-id="` + data.id + `">` + data.date + `</td>
-                    <td data-cell="calories" data-id="` + data.id + `">` + data.score + `</td>
-                    <td data-cell="fat" data-id="` + data.id + `">` + data.baseline + `</td>
+                    <td data-cell="Date" data-id="` + data.id + `">` + data.Date + `</td>
+                    <td data-cell="Score" data-id="` + data.id + `">` + data.Score + `</td>
+                    <td data-cell="Baseline" data-id="` + data.id + `">` + data.Baseline + `</td>
                 </tr>
             `;
         });
