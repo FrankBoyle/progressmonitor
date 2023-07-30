@@ -73,7 +73,7 @@ class Database
 // Connect To Database
 $db = new Database(
     "localhost",         // Host Name
-    "live_table_editor", // Database Name
+    "Student_Data", // Database Name
     "root",              // Username
     ""                   // Password
 );
