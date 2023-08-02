@@ -1,50 +1,39 @@
 {
-  "name": "soft-ui-dashboard",
-  "version": "1.0.7",
-  "description": "Freebie Dashboard for Bootstrap 5",
-  "main": "pages/dashboard.html",
-  "directories": {
-    "example": "root"
-  },
-  "scripts": {
-    "open-app": "gulp open-app",
-    "start": "npm run open-app",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "gulp-watch"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/creativetimofficial/soft-ui-dashboard.git"
-  },
-  "keywords": [
-    "soft ui dashboard",
-    "bootstrap 5",
-    "dashboard",
-    "creative tim",
-    "html dashboard",
-    "html css dashboard",
-    "web dashboard",
-    "freebie",
-    "free bootstrap dashboard",
-    "css3 dashboard",
-    "bootstrap dashboard",
-    "frontend",
-    "responsive bootstrap dashboard"
-  ],
-  "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com/)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/soft-ui-dashboard/issues"
+  "name": "Majestic_admin",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "@mdi/font": "^3.6.95",
+    "bootstrap": "5.1.3",
+    "chart.js": "^2.8.0",
+    "datatables": "^1.10.18",
+    "datatables.net-bs4": "^1.10.19",
+    "del": "^4.1.1",
+    "gulp-sourcemaps": "^2.6.3",
+    "jquery": "^3.4.1",
+    "perfect-scrollbar": "^1.4.0",
+    "popper.js": "^1.15.0"
   },
   "devDependencies": {
+    "browser-sync": "^2.16.0",
+    "compass-mixins": "^0.12.10",
     "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
-    "gulp-clean": "^0.4.0",
-    "gulp-install": "^1.1.0",
-    "gulp-sass": "^5.1.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-open": "^3.0.1",
-    "sass": "^1.49.9"
+    "gulp-concat": "^2.6.1",
+    "gulp-inject": "^5.0.2",
+    "gulp-inject-partials": "^1.0.3",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "merge-stream": "^1.0.1",
+    "minimatch": "^3.0.4",
+    "node-sass": "^4.12.0"
   },
-  "homepage": "http://creative-tim.com/product/soft-ui-dashboard"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bootstrapdash",
+  "url": "http://www.bootstrapdash.com/",
+  "copyright": "",
+  "license": ""
 }
