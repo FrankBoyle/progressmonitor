@@ -1,89 +1,59 @@
-# PHP Dashboard Framework
-
-## About
-
-This repository contains sample dashboard application built on top of KoolReport's Dashboard Framework. The application act as demonstration of framework's features as well as examples for you to start with.
-
-## KoolReport's Dashboard
-
-[KoolReport's Dashboard](https://www.koolreport.com/packages/dashboard) is a __PHP Dashboard Framework__ to facilitate dashboard construction. The framework is built on top of [KoolReport Pro](https://www.koolreport.com/get-koolreport-pro) which is general data reporting framework. Dashboard framework is added with following features:
-
-1. Low-code orientation
-2. Built-in authentication
-3. Construct a beautiful admin panel
-4. Allow authorization from application to data field
-5. Work with MySQL, Postgres, SQL Server, SQLite
-6. Support data from CSV, Excel files
-7. Support Data Caching at widget level
-8. Support multi-languages
-9. Support Multi-themes
-10. Beautiful single page application
-11. Support lazy loading for widgets
-12. Flexible three levels organized menus
-13. Able to export to PDF, Excel, CSV and other formats
-14. Support master-detail data model
-15. Integrated with beautiful data visualization libraries: Google Chart, ChartJs, D3
-16. Work with other frameworks like Laravel, Codeigniter, Yii2, Symfony
+# php-admin-panel
+This is a simple PHP, Jquery, ajax admin panel for small softwares and website panels. it uses google captcha. it is not depended on sql, but it keeps data in every file [After Update, all data is kept in one file named credential.php]
+<li>For SQL based Admin Panel please visit</li>
+<li>https://github.com/supreen/Php-Sql-admin-panel/</li>
 
 
-## Demonstration
+It is designed for beginners.However, it does require sql
 
-You may view the result in here
+APlease Use Your Google Captcha Sitekey and Secret [after update they are in one file named credential.php]
 
-[![](https://www.koolreport.com/assets/images/editor/c5/image5ff5e2c35199e.png)](https://www.koolreport.com/dashboard/demo/)
+Copy the Index.php file and create as many page as you want.
 
-Link: [https://www.koolreport.com/dashboard/demo/](https://www.koolreport.com/dashboard/demo/)
+<h1> Updated on 13/08/2021 </h1>
+<ul> UI improved </ul>
+<ul> background and Logo added </ul>
+<ul> Now you need to put Admin name, Password, Sitekey, SecretKey just in one file called Credential.php </ul>
+<ul>Get your google captcha sitekey and secret for your website from https://www.google.com/recaptcha/admin/create . make sure that it is "captcha v2" and "i am not robot" and put them in credential.php.</ul> 
+<ul> Navbar can be updated via navbar.php too </ul>
+<ul> Replace logo.png with any logo of your choice </ul>
+<ul> Change the background image via \login\images\bg-01.jpg </ul>
 
-## Documentation
+<h1> Updated on 26/06/2022 </h1>  
+<ul> UI improved </ul>
+<ul> New Modern Navbar added </ul>
+<ul> Index.php preview updated in readme </ul>
+<ul> CSS, JS and other files were missing, they are added </ul>
+<ul> Instruction to get Captcha sitekey and secret key added </ul>
+<ul> SQL based Admin panel created in new repository </ul>
 
-Full documentation can be found at
+<h1> Updated on 23/07/2022 </h1>  
+<ul> nav bar was not showing properly. (bug fixed) </ul>
+<ul> Navbar is now fully functional and clickable </ul>
+<ul> add your codes in the resources folder to give life to your panel</ul>
 
-[https://www.koolreport.com/docs/dashboard/overview/](https://www.koolreport.com/docs/dashboard/overview/)
 
-## Installation
+Thankyou 
+<h3> Here is the demo (SQL based)</h3>
 
-#### Step1: Clone our dashboard demo
+<li>https://demoadmin.sobdar.com/</li>
 
-To clone our dashboard demo, please run
+<h3>Consider buying me a coffee, if you loved my work.</h3>
+<li>https://www.buymeacoffee.com/suprin</li>
 
-```
-git clone git@github.com:koolreport/dashboard-demo.git
-```
+<h3>If you are still finding it hard, Hire me</h3> 
+<li>https://www.fiverr.com/supreen</li>
+<li>or put an order at <b> https://sobdar.com</b></li>
 
-#### Step 2: Add authentication
 
-Please login into our website, navigating the [My Licenses](https://www.koolreport.com/my-licensed-packages) and click to __[Get Token For Composer]__ button.
 
-Near existed `composer.json`, please create `auth.json` and fill it with authentication information from Token For Composer pop up.
+<h1> Images </h1>
+<bn>
+  
+<h2> Admin.php </h2>
 
-#### Step 3: Run composer to update
+![Image of Admin Panel](https://suprin.sobdar.com/references/adlogin.JPG)
 
-```
-composer update
-```
-
-*Note: Please make sure that you have subscription of KoolReport Pro and Dashboard Framework otherwise this command will not work.*
-
-#### Step 4: Install database (Optional)
-
-Please locate the `automaker.sql` inside `data` folder and then import it to your databases.
-
-*Note: We provided a public database connection so you may run example immediately, but if you want to use local database, you take this step and the step 5*
-
-#### Step 5: Provide connection inside `AutoMaker.php` (Optional)
-
-Please locate the `AutoMaker.php` and provide detail connection to your installed AutoMaker.
-
-*Note: If you take the step 4 then you should take this step, otherwise move to step 6*
-
-#### Step 6: Run
-
-You may run the demo now
-
-```
-http://localhost/dashboard-demo/
-```
-
-### Thank you!
-
-__*<3 koolreport team*__
+<h2> Index.php </h2>
+  
+ ![Image of Index](https://raw.githubusercontent.com/supreen/php-admin-panel/master/login/images/index.JPG)
