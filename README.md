@@ -1,195 +1,89 @@
-[![@coreui coreui](https://img.shields.io/badge/@coreui%20-coreui-lightgrey.svg?style=flat-square)](https://github.com/coreui/coreui)
-[![npm package][npm-coreui-badge]][npm-coreui]
-[![NPM downloads][npm-coreui-download]][npm-coreui]  
-[![@coreui react](https://img.shields.io/badge/@coreui%20-react-lightgrey.svg?style=flat-square)](https://github.com/coreui/react)
-[![npm package][npm-coreui-react-badge]][npm-coreui-react]
-[![NPM downloads][npm-coreui-react-download]][npm-coreui-react]  
+# PHP Dashboard Framework
 
-[npm-coreui]: https://www.npmjs.com/package/@coreui/coreui
-[npm-coreui-badge]: https://img.shields.io/npm/v/@coreui/coreui.png?style=flat-square
-[npm-coreui-download]: https://img.shields.io/npm/dm/@coreui/coreui.svg?style=flat-square
-[npm-coreui-react]: https://www.npmjs.com/package/@coreui/react
-[npm-coreui-react-badge]: https://img.shields.io/npm/v/@coreui/react.png?style=flat-square
-[npm-coreui-react-download]: https://img.shields.io/npm/dm/@coreui/react.svg?style=flat-square
-[npm]: https://www.npmjs.com/package/@coreui/react
+## About
 
-# CoreUI Free React Admin Template
+This repository contains sample dashboard application built on top of KoolReport's Dashboard Framework. The application act as demonstration of framework's features as well as examples for you to start with.
 
-CoreUI is meant to be the UX game changer. Pure & transparent code is devoid of redundant components, so the app is light enough to offer ultimate user experience. This means mobile devices also, where the navigation is just as easy and intuitive as on a desktop or laptop. The CoreUI Layout API lets you customize your project for almost any device – be it Mobile, Web or WebApp – CoreUI covers them all!
+## KoolReport's Dashboard
 
-## Table of Contents
+[KoolReport's Dashboard](https://www.koolreport.com/packages/dashboard) is a __PHP Dashboard Framework__ to facilitate dashboard construction. The framework is built on top of [KoolReport Pro](https://www.koolreport.com/get-koolreport-pro) which is general data reporting framework. Dashboard framework is added with following features:
 
-* [Versions](#versions)
-* [CoreUI Pro](#coreui-pro)
-* [Quick Start](#quick-start)
-* [Installation](#installation)
-* [Basic usage](#basic-usage)
-* [What's included](#whats-included)
-* [Documentation](#documentation)
-* [Versioning](#versioning)
-* [Creators](#creators)
-* [Community](#community)
-* [Support CoreUI Development](#support-coreui-development)
-* [Copyright and License](#copyright-and-license)
+1. Low-code orientation
+2. Built-in authentication
+3. Construct a beautiful admin panel
+4. Allow authorization from application to data field
+5. Work with MySQL, Postgres, SQL Server, SQLite
+6. Support data from CSV, Excel files
+7. Support Data Caching at widget level
+8. Support multi-languages
+9. Support Multi-themes
+10. Beautiful single page application
+11. Support lazy loading for widgets
+12. Flexible three levels organized menus
+13. Able to export to PDF, Excel, CSV and other formats
+14. Support master-detail data model
+15. Integrated with beautiful data visualization libraries: Google Chart, ChartJs, D3
+16. Work with other frameworks like Laravel, Codeigniter, Yii2, Symfony
 
-## Versions
 
-* [CoreUI Free Bootstrap Admin Template](https://github.com/coreui/coreui-free-bootstrap-admin-template)
-* [CoreUI Free Angular Admin Template](https://github.com/coreui/coreui-free-angular-admin-template)
-* [CoreUI Free React.js Admin Template](https://github.com/coreui/coreui-free-react-admin-template)
-* [CoreUI Free Vue.js Admin Template](https://github.com/coreui/coreui-free-vue-admin-template)
+## Demonstration
 
-## CoreUI Pro
+You may view the result in here
 
-* 💪  [CoreUI Pro Angular Admin Template](https://coreui.io/product/angular-dashboard-template/)
-* 💪  [CoreUI Pro Bootstrap Admin Template](https://coreui.io/product/bootstrap-dashboard-template/)
-* 💪  [CoreUI Pro React Admin Template](https://coreui.io/product/react-dashboard-template/)
-* 💪  [CoreUI Pro Vue Admin Template](https://coreui.io/product/vue-dashboard-template/)
+[![](https://www.koolreport.com/assets/images/editor/c5/image5ff5e2c35199e.png)](https://www.koolreport.com/dashboard/demo/)
 
-## Quick Start
-
-- [Download the latest release](https://github.com/coreui/coreui-free-react-admin-template/archive/refs/heads/main.zip)
-- Clone the repo: `git clone https://github.com/coreui/coreui-free-react-admin-template.git`
-
-### Installation
-
-``` bash
-$ npm install
-```
-
-or
-
-``` bash
-$ yarn install
-```
-
-### Basic usage
-
-``` bash
-# dev server with hot reload at http://localhost:3000
-$ npm start 
-```
-
-or 
-
-``` bash
-# dev server with hot reload at http://localhost:3000
-$ yarn start
-```
-
-Navigate to [http://localhost:3000](http://localhost:3000). The app will automatically reload if you change any of the source files.
-
-#### Build
-
-Run `build` to build the project. The build artifacts will be stored in the `build/` directory.
-
-```bash
-# build for production with minification
-$ npm run build
-```
-
-or
-
-```bash
-# build for production with minification
-$ yarn build
-```
-
-## What's included
-
-Within the download you'll find the following directories and files, logically grouping common assets and providing both compiled and minified variations. You'll see something like this:
-
-```
-coreui-free-react-admin-template
-├── public/          # static files
-│   └── index.html   # html template
-│
-├── src/             # project root
-│   ├── assets/      # images, icons, etc.
-│   ├── components/  # common components - header, footer, sidebar, etc.
-│   ├── layouts/     # layout containers
-│   ├── scss/        # scss styles
-│   ├── views/       # application views
-│   ├── _nav.js      # sidebar navigation config
-│   ├── App.js
-│   ├── ...
-│   ├── index.js
-│   ├── routes.js    # routes config
-│   └── store.js     # template state example 
-│
-└── package.json
-```
+Link: [https://www.koolreport.com/dashboard/demo/](https://www.koolreport.com/dashboard/demo/)
 
 ## Documentation
 
-The documentation for the CoreUI Admin Template is hosted at our website [CoreUI for React](https://coreui.io/react/)
+Full documentation can be found at
 
-## Versioning
+[https://www.koolreport.com/docs/dashboard/overview/](https://www.koolreport.com/docs/dashboard/overview/)
 
-For transparency into our release cycle and in striving to maintain backward compatibility, CoreUI Free Admin Template is maintained under [the Semantic Versioning guidelines](http://semver.org/).
+## Installation
 
-See [the Releases section of our project](https://github.com/coreui/coreui-free-react-admin-template/releases) for changelogs for each release version.
+#### Step1: Clone our dashboard demo
 
-## Creators
+To clone our dashboard demo, please run
 
-**Łukasz Holeczek**
-* <https://twitter.com/lukaszholeczek>
-* <https://github.com/mrholek>
-* <https://github.com/coreui>
+```
+git clone git@github.com:koolreport/dashboard-demo.git
+```
 
-**CoreUI team**
-* https://github.com/orgs/coreui/people
+#### Step 2: Add authentication
 
-## Community
+Please login into our website, navigating the [My Licenses](https://www.koolreport.com/my-licensed-packages) and click to __[Get Token For Composer]__ button.
 
-Get updates on CoreUI's development and chat with the project maintainers and community members.
+Near existed `composer.json`, please create `auth.json` and fill it with authentication information from Token For Composer pop up.
 
-- Follow [@core_ui on Twitter](https://twitter.com/core_ui).
-- Read and subscribe to [CoreUI Blog](https://coreui.ui/blog/).
+#### Step 3: Run composer to update
 
-## Support CoreUI Development
+```
+composer update
+```
 
-CoreUI is an MIT-licensed open source project and is completely free to use. However, the amount of effort needed to maintain and develop new features for the project is not sustainable without proper financial backing. You can support development by buying the [CoreUI PRO](https://coreui.io/pricing/) or by becoming a sponsor via [Open Collective](https://opencollective.com/coreui/).
+*Note: Please make sure that you have subscription of KoolReport Pro and Dashboard Framework otherwise this command will not work.*
 
-<!--- StartOpenCollectiveBackers -->
+#### Step 4: Install database (Optional)
 
-### Platinum Sponsors
+Please locate the `automaker.sql` inside `data` folder and then import it to your databases.
 
-Support this project by [becoming a Platinum Sponsor](https://opencollective.com/coreui/contribute/platinum-sponsor-40959/). A large company logo will be added here with a link to your website.
+*Note: We provided a public database connection so you may run example immediately, but if you want to use local database, you take this step and the step 5*
 
-<a href="https://opencollective.com/coreui/contribute/platinum-sponsor-40959/checkout"><img src="https://opencollective.com/coreui/tiers/platinum-sponsor/0/avatar.svg?avatarHeight=100"></a>
+#### Step 5: Provide connection inside `AutoMaker.php` (Optional)
 
-### Gold Sponsors
+Please locate the `AutoMaker.php` and provide detail connection to your installed AutoMaker.
 
-Support this project by [becoming a Gold Sponsor](https://opencollective.com/coreui/contribute/gold-sponsor-40960/). A big company logo will be added here with a link to your website.
+*Note: If you take the step 4 then you should take this step, otherwise move to step 6*
 
-<a href="https://opencollective.com/coreui/contribute/gold-sponsor-40960/checkout"><img src="https://opencollective.com/coreui/tiers/gold-sponsor/0/avatar.svg?avatarHeight=100"></a> 
+#### Step 6: Run
 
-### Silver Sponsors
+You may run the demo now
 
-Support this project by [becoming a Silver Sponsor](https://opencollective.com/coreui/contribute/silver-sponsor-40967/). A medium company logo will be added here with a link to your website.
+```
+http://localhost/dashboard-demo/
+```
 
-<a href="https://opencollective.com/coreui/contribute/silver-sponsor-40967/checkout"><img src="https://opencollective.com/coreui/tiers/gold-sponsor/0/avatar.svg?avatarHeight=100"></a>
+### Thank you!
 
-### Bronze Sponsors
-
-Support this project by [becoming a Bronze Sponsor](https://opencollective.com/coreui/contribute/bronze-sponsor-40966/). The company avatar will show up here with a link to your OpenCollective Profile.
-
-<a href="https://opencollective.com/coreui/contribute/bronze-sponsor-40966/checkout"><img src="https://opencollective.com/coreui/tiers/bronze-sponsor/0/avatar.svg?avatarHeight=100"></a> 
-
-### Backers
-
-Thanks to all the backers and sponsors! Support this project by [becoming a backer](https://opencollective.com/coreui/contribute/backer-40965/).
-
-<a href="https://opencollective.com/coreui/contribute/backer-40965/checkout" target="_blank" rel="noopener"><img src="https://opencollective.com/coreui/backers.svg?width=890"></a>
-
-<!--- EndOpenCollectiveBackers -->
-
-## Copyright and License
-
-copyright 2023 creativeLabs Łukasz Holeczek.   
-
- 
-Code released under [the MIT license](https://github.com/coreui/coreui-free-react-admin-template/blob/master/LICENSE).
-There is only one limitation you can't can’t re-distribute the CoreUI as stock. You can’t do this if you modify the CoreUI. In past we faced some problems with persons who tried to sell CoreUI based templates.
-
+__*<3 koolreport team*__
