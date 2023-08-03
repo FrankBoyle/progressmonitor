@@ -8,7 +8,7 @@
       $email = mysqli_real_escape_string($db,$_POST['email']);
       $password = mysqli_real_escape_string($db,$_POST['password']); 
       
-      $sql = "SELECT id FROM admin WHERE username = '$myusername' and password = '$mpassword'";
+      $sql = "SELECT id FROM admin WHERE email = '$email' and password = '$password'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       $active = $row['active'];
@@ -903,8 +903,6 @@
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-    <?php
-
       <p class="login-box-msg">Sign in</p>
 
       <form action="" method="post" name="login">
