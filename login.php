@@ -873,13 +873,13 @@
     <section class="content">
     <div class="login-box container-fluid">
   <div class="login-logo">
-    <a href="../../index2.html"><b>Bfactor</b></a>
+    <a href="../../index.php"><b>Bfactor</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
-    <?php
+  <?php
     require('./db/db.php');
     session_start();
     // When form submitted, check and create user session.
@@ -896,7 +896,7 @@
         if ($rows == 1) {
             $_SESSION['email'] = $email;
             // Redirect to user dashboard page
-            echo "<script>location.href='index.php?id={$_SESSION['email']}';</script>";
+            header("Location: dashboard.php");
         } else {
             echo "<div class='form'>
                   <h3>Incorrect email/password.</h3><br/>
