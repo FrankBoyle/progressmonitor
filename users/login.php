@@ -1,5 +1,5 @@
 <?php session_start();
-include_once('config.php');
+include_once('./config/db.php');
 //Coding For Signup
 if(isset($_POST['login']))
 {
