@@ -896,7 +896,7 @@
         if ($rows == 1) {
             $_SESSION['email'] = $email;
             // Redirect to user dashboard page
-            header("Location: index.php");
+            echo "<script>location.href='index.php?id={$_SESSION['email']}';</script>";
         } else {
             echo "<div class='form'>
                   <h3>Incorrect email/password.</h3><br/>
