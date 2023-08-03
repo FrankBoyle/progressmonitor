@@ -6,10 +6,10 @@ if(isset($_POST['login']))
 //Getting Psot Values
 $email=$_POST['email'];	
 $password=$_POST['password'];	
-$stmt = $mysqli->prepare( "SELECT * FROM accounts WHERE (email=? || Password='" . md5($password) . "')");
+$stmt = $mysqli->prepare( "SELECT fname,id FROM accounts WHERE (email=? || Password='" . md5($password) . "')");
 $stmt->bind_param('ss',$email,$password);
     $stmt->execute();
-    $stmt->bind_result($fname, $lname, $email, $id);
+    $stmt->bind_result($id, $fname, $lname, $email);
     $rs= $stmt->fetch ();
     $stmt->close();
     if (!$rs) {
@@ -22,7 +22,6 @@ $stmt->bind_param('ss',$email,$password);
      header('location: https://bfactor.org/index.php');
     }
 }
- 
 ?>
 
 <!DOCTYPE html>
