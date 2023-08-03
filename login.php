@@ -21,7 +21,7 @@
          session_register("email");
          $_SESSION['email'] = $email;
          
-         header("location: index.php");
+         header("Location: index.php");
       }else {
          $error = "Your Login Name or Password is invalid";
       }
