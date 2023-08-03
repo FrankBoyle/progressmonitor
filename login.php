@@ -19,7 +19,7 @@
 		
       if($count == 1) {
          session_register("email");
-         $_SESSION['login_user'] = $email;
+         $_SESSION['email'] = $email;
          
          header("location: index.php");
       }else {
