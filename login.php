@@ -15,8 +15,8 @@
         if ($rows == 1) {
             $_SESSION['email'] = $email;
             // Redirect to user dashboard page
-            echo '<script>window.location.replace("https://bfactor.org/index.php");</script>';
-          } else {
+            header("Location: index.php");
+             } else {
             echo "<div class='form'>
                   <h3>Incorrect email/password.</h3><br/>
                   <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
