@@ -184,6 +184,11 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="logout.php" role="button">
+          <i class="fas fa-sign-out"></i>
+        </a>
+      </li>
     </ul>
   </nav>
   <!-- /.navbar -->
