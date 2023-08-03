@@ -28,109 +28,6 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div><!-- content header close -->
-    <section class="content">
-    <div class="login-box container-fluid">
-  <div class="login-logo">
-    <a href="./index.php"><b>Bfactor</b></a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-    <?php
-    require('./db/db.php');
-    session_start();
-    // When form submitted, check and create user session.
-    if (isset($_POST['email'])) {
-        $email = stripslashes($_REQUEST['email']);    // removes backslashes
-        $email = mysqli_real_escape_string($con, $email);
-        $password = stripslashes($_REQUEST['password']);
-        $password = mysqli_real_escape_string($con, $password);
-        // Check user is exist in the database
-        $query    = "SELECT * FROM `accounts` WHERE email='$email'
-                     AND password='" . md5($password) . "'";
-        $result = mysqli_query($con, $query) or die(mysql_error());
-        $rows = mysqli_num_rows($result);
-        if ($rows == 1) {
-            $_SESSION['email'] = $email;
-            // Redirect to user dashboard page
-            echo "window.location.href='https://bfactor.org/index.php'";exit;
-          } else {
-            echo "<div class='form'>
-                  <h3>Incorrect email/password.</h3><br/>
-                  <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
-                  </div>";
-        }
-    } else {
-?>
-      <p class="login-box-msg">Sign in</p>
-
-      <form method="post" name="login">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="email" placeholder="E-mail">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" value="Login" name="submit" class="btn btn-primary btn-block">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-      <?php
-    }
-?>
-      <div class="social-auth-links text-center mb-3">
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a>
-      </div>
-      <!-- /.social-auth-links -->
-
-      <p class="mb-1">
-        <a href="forgot-password.php">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="register.php" class="text-center">Register a new membership</a>
-      </p>
-    </div>
-    <!-- /.login-card-body -->
-  </div>
-</div>
-<!-- /.login-box -->
-</section>
     <!--INSERT COMPLETED SIDEBAR HERE-->
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
@@ -956,7 +853,109 @@
     </div>
     <!-- /.sidebar -->
   </aside>
- 
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div><!-- content header close -->
+    <section class="content">
+    <div class="login-box container-fluid">
+  <div class="login-logo">
+    <a href="./index.php"><b>Bfactor</b></a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+    <?php
+    require('./db/db.php');
+    session_start();
+    // When form submitted, check and create user session.
+    if (isset($_POST['email'])) {
+        $email = stripslashes($_REQUEST['email']);    // removes backslashes
+        $email = mysqli_real_escape_string($con, $email);
+        $password = stripslashes($_REQUEST['password']);
+        $password = mysqli_real_escape_string($con, $password);
+        // Check user is exist in the database
+        $query    = "SELECT * FROM `accounts` WHERE email='$email'
+                     AND password='" . md5($password) . "'";
+        $result = mysqli_query($con, $query) or die(mysql_error());
+        $rows = mysqli_num_rows($result);
+        if ($rows == 1) {
+            $_SESSION['email'] = $email;
+            // Redirect to user dashboard page
+            echo "window.location.href='https://bfactor.org/index.php'";exit;
+          } else {
+            echo "<div class='form'>
+                  <h3>Incorrect email/password.</h3><br/>
+                  <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
+                  </div>";
+        }
+    } else {
+?>
+      <p class="login-box-msg">Sign in</p>
+
+      <form method="post" name="login">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="email" placeholder="E-mail">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" name="password" placeholder="Password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="remember">
+              <label for="remember">
+                Remember Me
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" value="Login" name="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+      <?php
+    }
+?>
+      <div class="social-auth-links text-center mb-3">
+        <a href="#" class="btn btn-block btn-danger">
+          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+        </a>
+      </div>
+      <!-- /.social-auth-links -->
+
+      <p class="mb-1">
+        <a href="forgot-password.php">I forgot my password</a>
+      </p>
+      <p class="mb-0">
+        <a href="register.php" class="text-center">Register a new membership</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+</section>
   <!-- /.content-wrapper -->
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
