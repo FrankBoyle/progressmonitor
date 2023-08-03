@@ -1,35 +1,26 @@
-
-<?php
-include_once('./config/db.php');
+<?php session_start();
+include_once('./users/db.php');
 //Coding For Signup
-if(isset($_POST['register']))
+if(isset($_POST['login']))
 {
 //Getting Psot Values
-$fname=$_POST['fname'];	
-$lname=$_POST['lname'];	
 $email=$_POST['email'];	
 $password=$_POST['password'];	
-//Checking email id exist for not
-$result ="SELECT count(*) FROM accounts WHERE email=?";
-$stmt = $mysqli->prepare($result);
-$stmt->bind_param('s',$email);$stmt->execute();
-$stmt->bind_result($count);
-$stmt->fetch();
-$stmt->close();
-//if email already exist
-if($count>0)
-{
-echo "<script>alert('Email id already associated with another account. Please sign-in or reset your password.');</script>";
-} 
-// If email not exist
-else {
-$sql="INSERT into accounts(fname, lname, email, password) VALUES(?,?,?,?)";
-$stmti = $mysqli->prepare($sql);
-$stmti->bind_param('ssis',$fname,$lname,$email,$password);
-$stmti->execute();
-$stmti->close();
-echo "<script>alert('User registration successful');</script>";
-}
+$stmt = $mysqli->prepare( "SELECT fname,id FROM accounts WHERE (email=? || Password='" . md5($password) . "')");
+$stmt->bind_param('ss',$email,$password);
+    $stmt->execute();
+    $stmt->bind_result($id, $fname, $lname, $email);
+    $rs= $stmt->fetch ();
+    $stmt->close();
+    if (!$rs) {
+  echo "<script>alert('Invalid Details. Please try again.')</script>";
+    } 
+    else {
+      $_SESSION['fname']=$fName;
+      $_SESSION['uid']=$id;
+      $_SESSION['email']=$email;
+     header('location: https://bfactor.org/index.php');
+    }
 }
 ?>
 
@@ -894,99 +885,73 @@ echo "<script>alert('User registration successful');</script>";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
-            </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div><!-- content header close -->
     <section class="content">
-    <div class="register-box container-fluid">
-      <div class="register-logo">
-        <a href="../../index.php"><b>Bfactor</b></a>
-      </div>
-  
-    <div class="card">
-      <div class="card-body register-card-body">
-        <p class="login-box-msg">Register a new membership</p>
-        <form method="post" action="" name="registration">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-user"></span>
-              </div>
-            </div>
-          </div>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-user"></span>
-              </div>
-            </div>
-          </div>
-          <div class="input-group mb-3">
-            <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
-              </div>
-            </div>
-          </div>
-          <div class="input-group mb-3">
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
-            </div>
-          </div>
-          <!-- Revisit for password verification
-          <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Retype password">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
-              </div>
-            </div>
-          </div>
-           -->
-          <div class="row">
-            <div class="col-8">
-              <div class="icheck-primary">
-                <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-                <label for="agreeTerms">
-                 I agree to the <a href="#">terms</a>
-                </label>
-              </div>
-            </div>
-            <!-- /.col -->
-            <div class="col-4">
-              <button type="submit" name="register" id="submit" value="Register" class="btn btn-primary btn-block">Register</button>
-            </div>
-            <!-- /.col -->
-          </div>
-        </form>
-        <div class="social-auth-links text-center">
-
-          <a href="#" class="btn btn-block btn-danger">
-            <i class="fab fa-google-plus mr-2"></i>
-            Sign up using Google+
-          </a>
-        </div>
-  
-        <a href="login.php" class="text-center">I already have a membership</a>
-      </div>
-      <!-- /.form-box -->
-    </div><!-- /.card -->
+    <div class="login-box container-fluid">
+  <div class="login-logo">
+    <a href="./index.php"><b>Bfactor</b></a>
   </div>
-  <!-- /.register-box -->
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in</p>
+
+      <form action="" method="post" name="login">
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" name="email" placeholder="E-mail">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" name="password" placeholder="Password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="remember">
+              <label for="remember">
+                Remember Me
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" value="Login" name="login" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+      <div class="social-auth-links text-center mb-3">
+        <a href="#" class="btn btn-block btn-danger">
+          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+        </a>
+      </div>
+      <!-- /.social-auth-links -->
+
+      <p class="mb-1">
+        <a href="forgot-password.php">I forgot my password</a>
+      </p>
+      <p class="mb-0">
+        <a href="register.php" class="text-center">Register a new membership</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
 </section>
   <!-- /.content-wrapper -->
     <!-- Control Sidebar -->
