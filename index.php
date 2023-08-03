@@ -1,6 +1,5 @@
 <?php
-require('/db/db.php');
-include("/db/auth_session.php");
+include("./db/auth_session.php");
 ?>
 <!--
 /*
