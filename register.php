@@ -983,7 +983,7 @@
           </a>
         </div>
   
-        <a href="login.html" class="text-center">I already have a membership</a>
+        <a href="login.php" class="text-center">I already have a membership</a>
       </div>
       <!-- /.form-box -->
     </div><!-- /.card -->
@@ -991,6 +991,12 @@
   <!-- /.register-box -->
 </section>
   <!-- /.content-wrapper -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
   <footer class="main-footer">
     <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor.org</a>.</strong>
     All rights reserved.
@@ -999,12 +1005,7 @@
     </div>
   </footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
+
 
 
 <!-- jQuery -->
