@@ -3,7 +3,17 @@
 <head>
   <title>ApexCharts Example</title>
   <!-- Include ApexCharts library -->
+<script>
+import { ApexGrid } from 'apex-grid';
 
+ApexGrid.register();
+
+const grid = document.createElement('apex-grid');
+grid.autoGenerate = true;
+grid.data = [...];
+
+document.querySelector('#app').appendChild(grid);
+</script>
   
   <script src=".\apexcharts\apexcharts.min.js"></script>
 </head>
