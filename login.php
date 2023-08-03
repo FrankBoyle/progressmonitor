@@ -1,27 +1,28 @@
-<?php session_start();
-include_once('./users/db.php');
-//Coding For Signup
-if(isset($_POST['login']))
-{
-//Getting Psot Values
-$email=$_POST['email'];	
-$password=$_POST['password'];	
-$stmt = $mysqli->prepare( "SELECT fname,id FROM accounts WHERE (email=? || Password='" . md5($password) . "')");
-$stmt->bind_param('ss',$email,$password);
-    $stmt->execute();
-    $stmt->bind_result($id, $fname, $lname, $email);
-    $rs= $stmt->fetch ();
-    $stmt->close();
-    if (!$rs) {
-  echo "<script>alert('Invalid Details. Please try again.')</script>";
-    } 
-    else {
-      $_SESSION['fname']=$fName;
-      $_SESSION['uid']=$id;
-      $_SESSION['email']=$email;
-     header('location: https://bfactor.org/index.php');
-    }
-}
+<?php
+    require('./users/db.php');
+    session_start();
+    // When form submitted, check and create user session.
+    if (isset($_POST['login'])) {
+        $email = stripslashes($_REQUEST['email']);    // removes backslashes
+        $email = mysqli_real_escape_string($con, $email);
+        $password = stripslashes($_REQUEST['password']);
+        $password = mysqli_real_escape_string($con, $password);
+        // Check user is exist in the database
+        $query    = "SELECT * FROM `accounts` WHERE email='$email'
+                     AND password='" . md5($password) . "'";
+        $result = mysqli_query($con, $query) or die(mysql_error());
+        $rows = mysqli_num_rows($result);
+        if ($rows == 1) {
+            $_SESSION['email'] = $email;
+            // Redirect to user dashboard page
+            header("Location: dashboard.php");
+        } else {
+            echo "<div class='form'>
+                  <h3>Incorrect Username/password.</h3><br/>
+                  <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
+                  </div>";
+        }
+    } else 
 ?>
 
 <!DOCTYPE html>

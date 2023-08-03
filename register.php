@@ -1,36 +1,33 @@
-
 <?php
-include_once('./users/db.php');
-//Coding For Signup
-if(isset($_POST['register']))
-{
-//Getting Psot Values
-$fname=$_POST['fname'];	
-$lname=$_POST['lname'];	
-$email=$_POST['email'];	
-$password=$_POST['password'];	
-//Checking email id exist for not
-$result ="SELECT count(*) FROM accounts WHERE email=?";
-$stmt = $mysqli->prepare($result);
-$stmt->bind_param('s',$email);$stmt->execute();
-$stmt->bind_result($count);
-$stmt->fetch();
-$stmt->close();
-//if email already exist
-if($count>0)
-{
-echo "<script>alert('Email id already associated with another account. Please sign-in or reset your password.');</script>";
-} 
-// If email not exist
-else {
-$sql="INSERT into accounts(fname, lname, email, password) VALUES(?,?,?,?)";
-$stmti = $mysqli->prepare($sql);
-$stmti->bind_param('ssis',$fname,$lname,$email,$password);
-$stmti->execute();
-$stmti->close();
-echo "<script>alert('User registration successful');</script>";
-}
-}
+    require('db.php');
+    // When form submitted, insert values into the database.
+    if (isset($_REQUEST['username'])) {
+        // removes backslashes
+        $fname = stripslashes($_REQUEST['fname']);
+        //escapes special characters in a string
+        $fname = mysqli_real_escape_string($con, $fname);
+        $lname = stripslashes($_REQUEST['lname']);
+        $lname = mysqli_real_escape_string($con, $lname);
+        $email    = stripslashes($_REQUEST['email']);
+        $email    = mysqli_real_escape_string($con, $email);
+        $password = stripslashes($_REQUEST['password']);
+        $password = mysqli_real_escape_string($con, $password);
+        $create_datetime = date("m-d-Y H:i:s");
+        $query    = "INSERT into `accounts` (fname, lname, email, password, create_datetime)
+                     VALUES ('$fname', '$lname', '$email', '" . md5($password) . "', '$create_datetime')";
+        $result   = mysqli_query($con, $query);
+        if ($result) {
+            echo "<div class='form'>
+                  <h3>You are registered successfully.</h3><br/>
+                  <p class='link'>Click here to <a href='login.php'>Login</a></p>
+                  </div>";
+        } else {
+            echo "<div class='form'>
+                  <h3>Required fields are missing.</h3><br/>
+                  <p class='link'>Click here to <a href='register.php'>register</a> again.</p>
+                  </div>";
+        }
+    } 
 ?>
 
 <!DOCTYPE html>
