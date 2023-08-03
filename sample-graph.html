@@ -3,21 +3,23 @@
 <head>
   <title>ApexCharts Example</title>
   <!-- Include ApexCharts library -->
-<script>
-import { ApexGrid } from 'apex-grid';
 
-ApexGrid.register();
+<script src='https://cdn.jsdelivr.net/npm/apexcharts'></script>
 
-const grid = document.createElement('apex-grid');
-grid.autoGenerate = true;
-grid.data = [...];
-
-document.querySelector('#app').appendChild(grid);
-</script>
-  
   <script src=".\apexcharts\apexcharts.min.js"></script>
 </head>
 <body>
+    <script>
+        import { ApexGrid } from 'apex-grid';
+        
+        ApexGrid.register();
+        
+        const grid = document.createElement('apex-grid');
+        grid.autoGenerate = true;
+        grid.data = [...];
+        
+        document.querySelector('#app').appendChild(grid);
+        </script>
   <div id="chart"></div>
   <script src='https://cdn.jsdelivr.net/npm/apexcharts'></script>
   <script>
