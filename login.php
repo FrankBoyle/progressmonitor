@@ -904,7 +904,7 @@
 
       <form method="post" name="login">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" placeholder="E-mail">
+          <input type="text" class="form-control" name="email" placeholder="E-mail">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -930,7 +930,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" value="Login" name="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
