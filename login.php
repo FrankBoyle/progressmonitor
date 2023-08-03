@@ -896,8 +896,7 @@
         if ($rows == 1) {
             $_SESSION['email'] = $email;
             // Redirect to user dashboard page
-            header("Location: https://bfactor.org/index.php");
-        } else {
+            echo '<script>window.location.href = "https://bfactor.org/index.php";</script>';        } else {
             echo "<div class='form'>
                   <h3>Incorrect email/password.</h3><br/>
                   <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
@@ -907,7 +906,7 @@
 ?>
       <form method="post" name="login">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" placeholder="Email">
+          <input type="email" class="form-control" name="email" placeholder="E-mail">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
