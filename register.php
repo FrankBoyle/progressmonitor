@@ -886,10 +886,10 @@
     // When form submitted, insert values into the database.
     if (isset($_REQUEST['email'])) {
         // removes backslashes
-        $fname = stripslashes($_REQUEST['First Name']);
+        $fname = stripslashes($_REQUEST['fname']);
         //escapes special characters in a string
         $fname = mysqli_real_escape_string($con, $fname);
-        $lname = stripslashes($_REQUEST['Last Name']);
+        $lname = stripslashes($_REQUEST['lname']);
         $lname = mysqli_real_escape_string($con, $lname);
         $email    = stripslashes($_REQUEST['email']);
         $email    = mysqli_real_escape_string($con, $email);
