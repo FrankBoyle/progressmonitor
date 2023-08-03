@@ -3,163 +3,89 @@
 <head>
   <title>ApexCharts Example</title>
   <!-- Include ApexCharts library -->
-
-<script src='https://cdn.jsdelivr.net/npm/apexcharts'></script>
-
   <script src=".\apexcharts\apexcharts.min.js"></script>
 </head>
 <body>
-    <script>
-        import { ApexGrid } from 'apex-grid';
-        
-        ApexGrid.register();
-        
-        const grid = document.createElement('apex-grid');
-        grid.autoGenerate = true;
-        grid.data = [...];
-        
-        document.querySelector('#app').appendChild(grid);
-        </script>
-  <div id="chart"></div>
-  <script src='https://cdn.jsdelivr.net/npm/apexcharts'></script>
-  <script>
-        var options = {
-          series: [{
-          name: 'Denied Charges ($)',
-          data: [33111, 27510, 27377, 14947, 4312, 7279, 70988, 2903, 29575, 65, 9861, 3416],
-          data_action: ["dot1_action", "dot2_action", "dot3_action", "dot4_action", "dot5_action", "dot6_action", "dot7_action", "dot8_action", "dot9_action", "dot10_action", "dot11_action", "dot12_action"],
-          data_alt: ["dot1_alt", "dot2_alt", "dot3_alt", "dot4_alt", "dot5_alt", "dot6_alt", "dot7_alt", "dot8_alt", "dot9_alt", "dot10_alt", "dot11_alt", "dot12_alt"]
-        }],
-        colors:['#367ee9'],
-          chart: {
-          height: 450,
-          type: 'line',
-          events: {
-            dataPointSelection: function(event, chartContext, config) {
-              bar_number = config.dataPointIndex;
-              alert(chartContext.w.config.series[0].data_action[bar_number])
-            },
-            dataPointMouseEnter: function(event, chartContext, config) {
-              event.target.style.cursor = 'pointer';
-            }
-          },
-          animations:{
-            enabled: true,
-          }
-        },
-        dataLabels: {
-          enabled: false,
-          formatter: function (val) {
-            return "$" + val.toLocaleString();
-          },
-          offsetY: -20,
-          style: {
-            fontSize: '12px',
-            colors: ["#304758"]
-          }
-        },
-        stroke: {
-          width:2,
-          curve: 'smooth',
-        },
-        markers:{
-            size:5,
-          },
-        
-        xaxis: {
-          categories: ["Jul 19", "Aug 19", "Sep 19", "Oct 19", "Nov 19", "Dec 19", "Jan 20", "Feb 20", "Mar 20", "Apr 20", "May 20", "Jun 20"],
-          position: 'top',
-          axisBorder: {
-            show: false
-          },
-          axisTicks: {
-            show: false
-          },
-          crosshairs: {
-            fill: {
-              type: 'gradient',
-              gradient: {
-                colorFrom: '#367ee9',
-                colorTo: '#367ee9',
-                stops: [0, 100],
-                opacityFrom: 0.4,
-                opacityTo: 0.5,
-              }
-            }
-          },
-          tooltip: {
-            enabled: true
-            },
-        },
-        yaxis: {
-          axisBorder: {
-            show: false
-          },
-          axisTicks: {
-            show: false,
-          },
-          labels: {
-            show: true,
-            formatter: function (val) {
-              return "$" + val.toLocaleString();
-            }
-          },
-          title: {
-            text: 'Denied Charges ($)',
-            style: {
-                  color: '#000',
-                  fontSize: '16px',
-                  fontFamily: 'Helvetica, Arial, sans-serif',
-                  fontWeight: 600,
-                  cssClass: 'apexcharts-yaxis-title',
-              },
-          }
-        
-        },
-        tooltip: {
-            enabled: true,
-            intersect:true,
-            shared:false,
-            custom: function({series, seriesIndex, dataPointIndex, w}) {
-                return '<div class="chart-tooltip">' + w.config.series[0].data_alt[dataPointIndex] + '</div>'
-              }
-          },
-        title: {
-          text: 'Total Benefits Exceeded ($231,345) (Claim Date)',
-          floating: true,
-          offsetY: 430,
-          align: 'center',
-          style: {
-            color: '#000'
-          }
-        }
-        };
+<script>
+    import Handsontable from "handsontable";
+import "handsontable/dist/handsontable.min.css";
+import "pikaday/css/pikaday.css";
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+import { data } from "./constants";
+import { progressBarRenderer, starRenderer } from "./customRenderers";
 
-        function fnUpdGraph(){
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
-            chart.render();
+import {
+  alignHeaders,
+  addClassesToRows,
+  changeCheckboxCell
+} from "./hooksCallbacks";
 
-            try{
-                chart.updateOptions({
-                    series: [{
-                        data: [23111, 7410, 27977, 74447, 3412, 4979, 4944, 9403, 4575, 11645, 861, 74416],
-                        data_alt: ["1dot1_alt", "1dot2_alt", "1dot3_alt", "1dot4_alt", "1dot5_alt", "1dot6_alt", "1dot7_alt", "1dot8_alt", "1dot9_alt", "1dot10_alt", "1dot11_alt", "1dot12_alt"]
+const example = document.getElementById("handsontable");
 
-                    }],
-                    xaxis:{
-                        categories: ["Jul 20", "Aug 20", "Sep 20", "Oct 20", "Nov 20", "Dec 20", "Jan 21", "Feb 21", "Mar 21", "Apr 21", "May 21", "Jun 21"]
-                    }
-                })
-            }
-            catch(e){
-                alert(e)
-            }
-        }
-  </script>
-<!--
+new Handsontable(example, {
+  data,
+  height: 450,
+  colWidths: [140, 126, 192, 100, 100, 90, 90, 110, 97],
+  colHeaders: [
+    "Company name",
+    "Country",
+    "Name",
+    "Sell date",
+    "Order ID",
+    "In stock",
+    "Qty",
+    "Progress",
+    "Rating"
+  ],
+  columns: [
+    { data: 1, type: "text" },
+    { data: 2, type: "text" },
+    { data: 3, type: "text" },
+    {
+      data: 4,
+      type: "date",
+      allowInvalid: false
+    },
+    { data: 5, type: "text" },
+    {
+      data: 6,
+      type: "checkbox",
+      className: "htCenter"
+    },
+    {
+      data: 7,
+      type: "numeric"
+    },
+    {
+      data: 8,
+      renderer: progressBarRenderer,
+      readOnly: true,
+      className: "htMiddle"
+    },
+    {
+      data: 9,
+      renderer: starRenderer,
+      readOnly: true,
+      className: "star htCenter"
+    }
+  ],
+  dropdownMenu: true,
+  hiddenColumns: {
+    indicators: true
+  },
+  contextMenu: true,
+  multiColumnSorting: true,
+  filters: true,
+  rowHeaders: true,
+  manualRowMove: true,
+  afterGetColHeader: alignHeaders,
+  afterOnCellMouseDown: changeCheckboxCell,
+  beforeRenderer: addClassesToRows,
+  licenseKey: "non-commercial-and-evaluation"
+});
+
+</script>
+
 <script>
  var options = {
           series: [{
@@ -273,6 +199,6 @@
       
     
 </script>
--->
+
 </body>
 </html>
