@@ -2,15 +2,18 @@
 require('./db/db.php');
 include("./db/auth_session.php");
 ?>
+<!--
+/*
+//    <?php
+//    session_start();
+//    // Destroy session
+//    if(session_destroy()) {
+//        // Redirecting To Home Page
+//        header("Location: login.php");
+//    }
+//     ?>
 
-<?php
-    session_start();
-    // Destroy session
-    if(session_destroy()) {
-        // Redirecting To Home Page
-        header("Location: login.php");
-    }
-?>
+-->
 
 <!DOCTYPE html>
 <html lang="en">
