@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -875,7 +873,7 @@
     <section class="content">
     <div class="register-box container-fluid">
       <div class="register-logo">
-        <a href="../../index.html"><b>Bfactor</b></a>
+        <a href="../../index.php"><b>Bfactor</b></a>
       </div>
   
     <div class="card">

@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="URL='http://bfactor.org/index.php'">
   <title>Bfactor | Registration Page</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -867,14 +866,14 @@
       </div><!-- /.container-fluid -->
     </div><!-- content header close -->
     <section class="content">
-    <div class="login-box">
+    <div class="login-box container-fluid">
   <div class="login-logo">
     <a href="../../index.php"><b>Bfactor</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">Sign in</p>
   <?php
     require('./db/db.php');
     session_start();
@@ -892,8 +891,8 @@
         if ($rows == 1) {
             $_SESSION['email'] = $email;
             // Redirect to user dashboard page
-            header("Location: https://bfactor.org/index.php");
-        } else {
+            echo '<script>window.location.replace("https://bfactor.org/index.php");</script>';
+          } else {
             echo "<div class='form'>
                   <h3>Incorrect email/password.</h3><br/>
                   <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
