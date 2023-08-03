@@ -14,6 +14,8 @@
         $rows = mysqli_num_rows($result);
         if ($rows == 1) {
             $_SESSION['email'] = $email;
+            $_SESSION['user'] = $fname + " " + $lname;
+
             // Redirect to user dashboard page
             header("Location: index.php");
         } else {
