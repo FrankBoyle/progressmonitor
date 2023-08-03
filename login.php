@@ -5,10 +5,12 @@
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // username and password sent from form 
       
-      $email = mysqli_real_escape_string($db,$_POST['email']);
-      $password = mysqli_real_escape_string($db,$_POST['password']); 
+      $email = stripslashes($_REQUEST['email']);    // removes backslashes
+      $email = mysqli_real_escape_string($con, $email);
+      $password = stripslashes($_REQUEST['password']);
+      $password = mysqli_real_escape_string($con, $password);
       
-      $sql = "SELECT id FROM admin WHERE email = '$email' and password = '$password'";
+      $sql = "SELECT id FROM admin WHERE email = '$email' and password = '" . md5($password) . "'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       $active = $row['active'];
