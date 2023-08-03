@@ -1,3 +1,33 @@
+<?php
+   include("./db/db.php");
+   session_start();
+   
+   if($_SERVER["REQUEST_METHOD"] == "POST") {
+      // username and password sent from form 
+      
+      $email = mysqli_real_escape_string($db,$_POST['email']);
+      $password = mysqli_real_escape_string($db,$_POST['password']); 
+      
+      $sql = "SELECT id FROM admin WHERE username = '$myusername' and password = '$mpassword'";
+      $result = mysqli_query($db,$sql);
+      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+      $active = $row['active'];
+      
+      $count = mysqli_num_rows($result);
+      
+      // If result matched $myusername and $mypassword, table row must be 1 row
+		
+      if($count == 1) {
+         session_register("email");
+         $_SESSION['login_user'] = $email;
+         
+         header("location: index.php");
+      }else {
+         $error = "Your Login Name or Password is invalid";
+      }
+   }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -874,36 +904,12 @@
   <div class="card">
     <div class="card-body login-card-body">
     <?php
-    require('./db/db.php');
-    session_start();
-    // When form submitted, check and create user session.
-    if (isset($_POST['email'])) {
-        $email = stripslashes($_REQUEST['email']);    // removes backslashes
-        $email = mysqli_real_escape_string($con, $email);
-        $password = stripslashes($_REQUEST['password']);
-        $password = mysqli_real_escape_string($con, $password);
-        // Check user is exist in the database
-        $query    = "SELECT * FROM `accounts` WHERE email='$email'
-                     AND password='" . md5($password) . "'";
-        $result = mysqli_query($con, $query) or die(mysql_error());
-        $rows = mysqli_num_rows($result);
-        if ($rows == 1) {
-            $_SESSION['email'] = $email;
-            // Redirect to user dashboard page
-            echo "window.location.href='https://bfactor.org/index.php'";exit;
-          } else {
-            echo "<div class='form'>
-                  <h3>Incorrect email/password.</h3><br/>
-                  <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
-                  </div>";
-        }
-    } else {
-?>
+
       <p class="login-box-msg">Sign in</p>
 
-      <form method="post" name="login">
+      <form action="" method="post" name="login">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" name="email" placeholder="E-mail">
+          <input type="email" class="form-control" name="email" placeholder="E-mail">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -934,9 +940,6 @@
           <!-- /.col -->
         </div>
       </form>
-      <?php
-    }
-?>
       <div class="social-auth-links text-center mb-3">
         <a href="#" class="btn btn-block btn-danger">
           <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
