@@ -1,18 +1,12 @@
 <?php
-include("./db/auth_session.php");
+// We need to use sessions, so you should always start sessions using the below code.
+session_start();
+// If the user is not logged in redirect to the login page...
+if (!isset($_SESSION['email'])) {
+	header('Location: index.php');
+	exit;
+}
 ?>
-<!--
-/*
-//    <?php
-//    session_start();
-//    // Destroy session
-//    if(session_destroy()) {
-//        // Redirecting To Home Page
-//        header("Location: login.php");
-//    }
-//     ?>
-
--->
 
 <!DOCTYPE html>
 <html lang="en">
