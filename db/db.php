@@ -6,15 +6,6 @@
     if (mysqli_connect_errno()){
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
     }
-
-$query = mysql_query("SELECT * FROM account WHERE email  = '". $email ."'"); 
-$emailduplicate = null;
-    if (mysql_num_rows($query) > 0) 
-    { 
-    $emailduplicate = 'Email Address is Already in Use.  Please log-in or reset your password.'; 
-    }          
-
-
 ?>
 
 
