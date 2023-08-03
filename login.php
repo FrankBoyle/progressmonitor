@@ -1,18 +1,9 @@
-<?php
-// We need to use sessions, so you should always start sessions using the below code.
-session_start();
-// If the user is not logged in redirect to the login page...
-if (isset($_SESSION['email'])) {
-	header('Location: lindex.php');
-	exit;
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="0;URL='https://bfactor.org/index.php'">
   <title>Bfactor | Registration Page</title>
 
   <!-- Google Font: Source Sans Pro -->
