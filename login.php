@@ -896,7 +896,7 @@
         $result = mysqli_query($con, $query) or die(mysql_error());
         $rows = mysqli_num_rows($result);
         if ($rows == 1) {
-            $_SESSION['email'] = $username;
+            $_SESSION['email'] = $email;
             // Redirect to user dashboard page
             header("Location: index.php");
         } else {
