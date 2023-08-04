@@ -15,7 +15,7 @@
         if ($rows == 1) {
             $_SESSION['username'] = $username;
             // Redirect to user dashboard page
-            header("Location: index.php");
+            header("Location: https://bfactor.org/index.php");
         } else {
             echo "<div class='form'>
                   <h3>Incorrect Username/password.</h3><br/>
