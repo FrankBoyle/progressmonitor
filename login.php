@@ -1,7 +1,6 @@
 <?php
-
     session_start();
-    include('config.php');
+    include('./users/db.php');
 
     if (isset($_POST['login'])) {
         $email = $_POST['email'];
