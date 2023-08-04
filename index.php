@@ -64,7 +64,7 @@
             </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="lougout.php" role="button"><i class="fa fa-sign-out"></i></a>
+        <a class="nav-link" data-widget="pushmenu" href="lougout.php" role="button"><i class="fas fa-sign-out"></i></a>
       </li>
     </ul>
 
