@@ -890,7 +890,7 @@
         if ($rows == 1) {
             $_SESSION['email'] = $email;
             // Redirect to user dashboard page
-            echo "window.location.href='https://bfactor.org/index.php'";
+            header("Location: dashboard.php");
           } else {
             echo "<div class='form'>
                   <h3>Incorrect email/password.</h3><br/>
