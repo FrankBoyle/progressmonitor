@@ -877,7 +877,7 @@
     require('./db/db.php');
     session_start();
     // When form submitted, check and create user session.
-    if (isset($_POST['email'])) {
+    if (isset($_POST['login'])) {
         $email = stripslashes($_REQUEST['email']);    // removes backslashes
         $email = mysqli_real_escape_string($con, $email);
         $password = stripslashes($_REQUEST['password']);
@@ -929,7 +929,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" value="Login" name="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" value="Login" name="login" class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
