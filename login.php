@@ -880,7 +880,7 @@
     require('./users/db.php');
     session_start();
     // When form submitted, check and create user session.
-    if (isset($_POST['email'])) {
+    if (isset($_POST['login'])) {
         $username = stripslashes($_REQUEST['email']);    // removes backslashes
         $username = mysqli_real_escape_string($con, $email);
         $password = stripslashes($_REQUEST['password']);
@@ -891,7 +891,7 @@
         $result = mysqli_query($con, $query) or die(mysql_error());
         $rows = mysqli_num_rows($result);
         if ($rows == 1) {
-            $_SESSION['username'] = $username;
+            $_SESSION['login'] = $username;
             // Redirect to user dashboard page
             echo "window.location.href='https://bfactor.org/index.php'";exit;        } else {
             echo "<div class='form'>
