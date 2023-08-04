@@ -5,10 +5,10 @@
 // after form submitted insert values in to tables.
     if (isset($_POST['login'])){
         // removes backslashes
-	    $email = stripslashes($_REQUEST['email']);
+	    $email = stripslashes($_POST['email']);
         //escapes special characters in a string
 	    $email = mysqli_real_escape_string($db,$email);
-	    $password = stripslashes($_REQUEST['password']);
+	    $password = stripslashes($_POST['password']);
 	    $password = mysqli_real_escape_string($db,$password);
 	      //Checking for user already exist in the table or not
         $query = "SELECT * FROM `accounts` WHERE email='$email' AND password='" . md5($password) . "'";;
