@@ -1,7 +1,7 @@
 <?php
 
     define('USER', 'AndersonSchool');
-    define('PASSWORD', 'SepcialEd69$');
+    define('PASSWORD', 'SpecialEd69$');
     define('HOST', 'localhost');
     define('DATABASE', 'AndersonSchool');
 
