@@ -1,9 +1,15 @@
 <?php
-    // Enter your host name, database username, password, and database name.
-    // If you have not set database password on localhost then set empty.
-    $con = mysqli_connect("localhost:3306","AndersonSchool","SpecialEd69$","AndersonSchool");
-    // Check connection
-    if (mysqli_connect_errno()){
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+
+    define('USER', 'AndersonSchool');
+    define('PASSWORD', 'SepcialEd69$');
+    define('HOST', 'localhost');
+    define('DATABASE', 'AndersonSchool');
+
+    try {
+        $connection = new PDO("mysql:host=".HOST.";dbname=".DATABASE, USER, PASSWORD);
+    } catch (PDOException $e) {
+        exit("Error: " . $e->getMessage());
+
     }
+
 ?>

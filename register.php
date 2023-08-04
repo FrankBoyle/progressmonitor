@@ -1,3 +1,36 @@
+<?php
+    session_start();
+
+    include('./users/db.php');
+    if (isset($_POST['register'])) {
+        $fname = $_POST['fname'];
+        $lname = $_POST['lname'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $password_hash = password_hash($password, PASSWORD_BCRYPT);
+        $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
+        $query->bindParam("email", $email, PDO::PARAM_STR);
+        $query->execute();
+        
+        if ($query->rowCount() > 0) {
+            echo '<p class="error">The email address is already registered!</p>';
+        }
+        if ($query->rowCount() == 0) {
+            $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password) VALUES (:fname,:fname,:password_hash,:email)");
+            $query->bindParam("fname", $fname, PDO::PARAM_STR);
+            $query->bindParam("lname", $fname, PDO::PARAM_STR);
+            $query->bindParam("email", $email, PDO::PARAM_STR);
+            $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
+            $result = $query->execute();
+            if ($result) {
+                echo '<p class="success">Your registration was successful!</p>';
+            } else {
+                echo '<p class="error">Something went wrong!</p>';
+            }
+        }
+    }
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -881,36 +914,7 @@
       <div class="card-body register-card-body">
         <p class="login-box-msg">Register a new membership</p>
         <?php
-    require('./users/db.php');
-    // When form submitted, insert values into the database.
-    if (isset($_REQUEST['register'])) {
-        // removes backslashes
-        $fname = stripslashes($_REQUEST['fname']);
-        //escapes special characters in a string
-        $fname = mysqli_real_escape_string($con, $fname);
-        $lname = stripslashes($_REQUEST['lname']);
-        $lname = mysqli_real_escape_string($con, $lname);
-        $email    = stripslashes($_REQUEST['email']);
-        $email    = mysqli_real_escape_string($con, $email);
-        $password = stripslashes($_REQUEST['password']);
-        $password = mysqli_real_escape_string($con, $password);
-        $create_datetime = date("m-d-Y H:i:s");
-        $query    = "INSERT into `accounts` (fname, lname, email, password, create_datetime)
-                     VALUES ('$fname', '$lname', '$email', '" . md5($password) . "', '$create_datetime')";
-        $result   = mysqli_query($con, $query);
-        if ($result) {
-            echo "<div class='form'>
-                  <h3>You are registered successfully.</h3><br/>
-                  <p class='link'>Click here to <a href='login.php'>Login</a></p>
-                  </div>";
-        } else {
-            echo "<div class='form'>
-                  <h3>Required fields are missing.</h3><br/>
-                  <p class='link'>Click here to <a href='register.php'>register</a> again.</p>
-                  </div>";
-        }
-    } else {
-?>
+
         <form method="post" action="" name="registration">
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
@@ -970,9 +974,7 @@
             <!-- /.col -->
           </div>
         </form>
-        <?php
-    }
-?>
+
         <div class="social-auth-links text-center">
 
           <a href="#" class="btn btn-block btn-danger">

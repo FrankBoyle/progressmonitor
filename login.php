@@ -1,3 +1,27 @@
+<?php
+
+    session_start();
+    include('config.php');
+
+    if (isset($_POST['login'])) {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
+        $query->bindParam("email", $email, PDO::PARAM_STR);
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);  
+          if (!$result) {
+            echo '<p class="error">Username password combination is wrong!</p>';
+          } else {
+            if (password_verify($password, $result['password'])) {
+                $_SESSION['user'] = $result['email'];
+                echo '<p class="success">Congratulations, you are logged in!</p>';
+            } else {
+                echo '<p class="error">Username password combination is wrong!</p>';
+            }
+        }
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -874,33 +898,10 @@
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-
       <p class="login-box-msg">Sign in</p>
-      <?php
-    require('./users/db.php');
-    session_start();
-    // When form submitted, check and create user session.
-    if (isset($_POST['login'])) {
-        $username = stripslashes($_REQUEST['email']);    // removes backslashes
-        $username = mysqli_real_escape_string($con, $email);
-        $password = stripslashes($_REQUEST['password']);
-        $password = mysqli_real_escape_string($con, $password);
-        // Check user is exist in the database
-        $query    = "SELECT * FROM `accounts` WHERE username='$username'
-                     AND password='" . md5($password) . "'";
-        $result = mysqli_query($con, $query) or die(mysql_error());
-        $rows = mysqli_num_rows($result);
-        if ($rows == 1) {
-            $_SESSION['login'] = $username;
-            // Redirect to user dashboard page
-            echo "window.location.href='https://bfactor.org/index.php'";exit;        } else {
-            echo "<div class='form'>
-                  <h3>Incorrect Username/password.</h3><br/>
-                  <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
-                  </div>";
-        }
-    } else {
-?>
+    
+
+
       <form method="post" action="" name="login">
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="email" placeholder="E-mail">
@@ -934,9 +935,10 @@
           <!-- /.col -->
         </div>
       </form>
-      <?php
-    }
-?>
+
+
+
+
       <div class="social-auth-links text-center mb-3">
         <a href="#" class="btn btn-block btn-danger">
           <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
