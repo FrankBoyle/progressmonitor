@@ -16,7 +16,7 @@
             echo '<p class="error">The email address is already registered!</p>';
         }
         if ($query->rowCount() == 0) {
-            $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password) VALUES (:fname,:fname,:password_hash,:email)");
+            $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password) VALUES (:fname,:fname,:email,:password_hash)");
             $query->bindParam("fname", $fname, PDO::PARAM_STR);
             $query->bindParam("lname", $fname, PDO::PARAM_STR);
             $query->bindParam("email", $email, PDO::PARAM_STR);
@@ -914,7 +914,7 @@
       <div class="card-body register-card-body">
         <p class="login-box-msg">Register a new membership</p>
         
-        
+
         <form method="post" action="" name="registration">
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
