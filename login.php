@@ -18,7 +18,7 @@
 	            $_SESSION['user'] = $email;
             // Redirect user to index.php
 	            header("Location: index.php");
-              }else{
+              } else {
 	echo "<div class='form'>
 <h3>Username OR Password is incorrect.</h3>
 <br/><a href='login.php'>Login</a></div>";
@@ -903,7 +903,7 @@
 
       <p class="login-box-msg">Sign in</p>
 
-      <form method="post" name="login">
+      <form method="post" action="" name="login">
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="email" placeholder="E-mail">
           <div class="input-group-append">
@@ -931,7 +931,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" value="Login" name="login" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" value="login" name="login" class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
