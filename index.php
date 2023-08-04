@@ -63,6 +63,15 @@
               </a>
             </div>
       </li>
+      <li class="nav-item dropdown d-none d-sm-inline-block">
+      <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="fas fa-sign-out"></i></a>
+            <div class="dropdown-menu">
+              <a href="logout.php" class="dropdown-item">
+                <span href="#" class="dropdown-item">Log Out</button>
+                </a>
+
+      </li>
     </ul>
 
     <!-- Right navbar links -->
@@ -182,11 +191,6 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="logout.php" role="button">
-          <i class="fas fa-sign-out"></i>
         </a>
       </li>
     </ul>
