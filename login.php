@@ -2,7 +2,7 @@
     require('./users/db.php');
     session_start();
     // When form submitted, check and create user session.
-    if (isset($_POST['login'])) {
+    if (isset($_POST['email'])) {
         $username = stripslashes($_REQUEST['email']);    // removes backslashes
         $username = mysqli_real_escape_string($con, $email);
         $password = stripslashes($_REQUEST['password']);
