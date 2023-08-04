@@ -1,29 +1,28 @@
 <?php
-  require('./users/db.php');
-  session_start();
-
-// after form submitted insert values in to tables.
-    if (isset($_POST['login'])){
-        // removes backslashes
-	    $email = stripslashes($_POST['email']);
-        //escapes special characters in a string
-	    $email = mysqli_real_escape_string($db,$email);
-	    $password = stripslashes($_POST['password']);
-	    $password = mysqli_real_escape_string($db,$password);
-	      //Checking for user already exist in the table or not
-        $query = "SELECT * FROM `accounts` WHERE email='$email' AND password='" . md5($password) . "'";;
-	        $result = mysqli_query($db,$query) or die(mysql_error());
-	        $rows = mysqli_num_rows($result);
-            if($rows==1){
-	            $_SESSION['user'] = $email;
-            // Redirect user to index.php
-	            header("Location: index.php");
-              } else {
-	echo "<div class='form'>
-<h3>Username OR Password is incorrect.</h3>
-<br/><a href='login.php'>Login</a></div>";
-	}
-    }
+    require('.users/db.php');
+    session_start();
+    // When form submitted, check and create user session.
+    if (isset($_POST['login'])) {
+        $username = stripslashes($_REQUEST['email']);    // removes backslashes
+        $username = mysqli_real_escape_string($con, $email);
+        $password = stripslashes($_REQUEST['password']);
+        $password = mysqli_real_escape_string($con, $password);
+        // Check user is exist in the database
+        $query    = "SELECT * FROM `accounts` WHERE username='$username'
+                     AND password='" . md5($password) . "'";
+        $result = mysqli_query($con, $query) or die(mysql_error());
+        $rows = mysqli_num_rows($result);
+        if ($rows == 1) {
+            $_SESSION['username'] = $username;
+            // Redirect to user dashboard page
+            header("Location: index.php");
+        } else {
+            echo "<div class='form'>
+                  <h3>Incorrect Username/password.</h3><br/>
+                  <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
+                  </div>";
+        }
+    } 
 ?>
 <!DOCTYPE html>
 <html lang="en">
