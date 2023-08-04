@@ -1,5 +1,5 @@
 <?php
-    require('.users/db.php');
+    require('./users/db.php');
     session_start();
     // When form submitted, check and create user session.
     if (isset($_POST['login'])) {
