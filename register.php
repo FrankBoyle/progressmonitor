@@ -1,7 +1,7 @@
 <?php
     session_start();
-
     include('./users/db.php');
+
     if (isset($_POST['register'])) {
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
@@ -907,14 +907,14 @@
     <section class="content">
     <div class="register-box container-fluid">
       <div class="register-logo">
-        <a href="../../index.php"><b>Bfactor</b></a>
+        <a href="./index.php"><b>Bfactor</b></a>
       </div>
   
     <div class="card">
       <div class="card-body register-card-body">
         <p class="login-box-msg">Register a new membership</p>
-        <?php
-
+        
+        
         <form method="post" action="" name="registration">
           <div class="input-group mb-3">
             <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
