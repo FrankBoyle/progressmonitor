@@ -14,6 +14,8 @@
           } else {
             if (password_verify($password, $result['password'])) {
                 $_SESSION['user'] = $result['email'];
+                header("Location: index.php");
+                
                 echo '<p class="success">Congratulations, you are logged in!</p>';
             } else {
                 echo '<p class="error">Username password combination is wrong!</p>';

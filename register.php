@@ -16,16 +16,17 @@
             echo '<p class="error">The email address is already registered!</p>';
         }
         if ($query->rowCount() == 0) {
-            $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password) VALUES (:fname,:fname,:email,:password_hash)");
+            $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password) VALUES (:fname,:lname,:email,:password_hash)");
             $query->bindParam("fname", $fname, PDO::PARAM_STR);
             $query->bindParam("lname", $fname, PDO::PARAM_STR);
             $query->bindParam("email", $email, PDO::PARAM_STR);
             $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
             $result = $query->execute();
             if ($result) {
-                echo '<p class="success">Your registration was successful!</p>';
+              header("Location: login.php");
+              echo '<p class="success">Your registration was successful!</p>';
             } else {
-                echo '<p class="error">Something went wrong!</p>';
+              echo '<p class="error">Something went wrong!</p>';
             }
         }
     }
