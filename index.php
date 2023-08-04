@@ -63,9 +63,6 @@
               </a>
             </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="lougout.php" role="button"><i class="fas fa-sign-out"></i></a>
-      </li>
     </ul>
 
     <!-- Right navbar links -->
@@ -877,8 +874,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item"><a href="./logout.php">Sign-Out</a></li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
