@@ -881,7 +881,7 @@
       <div class="card-body register-card-body">
         <p class="login-box-msg">Register a new membership</p>
         <?php
-    require('db.php');
+    require('/users/db.php');
     // When form submitted, insert values into the database.
     if (isset($_REQUEST['username'])) {
         // removes backslashes

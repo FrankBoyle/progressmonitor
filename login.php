@@ -874,7 +874,7 @@
   <div class="card">
     <div class="card-body login-card-body">
     <?php
-    require('./db/db.php');
+    require('./users/db.php');
     session_start();
     // When form submitted, check and create user session.
     if (isset($_POST['login'])) {
