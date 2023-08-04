@@ -1,3 +1,8 @@
+<?php
+require('./db/db.php');
+include("./db/auth_session.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
