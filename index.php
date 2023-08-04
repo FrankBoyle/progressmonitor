@@ -1,5 +1,4 @@
 <?php
-require('./users/db.php');
 include("./users/auth_session.php");
 ?>
 
