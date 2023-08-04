@@ -881,9 +881,9 @@
       <div class="card-body register-card-body">
         <p class="login-box-msg">Register a new membership</p>
         <?php
-    require('/users/db.php');
+    require('./users/db.php');
     // When form submitted, insert values into the database.
-    if (isset($_REQUEST['username'])) {
+    if (isset($_REQUEST['register'])) {
         // removes backslashes
         $fname = stripslashes($_REQUEST['fname']);
         //escapes special characters in a string
@@ -965,7 +965,7 @@
             </div>
             <!-- /.col -->
             <div class="col-4">
-              <button type="submit" name="register" id="submit" value="Register" class="btn btn-primary btn-block">Register</button>
+              <button type="submit" name="register" id="register" value="Register" class="btn btn-primary btn-block">Register</button>
             </div>
             <!-- /.col -->
           </div>
