@@ -1,12 +1,3 @@
-<?php
-   session_start();
-   if(!isset($_SESSION["email"])){
-       header("Location: ./login.php");
-       exit();
-   }
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -204,7 +195,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?php echo $_SESSION['email']; ?></a>
+          <a href="#" class="d-block">Fran Boyle and Dan Ganz</a>
         </div>
       </div>
 
@@ -874,7 +865,8 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="./logout.php">Sign-Out</a></li>
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard v1</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
