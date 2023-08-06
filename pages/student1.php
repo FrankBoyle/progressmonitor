@@ -38,8 +38,8 @@ $jsonData = json_encode($data);
 <head>
     <title>jsGrid Table</title>
     <!-- Include CSS file for jsGrid -->
-    <link rel="stylesheet" type="text/css" href="path_to_jsgrid_css/jsgrid.min.css" />
-    <link rel="stylesheet" type="text/css" href="path_to_jsgrid_css/jsgrid-theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
 </head>
 <body>
     <script>
