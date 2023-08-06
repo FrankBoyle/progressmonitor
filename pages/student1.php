@@ -68,6 +68,5 @@ $jsonData = json_encode($data);
 
     <!-- Include JavaScript files for jQuery and jsGrid -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 </body>
 </html>
