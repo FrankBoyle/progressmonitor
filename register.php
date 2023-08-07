@@ -18,7 +18,7 @@
         if ($query->rowCount() == 0) {
             $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password) VALUES (:fname,:lname,:email,:password_hash)");
             $query->bindParam("fname", $fname, PDO::PARAM_STR);
-            $query->bindParam("lname", $fname, PDO::PARAM_STR);
+            $query->bindParam("lname", $lname, PDO::PARAM_STR);
             $query->bindParam("email", $email, PDO::PARAM_STR);
             $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
             $result = $query->execute();

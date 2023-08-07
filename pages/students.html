@@ -837,12 +837,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>jsGrid</h1>
+            <h1>Array Display</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">jsGrid</li>
+              <li class="breadcrumb-item active">Array Display</li>
             </ol>
           </div>
         </div>
@@ -853,13 +853,23 @@
     <section class="content">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">jsGrid</h3>
+          <h3 class="card-title">Array</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
           <div id="jsGrid1"></div>
         </div>
-        <!-- /.card-body -->
+        <form action="display.php" method="post">
+          <label for="column_title">Column Title: </label>
+          <input type="text" name="column_title" id="column_title"><br>
+          
+          <label for="visible_columns">Visible Columns: </label>
+          <input type="checkbox" name="visible_columns[]" value="name"> Name
+          <input type="checkbox" name="visible_columns[]" value="email"> Email
+          <input type="checkbox" name="visible_columns[]" value="age"> Age<br>
+          
+          <input type="submit" value="Update View">
+      </form>
       </div>
       <!-- /.card -->
     </section>
@@ -879,40 +889,7 @@
   </aside>
   <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
 
-<!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- jsGrid -->
-<script src="../../plugins/jsgrid/demos/db.js"></script>
-<script src="../../plugins/jsgrid/jsgrid.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
-<!-- Page specific script -->
-<script>
-  $(function () {
-    $("#jsGrid1").jsGrid({
-        height: "100%",
-        width: "100%",
-
-        sorting: true,
-        paging: true,
-
-        data: db.clients,
-
-        fields: [
-            { name: "Name", type: "text", width: 150 },
-            { name: "Age", type: "number", width: 50 },
-            { name: "Address", type: "text", width: 200 },
-            { name: "Country", type: "select", items: db.countries, valueField: "Id", textField: "Name" },
-            { name: "Married", type: "checkbox", title: "Is Married" }
-        ]
-    });
-  });
 </script>
 </body>
 </html>
