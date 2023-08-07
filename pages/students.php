@@ -876,12 +876,12 @@
     
         // Update existing data
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-          $goalkey = $_POST["goalkey"];
-          $date = $_POST["date"];
-          $score = $_POST["score"];
-          $baseline = $_POST["baseline"];
+          $GoalKey = $_POST["GoalKey"];
+          $Date = $_POST["Date"];
+          $Score = $_POST["Score"];
+          $Baseline = $_POST["Baseline"];
   
-          $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE goalkey=$goalkey";
+          $update_sql = "UPDATE JaylaBrazzle1 SET Date='$Date', Score='$Score', Baseline='$Baseline' WHERE GoalKey=$GoalKey";
           if ($conn->query($update_sql) === TRUE) {
               echo "Record updated successfully!";
           } else {
@@ -898,10 +898,10 @@
             echo "<tr><th>Date</th><th>Score</th><th>Baseline</th></tr>";
             while ($row = $result->fetch_assoc()) {
               echo "<tr>";
-              echo "<td><input type='date' name='date' value='{$row["date"]}'></td>";
-              echo "<td><input type='float' name='score' value='{$row["score"]}'></td>";
-              echo "<td><input type='float' name='baseline' value='{$row["baseline"]}'></td>";  // Add this line
-              echo "<td><input type='hidden' name='goalkey' value='{$row["goalkey"]}'></td>";
+              echo "<td><input type='date' name='Date' value='{$row["Date"]}'></td>";
+              echo "<td><input type='float' name='Score' value='{$row["Score"]}'></td>";
+              echo "<td><input type='float' name='Baseline' value='{$row["Baseline"]}'></td>";  // Add this line
+              echo "<td><input type='hidden' name='Goalkey' value='{$row["GoalKey"]}'></td>";
               echo "<td><input type='submit' value='Update'></td>";
               echo "</tr>";
             }
