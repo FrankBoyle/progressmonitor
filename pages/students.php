@@ -859,7 +859,7 @@
         <div class="card-body">
           <div id="jsGrid1"></div>
         </div>
-        <h1>User List</h1>
+        <h1>Jayla Brazzle</h1>
         <?php
         $servername = "localhost";
         $username = "AndersonSchool";
@@ -874,28 +874,42 @@
             die("Connection failed: " . $conn->connect_error);
         }
     
+        // Update existing data
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+          $Goal=$_POST["Goal"];
+          $Date = $_POST["Date"];
+          $Score = $_POST["Score"];
+          $Baseline = $_POST["Baseline"];
+
+          $update_sql = "UPDATE JaylaBrazzle1 SET Date='$Date', Score='$Score', Baseline=$Baseline WHERE Goal=$Goal";
+          $conn->query($update_sql);
+        }
         // Fetch data from the database
         $sql = "SELECT * FROM JaylaBrazzle1";
         $result = $conn->query($sql);
     
         if ($result->num_rows > 0) {
-            // Display fetched data in a table
+            echo "<form method='post'>";               // Display fetched data in a table
             echo "<table border='1'>";
-            echo "<tr><th>Date</th><th>Score</th><th>Baseline</th></tr>";
+            echo "<tr><th>Goal</th><th>Date</th><th>Score</th><th>Baseline</th></tr>";
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
+                echo "<td>" . $row["Goal"] . "</td>";
                 echo "<td>" . $row["Date"] . "</td>";
                 echo "<td>" . $row["Score"] . "</td>";
                 echo "<td>" . $row["Baseline"] . "</td>";
+                echo "<td><input type='submit' value='Update'></td>";
                 echo "</tr>";
             }
             echo "</table>";
+            echo "</form>";
         } else {
             echo "No data available.";
         }
     
         $conn->close();
         ?>
+
       </div>
       <!-- /.card -->
     </section>
