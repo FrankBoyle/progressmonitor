@@ -894,7 +894,6 @@
             echo "<tr><th>Date</th><th>Score</th><th>Baseline</th></tr>";
             while ($row = $result->fetch_assoc()) {
               echo "<tr>";
-              echo "<td>{$row["goal"]}</td>";
               echo "<td><input type='text' name='name' value='{$row["Date"]}'></td>";
               echo "<td><input type='text' name='email' value='{$row["Score"]}'></td>";
               echo "<td><input type='text' name='date' value='{$row["Baseline"]}'></td>";  // Add this line
