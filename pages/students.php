@@ -882,10 +882,10 @@
           echo "Form submitted!";  //debugging
           print_r($_POST);
 
-          $GoalKey = $_POST["GoalKey"];
-          $Date = $_POST["Date"];
-          $Score = $_POST["Score"];
-          $Baseline = $_POST["Baseline"];
+          foreach ($_POST['id'] as $key => $GoalKey) {
+            $Date = $_POST["Date"][$key];
+            $Score = $_POST["Score"][$key];
+            $Baseline = $_POST["Baseline"][$key];
   
           $update_sql = "UPDATE JaylaBrazzle1 SET Date='$Date', Score='$Score', Baseline='$Baseline' WHERE GoalKey=$GoalKey";
           if ($conn->query($update_sql) === TRUE) {
@@ -894,6 +894,7 @@
               echo "Error updating record: " . $conn->error;
           }
       }
+    }
         // Fetch data from the database
         $sql = "SELECT GoalKey, Date, Score, Baseline FROM JaylaBrazzle1";
         $result = $conn->query($sql);
@@ -904,13 +905,13 @@
             echo "<tr><th>Date</th><th>Score</th><th>Baseline</th></tr>";
             while ($row = $result->fetch_assoc()) {
               echo "<tr>";
-              echo "<td><input type='date' name='Date' value='{$row["Date"]}'></td>";
-              echo "<td><input type='float' name='Score' value='{$row["Score"]}'></td>";
-              echo "<td><input type='float' name='Baseline' value='{$row["Baseline"]}'></td>";  // Add this line
-              echo "<td><input type='hidden' name='GoalKey' value='{$row["GoalKey"]}'></td>";
-              echo "<td><input type='submit' value='Update'></td>";
+              echo "<td><input type='date' name='Date[]' value='{$row["Date"]}'></td>";
+              echo "<td><input type='float' name='Score[]' value='{$row["Score"]}'></td>";
+              echo "<td><input type='float' name='Baseline[]' value='{$row["Baseline"]}'></td>";  // Add this line
+              echo "<td><input type='hidden' name='GoalKey[]' value='{$row["GoalKey"]}'></td>";
               echo "</tr>";
             }
+            echo "<td><input type='submit' value='Update'></td>";
             echo "</table>";
             echo "</form>";
         } else {
