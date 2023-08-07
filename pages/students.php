@@ -859,17 +859,43 @@
         <div class="card-body">
           <div id="jsGrid1"></div>
         </div>
-        <form action="display.php" method="post">
-          <label for="column_title">Column Title: </label>
-          <input type="text" name="column_title" id="column_title"><br>
-          
-          <label for="visible_columns">Visible Columns: </label>
-          <input type="checkbox" name="visible_columns[]" value="name"> Name
-          <input type="checkbox" name="visible_columns[]" value="email"> Email
-          <input type="checkbox" name="visible_columns[]" value="age"> Age<br>
-          
-          <input type="submit" value="Update View">
-      </form>
+        <h1>User List</h1>
+        <?php
+        $servername = "localhost";
+        $username = "AndersonSchool";
+        $password = "SpecialEd69$";
+        $dbname = "AndersonSchool";
+    
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+    
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+    
+        // Fetch data from the database
+        $sql = "SELECT * FROM JaylaBrazzle1";
+        $result = $conn->query($sql);
+    
+        if ($result->num_rows > 0) {
+            // Display fetched data in a table
+            echo "<table border='1'>";
+            echo "<tr><th>Date</th><th>Score</th><th>Baseline</th></tr>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . $row["Date"] . "</td>";
+                echo "<td>" . $row["Score"] . "</td>";
+                echo "<td>" . $row["Baseline"] . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "No data available.";
+        }
+    
+        $conn->close();
+        ?>
       </div>
       <!-- /.card -->
     </section>

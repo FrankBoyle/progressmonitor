@@ -25,7 +25,7 @@ $stmt->execute();
 $stmt->close();
 
 // Fetch data based on user preferences
-$sql = "SELECT " . implode(",", $visibleColumns) . " FROM JaylaBrazzle1"; // user_data should be your data table
+$sql = "SELECT " . implode(",", $visibleColumns) . " FROM user_data"; // user_data should be your data table
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
