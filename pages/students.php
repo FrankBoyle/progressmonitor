@@ -876,7 +876,7 @@
     
         // Update existing data
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-          $Goal=$_POST["Goal"];
+          $Goal = $_POST["Goal"];
           $Date = $_POST["Date"];
           $Score = $_POST["Score"];
           $Baseline = $_POST["Baseline"];
@@ -891,15 +891,16 @@
         if ($result->num_rows > 0) {
             echo "<form method='post'>";               // Display fetched data in a table
             echo "<table border='1'>";
-            echo "<tr><th>Goal</th><th>Date</th><th>Score</th><th>Baseline</th></tr>";
+            echo "<tr><th>Date</th><th>Score</th><th>Baseline</th></tr>";
             while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row["Goal"] . "</td>";
-                echo "<td>" . $row["Date"] . "</td>";
-                echo "<td>" . $row["Score"] . "</td>";
-                echo "<td>" . $row["Baseline"] . "</td>";
-                echo "<td><input type='submit' value='Update'></td>";
-                echo "</tr>";
+              echo "<tr>";
+              echo "<td>{$row["goal"]}</td>";
+              echo "<td><input type='text' name='name' value='{$row["Date"]}'></td>";
+              echo "<td><input type='text' name='email' value='{$row["Score"]}'></td>";
+              echo "<td><input type='text' name='date' value='{$row["Baseline"]}'></td>";  // Add this line
+              echo "<td><input type='hidden' name='id' value='{$row["Goal"]}'>";
+              echo "<td><input type='submit' value='Update'></td>";
+              echo "</tr>";
             }
             echo "</table>";
             echo "</form>";
@@ -909,6 +910,9 @@
     
         $conn->close();
         ?>
+
+
+
 
       </div>
       <!-- /.card -->
