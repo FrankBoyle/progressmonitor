@@ -889,7 +889,7 @@
           }
       }
         // Fetch data from the database
-        $sql = "SELECT goalkey, date, score, baseline FROM JaylaBrazzle1";
+        $sql = "SELECT GoalKey, Date, Score, Baseline FROM JaylaBrazzle1";
         $result = $conn->query($sql);
     
         if ($result->num_rows > 0) {
