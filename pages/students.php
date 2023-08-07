@@ -879,6 +879,9 @@
 
         // Update existing data
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+          echo "Form submitted!";  //debugging
+          print_r($_POST);
+
           $GoalKey = $_POST["GoalKey"];
           $Date = $_POST["Date"];
           $Score = $_POST["Score"];
