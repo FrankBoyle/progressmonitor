@@ -897,7 +897,7 @@
               echo "<td><input type='text' name='name' value='{$row["Date"]}'></td>";
               echo "<td><input type='text' name='email' value='{$row["Score"]}'></td>";
               echo "<td><input type='text' name='date' value='{$row["Baseline"]}'></td>";  // Add this line
-              echo "<td><input type='hidden' name='id' value='{$row["Goal"]}'>";
+              echo "<td><input type='hidden' name='id' value='{$row["Goal"]}'></td>";
               echo "<td><input type='submit' value='Update'></td>";
               echo "</tr>";
             }
