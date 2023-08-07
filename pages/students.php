@@ -876,16 +876,20 @@
     
         // Update existing data
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-          $Goal = $_POST["Goal"];
-          $Date = $_POST["Date"];
-          $Score = $_POST["Score"];
-          $Baseline = $_POST["Baseline"];
-
-          $update_sql = "UPDATE JaylaBrazzle1 SET Date='$Date', Score='$Score', Baseline=$Baseline WHERE Goal=$Goal";
-          $conn->query($update_sql);
-        }
+          $goalkey = $_POST["goalkey"];
+          $date = $_POST["date"];
+          $score = $_POST["score"];
+          $baseline = $_POST["baseline"];
+  
+          $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE goalkey=$goalkey";
+          if ($conn->query($update_sql) === TRUE) {
+              echo "Record updated successfully!";
+          } else {
+              echo "Error updating record: " . $conn->error;
+          }
+      }
         // Fetch data from the database
-        $sql = "SELECT * FROM JaylaBrazzle1";
+        $sql = "SELECT goalkey, date, score, baseline FROM JaylaBrazzle1";
         $result = $conn->query($sql);
     
         if ($result->num_rows > 0) {
@@ -894,10 +898,10 @@
             echo "<tr><th>Date</th><th>Score</th><th>Baseline</th></tr>";
             while ($row = $result->fetch_assoc()) {
               echo "<tr>";
-              echo "<td><input type='text' name='name' value='{$row["Date"]}'></td>";
-              echo "<td><input type='text' name='email' value='{$row["Score"]}'></td>";
-              echo "<td><input type='text' name='date' value='{$row["Baseline"]}'></td>";  // Add this line
-              echo "<td><input type='hidden' name='id' value='{$row["Goal"]}'></td>";
+              echo "<td><input type='text' name='date' value='{$row["date"]}'></td>";
+              echo "<td><input type='text' name='score' value='{$row["score"]}'></td>";
+              echo "<td><input type='text' name='baseline' value='{$row["baseline"]}'></td>";  // Add this line
+              echo "<td><input type='hidden' name='goalkey' value='{$row["goalkey"]}'></td>";
               echo "<td><input type='submit' value='Update'></td>";
               echo "</tr>";
             }
