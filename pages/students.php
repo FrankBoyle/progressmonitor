@@ -944,9 +944,9 @@
             echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
             echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
             echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+            echo "<td><input type='submit' value='Update'></td>";
             echo "</tr>";
           }
-            echo "<td><input type='submit' value='Update'></td>";
             echo "</table>";
             echo "</form>";
           } else {
