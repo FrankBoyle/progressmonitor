@@ -878,12 +878,12 @@
 
     // Update existing data
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        foreach ($_POST['goalkey'] as $key => $id) {
+        foreach ($_POST['GoalKey'] as $key => $GoalKey) {
             $date = $_POST["date"][$key];
             $score = $_POST["score"][$key];
             $baseline = $_POST["baseline"][$key];
 
-            $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE goalkey=$goalkey";
+            $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE goalkey=$key";
             if ($conn->query($update_sql) !== TRUE) {
                 echo "Error updating record: " . $conn->error;
             } else {
