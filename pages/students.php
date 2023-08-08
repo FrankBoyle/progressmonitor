@@ -13,18 +13,11 @@ if ($conn->connect_error) {
 $selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    $idArray = $_POST['id'];
-    $uuidArray = $_POST['uuid'];
-    $dateArray = $_POST['date'];
-    $scoreArray = $_POST['score'];
-    $baselineArray = $_POST['baseline'];
-
-    for ($i = 0; $i < count($idArray); $i++) {
-        $id = $idArray[$i];
-        $uuid = $uuidArray[$i];
-        $date = $dateArray[$i];
-        $score = $scoreArray[$i];
-        $baseline = $baselineArray[$i];
+    foreach ($_POST['id'] as $key => $id) {
+        $uuid = $_POST["uuid"][$key];
+        $date = $_POST["date"][$key];
+        $score = $_POST["score"][$key];
+        $baseline = $_POST["baseline"][$key];
 
         $update_sql = "UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE id=? AND uuid=?";
         $stmt = $conn->prepare($update_sql);
@@ -911,21 +904,6 @@ $result = $conn->query($sql);
 
           <form method="post" action="">
             <select name="selected_table">
-            
-<!-- php   
-
-              $tables = ['JaylaBrazzle1', 'JaylaBrazzle2', 'JaylaBrazzle3', 'JaylaBrazzle4', 'NicoleElkins1', 'NicoleElkins2', 'NicoleElkins3', 'NicoleElkins4'];
-
-              foreach ($tables as $table) {
-                echo "<option value='$table'";
-              if ($table === $selectedTable) {
-                echo " selected";
-              }
-              echo ">$table</option>";
-              }
--->
-
-
                 <option value='JaylaBrazzle1'<?php if ($selectedTable === 'JaylaBrazzle1') echo " selected"; ?>>JaylaBrazzle1</option>
                 <option value='JaylaBrazzle2'<?php if ($selectedTable === 'JaylaBrazzle2') echo " selected"; ?>>JaylaBrazzle2</option>
                 <option value='JaylaBrazzle3'<?php if ($selectedTable === 'JaylaBrazzle3') echo " selected"; ?>>JaylaBrazzle3</option>
@@ -938,8 +916,6 @@ $result = $conn->query($sql);
         <input type="submit" value="Select Student">
     </form>
 
-
-
 <!-- Display data only if a table is selected -->
 <?php if ($result->num_rows > 0): ?>
     <form method="post" action="">
@@ -948,12 +924,13 @@ $result = $conn->query($sql);
             <?php
             while ($row = $result->fetch_assoc()){
               echo "<tr>";
-                echo "<td><input type='number' name='id[]' value='<?php echo $row["id"]; ?>'></td>";
-                    echo "<td><input type='date' name='date[]' value='<?php echo $row["date"]; ?>'></td>";
-                    echo "<td><input type='number' name='score[]' value='<?php echo $row["score"]; ?>'></td>";
-                    echo "<td><input type='number' name='baseline[]' value='<?php echo $row["baseline"]; ?>'></td>";
-                    echo "</tr>";
+              echo "<td><input type='number' name='id[]' value='<?php echo $row["id"]; ?>'></td>";
+              echo "<td><input type='date' name='date[]' value='<?php echo $row["date"]; ?>'></td>";
+              echo "<td><input type='number' name='score[]' value='<?php echo $row["score"]; ?>'></td>";
+              echo "<td><input type='number' name='baseline[]' value='<?php echo $row["baseline"]; ?>'></td>";
+              echo "</tr>";
             }
+            ?>
             <tr>
                 <td colspan="5"><input type='submit' name='update' value='Update'></td>
             </tr>
