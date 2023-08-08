@@ -947,11 +947,11 @@ $result = $conn->query($sql);
             <tr><th>ID</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
             <?php
             while ($row = $result->fetch_assoc()){
-                <tr>
-                    <td><input type='number' name='id[]' value='<?php echo $row["id"]; ?>'></td>
-                    <td><input type='date' name='date[]' value='<?php echo $row["date"]; ?>'></td>
-                    <td><input type='number' name='score[]' value='<?php echo $row["score"]; ?>'></td>
-                    <td><input type='number' name='baseline[]' value='<?php echo $row["baseline"]; ?>'></td>
+              echo "<tr>";
+                echo "<td><input type='number' name='id[]' value='<?php echo $row["id"]; ?>'></td>";
+                    echo "<td><input type='date' name='date[]' value='<?php echo $row["date"]; ?>'></td>";
+                    echo "<td><input type='number' name='score[]' value='<?php echo $row["score"]; ?>'></td>";
+                    echo "<td><input type='number' name='baseline[]' value='<?php echo $row["baseline"]; ?>'></td>";
                     echo "</tr>";
             }
             <tr>
