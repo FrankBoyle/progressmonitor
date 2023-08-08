@@ -919,10 +919,11 @@ $conn->close();
             <option value='JaylaBrazzle2'>NicoleElkins3</option>
             <option value='JaylaBrazzle2'>NicoleElkins4</option>
             </select>
-            <input type='submit' value='selected_table'>
+            <input type='submit' value='Select Student'>
           </form>
           
-          <form method='post' action="">
+        <?php if ($result->num_rows > 0): ?>
+          <form method='post'>
             <table border='1'>
               <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
               <?php
@@ -938,7 +939,9 @@ $conn->close();
               <tr><td colspan="4"><input type='submit' value='Update'></td></tr>
             </table>
           </form>
-
+        <?php else: ?>
+        <p>No data available.</p>
+        <?php endif; ?>
 
 </div>
       <!-- /.card -->
