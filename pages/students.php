@@ -20,8 +20,8 @@ $selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1';
 
 // Update existing data
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    echo "Form submitted!"; // Debugging
-    print_r($_POST);
+    //echo "Form submitted!"; // Debugging
+    //print_r($_POST);
 
     foreach ($_POST['id'] as $key => $id) {
         $date = $_POST["date"][$key];
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         $baseline = $_POST["baseline"][$key];
 
         $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
-        echo "Update SQL: $update_sql<br>"; // Debugging
+        //echo "Update SQL: $update_sql<br>"; // Debugging
         if ($conn->query($update_sql) === TRUE) {
             echo "Record updated successfully!";
         } else {
@@ -933,10 +933,11 @@ $conn->close();
                   echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                   echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                   echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+                  echo "<td><input type='submit' name='update' value='Update'></td>";
                   echo "</tr>";
                 }
               ?>
-            <tr><td colspan="4"><input type='submit' name='update' value='Update'></td></tr>
+            <!--<tr><td colspan="4"><input type='submit' name='update' value='Update'></td></tr>-->
             </table>
           </form>
         <?php else: ?>
