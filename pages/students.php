@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         $score = $scores[$i];
         $baseline = $baselines[$i];
 
-        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE uuid='$id'";
+        $update_sql = "UPDATE $selectedTable SET id='$id' date='$date', score='$score', baseline='$baseline' WHERE uuid='$uuid'";
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
         }
