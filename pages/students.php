@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$selectedTable = $_POST['selected_table'] ?? 'DefaultTableName';
+$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     foreach ($_POST['id'] as $key => $id) {
