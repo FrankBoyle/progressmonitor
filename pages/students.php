@@ -12,6 +12,9 @@ if ($conn->connect_error) {
 
 $selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
+
+echo "Updating records in table: $selectedTable<br>";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     // Handle updates
     foreach ($_POST['id'] as $key => $id) {
