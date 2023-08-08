@@ -936,7 +936,7 @@ $result = $conn->query($sql);
 <?php if ($result->num_rows > 0): ?>
     <form method='post' action="">
         <table border='1'>
-            <tr><th>Entry</th><th>UUID</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
+            <tr><th>ID</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
             <?php
             while ($row = $result->fetch_assoc()): ?>
                 <tr>
