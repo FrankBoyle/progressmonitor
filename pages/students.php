@@ -27,10 +27,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         $score = $scoreArray[$i];
         $baseline = $baselineArray[$i];
 
-        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id AND uuid='$uuid'";
-        if ($conn->query($update_sql) !== TRUE) {
-            echo "Error updating record: " . $conn->error;
+        // Prepare the update statement
+        $update_sql = "UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE id=? AND uuid=?";
+        $stmt = $conn->prepare($update_sql);
+        $stmt->bind_param("ssdsi", $date, $score, $baseline, $id, $uuid);
+
+        if ($stmt->execute()) {
+            echo "Record updated successfully!";
+        } else {
+            echo "Error updating record: " . $stmt->error;
         }
+
+        $stmt->close();
     }
 }
 
