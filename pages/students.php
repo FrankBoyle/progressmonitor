@@ -918,32 +918,31 @@ $result = $conn->query($sql);
         <input type="submit" name="select_table" value="Select Table">
     </form>
 
-    <!-- Display data only if a table is selected -->
-    <?php if ($result->num_rows > 0): ?>
-        <form method='post' action="">
-            <table border='1'>
-                <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
-                <?php
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
-                    echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
-                    echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
-                    echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
-                    //echo "<td><input type='submit' name='update' value='Update'></td>";
-                    echo "</tr>";
-                }
-                ?>
-            </table>
-            <td><input type='submit' name='update' value='Update'></td>
-        </form>
-    <?php else: ?>
-        <p>No data available.</p>
-    <?php endif; ?>
+<!-- Display data only if a table is selected -->
+<?php if ($result->num_rows > 0): ?>
+    <form method='post' action="">
+        <table border='1'>
+            <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
+            <?php
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
+                echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+                echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+                echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+        <input type='submit' name='update' value='Update'>
+    </form>
+<?php else: ?>
+    <p>No data available.</p>
+<?php endif; ?>
 
-    <?php
-    $conn->close();
-    ?>
+<?php
+$conn->close();
+?>
 
 </div>
       <!-- /.card -->
