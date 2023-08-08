@@ -942,7 +942,7 @@ $result = $conn->query($sql);
                 echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                 echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                 echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
-                echo "<input type="hidden" name="selected_table" value="<?php echo $selectedTable; ?>">";
+                echo "<td><input type="hidden" name="selected_table" value="<?php echo $selectedTable; ?>"></td>";
                 echo "</tr>";
             }
             ?>
