@@ -894,7 +894,7 @@ $conn->close();
         </div>
         <h1>Progress Monitoring Testing Area</h1>
 
-          <form method='post' action="">
+          <form method="post" action="">
             <select name='selected_table'>
             <option value='JaylaBrazzle1'<?php if ($selectedTable === 'JaylaBrazzle1') echo " selected"; ?>>JaylaBrazzle1</option>
             <option value='JaylaBrazzle2'<?php if ($selectedTable === 'JaylaBrazzle2') echo " selected"; ?>>JaylaBrazzle2</option>
@@ -909,7 +909,7 @@ $conn->close();
           </form>
           
         <?php if ($result->num_rows > 0): ?>
-          <form method='post' action=''>
+          <form method="post" action="">
             <table border='1'>
               <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
               <?php
