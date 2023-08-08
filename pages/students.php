@@ -914,6 +914,7 @@ $result = $conn->query($sql);
               <option value='NicoleElkins4'>NicoleElkins4</option>
               </select>
             -->
+
         <input type="submit" name="select_table" value="Select Table">
     </form>
 
@@ -933,8 +934,8 @@ $result = $conn->query($sql);
                     echo "</tr>";
                 }
                 ?>
-                <td><input type='submit' name='update' value='Update'></td>
             </table>
+            <td><input type='submit' name='update' value='Update'></td>
         </form>
     <?php else: ?>
         <p>No data available.</p>
