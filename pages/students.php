@@ -902,7 +902,7 @@ $result = $conn->query($sql);
         </div>
         <h1>Progress Monitoring Testing Area</h1>
 
-          <form method="post" action="">
+          <form method="post">
             <select name="selected_table">
             
 <!--    php   
@@ -932,7 +932,7 @@ $result = $conn->query($sql);
 
 <!-- Display data only if a table is selected -->
 <?php if ($result->num_rows > 0): ?>
-    <form method='post' action="">
+    <form method='post'>
         <table border='1'>
             <tr><th>ID</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
             <?php
