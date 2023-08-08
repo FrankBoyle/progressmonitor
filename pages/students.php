@@ -23,18 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
 
     for ($i = 0; $i < count($ids); $i++) {
         $id = $ids[$i];
-        $date = $dates[$i];
-        $score = $scores[$i];
-        $baseline = $baselines[$i];
+        $date = $conn->real_escape_string($dates[$i]);
+        $score = $conn->real_escape_string($scores[$i]);
+        $baseline = $conn->real_escape_string($baselines[$i]);
 
-        $update_sql = "UPDATE $selectedTable SET id='$ids' date='$date', score='$score', baseline='$baseline' WHERE uuid='$id'";
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE uuid='$id'";
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
         }
     }
 }
 
-$sql = "SELECT uuid, date, score, baseline FROM $selectedTable";
+$sql = "SELECT uuid, id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
