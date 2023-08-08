@@ -916,10 +916,11 @@ $result = $conn->query($sql);
                     echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                     echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                     echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
-                    echo "<td><input type='submit' name='update' value='Update'></td>";
+                    //echo "<td><input type='submit' name='update' value='Update'></td>";
                     echo "</tr>";
                 }
                 ?>
+                <td><input type='submit' name='update' value='Update'></td>
             </table>
         </form>
     <?php else: ?>
