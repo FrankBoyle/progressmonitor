@@ -940,7 +940,6 @@ $result = $conn->query($sql);
             <?php
             while ($row = $result->fetch_assoc()): ?>
                 <tr>
-                    <td><input type='hidden' name='uuid[]' value='<?php echo $row["uuid"]; ?>' readonly></td>
                     <td><input type='number' name='id[]' value='<?php echo $row["id"]; ?>'></td>
                     <td><input type='date' name='date[]' value='<?php echo $row["date"]; ?>'></td>
                     <td><input type='number' name='score[]' value='<?php echo $row["score"]; ?>'></td>
