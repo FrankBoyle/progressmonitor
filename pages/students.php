@@ -887,7 +887,7 @@
             if ($conn->query($update_sql) !== TRUE) {
                 echo "Error updating record: " . $conn->error;
             } else {
-                echo "Updated record with ID: $goalkey<br>";
+                echo "Updated record with ID: $id<br>";
             }
         }
     }
