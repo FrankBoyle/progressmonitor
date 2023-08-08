@@ -892,7 +892,19 @@ $result = $conn->query($sql);
 
           <form method="post" action="">
             <select name="selected_table">
-              <option value='JaylaBrazzle1'>JaylaBrazzle1</option>
+            <?php
+              $tables = ['JaylaBrazzle1', 'JaylaBrazzle2', 'JaylaBrazzle3', 'JaylaBrazzle4', 'NicoleElkins1', 'NicoleElkins2', 'NicoleElkins3', 'NicoleElkins4'];
+
+              foreach ($tables as $table) {
+                echo "<option value='$table'";
+              if ($table === $selectedTable) {
+                echo " selected";
+              }
+            echo ">$table</option>";
+        }
+        ?>  
+            <!--
+            <option value='JaylaBrazzle1'>JaylaBrazzle1</option>
               <option value='JaylaBrazzle2'>JaylaBrazzle2</option>
               <option value='JaylaBrazzle3'>JaylaBrazzle3</option>
               <option value='JaylaBrazzle4'>JaylaBrazzle4</option>
@@ -901,6 +913,7 @@ $result = $conn->query($sql);
               <option value='NicoleElkins3'>NicoleElkins3</option>
               <option value='NicoleElkins4'>NicoleElkins4</option>
               </select>
+            -->
         <input type="submit" name="select_table" value="Select Table">
     </form>
 
