@@ -859,7 +859,7 @@
         <div class="card-body">
           <div id="jsGrid1"></div>
         </div>
-        <h1>Jayla Brazzle</h1>
+        <h1>Progress Monitoring Testing Area</h1>
         <?php
           $servername = "localhost";
           $username = "AndersonSchool";
@@ -911,6 +911,7 @@
           if ($selectedTable === 'JaylaBrazzle1') echo " selected";
             echo ">JaylaBrazzle1</option>";
             echo "<option value='AnotherTable'"; // Add other table options here
+          if ($selectedTable === 'AnotherTable') echo " selected";
             echo ">JaylaBrazzle2</option>";
             echo "<option value='AnotherTable'"; // Add other table options here
             echo ">JaylaBrazzle3</option>";
@@ -924,10 +925,8 @@
             echo ">NicoleElkins3</option>";
             echo "<option value='AnotherTable'"; // Add other table options here
             echo ">NicoleElkins4</option>";
-
-            echo "<option value='AnotherTable'"; // Add other table options here
-          if ($selectedTable === 'AnotherTable') echo " selected";
             echo ">AnotherTable</option>";
+            
             // Add more options for other tables as needed
             echo "</select>";
             echo "<input type='submit' value='Select Table'>";
