@@ -904,7 +904,7 @@
             echo "Date: <input type='date' name='date[]' value='{$row["date"]}'><br>";
             echo "Score: <input type='number' name='score[]' value='{$row["score"]}'><br>";
             echo "Baseline: <input type='number' name='baseline[]' value='{$row["baseline"]}'><br>";
-            echo "<input type='hidden' name='id[]' value='{$row["id"]}'>";
+            echo "<input type='hidden' name='id[]' value='{$row["goalkey"]}'>";
             echo "<hr>";
         }
         echo "<input type='submit' value='Update'>";
