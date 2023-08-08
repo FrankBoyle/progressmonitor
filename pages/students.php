@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         $score = $scores[$i];
         $baseline = $baselines[$i];
 
-        $update_sql = "UPDATE $selectedTable SET id='$id' date='$date', score='$score', baseline='$baseline' WHERE uuid='$uuid'";
+        $update_sql = "UPDATE $selectedTable SET id='$entry' date='$date', score='$score', baseline='$baseline' WHERE uuid='$id'";
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
         }
@@ -937,7 +937,7 @@ $result = $conn->query($sql);
             <?php
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td><input type='text' name='id[]' value='{$row["uuid"]}' readonly></td>";
+                echo "<td><input type='text' name='id[]' value='{$row["id"]}' readonly></td>";
                 echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                 echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                 echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
