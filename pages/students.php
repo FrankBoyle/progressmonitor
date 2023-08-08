@@ -934,13 +934,12 @@ $result = $conn->query($sql);
 
 <!-- Display data only if a table is selected -->
 <?php if ($result->num_rows > 0): ?>
-    <form method='post'>
+    <form method='post' action="">
         <table border='1'>
             <tr><th>ID</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
             <?php
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td><input type='hidden' name='uuid[]' value='{$row["uuid"]}'>{$row["uuid"]}</td>";
                 echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
                 echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                 echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
