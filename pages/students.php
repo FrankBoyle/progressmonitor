@@ -13,28 +13,26 @@ if ($conn->connect_error) {
 $selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
+    // Handle updates
     foreach ($_POST['id'] as $key => $id) {
-        $uuid = $_POST["uuid"][$key];
         $date = $_POST["date"][$key];
         $score = $_POST["score"][$key];
         $baseline = $_POST["baseline"][$key];
 
-        $conn->prepare("UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE id=?");
-        $stmt->bind_param("ssdi", $date, $score, $baseline, $id);
-
-        if ($stmt->execute()) {
-            echo "Record updated successfully!";
-        } else {
-            echo "Error updating record: " . $stmt->error;
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
+        
+        if ($conn->query($update_sql) !== TRUE) {
+            echo "Error updating record: " . $conn->error;
         }
-
-        $stmt->close();
     }
-
-    $conn->commit();
 }
 
-$sql = "SELECT id, uuid, date, score, baseline FROM $selectedTable";
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
+    // Handle student selection
+    $selectedTable = $_POST['selected_table'];
+}
+
+$sql = "SELECT id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
@@ -903,37 +901,49 @@ $result = $conn->query($sql);
 
           <form method="post" action="">
             <select name="selected_table">
-                <option value='JaylaBrazzle1'<?php if ($selectedTable === 'JaylaBrazzle1') echo " selected"; ?>>JaylaBrazzle1</option>
-                <option value='JaylaBrazzle2'<?php if ($selectedTable === 'JaylaBrazzle2') echo " selected"; ?>>JaylaBrazzle2</option>
-                <option value='JaylaBrazzle3'<?php if ($selectedTable === 'JaylaBrazzle3') echo " selected"; ?>>JaylaBrazzle3</option>
-                <option value='JaylaBrazzle4'<?php if ($selectedTable === 'JaylaBrazzle4') echo " selected"; ?>>JaylaBrazzle4</option>
-                <option value='NicoleElkins1'<?php if ($selectedTable === 'NicoleElkins1') echo " selected"; ?>>NicoleElkins1</option>
-                <option value='NicoleElkins2'<?php if ($selectedTable === 'NicoleElkins2') echo " selected"; ?>>NicoleElkins2</option>
-                <option value='NicoleElkins3'<?php if ($selectedTable === 'NicoleElkins3') echo " selected"; ?>>NicoleElkins3</option>
-                <option value='NicoleElkins4'<?php if ($selectedTable === 'NicoleElkins4') echo " selected"; ?>>NicoleElkins4</option>
+            
+<!--    php   
+
+              $tables = ['JaylaBrazzle1', 'JaylaBrazzle2', 'JaylaBrazzle3', 'JaylaBrazzle4', 'NicoleElkins1', 'NicoleElkins2', 'NicoleElkins3', 'NicoleElkins4'];
+
+              foreach ($tables as $table) {
+                echo "<option value='$table'";
+              if ($table === $selectedTable) {
+                echo " selected";
+              }
+              echo ">$table</option>";
+              }
+     
+ -->
+              <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
+              <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
+              <option value='JaylaBrazzle3'<?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
+              <option value='JaylaBrazzle4'<?= $selectedTable === 'JaylaBrazzle4' ? ' selected' : '' ?>>JaylaBrazzle4</option>
+              <option value='NicoleElkins1'<?= $selectedTable === 'NicoleElkins1' ? ' selected' : '' ?>>NicoleElkins1</option>
+              <option value='NicoleElkins2'<?= $selectedTable === 'NicoleElkins2' ? ' selected' : '' ?>>NicoleElkins2</option>
+              <option value='NicoleElkins3'<?= $selectedTable === 'NicoleElkins3' ? ' selected' : '' ?>>NicoleElkins3</option>
+              <option value='NicoleElkins4'<?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
               </select>
-        <input type="submit" value="Select Student">
+        <input type="submit" name="select_table" value="Select Student">
     </form>
 
 <!-- Display data only if a table is selected -->
 <?php if ($result->num_rows > 0): ?>
-    <form method="post" action="">
-        <table border="1">
-            <tr><th>ID</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
+    <form method='post' action="">
+        <table border='1'>
+            <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
             <?php
-            while ($row = $result->fetch_assoc()){
-              echo "<tr>";
-              echo "<td><input type='number' name='id[]' value='<?php echo $row["id"]; ?>'></td>";
-              echo "<td><input type='date' name='date[]' value='<?php echo $row["date"]; ?>'></td>";
-              echo "<td><input type='number' name='score[]' value='<?php echo $row["score"]; ?>'></td>";
-              echo "<td><input type='number' name='baseline[]' value='<?php echo $row["baseline"]; ?>'></td>";
-              echo "</tr>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
+                echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+                echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+                echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+                echo "</tr>";
             }
             ?>
-            <tr>
-                <td colspan="5"><input type='submit' name='update' value='Update'></td>
-            </tr>
         </table>
+        <input type='submit' name='update' value='Update'>
     </form>
 <?php else: ?>
     <p>No data available.</p>
