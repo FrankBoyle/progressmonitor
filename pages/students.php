@@ -14,26 +14,16 @@ $selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default t
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     // Handle updates
-    foreach ($_POST['uuid'] as $key => $uuid) {
+    foreach ($_POST['id'] as $key => $id) {
         $date = $_POST["date"][$key];
         $score = $_POST["score"][$key];
         $baseline = $_POST["baseline"][$key];
 
-        $update_sql = "UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE uuid=?";
-$stmt = $conn->prepare($update_sql);
-$stmt->bind_param("ssss", $date, $score, $baseline, $uuid);
-
-foreach ($_POST['uuid'] as $key => $uuid) {
-    $date = $_POST["date"][$key];
-    $score = $_POST["score"][$key];
-    $baseline = $_POST["baseline"][$key];
-    
-    if ($stmt->execute() !== TRUE) {
-        echo "Error updating record: " . $stmt->error;
-    }
-}
-
-$stmt->close();
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
+        
+        if ($conn->query($update_sql) !== TRUE) {
+            echo "Error updating record: " . $conn->error;
+        }
     }
 }
 
@@ -42,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
     $selectedTable = $_POST['selected_table'];
 }
 
-$sql = "SELECT uuid, date, score, baseline FROM $selectedTable";
+$sql = "SELECT id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
