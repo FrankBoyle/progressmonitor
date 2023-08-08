@@ -22,8 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         $date = $_POST["date"][$key];
         $score = $_POST["score"][$key];
         $baseline = $_POST["baseline"][$key];
+        $goal = $_POST["goal"][$key];
 
-        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline', goal='$goal' WHERE id=$id";
        
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
@@ -37,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
     $_SESSION['selected_table'] = $selectedTable; // Store the selected table value in a session variable
 }
 
-$sql = "SELECT uuid, id, date, score, baseline FROM $selectedTable";
+$sql = "SELECT uuid, id, goal, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
@@ -936,10 +937,17 @@ $result = $conn->query($sql);
 <?php if ($result->num_rows > 0): ?>
     <form method='post' action="">
         <table border='1'>
-            <tr><th>ID</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
+            <tr>
+                <th>Goal</th>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Score</th>
+                <th>Baseline</th>
+            </tr>
             <?php
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
+                echo "<td><input type='text' name='goal[]' value='{$row["goal"]}'></td>";
                 echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
                 echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                 echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
