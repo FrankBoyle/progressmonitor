@@ -924,34 +924,18 @@ $result = $conn->query($sql);
 -->
 
 
-<? php
-echo "<select name='selected_table'>";
-echo "<option value='JaylaBrazzle1'";
-if ($selectedTable === 'JaylaBrazzle1') echo " selected";
-    echo ">JaylaBrazzle2</option>";
-    echo ">JaylaBrazzle3</option>";
-    echo ">JaylaBrazzle4</option>";
-    echo ">NicoleElkins1</option>";
-    echo ">NicoleElkins2</option>";
-    echo ">NicoleElkins3</option>";
-    echo ">NicoleElkins4</option>";
-  echo "</select>";
-echo "<input type='submit' name='select_student' value='Select Student'>";
-?>
-
-<!--
-              <option value='JaylaBrazzle1'< ?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
-              <option value='JaylaBrazzle2'< ?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
-              <option value='JaylaBrazzle3'< ?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
-              <option value='JaylaBrazzle4'< ?= $selectedTable === 'JaylaBrazzle4' ? ' selected' : '' ?>>JaylaBrazzle4</option>
-              <option value='NicoleElkins1'< ?= $selectedTable === 'NicoleElkins1' ? ' selected' : '' ?>>NicoleElkins1</option>
-              <option value='NicoleElkins2'< ?= $selectedTable === 'NicoleElkins2' ? ' selected' : '' ?>>NicoleElkins2</option>
-              <option value='NicoleElkins3'< ?= $selectedTable === 'NicoleElkins3' ? ' selected' : '' ?>>NicoleElkins3</option>
-              <option value='NicoleElkins4'< ?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
+              <option value='JaylaBrazzle1'<?php if ($selectedTable === 'JaylaBrazzle1') echo "selected" : ?>>JaylaBrazzle1</option>
+              <option value='JaylaBrazzle2'<?php if ($selectedTable === 'JaylaBrazzle2') echo "selected" : ?>>JaylaBrazzle2</option>
+              <option value='JaylaBrazzle3'<?php if ($selectedTable === 'JaylaBrazzle3') echo "selected" : ?>>JaylaBrazzle3</option>
+              <option value='JaylaBrazzle4'<?php if ($selectedTable === 'JaylaBrazzle4') echo "selected" : ?>>JaylaBrazzle4</option>
+              <option value='NicoleElkins1'<?php if ($selectedTable === 'NicoleElkins1') echo "selected" : ?>>NicoleElkins1</option>
+              <option value='NicoleElkins2'<?php if ($selectedTable === 'NicoleElkins2') echo "selected" : ?>>NicoleElkins2</option>
+              <option value='NicoleElkins3'<?php if ($selectedTable === 'NicoleElkins3') echo "selected" : ?>>NicoleElkins3</option>
+              <option value='NicoleElkins4'<?php if ($selectedTable === 'NicoleElkins4') echo "selected" : ?>>NicoleElkins4</option>
               </select>
         <input type="submit" name="select_table" value="Select Student">
     </form>
--->
+
 
 
 <!-- Display data only if a table is selected -->
