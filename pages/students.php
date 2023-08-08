@@ -878,7 +878,7 @@
 
     // Update existing data
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        foreach ($_POST['goalkey'] as $key => $goalkey) {
+        foreach ($_POST['goalkey'] as $key => $id) {
             $date = $_POST["date"][$key];
             $score = $_POST["score"][$key];
             $baseline = $_POST["baseline"][$key];
