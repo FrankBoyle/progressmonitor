@@ -4,31 +4,40 @@ $username = "AndersonSchool";
 $password = "SpecialEd69$";
 $dbname = "AndersonSchool";
 
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$selectedTable = $_POST["selected_table"] ?? 'JaylaBrazzle1';
+// Debugging output
+echo "Update SQL: $update_sql<br>";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
+// Update existing data
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    echo "Form submitted!"; // Debugging
+    print_r($_POST);
+
     foreach ($_POST['id'] as $key => $id) {
-        $date = $_POST['date'][$key];
-        $score = $_POST['score'][$key];
-        $baseline = $_POST['baseline'][$key];
+        $date = $_POST["date"][$key];
+        $score = $_POST["score"][$key];
+        $baseline = $_POST["baseline"][$key];
 
         $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
-        if ($conn->query($update_sql) !== TRUE) {
+        if ($conn->query($update_sql) === TRUE) {
+            echo "Record updated successfully!";
+        } else {
             echo "Error updating record: " . $conn->error;
         }
     }
 }
 
+// Fetch data from the selected table
 $sql = "SELECT id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 
-$conn->close();
 ?>
 
 <!DOCTYPE html>
