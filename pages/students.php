@@ -932,6 +932,14 @@ $result = $conn->query($sql);
               </select>
         <input type="submit" name="select_table" value="Select Student">
     </form>
+   
+    
+    <form method="post" action="">
+    <label for="edit_goal">Edit Goal: </label>
+    <input type="text" name="edit_goal" id="edit_goal">
+    <input type="submit" name="save_goal" value="Save Goal">
+</form>
+
 
 <!-- Display data only if a table is selected -->
 <?php if ($result->num_rows > 0): ?>
