@@ -910,12 +910,19 @@
             echo "<option value='JaylaBrazzle1'"; // Default option
           if ($selectedTable === 'JaylaBrazzle1') echo " selected";
             echo ">JaylaBrazzle1</option>";
+            echo "<option value='AnotherTable'"; // Add other table options here
             echo ">JaylaBrazzle2</option>";
+            echo "<option value='AnotherTable'"; // Add other table options here
             echo ">JaylaBrazzle3</option>";
+            echo "<option value='AnotherTable'"; // Add other table options here
             echo ">JaylaBrazzle4</option>";
+            echo "<option value='AnotherTable'"; // Add other table options here
             echo ">NicoleElkins1</option>";
+            echo "<option value='AnotherTable'"; // Add other table options here
             echo ">NicoleElkins2</option>";
+            echo "<option value='AnotherTable'"; // Add other table options here
             echo ">NicoleElkins3</option>";
+            echo "<option value='AnotherTable'"; // Add other table options here
             echo ">NicoleElkins4</option>";
 
             echo "<option value='AnotherTable'"; // Add other table options here
@@ -946,10 +953,7 @@
   $conn->close();
   ?>
 
-
-
-
-      </div>
+</div>
       <!-- /.card -->
     </section>
     <!-- /.content -->
