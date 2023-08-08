@@ -16,7 +16,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$selectedTable = $_POST['selected_table']; // Set a default table name
+$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
+echo "Selected Table: $selectedTable<br>";
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     // Handle updates
