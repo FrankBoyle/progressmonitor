@@ -910,7 +910,7 @@ $result = $conn->query($sql);
           <form method="post" action="">
             <select name="selected_table">
             
-<!--    php   
+<?php   
 
               $tables = ['JaylaBrazzle1', 'JaylaBrazzle2', 'JaylaBrazzle3', 'JaylaBrazzle4', 'NicoleElkins1', 'NicoleElkins2', 'NicoleElkins3', 'NicoleElkins4'];
 
@@ -922,7 +922,17 @@ $result = $conn->query($sql);
               echo ">$table</option>";
               }
      
- -->
+ ?>
+<!--
+ echo "<select name='selected_table'>";
+echo "<option value='JaylaBrazzle1'";
+if ($selectedTable === 'JaylaBrazzle1') echo " selected";
+echo ">JaylaBrazzle1</option>";
+// ... Add other option elements here ...
+echo "</select>";
+echo "<input type='submit' name='select_student' value='Select Student'>";
+
+<!--
               <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
               <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
               <option value='JaylaBrazzle3'<?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
@@ -934,6 +944,8 @@ $result = $conn->query($sql);
               </select>
         <input type="submit" name="select_table" value="Select Student">
     </form>
+-->
+
 
 <!-- Display data only if a table is selected -->
 <?php if ($result->num_rows > 0): ?>
