@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Debugging output
-echo "Update SQL: $update_sql<br>";
+//echo "Update SQL: $update_sql<br>";
 
 // Update existing data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
