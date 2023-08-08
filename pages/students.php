@@ -919,7 +919,7 @@ $conn->close();
             <option value='JaylaBrazzle2'>NicoleElkins3</option>
             <option value='JaylaBrazzle2'>NicoleElkins4</option>
             </select>
-            <input type='submit' value='Select Table'>
+            <input type='submit' value='selected_table'>
           </form>
           
           <form method='post' action="">
