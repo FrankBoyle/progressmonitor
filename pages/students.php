@@ -934,7 +934,6 @@ $conn->close();
                   echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                   echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
                   echo "</tr>";
-                  echo "<tr><td colspan="4"><input type='submit' value='Update'></td></tr>";
                 }
               ?>
               <tr><td colspan="4"><input type='submit' value='Update'></td></tr>
@@ -942,7 +941,7 @@ $conn->close();
           </form>
         <?php else: ?>
         <p>No data available.</p>
-        <?php endif; ?>
+    <?php endif; ?>
 
 </div>
       <!-- /.card -->
