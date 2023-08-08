@@ -903,37 +903,34 @@
           $sql = "SELECT id, date, score, baseline FROM $selectedTable";
           $result = $conn->query($sql);
 
-          if ($result->num_rows > 0) {
+        if ($result->num_rows > 0) {
             // Display fetched data and dropdown menu in a table
             echo "<form method='post'>";
             echo "<select name='selected_table'>";
-            echo "<option value='JaylaBrazzle1'"; // Default option
+            echo "<option value='JaylaBrazzle1'";
           if ($selectedTable === 'JaylaBrazzle1') echo " selected";
             echo ">JaylaBrazzle1</option>";
-            echo "<option value='JaylaBrazzle2'"; // Add other table options here
+            echo "<option value='JaylaBrazzle2'";
           if ($selectedTable === 'JaylaBrazzle2') echo " selected";
             echo ">JaylaBrazzle2</option>";
-            echo "<option value='JaylaBrazzle3'"; // Add other table options here
+            echo "<option value='JaylaBrazzle3'";
           if ($selectedTable === 'JaylaBrazzle3') echo " selected";
             echo ">JaylaBrazzle3</option>";
-            echo "<option value='JaylaBrazzle4'"; // Add other table options here
+            echo "<option value='JaylaBrazzle4'";
           if ($selectedTable === 'JaylaBrazzle4') echo " selected";
             echo ">JaylaBrazzle4</option>";
-            echo "<option value='NicoleElkins1'"; // Add other table options here
+            echo "<option value='NicoleElkins1'";
           if ($selectedTable === 'NicoleElkins1') echo " selected";
             echo ">NicoleElkins1</option>";
-            echo "<option value='NicoleElkins2'"; // Add other table options here
+            echo "<option value='NicoleElkins2'";
           if ($selectedTable === 'NicoleElkins2') echo " selected";
             echo ">NicoleElkins2</option>";
-            echo "<option value='NicoleElkins3'"; // Add other table options here
+            echo "<option value='NicoleElkins3'";
           if ($selectedTable === 'NicoleElkins3') echo " selected";
             echo ">NicoleElkins3</option>";
-            echo "<option value='NicoleElkins4'"; // Add other table options here
+            echo "<option value='NicoleElkins4'";
           if ($selectedTable === 'NicoleElkins4') echo " selected";
             echo ">NicoleElkins4</option>";
-            echo ">AnotherTable</option>";
-
-            // Add more options for other tables as needed
             echo "</select>";
             echo "<input type='submit' value='Select Table'>";
             echo "</form>";
