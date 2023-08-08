@@ -905,14 +905,14 @@ $result = $conn->query($sql);
 
           <form method="post" action="">
             <select name="selected_table">
-              <option value='JaylaBrazzle1'<?php if ($selectedTable === 'JaylaBrazzle1') echo " selected"; ?>>JaylaBrazzle1</option>
-              <option value='JaylaBrazzle2'<?php if ($selectedTable === 'JaylaBrazzle2') echo " selected"; ?>>JaylaBrazzle2</option>
-              <option value='JaylaBrazzle3'<?php if ($selectedTable === 'JaylaBrazzle3') echo " selected"; ?>>JaylaBrazzle3</option>
-              <option value='JaylaBrazzle4'<?php if ($selectedTable === 'JaylaBrazzle4') echo " selected"; ?>>JaylaBrazzle4</option>
-              <option value='NicoleElkins1'<?php if ($selectedTable === 'NicoleElkins1') echo " selected"; ?>>NicoleElkins1</option>
-              <option value='NicoleElkins2'<?php if ($selectedTable === 'NicoleElkins2') echo " selected"; ?>>NicoleElkins2</option>
-              <option value='NicoleElkins3'<?php if ($selectedTable === 'NicoleElkins3') echo " selected"; ?>>NicoleElkins3</option>
-              <option value='NicoleElkins4'<?php if ($selectedTable === 'NicoleElkins4') echo " selected"; ?>>NicoleElkins4</option>
+              <option value='JaylaBrazzle1'>JaylaBrazzle1</option>
+              <option value='JaylaBrazzle2'>JaylaBrazzle2</option>
+              <option value='JaylaBrazzle3'>JaylaBrazzle3</option>
+              <option value='JaylaBrazzle4'>JaylaBrazzle4</option>
+              <option value='NicoleElkins1'>NicoleElkins1</option>
+              <option value='NicoleElkins2'>NicoleElkins2</option>
+              <option value='NicoleElkins3'>NicoleElkins3</option>
+              <option value='NicoleElkins4'>NicoleElkins4</option>
             </select>
         <input type="submit" value="Select Table">
     </form>
