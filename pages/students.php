@@ -861,68 +861,90 @@
         </div>
         <h1>Jayla Brazzle</h1>
         <?php
-        $servername = "localhost";
-        $username = "AndersonSchool";
-        $password = "SpecialEd69$";
-        $dbname = "AndersonSchool";
-   
-        // Create connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
-   
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-   
-        // Debugging output
-        echo "Update SQL: $update_sql<br>";
+          $servername = "localhost";
+          $username = "AndersonSchool";
+          $password = "SpecialEd69$";
+          $dbname = "AndersonSchool";
 
+              // Create connection
+          $conn = new mysqli($servername, $username, $password, $dbname);
 
-        // Update existing data
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-          echo "Form submitted!";  //debugging
-          print_r($_POST);
+              // Check connection
+            if ($conn->connect_error) {
+              die("Connection failed: " . $conn->connect_error);
+            }
 
+              // Debugging output
+          echo "Update SQL: $update_sql<br>";
 
-          foreach ($_POST['id'] as $key => $id) {
-            $date = $_POST["date"][$key];
-            $score = $_POST["score"][$key];
-            $baseline = $_POST["baseline"][$key];
- 
-          $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
-          if ($conn->query($update_sql) === TRUE) {
-              echo "Record updated successfully!";
-          } else {
-              echo "Error updating record: " . $conn->error;
+              // Update existing data
+          if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            echo "Form submitted!";  // Debugging
+            print_r($_POST);
+
+            foreach ($_POST['id'] as $key => $id) {
+              $date = $_POST["date"][$key];
+              $score = $_POST["score"][$key];
+              $baseline = $_POST["baseline"][$key];
+
+              $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
+                if ($conn->query($update_sql) === TRUE) {
+                  echo "Record updated successfully!";
+                } else {
+                  echo "Error updating record: " . $conn->error;
+                }
+              }
           }
-      }
-    }
-        // Fetch data from the database
-        $sql = "SELECT id, date, score, baseline FROM JaylaBrazzle1";
-        $result = $conn->query($sql);
-   
-        if ($result->num_rows > 0) {
-            echo "<form method='post'>";               // Display fetched data in a table
+
+            // Get selected table from dropdown menu
+          $selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1';
+
+            // Fetch data from the selected table
+          $sql = "SELECT id, date, score, baseline FROM $selectedTable";
+          $result = $conn->query($sql);
+
+          if ($result->num_rows > 0) {
+            // Display fetched data and dropdown menu in a table
+            echo "<form method='post'>";
+            echo "<select name='selected_table'>";
+            echo "<option value='JaylaBrazzle1'"; // Default option
+          if ($selectedTable === 'JaylaBrazzle1') echo " selected";
+            echo ">JaylaBrazzle1</option>";
+            echo ">JaylaBrazzle2</option>";
+            echo ">JaylaBrazzle3</option>";
+            echo ">JaylaBrazzle4</option>";
+            echo ">NicoleElkins1</option>";
+            echo ">NicoleElkins2</option>";
+            echo ">NicoleElkins3</option>";
+            echo ">NicoleElkins4</option>";
+
+            echo "<option value='AnotherTable'"; // Add other table options here
+          if ($selectedTable === 'AnotherTable') echo " selected";
+            echo ">AnotherTable</option>";
+            // Add more options for other tables as needed
+            echo "</select>";
+            echo "<input type='submit' value='Select Table'>";
+            echo "</form>";
+
             echo "<table border='1'>";
             echo "<tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>";
-            while ($row = $result->fetch_assoc()) {
-              echo "<tr>";
-              echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
-              echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
-              echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
-              echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";  // Add this line
-              echo "</tr>";
-            }
+          while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
+            echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+            echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+            echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+            echo "</tr>";
+          }
             echo "<td><input type='submit' value='Update'></td>";
             echo "</table>";
             echo "</form>";
-        } else {
+          } else {
             echo "No data available.";
-        }
-   
-        $conn->close();
-        
-        ?>
+          }
+
+  $conn->close();
+  ?>
 
 
 
