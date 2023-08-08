@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
     $selectedTable = $_POST['selected_table'];
 }
 
-$sql = "SELECT id, date, score, baseline FROM $selectedTable";
+$sql = "SELECT uuid, id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
@@ -938,11 +938,11 @@ $result = $conn->query($sql);
             <?php
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
+                echo "<td><input type='hidden' name='uuid[]' value='{$row["uuid"]}'>{$row["uuid"]}</td>";
                 echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
                 echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                 echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                 echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
-                echo "<td><input type="hidden" name="selected_table" value="<?php echo $selectedTable; ?>"></td>";
                 echo "</tr>";
             }
             ?>
