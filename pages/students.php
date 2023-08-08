@@ -19,11 +19,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         $score = $_POST["score"][$key];
         $baseline = $_POST["baseline"][$key];
 
-        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE uuid='$uuid'";
-        
-        if ($conn->query($update_sql) !== TRUE) {
-            echo "Error updating record: " . $conn->error;
-        }
+        $update_sql = "UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE uuid=?";
+$stmt = $conn->prepare($update_sql);
+$stmt->bind_param("ssss", $date, $score, $baseline, $uuid);
+
+foreach ($_POST['uuid'] as $key => $uuid) {
+    $date = $_POST["date"][$key];
+    $score = $_POST["score"][$key];
+    $baseline = $_POST["baseline"][$key];
+    
+    if ($stmt->execute() !== TRUE) {
+        echo "Error updating record: " . $stmt->error;
+    }
+}
+
+$stmt->close();
     }
 }
 
