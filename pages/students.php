@@ -914,7 +914,7 @@ $result = $conn->query($sql);
               <option value='NicoleElkins3'>NicoleElkins3</option>
               <option value='NicoleElkins4'>NicoleElkins4</option>
             </select>
-        <input type="submit" value="Select Table">
+        <input type="submit" name="select_table" value="Select Table">
     </form>
     <?php
     if ($result->num_rows > 0) {
