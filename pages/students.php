@@ -1,4 +1,6 @@
 <?php
+session_start(); // Start the session
+
 $servername = "localhost";
 $username = "AndersonSchool";
 $password = "SpecialEd69$";
@@ -10,27 +12,29 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$selectedTable = $_SESSION['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
-
+$selectedTable = $_POST['selected_table'] ?? $_SESSION['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
 echo "Updating records in table: $selectedTable<br>";
-
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
-    // Handle student selection
-    $_SESSION['selected_table'] = $_POST['selected_table'];
-    $selectedTable = $_POST['selected_table'];
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     // Handle updates
     foreach ($_POST['id'] as $key => $id) {
-        // Retrieve selected table from session
-        $selectedTable = $_SESSION['selected_table'];
-        
-        // Rest of the update code...
+        $date = $_POST["date"][$key];
+        $score = $_POST["score"][$key];
+        $baseline = $_POST["baseline"][$key];
+
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
+       
+        if ($conn->query($update_sql) !== TRUE) {
+            echo "Error updating record: " . $conn->error;
+        }
     }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
+    // Handle student selection
+    $selectedTable = $_POST['selected_table'];
+    $_SESSION['selected_table'] = $selectedTable; // Store the selected table value in a session variable
 }
 
 $sql = "SELECT uuid, id, date, score, baseline FROM $selectedTable";
