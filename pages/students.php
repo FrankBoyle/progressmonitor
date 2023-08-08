@@ -10,32 +10,31 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1';
+$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (isset($_POST['update'])) {
-      $idArray = $_POST['id'];
-      $uuidArray = $_POST['uuid'];
-      $dateArray = $_POST['date'];
-      $scoreArray = $_POST['score'];
-      $baselineArray = $_POST['baseline'];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
+    // Handle updates
+    $idArray = $_POST['id'];
+    $uuidArray = $_POST['uuid'];
+    $dateArray = $_POST['date'];
+    $scoreArray = $_POST['score'];
+    $baselineArray = $_POST['baseline'];
 
-      for ($i = 0; $i < count($idArray); $i++) {
-          $uuid = $uuidArray[$i];
-          $id = $idArray[$i];
-          $date = $dateArray[$i];
-          $score = $scoreArray[$i];
-          $baseline = $baselineArray[$i];
+    for ($i = 0; $i < count($idArray); $i++) {
+        $id = $idArray[$i];
+        $uuid = $uuidArray[$i];
+        $date = $dateArray[$i];
+        $score = $scoreArray[$i];
+        $baseline = $baselineArray[$i];
 
-          $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id AND uuid='$uuid'";
-          if ($conn->query($update_sql) !== TRUE) {
-              echo "Error updating record: " . $conn->error;
-          }
-      }
-  }
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id AND uuid='$uuid'";
+        if ($conn->query($update_sql) !== TRUE) {
+            echo "Error updating record: " . $conn->error;
+        }
+    }
 }
 
-$sql = "SELECT uuid, id, date, score, baseline FROM $selectedTable";
+$sql = "SELECT id, uuid, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
