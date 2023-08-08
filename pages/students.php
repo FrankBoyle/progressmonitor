@@ -935,20 +935,20 @@ $result = $conn->query($sql);
    
     
       <form method="post" action="">
-    <?php
-    // Fetch the current goal value from the database
-    $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
-    $goalResult = $conn->query($goalSql);
+        <?php
+        // Fetch the current goal value from the database
+          $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
+          $goalResult = $conn->query($goalSql);
     
-    if ($goalResult && $goalResult->num_rows > 0) {
-        $goalRow = $goalResult->fetch_assoc();
-        $currentGoal = $goalRow["goal"];
-        echo '<label for="edit_goal">Edit Goal: </label>';
-        echo '<input type="text" name="edit_goal" id="edit_goal" value="' . htmlspecialchars($currentGoal) . '">';
-    }
-    ?>
-    <input type="submit" name="save_goal" value="Save Goal">
-</form>
+          if ($goalResult && $goalResult->num_rows > 0) {
+            $goalRow = $goalResult->fetch_assoc();
+            $currentGoal = $goalRow["goal"];
+            echo '<label for="edit_goal">Edit Goal: </label>';
+            echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
+          }
+        ?>
+        <input type="submit" name="save_goal" value="Save Goal">
+      </form>
 
 
 <!-- Display data only if a table is selected -->
