@@ -4,8 +4,10 @@ $username = "AndersonSchool";
 $password = "SpecialEd69$";
 $dbname = "AndersonSchool";
 
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -14,27 +16,25 @@ $selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default t
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     // Handle updates
-    foreach ($_POST['uuid'] as $key => $uuid) {
-        $id = $_POST["id"][$key];
-        $date = $_POST["date"][$key];
-        $score = $_POST["score"][$key];
-        $baseline = $_POST["baseline"][$key];
-        
+    $ids = $_POST['id'];
+    $dates = $_POST['date'];
+    $scores = $_POST['score'];
+    $baselines = $_POST['baseline'];
 
-        $update_sql = "UPDATE $selectedTable SET id='$id' date='$date', score='$score', baseline='$baseline' WHERE uuid=$uuid";
-        
+    for ($i = 0; $i < count($ids); $i++) {
+        $id = $ids[$i];
+        $date = $dates[$i];
+        $score = $scores[$i];
+        $baseline = $baselines[$i];
+
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE uuid='$id'";
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
         }
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
-    // Handle student selection
-    $selectedTable = $_POST['selected_table'];
-}
-
-$sql = "SELECT uuid, id, date, score, baseline FROM $selectedTable";
+$sql = "SELECT uuid, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
@@ -937,7 +937,7 @@ $result = $conn->query($sql);
             <?php
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
+                echo "<td><input type='text' name='id[]' value='{$row["uuid"]}' readonly></td>";
                 echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                 echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                 echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
