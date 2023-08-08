@@ -21,9 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     print_r($_POST);
 
     foreach ($_POST['id'] as $key => $id) {
-        $date = $_POST["date"][$key];
-        $score = $_POST["score"][$key];
-        $baseline = $_POST["baseline"][$key];
+        $date = $_POST['date'][$key];
+        $score = $_POST['score'][$key];
+        $baseline = $_POST['baseline'][$key];
 
         $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
         if ($conn->query($update_sql) === TRUE) {
