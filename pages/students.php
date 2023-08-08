@@ -16,8 +16,8 @@ $selectedTable = $_POST['selected_table'] ?? $_SESSION['selected_table'] ?? 'Jay
 
 echo "Updating records in table: $selectedTable<br>";
 
+// Handle updates for both goal and other fields
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    // Handle updates
     foreach ($_POST['id'] as $key => $id) {
         $date = $_POST["date"][$key];
         $score = $_POST["score"][$key];
@@ -29,6 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
         }
+    }
+}
+
+// Handle goal update
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_goal'])) {
+    $newGoal = $_POST["edit_goal"];
+    
+    // Update the goal in the database
+    $updateGoalSql = "UPDATE $selectedTable SET goal='$newGoal' WHERE 1";
+    if ($conn->query($updateGoalSql) !== TRUE) {
+        echo "Error updating goal: " . $conn->error;
     }
 }
 
@@ -952,6 +963,7 @@ $result = $conn->query($sql);
 
 
 <!-- Display data only if a table is selected -->
+<!-- Display data only if a table is selected -->
 <?php if ($result->num_rows > 0): ?>
     <form method='post' action="">
         <table border='1'>
@@ -977,19 +989,6 @@ $result = $conn->query($sql);
 <?php else: ?>
     <p>No data available.</p>
 <?php endif; ?>
-
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_goal'])) {
-    $newGoal = $_POST["edit_goal"];
-    
-    // Update the goal in the database
-    $updateGoalSql = "UPDATE $selectedTable SET goal='$newGoal' WHERE 1";
-    if ($conn->query($updateGoalSql) !== TRUE) {
-        echo "Error updating goal: " . $conn->error;
-    }
-}
-$conn->close();
-?>
 
 </div>
       <!-- /.card -->
