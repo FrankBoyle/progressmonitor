@@ -885,11 +885,11 @@
 
 
           foreach ($_POST['id'] as $key => $id) {
-            $Date = $_POST["Date"][$key];
-            $Score = $_POST["Score"][$key];
-            $Baseline = $_POST["Baseline"][$key];
+            $date = $_POST["date"][$key];
+            $score = $_POST["score"][$key];
+            $baseline = $_POST["baseline"][$key];
  
-          $update_sql = "UPDATE JaylaBrazzle1 SET Date='$Date', Score='$Score', Baseline='$Baseline' WHERE id=$id";
+          $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
           if ($conn->query($update_sql) === TRUE) {
               echo "Record updated successfully!";
           } else {
@@ -898,7 +898,7 @@
       }
     }
         // Fetch data from the database
-        $sql = "SELECT id, Date, Score, Baseline FROM JaylaBrazzle1";
+        $sql = "SELECT id, date, score, baseline FROM JaylaBrazzle1";
         $result = $conn->query($sql);
    
         if ($result->num_rows > 0) {
@@ -908,9 +908,9 @@
             while ($row = $result->fetch_assoc()) {
               echo "<tr>";
               echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
-              echo "<td><input type='date' name='Date[]' value='{$row["Date"]}'></td>";
-              echo "<td><input type='number' name='Score[]' value='{$row["Score"]}'></td>";
-              echo "<td><input type='number' name='Baseline[]' value='{$row["Baseline"]}'></td>";  // Add this line
+              echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+              echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+              echo "<td><input type='number' name='baseline[]' value='{$row[bBaseline"]}'></td>";  // Add this line
               echo "</tr>";
             }
             echo "<td><input type='submit' value='Update'></td>";
