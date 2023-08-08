@@ -859,10 +859,8 @@
         <div class="card-body">
           <div id="jsGrid1"></div>
         </div>
-        <h1>Update Test</h1>
+        <h1>Jayla Brazzle</h1>
         <?php
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
         $servername = "localhost";
         $username = "AndersonSchool";
         $password = "SpecialEd69$";
@@ -875,46 +873,55 @@
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
+   
+        // Debugging output
+        echo "Update SQL: $update_sql<br>";
 
-    // Update existing data
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        foreach ($_POST['id'] as $key => $id) {
-            $date = $_POST["date"][$key];
-            $score = $_POST["score"][$key];
-            $baseline = $_POST["baseline"][$key];
 
-            $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
-            if ($conn->query($update_sql) !== TRUE) {
-                echo "Error updating record: " . $conn->error;
-            } else {
-                echo "Updated record with ID: $id<br>";
+        // Update existing data
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+          echo "Form submitted!";  //debugging
+          print_r($_POST);
+
+
+          foreach ($_POST['id'] as $key => $id) {
+            $Date = $_POST["Date"][$key];
+            $Score = $_POST["Score"][$key];
+            $Baseline = $_POST["Baseline"][$key];
+ 
+          $update_sql = "UPDATE JaylaBrazzle1 SET Date='$Date', Score='$Score', Baseline='$Baseline' WHERE id=$id";
+          if ($conn->query($update_sql) === TRUE) {
+              echo "Record updated successfully!";
+          } else {
+              echo "Error updating record: " . $conn->error;
+          }
+      }
+    }
+        // Fetch data from the database
+        $sql = "SELECT id, Date, Score, Baseline FROM JaylaBrazzle1";
+        $result = $conn->query($sql);
+   
+        if ($result->num_rows > 0) {
+            echo "<form method='post'>";               // Display fetched data in a table
+            echo "<table border='1'>";
+            echo "<tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>";
+            while ($row = $result->fetch_assoc()) {
+              echo "<tr>";
+              echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
+              echo "<td><input type='date' name='Date[]' value='{$row["Date"]}'></td>";
+              echo "<td><input type='number' name='Score[]' value='{$row["Score"]}'></td>";
+              echo "<td><input type='number' name='Baseline[]' value='{$row["Baseline"]}'></td>";  // Add this line
+              echo "<td><input type='submit' value='Update'></td>";
+              echo "</tr>";
             }
+            echo "</table>";
+            echo "</form>";
+        } else {
+            echo "No data available.";
         }
-    }
-
-    // Fetch data from the database
-    $sql = "SELECT id, date, score, baseline FROM JaylaBrazzle1";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        // Display fetched data in an editable form
-        echo "<form method='post'>";
-        while ($row = $result->fetch_assoc()) {
-            echo "ID: {$row["id"]}<br>";
-            echo "Date: <input type='date' name='date[]' value='{$row["date"]}'><br>";
-            echo "Score: <input type='number' name='score[]' value='{$row["score"]}'><br>";
-            echo "Baseline: <input type='number' name='baseline[]' value='{$row["baseline"]}'><br>";
-            echo "<input type='hidden' name='id[]' value='{$row["id"]}'>";
-            echo "<hr>";
-        }
-        echo "<input type='submit' value='Update'>";
-        echo "</form>";
-    } else {
-        echo "No data available.";
-    }
-
-    $conn->close();
-    ?>
+   
+        $conn->close();
+        ?>
 
 
 
