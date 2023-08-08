@@ -931,12 +931,22 @@ $result = $conn->query($sql);
               <option value='NicoleElkins4'<?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
               </select>
         <input type="submit" name="select_table" value="Select Student">
-    </form>
+      </form>
    
     
-    <form method="post" action="">
-    <label for="edit_goal">Edit Goal: </label>
-    <input type="text" name="edit_goal" id="edit_goal">
+      <form method="post" action="">
+        <?php
+          // Fetch the current goal value from the database
+          $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
+          $goalResult = $conn->query($goalSql);
+    
+          if ($goalResult && $goalResult->num_rows > 0) {
+            $goalRow = $goalResult->fetch_assoc();
+            $currentGoal = $goalRow["goal"];
+            echo '<label for="edit_goal">Edit Goal: </label>';
+            echo '<input type="text" name="edit_goal" id="edit_goal" value="' . $currentGoal . '">';
+          }
+        ?>
     <input type="submit" name="save_goal" value="Save Goal">
 </form>
 
@@ -946,7 +956,6 @@ $result = $conn->query($sql);
     <form method='post' action="">
         <table border='1'>
             <tr>
-                <th>Goal</th>
                 <th>ID</th>
                 <th>Date</th>
                 <th>Score</th>
@@ -955,11 +964,10 @@ $result = $conn->query($sql);
             <?php
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td><input type='text' name='goal[]' value='{$row["goal"]}'></td>";
-                echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
-                echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
-                echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
-                echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+                echo "<td>{$row["id"]}</td>";
+                echo "<td>{$row["date"]}</td>";
+                echo "<td>{$row["score"]}</td>";
+                echo "<td>{$row["baseline"]}</td>";
                 echo "</tr>";
             }
             ?>
