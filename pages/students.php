@@ -934,9 +934,9 @@ $conn->close();
                   echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                   echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
                   echo "</tr>";
-                  echo "<td colspan="4"><input type='submit' value='Update'></td>";
                 }
               ?>
+            <tr><td colspan="4"><input type='submit' value='Update'></td></tr>
             </table>
           </form>
         <?php else: ?>
