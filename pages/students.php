@@ -878,12 +878,12 @@
 
     // Update existing data
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        foreach ($_POST['GoalKey'] as $key => $GoalKey) {
+        foreach ($_POST['id'] as $key => $id) {
             $date = $_POST["date"][$key];
             $score = $_POST["score"][$key];
             $baseline = $_POST["baseline"][$key];
 
-            $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE goalkey=$key";
+            $update_sql = "UPDATE JaylaBrazzle1 SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
             if ($conn->query($update_sql) !== TRUE) {
                 echo "Error updating record: " . $conn->error;
             } else {
@@ -893,18 +893,18 @@
     }
 
     // Fetch data from the database
-    $sql = "SELECT goalkey, date, score, baseline FROM JaylaBrazzle1";
+    $sql = "SELECT id, date, score, baseline FROM JaylaBrazzle1";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         // Display fetched data in an editable form
         echo "<form method='post'>";
         while ($row = $result->fetch_assoc()) {
-            echo "ID: {$row["goalkey"]}<br>";
+            echo "ID: {$row["id"]}<br>";
             echo "Date: <input type='date' name='date[]' value='{$row["date"]}'><br>";
             echo "Score: <input type='number' name='score[]' value='{$row["score"]}'><br>";
             echo "Baseline: <input type='number' name='baseline[]' value='{$row["baseline"]}'><br>";
-            echo "<input type='hidden' name='id[]' value='{$row["goalkey"]}'>";
+            echo "<input type='hidden' name='id[]' value='{$row["id"]}'>";
             echo "<hr>";
         }
         echo "<input type='submit' value='Update'>";
