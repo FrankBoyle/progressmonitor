@@ -10,26 +10,26 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the student selection form is submitted
-    if (isset($_POST['select_table'])) {
-        $selectedTable = $_POST['selected_table'];
-    }
+$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     // Handle updates
-    if (isset($_POST['update'])) {
-        foreach ($_POST['id'] as $key => $id) {
-            $date = $_POST["date"][$key];
-            $score = $_POST["score"][$key];
-            $baseline = $_POST["baseline"][$key];
+    foreach ($_POST['id'] as $key => $id) {
+        $date = $_POST["date"][$key];
+        $score = $_POST["score"][$key];
+        $baseline = $_POST["baseline"][$key];
 
-            $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
-
-            if ($conn->query($update_sql) !== TRUE) {
-                echo "Error updating record: " . $conn->error;
-            }
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
+        
+        if ($conn->query($update_sql) !== TRUE) {
+            echo "Error updating record: " . $conn->error;
         }
     }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
+    // Handle student selection
+    $selectedTable = $_POST['selected_table'];
 }
 
 $sql = "SELECT id, date, score, baseline FROM $selectedTable";
