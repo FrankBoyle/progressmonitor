@@ -1,43 +1,30 @@
 <?php
 $servername = "localhost";
-$username = "AndersonSchool";
-$password = "SpecialEd69$";
-$dbname = "AndersonSchool";
+$username = "YourUsername";
+$password = "YourPassword";
+$dbname = "YourDatabaseName";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Debugging output
-//echo "Update SQL: $update_sql<br>";
+$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
-// Update existing data
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    echo "Form submitted!"; // Debugging
-    print_r($_POST);
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
+    // Handle updates
+    // ...
 
-    foreach ($_POST['id'] as $key => $id) {
-        $date = $_POST['date'][$key];
-        $score = $_POST['score'][$key];
-        $baseline = $_POST['baseline'][$key];
-
-        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
-        if ($conn->query($update_sql) === TRUE) {
-            echo "Record updated successfully!";
-        } else {
-            echo "Error updating record: " . $conn->error;
-        }
+    if ($conn->query($update_sql) === TRUE) {
+        echo "Record updated successfully!";
+    } else {
+        echo "Error updating record: " . $conn->error;
     }
 }
 
-// Fetch data from the selected table
 $sql = "SELECT id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +32,7 @@ $result = $conn->query($sql);
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | jsGrid</title>
+  <title>Bfactor</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -913,29 +900,33 @@ $result = $conn->query($sql);
               <option value='NicoleElkins2'>NicoleElkins2</option>
               <option value='NicoleElkins3'>NicoleElkins3</option>
               <option value='NicoleElkins4'>NicoleElkins4</option>
-            </select>
+              </select>
         <input type="submit" name="select_table" value="Select Table">
     </form>
-    <?php
-    if ($result->num_rows > 0) {
-        echo "<form method='post'>";
-        echo "<table border='1'>";
-        echo "<tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>";
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
-            echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
-            echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
-            echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
-            echo "</tr>";
-        }
-        echo "<td><input type='submit' value='Update'></td>";
-        echo "</table>";
-        echo "</form>";
-    } else {
-        echo "No data available.";
-    }
 
+    <!-- Display data only if a table is selected -->
+    <?php if ($result->num_rows > 0): ?>
+        <form method='post' action="">
+            <table border='1'>
+                <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
+                <?php
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
+                    echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+                    echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+                    echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+                    echo "<td><input type='submit' name='update' value='Update'></td>";
+                    echo "</tr>";
+                }
+                ?>
+            </table>
+        </form>
+    <?php else: ?>
+        <p>No data available.</p>
+    <?php endif; ?>
+
+    <?php
     $conn->close();
     ?>
 
