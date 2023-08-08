@@ -909,11 +909,11 @@ $conn->close();
           </form>
           
         <?php if ($result->num_rows > 0): ?>
-          <form method='post' action="">
+          <form method='post' action=''>
             <table border='1'>
               <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
               <?php
-                while ($row = $result->fetch_assoc()){
+                while ($row=$result->fetch_assoc()){
                   echo "<tr>";
                   echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
                   echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
