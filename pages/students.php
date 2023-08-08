@@ -13,33 +13,36 @@ if ($conn->connect_error) {
 $selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    // Handle updates
-    $idArray = $_POST['id'];
-    $uuidArray = $_POST['uuid'];
-    $dateArray = $_POST['date'];
-    $scoreArray = $_POST['score'];
-    $baselineArray = $_POST['baseline'];
+  // Handle updates
+  $idArray = $_POST['id'];
+  $uuidArray = $_POST['uuid'];
+  $dateArray = $_POST['date'];
+  $scoreArray = $_POST['score'];
+  $baselineArray = $_POST['baseline'];
 
-    for ($i = 0; $i < count($idArray); $i++) {
-        $id = $idArray[$i];
-        $uuid = $uuidArray[$i];
-        $date = $dateArray[$i];
-        $score = $scoreArray[$i];
-        $baseline = $baselineArray[$i];
+  for ($i = 0; $i < count($idArray); $i++) {
+      $id = $idArray[$i];
+      $uuid = $uuidArray[$i];
+      $date = $dateArray[$i];
+      $score = $scoreArray[$i];
+      $baseline = $baselineArray[$i];
 
-        // Prepare the update statement
-        $update_sql = "UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE id=? AND uuid=?";
-        $stmt = $conn->prepare($update_sql);
-        $stmt->bind_param("ssdsi", $date, $score, $baseline, $id, $uuid);
+      // Prepare the update statement
+      $update_sql = "UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE id=? AND uuid=?";
+      $stmt = $conn->prepare($update_sql);
+      $stmt->bind_param("ssdsi", $date, $score, $baseline, $id, $uuid);
 
-        if ($stmt->execute()) {
-            echo "Record updated successfully!";
-        } else {
-            echo "Error updating record: " . $stmt->error;
-        }
+      if ($stmt->execute()) {
+          echo "Record updated successfully!";
+      } else {
+          echo "Error updating record: " . $stmt->error;
+      }
 
-        $stmt->close();
-    }
+      $stmt->close();
+  }
+
+  // Commit the changes
+  $conn->commit();
 }
 
 $sql = "SELECT id, uuid, date, score, baseline FROM $selectedTable";
