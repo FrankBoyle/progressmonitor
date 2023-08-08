@@ -1,44 +1,30 @@
 <?php
 $servername = "localhost";
-$username = "AndersonSchool";
-$password = "SpecialEd69$";
-$dbname = "AndersonSchool";
+$username = "YourUsername";
+$password = "YourPassword";
+$dbname = "YourDatabaseName";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Debugging output
-echo "Update SQL: $update_sql<br>";
+$selectedTable = $_POST['selected_table'] ?? 'DefaultTableName';
 
-// Get selected table from dropdown menu
-$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1';
-
-// Update existing data
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    //echo "Form submitted!"; // Debugging
-    //print_r($_POST);
-
     foreach ($_POST['id'] as $key => $id) {
         $date = $_POST["date"][$key];
         $score = $_POST["score"][$key];
         $baseline = $_POST["baseline"][$key];
 
         $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
-        //echo "Update SQL: $update_sql<br>"; // Debugging
-        if ($conn->query($update_sql) === TRUE) {
-            echo "Record updated successfully!";
-        } else {
+        if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
         }
     }
 }
 
-// Fetch data from the selected table
 $sql = "SELECT id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 
@@ -923,11 +909,11 @@ $conn->close();
           </form>
           
         <?php if ($result->num_rows > 0): ?>
-          <form method='post'>
+          <form method='post' action="">
             <table border='1'>
               <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
               <?php
-                while ($row=$result->fetch_assoc()){
+                while ($row = $result->fetch_assoc()){
                   echo "<tr>";
                   echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
                   echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
