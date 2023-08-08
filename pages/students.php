@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
     $_SESSION['selected_table'] = $selectedTable; // Store the selected table value in a session variable
 }
 
-$sql = "SELECT uuid, id, goal, date, score, baseline FROM $selectedTable";
+$sql = "SELECT id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
@@ -963,7 +963,6 @@ $result = $conn->query($sql);
 
 
 <!-- Display data only if a table is selected -->
-<!-- Display data only if a table is selected -->
 <?php if ($result->num_rows > 0): ?>
     <form method='post' action="">
         <table border='1'>
@@ -977,9 +976,9 @@ $result = $conn->query($sql);
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td>{$row["id"]}</td>";
-                echo "<td>{$row["date"]}</td>";
-                echo "<td>{$row["score"]}</td>";
-                echo "<td>{$row["baseline"]}</td>";
+                echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+                echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+                echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
                 echo "</tr>";
             }
             ?>
@@ -989,6 +988,33 @@ $result = $conn->query($sql);
 <?php else: ?>
     <p>No data available.</p>
 <?php endif; ?>
+
+<form method="post" action="">
+    <?php
+    // Fetch the current goal value from the database
+    $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
+    $goalResult = $conn->query($goalSql);
+    
+    if ($goalResult && $goalResult->num_rows > 0) {
+        $goalRow = $goalResult->fetch_assoc();
+        $currentGoal = $goalRow["goal"];
+        echo '<label for="edit_goal">Edit Goal: </label>';
+        echo '<input type="text" name="edit_goal" id="edit_goal" value="' . htmlspecialchars($currentGoal) . '">';
+    }
+    ?>
+    <input type="submit" name="save_goal" value="Save Goal">
+</form>
+
+<?php
+$conn->close();
+?>
+This code should display the "goal" field above the table and allow you to edit both the "goal" value and the other fields (ID, date, score, baseline) in the table. Make sure that you have the correct column names and table structure in your database. If you're still facing issues, please provide more details about any error messages you're encountering.
+
+
+
+
+
+
 
 </div>
       <!-- /.card -->
