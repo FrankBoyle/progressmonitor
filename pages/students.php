@@ -19,9 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         $score = $_POST["score"][$key];
         $baseline = $_POST["baseline"][$key];
 
-        $update_sql = "UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE id=? AND uuid=?";
-        $stmt = $conn->prepare($update_sql);
-        $stmt->bind_param("ssdsi", $date, $score, $baseline, $id, $uuid);
+        $conn->prepare("UPDATE $selectedTable SET date=?, score=?, baseline=? WHERE id=?");
+        $stmt->bind_param("ssdi", $date, $score, $baseline, $id);
 
         if ($stmt->execute()) {
             echo "Record updated successfully!";
