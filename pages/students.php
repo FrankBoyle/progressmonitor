@@ -905,39 +905,39 @@ $result = $conn->query($sql);
 
           <form method="post" action="">
             <select name="selected_table">
-            <option value='JaylaBrazzle1'<?php if ($selectedTable === 'JaylaBrazzle1') echo " selected"; ?>>JaylaBrazzle1</option>
-            <option value='JaylaBrazzle2'<?php if ($selectedTable === 'JaylaBrazzle2') echo " selected"; ?>>JaylaBrazzle2</option>
-            <option value='JaylaBrazzle3'<?php if ($selectedTable === 'JaylaBrazzle3') echo " selected"; ?>>JaylaBrazzle3</option>
-            <option value='JaylaBrazzle4'<?php if ($selectedTable === 'JaylaBrazzle4') echo " selected"; ?>>JaylaBrazzle4</option>
-            <option value='NicoleElkins1'<?php if ($selectedTable === 'NicoleElkins1') echo " selected"; ?>>NicoleElkins1</option>
-            <option value='NicoleElkins2'<?php if ($selectedTable === 'NicoleElkins2') echo " selected"; ?>>NicoleElkins2</option>
-            <option value='NicoleElkins3'<?php if ($selectedTable === 'NicoleElkins3') echo " selected"; ?>>NicoleElkins3</option>
-            <option value='NicoleElkins4'<?php if ($selectedTable === 'NicoleElkins4') echo " selected"; ?>>NicoleElkins4</option>
+              <option value='JaylaBrazzle1'<?php if ($selectedTable === 'JaylaBrazzle1') echo " selected"; ?>>JaylaBrazzle1</option>
+              <option value='JaylaBrazzle2'<?php if ($selectedTable === 'JaylaBrazzle2') echo " selected"; ?>>JaylaBrazzle2</option>
+              <option value='JaylaBrazzle3'<?php if ($selectedTable === 'JaylaBrazzle3') echo " selected"; ?>>JaylaBrazzle3</option>
+              <option value='JaylaBrazzle4'<?php if ($selectedTable === 'JaylaBrazzle4') echo " selected"; ?>>JaylaBrazzle4</option>
+              <option value='NicoleElkins1'<?php if ($selectedTable === 'NicoleElkins1') echo " selected"; ?>>NicoleElkins1</option>
+              <option value='NicoleElkins2'<?php if ($selectedTable === 'NicoleElkins2') echo " selected"; ?>>NicoleElkins2</option>
+              <option value='NicoleElkins3'<?php if ($selectedTable === 'NicoleElkins3') echo " selected"; ?>>NicoleElkins3</option>
+              <option value='NicoleElkins4'<?php if ($selectedTable === 'NicoleElkins4') echo " selected"; ?>>NicoleElkins4</option>
             </select>
-            <input type="submit" name="select_table"  value="Select Student">
-          </form>
-          
-        <?php if ($result->num_rows > 0): ?>
-          <form method="post" action="">
-            <table border="1">
-              <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
-              <?php
-                while ($row=$result->fetch_assoc()){
-                  echo "<tr>";
-                  echo "<td><input type="number" name="id[]" value="{$row['id']}"></td>";
-                  echo "<td><input type="date" name="date[]" value="{$row['date']}"></td>";
-                  echo "<td><input type="number" name="score[]" value="{$row['score']}"></td>";
-                  echo "<td><input type="number" name="baseline[]" value="{$row['baseline']}"></td>";
-                  echo "<td><input type="submit" name="update" value="Update"></td>";
-                  echo "</tr>";
-                }
-              ?>
-            <!--<tr><td colspan="4"><input type="submit" name="update" value="Update"></td></tr>-->
-            </table>
-          </form>
-        <?php else: ?>
-        <p>No data available.</p>
-        <?php endif; ?>
+        <input type="submit" value="Select Table">
+    </form>
+    <?php
+    if ($result->num_rows > 0) {
+        echo "<form method='post'>";
+        echo "<table border='1'>";
+        echo "<tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>";
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td><input type='number' name='id[]' value='{$row["id"]}'></td>";
+            echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+            echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+            echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+            echo "</tr>";
+        }
+        echo "<td><input type='submit' value='Update'></td>";
+        echo "</table>";
+        echo "</form>";
+    } else {
+        echo "No data available.";
+    }
+
+    $conn->close();
+    ?>
 
 </div>
       <!-- /.card -->
