@@ -17,7 +17,7 @@ $selectedTable = $_POST['selected_table'] ?? $_SESSION['selected_table'] ?? 'Jay
 echo "Updating records in table: $selectedTable<br>";
 
 // Handle updates for both goal and other fields
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && (isset($_POST['update']) || isset($_POST['save_goal']))) {
     foreach ($_POST['id'] as $key => $id) {
         $date = $_POST["date"][$key];
         $score = $_POST["score"][$key];
@@ -29,17 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
         }
-    }
-}
-
-// Handle goal update
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_goal'])) {
-    $newGoal = $_POST["edit_goal"];
-    
-    // Update the goal in the database
-    $updateGoalSql = "UPDATE $selectedTable SET goal='$newGoal' WHERE 1";
-    if ($conn->query($updateGoalSql) !== TRUE) {
-        echo "Error updating goal: " . $conn->error;
     }
 }
 
@@ -975,7 +964,7 @@ $result = $conn->query($sql);
             <?php
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td>{$row["id"]}</td>";
+                echo "<td><input type='hidden' name='id[]' value='{$row["id"]}'>{$row["id"]}</td>";
                 echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                 echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                 echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
@@ -989,10 +978,25 @@ $result = $conn->query($sql);
     <p>No data available.</p>
 <?php endif; ?>
 
+<form method="post" action="">
+    <?php
+    // Fetch the current goal value from the database
+    $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
+    $goalResult = $conn->query($goalSql);
+    
+    if ($goalResult && $goalResult->num_rows > 0) {
+        $goalRow = $goalResult->fetch_assoc();
+        $currentGoal = $goalRow["goal"];
+        echo '<label for="edit_goal">Edit Goal: </label>';
+        echo '<input type="text" name="edit_goal" id="edit_goal" value="' . htmlspecialchars($currentGoal) . '">';
+    }
+    ?>
+    <input type="submit" name="save_goal" value="Save Goal">
+</form>
+
 <?php
 $conn->close();
 ?>
-This code should display the "goal" field above the table and allow you to edit both the "goal" value and the other fields (ID, date, score, baseline) in the table. Make sure that you have the correct column names and table structure in your database. If you're still facing issues, please provide more details about any error messages you're encountering.
 
 
 
