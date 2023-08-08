@@ -27,6 +27,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     }
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
+    // Handle student selection
+    $selectedTable = $_POST['selected_table'];
+}
+
 $sql = "SELECT id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
@@ -896,7 +901,9 @@ $result = $conn->query($sql);
 
           <form method="post" action="">
             <select name="selected_table">
-            <?php
+            
+<!--    php   
+
               $tables = ['JaylaBrazzle1', 'JaylaBrazzle2', 'JaylaBrazzle3', 'JaylaBrazzle4', 'NicoleElkins1', 'NicoleElkins2', 'NicoleElkins3', 'NicoleElkins4'];
 
               foreach ($tables as $table) {
@@ -904,22 +911,20 @@ $result = $conn->query($sql);
               if ($table === $selectedTable) {
                 echo " selected";
               }
-            echo ">$table</option>";
-        }
-        ?>  
-            <!--
-            <option value='JaylaBrazzle1'>JaylaBrazzle1</option>
-              <option value='JaylaBrazzle2'>JaylaBrazzle2</option>
-              <option value='JaylaBrazzle3'>JaylaBrazzle3</option>
-              <option value='JaylaBrazzle4'>JaylaBrazzle4</option>
-              <option value='NicoleElkins1'>NicoleElkins1</option>
-              <option value='NicoleElkins2'>NicoleElkins2</option>
-              <option value='NicoleElkins3'>NicoleElkins3</option>
-              <option value='NicoleElkins4'>NicoleElkins4</option>
+              echo ">$table</option>";
+              }
+     
+ -->
+              <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
+              <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
+              <option value='JaylaBrazzle3'<?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
+              <option value='JaylaBrazzle4'<?= $selectedTable === 'JaylaBrazzle4' ? ' selected' : '' ?>>JaylaBrazzle4</option>
+              <option value='NicoleElkins1'<?= $selectedTable === 'NicoleElkins1' ? ' selected' : '' ?>>NicoleElkins1</option>
+              <option value='NicoleElkins2'<?= $selectedTable === 'NicoleElkins2' ? ' selected' : '' ?>>NicoleElkins2</option>
+              <option value='NicoleElkins3'<?= $selectedTable === 'NicoleElkins3' ? ' selected' : '' ?>>NicoleElkins3</option>
+              <option value='NicoleElkins4'<?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
               </select>
-            -->
-
-        <input type="submit" name="select_table" value="Select Table">
+        <input type="submit" name="select_table" value="Select Student">
     </form>
 
 <!-- Display data only if a table is selected -->
