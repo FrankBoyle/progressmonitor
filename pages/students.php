@@ -888,6 +888,7 @@
               $baseline = $_POST["baseline"][$key];
 
               $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
+              echo "Update SQL: $update_sql<br>"; // Debugging
                 if ($conn->query($update_sql) === TRUE) {
                   echo "Record updated successfully!";
                 } else {
