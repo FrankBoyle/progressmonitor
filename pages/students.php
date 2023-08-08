@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     }
 }
 
-$sql = "SELECT uuid, id, date, score, baseline FROM $selectedTable";
+$sql = "SELECT uuid, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
@@ -937,7 +937,7 @@ $result = $conn->query($sql);
             <?php
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td><input type='text' name='id[]' value='{$row["ids"]}' readonly></td>";
+                echo "<td><input type='text' name='id[]' value='{$row["uuid"]}' readonly></td>";
                 echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
                 echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
                 echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
