@@ -15,8 +15,11 @@ if ($conn->connect_error) {
 // Debugging output
 echo "Update SQL: $update_sql<br>";
 
+// Get selected table from dropdown menu
+$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1';
+
 // Update existing data
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     echo "Form submitted!"; // Debugging
     print_r($_POST);
 
@@ -34,9 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
-// Get selected table from dropdown menu
-$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1';
 
 // Fetch data from the selected table
 $sql = "SELECT id, date, score, baseline FROM $selectedTable";
@@ -910,16 +910,16 @@ $conn->close();
 
           <form method='post' action="">
             <select name='selected_table'>
-            <option value='JaylaBrazzle1'>JaylaBrazzle1</option>
-            <option value='JaylaBrazzle2'>JaylaBrazzle2</option>
-            <option value='JaylaBrazzle2'>JaylaBrazzle3</option>
-            <option value='JaylaBrazzle2'>JaylaBrazzle4</option>
-            <option value='JaylaBrazzle2'>NicoleElkins1</option>
-            <option value='JaylaBrazzle2'>NicoleElkins2</option>
-            <option value='JaylaBrazzle2'>NicoleElkins3</option>
-            <option value='JaylaBrazzle2'>NicoleElkins4</option>
+            <option value='JaylaBrazzle1'<?php if ($selectedTable === 'JaylaBrazzle1') echo " selected"; ?>>JaylaBrazzle1</option>
+            <option value='JaylaBrazzle2'<?php if ($selectedTable === 'JaylaBrazzle2') echo " selected"; ?>>JaylaBrazzle2</option>
+            <option value='JaylaBrazzle3'<?php if ($selectedTable === 'JaylaBrazzle3') echo " selected"; ?>>JaylaBrazzle3</option>
+            <option value='JaylaBrazzle4'<?php if ($selectedTable === 'JaylaBrazzle4') echo " selected"; ?>>JaylaBrazzle4</option>
+            <option value='NicoleElkins1'<?php if ($selectedTable === 'NicoleElkins1') echo " selected"; ?>>NicoleElkins1</option>
+            <option value='NicoleElkins2'<?php if ($selectedTable === 'NicoleElkins2') echo " selected"; ?>>NicoleElkins2</option>
+            <option value='NicoleElkins3'<?php if ($selectedTable === 'NicoleElkins3') echo " selected"; ?>>NicoleElkins3</option>
+            <option value='NicoleElkins4'<?php if ($selectedTable === 'NicoleElkins4') echo " selected"; ?>>NicoleElkins4</option>
             </select>
-            <input type='submit' value='Select Student'>
+            <input type='submit' name="select_table"  value='Select Student'>
           </form>
           
         <?php if ($result->num_rows > 0): ?>
@@ -936,7 +936,7 @@ $conn->close();
                   echo "</tr>";
                 }
               ?>
-            <tr><td colspan="4"><input type='submit' value='Update'></td></tr>
+            <tr><td colspan="4"><input type='submit' name='update' value='Update'></td></tr>
             </table>
           </form>
         <?php else: ?>
