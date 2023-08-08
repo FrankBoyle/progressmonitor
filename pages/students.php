@@ -910,23 +910,29 @@
             echo "<option value='JaylaBrazzle1'"; // Default option
           if ($selectedTable === 'JaylaBrazzle1') echo " selected";
             echo ">JaylaBrazzle1</option>";
-            echo "<option value='AnotherTable'"; // Add other table options here
-          if ($selectedTable === 'AnotherTable') echo " selected";
+            echo "<option value='JaylaBrazzle2'"; // Add other table options here
+          if ($selectedTable === 'JaylaBrazzle2') echo " selected";
             echo ">JaylaBrazzle2</option>";
-            echo "<option value='AnotherTable'"; // Add other table options here
+            echo "<option value='JaylaBrazzle3'"; // Add other table options here
+          if ($selectedTable === 'JaylaBrazzle3') echo " selected";
             echo ">JaylaBrazzle3</option>";
-            echo "<option value='AnotherTable'"; // Add other table options here
+            echo "<option value='JaylaBrazzle4'"; // Add other table options here
+          if ($selectedTable === 'JaylaBrazzle4') echo " selected";
             echo ">JaylaBrazzle4</option>";
-            echo "<option value='AnotherTable'"; // Add other table options here
+            echo "<option value='NicoleElkins1'"; // Add other table options here
+          if ($selectedTable === 'NicoleElkins1') echo " selected";
             echo ">NicoleElkins1</option>";
-            echo "<option value='AnotherTable'"; // Add other table options here
+            echo "<option value='NicoleElkins2'"; // Add other table options here
+          if ($selectedTable === 'NicoleElkins2') echo " selected";
             echo ">NicoleElkins2</option>";
-            echo "<option value='AnotherTable'"; // Add other table options here
+            echo "<option value='NicoleElkins3'"; // Add other table options here
+          if ($selectedTable === 'NicoleElkins3') echo " selected";
             echo ">NicoleElkins3</option>";
-            echo "<option value='AnotherTable'"; // Add other table options here
+            echo "<option value='NicoleElkins4'"; // Add other table options here
+          if ($selectedTable === 'NicoleElkins4') echo " selected";
             echo ">NicoleElkins4</option>";
             echo ">AnotherTable</option>";
-            
+
             // Add more options for other tables as needed
             echo "</select>";
             echo "<input type='submit' value='Select Table'>";
