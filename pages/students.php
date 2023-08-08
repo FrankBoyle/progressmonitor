@@ -1,46 +1,41 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $servername = "localhost";
 $username = "AndersonSchool";
 $password = "SpecialEd69$";
 $dbname = "AndersonSchool";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
-echo "Selected Table: $selectedTable<br>";
+$selectedTable = $_POST['selected_table'] ?? 'JaylaBrazzle1';
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (isset($_POST['update'])) {
+      $idArray = $_POST['id'];
+      $uuidArray = $_POST['uuid'];
+      $dateArray = $_POST['date'];
+      $scoreArray = $_POST['score'];
+      $baselineArray = $_POST['baseline'];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    // Handle updates
-    $ids = $_POST['id'];
-    $dates = $_POST['date'];
-    $scores = $_POST['score'];
-    $baselines = $_POST['baseline'];
+      for ($i = 0; $i < count($idArray); $i++) {
+          $uuid = $uuidArray[$i];
+          $id = $idArray[$i];
+          $date = $dateArray[$i];
+          $score = $scoreArray[$i];
+          $baseline = $baselineArray[$i];
 
-    for ($i = 0; $i < count($ids); $i++) {
-        $id = $ids[$i];
-        $date = $conn->real_escape_string($dates[$i]);
-        $score = $conn->real_escape_string($scores[$i]);
-        $baseline = $conn->real_escape_string($baselines[$i]);
-
-        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE uuid='$id'";
-        if ($conn->query($update_sql) !== TRUE) {
-            echo "Error updating record: " . $conn->error;
-        }
-    }
+          $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id AND uuid='$uuid'";
+          if ($conn->query($update_sql) !== TRUE) {
+              echo "Error updating record: " . $conn->error;
+          }
+      }
+  }
 }
 
-$sql = "SELECT uuid, date, score, baseline FROM $selectedTable";
+$sql = "SELECT uuid, id, date, score, baseline FROM $selectedTable";
 $result = $conn->query($sql);
 ?>
 
@@ -942,19 +937,21 @@ $result = $conn->query($sql);
 <?php if ($result->num_rows > 0): ?>
     <form method='post' action="">
         <table border='1'>
-            <tr><th>Entry</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
+            <tr><th>Entry</th><th>UUID</th><th>Date</th><th>Score</th><th>Baseline</th></tr>
             <?php
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td><input type='text' name='id[]' value='{$row["uuid"]}' readonly></td>";
-                echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
-                echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
-                echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
-                echo "</tr>";
-            }
-            ?>
+            while ($row = $result->fetch_assoc()): ?>
+                <tr>
+                    <td><input type='hidden' name='uuid[]' value='<?php echo $row["uuid"]; ?>' readonly></td>
+                    <td><input type='number' name='id[]' value='<?php echo $row["id"]; ?>'></td>
+                    <td><input type='date' name='date[]' value='<?php echo $row["date"]; ?>'></td>
+                    <td><input type='number' name='score[]' value='<?php echo $row["score"]; ?>'></td>
+                    <td><input type='number' name='baseline[]' value='<?php echo $row["baseline"]; ?>'></td>
+                </tr>
+            <?php endwhile; ?>
+            <tr>
+                <td colspan="5"><input type='submit' name='update' value='Update'></td>
+            </tr>
         </table>
-        <input type='submit' name='update' value='Update'>
     </form>
 <?php else: ?>
     <p>No data available.</p>
