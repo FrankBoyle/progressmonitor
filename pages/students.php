@@ -943,8 +943,8 @@ $result = $conn->query($sql);
           if ($goalResult && $goalResult->num_rows > 0) {
             $goalRow = $goalResult->fetch_assoc();
             $currentGoal = $goalRow["goal"];
-            echo '<label for="edit_goal">Edit Goal: </label>';
-            echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
+            echo '<label for="edit_goal">Goal: </label>';
+            echo '<textarea name="edit_goal" id="edit_goal" rows="7" cols="60">' . htmlspecialchars($currentGoal) . '</textarea>';
           }
         ?>
         <input type="submit" name="save_goal" value="Save Goal">
