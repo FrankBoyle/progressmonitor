@@ -919,7 +919,7 @@ $conn->close();
             <option value='NicoleElkins3'<?php if ($selectedTable === 'NicoleElkins3') echo " selected"; ?>>NicoleElkins3</option>
             <option value='NicoleElkins4'<?php if ($selectedTable === 'NicoleElkins4') echo " selected"; ?>>NicoleElkins4</option>
             </select>
-            <input type='submit' name="select_table"  value='Select Student'>
+            <input type='submit' name="selected_table"  value='Select Student'>
           </form>
           
         <?php if ($result->num_rows > 0): ?>
