@@ -861,6 +861,8 @@
         </div>
         <h1>Update Test</h1>
         <?php
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
         $servername = "localhost";
         $username = "AndersonSchool";
         $password = "SpecialEd69$";
@@ -898,7 +900,7 @@
         // Display fetched data in an editable form
         echo "<form method='post'>";
         while ($row = $result->fetch_assoc()) {
-            echo "ID: {$row["id"]}<br>";
+            echo "ID: {$row["goalkey"]}<br>";
             echo "Date: <input type='date' name='date[]' value='{$row["date"]}'><br>";
             echo "Score: <input type='number' name='score[]' value='{$row["score"]}'><br>";
             echo "Baseline: <input type='number' name='baseline[]' value='{$row["baseline"]}'><br>";
