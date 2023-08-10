@@ -77,7 +77,7 @@ if ($chartResult->num_rows > 0) {
 
 $chartDataArray1 = array();
 $chartSql1 = "SELECT date, baseline FROM $selectedTable";
-$chartResult1 = $conn->query($chartSql);
+$chartResult1 = $conn->query($chartSql1);
 if ($chartResult1->num_rows > 0) {
     while ($row = $chartResult1->fetch_assoc()) {
         $chartDataArray1[] = array(
