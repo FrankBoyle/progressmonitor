@@ -64,13 +64,24 @@ if ($tableResult->num_rows > 0) {
 
 // Fetch and store data from the database for the chart
 $chartDataArray = array();
-$chartSql = "SELECT date, score, baseline FROM $selectedTable";
+$chartSql = "SELECT date, score FROM $selectedTable";
 $chartResult = $conn->query($chartSql);
 if ($chartResult->num_rows > 0) {
     while ($row = $chartResult->fetch_assoc()) {
         $chartDataArray[] = array(
             'x' => $row['date'],     // Use the 'date' column as the x-variable
             'y1' => $row['score'],   // Use the 'score' column as the first y-variable
+        );
+    }
+}
+
+$chartDataArray1 = array();
+$chartSql1 = "SELECT date, baseline FROM $selectedTable";
+$chartResult1 = $conn->query($chartSql);
+if ($chartResult1->num_rows > 0) {
+    while ($row = $chartResult1->fetch_assoc()) {
+        $chartDataArray1[] = array(
+            'x' => $row['date'],     // Use the 'date' column as the x-variable
             'y2' => $row['baseline'] // Use the 'baseline' column as the second y-variable
         );
     }
@@ -496,10 +507,11 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-                <div id="chart"></div> <!-- Container for the scatter plot -->
+                <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 <script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
+    const baselineData = <?php echo json_encode($chartDataArray1); ?>;
 
     const scatterSeries = {
         name: 'Score',
@@ -520,38 +532,19 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         }
     };
 
-    // Create ApexCharts instance for the scatter plot
-    const options = {
-        chart: {
-            type: 'scatter'
-        },
-        xaxis: {
-            type: 'datetime'
-        },
-        series: [scatterSeries]
-    };
-
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
-</script>
-<div id="chart"></div> <!-- Container for the line chart -->
-<script>
-    // Processed PHP data
-    const chartData = <?php echo json_encode($chartDataArray); ?>;
-
     const baselineSeries = {
         name: 'Baseline',
         type: 'line',
-        data: chartData.map(item => ({
+        data: baselineData.map(item => ({
             x: new Date(item.x).getTime(),
-            y: item.y2  // Use y2 values from the PHP data as the baseline
+            y: item.y2
         })),
         // Customizing the line series
         strokeDashArray: 3,
         colors: ['#FF0000']  // Color of the baseline line
     };
 
-    // Create ApexCharts instance for the line chart with baseline series
+    // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
         chart: {
             type: 'line'
@@ -559,17 +552,12 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         xaxis: {
             type: 'datetime'
         },
-        yaxis: {
-            min: -10,  // Adjust this value based on your data range
-            max: 10    // Adjust this value based on your data range
-        },
-        series: [baselineSeries]
+        series: [scatterSeries, baselineSeries]
     };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
-
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
