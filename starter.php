@@ -496,7 +496,8 @@ if ($chartResult->num_rows > 0) {
 <script>
         // Processed PHP data
         const chartData = <?php echo json_encode($chartDataArray); ?>;
-        
+        console.log(chartData);
+
         // Transform data for ApexCharts
         const scatterSeries = {
             name: 'y1 (Scatter)',
