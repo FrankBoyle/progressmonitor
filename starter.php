@@ -505,7 +505,7 @@ if ($chartResult->num_rows > 0) {
     ];
     
     // Create ApexCharts instance
-    const options = {
+    const options1 = {
         chart: {
             type: 'line'
         },
@@ -515,7 +515,7 @@ if ($chartResult->num_rows > 0) {
         series: series
     };
     
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    const chart = new ApexCharts(document.querySelector("#chart"), options1);
     chart.render();
 </script>
 
