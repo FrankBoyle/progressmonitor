@@ -491,7 +491,7 @@ if ($chartResult->num_rows > 0) {
     const chartData1 = <?php echo json_encode($chartDataArray); ?>;
     
     // Transform data for ApexCharts
-    const series = [
+    const series1 = [
         {
             name: 'y1 (Scatter)',
             type: 'scatter', // Set the series type to scatter
@@ -505,18 +505,18 @@ if ($chartResult->num_rows > 0) {
     ];
     
     // Create ApexCharts instance for the combined scatter plot and line graph
-    const options = {
+    const options1 = {
         chart: {
             type: 'line' // Use line type for combined chart
         },
         xaxis: {
             type: 'datetime' // If your x-variable is a date, use 'datetime' type
         },
-        series: series
+        series: series1
     };
     
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    const chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+    chart1.render();
 </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
