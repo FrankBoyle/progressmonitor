@@ -490,7 +490,7 @@ if ($chartResult->num_rows > 0) {
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-                
+
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 
 <script>
