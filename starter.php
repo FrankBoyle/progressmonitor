@@ -57,8 +57,8 @@ $result = $conn->query($sql);
 
 // Fetch and store data from the database
 $chartDataArray = array();
-if ($result1->num_rows > 0) {
-    while ($row = $result1->fetch_assoc()) {
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
         $chartDataArray[] = array(
             'x' => $row['date'],     // Use the 'date' column as the x-variable
             'y1' => $row['score'],   // Use the 'score' column as the first y-variable
