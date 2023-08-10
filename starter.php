@@ -489,6 +489,8 @@ if ($chartResult->num_rows > 0) {
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
+
+                
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 
 <script>
@@ -497,40 +499,40 @@ if ($chartResult->num_rows > 0) {
         const chartData1 = <?php echo json_encode($chartDataArray); ?>;
         
         // Transform data for ApexCharts
-        const series1 = [
-            {
-                name: 'y1 (Scatter)',
-                type: 'scatter', // Set the series type to scatter
-                data: chartData1.map(item => ({
-                    x: new Date(item.x).getTime(),
-                    y: item.y1
-                }))
-            },
-            {
-                name: 'y2 (Line)',
-                type: 'line', // Set the series type to line
-                data: chartData1.map(item => ({
-                    x: new Date(item.x).getTime(),
-                    y: item.y2
-                }))
-            }
-        ];
+        const scatterSeries = {
+            name: 'y1 (Scatter)',
+            type: 'scatter',
+            data: chartData1.map(item => ({
+                x: new Date(item.x).getTime(),
+                y: item.y1
+            }))
+        };
+
+        const lineSeries = {
+            name: 'y2 (Line)',
+            type: 'line',
+            data: chartData1.map(item => ({
+                x: new Date(item.x).getTime(),
+                y: item.y2
+            }))
+        };
         
         // Create ApexCharts instance for the combined scatter plot and line graph
         const options1 = {
             chart: {
-                type: 'line' // Use line type for combined chart
+                type: 'line'
             },
             xaxis: {
-                type: 'datetime' // If your x-variable is a date, use 'datetime' type
+                type: 'datetime'
             },
-            series: series1
+            series: [scatterSeries, lineSeries] // Combine scatter and line series
         };
         
         const chart1 = new ApexCharts(document.querySelector("#chart"), options1);
         chart1.render();
     });
 </script>
+
 
 
 
