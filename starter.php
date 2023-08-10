@@ -511,17 +511,11 @@ if ($chartResult->num_rows > 0) {
         const lineSeries = {
             name: 'y2 (Line)',
             type: 'line',
-            data: chartData.map(item => {
-    console.log(item);
-    return {
-        x: new Date(item.x).getTime(),
-        y: item.y1
-    };
-})
-                //x: new Date(item.x).getTime(),
-                //y: item.y2
-            }
-        
+            data: chartData.map(item => ({
+                x: new Date(item.x).getTime(),
+                y: item.y2
+            }))
+        };
         
         // Create ApexCharts instance for the combined scatter plot and line graph
         const options = {
@@ -531,7 +525,7 @@ if ($chartResult->num_rows > 0) {
             xaxis: {
                 type: 'datetime'
             },
-            series: [scatterSeries, lineSeries] // Combine scatter and line series
+            series: [scatterSeries] // Combine scatter and line series
         };
         
         const chart = new ApexCharts(document.querySelector("#chart"), options);
