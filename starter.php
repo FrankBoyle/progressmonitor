@@ -516,7 +516,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         
     const scatterSeries = {
         name: 'y1 (Scatter)',
-        type: 'scatter',
+        type: 'line',
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y1
