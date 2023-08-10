@@ -18,7 +18,7 @@ if ($conn->connect_error) {
 
 $selectedTable = $_POST['selected_table'] ?? $_SESSION['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
-echo "Updating records in table: $selectedTable<br>";
+//echo "Updating records in table: $selectedTable<br>";
 
 // Handle updates for ID, date, score, and baseline
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
