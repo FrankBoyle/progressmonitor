@@ -512,7 +512,7 @@ if ($chartResult->num_rows > 0) {
         xaxis: {
             type: 'datetime' // If your x-variable is a date, use 'datetime' type
         },
-        series: series
+        series: series1
     };
     
     const chart1 = new ApexCharts(document.querySelector("#chart"), options1);
