@@ -534,6 +534,41 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+<div id="chart"></div> <!-- Container for the line chart -->
+<script>
+    // Processed PHP data
+    const chartData = <?php echo json_encode($chartDataArray); ?>;
+
+    const baselineSeries = {
+        name: 'Baseline',
+        type: 'line',
+        data: chartData.map(item => ({
+            x: new Date(item.x).getTime(),
+            y: item.y2  // Use y2 values from the PHP data as the baseline
+        })),
+        // Customizing the line series
+        strokeDashArray: 3,
+        colors: ['#FF0000']  // Color of the baseline line
+    };
+
+    // Create ApexCharts instance for the line chart with baseline series
+    const options = {
+        chart: {
+            type: 'line'
+        },
+        xaxis: {
+            type: 'datetime'
+        },
+        yaxis: {
+            min: -10,  // Adjust this value based on your data range
+            max: 10    // Adjust this value based on your data range
+        },
+        series: [baselineSeries]
+    };
+
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
 
 
 
