@@ -495,13 +495,13 @@ if ($chartResult->num_rows > 0) {
 
 <script>
         // Processed PHP data
-        const chartData1 = <?php echo json_encode($chartDataArray); ?>;
+        const chartData = <?php echo json_encode($chartDataArray); ?>;
         
         // Transform data for ApexCharts
         const scatterSeries = {
             name: 'y1 (Scatter)',
             type: 'scatter',
-            data: chartData1.map(item => ({
+            data: chartData.map(item => ({
                 x: new Date(item.x).getTime(),
                 y: item.y1
             }))
@@ -510,14 +510,14 @@ if ($chartResult->num_rows > 0) {
         const lineSeries = {
             name: 'y2 (Line)',
             type: 'line',
-            data: chartData1.map(item => ({
+            data: chartData.map(item => ({
                 x: new Date(item.x).getTime(),
                 y: item.y2
             }))
         };
         
         // Create ApexCharts instance for the combined scatter plot and line graph
-        const options1 = {
+        const options = {
             chart: {
                 type: 'line'
             },
@@ -527,10 +527,8 @@ if ($chartResult->num_rows > 0) {
             series: [scatterSeries, lineSeries] // Combine scatter and line series
         };
         
-        const chart1 = new ApexCharts(document.querySelector("#chart"), options1);
-        setTimeout(function() {
-    chart1.render();
-}, 100);
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart1.render();
 </script>
 
 
