@@ -503,7 +503,8 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const chartData = <?php echo json_encode($chartDataArray); ?>;
 
     const scatterSeries = {
-        name: 'y1 (Scatter)',
+        name: 'Score',
+        type: 'scatter',
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y1
@@ -525,7 +526,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         type: 'line',
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
-            y: 0  // Set the baseline y-value here
+            y: item.y2  // Set the baseline y-value here
         })),
         // Customizing the line series
         strokeDashArray: 3,
