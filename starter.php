@@ -493,11 +493,11 @@ if ($chartResult->num_rows > 0) {
 
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 
-                <script>
+<script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
 
-    // Transform data for ApexCharts
+    // data for ApexCharts
     const lineSeries = {
         name: 'y2 (Line)',
         type: 'line',
@@ -506,7 +506,8 @@ if ($chartResult->num_rows > 0) {
             y: item.y2
         })),
         // Set the chart type to 'line' for this series
-
+        // By default, the chart type is 'scatter' for all series
+        // This ensures that it is plotted as a line graph
     };
     
     const scatterSeries = {
@@ -521,7 +522,7 @@ if ($chartResult->num_rows > 0) {
     // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
         chart: {
-            type: 'scatter'
+            type: '' // Set the chart type to 'line'
         },
         xaxis: {
             type: 'datetime'
