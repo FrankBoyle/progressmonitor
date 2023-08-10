@@ -54,6 +54,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
 
 $sql = "SELECT id, date, score, baseline, goal FROM $selectedTable";
 $result = $conn->query($sql);
+
+// Fetch and store data from the database
+$dataArray = array();
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $dataArray[] = array(
+            'x' => $row['date'],     // Use the 'score' column for the 3rd column of the graph
+            'y1' => $row['score']  // Use the 'baseline' column for the 4th column of the graph
+            'y2' => $row['baseline']  // Use the 'baseline' column for the 4th column of the graph
+        );
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +74,6 @@ $result = $conn->query($sql);
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bfactor</title>
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -71,7 +82,6 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-
   <!-- jsGrid -->
   <link rel="stylesheet" href="../plugins/jsgrid/jsgrid.min.css">
   <link rel="stylesheet" href="../plugins/jsgrid/jsgrid-theme.min.css">
@@ -91,6 +101,7 @@ $result = $conn->query($sql);
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 <div class="wrapper">
@@ -347,75 +358,62 @@ $result = $conn->query($sql);
 
                 <h1>Progress Monitoring Testing Area</h1>
 
-<form method="post">
-  <select name="selected_table">
-  
-<!--    php   
-
-    $tables = ['JaylaBrazzle1', 'JaylaBrazzle2', 'JaylaBrazzle3', 'JaylaBrazzle4', 'NicoleElkins1', 'NicoleElkins2', 'NicoleElkins3', 'NicoleElkins4'];
-
-    foreach ($tables as $table) {
-      echo "<option value='$table'";
-    if ($table === $selectedTable) {
-      echo " selected";
-    }
-    echo ">$table</option>";
-    }
-
--->
-    <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
-    <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
-    <option value='JaylaBrazzle3'<?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
-    <option value='JaylaBrazzle4'<?= $selectedTable === 'JaylaBrazzle4' ? ' selected' : '' ?>>JaylaBrazzle4</option>
-    <option value='NicoleElkins1'<?= $selectedTable === 'NicoleElkins1' ? ' selected' : '' ?>>NicoleElkins1</option>
-    <option value='NicoleElkins2'<?= $selectedTable === 'NicoleElkins2' ? ' selected' : '' ?>>NicoleElkins2</option>
-    <option value='NicoleElkins3'<?= $selectedTable === 'NicoleElkins3' ? ' selected' : '' ?>>NicoleElkins3</option>
-    <option value='NicoleElkins4'<?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
-    </select>
-<input type="submit" name="select_table" value="Select Student">
-</form>
+                  <form method="post">
+                    <select name="selected_table">
+                      <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
+                      <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
+                      <option value='JaylaBrazzle3'<?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
+                      <option value='JaylaBrazzle4'<?= $selectedTable === 'JaylaBrazzle4' ? ' selected' : '' ?>>JaylaBrazzle4</option>
+                      <option value='NicoleElkins1'<?= $selectedTable === 'NicoleElkins1' ? ' selected' : '' ?>>NicoleElkins1</option>
+                      <option value='NicoleElkins2'<?= $selectedTable === 'NicoleElkins2' ? ' selected' : '' ?>>NicoleElkins2</option>
+                      <option value='NicoleElkins3'<?= $selectedTable === 'NicoleElkins3' ? ' selected' : '' ?>>NicoleElkins3</option>
+                      <option value='NicoleElkins4'<?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
+                    </select>
+                    <input type="submit" name="select_table" value="Select Student">
+                  </form>
 
 
 <!-- Form for updating the goal -->
-<form method="post" action="">
-<?php
-// Fetch the current goal value from the database
-$goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
-$goalResult = $conn->query($goalSql);
+                  <form method="post" action="">
+                    <?php
+                    // Fetch the current goal value from the database
+                      $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
+                      $goalResult = $conn->query($goalSql);
 
-if ($goalResult && $goalResult->num_rows > 0) {
-$goalRow = $goalResult->fetch_assoc();
-$currentGoal = $goalRow["goal"];
-echo '<label for="edit_goal">Edit Goal: </label>';
-echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
-}
-?>
-<input type="submit" name="save_goal" value="Save Goal">
-</form>
+                        if ($goalResult && $goalResult->num_rows > 0) {
+                          $goalRow = $goalResult->fetch_assoc();
+                          $currentGoal = $goalRow["goal"];
+                          echo '<label for="edit_goal">Edit Goal: </label>';
+                          echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
+                        }
+                    ?>
+                    <input type="submit" name="save_goal" value="Save Goal">
+                  </form>
 
 
 <!-- Form for updating ID, date, score, and baseline -->
-<form method='post' action="">
-<table border='1'>
-<tr>
-  <th>ID</th>
-  <th>Date</th>
-  <th>Score</th>
-  <th>Baseline</th>
-</tr>
-<?php
-while ($row = $result->fetch_assoc()) {
-  echo "<tr>";
-  echo "<td><input type='hidden' name='id[]' value='{$row["id"]}'>{$row["id"]}</td>";
-  echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
-  echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
-  echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
-  echo "</tr>";
-}
-?>
-</table>
-<input type='submit' name='update' value='Update'>
-</form>
+                  <form method='post' action="">
+                    <table border='1'>
+                      <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Baseline</th>
+                      </tr>
+                    <?php
+                      while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td><input type='hidden' name='id[]' value='{$row["id"]}'>{$row["id"]}</td>";
+                        echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+                        echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+                        echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+                        echo "</tr>";
+                      }
+                    ?>
+                    </table>
+                    <input type='submit' name='update' value='Update'>
+                  </form>
+  
 
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
@@ -424,12 +422,35 @@ while ($row = $result->fetch_assoc()) {
 
             <div class="card card-primary card-outline">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
+                <h5 class="card-title">Graph</h5>
+                <div id="chart"></div>
+    
+    <script>
+        // Processed PHP data
+        const chartData = <?php echo json_encode($dataArray); ?>;
+        
+        // Transform data for ApexCharts
+        const series = Object.keys(chartData[0])
+            .filter(key => key !== 'x') // Exclude the x-variable
+            .map(key => ({
+                name: key,
+                data: chartData.map(item => [item.x, item[key]])
+            }));
+        
+        // Create ApexCharts instance
+        const options = {
+            chart: {
+                type: 'line'
+            },
+            xaxis: {
+                type: 'datetime' // If your x-variable is a date, use 'datetime' type
+            },
+            series: series
+        };
+        
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    </script>
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
               </div>
