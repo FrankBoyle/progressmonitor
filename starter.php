@@ -61,7 +61,7 @@ $result = $conn->query($sql);
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Tabbed IFrames</title>
+  <title>Bfactor</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -236,7 +236,7 @@ $result = $conn->query($sql);
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Fran Boyle</a>
+          <a href="#" class="d-block"><?php echo($_SESSION['user']);?></a>
         </div>
       </div>
 
