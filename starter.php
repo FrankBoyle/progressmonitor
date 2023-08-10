@@ -70,7 +70,7 @@ if ($chartResult->num_rows > 0) {
     while ($row = $chartResult->fetch_assoc()) {
         $chartDataArray[] = array(
             'x' => $row['date'],     // Use the 'date' column as the x-variable
-            'y1' => $row['score'],   // Use the 'score' column as the first y-variable
+            'y' => $row['score'],   // Use the 'score' column as the first y-variable
         );
     }
 }
@@ -81,8 +81,8 @@ $chartResult1 = $conn->query($chartSql1);
 if ($chartResult1->num_rows > 0) {
     while ($row = $chartResult1->fetch_assoc()) {
         $chartDataArray1[] = array(
-            'x' => $row['date'],     // Use the 'date' column as the x-variable
-            'y2' => $row['baseline'] // Use the 'baseline' column as the second y-variable
+            'x1' => $row['date'],     // Use the 'date' column as the x-variable
+            'y1' => $row['baseline'] // Use the 'baseline' column as the second y-variable
         );
     }
 }
@@ -519,7 +519,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     });
 
     baselineData.forEach(item => {
-        item.x = new Date(item.x).getTime();
+        item.x1 = new Date(item.x1).getTime();
     });
 
     const scatterSeries = {
@@ -527,7 +527,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         type: 'scatter',
         data: chartData.map(item => ({
             x: item.x,
-            y: item.y1
+            y: item.y
         })),
         markers: {
             size: 6  // Adjust the marker size as needed
@@ -548,8 +548,8 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         name: 'Baseline',
         type: 'line',
         data: baselineData.map(item => ({
-            x: item.x,
-            y: item.y2
+            x: item.x1,
+            y: item.y1
         })),
         // Customizing the line series
         strokeDashArray: 3,
@@ -562,7 +562,15 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
             type: 'line'
         },
         xaxis: {
-            type: 'datetime'
+            type: 'datetime',
+            labels: {
+                datetimeFormatter: {
+                    year: 'yyyy',
+                    month: "MMM 'yy",
+                    day: 'dd MMM',
+                    hour: 'HH:mm'
+                }
+            }
         },
         series: [scatterSeries, baselineSeries]
     };
@@ -570,6 +578,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
