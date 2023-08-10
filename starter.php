@@ -528,84 +528,74 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
     // Prepare the scatter data for y2 variable
     const x1Data = <?php echo json_encode($chartDataArray1); ?>;
-    const x1DataSeries = {
-        name: 'Date',
-        data: x1Data.map(item => ({
-            x1: item.x1, // Assuming you have x values in scatterData
-        })),
-        markers: {
-            size: 6
-        }
-    };
 
     // Prepare the line data for y1 variable
     const y1Data = <?php echo json_encode($chartDataArray2); ?>;
-    const y1DataSeries = {
-        name: 'Baseline',
-        data: y1Data.map(item => ({
-            y1: item.y1
-        })),
-        // Customizing the line series
-        strokeDashArray: 3,
-        color: '#FF0000'
-    };
 
-        // Prepare the line data for y1 variable
+    // Prepare the line data for y2 variable
     const y2Data = <?php echo json_encode($chartDataArray3); ?>;
-    const y2DataSeries = {
-        name: 'Score',
-        data: y2Data.map(item => ({
-            y2: item.y2
-        })),
-        // Customizing the line series
-        strokeDashArray: 3,
-        color: '#FF0000'
-    };
+
     // Create ApexCharts instance for the scatter plot and baseline line
     var options = {
-          series: [{
-          name: 'Points',
-          type: 'scatter',
-        
-          //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
-          data: [{
-            x1: [x1DataSeries],
-            y1: [y1DataSeries]
-
-          }]
-        }, {
-          name: 'Line',
-          type: 'line',
-          data: [{
-            x1: [x1DataSeries],
-            y2: [y2DataSeries]
-          }]
-        }],
-          chart: {
-          height: 350,
-          type: 'line',
-        },
-        fill: {
-          type:'solid',
-        },
-        markers: {
-          size: [6, 0]
-        },
-        tooltip: {
-          shared: false,
-          intersect: true,
-        },
-        legend: {
-          show: false
+        series: [
+            {
+                name: 'Baseline',
+                data: y1Data.map(item => ({
+                    x: item.x1,
+                    y: item.y1
+                })),
+                type: 'line',
+                strokeDashArray: 3,
+                color: '#FF0000'
+            },
+            {
+                name: 'Score',
+                data: y2Data.map(item => ({
+                    x: item.x1,
+                    y: item.y2
+                })),
+                type: 'line',
+                strokeDashArray: 3,
+                color: '#00FF00'
+            }
+        ],
+        chart: {
+            height: 350,
+            type: 'line',
         },
         xaxis: {
-          type: 'numeric',
-          min: 0,
-        }
-        };
+            type: 'datetime' // Change to 'datetime' for date-based x-axis
+        },
+        fill: {
+            type: 'solid',
+        },
+        markers: {
+            size: 6
+        },
+        tooltip: {
+            shared: false,
+            intersect: true,
+        },
+        legend: {
+            show: false
+        },
+        yaxis: [
+            {
+                title: {
+                    text: 'Baseline'
+                }
+            },
+            {
+                opposite: true,
+                title: {
+                    text: 'Score'
+                }
+            }
+        ]
+    };
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
 </script>
 
 
