@@ -505,17 +505,17 @@ if ($chartResult->num_rows > 0) {
             x: new Date(item.x).getTime(),
             y: item.y1
         }))
-        console.log(x,y1);
     };
 
     const lineSeries = {
         name: 'y2 (Line)',
+        type: 'line'
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y2
         })),
         // Set the chart type to 'line' for this series
-        type: 'line'
+
     };
 
     // Create ApexCharts instance for the combined scatter plot and line graph
