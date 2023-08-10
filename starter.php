@@ -519,8 +519,8 @@ if ($chartResult->num_rows > 0) {
         y: item.y1
     };
 })
-                x: new Date(item.x).getTime(),
-                y: item.y2
+                //x: new Date(item.x).getTime(),
+                //y: item.y2
             }))
         };
         
