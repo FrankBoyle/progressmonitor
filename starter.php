@@ -56,10 +56,10 @@ $sql = "SELECT id, date, score, baseline, goal FROM $selectedTable";
 $result = $conn->query($sql);
 
 // Fetch and store data from the database
-$dataArray = array();
+$chartDataArray = array();
 if ($result1->num_rows > 0) {
     while ($row = $result1->fetch_assoc()) {
-        $dataArray[] = array(
+        $chartDataArray[] = array(
             'x' => $row['date'],     // Use the 'date' column as the x-variable
             'y1' => $row['score'],   // Use the 'score' column as the first y-variable
             'y2' => $row['baseline'] // Use the 'baseline' column as the second y-variable
@@ -67,7 +67,7 @@ if ($result1->num_rows > 0) {
     }
 }
 echo "Data Array: ";
-print_r($dataArray);
+print_r($chartDataArray);
 ?>
 
 <!DOCTYPE html>
@@ -429,7 +429,7 @@ print_r($dataArray);
     
     <script>
         // Processed PHP data
-        const chartData = <?php echo json_encode($dataArray); ?>;
+        const chartData = <?php echo json_encode($chartDataArray); ?>;
         
         // Transform data for ApexCharts
         const series = Object.keys(chartData[0])
