@@ -230,7 +230,7 @@ include("./users/auth_session.php");
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="./pages/students.php" class="nav-link active">
+                <a href="./starter.php" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Students</p>
                 </a>
