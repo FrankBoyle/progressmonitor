@@ -502,7 +502,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
 
-    /* data for ApexCharts
     const lineSeries = {
         name: 'y2 (Line)',
         type: 'line',
@@ -514,8 +513,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         // By default, the chart type is 'scatter' for all series
         // This ensures that it is plotted as a line graph
     };
-    */
-    
+        
     const scatterSeries = {
         name: 'y1 (Scatter)',
         type: 'scatter',
