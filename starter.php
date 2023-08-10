@@ -517,7 +517,7 @@ if ($chartResult->num_rows > 0) {
     
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
-</script>a
+</script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
