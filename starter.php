@@ -506,18 +506,26 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
-
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 <script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
     const baselineData = <?php echo json_encode($chartDataArray1); ?>;
 
+    // Transform the date strings to Date objects
+    chartData.forEach(item => {
+        item.x = new Date(item.x).getTime();
+    });
+
+    baselineData.forEach(item => {
+        item.x = new Date(item.x).getTime();
+    });
+
     const scatterSeries = {
         name: 'Score',
         type: 'scatter',
         data: chartData.map(item => ({
-            x: new Date(item.x).getTime(),
+            x: item.x,
             y: item.y1
         })),
         dataLabels: {
@@ -536,7 +544,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         name: 'Baseline',
         type: 'line',
         data: baselineData.map(item => ({
-            x: new Date(item.x).getTime(),
+            x: item.x,
             y: item.y2
         })),
         // Customizing the line series
@@ -558,6 +566,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
