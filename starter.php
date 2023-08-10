@@ -512,6 +512,13 @@ if ($chartResult->num_rows > 0) {
             name: 'y2 (Line)',
             type: 'line',
             data: chartData.map(item => ({
+              data: chartData.map(item => {
+    console.log(item);
+    return {
+        x: new Date(item.x).getTime(),
+        y: item.y1
+    };
+})
                 x: new Date(item.x).getTime(),
                 y: item.y2
             }))
