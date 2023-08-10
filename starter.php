@@ -486,6 +486,38 @@ if ($chartResult->num_rows > 0) {
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
+                <script>
+    // Processed PHP data
+    const chartData = <?php echo json_encode($chartDataArray); ?>;
+    
+    // Transform data for ApexCharts
+    const series = [
+        {
+            name: 'y1 (Scatter)',
+            type: 'scatter', // Set the series type to scatter
+            data: chartData.map(item => ({ x: new Date(item.x).getTime(), y: item.y1 }))
+        },
+        {
+            name: 'y2 (Line)',
+            type: 'line', // Set the series type to line
+            data: chartData.map(item => ({ x: new Date(item.x).getTime(), y: item.y2 }))
+        }
+    ];
+    
+    // Create ApexCharts instance
+    const options = {
+        chart: {
+            type: 'line'
+        },
+        xaxis: {
+            type: 'datetime' // If your x-variable is a date, use 'datetime' type
+        },
+        series: series
+    };
+    
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
@@ -518,7 +550,7 @@ if ($chartResult->num_rows > 0) {
       Anything you want
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor</a>.</strong> All rights reserved.
   </footer>
 </div>
 <!-- ./wrapper -->
