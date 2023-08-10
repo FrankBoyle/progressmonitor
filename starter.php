@@ -509,7 +509,7 @@ if ($chartResult->num_rows > 0) {
 
     const lineSeries = {
         name: 'y2 (Line)',
-        type: 'line'
+        type: 'line',
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y2
