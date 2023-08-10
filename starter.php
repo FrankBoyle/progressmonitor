@@ -496,7 +496,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-
                 <div id="chart"></div> <!-- Container for the scatter plot -->
 <script>
     // Processed PHP data
@@ -521,14 +520,12 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         }
     };
 
-    const baselineYValue = 5; // Set the baseline y-value here
-
     const baselineSeries = {
         name: 'Baseline',
         type: 'line',
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
-            y: baselineYValue
+            y: item.y2  // Use y2 values from the PHP data as the baseline
         })),
         // Customizing the line series
         strokeDashArray: 3,
@@ -549,6 +546,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+
 
 
 
