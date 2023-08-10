@@ -586,7 +586,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
                 }
             },
             {
-                opposite: true,
+                opposite: false,
                 title: {
                     text: 'Score'
                 }
