@@ -569,16 +569,16 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         
           //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
           data: [{
-            x: [x1DataSeries]
-            y: [y1DataSeries]
+            x1: [x1DataSeries]
+            y1: [y1DataSeries]
 
           }]
         }, {
           name: 'Line',
           type: 'line',
           data: [{
-            x: [x1DataSeries]
-            y: [y2DataSeries]
+            x1: [x1DataSeries]
+            y2: [y2DataSeries]
           }]
         }],
           chart: {
