@@ -522,10 +522,10 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
     const baselineSeries = {
         name: 'Baseline',
-        type: 'line',
+        type: 'line', // Use 'line' chart type for the baseline series
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
-            y: item.y2  // Use y2 values from the PHP data as the baseline
+            y: item.y2
         })),
         // Customizing the line series
         strokeDashArray: 3,
@@ -546,11 +546,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
-
-
-
-
-
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
