@@ -55,17 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
 $sql = "SELECT id, date, score, baseline, goal FROM $selectedTable";
 $result = $conn->query($sql);
 
-// Fetch and store data from the database
-$dataArray = array();
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $dataArray[] = array(
-            'x' => $row['date'],     // Use the 'score' column for the 3rd column of the graph
-            'y1' => $row['score']  // Use the 'baseline' column for the 4th column of the graph
-            'y2' => $row['baseline']  // Use the 'baseline' column for the 4th column of the graph
-        );
-    }
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -425,7 +415,32 @@ if ($result->num_rows > 0) {
                 <h5 class="card-title">Graph</h5>
                 <div id="chart"></div>
     
-    
+    <script>
+        // Processed PHP data
+        const chartData = <?php echo json_encode($dataArray); ?>;
+        
+        // Transform data for ApexCharts
+        const series = Object.keys(chartData[0])
+            .filter(key => key !== 'x') // Exclude the x-variable
+            .map(key => ({
+                name: key,
+                data: chartData.map(item => [item.x, item[key]])
+            }));
+        
+        // Create ApexCharts instance
+        const options = {
+            chart: {
+                type: 'line'
+            },
+            xaxis: {
+                type: 'datetime' // If your x-variable is a date, use 'datetime' type
+            },
+            series: series
+        };
+        
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    </script>
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
               </div>
