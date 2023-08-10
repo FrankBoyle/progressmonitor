@@ -541,59 +541,49 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
     // Create ApexCharts instance for the scatter plot and baseline line
     var options = {
-        series: [
-            {
-                name: 'Baseline',
-                data: y1Data.map(item => ({
-                    x: item.x1,
-                    y: item.y1
-                })),
-                type: 'line',
-                strokeDashArray: 3,
-                color: '#FF0000'
-            },
-            {
-                name: 'Score',
-                data: y2Data.map(item => ({
-                    x: item.x1,
-                    y: item.y2
-                })),
-                type: 'scatter',
-                strokeDashArray: 3,
-                color: '#00FF00'
-            }
-        ],
-        chart: {
-            height: 350,
+    series: [
+        {
+            name: 'Baseline',
+            data: y1Data.map(item => ({
+                x: item.x1,
+                y: item.y1
+            })),
             type: 'line',
+            strokeDashArray: 3,
+            color: '#FF0000'
         },
-        xaxis: {
-            type: 'datetime' // Change to 'datetime' for date-based x-axis
-        },
-        fill: {
-            type: 'solid',
-        },
-        markers: {
-            size: 6
-        },
-        tooltip: {
-            shared: false,
-            intersect: true,
-        },
-        legend: {
-            show: false
-        },
-        yaxis: [
-            {
-                title: {
-                    text: 'Score'
-                }
+        {
+            name: 'Score',
+            data: y2Data.map(item => ({
+                x: item.x1,
+                y: item.y2
+            })),
+            type: 'scatter',
+            strokeDashArray: 3,
+            color: '#00FF00'
+        }
+    ],
+    chart: {
+        height: 350,
+        type: 'line',
+    },
+    xaxis: {
+        type: 'datetime',
+        labels: {
+            datetimeFormatter: {
+                year: 'yyyy',
+                month: 'MMM yyyy',
+                day: 'dd MMM',
+                hour: 'HH:mm'
             }
-        ]
-    };
+        }
+    },
+    // ...
+};
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+var chart = new ApexCharts(document.querySelector("#chart"), options);
+chart.render();
+
 </script>
 
 
