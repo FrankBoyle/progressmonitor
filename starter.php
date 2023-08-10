@@ -503,7 +503,11 @@ if ($chartResult->num_rows > 0) {
                 data: chartData1.map(item => ({
                     x: new Date(item.x).getTime(),
                     y: item.y1
-                }))
+                })),
+                type: 'scatter', // Specify scatter type for the series
+                markers: {
+                    size: 6 // Adjust marker size as needed
+                }
             }
         ];
 
@@ -533,6 +537,7 @@ if ($chartResult->num_rows > 0) {
         chart1.render();
     });
 </script>
+
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
