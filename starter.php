@@ -515,7 +515,7 @@ if ($chartResult->num_rows > 0) {
         series: series1
     };
     
-    const chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+    const chart1 = new ApexCharts(document.querySelector("#chart"), options1);
     chart1.render();
 </script>
 
