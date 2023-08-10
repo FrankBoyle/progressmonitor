@@ -498,7 +498,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
 
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
-                <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 <script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
@@ -518,17 +517,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y1
-        })),
-        dataLabels: {  // Add data labels for the scatter series
-            enabled: true,
-            offsetY: -10,
-            style: {
-                colors: ['#333']
-            },
-            formatter: function(val, opts) {
-                return opts.w.globals.series[1][opts.dataPointIndex].y.toFixed(2);  // Index 1 corresponds to the scatter series
-            },
-        }
+        }))
     };
 
     // Create ApexCharts instance for the combined scatter plot and line graph
@@ -545,6 +534,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
