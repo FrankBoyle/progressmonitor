@@ -529,7 +529,9 @@ if ($chartResult->num_rows > 0) {
         };
         
         const chart1 = new ApexCharts(document.querySelector("#chart"), options1);
-        chart1.render();
+        setTimeout(function() {
+    chart1.render();
+}, 100);
     });
 </script>
 
