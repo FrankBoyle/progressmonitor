@@ -498,15 +498,6 @@ if ($chartResult->num_rows > 0) {
     const chartData = <?php echo json_encode($chartDataArray); ?>;
 
     // Transform data for ApexCharts
-    const scatterSeries = {
-        name: 'y1 (Scatter)',
-        type: 'scatter',
-        data: chartData.map(item => ({
-            x: new Date(item.x).getTime(),
-            y: item.y1
-        }))
-    };
-
     const lineSeries = {
         name: 'y2 (Line)',
         type: 'line',
@@ -516,6 +507,15 @@ if ($chartResult->num_rows > 0) {
         })),
         // Set the chart type to 'line' for this series
 
+    };
+    
+    const scatterSeries = {
+        name: 'y1 (Scatter)',
+        type: 'scatter',
+        data: chartData.map(item => ({
+            x: new Date(item.x).getTime(),
+            y: item.y1
+        }))
     };
 
     // Create ApexCharts instance for the combined scatter plot and line graph
