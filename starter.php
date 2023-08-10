@@ -508,7 +508,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
                 <h6 class="card-title">Special title treatment</h6>
 
                 <div id="chart"></div>
-                <script>
+<script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
     const baselineData = <?php echo json_encode($chartDataArray1); ?>;
@@ -522,7 +522,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         item.x1 = new Date(item.x1).getTime();
     });
 
-    const scatterSeries = {
+    var scatterSeries = {
         name: 'Score',
         type: 'scatter',
         data: chartData.map(item => ({
@@ -534,39 +534,32 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         }
     };
 
-    // Create ApexCharts instance for the scatter plot
-    const options = {
+    var baselineSeries = {
+        name: 'Baseline',
+        type: 'line',
+        data: baselineData.map(item => ({
+            x: item.x1,
+            y: item.y1
+        })),
+        // Customizing the line series
+        strokeDashArray: 3,
+        colors: ['#FF0000']
+    };
+
+    // Create ApexCharts instance for the scatter plot and baseline line
+    var options = {
         chart: {
-            type: 'line' // Change the chart type to 'line'
+            type: 'scatter'
         },
         xaxis: {
             type: 'datetime'
         },
-        series: [scatterSeries]
+        series: [scatterSeries, baselineSeries]
     };
 
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
-
-    // Draw the baseline line using annotations
-    const baselineAnnotation = {
-        xaxis: {
-            x: baselineData[0].x1, // Assuming baselineData is sorted
-            borderColor: '#FF0000',
-            label: {
-                borderColor: '#FF0000',
-                style: {
-                    color: '#fff',
-                    background: '#FF0000'
-                },
-                text: 'Baseline'
-            }
-        }
-    };
-
-    chart.addXaxisAnnotation(baselineAnnotation);
 </script>
-
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
