@@ -489,7 +489,7 @@ if ($chartResult->num_rows > 0) {
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
-                <div id="chart"></chart>
+                <div id="chart">
                 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Processed PHP data
@@ -523,6 +523,7 @@ if ($chartResult->num_rows > 0) {
         chart1.render();
     });
 </script>
+</chart>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
