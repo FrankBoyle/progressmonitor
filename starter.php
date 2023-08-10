@@ -527,13 +527,11 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     });
 
     // Prepare the scatter data for y2 variable
-    const scatterData = <?php echo json_encode($chartDataArray3); ?>;
-    const scatterSeries = {
-        name: 'Score',
-        type: 'scatter',
+    const x1Data = <?php echo json_encode($chartDataArray1); ?>;
+    const x1DataSeries = {
+        name: 'Date',
         data: scatterData.map(item => ({
             x: item.x, // Assuming you have x values in scatterData
-            y: item.y2
         })),
         markers: {
             size: 6
@@ -541,19 +539,28 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     };
 
     // Prepare the line data for y1 variable
-    const lineData = <?php echo json_encode($chartDataArray2); ?>;
-    const lineSeries = {
+    const y1Data = <?php echo json_encode($chartDataArray2); ?>;
+    const y1DataSeries = {
         name: 'Baseline',
-        type: 'line',
         data: lineData.map(item => ({
-            x: item.x1,
-            y: item.y1
+            y1: item.y1
         })),
         // Customizing the line series
         strokeDashArray: 3,
         color: '#FF0000'
     };
 
+        // Prepare the line data for y1 variable
+    const y2Data = <?php echo json_encode($chartDataArray3); ?>;
+    const y2DataSeries = {
+        name: 'Score',
+        data: lineData.map(item => ({
+            y2: item.y2
+        })),
+        // Customizing the line series
+        strokeDashArray: 3,
+        color: '#FF0000'
+    };
     // Create ApexCharts instance for the scatter plot and baseline line
     var options = {
           series: [{
@@ -562,16 +569,16 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         
           //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
           data: [{
-            x: 1,
-            y: 2.14
+            x: [x1DataSeries]
+            y: [y1DataSeries]
 
           }]
         }, {
           name: 'Line',
           type: 'line',
           data: [{
-            x: 1,
-            y: 2
+            x: [x1DataSeries]
+            y: [y2DataSeries]
           }]
         }],
           chart: {
