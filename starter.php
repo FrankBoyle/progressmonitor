@@ -515,8 +515,8 @@ if ($chartResult->num_rows > 0) {
         series: series
     };
     
-    const chart = new ApexCharts(document.querySelector("#chart"), options1);
-    chart.render();
+    const chart1 = new ApexCharts(document.querySelector("#chart"), options1);
+    chart1.render();
 </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
