@@ -497,7 +497,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
                 <h6 class="card-title">Special title treatment</h6>
 
 
-                <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
                 <div id="chart"></div> <!-- Container for the scatter plot -->
 <script>
     // Processed PHP data
@@ -508,10 +507,32 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y1
-        }))
+        })),
+        dataLabels: {
+            enabled: true,
+            offsetY: -15,
+            style: {
+                colors: ['#333']
+            },
+            formatter: function(val) {
+                return val.toFixed(2);
+            }
+        }
     };
 
-    // Create ApexCharts instance for the scatter plot
+    const baselineSeries = {
+        name: 'Baseline',
+        type: 'line',
+        data: chartData.map(item => ({
+            x: new Date(item.x).getTime(),
+            y: 0  // Set the baseline y-value here
+        })),
+        // Customizing the line series
+        strokeDashArray: 3,
+        colors: ['#FF0000']  // Color of the baseline line
+    };
+
+    // Create ApexCharts instance for the scatter plot with baseline line
     const options = {
         chart: {
             type: 'scatter'
@@ -519,12 +540,17 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         xaxis: {
             type: 'datetime'
         },
-        series: [scatterSeries]
+        yaxis: {
+            min: -10,  // Adjust this value based on your data range
+            max: 10    // Adjust this value based on your data range
+        },
+        series: [scatterSeries, baselineSeries]
     };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+
 
 
 
