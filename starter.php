@@ -449,6 +449,7 @@ if ($chartResult->num_rows > 0) {
               </div>
               <div class="card-body" id="chart">
                 <h6 class="card-title">Special title treatment</h6>
+                <!--
                    <script>
         // Processed PHP data
         const chartData = <?php echo json_encode($chartDataArray); ?>;
@@ -475,6 +476,7 @@ if ($chartResult->num_rows > 0) {
         const chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
     </script>
+      -->
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
@@ -488,6 +490,8 @@ if ($chartResult->num_rows > 0) {
               <div class="card-body" id="chart">
                 <h6 class="card-title">Special title treatment</h6>
                 <script>
+                      document.addEventListener("DOMContentLoaded", function() {
+
     // Processed PHP data
     const chartData1 = <?php echo json_encode($chartDataArray); ?>;
     
@@ -518,6 +522,7 @@ if ($chartResult->num_rows > 0) {
     
     const chart1 = new ApexCharts(document.querySelector("#chart"), options1);
     chart1.render();
+  });
 </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
