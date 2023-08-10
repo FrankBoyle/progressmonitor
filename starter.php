@@ -531,7 +531,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const x1DataSeries = {
         name: 'Date',
         data: scatterData.map(item => ({
-            x: item.x, // Assuming you have x values in scatterData
+            x1: item.x1, // Assuming you have x values in scatterData
         })),
         markers: {
             size: 6
