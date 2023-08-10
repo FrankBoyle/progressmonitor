@@ -493,43 +493,44 @@ if ($chartResult->num_rows > 0) {
 
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 
-<script>
-// Processed PHP data
-const chartData = <?php echo json_encode($chartDataArray); ?>;
+                <script>
+    // Processed PHP data
+    const chartData = <?php echo json_encode($chartDataArray); ?>;
 
-// Transform data for ApexCharts
-const scatterSeries = {
-    name: 'y1 (Scatter)',
-    type: 'scatter',
-    data: chartData.map(item => ({
-        x: new Date(item.x).getTime(),
-        y: item.y1
-    }))
-};
+    // Transform data for ApexCharts
+    const scatterSeries = {
+        name: 'y1 (Scatter)',
+        type: 'scatter',
+        data: chartData.map(item => ({
+            x: new Date(item.x).getTime(),
+            y: item.y1
+        }))
+    };
 
-const lineSeries = {
-    name: 'y2 (Line)',
-    type: 'line',
-    data: chartData.map(item => ({
-        x: new Date(item.x).getTime(),
-        y: item.y2
-    }))
-};
+    const lineSeries = {
+        name: 'y2 (Line)',
+        type: 'line', // Set the chart type to 'line' for the line series
+        data: chartData.map(item => ({
+            x: new Date(item.x).getTime(),
+            y: item.y2
+        }))
+    };
 
-// Create ApexCharts instance for the combined scatter plot and line graph
-const options = {
-    chart: {
-        type: 'scatter' // Change the chart type to 'scatter'
-    },
-    xaxis: {
-        type: 'datetime'
-    },
-    series: [scatterSeries, lineSeries] // Combine scatter and line series
-};
+    // Create ApexCharts instance for the combined scatter plot and line graph
+    const options = {
+        chart: {
+            type: 'scatter'
+        },
+        xaxis: {
+            type: 'datetime'
+        },
+        series: [scatterSeries, lineSeries]
+    };
 
-const chart = new ApexCharts(document.querySelector("#chart"), options);
-chart.render();
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
 </script>
+
 
 
 
