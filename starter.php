@@ -498,28 +498,34 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
 
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
-
-                <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
-
-                <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
-
-<script>
+                <script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
 
-    // Create data for the scatter series
-    const scatterData = chartData.map(item => ({
-        x: new Date(item.x).getTime(),
-        y: item.y1
-    }));
+    /* data for ApexCharts
+    const lineSeries = {
+        name: 'y2 (Line)',
+        type: 'line',
+        data: chartData.map(item => ({
+            x: new Date(item.x).getTime(),
+            y: item.y2
+        })),
+        // Set the chart type to 'line' for this series
+        // By default, the chart type is 'scatter' for all series
+        // This ensures that it is plotted as a line graph
+    };
+    */
+    
+    const scatterSeries = {
+        name: 'y1 (Scatter)',
+        type: 'scatter',
+        data: chartData.map(item => ({
+            x: new Date(item.x).getTime(),
+            y: item.y1
+        }))
+    };
 
-    // Create data for the line series
-    const lineData = chartData.map(item => ({
-        x: new Date(item.x).getTime(),
-        y: item.y2
-    }));
-
-    // Create the chart options
+    // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
         chart: {
             type: 'line' // Set the chart type to 'line'
@@ -527,29 +533,12 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         xaxis: {
             type: 'datetime'
         },
-        series: [
-            {
-                name: 'y1 (Scatter)',
-                type: 'scatter',
-                data: scatterData
-            },
-            {
-                name: 'y2 (Line)',
-                type: 'line',
-                data: lineData
-            }
-        ],
-        title: {
-            text: 'Combined Scatter Plot and Line Graph'
-        }
+        series: [scatterSeries, lineSeries]
     };
 
-    // Create the chart
     const chart = new ApexCharts(document.querySelector("#chart"), options);
-
-    // Render the chart
     chart.render();
-</script>
+</script> 
 
 
 
