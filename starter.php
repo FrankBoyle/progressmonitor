@@ -524,6 +524,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const baselineData = <?php echo json_encode($chartDataArray1); ?>;
     baselineData.forEach(item => {
         item.x1 = new Date(item.x1).getTime();
+        console.log(item.x1);
     });
 
     // Transform the date strings to JavaScript Date objects for x1 variable
