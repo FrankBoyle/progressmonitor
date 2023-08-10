@@ -524,7 +524,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
     var scatterSeries = {
         name: 'Score',
-        type: 'scatter',
         data: chartData.map(item => ({
             x: item.x,
             y: item.y
@@ -536,7 +535,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
     var baselineSeries = {
         name: 'Baseline',
-        type: 'line',
         data: baselineData.map(item => ({
             x: item.x1,
             y: item.y1
