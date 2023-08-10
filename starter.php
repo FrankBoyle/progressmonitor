@@ -530,7 +530,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const x1Data = <?php echo json_encode($chartDataArray1); ?>;
     const x1DataSeries = {
         name: 'Date',
-        data: scatterData.map(item => ({
+        data: x1Data.map(item => ({
             x1: item.x1, // Assuming you have x values in scatterData
         })),
         markers: {
@@ -542,7 +542,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const y1Data = <?php echo json_encode($chartDataArray2); ?>;
     const y1DataSeries = {
         name: 'Baseline',
-        data: lineData.map(item => ({
+        data: y1Data.map(item => ({
             y1: item.y1
         })),
         // Customizing the line series
@@ -554,7 +554,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const y2Data = <?php echo json_encode($chartDataArray3); ?>;
     const y2DataSeries = {
         name: 'Score',
-        data: lineData.map(item => ({
+        data: y2Data.map(item => ({
             y2: item.y2
         })),
         // Customizing the line series
