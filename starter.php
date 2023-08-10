@@ -488,19 +488,19 @@ if ($chartResult->num_rows > 0) {
                 <h6 class="card-title">Special title treatment</h6>
                 <script>
     // Processed PHP data
-    const chartData = <?php echo json_encode($chartDataArray); ?>;
+    const chartData1 = <?php echo json_encode($chartDataArray); ?>;
     
     // Transform data for ApexCharts
     const series = [
         {
             name: 'y1 (Scatter)',
             type: 'scatter', // Set the series type to scatter
-            data: chartData.map(item => ({ x: new Date(item.x).getTime(), y: item.y1 }))
+            data: chartData1.map(item => ({ x: new Date(item.x).getTime(), y: item.y1 }))
         },
         {
             name: 'y2 (Line)',
             type: 'line', // Set the series type to line
-            data: chartData.map(item => ({ x: new Date(item.x).getTime(), y: item.y2 }))
+            data: chartData1.map(item => ({ x: new Date(item.x).getTime(), y: item.y2 }))
         }
     ];
     
