@@ -555,36 +555,52 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     };
 
     // Create ApexCharts instance for the scatter plot and baseline line
-    const options = {
-        chart: {
-            height: 350,
-            type: 'line'
+    var options = {
+          series: [{
+          name: 'Points',
+          type: 'scatter',
+        
+          //2.14, 2.15, 3.61, 4.93, 2.4, 2.7, 4.2, 5.4, 6.1, 8.3
+          data: [{
+            x: 1,
+            y: 2.14
+
+          }]
+        }, {
+          name: 'Line',
+          type: 'line',
+          data: [{
+            x: 1,
+            y: 2
+          }]
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
         },
-        xaxis: {
-            type: 'datetime'
-        },
-        series: [scatterSeries, lineSeries],
         fill: {
-            type: 'solid'
+          type:'solid',
         },
         markers: {
-            size: [6, 0]
+          size: [6, 0]
         },
         tooltip: {
-            shared: false,
-            intersect: true
+          shared: false,
+          intersect: true,
         },
         legend: {
-            show: false
+          show: false
         },
         xaxis: {
-            type: 'datetime' // Change x-axis type to 'datetime' if your x values are dates
+          type: 'numeric',
+          min: 0,
         }
-    };
+        };
 
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
 </script>
+
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
