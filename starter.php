@@ -494,7 +494,6 @@ if ($chartResult->num_rows > 0) {
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
         // Processed PHP data
         const chartData1 = <?php echo json_encode($chartDataArray); ?>;
         
@@ -532,7 +531,6 @@ if ($chartResult->num_rows > 0) {
         setTimeout(function() {
     chart1.render();
 }, 100);
-    });
 </script>
 
 
