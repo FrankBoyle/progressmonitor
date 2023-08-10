@@ -527,7 +527,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         type: 'scatter',
         data: chartData.map(item => ({
             x: item.x,
-            y: item.y1
+            y: item.y
         })),
         markers: {
             size: 6
@@ -560,7 +560,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
-
+aw
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
