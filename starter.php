@@ -526,14 +526,17 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         item.x1 = new Date(item.x1).getTime();
     });
 
-    // Prepare the scatter data for y2 variable
-    const x1Data = <?php echo json_encode($chartDataArray1); ?>;
-
-    // Prepare the line data for y1 variable
+    // Transform the date strings to JavaScript Date objects for x1 variable
     const y1Data = <?php echo json_encode($chartDataArray2); ?>;
+    y1Data.forEach(item => {
+        item.x1 = new Date(item.x1).getTime();
+    });
 
-    // Prepare the line data for y2 variable
+    // Transform the date strings to JavaScript Date objects for x1 variable
     const y2Data = <?php echo json_encode($chartDataArray3); ?>;
+    y2Data.forEach(item => {
+        item.x1 = new Date(item.x1).getTime();
+    });
 
     // Create ApexCharts instance for the scatter plot and baseline line
     var options = {
@@ -554,7 +557,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
                     x: item.x1,
                     y: item.y2
                 })),
-                type: 'line',
+                type: 'scatter',
                 strokeDashArray: 3,
                 color: '#00FF00'
             }
@@ -582,12 +585,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         yaxis: [
             {
                 title: {
-                    text: 'Baseline'
-                }
-            },
-            {
-                opposite: false,
-                title: {
                     text: 'Score'
                 }
             }
@@ -597,6 +594,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+
 
 
 
