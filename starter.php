@@ -497,24 +497,18 @@ if ($chartResult->num_rows > 0) {
         const chartData1 = <?php echo json_encode($chartDataArray); ?>;
         
         // Transform data for ApexCharts
-        const scatterSeries = [
+        const series1 = [
             {
                 name: 'y1 (Scatter)',
+                type: 'scatter', // Set the series type to scatter
                 data: chartData1.map(item => ({
                     x: new Date(item.x).getTime(),
                     y: item.y1
-                })),
-                type: 'scatter', // Specify scatter type for the series
-                markers: {
-                    size: 6 // Adjust marker size as needed
-                }
-            }
-        ];
-
-        const lineSeries = [
+                }))
+            },
             {
                 name: 'y2 (Line)',
-                type: 'line',
+                type: 'line', // Set the series type to line
                 data: chartData1.map(item => ({
                     x: new Date(item.x).getTime(),
                     y: item.y2
@@ -525,18 +519,19 @@ if ($chartResult->num_rows > 0) {
         // Create ApexCharts instance for the combined scatter plot and line graph
         const options1 = {
             chart: {
-                type: 'line'
+                type: 'line' // Use line type for combined chart
             },
             xaxis: {
-                type: 'datetime'
+                type: 'datetime' // If your x-variable is a date, use 'datetime' type
             },
-            series: scatterSeries.concat(lineSeries) // Combine scatter and line series
+            series: series1
         };
         
         const chart1 = new ApexCharts(document.querySelector("#chart"), options1);
         chart1.render();
     });
 </script>
+
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
