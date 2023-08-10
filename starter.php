@@ -447,7 +447,7 @@ if ($chartResult->num_rows > 0) {
               <div class="card-header">
                 <h5 class="m-0">Featured</h5>
               </div>
-              <div class="card-body" id="chart">
+              <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
                 <!--
                    <script>
