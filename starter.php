@@ -556,6 +556,10 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         colors: ['#FF0000']  // Color of the baseline line
     };
 
+    // Calculate the x-axis range to ensure proper alignment
+    const xMin = Math.min(...chartData.map(item => item.x));
+    const xMax = Math.max(...chartData.map(item => item.x));
+
     // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
         chart: {
@@ -563,6 +567,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         },
         xaxis: {
             type: 'datetime',
+            range: [xMin, xMax],  // Set the x-axis range
             labels: {
                 datetimeFormatter: {
                     year: 'yyyy',
@@ -572,13 +577,23 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
                 }
             }
         },
+        annotations: {
+            xaxis: [
+                {
+                    x: xMin,
+                    x2: xMax,
+                    strokeDashArray: 0,
+                    borderColor: '#FF0000',
+                    borderWidth: 1,
+                }
+            ]
+        },
         series: [scatterSeries, baselineSeries]
     };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
-
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
