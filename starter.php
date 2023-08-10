@@ -507,88 +507,32 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-                <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
+                <div id="chart"></div>
 <script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
-    const baselineData = <?php echo json_encode($chartDataArray1); ?>;
-
-    // Transform the date strings to Date objects
-    chartData.forEach(item => {
-        item.x = new Date(item.x).getTime();
-    });
-
-    baselineData.forEach(item => {
-        item.x1 = new Date(item.x1).getTime();
-    });
 
     const scatterSeries = {
         name: 'Score',
         type: 'scatter',
         data: chartData.map(item => ({
-            x: item.x,
-            y: item.y
+            x: new Date(item.x).getTime(),
+            y: item.y1
         })),
         markers: {
-            size: 6  // Adjust the marker size as needed
-        },
-        dataLabels: {
-            enabled: true,
-            offsetY: -15,
-            style: {
-                colors: ['#333']
-            },
-            formatter: function(val) {
-                return val.toFixed(2);
-            }
+            size: 6
         }
     };
 
-    const baselineSeries = {
-        name: 'Baseline',
-        type: 'line',
-        data: baselineData.map(item => ({
-            x: item.x1,
-            y: item.y1
-        })),
-        // Customizing the line series
-        strokeDashArray: 3,
-        colors: ['#FF0000']  // Color of the baseline line
-    };
-
-    // Calculate the x-axis range to ensure proper alignment
-    const xMin = Math.min(...chartData.map(item => item.x));
-    const xMax = Math.max(...chartData.map(item => item.x));
-
-    // Create ApexCharts instance for the combined scatter plot and line graph
+    // Create ApexCharts instance for the scatter plot
     const options = {
         chart: {
-            type: 'line'
+            type: 'scatter'
         },
         xaxis: {
-            type: 'datetime',
-            range: [xMin, xMax],  // Set the x-axis range
-            labels: {
-                datetimeFormatter: {
-                    year: 'yyyy',
-                    month: "MMM 'yy",
-                    day: 'dd MMM',
-                    hour: 'HH:mm'
-                }
-            }
+            type: 'datetime'
         },
-        annotations: {
-            xaxis: [
-                {
-                    x: xMin,
-                    x2: xMax,
-                    strokeDashArray: 0,
-                    borderColor: '#FF0000',
-                    borderWidth: 1,
-                }
-            ]
-        },
-        series: [scatterSeries, baselineSeries]
+        series: [scatterSeries]
     };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
