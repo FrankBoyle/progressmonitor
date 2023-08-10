@@ -525,14 +525,24 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
     // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
-        chart: {
-            type: 'line' // Set the chart type to 'line'
+    chart: {
+        type: 'line'
+    },
+    xaxis: {
+        type: 'datetime'
+    },
+    series: [scatterSeries, lineSeries],
+    dataLabels: {  // Add this section to enable data labels
+        enabled: true,  // Enable data labels
+        formatter: function(val, opts) {
+            return opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex].y.toFixed(2);
         },
-        xaxis: {
-            type: 'datetime'
-        },
-        series: [scatterSeries, lineSeries]
-    };
+        offsetY: -10,  // Adjust the vertical position of the labels
+        style: {
+            colors: ['#333']  // Set the color of the labels
+        }
+    }
+};
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
