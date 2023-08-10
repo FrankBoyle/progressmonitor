@@ -456,7 +456,7 @@ print_r($chartDataArray);
         // Create ApexCharts instance
         const options = {
             chart: {
-                type: 'scatter'
+                type: 'line'
             },
             xaxis: {
                 type: 'datetime' // If your x-variable is a date, use 'datetime' type
