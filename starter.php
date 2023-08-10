@@ -511,12 +511,22 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 <script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
+    const baselineData = <?php echo json_encode($chartDataArray1); ?>;
+
+    // Transform the date strings to Date objects
+    chartData.forEach(item => {
+        item.x = new Date(item.x).getTime();
+    });
+
+    baselineData.forEach(item => {
+        item.x1 = new Date(item.x1).getTime();
+    });
 
     const scatterSeries = {
         name: 'Score',
         type: 'scatter',
         data: chartData.map(item => ({
-            x: new Date(item.x).getTime(),
+            x: item.x,
             y: item.y1
         })),
         markers: {
@@ -524,7 +534,19 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         }
     };
 
-    // Create ApexCharts instance for the scatter plot
+    const baselineSeries = {
+        name: 'Baseline',
+        type: 'line',
+        data: baselineData.map(item => ({
+            x: item.x1,
+            y: item.y1
+        })),
+        // Customizing the line series
+        strokeDashArray: 3,
+        colors: ['#FF0000']
+    };
+
+    // Create ApexCharts instance for the scatter plot and baseline line
     const options = {
         chart: {
             type: 'scatter'
@@ -532,12 +554,13 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         xaxis: {
             type: 'datetime'
         },
-        series: [scatterSeries]
+        series: [scatterSeries, baselineSeries]
     };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
