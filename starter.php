@@ -411,7 +411,7 @@ if ($chartResult->num_rows > 0) {
                         <th>Baseline</th>
                       </tr>
                     <?php
-                      while ($row = $result->fetch_assoc()) {
+                      foreach ($tableDataArray as $row) {
                         echo "<tr>";
                         echo "<td><input type='hidden' name='id[]' value='{$row["id"]}'>{$row["id"]}</td>";
                         echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
