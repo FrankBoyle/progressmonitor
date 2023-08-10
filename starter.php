@@ -112,6 +112,8 @@ if ($chartResult->num_rows > 0) {
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="path/to/ej.chart.min.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 <div class="wrapper">
@@ -493,45 +495,54 @@ if ($chartResult->num_rows > 0) {
 
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
 
+                <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
+
 <script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
 
-    // data for ApexCharts
-    const lineSeries = {
-        name: 'y2 (Line)',
-        type: 'line',
-        data: chartData.map(item => ({
+    // Create data for the scatter series
+    const scatterData = chartData.map(item => ({
+        x: new Date(item.x).getTime(),
+        y: item.y1
+    }));
+
+    // Create a scatter series
+    const scatterSeries = new ej.charts.ScatterSeries({
+        dataSource: scatterData,
+        xName: 'x',
+        yName: 'y',
+        marker: {
+            visible: true
+        },
+        name: 'y1 (Scatter)'
+    });
+
+    // Create a line series
+    const lineSeries = new ej.charts.LineSeries({
+        dataSource: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y2
         })),
-        // Set the chart type to 'line' for this series
-        // By default, the chart type is 'scatter' for all series
-        // This ensures that it is plotted as a line graph
-    };
-    
-    const scatterSeries = {
-        name: 'y1 (Scatter)',
-        type: 'scatter',
-        data: chartData.map(item => ({
-            x: new Date(item.x).getTime(),
-            y: item.y1
-        }))
-    };
-
-    // Create ApexCharts instance for the combined scatter plot and line graph
-    const options = {
-        chart: {
-            type: 'line' // Set the chart type to 'line'
+        xName: 'x',
+        yName: 'y',
+        marker: {
+            visible: true
         },
-        xaxis: {
-            type: 'datetime'
-        },
-        series: [scatterSeries, lineSeries]
-    };
+        name: 'y2 (Line)'
+    });
 
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    // Create the chart
+    const chart = new ej.charts.Chart({
+        primaryXAxis: {
+            valueType: 'DateTime'
+        },
+        series: [scatterSeries, lineSeries],
+        title: 'Combined Scatter Plot and Line Graph'
+    });
+
+    // Render the chart
+    chart.appendTo('#chart');
 </script>
 
 
