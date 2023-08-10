@@ -63,26 +63,35 @@ if ($tableResult->num_rows > 0) {
 }
 
 // Fetch and store data from the database for the chart
-$chartDataArray = array();
-$chartSql = "SELECT date, score FROM $selectedTable";
-$chartResult = $conn->query($chartSql);
-if ($chartResult->num_rows > 0) {
-    while ($row = $chartResult->fetch_assoc()) {
-        $chartDataArray[] = array(
-            'x' => $row['date'],     // Use the 'date' column as the x-variable
-            'y' => $row['score'],   // Use the 'score' column as the first y-variable
-        );
-    }
-}
-
 $chartDataArray1 = array();
-$chartSql1 = "SELECT date, baseline FROM $selectedTable";
+$chartSql1 = "SELECT date FROM $selectedTable";
 $chartResult1 = $conn->query($chartSql1);
 if ($chartResult1->num_rows > 0) {
     while ($row = $chartResult1->fetch_assoc()) {
         $chartDataArray1[] = array(
             'x1' => $row['date'],     // Use the 'date' column as the x-variable
+        );
+    }
+}
+
+$chartDataArray2 = array();
+$chartSql2 = "SELECT baseline FROM $selectedTable";
+$chartResult2 = $conn->query($chartSql2);
+if ($chartResult2->num_rows > 0) {
+    while ($row = $chartResult2->fetch_assoc()) {
+        $chartDataArray2[] = array(
             'y1' => $row['baseline'] // Use the 'baseline' column as the second y-variable
+        );
+    }
+}
+
+$chartDataArray3 = array();
+$chartSql3 = "SELECT score FROM $selectedTable";
+$chartResult3 = $conn->query($chartSql3);
+if ($chartResult3->num_rows > 0) {
+    while ($row = $chartResult3->fetch_assoc()) {
+        $chartDataArray3[] = array(
+            'y2' => $row['score'] // Use the 'baseline' column as the second y-variable
         );
     }
 }
@@ -508,56 +517,72 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
                 <h6 class="card-title">Special title treatment</h6>
 
                 <div id="chart"></div>
-<script>
-    // Processed PHP data
-    const chartData = <?php echo json_encode($chartDataArray); ?>;
+                <script>
+    // Assuming you have fetched data and stored it in $chartDataArray1, $chartDataArray2, and $chartDataArray3
+
+    // Transform the date strings to JavaScript Date objects for x1 variable
     const baselineData = <?php echo json_encode($chartDataArray1); ?>;
-
-    // Transform the date strings to Date objects
-    chartData.forEach(item => {
-        item.x = new Date(item.x).getTime();
-    });
-
     baselineData.forEach(item => {
         item.x1 = new Date(item.x1).getTime();
     });
 
-    var scatterSeries = {
+    // Prepare the scatter data for y2 variable
+    const scatterData = <?php echo json_encode($chartDataArray3); ?>;
+    const scatterSeries = {
         name: 'Score',
         type: 'scatter',
-        data: chartData.map(item => ({
-            x: item.x,
-            y: item.y
+        data: scatterData.map(item => ({
+            x: item.x, // Assuming you have x values in scatterData
+            y: item.y2
         })),
         markers: {
             size: 6
         }
     };
 
-    var baselineSeries = {
+    // Prepare the line data for y1 variable
+    const lineData = <?php echo json_encode($chartDataArray2); ?>;
+    const lineSeries = {
         name: 'Baseline',
         type: 'line',
-        data: baselineData.map(item => ({
+        data: lineData.map(item => ({
             x: item.x1,
             y: item.y1
         })),
         // Customizing the line series
         strokeDashArray: 3,
-        colors: ['#FF0000']
+        color: '#FF0000'
     };
 
     // Create ApexCharts instance for the scatter plot and baseline line
-    var options = {
+    const options = {
         chart: {
-            type: 'scatter'
+            height: 350,
+            type: 'line'
         },
         xaxis: {
             type: 'datetime'
         },
-        series: [scatterSeries, baselineSeries]
+        series: [scatterSeries, lineSeries],
+        fill: {
+            type: 'solid'
+        },
+        markers: {
+            size: [6, 0]
+        },
+        tooltip: {
+            shared: false,
+            intersect: true
+        },
+        legend: {
+            show: false
+        },
+        xaxis: {
+            type: 'datetime' // Change x-axis type to 'datetime' if your x values are dates
+        }
     };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
 
