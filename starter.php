@@ -52,13 +52,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
     $_SESSION['selected_table'] = $selectedTable; // Store the selected table value in a session variable
 }
 
-$sql = "SELECT id, date, score, baseline, goal FROM $selectedTable";
-$result = $conn->query($sql);
+// Fetch data for the table
+$tableDataArray = array();
+$tableSql = "SELECT id, date, score, baseline, goal FROM $selectedTable";
+$tableResult = $conn->query($tableSql);
+if ($tableResult->num_rows > 0) {
+    while ($row = $tableResult->fetch_assoc()) {
+        $tableDataArray[] = $row;
+    }
+}
 
-// Fetch and store data from the database
+// Fetch and store data from the database for the chart
 $chartDataArray = array();
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+$chartSql = "SELECT date, score, baseline FROM $selectedTable";
+$chartResult = $conn->query($chartSql);
+if ($chartResult->num_rows > 0) {
+    while ($row = $chartResult->fetch_assoc()) {
         $chartDataArray[] = array(
             'x' => $row['date'],     // Use the 'date' column as the x-variable
             'y1' => $row['score'],   // Use the 'score' column as the first y-variable
@@ -66,8 +75,7 @@ if ($result->num_rows > 0) {
         );
     }
 }
-echo "Data Array: ";
-print_r($chartDataArray);
+
 ?>
 
 <!DOCTYPE html>
