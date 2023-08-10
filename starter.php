@@ -447,10 +447,9 @@ if ($chartResult->num_rows > 0) {
               <div class="card-header">
                 <h5 class="m-0">Featured</h5>
               </div>
-              <div class="card-body">
+              <div class="card-body" id="chart">
                 <h6 class="card-title">Special title treatment</h6>
-                <!--
-                <script>
+                   <script>
         // Processed PHP data
         const chartData = <?php echo json_encode($chartDataArray); ?>;
         
@@ -476,7 +475,7 @@ if ($chartResult->num_rows > 0) {
         const chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
     </script>
-      -->
+
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
               </div>
@@ -486,7 +485,7 @@ if ($chartResult->num_rows > 0) {
               <div class="card-header">
                 <h5 class="m-0">Featured</h5>
               </div>
-              <div class="card-body">
+              <div class="card-body" id="chart">
                 <h6 class="card-title">Special title treatment</h6>
                 <script>
     // Processed PHP data
