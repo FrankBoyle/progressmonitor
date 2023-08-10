@@ -520,19 +520,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         }
     };
 
-    const baselineSeries = {
-        name: 'Baseline',
-        type: 'line', // Use 'line' chart type for the baseline series
-        data: chartData.map(item => ({
-            x: new Date(item.x).getTime(),
-            y: item.y2
-        })),
-        // Customizing the line series
-        strokeDashArray: 3,
-        colors: ['#FF0000']  // Color of the baseline line
-    };
-
-    // Create ApexCharts instance for the scatter plot with baseline line
+    // Create ApexCharts instance for the scatter plot
     const options = {
         chart: {
             type: 'scatter'
@@ -540,12 +528,13 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         xaxis: {
             type: 'datetime'
         },
-        series: [scatterSeries, baselineSeries]
+        series: [scatterSeries]
     };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
+
 
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
