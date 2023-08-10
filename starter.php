@@ -498,7 +498,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
 
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
-<script>
+                <script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
 
@@ -508,12 +508,15 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y2
-        }))
+        })),
+        // Set the chart type to 'line' for this series
+        // By default, the chart type is 'scatter' for all series
+        // This ensures that it is plotted as a line graph
     };
-
+        
     const scatterSeries = {
         name: 'y1 (Scatter)',
-        type: 'scatter', // Set the chart type to 'scatter' for scatter series
+        type: 'line',
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y1
@@ -523,22 +526,12 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
     // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
         chart: {
-            type: 'line'
+            type: 'line' // Set the chart type to 'line'
         },
         xaxis: {
             type: 'datetime'
         },
-        series: [scatterSeries, lineSeries],
-        dataLabels: {
-            enabled: true,
-            formatter: function(val, opts) {
-                return opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex].y.toFixed(2);
-            },
-            offsetY: -10,
-            style: {
-                colors: ['#333']
-            }
-        }
+        series: [scatterSeries, lineSeries]
     };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
