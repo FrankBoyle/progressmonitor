@@ -509,24 +509,31 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
             x: new Date(item.x).getTime(),
             y: item.y2
         })),
-        // Set the chart type to 'line' for this series
-        // By default, the chart type is 'scatter' for all series
-        // This ensures that it is plotted as a line graph
     };
-        
+
     const scatterSeries = {
         name: 'y1 (Scatter)',
-        type: 'line',
+        type: 'scatter', // Set the chart type to 'scatter' for scatter series
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y1
-        }))
+        })),
+        dataLabels: {  // Add data labels for the scatter series
+            enabled: true,
+            offsetY: -10,
+            style: {
+                colors: ['#333']
+            },
+            formatter: function(val, opts) {
+                return opts.w.globals.series[0][opts.dataPointIndex].y.toFixed(2);  // Index 0 corresponds to the scatter series
+            },
+        }
     };
 
     // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
         chart: {
-            type: 'line' // Set the chart type to 'line'
+            type: 'line'
         },
         xaxis: {
             type: 'datetime'
