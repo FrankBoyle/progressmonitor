@@ -505,6 +505,7 @@ if ($chartResult->num_rows > 0) {
             x: new Date(item.x).getTime(),
             y: item.y1
         }))
+        console.log(x,y1);
     };
 
     const lineSeries = {
