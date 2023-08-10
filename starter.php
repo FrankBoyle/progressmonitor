@@ -522,7 +522,7 @@ if ($chartResult->num_rows > 0) {
     // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
         chart: {
-            type: '' // Set the chart type to 'line'
+            type: 'line' // Set the chart type to 'line'
         },
         xaxis: {
             type: 'datetime'
