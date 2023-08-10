@@ -528,7 +528,7 @@ if ($chartResult->num_rows > 0) {
         };
         
         const chart = new ApexCharts(document.querySelector("#chart"), options);
-        Chart.render();
+        chart.render();
 </script>
 
 
