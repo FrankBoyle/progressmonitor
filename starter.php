@@ -491,15 +491,12 @@ if ($chartResult->num_rows > 0) {
     const chartData1 = <?php echo json_encode($chartDataArray); ?>;
     
     // Transform data for ApexCharts
-    const scatterSeries = [
+    const series = [
         {
             name: 'y1 (Scatter)',
             type: 'scatter', // Set the series type to scatter
             data: chartData1.map(item => ({ x: new Date(item.x).getTime(), y: item.y1 }))
-        }
-    ];
-
-    const lineSeries = [
+        },
         {
             name: 'y2 (Line)',
             type: 'line', // Set the series type to line
@@ -507,32 +504,19 @@ if ($chartResult->num_rows > 0) {
         }
     ];
     
-    // Create ApexCharts instances for scatter plot and line graph
-    const scatterOptions = {
+    // Create ApexCharts instance for the combined scatter plot and line graph
+    const options = {
         chart: {
-            type: 'scatter'
+            type: 'line' // Use line type for combined chart
         },
         xaxis: {
-            type: 'datetime'
+            type: 'datetime' // If your x-variable is a date, use 'datetime' type
         },
-        series: scatterSeries
+        series: series
     };
-
-    const lineOptions = {
-        chart: {
-            type: 'line'
-        },
-        xaxis: {
-            type: 'datetime'
-        },
-        series: lineSeries
-    };
-
-    const scatterChart = new ApexCharts(document.querySelector("#chart1"), scatterOptions);
-    const lineChart = new ApexCharts(document.querySelector("#chart1"), lineOptions);
     
-    scatterChart.render();
-    lineChart.render();
+    const chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
 </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
