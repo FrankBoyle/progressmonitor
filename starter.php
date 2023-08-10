@@ -498,7 +498,7 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
 
                 <div id="chart"></div> <!-- Container for the combined scatter plot and line graph -->
-                <script>
+<script>
     // Processed PHP data
     const chartData = <?php echo json_encode($chartDataArray); ?>;
 
@@ -508,15 +508,12 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y2
-        })),
-        // Set the chart type to 'line' for this series
-        // By default, the chart type is 'scatter' for all series
-        // This ensures that it is plotted as a line graph
+        }))
     };
-        
+
     const scatterSeries = {
         name: 'y1 (Scatter)',
-        type: 'line',
+        type: 'scatter', // Set the chart type to 'scatter' for scatter series
         data: chartData.map(item => ({
             x: new Date(item.x).getTime(),
             y: item.y1
@@ -525,28 +522,29 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 
     // Create ApexCharts instance for the combined scatter plot and line graph
     const options = {
-    chart: {
-        type: 'line'
-    },
-    xaxis: {
-        type: 'datetime'
-    },
-    series: [scatterSeries, lineSeries],
-    dataLabels: {  // Add this section to enable data labels
-        enabled: true,  // Enable data labels
-        formatter: function(val, opts) {
-            return opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex].y.toFixed(2);
+        chart: {
+            type: 'line'
         },
-        offsetY: -10,  // Adjust the vertical position of the labels
-        style: {
-            colors: ['#333']  // Set the color of the labels
+        xaxis: {
+            type: 'datetime'
+        },
+        series: [scatterSeries, lineSeries],
+        dataLabels: {
+            enabled: true,
+            formatter: function(val, opts) {
+                return opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex].y.toFixed(2);
+            },
+            offsetY: -10,
+            style: {
+                colors: ['#333']
+            }
         }
-    }
-};
+    };
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
-</script> 
+</script>
+
 
 
 
