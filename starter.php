@@ -66,6 +66,8 @@ if ($result->num_rows > 0) {
         );
     }
 }
+echo "Data Array: ";
+print_r($dataArray);
 ?>
 
 <!DOCTYPE html>
