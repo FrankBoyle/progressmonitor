@@ -303,12 +303,12 @@ $result = $conn->query($sql);
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Starter Page</h1>
+            <h1 class="m-0">Progress Monitoring Starter Page</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Starter Page</li>
+              <li class="breadcrumb-item active">Landing Page</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -323,12 +323,79 @@ $result = $conn->query($sql);
           <div class="col-lg-6">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
+                <h5 class="card-title"><?php echo($selectedTable);?></h5>
 
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
+                <h1>Progress Monitoring Testing Area</h1>
+
+<form method="post">
+  <select name="selected_table">
+  
+<!--    php   
+
+    $tables = ['JaylaBrazzle1', 'JaylaBrazzle2', 'JaylaBrazzle3', 'JaylaBrazzle4', 'NicoleElkins1', 'NicoleElkins2', 'NicoleElkins3', 'NicoleElkins4'];
+
+    foreach ($tables as $table) {
+      echo "<option value='$table'";
+    if ($table === $selectedTable) {
+      echo " selected";
+    }
+    echo ">$table</option>";
+    }
+
+-->
+    <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
+    <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
+    <option value='JaylaBrazzle3'<?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
+    <option value='JaylaBrazzle4'<?= $selectedTable === 'JaylaBrazzle4' ? ' selected' : '' ?>>JaylaBrazzle4</option>
+    <option value='NicoleElkins1'<?= $selectedTable === 'NicoleElkins1' ? ' selected' : '' ?>>NicoleElkins1</option>
+    <option value='NicoleElkins2'<?= $selectedTable === 'NicoleElkins2' ? ' selected' : '' ?>>NicoleElkins2</option>
+    <option value='NicoleElkins3'<?= $selectedTable === 'NicoleElkins3' ? ' selected' : '' ?>>NicoleElkins3</option>
+    <option value='NicoleElkins4'<?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
+    </select>
+<input type="submit" name="select_table" value="Select Student">
+</form>
+
+
+<!-- Form for updating the goal -->
+<form method="post" action="">
+<?php
+// Fetch the current goal value from the database
+$goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
+$goalResult = $conn->query($goalSql);
+
+if ($goalResult && $goalResult->num_rows > 0) {
+$goalRow = $goalResult->fetch_assoc();
+$currentGoal = $goalRow["goal"];
+echo '<label for="edit_goal">Edit Goal: </label>';
+echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
+}
+?>
+<input type="submit" name="save_goal" value="Save Goal">
+</form>
+
+
+<!-- Form for updating ID, date, score, and baseline -->
+<form method='post' action="">
+<table border='1'>
+<tr>
+  <th>ID</th>
+  <th>Date</th>
+  <th>Score</th>
+  <th>Baseline</th>
+</tr>
+<?php
+while ($row = $result->fetch_assoc()) {
+  echo "<tr>";
+  echo "<td><input type='hidden' name='id[]' value='{$row["id"]}'>{$row["id"]}</td>";
+  echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+  echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+  echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+  echo "</tr>";
+}
+?>
+</table>
+<input type='submit' name='update' value='Update'>
+</form>
 
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
