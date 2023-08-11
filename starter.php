@@ -546,9 +546,6 @@ if ($chartResult3->num_rows > 0) {
                 {
                     name: 'Baseline',
                     data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-                    dataLabels: {
-                        enabled: false, // Disable data labels for the "Baseline" series
-                    }
                 },
                 {
                     name: 'Score',
@@ -556,6 +553,13 @@ if ($chartResult3->num_rows > 0) {
                 }
             ],
         };
+
+        // Disable data labels for the entire series
+        options.series.forEach(function (serie) {
+            if (serie.name === 'Baseline') {
+                serie.dataLabels = { enabled: false };
+            }
+        });
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
