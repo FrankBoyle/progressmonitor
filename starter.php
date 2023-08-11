@@ -491,72 +491,74 @@ if ($chartResult3->num_rows > 0) {
                 <h6 class="card-title">Special title treatment</h6>
                 <div id="chart"></div>
 
-<script>
-    // Data from PHP
-    var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
-    var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
-    var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+                <script>
+        // Data from PHP
+        var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
+        var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
+        var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
-    // Process data to match ApexCharts format
-    var chartData = [];
-    for (var i = 0; i < chartDataArray1.length; i++) {
-        chartData.push({
-            x: new Date(chartDataArray1[i].x1).getTime(),
-            y1: chartDataArray2[i] ? chartDataArray2[i].y1 : null,
-            y2: chartDataArray3[i] ? chartDataArray3[i].y2 : null,
-        });
-    }
+        // Process data to match ApexCharts format
+        var chartData = [];
+        for (var i = 0; i < chartDataArray1.length; i++) {
+            var xValue = new Date(chartDataArray1[i].x1).getTime();
+            var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
+            var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
 
-    // Prepare series data for ApexCharts
-    var series = [
-        {
-            name: 'Baseline',
-            data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-        },
-        {
-            name: 'Score',
-            data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+            chartData.push({
+                x: xValue,
+                y1: y1Value,
+                y2: y2Value,
+            });
         }
-    ];
 
-    // Create ApexCharts chart
-    var options = {
-        chart: {
-            type: 'line',
-            stacked: false,
-            height: 350,
-        },
-        xaxis: {
-            type: 'datetime',
-            labels: {
-                formatter: function (value) {
-                    return new Date(value).toLocaleDateString();
+        // Create ApexCharts chart
+        var options = {
+            chart: {
+                type: 'line',
+                stacked: false,
+                height: 350,
+            },
+            xaxis: {
+                type: 'datetime',
+                labels: {
+                    formatter: function (value) {
+                        return new Date(value).toLocaleDateString();
+                    }
+                },
+                title: {
+                    text: 'Date'
                 }
             },
-            title: {
-                text: 'Date'
-            }
-        },
-        yaxis: {
-            title: {
-                text: 'Value'
-            }
-        },
-        dataLabels: {
-            enabled: true,
-            style: {
-                colors: ['#000']
+            yaxis: {
+                title: {
+                    text: 'Value'
+                }
             },
-            formatter: function (value) {
-                return value.toFixed(2);
-            }
-        },
-        colors: ['#2196F3', '#4CAF50'],
-    };
+            dataLabels: {
+                enabled: true,
+                style: {
+                    colors: ['#000']
+                },
+                formatter: function (value) {
+                    return value.toFixed(2);
+                }
+            },
+            colors: ['#2196F3', '#4CAF50'],
+            series: [
+                {
+                    name: 'Baseline',
+                    data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+                },
+                {
+                    name: 'Score',
+                    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+                }
+            ],
+        };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
-</script>
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    </script>
 
 <!--
                 <div style="width: 100%; margin: 0 auto;">
