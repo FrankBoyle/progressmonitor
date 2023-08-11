@@ -488,7 +488,6 @@ if ($chartResult3->num_rows > 0) {
                 
                 <div id="chart"></div>
 
-
                 <script>
 // Data from PHP
 var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
@@ -509,6 +508,37 @@ for (var i = 0; i < chartDataArray1.length; i++) {
     });
 }
 
+// Calculate linear regression for Score data series
+function calculateTrendline(data) {
+    var sumX = 0;
+    var sumY = 0;
+    var sumXY = 0;
+    var sumXX = 0;
+    var count = 0;
+
+    data.forEach(function (point) {
+        var x = point.x;
+        var y = point.y2;
+
+        if (y !== null) {
+            sumX += x;
+            sumY += y;
+            sumXY += x * y;
+            sumXX += x * x;
+            count++;
+        }
+    });
+
+    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / count;
+
+    return function (x) {
+        return slope * x + intercept;
+    };
+}
+
+var trendlineFunction = calculateTrendline(chartData);
+
 // Create ApexCharts chart
 var options = {
     series: [
@@ -519,7 +549,11 @@ var options = {
         {
             name: 'Score',
             data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-        }
+        },
+        {
+            name: 'Trendline',
+            data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
+        },
     ],
     chart: {
         type: 'line',
@@ -567,8 +601,7 @@ var options = {
         },
         title: {
             text: 'Date'
-        },
-        tickAmount: chartData.length, // Show a tick for each data point
+        }
     },
     yaxis: {
         title: {
@@ -601,20 +634,14 @@ var options = {
                     },
                     text: item.y2.toFixed(0)  // Display 0 decimal places
                 }
-            }))
+            })),
     },
-    colors: ['#2196F3', '#4CAF50'],
+    colors: ['#2196F3', '#4CAF50', '#FF5722'], // Trendline color added
 };
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
-
-
-
-
-
-
 
 
 <!--
