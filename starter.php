@@ -508,9 +508,16 @@ if ($chartResult3->num_rows > 0) {
                 y2: chartDataArray3[i] ? chartDataArray3[i].y2 : null,
             });
         }
+    // Get the canvas element
+    var canvas = document.getElementById('myChart');
 
-        // Create a new Chart.js chart
-        var ctx = document.getElementById('myChart').getContext('2d');
+    // Set the canvas width and height to make the graph larger
+    canvas.width = 800; // Set the desired width
+    canvas.height = 400; // Set the desired height
+
+    // Create a new Chart.js chart
+    var ctx = canvas.getContext('2d');
+
         var myChart = new Chart(ctx, {
     type: 'line',
     data: {
