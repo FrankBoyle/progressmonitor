@@ -527,7 +527,7 @@ if ($chartResult3->num_rows > 0) {
     trendlineLinear: {
         style: "red", // Change the color to red
         lineStyle: "dashed", // Trendline style (solid, dashed, dotted, etc.)
-        width: 2, // Trendline width
+        width: 1, // Trendline width
                 },
             }
         ]
