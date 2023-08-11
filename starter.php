@@ -488,61 +488,59 @@ if ($chartResult3->num_rows > 0) {
 
 <div id="chart"></div>
 <script>
-    var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
-    var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
-    var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+        var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
+        var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
+        var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
-    // Process data and create datasets
-    var datasets = [];
-    for (var i = 0; i < chartDataArray1.length; i++) {
-        datasets.push({
-            x: new Date(chartDataArray1[i]['x1']),
-            y1: chartDataArray2[i]['y1'],
-            y2: chartDataArray3[i]['y2']
-        });
-    }
+        // Process data and create datasets
+        var datasets = [];
+        for (var i = 0; i < chartDataArray1.length; i++) {
+            datasets.push({
+                x: new Date(chartDataArray1[i]['x1']),
+                y1: chartDataArray2[i]['y1'],
+                y2: chartDataArray3[i]['y2']
+            });
+        }
 
-    // Create ApexCharts
-    var options = {
-        series: [
-            {
-                name: 'Score',
-                type: 'scatter',
-                data: datasets.map(entry => ({ x: entry.x, y: entry.y2 })),
-            },
-            {
-                name: 'Baseline',
+        // Create ApexCharts
+        var options = {
+            series: [
+                {
+                    name: 'Score',
+                    data: datasets.map(entry => ({ x: entry.x, y: entry.y2 })),
+                },
+                {
+                    name: 'Baseline',
+                    data: datasets.map(entry => ({ x: entry.x, y: entry.y1 })),
+                }
+            ],
+            chart: {
+                height: 350,
                 type: 'line',
-                data: datasets.map(entry => ({ x: entry.x, y: entry.y1 })),
-            }
-        ],
-        chart: {
-            height: 350,
-            type: 'line',
-        },
-        stroke: {
-            width: [0, 4],
-        },
-        title: {
-            text: 'Progress Monitoring Graph',
-        },
-        dataLabels: {
-            enabled: true,
-            enabledOnSeries: [1],
-        },
-        xaxis: {
-            type: 'datetime',
-        },
-        yaxis: {
-            title: {
-                text: 'Y Values',
             },
-        },
-    };
+            stroke: {
+                width: [0, 4],
+            },
+            title: {
+                text: 'Progress Monitoring Graph',
+            },
+            dataLabels: {
+                enabled: true,
+                enabledOnSeries: [1],
+            },
+            xaxis: {
+                type: 'datetime',
+            },
+            yaxis: {
+                title: {
+                    text: 'Y Values',
+                },
+            },
+        };
 
-    var chart = new ApexCharts(document.querySelector('#chart'), options);
-    chart.render();
-</script>
+        var chart = new ApexCharts(document.querySelector('#chart'), options);
+        chart.render();
+    </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
