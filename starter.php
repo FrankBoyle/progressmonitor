@@ -606,7 +606,13 @@ var options = {
     yaxis: {
         title: {
             text: 'Value'
-        }
+        },
+        labels: {
+            formatter: function (value) {
+                return value.toFixed(0);
+            }
+        },
+        forceNiceScale: false, // Disable automatic nice scaling
     },
     grid: {
         xaxis: {
