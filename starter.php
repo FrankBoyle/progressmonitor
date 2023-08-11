@@ -514,10 +514,34 @@ y2: y2Value,
 
 // Create ApexCharts chart
 var options = {
+  series: [
+        {
+            name: 'Baseline',
+            data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+        },
+        {
+            name: 'Score',
+            data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+        }
+    ],
     chart: {
         type: 'line',
         stacked: false,
         height: 350,
+        dropShadow: {
+            enabled: true,
+            color: '#000',
+            top: 18,
+            left: 7,
+            blur: 10,
+            opacity: 0.2
+          },
+    },
+    stroke: {
+          curve: 'smooth'
+        },
+    markers: {
+      size: 1
     },
     xaxis: {
         type: 'datetime',
@@ -536,7 +560,7 @@ var options = {
         }
     },
     dataLabels: {
-        enabled: false, // Disable data labels by default
+        enabled: true, // Disable data labels by default
         style: {
             colors: ['#000']
         },
@@ -545,22 +569,8 @@ var options = {
         }
     },
     colors: ['#2196F3', '#4CAF50'],
-    series: [
-        {
-            name: 'Baseline',
-            data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-            dataLabels: {
-                enabled: false // Disable data labels for the Baseline series
-            }
-        },
-        {
-            name: 'Score',
-            data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-            dataLabels: {
-                enabled: true // Enable data labels for the Score series
-            }
-        }
-    ],
+
+    
 };
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
