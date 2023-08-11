@@ -598,15 +598,21 @@ var options = {
         }
     },
     xaxis: {
-        categories: 'datetime',
-        tickAmount: 'dataPoints',
-        labels: {
-    hideOverlappingLabels: false
-  },
-        title: {
-            text: 'Date'
+    categories: xCategories, // Set the array of formatted date strings here
+    type: 'datetime', // Use 'datetime' type for dates
+    labels: {
+        hideOverlappingLabels: false,
+        datetimeFormatter: {
+            year: 'yyyy',
+            month: "MMM 'yy",
+            day: 'dd MMM',
+            hour: 'HH:mm',
         }
     },
+    title: {
+        text: 'Date'
+    }
+},
     yaxis: {
         title: {
             text: 'Value'
