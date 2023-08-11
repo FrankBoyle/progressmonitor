@@ -535,7 +535,8 @@ if ($chartResult3->num_rows > 0) {
                             color: 'black',
                             align: 'top',
                             formatter: function(value, context) {
-                                return value.toFixed(2);
+                              console.log('Value:', value, 'Type:', typeof value); // Debug output
+                              return value.toFixed(2);
                             }
                         }
                     }
