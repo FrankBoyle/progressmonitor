@@ -133,6 +133,7 @@ if ($chartResult3->num_rows > 0) {
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
 
@@ -520,14 +521,14 @@ if ($chartResult3->num_rows > 0) {
                 fill: false,
             },
             {
-              label: 'Score',
-    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-    borderColor: 'red',
-    fill: false,
-    trendlineLinear: {
-        style: "#FF5733", // Change the color to red
-        lineStyle: "dashed", // Trendline style (solid, dashed, dotted, etc.)
-        width: 1, // Trendline width
+                label: 'Score',
+                data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+                borderColor: 'green',
+                fill: false,
+                trendlineLinear: {
+                    style: "rgba(75, 192, 192, 0.6)",
+                    lineStyle: "dashed",
+                    width: 2,
                 },
             }
         ]
@@ -555,9 +556,25 @@ if ($chartResult3->num_rows > 0) {
                     labelString: 'Value'
                 }
             }]
+        },
+        plugins: {
+            datalabels: {
+                align: 'end', // Position of the data label relative to the point
+                anchor: 'end', // Anchor point of the data label
+                backgroundColor: null, // Background color of the label
+                borderRadius: 4, // Border radius of the label background
+                color: 'black', // Text color of the label
+                font: {
+                    weight: 'bold' // Font weight of the label text
+                },
+                formatter: function(value, context) {
+                    return value.toFixed(2); // Format the label value to two decimal places
+                }
+            }
         }
     }
 });
+
     </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
