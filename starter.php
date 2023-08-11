@@ -560,11 +560,11 @@ if ($chartResult3->num_rows > 0) {
                           onClick: undefined,
                           onDblClick: undefined,
                           showNullDataPoints: true,
-                        }
+                        
                           hover: {
                             size: undefined,
                             sizeOffset: 3
-                        },
+                        }},
                         label: {
                             text: item.y2.toFixed(2),
                             borderColor: '#4CAF50',
