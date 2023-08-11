@@ -485,6 +485,8 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
                 
+                <div id="chart"></div>
+
                 <script>
         // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
@@ -504,6 +506,9 @@ if ($chartResult3->num_rows > 0) {
                 y2: y2Value,
             });
         }
+
+        // Calculate trendline points for the Score series
+        var trendlinePoints = calculateTrendline(chartData.map(item => ({ x: item.x, y: item.y2 })));
 
         // Create ApexCharts chart
         var options = {
@@ -556,7 +561,7 @@ if ($chartResult3->num_rows > 0) {
                             shape: "circle",
                             radius: 2,
                             offsetX: 0,
-                            offsetY: 0,
+                            offsetY: 5,
                             onClick: undefined,
                             onDblClick: undefined,
                             showNullDataPoints: true,
@@ -567,7 +572,7 @@ if ($chartResult3->num_rows > 0) {
                             }
                         },
                         label: {
-                            text: item.y2.toFixed(2),
+                            text: item.y2.toFixed(0), // Format to show no decimal places
                             borderColor: '#4CAF50',
                             style: {
                                 background: '#4CAF50',
@@ -579,12 +584,52 @@ if ($chartResult3->num_rows > 0) {
                                 }
                             }
                         }
-                    }))
+                    })),
+                lines: [
+                    // Manually add the calculated trendline points
+                    {
+                        x1: trendlinePoints[0].x,
+                        y1: trendlinePoints[0].y,
+                        x2: trendlinePoints[1].x,
+                        y2: trendlinePoints[1].y,
+                        borderColor: '#FF5733',
+                        borderWidth: 2,
+                    }
+                ]
             }
         };
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
+
+        // Function to calculate trendline points using linear regression
+        function calculateTrendline(data) {
+            var n = data.length;
+            var sumX = 0;
+            var sumY = 0;
+            var sumXY = 0;
+            var sumX2 = 0;
+
+            for (var i = 0; i < n; i++) {
+                sumX += data[i].x;
+                sumY += data[i].y;
+                sumXY += data[i].x * data[i].y;
+                sumX2 += data[i].x * data[i].x;
+            }
+
+            var slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            var intercept = (sumY - slope * sumX) / n;
+
+            var minX = data[0].x;
+            var maxX = data[n - 1].x;
+            var minY = slope * minX + intercept;
+            var maxY = slope * maxX + intercept;
+
+            return [
+                { x: minX, y: minY },
+                { x: maxX, y: maxY }
+            ];
+        }
     </script>
 
 <!--
