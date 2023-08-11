@@ -131,7 +131,7 @@ if ($chartResult3->num_rows > 0) {
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
-  <script src="
+  
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="
 https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
