@@ -517,24 +517,6 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-                <canvas id="myChart"></canvas>
-
-<script>
-    // PHP data arrays
-    var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
-    var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
-    var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
-
-    // Extract data for Chart.js
-    var chartData = [];
-    for (var i = 0; i < chartDataArray1.length; i++) {
-        var dataEntry = {
-            x: new Date(chartDataArray1[i]['x1']),
-            y1: chartDataArray2[i]['y1'],
-            y2: chartDataArray3[i]['y2']
-        };
-        chartData.push(dataEntry);
-    }
 
     <div id="chart"></div>
 
