@@ -134,6 +134,7 @@ if ($chartResult3->num_rows > 0) {
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
 
@@ -556,24 +557,6 @@ if ($chartResult3->num_rows > 0) {
                     labelString: 'Value'
                 }
             }]
-        }
-    }
-        plugins: {
-        datalabels: {
-            align: 'end', // Label alignment relative to the data point
-            anchor: 'end', // Label anchor point relative to the data point
-            backgroundColor: function(context) {
-                return context.dataset.borderColor; // Use dataset border color as label background color
-            },
-            borderRadius: 4, // Border radius of the label
-            color: 'white', // Label text color
-            font: {
-                weight: 'bold' // Label font weight
-            },
-            formatter: function(value, context) {
-                // Format the label text (value) as needed
-                return value.toFixed(2);
-            },
         }
     }
 });
