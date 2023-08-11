@@ -593,8 +593,8 @@ var options = {
         }
     },
     xaxis: {
-        type: 'datetime',
-        tickPlacement: 'on', // Display ticks at data points
+        type: 'category', // Set x-axis type to 'category'
+        categories: chartData.map(item => new Date(item.x).toLocaleDateString()), // Use formatted dates as labels
         title: {
             text: 'Date'
         }
@@ -602,6 +602,11 @@ var options = {
     yaxis: {
         title: {
             text: 'Value'
+        },
+        labels: {
+            formatter: function (value) {
+                return value.toFixed(0);
+            }
         }
     },
     grid: {
