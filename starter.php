@@ -137,6 +137,8 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.js
 <link href="
 https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 " rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
@@ -516,6 +518,68 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
+                <canvas id="myChart"></canvas>
+
+<script>
+    // PHP data arrays
+    var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
+    var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
+    var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+
+    // Extract data for Chart.js
+    var chartData = [];
+    for (var i = 0; i < chartDataArray1.length; i++) {
+        var dataEntry = {
+            x: new Date(chartDataArray1[i]['x1']),
+            y1: chartDataArray2[i]['y1'],
+            y2: chartDataArray3[i]['y2']
+        };
+        chartData.push(dataEntry);
+    }
+
+    // Create a scatter plot and line graph
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Scatter Plot (x1 vs. y2)',
+                data: chartData,
+                showLine: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)'
+            }, {
+                label: 'Line Graph (x1 vs. y1)',
+                data: chartData,
+                showLine: true,
+                borderColor: 'rgba(192, 75, 75, 1)',
+                backgroundColor: 'rgba(192, 75, 75, 0.2)'
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day'
+                    },
+                    title: {
+                        display: true,
+                        text: 'X1 (Date)'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Y Values'
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+                <!--
                 <div id="chart"></div>
                 <script>
     // Assuming you have fetched data and stored it in $chartDataArray1, $chartDataArray2, and $chartDataArray3
@@ -585,7 +649,7 @@ var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 
 </script>
-
+-->
 
 
 
