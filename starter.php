@@ -594,7 +594,7 @@ var options = {
     },
     xaxis: {
         type: 'category', // Set x-axis type to 'category'
-        labels: chartData.map(item => new Date(item.x).toLocaleDateString()), // Use formatted dates as labels
+        categories: chartData.map(item => new Date(item.x).toLocaleDateString()), // Use formatted dates as labels
         title: {
             text: 'Date'
         }
@@ -638,6 +638,7 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
+
 
 
 
