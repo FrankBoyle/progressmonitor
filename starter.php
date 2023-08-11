@@ -472,34 +472,7 @@ if ($chartResult3->num_rows > 0) {
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
-                <!--
-                   <script>
-        // Processed PHP data
-        const chartData = <?php echo json_encode($chartDataArray); ?>;
-        
-        // Transform data for ApexCharts
-        const series = Object.keys(chartData[0])
-            .filter(key => key !== 'x') // Exclude the x-variable
-            .map(key => ({
-                name: key,
-                data: chartData.map(item => [item.x, item[key]])
-            }));
-        
-        // Create ApexCharts instance
-        const options = {
-            chart: {
-                type: 'line'
-            },
-            xaxis: {
-                type: 'datetime' // If your x-variable is a date, use 'datetime' type
-            },
-            series: series
-        };
-        
-        const chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-    </script>
-      -->
+
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
@@ -532,46 +505,50 @@ if ($chartResult3->num_rows > 0) {
         }
 
         // Create ApexCharts
-        var options = {
-            series: [{
-                name: 'Scatter Plot (x1 vs. y2)',
-                data: datasets.map(entry => ({ x: entry.x, y: entry.y2 }))
-            }, {
-                name: 'Line Graph (x1 vs. y1)',
-                data: datasets.map(entry => ({ x: entry.x, y: entry.y1 }))
-            }],
-            chart: {
-                type: 'line',
-                height: 350,
-                animations: {
-                    enabled: false
-                },
-                toolbar: {
-                    show: false
-                }
-            },
-            xaxis: {
-                type: 'datetime',
-                title: {
-                    text: 'X1 (Date)'
-                }
-            },
-            yaxis: {
-                title: {
-                    text: 'Y Values'
-                }
-            },
-            legend: {
-                position: 'top'
-            }
-        };
+
+        series: [{
+          name: 'Score',
+          type: 'scater',
+          data: [x, y2]
+        }, {
+          name: 'Baseline',
+          type: 'line',
+          data: [x,y1]
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+        },
+        stroke: {
+          width: [0, 4]
+        },
+        title: {
+          text: 'Traffic Sources'
+        },
+        dataLabels: {
+          enabled: true,
+          enabledOnSeries: [1]
+        },
+        xaxis: {
+          type: 'datetime'
+        },
+        yaxis: [{
+          title: {
+            text: 'WProgress Monitoring Graph',
+          },
+        
+        }, {
+          opposite: true,
+          title: {
+            text: 'Baseline'
+          }
+        }]
+        
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
+
     </script>
-
-
-
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
