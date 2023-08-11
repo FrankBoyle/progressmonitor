@@ -489,16 +489,85 @@ if ($chartResult3->num_rows > 0) {
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
+                <div id="chart"></div>
 
+<script>
+    // Data from PHP
+    var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
+    var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
+    var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+
+    // Process data to match ApexCharts format
+    var chartData = [];
+    for (var i = 0; i < chartDataArray1.length; i++) {
+        chartData.push({
+            x: new Date(chartDataArray1[i].x1).getTime(),
+            y1: chartDataArray2[i] ? chartDataArray2[i].y1 : null,
+            y2: chartDataArray3[i] ? chartDataArray3[i].y2 : null,
+        });
+    }
+
+    // Prepare series data for ApexCharts
+    var series = [
+        {
+            name: 'Baseline',
+            data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+        },
+        {
+            name: 'Score',
+            data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+        }
+    ];
+
+    // Create ApexCharts chart
+    var options = {
+        chart: {
+            type: 'line',
+            stacked: false,
+            height: 350,
+        },
+        xaxis: {
+            type: 'datetime',
+            labels: {
+                formatter: function (value) {
+                    return new Date(value).toLocaleDateString();
+                }
+            },
+            title: {
+                text: 'Date'
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Value'
+            }
+        },
+        dataLabels: {
+            enabled: true,
+            style: {
+                colors: ['#000']
+            },
+            formatter: function (value) {
+                return value.toFixed(2);
+            }
+        },
+        colors: ['#2196F3', '#4CAF50'],
+    };
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
+
+<!--
                 <div style="width: 100%; margin: 0 auto;">
         <canvas id="myChart"></canvas>
     </div>
 
     <script>
         // Data from PHP
-        var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
-        var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
-        var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+        var chartDataArray1 = < ?php echo json_encode($chartDataArray1); ?>;
+        var chartDataArray2 = < ?php echo json_encode($chartDataArray2); ?>;
+        var chartDataArray3 = < ?php echo json_encode($chartDataArray3); ?>;
 
 
         // Process data to match Chart.js format
@@ -578,7 +647,7 @@ if ($chartResult3->num_rows > 0) {
             }
         });
     </script>
-
+-->
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
               </div>
