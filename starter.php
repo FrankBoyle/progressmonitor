@@ -489,32 +489,29 @@ if ($chartResult3->num_rows > 0) {
                 <div id="chart"></div>
 
 
-<script>
+                <script>
 // Data from PHP
 var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
 var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
 var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
-
 // Process data to match ApexCharts format
 var chartData = [];
 for (var i = 0; i < chartDataArray1.length; i++) {
-var xValue = new Date(chartDataArray1[i].x1).getTime();
-var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
-var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
+    var xValue = new Date(chartDataArray1[i].x1).getTime();
+    var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
+    var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
 
-
-chartData.push({
-x: xValue,
-y1: y1Value,
-y2: y2Value,
-});
+    chartData.push({
+        x: xValue,
+        y1: y1Value,
+        y2: y2Value,
+    });
 }
-
 
 // Create ApexCharts chart
 var options = {
-  series: [
+    series: [
         {
             name: 'Baseline',
             data: chartData.map(item => ({ x: item.x, y: item.y1 })),
@@ -535,31 +532,32 @@ var options = {
             left: 7,
             blur: 10,
             opacity: 0.2
-          },
+        },
     },
     stroke: {
-          curve: 'smooth'
-        },
-        markers: {
-    size: 5,
-    colors: undefined,
-    strokeColors: '#fff',
-    strokeWidth: 2,
-    strokeOpacity: 0.9,
-    strokeDashArray: 0,
-    fillOpacity: 1,
-    discrete: [],
-    shape: "circle",
-    radius: 2,
-    offsetX: 0,
-    offsetY: 0,
-    onClick: undefined,
-    onDblClick: undefined,
-    showNullDataPoints: true,
-    hover: {
-      size: undefined,
-      sizeOffset: 3
-    }},
+        curve: 'smooth'
+    },
+    markers: {
+        size: 5,
+        colors: undefined,
+        strokeColors: '#fff',
+        strokeWidth: 2,
+        strokeOpacity: 0.9,
+        strokeDashArray: 0,
+        fillOpacity: 1,
+        discrete: [],
+        shape: "circle",
+        radius: 2,
+        offsetX: 0,
+        offsetY: 0,
+        onClick: undefined,
+        onDblClick: undefined,
+        showNullDataPoints: true,
+        hover: {
+            size: undefined,
+            sizeOffset: 3
+        }
+    },
     xaxis: {
         type: 'datetime',
         labels: {
@@ -576,24 +574,27 @@ var options = {
             text: 'Value'
         }
     },
-    dataLabels: {
-        enabled: true, // Disable data labels by default
-        style: {
-            colors: ['#000']
-        },
-        formatter: function (value) {
-            return value.toFixed(2);
+    annotations: {
+        dataLabels: {
+            enabled: true, // Enable data labels for annotations
+            textAnchor: 'middle',
+            offsetY: -10,
+            style: {
+                fontSize: '12px',
+                colors: ['#000']
+            },
+            formatter: function (value) {
+                return value.toFixed(2);
+            }
         }
     },
     colors: ['#2196F3', '#4CAF50'],
-
-    
 };
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
-
 </script>
+
 
 
 <!--
