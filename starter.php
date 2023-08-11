@@ -602,7 +602,7 @@ var options = {
         tickAmount: 'dataPoints',
         labels: {
     hideOverlappingLabels: false
-  }
+  },
         title: {
             text: 'Date'
         }
