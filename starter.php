@@ -556,7 +556,7 @@ if ($chartResult3->num_rows > 0) {
                             shape: "circle",
                             radius: 2,
                             offsetX: 0,
-                            offsetY: 5,
+                            offsetY: 0,
                             onClick: undefined,
                             onDblClick: undefined,
                             showNullDataPoints: true,
