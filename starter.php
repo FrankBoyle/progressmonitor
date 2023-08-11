@@ -132,8 +132,7 @@ if ($chartResult3->num_rows > 0) {
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <script src="
-https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.js
-"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="
 https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
 " rel="stylesheet">
@@ -537,119 +536,62 @@ https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css
         chartData.push(dataEntry);
     }
 
-    // Create a scatter plot and line graph
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'scatter',
-        data: {
-            datasets: [{
-                label: 'Scatter Plot (x1 vs. y2)',
-                data: chartData,
-                showLine: false,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)'
+    <div id="chart"></div>
+
+    <script>
+    var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
+    var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
+    var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+
+        // Process data and create datasets
+        var datasets = [];
+        for (var i = 0; i < chartDataArray1.length; i++) {
+            datasets.push({
+                x: new Date(chartDataArray1[i]['x1']),
+                y1: chartDataArray2[i]['y1'],
+                y2: chartDataArray3[i]['y2']
+            });
+        }
+
+        // Create ApexCharts
+        var options = {
+            series: [{
+                name: 'Scatter Plot (x1 vs. y2)',
+                data: datasets.map(entry => ({ x: entry.x, y: entry.y2 }))
             }, {
-                label: 'Line Graph (x1 vs. y1)',
-                data: chartData,
-                showLine: true,
-                borderColor: 'rgba(192, 75, 75, 1)',
-                backgroundColor: 'rgba(192, 75, 75, 0.2)'
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day'
-                    },
-                    title: {
-                        display: true,
-                        text: 'X1 (Date)'
-                    }
+                name: 'Line Graph (x1 vs. y1)',
+                data: datasets.map(entry => ({ x: entry.x, y: entry.y1 }))
+            }],
+            chart: {
+                type: 'line',
+                height: 350,
+                animations: {
+                    enabled: false
                 },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Y Values'
-                    }
+                toolbar: {
+                    show: false
                 }
+            },
+            xaxis: {
+                type: 'datetime',
+                title: {
+                    text: 'X1 (Date)'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Y Values'
+                }
+            },
+            legend: {
+                position: 'top'
             }
-        }
-    });
-</script>
+        };
 
-                <!--
-                <div id="chart"></div>
-                <script>
-    // Assuming you have fetched data and stored it in $chartDataArray1, $chartDataArray2, and $chartDataArray3
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    </script>
 
-    // Transform the date strings to JavaScript Date objects for x1 variable
-    const baselineData = <?php echo json_encode($chartDataArray1); ?>;
-    baselineData.forEach(item => {
-        item.x1 = new Date(item.x1).getTime();
-        console.log(item.x1);
-    });
-
-    // Transform the date strings to JavaScript Date objects for x1 variable
-    const y1Data = <?php echo json_encode($chartDataArray2); ?>;
-    y1Data.forEach(item => {
-        item.x1 = new Date(item.x1).getTime();
-    });
-
-    // Transform the date strings to JavaScript Date objects for x1 variable
-    const y2Data = <?php echo json_encode($chartDataArray3); ?>;
-    y2Data.forEach(item => {
-        item.x1 = new Date(item.x1).getTime();
-    });
-
-    // Create ApexCharts instance for the scatter plot and baseline line
-    var options = {
-    series: [
-        {
-            name: 'Baseline',
-            data: y1Data.map(item => ({
-                x: item.x1,
-                y: item.y1
-            })),
-            type: 'line',
-            strokeDashArray: 3,
-            color: '#FF0000'
-        },
-        {
-            name: 'Score',
-            data: y2Data.map(item => ({
-                x: item.x1,
-                y: item.y2
-            })),
-            type: 'scatter',
-            strokeDashArray: 3,
-            color: '#00FF00'
-        }
-    ],
-    chart: {
-        height: 350,
-        type: 'line',
-    },
-    xaxis: {
-        type: 'datetime',
-        labels: {
-            datetimeFormatter: {
-                year: 'yyyy',
-                month: 'MMM yyyy',
-                day: 'dd MMM',
-                hour: 'HH:mm'
-            }
-        }
-    },
-    // ...
-};
-
-var chart = new ApexCharts(document.querySelector("#chart"), options);
-chart.render();
-
-</script>
--->
 
 
 
