@@ -495,12 +495,11 @@ if ($chartResult3->num_rows > 0) {
     </div>
 
     <script>
-      //Chart.register(ChartDataLabels); // Register the DataLabels plugin
-
         // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
         var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
         var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+
 
         // Process data to match Chart.js format
         var chartData = [];
@@ -511,7 +510,6 @@ if ($chartResult3->num_rows > 0) {
                 y2: chartDataArray3[i] ? chartDataArray3[i].y2 : null,
             });
         }
-        Chart.register(ChartDataLabels);
 
         // Create a new Chart.js chart
         var ctx = document.getElementById('myChart').getContext('2d');
@@ -521,13 +519,13 @@ if ($chartResult3->num_rows > 0) {
                 datasets: [
                     {
                         label: 'Baseline',
-                        data: chartData.map(item => ({ x: item.x, parseFloat(y: item.y1) })),
+                        data: chartData.map(item => ({ x: item.x, y: item.y1 })),
                         borderColor: 'blue',
                         fill: false,
                     },
                     {
                         label: 'Score',
-                        data: chartData.map(item => ({ x: item.x, parseFloat(y: item.y2) })),
+                        data: chartData.map(item => ({ x: item.x, y: item.y2 })),
                         borderColor: 'green',
                         fill: false,
                         datalabels: {
@@ -535,8 +533,7 @@ if ($chartResult3->num_rows > 0) {
                             color: 'black',
                             align: 'top',
                             formatter: function(value, context) {
-                              //console.log('Value:', value, 'Type:', typeof value); // Debug output
-                              return value.toFixed(2);
+                                return value.toFixed(2);
                             }
                         }
                     }
@@ -544,7 +541,7 @@ if ($chartResult3->num_rows > 0) {
             },
             options: {
                 scales: {
-                    x: [{
+                    xAxes: [{
                         type: 'time',
                         time: {
                             parser: 'YYYY-MM-DD',
@@ -553,14 +550,14 @@ if ($chartResult3->num_rows > 0) {
                                 day: 'MMM D'
                             }
                         },
-                        Label: {
+                        scaleLabel: {
                             display: true,
                             labelString: 'Date'
                         }
                     }],
-                    y: [{
+                    yAxes: [{
                         type: 'linear',
-                        Label: {
+                        scaleLabel: {
                             display: true,
                             labelString: 'Value'
                         }
