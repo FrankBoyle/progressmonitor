@@ -484,8 +484,9 @@ if ($chartResult3->num_rows > 0) {
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
-
-                <script>
+                
+<div id="chart"></div>
+<script>
         // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
         var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
@@ -563,7 +564,7 @@ if ($chartResult3->num_rows > 0) {
                         
                           hover: {
                             size: undefined,
-                            sizeOffset: 3
+                            sizeOffset: 0
                         }},
                         label: {
                             text: item.y2.toFixed(2),
