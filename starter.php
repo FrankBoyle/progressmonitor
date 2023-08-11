@@ -545,7 +545,7 @@ if ($chartResult3->num_rows > 0) {
                     .map(item => ({
                         x: item.x,
                         y: item.y2,
-                        markers: {
+                        marker: {
                           size: 0,
                           strokeColors: '#fff',
                           strokeWidth: 2,
