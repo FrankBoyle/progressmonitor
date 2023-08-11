@@ -489,8 +489,6 @@ if ($chartResult3->num_rows > 0) {
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
-                <div id="chart"></div>
-
                 <script>
         // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
@@ -548,6 +546,9 @@ if ($chartResult3->num_rows > 0) {
                 {
                     name: 'Baseline',
                     data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+                    dataLabels: {
+                        enabled: false, // Disable data labels for the "Baseline" series
+                    }
                 },
                 {
                     name: 'Score',
