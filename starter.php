@@ -593,8 +593,8 @@ var options = {
         }
     },
     xaxis: {
-        type: 'category', // Set x-axis type to 'category'
-        categories: chartData.map(item => new Date(item.x).toLocaleDateString()), // Use formatted dates as labels
+        type: 'datetime',
+        tickPlacement: 'on', // Display ticks at data points
         title: {
             text: 'Date'
         }
