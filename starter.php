@@ -546,10 +546,10 @@ if ($chartResult3->num_rows > 0) {
                         x: item.x,
                         y: item.y2,
                         marker: {
-                          size: 5,
+                          size: 3,
                           strokeColors: '#fff',
                           strokeWidth: 2,
-                          strokeOpacity: 0.9,
+                          strokeOpacity: 0.3,
                           strokeDashArray: 0,
                           fillOpacity: 1,
                           discrete: [],
