@@ -486,7 +486,7 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-                <div style="width: 80%; margin: 0 auto;">
+                <div style="width: 100%; margin: 0 auto;">
         <canvas id="myChart"></canvas>
     </div>
 
