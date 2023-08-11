@@ -486,8 +486,7 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-
-    <div id="chart"></div>
+<div id="chart"></div>
 <script>
     var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
     var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
@@ -505,45 +504,43 @@ if ($chartResult3->num_rows > 0) {
 
     // Create ApexCharts
     var options = {
-        series: [{
-            name: 'Score',
-            type: 'scatter',
-            data: datasets.map(entry => ({ x: entry.x, y: entry.y2 }))
-        }, {
-            name: 'Baseline',
-            type: 'line',
-            data: datasets.map(entry => ({ x: entry.x, y: entry.y1 }))
-        }],
+        series: [
+            {
+                name: 'Score',
+                type: 'scatter',
+                data: datasets.map(entry => ({ x: entry.x, y: entry.y2 })),
+            },
+            {
+                name: 'Baseline',
+                type: 'line',
+                data: datasets.map(entry => ({ x: entry.x, y: entry.y1 })),
+            }
+        ],
         chart: {
             height: 350,
             type: 'line',
         },
         stroke: {
-            width: [0, 4]
+            width: [0, 4],
         },
         title: {
-            text: 'Progress Monitoring Graph'
+            text: 'Progress Monitoring Graph',
         },
         dataLabels: {
             enabled: true,
-            enabledOnSeries: [1]
+            enabledOnSeries: [1],
         },
         xaxis: {
-            type: 'datetime'
+            type: 'datetime',
         },
-        yaxis: [{
+        yaxis: {
             title: {
-                text: 'Score'
+                text: 'Y Values',
             },
-        }, {
-            opposite: true,
-            title: {
-                text: 'Baseline'
-            }
-        }]
+        },
     };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    var chart = new ApexCharts(document.querySelector('#chart'), options);
     chart.render();
 </script>
 
