@@ -594,7 +594,7 @@ var options = {
     },
     xaxis: {
         type: 'datetime', // Set x-axis type to 'category'
-        tickPlacement: 'on', // Display ticks at data points
+        //tickPlacement: 'on', // Display ticks at data points
         tickAmount: chartData.length, // Display all data points
         //categories: chartData.map(item => new Date(item.x).toLocaleDateString()), // Use formatted dates as labels
         title: {
