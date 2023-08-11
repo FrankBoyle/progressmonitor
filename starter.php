@@ -568,7 +568,16 @@ if ($chartResult3->num_rows > 0) {
                                 }
                             }
                         }
-                    }))
+                    })),
+                lines: [
+                    {
+                        name: 'Trendline',
+                        type: 'regression',
+                        axisXIndex: 0,
+                        axisYIndex: 1,
+                        seriesIndex: 1,
+                    }
+                ]
             }
         };
 
