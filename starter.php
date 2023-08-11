@@ -598,16 +598,13 @@ var options = {
         }
     },
     xaxis: {
-    categories: xCategories, // Set the array of formatted date strings here
-    type: 'datetime', // Use 'datetime' type for dates
-    tickAmount: xCategories.length, // Set tickAmount to the total number of data points
+    categories: xCategories,
+    type: 'datetime',
+    tickAmount: xCategories.length,
     labels: {
         hideOverlappingLabels: false,
-        datetimeFormatter: {
-            year: 'yyyy',
-            month: "MMM 'yy",
-            day: 'dd MMM',
-            hour: 'HH:mm',
+        formatter: function(value, timestamp, opts) {
+            return new Date(value).toLocaleDateString(); // Format date label
         }
     },
     title: {
