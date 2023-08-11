@@ -562,14 +562,14 @@ if ($chartResult3->num_rows > 0) {
                     }]
                 },
                 plugins: {
-                    datalabels: {
-                        backgroundColor: function(context) {
-                            return context.dataset.borderColor;
-                        },
-                        borderRadius: 4,
-                        padding: 6,
-                        font: {
-                            weight: 'bold'
+        datalabels: {
+            backgroundColor: function(context) {
+                return context.dataset.borderColor;
+            },
+            borderRadius: 4,
+            padding: 6,
+            font: {
+                weight: 'bold'
                         }
                     }
                 }
