@@ -593,27 +593,16 @@ var options = {
         }
     },
     xaxis: {
-        type: 'datetime',
-        labels: {
-            formatter: function (value) {
-                return new Date(value).toLocaleDateString();
-            }
-        },
+        type: 'category', // Set x-axis type to 'category'
+        labels: chartData.map(item => new Date(item.x).toLocaleDateString()), // Use formatted dates as labels
         title: {
             text: 'Date'
-        },
-        categories: chartData.map(item => item.x), // Display all dates on x-axis
+        }
     },
     yaxis: {
         title: {
             text: 'Value'
-        },
-        labels: {
-            formatter: function (value) {
-                return value.toFixed(0);
-            }
-        },
-        forceNiceScale: false, // Disable automatic nice scaling
+        }
     },
     grid: {
         xaxis: {
@@ -649,6 +638,7 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
+
 
 
 <!--
