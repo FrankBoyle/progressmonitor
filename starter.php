@@ -482,102 +482,85 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-header">
                 <h5 class="m-0">Featured</h5>
               </div>
-              <script>
-// Your data arrays
-var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
-var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
-var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
-// Process data to match ApexCharts format
-var chartData = [];
-for (var i = 0; i < chartDataArray1.length; i++) {
-    var xValue = new Date(chartDataArray1[i].x1).getTime();
-    var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
-    var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
-
-    chartData.push({
-        x: xValue,
-        y1: y1Value,
-        y2: y2Value,
-    });
-}
-
-// ApexCharts options
-var options = {
-    series: [
-        {
-            name: "Baseline",
-            data: chartData.map(item => item.y1)
-        },
-        {
-            name: "Score",
-            data: chartData.map(item => item.y2)
-        }
-    ],
-    chart: {
-        height: 300,
-        type: 'line',
-        dropShadow: {
-            enabled: true,
-            color: '#000',
-            top: 18,
-            left: 7,
-            blur: 10,
-            opacity: 0.2
-        },
-        toolbar: {
-            show: false
-        }
-    },
-    colors: ['#77B6EA', '#545454'],
-    dataLabels: {
-        enabled: true,
-    },
-    stroke: {
-        curve: 'smooth'
-    },
-    title: {
-        text: 'Average High & Low Temperature',
-        align: 'left'
-    },
-    grid: {
-        borderColor: '#e7e7e7',
-        row: {
-            colors: ['#f3f3f3', 'transparent'],
-            opacity: 0.5
-        },
-    },
-    markers: {
-        size: 2
-    },
-    xaxis: {
-        categories: chartData.map(item => new Date(item.x).toDateString()), // Assuming x values are timestamps
-        title: {
-            text: 'Month'
-        }
-    },
-    yaxis: {
-        title: {
-            text: 'Temperature'
-        },
-        min: 5,
-        max: 40
-    },
-    legend: {
-        position: 'top',
-        horizontalAlign: 'right',
-        floating: true,
-        offsetY: -25,
-        offsetX: -5
-    }
-};
-
-    </script>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
                 
                 <div id="chart"></div>
 
+
+<script>
+// Data from PHP
+var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
+var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
+var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+
+
+// Process data to match ApexCharts format
+var chartData = [];
+for (var i = 0; i < chartDataArray1.length; i++) {
+var xValue = new Date(chartDataArray1[i].x1).getTime();
+var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
+var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
+
+
+chartData.push({
+x: xValue,
+y1: y1Value,
+y2: y2Value,
+});
+}
+
+
+// Create ApexCharts chart
+var options = {
+chart: {
+type: 'line',
+stacked: false,
+height: 350,
+},
+xaxis: {
+type: 'datetime',
+labels: {
+    formatter: function (value) {
+        return new Date(value).toLocaleDateString();
+    }
+},
+title: {
+    text: 'Date'
+}
+},
+yaxis: {
+title: {
+    text: 'Value'
+}
+},
+dataLabels: {
+enabled: true,
+style: {
+    colors: ['#000']
+},
+formatter: function (value) {
+    return value.toFixed(2);
+}
+},
+colors: ['#2196F3', '#4CAF50'],
+series: [
+{
+    name: 'Baseline',
+    data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+},
+{
+    name: 'Score',
+    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+}
+],
+};
+
+
+var chart = new ApexCharts(document.querySelector("#chart"), options);
+chart.render();
+</script>
 
 
 <!--
