@@ -510,49 +510,54 @@ if ($chartResult3->num_rows > 0) {
         // Create a new Chart.js chart
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [
-                    {
-                        label: 'Baseline',
-                        data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-                        borderColor: 'blue',
-                        fill: false,
-                    },
-                    {
-                        label: 'Score',
-                        data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-                        borderColor: 'green',
-                        fill: false,
-                    }
-                ]
+    type: 'line',
+    data: {
+        datasets: [
+            {
+                label: 'Baseline',
+                data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+                borderColor: 'blue',
+                fill: false,
             },
-            options: {
-                scales: {
-                    xAxes: [{
-                        type: 'time',
-                        time: {
-                            parser: 'YYYY-MM-DD',
-                            unit: 'day',
-                            displayFormats: {
-                                day: 'MMM D'
-                            }
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Date'
-                        }
-                    }],
-                    yAxes: [{
-                        type: 'linear',
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Value'
-                        }
-                    }]
-                }
+            {
+                label: 'Score',
+                data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+                borderColor: 'green',
+                fill: false,
+                trendlineLinear: {
+                    style: "rgba(75, 192, 192, 0.6)", // Trendline color
+                    lineStyle: "dashed", // Trendline style (solid, dashed, dotted, etc.)
+                    width: 2, // Trendline width
+                },
             }
-        });
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    parser: 'YYYY-MM-DD',
+                    unit: 'day',
+                    displayFormats: {
+                        day: 'MMM D'
+                    }
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Date'
+                }
+            }],
+            yAxes: [{
+                type: 'linear',
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Value'
+                }
+            }]
+        }
+    }
+});
     </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
