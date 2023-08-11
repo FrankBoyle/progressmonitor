@@ -600,6 +600,7 @@ var options = {
     xaxis: {
     categories: xCategories, // Set the array of formatted date strings here
     type: 'datetime', // Use 'datetime' type for dates
+    tickAmount: xCategories.length, // Set tickAmount to the total number of data points
     labels: {
         hideOverlappingLabels: false,
         datetimeFormatter: {
