@@ -131,7 +131,7 @@ if ($chartResult3->num_rows > 0) {
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
-  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
 
@@ -486,60 +486,87 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-<div id="chart"></div>
-<script>
+                <div style="width: 80%; margin: 0 auto;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
         var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
         var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
-        // Process data and create datasets
-        var datasets = [];
+        // Process data to match Chart.js format
+        var chartData = [];
         for (var i = 0; i < chartDataArray1.length; i++) {
-            datasets.push({
-                x1: new Date(chartDataArray1[i]['x1']),
-                y1: chartDataArray2[i]['y1'],
-                y2: chartDataArray3[i]['y2']
+            chartData.push({
+                x: chartDataArray1[i].x1,
+                y1: chartDataArray2[i] ? chartDataArray2[i].y1 : null,
+                y2: chartDataArray3[i] ? chartDataArray3[i].y2 : null,
             });
         }
 
-        // Create ApexCharts
-        var options = {
-            series: [
-                {
-                    name: 'Score',
-                    data: datasets.map(entry => ({ x: entry.x1, y: entry.y2 })),
-                },
-                {
-                    name: 'Baseline',
-                    data: datasets.map(entry => ({ x: entry.x1, y: entry.y1 })),
+        // Create a new Chart.js chart
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'Baseline',
+                        data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+                        borderColor: 'blue',
+                        fill: false,
+                        yAxisID: 'y-axis-1'
+                    },
+                    {
+                        label: 'Score',
+                        data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+                        borderColor: 'green',
+                        fill: false,
+                        yAxisID: 'y-axis-2'
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            parser: 'YYYY-MM-DD',
+                            unit: 'day',
+                            displayFormats: {
+                                day: 'MMM D'
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }],
+                    yAxes: [
+                        {
+                            type: 'linear',
+                            position: 'left',
+                            id: 'y-axis-1',
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Baseline'
+                            }
+                        },
+                        {
+                            type: 'linear',
+                            position: 'right',
+                            id: 'y-axis-2',
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Score'
+                            }
+                        }
+                    ]
                 }
-            ],
-            chart: {
-                height: 350,
-                type: 'line',
-            },
-            stroke: {
-                width: [0, 4],
-            },
-            title: {
-                text: 'Progress Monitoring Graph',
-            },
-            dataLabels: {
-                enabled: true,
-                enabledOnSeries: [1],
-            },
-            xaxis: {
-                type: 'datetime',
-            },
-            yaxis: {
-                title: {
-                    text: 'Y Values',
-                },
-            },
-        };
-
-        var chart = new ApexCharts(document.querySelector('#chart'), options);
-        chart.render();
+            }
+        });
     </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
