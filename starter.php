@@ -520,14 +520,14 @@ if ($chartResult3->num_rows > 0) {
                 fill: false,
             },
             {
-                label: 'Score',
-                data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-                borderColor: 'green',
-                fill: false,
-                trendlineLinear: {
-                    style: "rgba(75, 192, 192, 0.6)", // Trendline color
-                    lineStyle: "dashed", // Trendline style (solid, dashed, dotted, etc.)
-                    width: 2, // Trendline width
+              label: 'Score',
+    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+    borderColor: 'green',
+    fill: false,
+    trendlineLinear: {
+        style: "red", // Change the color to red
+        lineStyle: "dashed", // Trendline style (solid, dashed, dotted, etc.)
+        width: 2, // Trendline width
                 },
             }
         ]
