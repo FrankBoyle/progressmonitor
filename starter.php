@@ -559,7 +559,7 @@ var options = {
     hover: {
       size: undefined,
       sizeOffset: 3
-    },
+    }},
     xaxis: {
         type: 'datetime',
         labels: {
