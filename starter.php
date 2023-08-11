@@ -546,7 +546,7 @@ if ($chartResult3->num_rows > 0) {
                         x: item.x,
                         y: item.y2,
                         marker: {
-                          size: 0,
+                          size: 5,
                           strokeColors: '#fff',
                           strokeWidth: 2,
                           strokeOpacity: 0.9,
