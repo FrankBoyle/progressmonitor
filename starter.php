@@ -598,8 +598,11 @@ var options = {
         }
     },
     xaxis: {
-        categories: 'category',
-        tickAmount: "dataPoints",
+        categories: 'datetime',
+        tickAmount: 'dataPoints',
+        labels: {
+    hideOverlappingLabels: false
+  }
         title: {
             text: 'Date'
         }
