@@ -513,70 +513,32 @@ if ($chartResult3->num_rows > 0) {
         var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-        datasets: [
-            {
-                label: 'Baseline',
-                data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-                borderColor: 'blue',
-                fill: false,
-            },
-            {
-              label: 'Score',
-    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-    borderColor: 'green',
-    fill: false,
-    trendlineLinear: {
-        style: "#FF5733", // Change the color to red
-        lineStyle: "dashed", // Trendline style (solid, dashed, dotted, etc.)
-        width: 1, // Trendline width
-                },
-            }
-        ]
+        // ... (datasets)
     },
     options: {
         scales: {
-            xAxes: [{
-                type: 'time',
-                time: {
-                    parser: 'YYYY-MM-DD',
-                    unit: 'day',
-                    displayFormats: {
-                        day: 'MMM D'
-                    }
+            // ... (xAxes, yAxes)
+        },
+        plugins: {
+            datalabels: {
+                align: 'end',
+                anchor: 'end',
+                backgroundColor: function(context) {
+                    return context.dataset.borderColor;
                 },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Date'
+                borderRadius: 4,
+                color: 'white',
+                font: {
+                    weight: 'bold'
+                },
+                formatter: function(value, context) {
+                    return value.toFixed(2);
                 }
-            }],
-            yAxes: [{
-                type: 'linear',
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Value'
-                }
-            }]
-        }
-    }
-    plugins: {
-        datalabels: {
-            align: 'end', // Label alignment relative to the data point
-            anchor: 'end', // Label anchor point relative to the data point
-            backgroundColor: function(context) {
-                return context.dataset.borderColor; // Use dataset border color as label background color
-            },
-            borderRadius: 4, // Border radius of the label
-            color: 'white', // Label text color
-            font: {
-                weight: 'bold' // Label font weight
-            },
-            formatter: function(value, context) {
-                // Format the label text (value) as needed
-                return value.toFixed(2);
-            },
+            }
         }
     }
 });
+
     </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
