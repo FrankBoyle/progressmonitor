@@ -599,7 +599,7 @@ var options = {
     },
     xaxis: {
         categories: 'category',
-        tickAmount: chartDataArray1-1,
+        tickAmount: "dataPoints",
         title: {
             text: 'Date'
         }
