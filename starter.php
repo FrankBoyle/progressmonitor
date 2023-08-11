@@ -519,23 +519,7 @@ if ($chartResult3->num_rows > 0) {
         scales: {
             // ... (xAxes, yAxes)
         },
-        plugins: {
-            datalabels: {
-                align: 'end',
-                anchor: 'end',
-                backgroundColor: function(context) {
-                    return context.dataset.borderColor;
-                },
-                borderRadius: 4,
-                color: 'white',
-                font: {
-                    weight: 'bold'
-                },
-                formatter: function(value, context) {
-                    return value.toFixed(2);
-                }
-            }
-        }
+
     }
 });
 
