@@ -520,7 +520,7 @@ var options = {
         }
     ],
     chart: {
-        height: 350,
+        height: 300,
         type: 'line',
         dropShadow: {
             enabled: true,
