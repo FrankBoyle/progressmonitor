@@ -495,6 +495,8 @@ if ($chartResult3->num_rows > 0) {
     </div>
 
     <script>
+      //Chart.register(ChartDataLabels); // Register the DataLabels plugin
+
         // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
         var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
@@ -509,6 +511,7 @@ if ($chartResult3->num_rows > 0) {
                 y2: chartDataArray3[i] ? chartDataArray3[i].y2 : null,
             });
         }
+        Chart.register(ChartDataLabels);
 
         // Create a new Chart.js chart
         var ctx = document.getElementById('myChart').getContext('2d');
