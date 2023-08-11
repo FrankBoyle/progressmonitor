@@ -521,13 +521,13 @@ if ($chartResult3->num_rows > 0) {
                 datasets: [
                     {
                         label: 'Baseline',
-                        data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+                        data: chartData.map(item => ({ x: item.x, parseFloat(y: item.y1) })),
                         borderColor: 'blue',
                         fill: false,
                     },
                     {
                         label: 'Score',
-                        data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+                        data: chartData.map(item => ({ x: item.x, parseFloat(y: item.y2) })),
                         borderColor: 'green',
                         fill: false,
                         datalabels: {
@@ -535,7 +535,7 @@ if ($chartResult3->num_rows > 0) {
                             color: 'black',
                             align: 'top',
                             formatter: function(value, context) {
-                              console.log('Value:', value, 'Type:', typeof value); // Debug output
+                              //console.log('Value:', value, 'Type:', typeof value); // Debug output
                               return value.toFixed(2);
                             }
                         }
