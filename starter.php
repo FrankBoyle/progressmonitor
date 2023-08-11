@@ -521,24 +521,21 @@ if ($chartResult3->num_rows > 0) {
                 fill: false,
             },
             {
-                label: 'Score',
-                data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-                borderColor: 'green',
-                fill: false,
-            },
-            {
-                label: 'Score Trendline',
-                data: calculateTrendline(chartData.map(item => item.y2)),
-                borderColor: 'red',
-                borderDash: [5, 5], // Dashed line style for trendline
-                fill: false,
-                hidden: true, // Hide the trendline dataset initially
+              label: 'Score',
+    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+    borderColor: 'green',
+    fill: false,
+    trendlineLinear: {
+        style: "#FF5733", // Change the color to red
+        lineStyle: "dashed", // Trendline style (solid, dashed, dotted, etc.)
+        width: 1, // Trendline width
+                },
             }
         ]
     },
     options: {
         scales: {
-            x: {
+            xAxes: [{
                 type: 'time',
                 time: {
                     parser: 'YYYY-MM-DD',
@@ -547,49 +544,21 @@ if ($chartResult3->num_rows > 0) {
                         day: 'MMM D'
                     }
                 },
-                title: {
+                scaleLabel: {
                     display: true,
-                    text: 'Date'
+                    labelString: 'Date'
                 }
-            },
-            y: {
-                title: {
+            }],
+            yAxes: [{
+                type: 'linear',
+                scaleLabel: {
                     display: true,
-                    text: 'Value'
+                    labelString: 'Value'
                 }
-            }
+            }]
         }
     }
 });
-
-// Function to calculate trendline data
-function calculateTrendline(data) {
-    var sumX = 0;
-    var sumY = 0;
-    var sumXY = 0;
-    var sumX2 = 0;
-
-    for (var i = 0; i < data.length; i++) {
-        sumX += i;
-        sumY += data[i];
-        sumXY += i * data[i];
-        sumX2 += i * i;
-    }
-
-    var slope = (data.length * sumXY - sumX * sumY) / (data.length * sumX2 - sumX * sumX);
-
-    var trendlineData = [];
-    for (var i = 0; i < data.length; i++) {
-        trendlineData.push({
-            x: chartData[i].x,
-            y: slope * i
-        });
-    }
-
-    return trendlineData;
-}
-
-
     </script>
 
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
