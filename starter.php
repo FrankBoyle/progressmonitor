@@ -547,7 +547,6 @@ if ($chartResult3->num_rows > 0) {
                         y: item.y2,
                         markers: {
                           size: 0,
-                          colors: undefined,
                           strokeColors: '#fff',
                           strokeWidth: 2,
                           strokeOpacity: 0.9,
@@ -561,6 +560,7 @@ if ($chartResult3->num_rows > 0) {
                           onClick: undefined,
                           onDblClick: undefined,
                           showNullDataPoints: true,
+                        }
                           hover: {
                             size: undefined,
                             sizeOffset: 3
