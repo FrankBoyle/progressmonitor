@@ -496,30 +496,20 @@ var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
 // Process data to match ApexCharts format
 var chartData = [];
-var intervalData = {}; // Aggregate data over time intervals
 var xCategories = [];
-
-// Define the time interval (in milliseconds) for aggregation
-var interval = 24 * 60 * 60 * 1000; // 1 day interval
 
 for (var i = 0; i < chartDataArray1.length; i++) {
     var xValue = new Date(chartDataArray1[i].x1).getTime();
     var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
     var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
 
-    // Aggregate data into intervals
-    var intervalStart = Math.floor(xValue / interval) * interval;
-    if (!intervalData[intervalStart]) {
-        intervalData[intervalStart] = {
-            count: 0,
-            sumY2: 0,
-        };
-    }
-    intervalData[intervalStart].count++;
-    intervalData[intervalStart].sumY2 += y2Value || 0;
+    chartData.push({
+        x: xValue,
+        y1: y1Value,
+        y2: y2Value,
+    });
 
-    // Prepare x-axis labels
-    var formattedDate = new Date(intervalStart).toLocaleDateString();
+    var formattedDate = new Date(xValue).toLocaleDateString();
     xCategories.push(formattedDate);
 }
 
@@ -559,17 +549,15 @@ var options = {
     series: [
         {
             name: 'Baseline',
-            data: Object.keys(intervalData).map(intervalStart => ({
-                x: parseInt(intervalStart),
-                y: intervalData[intervalStart].count > 0 ? intervalData[intervalStart].sumY2 / intervalData[intervalStart].count : null,
-            })),
+            data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+        },
+        {
+            name: 'Score',
+            data: chartData.map(item => ({ x: item.x, y: item.y2 })),
         },
         {
             name: 'Trendline',
-            data: Object.keys(intervalData).map(intervalStart => ({
-                x: parseInt(intervalStart),
-                y: intervalData[intervalStart].count > 0 ? trendlineFunction(parseInt(intervalStart)) : null,
-            })),
+            data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
         },
     ],
     chart: {
@@ -610,7 +598,8 @@ var options = {
         }
     },
     xaxis: {
-        categories: xCategories,
+        categories: 'category',
+        tickAmount: chartDataArray1-1,
         title: {
             text: 'Date'
         }
@@ -633,11 +622,11 @@ var options = {
         }
     },
     annotations: {
-        points: Object.keys(intervalData)
-            .filter(intervalStart => intervalData[intervalStart].count > 0)
-            .map(intervalStart => ({
-                x: parseInt(intervalStart),
-                y: intervalData[intervalStart].sumY2 / intervalData[intervalStart].count,
+        points: chartData
+            .filter(item => item.y2 !== null)
+            .map(item => ({
+                x: item.x,
+                y: item.y2,
                 marker: {
                     size: 4,
                     fillColor: '#4CAF50',
@@ -649,11 +638,11 @@ var options = {
                         color: '#fff',
                         background: '#4CAF50'
                     },
-                    text: (intervalData[intervalStart].sumY2 / intervalData[intervalStart].count).toFixed(0)
+                    text: item.y2.toFixed(0)  // Display 0 decimal places
                 }
             })),
     },
-    colors: ['#2196F3', '#FF5722'], // Trendline color added
+    colors: ['#2196F3', '#4CAF50', '#FF5722'], // Trendline color added
 };
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
