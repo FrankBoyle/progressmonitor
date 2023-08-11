@@ -591,7 +591,7 @@ var options = {
                         color: '#fff',
                         background: '#4CAF50'
                     },
-                    text: item.y2.toFixed(2)
+                    text: item.y2.toFixed(0)
                 }
             }))
     },
