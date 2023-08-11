@@ -514,52 +514,58 @@ y2: y2Value,
 
 // Create ApexCharts chart
 var options = {
-chart: {
-type: 'line',
-stacked: false,
-height: 350,
-},
-xaxis: {
-type: 'datetime',
-labels: {
-    formatter: function (value) {
-        return new Date(value).toLocaleDateString();
-    }
-},
-title: {
-    text: 'Date'
-}
-},
-yaxis: {
-title: {
-    text: 'Value'
-}
-},
-dataLabels: {
-enabled: true,
-style: {
-    colors: ['#000']
-},
-formatter: function (value) {
-    return value.toFixed(2);
-}
-},
-colors: ['#2196F3', '#4CAF50'],
-series: [
-{
-    name: 'Baseline',
-    data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-},
-{
-    name: 'Score',
-    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-}
-],
+    chart: {
+        type: 'line',
+        stacked: false,
+        height: 350,
+    },
+    xaxis: {
+        type: 'datetime',
+        labels: {
+            formatter: function (value) {
+                return new Date(value).toLocaleDateString();
+            }
+        },
+        title: {
+            text: 'Date'
+        }
+    },
+    yaxis: {
+        title: {
+            text: 'Value'
+        }
+    },
+    dataLabels: {
+        enabled: false, // Disable data labels by default
+        style: {
+            colors: ['#000']
+        },
+        formatter: function (value) {
+            return value.toFixed(2);
+        }
+    },
+    colors: ['#2196F3', '#4CAF50'],
+    series: [
+        {
+            name: 'Baseline',
+            data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+            dataLabels: {
+                enabled: false // Disable data labels for the Baseline series
+            }
+        },
+        {
+            name: 'Score',
+            data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+            dataLabels: {
+                enabled: true // Enable data labels for the Score series
+            }
+        }
+    ],
 };
-
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
+
 </script>
 
 
