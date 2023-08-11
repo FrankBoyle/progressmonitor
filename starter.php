@@ -584,14 +584,14 @@ var options = {
                     size: 4,
                     fillColor: '#4CAF50',
                     offsetY: -15,
-                    label: {
-                        borderColor: '#4CAF50',
-                        style: {
-                            color: '#fff',
-                            background: '#4CAF50'
-                        },
-                        text: item.y2.toFixed(2)
-                    }
+                },
+                label: {
+                    borderColor: '#4CAF50',
+                    style: {
+                        color: '#fff',
+                        background: '#4CAF50'
+                    },
+                    text: item.y2.toFixed(2)
                 }
             }))
     },
@@ -601,6 +601,7 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
+
 
 
 
