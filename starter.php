@@ -528,11 +528,19 @@ if ($chartResult3->num_rows > 0) {
                     text: 'Date'
                 }
             },
-            yaxis: {
-                title: {
-                    text: 'Value'
-                }
-            },
+            yaxis: [
+                {
+                    title: {
+                        text: 'Baseline',
+                    },
+                },
+                {
+                    opposite: true,
+                    title: {
+                        text: 'Score',
+                    },
+                },
+            ],
             colors: ['#2196F3', '#4CAF50'],
             series: [
                 {
@@ -542,7 +550,8 @@ if ($chartResult3->num_rows > 0) {
                 {
                     name: 'Score',
                     data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-                }
+                    yAxisIndex: 1,
+                },
             ],
             annotations: {
                 points: chartData
