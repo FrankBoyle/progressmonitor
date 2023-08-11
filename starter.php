@@ -522,7 +522,7 @@ if ($chartResult3->num_rows > 0) {
             {
               label: 'Score',
     data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-    borderColor: 'green',
+    borderColor: 'red',
     fill: false,
     trendlineLinear: {
         style: "#FF5733", // Change the color to red
