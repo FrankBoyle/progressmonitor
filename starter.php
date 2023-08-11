@@ -496,10 +496,15 @@ var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
 // Process data to match ApexCharts format
 var chartData = [];
+var xLabels = []; // Array to store formatted date labels for x-axis
+
 for (var i = 0; i < chartDataArray1.length; i++) {
     var xValue = new Date(chartDataArray1[i].x1).getTime();
     var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
     var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
+
+    var formattedDate = new Date(xValue).toLocaleDateString();
+    xLabels.push(formattedDate);
 
     chartData.push({
         x: xValue,
@@ -593,10 +598,8 @@ var options = {
         }
     },
     xaxis: {
-        type: 'datetime', // Set x-axis type to 'category'
-        //tickPlacement: 'on', // Display ticks at data points
-        tickAmount: chartData.length, // Display all data points
-        //categories: chartData.map(item => new Date(item.x).toLocaleDateString()), // Use formatted dates as labels
+        type: 'category', // Set x-axis type to 'category'
+        categories: xLabels, // Use formatted date labels as x-axis tick labels
         title: {
             text: 'Date'
         }
@@ -645,6 +648,7 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
+
 
 
 
