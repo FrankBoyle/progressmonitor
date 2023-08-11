@@ -582,21 +582,13 @@ var options = {
                 y: item.y2,
                 marker: {
                     size: 4,
-                    offsetY: -15,
                     fillColor: '#4CAF50',
-                    strokeWidth: 0,
+                    offsetY: -15,
                     label: {
-                        show: true,
-                        offsetY: -22,
+                        borderColor: '#4CAF50',
                         style: {
-                            color: '#000',
-                            background: '#ffffff',
-                            padding: {
-                                left: 5,
-                                right: 5,
-                                top: 0,
-                                bottom: 0
-                            }
+                            color: '#fff',
+                            background: '#4CAF50'
                         },
                         text: item.y2.toFixed(2)
                     }
@@ -609,6 +601,7 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
+
 
 
 
