@@ -525,17 +525,20 @@ if ($chartResult3->num_rows > 0) {
                 data: chartData.map(item => ({ x: item.x, y: item.y2 })),
                 borderColor: 'green',
                 fill: false,
-                trendlineLinear: {
-                    style: "rgba(75, 192, 192, 0.6)",
-                    lineStyle: "dashed",
-                    width: 2,
-                },
+            },
+            {
+                label: 'Score Trendline',
+                data: calculateTrendline(chartData.map(item => item.y2)),
+                borderColor: 'red',
+                borderDash: [5, 5], // Dashed line style for trendline
+                fill: false,
+                hidden: true, // Hide the trendline dataset initially
             }
         ]
     },
     options: {
         scales: {
-            xAxes: [{
+            x: {
                 type: 'time',
                 time: {
                     parser: 'YYYY-MM-DD',
@@ -544,36 +547,48 @@ if ($chartResult3->num_rows > 0) {
                         day: 'MMM D'
                     }
                 },
-                scaleLabel: {
+                title: {
                     display: true,
-                    labelString: 'Date'
+                    text: 'Date'
                 }
-            }],
-            yAxes: [{
-                type: 'linear',
-                scaleLabel: {
+            },
+            y: {
+                title: {
                     display: true,
-                    labelString: 'Value'
-                }
-            }]
-        },
-        plugins: {
-            datalabels: {
-                align: 'end', // Position of the data label relative to the point
-                anchor: 'end', // Anchor point of the data label
-                backgroundColor: null, // Background color of the label
-                borderRadius: 4, // Border radius of the label background
-                color: 'black', // Text color of the label
-                font: {
-                    weight: 'bold' // Font weight of the label text
-                },
-                formatter: function(value, context) {
-                    return value.toFixed(2); // Format the label value to two decimal places
+                    text: 'Value'
                 }
             }
         }
     }
 });
+
+// Function to calculate trendline data
+function calculateTrendline(data) {
+    var sumX = 0;
+    var sumY = 0;
+    var sumXY = 0;
+    var sumX2 = 0;
+
+    for (var i = 0; i < data.length; i++) {
+        sumX += i;
+        sumY += data[i];
+        sumXY += i * data[i];
+        sumX2 += i * i;
+    }
+
+    var slope = (data.length * sumXY - sumX * sumY) / (data.length * sumX2 - sumX * sumX);
+
+    var trendlineData = [];
+    for (var i = 0; i < data.length; i++) {
+        trendlineData.push({
+            x: chartData[i].x,
+            y: slope * i
+        });
+    }
+
+    return trendlineData;
+}
+
 
     </script>
 
