@@ -517,14 +517,12 @@ if ($chartResult3->num_rows > 0) {
                         data: chartData.map(item => ({ x: item.x, y: item.y1 })),
                         borderColor: 'blue',
                         fill: false,
-                        yAxisID: 'y-axis-1'
                     },
                     {
                         label: 'Score',
                         data: chartData.map(item => ({ x: item.x, y: item.y2 })),
                         borderColor: 'green',
                         fill: false,
-                        yAxisID: 'y-axis-2'
                     }
                 ]
             },
@@ -544,26 +542,13 @@ if ($chartResult3->num_rows > 0) {
                             labelString: 'Date'
                         }
                     }],
-                    yAxes: [
-                        {
-                            type: 'linear',
-                            position: 'left',
-                            id: 'y-axis-1',
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Baseline'
-                            }
-                        },
-                        {
-                            type: 'linear',
-                            position: 'right',
-                            id: 'y-axis-2',
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Score'
-                            }
+                    yAxes: [{
+                        type: 'linear',
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
                         }
-                    ]
+                    }]
                 }
             }
         });
