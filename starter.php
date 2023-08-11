@@ -500,6 +500,9 @@ if ($chartResult3->num_rows > 0) {
         var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
         var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
+        console.log("chartDataArray1:", chartDataArray1);
+console.log("chartDataArray2:", chartDataArray2);
+console.log("chartDataArray3:", chartDataArray3);
         // Process data to match Chart.js format
         var chartData = [];
         for (var i = 0; i < chartDataArray1.length; i++) {
