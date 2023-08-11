@@ -574,6 +574,13 @@ var options = {
             text: 'Value'
         }
     },
+    grid: {
+        xaxis: {
+            lines: {
+                show: true
+            }
+        }
+    },
     annotations: {
         points: chartData
             .filter(item => item.y2 !== null)
@@ -591,7 +598,7 @@ var options = {
                         color: '#fff',
                         background: '#4CAF50'
                     },
-                    text: item.y2.toFixed(0)
+                    text: item.y2.toFixed(0)  // Display 0 decimal places
                 }
             }))
     },
@@ -601,6 +608,7 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
+
 
 
 
