@@ -553,7 +553,7 @@ var options = {
         },
     },
     markers: {
-        size: 1
+        size: 2
     },
     xaxis: {
         categories: chartData.map(item => new Date(item.x).toDateString()), // Assuming x values are timestamps
