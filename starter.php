@@ -489,6 +489,7 @@ if ($chartResult3->num_rows > 0) {
               </div>
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
+
                 <script>
         // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
@@ -532,44 +533,44 @@ if ($chartResult3->num_rows > 0) {
                     text: 'Value'
                 }
             },
-
             colors: ['#2196F3', '#4CAF50'],
             series: [
                 {
                     name: 'Baseline',
                     data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-                    dataLabels: {
-                enabled: false,
-                style: {
-                    colors: ['#000']
-                },
-                formatter: function (value) {
-                    return value.toFixed(2);
-                }
-            },
                 },
                 {
                     name: 'Score',
                     data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-                    dataLabels: {
-                enabled: true,
-                style: {
-                    colors: ['#000']
-                },
-                formatter: function (value) {
-                    return value.toFixed(2);
-                }
-            },
                 }
             ],
-        };
-
-        // Disable data labels for the entire series
-        options.series.forEach(function (serie) {
-            if (serie.name === 'Baseline') {
-                serie.dataLabels = { enabled: false };
+            annotations: {
+                points: chartData
+                    .filter(item => item.y2 !== null) // Filter out null values for Score series
+                    .map(item => ({
+                        x: item.x,
+                        y: item.y2,
+                        marker: {
+                            size: 5,
+                            fillColor: '#4CAF50',
+                            offsetY: -10
+                        },
+                        label: {
+                            text: item.y2.toFixed(2),
+                            borderColor: '#4CAF50',
+                            style: {
+                                background: '#4CAF50',
+                                color: '#fff',
+                                fontSize: '12px',
+                                padding: {
+                                    left: 5,
+                                    right: 5
+                                }
+                            }
+                        }
+                    }))
             }
-        });
+        };
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
