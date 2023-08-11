@@ -558,7 +558,7 @@ if ($chartResult3->num_rows > 0) {
             }]
         }
     }
-    plugins: {
+        plugins: {
         datalabels: {
             align: 'end', // Label alignment relative to the data point
             anchor: 'end', // Label anchor point relative to the data point
