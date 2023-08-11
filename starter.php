@@ -541,7 +541,7 @@ var options = {
           curve: 'smooth'
         },
         markers: {
-    size: 0,
+    size: 2,
     colors: undefined,
     strokeColors: '#fff',
     strokeWidth: 2,
