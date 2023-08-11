@@ -488,157 +488,95 @@ if ($chartResult3->num_rows > 0) {
                 <div id="chart"></div>
 
                 <script>
-        // Data from PHP
-        var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
-        var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
-        var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+// Your data arrays
+var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
+var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
+var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
-        // Process data to match ApexCharts format
-        var chartData = [];
-        for (var i = 0; i < chartDataArray1.length; i++) {
-            var xValue = new Date(chartDataArray1[i].x1).getTime();
-            var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
-            var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
+// Process data to match ApexCharts format
+var chartData = [];
+for (var i = 0; i < chartDataArray1.length; i++) {
+    var xValue = new Date(chartDataArray1[i].x1).getTime();
+    var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
+    var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
 
-            chartData.push({
-                x: xValue,
-                y1: y1Value,
-                y2: y2Value,
-            });
+    chartData.push({
+        x: xValue,
+        y1: y1Value,
+        y2: y2Value,
+    });
+}
+
+// ApexCharts options
+var options = {
+    series: [
+        {
+            name: "Baseline",
+            data: chartData.map(item => item.y1)
+        },
+        {
+            name: "Score",
+            data: chartData.map(item => item.y2)
         }
-
-        // Calculate trendline points for the Score series
-        var trendlinePoints = calculateTrendline(chartData.map(item => ({ x: item.x, y: item.y2 })));
-
-        // Create ApexCharts chart
-        var options = {
-            chart: {
-                type: 'line',
-                stacked: false,
-                height: 350,
-            },
-            xaxis: {
-                type: 'datetime',
-                labels: {
-                    formatter: function (value) {
-                        return new Date(value).toLocaleDateString();
-                    }
-                },
-                title: {
-                    text: 'Date'
-                }
-            },
-            yaxis: [
-                {
-                    title: {
-                        text: 'Baseline',
-                    },
-                },
-                {
-                    opposite: true,
-                    title: {
-                        text: 'Score',
-                    },
-                },
-            ],
-            colors: ['#2196F3', '#4CAF50'],
-            series: [
-                {
-                    name: 'Baseline',
-                    data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-                },
-                {
-                    name: 'Score',
-                    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-                    yAxisIndex: 1,
-                },
-            ],
-            annotations: {
-                points: chartData
-                    .filter(item => item.y2 !== null) // Filter out null values for Score series
-                    .map(item => ({
-                        x: item.x,
-                        y: item.y2,
-                        marker: {
-                            size: 3,
-                            strokeColors: '#fff',
-                            strokeWidth: 2,
-                            strokeOpacity: 0.3,
-                            strokeDashArray: 0,
-                            fillOpacity: 1,
-                            discrete: [],
-                            shape: "circle",
-                            radius: 2,
-                            offsetX: 0,
-                            offsetY: 5,
-                            onClick: undefined,
-                            onDblClick: undefined,
-                            showNullDataPoints: true,
-
-                            hover: {
-                                size: undefined,
-                                sizeOffset: 0
-                            }
-                        },
-                        label: {
-                            text: item.y2.toFixed(0), // Format to show no decimal places
-                            borderColor: '#4CAF50',
-                            style: {
-                                background: '#4CAF50',
-                                color: '#fff',
-                                fontSize: '12px',
-                                padding: {
-                                    left: 5,
-                                    right: 5
-                                }
-                            }
-                        }
-                    })),
-                lines: [
-                    // Manually add the calculated trendline points
-                    {
-                        x1: trendlinePoints[0].x,
-                        y1: trendlinePoints[0].y,
-                        x2: trendlinePoints[1].x,
-                        y2: trendlinePoints[1].y,
-                        borderColor: '#FF5733',
-                        borderWidth: 2,
-                    }
-                ]
-            }
-        };
-
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-
-        // Function to calculate trendline points using linear regression
-        function calculateTrendline(data) {
-            var n = data.length;
-            var sumX = 0;
-            var sumY = 0;
-            var sumXY = 0;
-            var sumX2 = 0;
-
-            for (var i = 0; i < n; i++) {
-                sumX += data[i].x;
-                sumY += data[i].y;
-                sumXY += data[i].x * data[i].y;
-                sumX2 += data[i].x * data[i].x;
-            }
-
-            var slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-            var intercept = (sumY - slope * sumX) / n;
-
-            var minX = data[0].x;
-            var maxX = data[n - 1].x;
-            var minY = slope * minX + intercept;
-            var maxY = slope * maxX + intercept;
-
-            return [
-                { x: minX, y: minY },
-                { x: maxX, y: maxY }
-            ];
+    ],
+    chart: {
+        height: 350,
+        type: 'line',
+        dropShadow: {
+            enabled: true,
+            color: '#000',
+            top: 18,
+            left: 7,
+            blur: 10,
+            opacity: 0.2
+        },
+        toolbar: {
+            show: false
         }
+    },
+    colors: ['#77B6EA', '#545454'],
+    dataLabels: {
+        enabled: true,
+    },
+    stroke: {
+        curve: 'smooth'
+    },
+    title: {
+        text: 'Average High & Low Temperature',
+        align: 'left'
+    },
+    grid: {
+        borderColor: '#e7e7e7',
+        row: {
+            colors: ['#f3f3f3', 'transparent'],
+            opacity: 0.5
+        },
+    },
+    markers: {
+        size: 1
+    },
+    xaxis: {
+        categories: chartData.map(item => new Date(item.x).toDateString()), // Assuming x values are timestamps
+        title: {
+            text: 'Month'
+        }
+    },
+    yaxis: {
+        title: {
+            text: 'Temperature'
+        },
+        min: 5,
+        max: 40
+    },
+    legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+        floating: true,
+        offsetY: -25,
+        offsetX: -5
+    }
+};
+
     </script>
 
 <!--
