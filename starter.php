@@ -543,7 +543,7 @@ if ($chartResult3->num_rows > 0) {
             },
             options: {
                 scales: {
-                    xAxes: [{
+                    x: [{
                         type: 'time',
                         time: {
                             parser: 'YYYY-MM-DD',
@@ -552,14 +552,14 @@ if ($chartResult3->num_rows > 0) {
                                 day: 'MMM D'
                             }
                         },
-                        scaleLabel: {
+                        Label: {
                             display: true,
                             labelString: 'Date'
                         }
                     }],
-                    yAxes: [{
+                    y: [{
                         type: 'linear',
-                        scaleLabel: {
+                        Label: {
                             display: true,
                             labelString: 'Value'
                         }
