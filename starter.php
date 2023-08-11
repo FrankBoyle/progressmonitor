@@ -546,9 +546,24 @@ if ($chartResult3->num_rows > 0) {
                         x: item.x,
                         y: item.y2,
                         markers: {
-                            size: 0,
-                            fillColor: '#4CAF50',
-                            offsetY: 0
+                          size: 0,
+                          colors: undefined,
+                          strokeColors: '#fff',
+                          strokeWidth: 2,
+                          strokeOpacity: 0.9,
+                          strokeDashArray: 0,
+                          fillOpacity: 1,
+                          discrete: [],
+                          shape: "circle",
+                          radius: 2,
+                          offsetX: 0,
+                          offsetY: 0,
+                          onClick: undefined,
+                          onDblClick: undefined,
+                          showNullDataPoints: true,
+                          hover: {
+                            size: undefined,
+                            sizeOffset: 3
                         },
                         label: {
                             text: item.y2.toFixed(2),
