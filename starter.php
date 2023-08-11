@@ -548,7 +548,7 @@ if ($chartResult3->num_rows > 0) {
                         markers: {
                             size: 0,
                             fillColor: '#4CAF50',
-                            offsetY: -10
+                            offsetY: 0
                         },
                         label: {
                             text: item.y2.toFixed(2),
