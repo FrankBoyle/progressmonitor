@@ -496,7 +496,7 @@ if ($chartResult3->num_rows > 0) {
         var datasets = [];
         for (var i = 0; i < chartDataArray1.length; i++) {
             datasets.push({
-                x: new Date(chartDataArray1[i]['x1']),
+                x1: new Date(chartDataArray1[i]['x1']),
                 y1: chartDataArray2[i]['y1'],
                 y2: chartDataArray3[i]['y2']
             });
@@ -507,11 +507,11 @@ if ($chartResult3->num_rows > 0) {
             series: [
                 {
                     name: 'Score',
-                    data: datasets.map(entry => ({ x: entry.x, y: entry.y2 })),
+                    data: datasets.map(entry => ({ x: entry.x1, y: entry.y2 })),
                 },
                 {
                     name: 'Baseline',
-                    data: datasets.map(entry => ({ x: entry.x, y: entry.y1 })),
+                    data: datasets.map(entry => ({ x: entry.x1, y: entry.y1 })),
                 }
             ],
             chart: {
