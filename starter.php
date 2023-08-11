@@ -62,39 +62,25 @@ if ($tableResult->num_rows > 0) {
     }
 }
 
-// Fetch and store data from the database for the chart
-$chartDataArray1 = array();
-$chartSql1 = "SELECT date FROM $selectedTable";
-$chartResult1 = $conn->query($chartSql1);
-if ($chartResult1->num_rows > 0) {
-    while ($row = $chartResult1->fetch_assoc()) {
-        $chartDataArray1[] = array(
-            'x1' => $row['date'],     // Use the 'date' column as the x-variable
+$chartDataArray = array();
+
+$chartSql = "SELECT date, baseline, score FROM $selectedTable";
+$chartResult = $conn->query($chartSql);
+
+if ($chartResult->num_rows > 0) {
+    while ($row = $chartResult->fetch_assoc()) {
+        $chartDataArray[] = array(
+            'x' => $row['date'],
+            'y' => array(
+                'baseline' => $row['baseline'],
+                'score' => $row['score']
+            )
         );
     }
 }
 
-$chartDataArray2 = array();
-$chartSql2 = "SELECT baseline FROM $selectedTable";
-$chartResult2 = $conn->query($chartSql2);
-if ($chartResult2->num_rows > 0) {
-    while ($row = $chartResult2->fetch_assoc()) {
-        $chartDataArray2[] = array(
-            'y1' => $row['baseline'] // Use the 'baseline' column as the second y-variable
-        );
-    }
-}
-
-$chartDataArray3 = array();
-$chartSql3 = "SELECT score FROM $selectedTable";
-$chartResult3 = $conn->query($chartSql3);
-if ($chartResult3->num_rows > 0) {
-    while ($row = $chartResult3->fetch_assoc()) {
-        $chartDataArray3[] = array(
-            'y2' => $row['score'] // Use the 'baseline' column as the second y-variable
-        );
-    }
-}
+// Convert the PHP array to a JSON string for use in JavaScript
+$chartDataJson = json_encode($chartDataArray);
 
 ?>
 
@@ -132,10 +118,8 @@ if ($chartResult3->num_rows > 0) {
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-trendline"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
 
@@ -490,19 +474,57 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
 
-                <div style="width: 100%; margin: 0 auto;">
+                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
+<script>
+    // Parse the JSON data into a JavaScript array
+    var chartData = <?php echo $chartDataJson; ?>;
+
+    // Prepare the data series for CanvasJS
+    var dataSeries = [];
+    var xDataPoints = [];
+    var y1DataPoints = [];
+    var y2DataPoints = [];
+
+    for (var i = 0; i < chartData.length; i++) {
+        xDataPoints.push({ x: new Date(chartData[i].x) });
+        y1DataPoints.push({ x: new Date(chartData[i].x), y: chartData[i].y.baseline });
+        y2DataPoints.push({ x: new Date(chartData[i].x), y: chartData[i].y.score });
+    }
+
+    dataSeries.push({ type: "line", name: "Baseline", showInLegend: true, dataPoints: y1DataPoints });
+    dataSeries.push({ type: "line", name: "Score", showInLegend: true, dataPoints: y2DataPoints });
+
+    var options = {
+        theme: "light2",
+        title: {
+            text: "Chart Title"
+        },
+        axisX: {
+            title: "Date"
+        },
+        axisY: {
+            title: "Values"
+        },
+        data: dataSeries
+    };
+
+    // Create the chart
+    var chart = new CanvasJS.Chart("chartContainer", options);
+    chart.render();
+</script>
+
+
+<!--
+                  <div style="width: 100%; margin: 0 auto;">
         <canvas id="myChart"></canvas>
     </div>
-
     <script>
         // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
         var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
         var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
 
-        console.log("chartDataArray1:", chartDataArray1);
-console.log("chartDataArray2:", chartDataArray2);
-console.log("chartDataArray3:", chartDataArray3);
         // Process data to match Chart.js format
         var chartData = [];
         for (var i = 0; i < chartDataArray1.length; i++) {
@@ -580,7 +602,7 @@ console.log("chartDataArray3:", chartDataArray3);
             }
         });
     </script>
-
+      -->
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
               </div>
