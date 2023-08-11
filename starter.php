@@ -485,8 +485,7 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
                 
-<div id="chart"></div>
-<script>
+                <script>
         // Data from PHP
         var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
         var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
@@ -547,25 +546,26 @@ if ($chartResult3->num_rows > 0) {
                         x: item.x,
                         y: item.y2,
                         marker: {
-                          size: 3,
-                          strokeColors: '#fff',
-                          strokeWidth: 2,
-                          strokeOpacity: 0.3,
-                          strokeDashArray: 0,
-                          fillOpacity: 1,
-                          discrete: [],
-                          shape: "circle",
-                          radius: 2,
-                          offsetX: 0,
-                          offsetY: 5,
-                          onClick: undefined,
-                          onDblClick: undefined,
-                          showNullDataPoints: true,
-                        
-                          hover: {
-                            size: undefined,
-                            sizeOffset: 0
-                        }},
+                            size: 3,
+                            strokeColors: '#fff',
+                            strokeWidth: 2,
+                            strokeOpacity: 0.3,
+                            strokeDashArray: 0,
+                            fillOpacity: 1,
+                            discrete: [],
+                            shape: "circle",
+                            radius: 2,
+                            offsetX: 0,
+                            offsetY: 5,
+                            onClick: undefined,
+                            onDblClick: undefined,
+                            showNullDataPoints: true,
+
+                            hover: {
+                                size: undefined,
+                                sizeOffset: 0
+                            }
+                        },
                         label: {
                             text: item.y2.toFixed(2),
                             borderColor: '#4CAF50',
@@ -579,16 +579,7 @@ if ($chartResult3->num_rows > 0) {
                                 }
                             }
                         }
-                    })),
-                lines: [
-                    {
-                        name: 'Trendline',
-                        type: 'regression',
-                        axisXIndex: 0,
-                        axisYIndex: 1,
-                        seriesIndex: 1,
-                    }
-                ]
+                    }))
             }
         };
 
