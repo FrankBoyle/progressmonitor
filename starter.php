@@ -601,7 +601,8 @@ var options = {
         },
         title: {
             text: 'Date'
-        }
+        },
+        categories: chartData.map(item => item.x), // Display all dates on x-axis
     },
     yaxis: {
         title: {
