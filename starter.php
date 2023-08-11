@@ -532,7 +532,26 @@ if ($chartResult3->num_rows > 0) {
                     text: 'Value'
                 }
             },
-            dataLabels: {
+
+            colors: ['#2196F3', '#4CAF50'],
+            series: [
+                {
+                    name: 'Baseline',
+                    data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+                    dataLabels: {
+                enabled: false,
+                style: {
+                    colors: ['#000']
+                },
+                formatter: function (value) {
+                    return value.toFixed(2);
+                }
+            },
+                },
+                {
+                    name: 'Score',
+                    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+                    dataLabels: {
                 enabled: true,
                 style: {
                     colors: ['#000']
@@ -541,15 +560,6 @@ if ($chartResult3->num_rows > 0) {
                     return value.toFixed(2);
                 }
             },
-            colors: ['#2196F3', '#4CAF50'],
-            series: [
-                {
-                    name: 'Baseline',
-                    data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-                },
-                {
-                    name: 'Score',
-                    data: chartData.map(item => ({ x: item.x, y: item.y2 })),
                 }
             ],
         };
