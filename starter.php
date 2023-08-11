@@ -575,18 +575,33 @@ var options = {
         }
     },
     annotations: {
-        dataLabels: {
-            enabled: true, // Enable data labels for annotations
-            textAnchor: 'middle',
-            offsetY: -10,
-            style: {
-                fontSize: '12px',
-                colors: ['#000']
-            },
-            formatter: function (value) {
-                return value.toFixed(2);
-            }
-        }
+        points: chartData
+            .filter(item => item.y2 !== null)
+            .map(item => ({
+                x: item.x,
+                y: item.y2,
+                marker: {
+                    size: 4,
+                    offsetY: -15,
+                    fillColor: '#4CAF50',
+                    strokeWidth: 0,
+                    label: {
+                        show: true,
+                        offsetY: -22,
+                        style: {
+                            color: '#000',
+                            background: '#ffffff',
+                            padding: {
+                                left: 5,
+                                right: 5,
+                                top: 0,
+                                bottom: 0
+                            }
+                        },
+                        text: item.y2.toFixed(2)
+                    }
+                }
+            }))
     },
     colors: ['#2196F3', '#4CAF50'],
 };
@@ -594,6 +609,7 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
+
 
 
 
