@@ -657,12 +657,7 @@ var options = {
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
-adjustStrokeWidths();
 </script>
-
-
-
-
 
 <!--
                 <div style="width: 100%; margin: 0 auto;">
