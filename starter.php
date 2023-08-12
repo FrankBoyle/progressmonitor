@@ -670,6 +670,7 @@ var options = {
 
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
+adjustStrokeWidths();
 </script>
 
 
@@ -805,6 +806,27 @@ chart.render();
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
+<script>
+  function adjustStrokeWidths() {
+    // Get the SVG elements for each series
+    var svg = document.querySelector("#chart svg");
+    var seriesPaths = svg.querySelectorAll(".apexcharts-series");
+
+    // Set different stroke widths for each series
+    seriesPaths.forEach(function (series, index) {
+        if (index === 0) {
+            // Baseline series
+            series.querySelector("path").setAttribute("stroke-width", "2");
+        } else if (index === 1) {
+            // Score series
+            series.querySelector("path").setAttribute("stroke-width", "4");
+        } else if (index === 2) {
+            // Trendline series
+            series.querySelector("path").setAttribute("stroke-width", "2");
+        }
+    });
+}
+</script>
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
