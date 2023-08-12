@@ -563,16 +563,19 @@ var options = {
         {
             name: 'Baseline',
             data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+            dataRealSeries: 'Baseline', // Add this attribute
 
         },
         {
             name: 'Score',
             data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+            dataRealSeries: 'Score', // Add this attribute
 
         },
         {
             name: 'Trendline',
             data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
+            dataRealSeries: 'Trendline', // Add this attribute
 
         },
     ],
