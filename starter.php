@@ -565,7 +565,7 @@ var options = {
     chart: {
         type: 'line',
         stacked: false,
-        height: 500,
+        width: 600,
         dropShadow: {
             enabled: true,
             color: '#000',
