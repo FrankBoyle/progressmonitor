@@ -565,7 +565,7 @@ var options = {
     chart: {
         type: 'line',
         stacked: false,
-        width: 1000,
+        width: 100%,
         toolbar: {
           show: true,
           tools: {
