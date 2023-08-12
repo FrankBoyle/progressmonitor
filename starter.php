@@ -134,19 +134,19 @@ if ($chartResult3->num_rows > 0) {
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
 <style>
-        /* Adjust line widths for different series */
-        #chart .apexcharts-series[data-series-name="Baseline"] path {
-            stroke-width: 2px;
-        }
+    /* Adjust line widths for different series */
+    .apexcharts-series-markers.circle[data-series-name="Baseline"] circle {
+        r: 2; /* Adjust this radius to change the stroke width of Baseline series */
+    }
 
-        #chart .apexcharts-series[data-series-name="Score"] path {
-            stroke-width: 4px;
-        }
+    .apexcharts-series-markers.circle[data-series-name="Score"] circle {
+        r: 4; /* Adjust this radius to change the stroke width of Score series */
+    }
 
-        #chart .apexcharts-series[data-series-name="Trendline"] path {
-            stroke-width: 2px;
-        }
-    </style>
+    .apexcharts-series-markers.circle[data-series-name="Trendline"] circle {
+        r: 2; /* Adjust this radius to change the stroke width of Trendline series */
+    }
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 <div class="wrapper">
