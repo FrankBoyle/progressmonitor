@@ -550,14 +550,20 @@ var options = {
         {
             name: 'Baseline',
             data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+            strokeWidth: 2, // Adjust the strokeWidth for the Baseline series
+
         },
         {
             name: 'Score',
             data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+            strokeWidth: 4, // Adjust the strokeWidth for the Baseline series
+
         },
         {
             name: 'Trendline',
             data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
+            strokeWidth: 2, // Adjust the strokeWidth for the Baseline series
+
         },
     ],
     chart: {
