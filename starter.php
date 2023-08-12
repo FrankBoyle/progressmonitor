@@ -570,7 +570,7 @@ var options = {
           show: true,
           tools: {
             download: false, // Enable the download button
-      },
+      },},
         dropShadow: {
             enabled: true,
             color: '#000',
