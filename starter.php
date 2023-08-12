@@ -133,7 +133,20 @@ if ($chartResult3->num_rows > 0) {
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
+<style>
+        /* Adjust line widths for different series */
+        #chart .apexcharts-series[data-series-name="Baseline"] path {
+            stroke-width: 2px;
+        }
 
+        #chart .apexcharts-series[data-series-name="Score"] path {
+            stroke-width: 4px;
+        }
+
+        #chart .apexcharts-series[data-series-name="Trendline"] path {
+            stroke-width: 2px;
+        }
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 <div class="wrapper">
@@ -550,19 +563,16 @@ var options = {
         {
             name: 'Baseline',
             data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-            strokeWidth: 2, // Adjust the strokeWidth for the Baseline series
 
         },
         {
             name: 'Score',
             data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-            strokeWidth: 4, // Adjust the strokeWidth for the Baseline series
 
         },
         {
             name: 'Trendline',
             data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
-            strokeWidth: 2, // Adjust the strokeWidth for the Baseline series
 
         },
     ],
