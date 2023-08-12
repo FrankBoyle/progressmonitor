@@ -577,7 +577,7 @@ var options = {
     },
     stroke: {
         curve: 'smooth',
-        width: [1, 4, 1],
+        width: [1, 3, 1],
     },
     markers: {
         size: 5,
