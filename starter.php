@@ -565,7 +565,12 @@ var options = {
     chart: {
         type: 'line',
         stacked: false,
-        width: 600,
+        width: 1000,
+        toolbar: {
+          show: true,
+          tools: {
+            download: false, // Enable the download button
+      },
         dropShadow: {
             enabled: true,
             color: '#000',
