@@ -550,18 +550,15 @@ var options = {
         {
             name: 'Baseline',
             data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-            width: 1,
         },
         {
             name: 'Score',
             data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-            width: 4,
 
         },
         {
             name: 'Trendline',
             data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
-            width: 1,
 
         },
     ],
@@ -579,7 +576,8 @@ var options = {
         },
     },
     stroke: {
-        curve: 'smooth'
+        curve: 'smooth',
+        width: [1, 4, 1],
     },
     markers: {
         size: 5,
