@@ -551,7 +551,7 @@ var options = {
             name: 'Baseline',
             data: chartData.map(item => ({ x: item.x, y: item.y1 })),
             stroke: {
-              width: 2
+              width: 1
             }
         },
         {
