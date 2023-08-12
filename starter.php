@@ -133,20 +133,7 @@ if ($chartResult3->num_rows > 0) {
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
-<style>
-    /* Adjust line widths for different series */
-    .apexcharts-series-markers.circle[data-series-name="Baseline"] circle {
-        r: 2; /* Adjust this radius to change the stroke width of Baseline series */
-    }
 
-    .apexcharts-series-markers.circle[data-series-name="Score"] circle {
-        r: 4; /* Adjust this radius to change the stroke width of Score series */
-    }
-
-    .apexcharts-series-markers.circle[data-series-name="Trendline"] circle {
-        r: 2; /* Adjust this radius to change the stroke width of Trendline series */
-    }
-</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 <div class="wrapper">
@@ -563,19 +550,16 @@ var options = {
         {
             name: 'Baseline',
             data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-            dataRealSeries: 'Baseline', // Add this attribute
 
         },
         {
             name: 'Score',
             data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-            dataRealSeries: 'Score', // Add this attribute
 
         },
         {
             name: 'Trendline',
             data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
-            dataRealSeries: 'Trendline', // Add this attribute
 
         },
     ],
@@ -809,27 +793,7 @@ adjustStrokeWidths();
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-<script>
-  function adjustStrokeWidths() {
-    // Get the SVG elements for each series
-    var svg = document.querySelector("#chart svg");
-    var seriesPaths = svg.querySelectorAll(".apexcharts-series");
 
-    // Set different stroke widths for each series
-    seriesPaths.forEach(function (series, index) {
-        if (index === 0) {
-            // Baseline series
-            series.querySelector("path").setAttribute("stroke-width", "2");
-        } else if (index === 1) {
-            // Score series
-            series.querySelector("path").setAttribute("stroke-width", "4");
-        } else if (index === 2) {
-            // Trendline series
-            series.querySelector("path").setAttribute("stroke-width", "2");
-        }
-    });
-}
-</script>
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
