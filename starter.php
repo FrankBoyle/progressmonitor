@@ -457,7 +457,7 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-header border-0">
                 <h3 class="card-title">
                   <i class="fas fa-th mr-1"></i>
-                  Sales Graph
+                  Graph
                 </h3>
 
                 <div class="card-tools">
@@ -549,7 +549,7 @@ data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
 chart: {
 type: 'line',
 stacked: false,
-width: 1200,
+width: 1000,
 toolbar: {
 show: true,
 tools: {
