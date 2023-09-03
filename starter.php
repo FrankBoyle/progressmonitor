@@ -453,7 +453,7 @@ if ($chartResult3->num_rows > 0) {
             </div>
 
             <!-- solid sales graph -->
-            <div class="card bg-gradient-info">
+            <div class="card">
               <div class="card-header border-0">
                 <h3 class="card-title">
                   <i class="fas fa-th mr-1"></i>
