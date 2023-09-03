@@ -456,7 +456,183 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h5 class="card-title">Graph</h5>
                 <div id="chart"></div>
-    
+                <div id="chart"></div>
+
+<script>
+// Data from PHP
+var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
+var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
+var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
+
+// Process data to match ApexCharts format
+var chartData = [];
+var xCategories = [];
+
+for (var i = 0; i < chartDataArray1.length; i++) {
+var xValue = new Date(chartDataArray1[i].x1).getTime();
+var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
+var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
+
+chartData.push({
+x: xValue,
+y1: y1Value,
+y2: y2Value,
+});
+
+var formattedDate = new Date(xValue).toLocaleDateString();
+xCategories.push(formattedDate);
+}
+
+// Calculate linear regression for Score data series
+function calculateTrendline(data) {
+var sumX = 0;
+var sumY = 0;
+var sumXY = 0;
+var sumXX = 0;
+var count = 0;
+
+data.forEach(function (point) {
+var x = point.x;
+var y = point.y2;
+
+if (y !== null) {
+sumX += x;
+sumY += y;
+sumXY += x * y;
+sumXX += x * x;
+count++;
+}
+});
+
+var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+var intercept = (sumY - slope * sumX) / count;
+
+return function (x) {
+return slope * x + intercept;
+};
+}
+
+var trendlineFunction = calculateTrendline(chartData);
+
+// Create ApexCharts chart
+var options = {
+series: [
+{
+name: 'Baseline',
+data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+},
+{
+name: 'Score',
+data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+
+},
+{
+name: 'Trendline',
+data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
+
+},
+],
+chart: {
+type: 'line',
+stacked: false,
+width: 1200,
+toolbar: {
+show: true,
+tools: {
+download: false, // Enable the download button
+},},
+dropShadow: {
+enabled: true,
+color: '#000',
+top: 18,
+left: 7,
+blur: 10,
+opacity: 0.2
+},
+},
+stroke: {
+curve: 'smooth',
+width: [1, 3, 1],
+},
+markers: {
+size: 5,
+colors: undefined,
+strokeColors: '#fff',
+strokeWidth: 2,
+strokeOpacity: 0.9,
+strokeDashArray: 0,
+fillOpacity: 1,
+discrete: [],
+shape: "circle",
+radius: 2,
+offsetX: 0,
+offsetY: 0,
+onClick: undefined,
+onDblClick: undefined,
+showNullDataPoints: true,
+hover: {
+size: undefined,
+sizeOffset: 3
+}
+},
+xaxis: {
+categories: xCategories,
+type: 'datetime',
+tickAmount: xCategories.length,
+labels: {
+hideOverlappingLabels: false,
+formatter: function(value, timestamp, opts) {
+return new Date(value).toLocaleDateString(); // Format date label
+}
+},
+title: {
+text: 'Date'
+}
+},
+yaxis: {
+title: {
+text: 'Value'
+},
+labels: {
+formatter: function (value) {
+return value.toFixed(0);
+}
+}
+},
+grid: {
+xaxis: {
+lines: {
+show: true
+}
+}
+},
+annotations: {
+points: chartData
+.filter(item => item.y2 !== null)
+.map(item => ({
+x: item.x,
+y: item.y2,
+marker: {
+    size: 4,
+    fillColor: '#4CAF50',
+    offsetY: -15,
+},
+label: {
+    borderColor: '#4CAF50',
+    style: {
+        color: '#fff',
+        background: '#4CAF50'
+    },
+    text: item.y2.toFixed(0)  // Display 0 decimal places
+}
+})),
+},
+colors: ['#2196F3', '#4CAF50', '#FF5722'], // Trendline color added
+};
+
+var chart = new ApexCharts(document.querySelector("#chart"), options);
+chart.render();
+</script>
 
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
@@ -486,185 +662,6 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h6 class="card-title">Special title treatment</h6>
                 
-                <div id="chart"></div>
-
-                <script>
-// Data from PHP
-var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
-var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
-var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
-
-// Process data to match ApexCharts format
-var chartData = [];
-var xCategories = [];
-
-for (var i = 0; i < chartDataArray1.length; i++) {
-    var xValue = new Date(chartDataArray1[i].x1).getTime();
-    var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
-    var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
-
-    chartData.push({
-        x: xValue,
-        y1: y1Value,
-        y2: y2Value,
-    });
-
-    var formattedDate = new Date(xValue).toLocaleDateString();
-    xCategories.push(formattedDate);
-}
-
-// Calculate linear regression for Score data series
-function calculateTrendline(data) {
-    var sumX = 0;
-    var sumY = 0;
-    var sumXY = 0;
-    var sumXX = 0;
-    var count = 0;
-
-    data.forEach(function (point) {
-        var x = point.x;
-        var y = point.y2;
-
-        if (y !== null) {
-            sumX += x;
-            sumY += y;
-            sumXY += x * y;
-            sumXX += x * x;
-            count++;
-        }
-    });
-
-    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
-    var intercept = (sumY - slope * sumX) / count;
-
-    return function (x) {
-        return slope * x + intercept;
-    };
-}
-
-var trendlineFunction = calculateTrendline(chartData);
-
-// Create ApexCharts chart
-var options = {
-    series: [
-        {
-            name: 'Baseline',
-            data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-        },
-        {
-            name: 'Score',
-            data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-
-        },
-        {
-            name: 'Trendline',
-            data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
-
-        },
-    ],
-    chart: {
-        type: 'line',
-        stacked: false,
-        width: 1200,
-        toolbar: {
-          show: true,
-          tools: {
-            download: false, // Enable the download button
-      },},
-        dropShadow: {
-            enabled: true,
-            color: '#000',
-            top: 18,
-            left: 7,
-            blur: 10,
-            opacity: 0.2
-        },
-    },
-    stroke: {
-        curve: 'smooth',
-        width: [1, 3, 1],
-    },
-    markers: {
-        size: 5,
-        colors: undefined,
-        strokeColors: '#fff',
-        strokeWidth: 2,
-        strokeOpacity: 0.9,
-        strokeDashArray: 0,
-        fillOpacity: 1,
-        discrete: [],
-        shape: "circle",
-        radius: 2,
-        offsetX: 0,
-        offsetY: 0,
-        onClick: undefined,
-        onDblClick: undefined,
-        showNullDataPoints: true,
-        hover: {
-            size: undefined,
-            sizeOffset: 3
-        }
-    },
-    xaxis: {
-    categories: xCategories,
-    type: 'datetime',
-    tickAmount: xCategories.length,
-    labels: {
-        hideOverlappingLabels: false,
-        formatter: function(value, timestamp, opts) {
-            return new Date(value).toLocaleDateString(); // Format date label
-        }
-    },
-    title: {
-        text: 'Date'
-    }
-},
-    yaxis: {
-        title: {
-            text: 'Value'
-        },
-        labels: {
-            formatter: function (value) {
-                return value.toFixed(0);
-            }
-        }
-    },
-    grid: {
-        xaxis: {
-            lines: {
-                show: true
-            }
-        }
-    },
-    annotations: {
-        points: chartData
-            .filter(item => item.y2 !== null)
-            .map(item => ({
-                x: item.x,
-                y: item.y2,
-                marker: {
-                    size: 4,
-                    fillColor: '#4CAF50',
-                    offsetY: -15,
-                },
-                label: {
-                    borderColor: '#4CAF50',
-                    style: {
-                        color: '#fff',
-                        background: '#4CAF50'
-                    },
-                    text: item.y2.toFixed(0)  // Display 0 decimal places
-                }
-            })),
-    },
-    colors: ['#2196F3', '#4CAF50', '#FF5722'], // Trendline color added
-};
-
-var chart = new ApexCharts(document.querySelector("#chart"), options);
-chart.render();
-</script>
-
-
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
               </div>
