@@ -451,7 +451,7 @@ if ($chartResult3->num_rows > 0) {
             </div>
 
             <!-- solid sales graph -->
-            <div class="card">
+            <div class="card info">
               <div class="card-header border-0">
                 <h3 class="card-title">
                   <i class="fas fa-th mr-1"></i>
@@ -462,12 +462,8 @@ if ($chartResult3->num_rows > 0) {
                   <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
                   </button>
-                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
                 </div>
               </div>
-              <div class="card-body">
               <div id="chart"></div>
 
 <script>
@@ -648,7 +644,6 @@ chart.render();
 
 
 
-            </div>
               <!-- /.card-body -->
               <div class="card-footer bg-transparent">
                 <div class="row">
