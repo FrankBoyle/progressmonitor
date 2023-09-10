@@ -654,6 +654,7 @@ chart.render();
 
 
               <!-- /.card-body -->
+              <div class="card-footer bg-transparent">
 
                   </div>
                   <!-- ./col -->
