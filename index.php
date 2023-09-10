@@ -95,7 +95,6 @@ if ($chartResult3->num_rows > 0) {
         );
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -1441,17 +1440,66 @@ if ($chartResult3->num_rows > 0) {
                 <div class="row">
                   <div class="col-4 text-center">
                     <div id="sparkline-1"></div>
-                    <div class="text-white">Visitors</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <div id="sparkline-2"></div>
-                    <div class="text-white">Online</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <div id="sparkline-3"></div>
-                    <div class="text-white">Sales</div>
+                    <h5 class="card-title"><?php echo($selectedTable);?></h5>
+
+<h1>Progress Monitoring Testing Area</h1>
+
+  <form method="post">
+    <select name="selected_table">
+      <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
+      <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
+      <option value='JaylaBrazzle3'<?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
+      <option value='JaylaBrazzle4'<?= $selectedTable === 'JaylaBrazzle4' ? ' selected' : '' ?>>JaylaBrazzle4</option>
+      <option value='NicoleElkins1'<?= $selectedTable === 'NicoleElkins1' ? ' selected' : '' ?>>NicoleElkins1</option>
+      <option value='NicoleElkins2'<?= $selectedTable === 'NicoleElkins2' ? ' selected' : '' ?>>NicoleElkins2</option>
+      <option value='NicoleElkins3'<?= $selectedTable === 'NicoleElkins3' ? ' selected' : '' ?>>NicoleElkins3</option>
+      <option value='NicoleElkins4'<?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
+    </select>
+    <input type="submit" name="select_table" value="Select Student">
+  </form>
+
+
+<!-- Form for updating the goal -->
+  <form method="post" action="">
+    <?php
+    // Fetch the current goal value from the database
+      $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
+      $goalResult = $conn->query($goalSql);
+
+        if ($goalResult && $goalResult->num_rows > 0) {
+          $goalRow = $goalResult->fetch_assoc();
+          $currentGoal = $goalRow["goal"];
+          echo '<label for="edit_goal">Edit Goal: </label>';
+          echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
+        }
+    ?>
+    <input type="submit" name="save_goal" value="Save Goal">
+  </form>
+
+
+<!-- Form for updating ID, date, score, and baseline -->
+  <form method='post' action="">
+    <table border='1'>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Score</th>
+        <th>Baseline</th>
+      </tr>
+    <?php
+      foreach ($tableDataArray as $row) {
+        echo "<tr>";
+        echo "<td><input type='hidden' name='id[]' value='{$row["id"]}'>{$row["id"]}</td>";
+        echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+        echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+        echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+        echo "</tr>";
+      }
+    ?>
+    </table>
+    <input type='submit' name='update' value='Update'>
+  </form>
+
                   </div>
                   <!-- ./col -->
                 </div>
