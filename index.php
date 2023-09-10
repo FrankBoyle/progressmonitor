@@ -1433,14 +1433,7 @@ if ($chartResult3->num_rows > 0) {
                 <!-- /.card-tools -->
               </div>
               <div class="card-body">
-                <div id="world-map" style="height: 250px; width: 100%;"></div>
-              </div>
-              <!-- /.card-body-->
-              <div class="card-footer bg-transparent">
-                <div class="row">
-                  <div class="col-4 text-center">
-                    <div id="sparkline-1"></div>
-                    <h5 class="card-title"><?php echo($selectedTable);?></h5>
+              <h5 class="card-title"><?php echo($selectedTable);?></h5>
 
 <h1>Progress Monitoring Testing Area</h1>
 
@@ -1499,6 +1492,13 @@ if ($chartResult3->num_rows > 0) {
     </table>
     <input type='submit' name='update' value='Update'>
   </form>
+              </div>
+              <!-- /.card-body-->
+              <div class="card-footer bg-transparent">
+                <div class="row">
+                  <div class="col-4 text-center">
+                    <div id="sparkline-1"></div>
+                    
 
                   </div>
                   <!-- ./col -->
