@@ -1,18 +1,12 @@
-FROM python:3.9
+FROM node:14
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+WORKDIR /code
 
-COPY requirements.txt .
-# install python dependencies
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+COPY package.json /code/package.json
+COPY package-lock.json /code/package-lock.json
 
-COPY . .
+RUN npm install
 
-# running migrations
-RUN python manage.py migrate
+COPY . /code
 
-# gunicorn
-CMD ["gunicorn", "--config", "gunicorn-cfg.py", "core.wsgi"]
+CMD ["npm", "run", "dev"]
