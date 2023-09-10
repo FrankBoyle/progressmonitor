@@ -395,9 +395,7 @@ if ($chartResult3->num_rows > 0) {
               <div class="card-body">
                 <h5 class="card-title"><?php echo($selectedTable);?></h5>
 
-                <h1>Progress Monitoring Testing Area</h1>
-
-                  <form method="post">
+                 <form method="post">
                     <select name="selected_table">
                       <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
                       <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
