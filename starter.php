@@ -389,7 +389,6 @@ if ($chartResult3->num_rows > 0) {
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
-          <div class="col-lg-6">
               <div class="card-body">
                 <h5 class="card-title"><?php echo($selectedTable);?></h5>
 
