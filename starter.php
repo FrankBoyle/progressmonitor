@@ -1,15 +1,14 @@
 <?php
 include("./users/auth_session.php");
-//include("./users/student_data.php");
 ?>
 
 <?php
 session_start(); // Start the session
 
 $servername = "localhost";
-$username = "AndersonSchool"; // Replace with your database username
-$password = "SpecialEd69$"; // Replace with your database password
-$dbname = "bFactor-test"; // Replace with your database name
+$username = "AndersonSchool";
+$password = "SpecialEd69$";
+$dbname = "AndersonSchool";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -17,18 +16,18 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$selectedStudent = $_POST['selected_student'] ?? $_SESSION['selected_student'] ?? 'DefaultStudent'; // Set a default student name
+$selectedTable = $_POST['selected_table'] ?? $_SESSION['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
 
-// Handle updates for assessment data
+//echo "Updating records in table: $selectedTable<br>";
+
+// Handle updates for ID, date, score, and baseline
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    foreach ($_POST['performance_id'] as $key => $performance_id) {
-        $score1 = $_POST["score1"][$key];
-        $score2 = $_POST["score2"][$key];
-        $score3 = $_POST["score3"][$key];
-        $score4 = $_POST["score4"][$key];
-        $score5 = $_POST["score5"][$key];
+    foreach ($_POST['id'] as $key => $id) {
+        $date = $_POST["date"][$key];
+        $score = $_POST["score"][$key];
+        $baseline = $_POST["baseline"][$key];
 
-        $update_sql = "UPDATE Performance SET score1='$score1', score2='$score2', score3='$score3', score4='$score4', score5='$score5' WHERE performance_id=$performance_id";
+        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
        
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
@@ -40,64 +39,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_goal'])) {
     $newGoal = $_POST["edit_goal"];
     
-    // Update the goal in the Goals table
-    $updateGoalSql = "UPDATE Goals SET goal_description='$newGoal' WHERE student_id=(SELECT student_id FROM Students WHERE name='$selectedStudent')";
+    // Update the goal in the database
+    $updateGoalSql = "UPDATE $selectedTable SET goal='$newGoal' WHERE 1";
     if ($conn->query($updateGoalSql) !== TRUE) {
         echo "Error updating goal: " . $conn->error;
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_student'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
     // Handle student selection
-    $selectedStudent = $_POST['selected_student'];
-    $_SESSION['selected_student'] = $selectedStudent; // Store the selected student value in a session variable
+    $selectedTable = $_POST['selected_table'];
+    $_SESSION['selected_table'] = $selectedTable; // Store the selected table value in a session variable
 }
 
-// Fetch assessment data for the selected student
-$assessmentDataArray = array();
-$assessmentSql = "SELECT P.performance_id, P.week_start_date, P.week_number, M.title, M.description, M.category, P.score1, P.score2, P.score3, P.score4, P.score5 
-                  FROM Performance P
-                  INNER JOIN Metadata M ON P.metadata_id = M.metadata_id
-                  INNER JOIN Students S ON P.student_id = S.student_id
-                  WHERE S.name='$selectedStudent'";
-$assessmentResult = $conn->query($assessmentSql);
-if ($assessmentResult->num_rows > 0) {
-    while ($row = $assessmentResult->fetch_assoc()) {
-        $assessmentDataArray[] = $row;
+// Fetch data for the table
+$tableDataArray = array();
+$tableSql = "SELECT id, date, score, baseline, goal FROM $selectedTable";
+$tableResult = $conn->query($tableSql);
+if ($tableResult->num_rows > 0) {
+    while ($row = $tableResult->fetch_assoc()) {
+        $tableDataArray[] = $row;
     }
 }
 
-// Fetch student data
-$studentDataArray = array();
-$studentSql = "SELECT student_id, date_of_birth, grade_level FROM Students WHERE name='$selectedStudent'";
-$studentResult = $conn->query($studentSql);
-if ($studentResult->num_rows > 0) {
-    while ($row = $studentResult->fetch_assoc()) {
-        $studentDataArray[] = $row;
+// Fetch and store data from the database for the chart
+$chartDataArray1 = array();
+$chartSql1 = "SELECT date FROM $selectedTable";
+$chartResult1 = $conn->query($chartSql1);
+if ($chartResult1->num_rows > 0) {
+    while ($row = $chartResult1->fetch_assoc()) {
+        $chartDataArray1[] = array(
+            'x1' => $row['date'],     // Use the 'date' column as the x-variable
+        );
     }
 }
 
-// Fetch teacher data
-$teacherDataArray = array();
-$teacherSql = "SELECT T.name, T.subject_taught
-               FROM Teachers T
-               INNER JOIN Teacher_Student_Assignment A ON T.teacher_id = A.teacher_id
-               INNER JOIN Students S ON A.student_id = S.student_id
-               WHERE S.name='$selectedStudent'";
-$teacherResult = $conn->query($teacherSql);
-if ($teacherResult->num_rows > 0) {
-    while ($row = $teacherResult->fetch_assoc()) {
-        $teacherDataArray[] = $row;
+$chartDataArray2 = array();
+$chartSql2 = "SELECT baseline FROM $selectedTable";
+$chartResult2 = $conn->query($chartSql2);
+if ($chartResult2->num_rows > 0) {
+    while ($row = $chartResult2->fetch_assoc()) {
+        $chartDataArray2[] = array(
+            'y1' => $row['baseline'] // Use the 'baseline' column as the second y-variable
+        );
     }
 }
 
-// Fetch goal data for the selected student
-$goalDataArray = array();
-$goalSql = "SELECT goal_description, goal_date FROM Goals WHERE student_id=(SELECT student_id FROM Students WHERE name='$selectedStudent')";
-$goalResult = $conn->query($goalSql);
-if ($goalResult->num_rows > 0) {
-    while ($row = $goalResult->fetch_assoc()) {
-        $goalDataArray[] = $row;
+$chartDataArray3 = array();
+$chartSql3 = "SELECT score FROM $selectedTable";
+$chartResult3 = $conn->query($chartSql3);
+if ($chartResult3->num_rows > 0) {
+    while ($row = $chartResult3->fetch_assoc()) {
+        $chartDataArray3[] = array(
+            'y2' => $row['score'] // Use the 'baseline' column as the second y-variable
+        );
     }
 }
 
@@ -410,47 +405,46 @@ if ($goalResult->num_rows > 0) {
 
 
 <!-- Form for updating the goal -->
-<form method="post" action="">
-  <?php
-  // Fetch the current goal value from the database
-  $goalSql = "SELECT goal_description FROM Goals WHERE student_id=(SELECT student_id FROM Students WHERE name='$selectedStudent') LIMIT 1";
-  $goalResult = $conn->query($goalSql);
+                  <form method="post" action="">
+                    <?php
+                    // Fetch the current goal value from the database
+                      $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
+                      $goalResult = $conn->query($goalSql);
 
-  if ($goalResult && $goalResult->num_rows > 0) {
-    $goalRow = $goalResult->fetch_assoc();
-    $currentGoal = $goalRow["goal_description"];
-    echo '<label for="edit_goal">Edit Goal: </label>';
-    echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
-  }
-  ?>
-  <input type="submit" name="save_goal" value="Save Goal">
-</form>
+                        if ($goalResult && $goalResult->num_rows > 0) {
+                          $goalRow = $goalResult->fetch_assoc();
+                          $currentGoal = $goalRow["goal"];
+                          echo '<label for="edit_goal">Edit Goal: </label>';
+                          echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
+                        }
+                    ?>
+                    <input type="submit" name="save_goal" value="Save Goal">
+                  </form>
+
 
 <!-- Form for updating ID, date, score, and baseline -->
-<form method='post' action="">
-  <table border='1'>
-    <tr>
-      <th>ID</th>
-      <th>Date</th>
-      <th>Score</th>
-      <th>Baseline</th>
-    </tr>
-    <?php
-    foreach ($assessmentDataArray as $row) {
-      echo "<tr>";
-      echo "<td><input type='hidden' name='performance_id[]' value='{$row["performance_id"]}'>{$row["performance_id"]}</td>";
-      echo "<td><input type='date' name='date[]' value='{$row["week_start_date"]}'></td>";
-      echo "<td><input type='number' name='score1[]' value='{$row["score1"]}'></td>";
-      echo "<td><input type='number' name='score2[]' value='{$row["score2"]}'></td>";
-      echo "<td><input type='number' name='score3[]' value='{$row["score3"]}'></td>";
-      echo "<td><input type='number' name='score4[]' value='{$row["score4"]}'></td>";
-      echo "<td><input type='number' name='score5[]' value='{$row["score5"]}'></td>";
-      echo "</tr>";
-    }
-    ?>
-  </table>
-  <input type='submit' name='update' value='Update'>
-</form>
+                  <form method='post' action="">
+                    <table border='1'>
+                      <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Baseline</th>
+                      </tr>
+                    <?php
+                      foreach ($tableDataArray as $row) {
+                        echo "<tr>";
+                        echo "<td><input type='hidden' name='id[]' value='{$row["id"]}'>{$row["id"]}</td>";
+                        echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
+                        echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
+                        echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
+                        echo "</tr>";
+                      }
+                    ?>
+                    </table>
+                    <input type='submit' name='update' value='Update'>
+                  </form>
+  
 
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
@@ -484,170 +478,170 @@ var chartData = [];
 var xCategories = [];
 
 for (var i = 0; i < chartDataArray1.length; i++) {
-  var xValue = new Date(chartDataArray1[i].date).getTime();
-  var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].baseline) : null;
-  var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].score) : null;
+var xValue = new Date(chartDataArray1[i].x1).getTime();
+var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
+var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
 
-  chartData.push({
-    x: xValue,
-    y1: y1Value,
-    y2: y2Value,
-  });
+chartData.push({
+x: xValue,
+y1: y1Value,
+y2: y2Value,
+});
 
-  var formattedDate = new Date(xValue).toLocaleDateString();
-  xCategories.push(formattedDate);
+var formattedDate = new Date(xValue).toLocaleDateString();
+xCategories.push(formattedDate);
 }
 
 // Calculate linear regression for Score data series
 function calculateTrendline(data) {
-  var sumX = 0;
-  var sumY = 0;
-  var sumXY = 0;
-  var sumXX = 0;
-  var count = 0;
+var sumX = 0;
+var sumY = 0;
+var sumXY = 0;
+var sumXX = 0;
+var count = 0;
 
-  data.forEach(function (point) {
-    var x = point.x;
-    var y = point.y2;
+data.forEach(function (point) {
+var x = point.x;
+var y = point.y2;
 
-    if (y !== null) {
-      sumX += x;
-      sumY += y;
-      sumXY += x * y;
-      sumXX += x * x;
-      count++;
-    }
-  });
+if (y !== null) {
+sumX += x;
+sumY += y;
+sumXY += x * y;
+sumXX += x * x;
+count++;
+}
+});
 
-  var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
-  var intercept = (sumY - slope * sumX) / count;
+var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+var intercept = (sumY - slope * sumX) / count;
 
-  return function (x) {
-    return slope * x + intercept;
-  };
+return function (x) {
+return slope * x + intercept;
+};
 }
 
 var trendlineFunction = calculateTrendline(chartData);
 
 // Create ApexCharts chart
 var options = {
-  series: [
-    {
-      name: 'Baseline',
-      data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+series: [
+{
+name: 'Baseline',
+data: chartData.map(item => ({ x: item.x, y: item.y1 })),
+},
+{
+name: 'Score',
+data: chartData.map(item => ({ x: item.x, y: item.y2 })),
+
+},
+{
+name: 'Trendline',
+data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
+
+},
+],
+chart: {
+type: 'line',
+stacked: false,
+width: 1000,
+toolbar: {
+show: true,
+tools: {
+download: false, // Enable the download button
+},},
+dropShadow: {
+enabled: true,
+color: '#000',
+top: 18,
+left: 7,
+blur: 10,
+opacity: 0.2
+},
+},
+stroke: {
+curve: 'smooth',
+width: [1, 3, 1],
+},
+markers: {
+size: 5,
+colors: undefined,
+strokeColors: '#fff',
+strokeWidth: 2,
+strokeOpacity: 0.9,
+strokeDashArray: 0,
+fillOpacity: 1,
+discrete: [],
+shape: "circle",
+radius: 2,
+offsetX: 0,
+offsetY: 0,
+onClick: undefined,
+onDblClick: undefined,
+showNullDataPoints: true,
+hover: {
+size: undefined,
+sizeOffset: 3
+}
+},
+xaxis: {
+categories: xCategories,
+type: 'datetime',
+tickAmount: xCategories.length,
+labels: {
+hideOverlappingLabels: false,
+formatter: function(value, timestamp, opts) {
+return new Date(value).toLocaleDateString(); // Format date label
+}
+},
+title: {
+text: 'Date'
+}
+},
+yaxis: {
+title: {
+text: 'Value'
+},
+labels: {
+formatter: function (value) {
+return value.toFixed(0);
+}
+}
+},
+grid: {
+xaxis: {
+lines: {
+show: true
+}
+}
+},
+annotations: {
+points: chartData
+.filter(item => item.y2 !== null)
+.map(item => ({
+x: item.x,
+y: item.y2,
+marker: {
+    size: 4,
+    fillColor: '#4CAF50',
+    offsetY: -15,
+},
+label: {
+    borderColor: '#4CAF50',
+    style: {
+        color: '#fff',
+        background: '#4CAF50'
     },
-    {
-      name: 'Score',
-      data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-    },
-    {
-      name: 'Trendline',
-      data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
-    },
-  ],
-  chart: {
-    type: 'line',
-    stacked: false,
-    width: 1000,
-    toolbar: {
-      show: true,
-      tools: {
-        download: false, // Enable the download button
-      },
-    },
-    dropShadow: {
-      enabled: true,
-      color: '#000',
-      top: 18,
-      left: 7,
-      blur: 10,
-      opacity: 0.2,
-    },
-  },
-  stroke: {
-    curve: 'smooth',
-    width: [1, 3, 1],
-  },
-  markers: {
-    size: 5,
-    colors: undefined,
-    strokeColors: '#fff',
-    strokeWidth: 2,
-    strokeOpacity: 0.9,
-    strokeDashArray: 0,
-    fillOpacity: 1,
-    discrete: [],
-    shape: 'circle',
-    radius: 2,
-    offsetX: 0,
-    offsetY: 0,
-    onClick: undefined,
-    onDblClick: undefined,
-    showNullDataPoints: true,
-    hover: {
-      size: undefined,
-      sizeOffset: 3,
-    },
-  },
-  xaxis: {
-    categories: xCategories,
-    type: 'datetime',
-    tickAmount: xCategories.length,
-    labels: {
-      hideOverlappingLabels: false,
-      formatter: function (value, timestamp, opts) {
-        return new Date(value).toLocaleDateString(); // Format date label
-      },
-    },
-    title: {
-      text: 'Date',
-    },
-  },
-  yaxis: {
-    title: {
-      text: 'Value',
-    },
-    labels: {
-      formatter: function (value) {
-        return value.toFixed(0);
-      },
-    },
-  },
-  grid: {
-    xaxis: {
-      lines: {
-        show: true,
-      },
-    },
-  },
-  annotations: {
-    points: chartData
-      .filter(item => item.y2 !== null)
-      .map(item => ({
-        x: item.x,
-        y: item.y2,
-        marker: {
-          size: 4,
-          fillColor: '#4CAF50',
-          offsetY: -15,
-        },
-        label: {
-          borderColor: '#4CAF50',
-          style: {
-            color: '#fff',
-            background: '#4CAF50',
-          },
-          text: item.y2.toFixed(0), // Display 0 decimal places
-        },
-      })),
-  },
-  colors: ['#2196F3', '#4CAF50', '#FF5722'], // Trendline color added
+    text: item.y2.toFixed(0)  // Display 0 decimal places
+}
+})),
+},
+colors: ['#2196F3', '#4CAF50', '#FF5722'], // Trendline color added
 };
 
-var chart = new ApexCharts(document.querySelector('#chart'), options);
+var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 </script>
-
 
 
 

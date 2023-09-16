@@ -1,21 +1,66 @@
-actually my new system doesn't use a new table for each student. It has the following table set-ups:
-Table `accounts` SET `id`=[value-1],`fname`=[value-2],`lname`=[value-3],`email`=[value-4],`password`=[value-5] WHERE 1
-- id is the primary key
-Table `Students` SET `student_id`=[value-1],`name`=[value-2],`date_of_birth`=[value-3],`grade_level`=[value-4] WHERE 1
-- student_id is primary key
-Table `Teachers` SET `teacher_id`=[value-1],`name`=[value-2],`subject_taught`=[value-3],`account_id`=[value-4] WHERE 1
-- teacher_id is primary key
-- account_id is foreign key from 'accounts' table
-Table `Teacher_Student_Assignment` SET `assignment_id`=[value-1],`teacher_id`=[value-2],`student_id`=[value-3] WHERE 1
-- assignment_id is primary key
-- teacher_id is foreign key
-- student_id is foreign key
-- this table makes sure teachers who are assigned to students only can see their data
-Table `Metadata` SET `metadata_id`=[value-1],`title`=[value-2],`description`=[value-3],`category`=[value-4] WHERE 1
-- metadata_id is primary key
-- this table is used so schools can use different category names for scores in 'Performance' table
-Tables `Performance` SET `performance_id`=[value-1],`student_id`=[value-2],`teacher_id`=[value-3],`week_start_date`=[value-4],`week_number`=[value-5],`metadata_id`=[value-6],`score1`=[value-7],`score2`=[value-8],`score3`=[value-9],`score4`=[value-10],`score5`=[value-11] WHERE 1
-- performance_id is primary key
-- student_id is foreign key
-- teacher_id is foreign key
-- metadata_id is foreign key
+Table 'accounts'
+1	id Primary	int(11)			No	None		AUTO_INCREMENT	
+2	fname	varchar(50)	utf8_general_ci		No	None		
+3	lname	varchar(50)	utf8_general_ci		No	None		
+4	email	varchar(100)	utf8_general_ci		No	None		
+5	password	varchar(255)	utf8_general_ci		No	None		
+
+Table 'Goals' 
+1	goal_id Primary	int(11)			No	None		AUTO_INCREMENT	
+2	student_id Index	int(11)			Yes	NULL		
+3	goal_description	text	latin1_swedish_ci		Yes			
+4	goal_date	date			Yes	NULL		
+
+Table 'Students'
+1	student_id Primary	int(11)			No	None		AUTO_INCREMENT
+2	name	varchar(255)	latin1_swedish_ci		Yes	NULL		
+3	date_of_birth	date			Yes	NULL
+4	grade_level	varchar(50)	latin1_swedish_ci		Yes	NULL	
+
+Table 'Teachers'
+1	teacher_id Primary	int(11)			No	None		AUTO_INCREMENT
+2	name	varchar(255)	latin1_swedish_ci		No	None	
+3	subject_taught	varchar(255)	latin1_swedish_ci		Yes	NULL	
+4	account_id Index	int(11)			Yes	NULL		
+
+Table 'Teacher-Student-Assignment'
+1	assignment_id Primary	int(11)			No	None		AUTO_INCREMENT
+2	teacher_id Index	int(11)			Yes	NULL		
+3	student_id Index	int(11)			Yes	NULL	
+
+Table 'Performance'
+1	performance_id Primary	int(11)			No	None		AUTO_INCREMENT	
+2	student_id Index	int(11)			Yes	NULL		
+3	teacher_id Index	int(11)			Yes	NULL	
+4	week_start_date	date			Yes	NULL
+5	week_number	int(11)			Yes	NULL	
+6	metadata_id Index	int(11)			Yes	NULL
+7	score1	decimal(5,2)			Yes	NULL	
+8	score2	decimal(5,2)			Yes	NULL	
+9	score3	decimal(5,2)			Yes	NULL	
+10	score4	decimal(5,2)			Yes	NULL	
+11	score5	decimal(5,2)			Yes	NULL	
+12	score6	decimal(5,2)			Yes	NULL
+13	score7	decimal(5,2)			Yes	NULL	
+14	score8	decimal(5,2)			Yes	NULL	
+15	score9	decimal(5,2)			Yes	NULL	
+16	score10	decimal(5,2)			Yes	NULL	
+	
+Table 'Metadata'
+1	metadata_id Primary	int(11)			No	None		AUTO_INCREMENT	
+2	title	varchar(255)	latin1_swedish_ci		Yes	NULL		
+3	description	text	latin1_swedish_ci		Yes			
+4	category	varchar(255)	latin1_swedish_ci		Yes	NULL	
+
+
+This is a new table format for storing, editing, and displaying student performance data. 
+However, it is replacing an older less scalable database that was formatted as just a new table 
+for each student goal 
+
+Table 'JaylaBrazzle1'
+1	uuid PrimaryIndex	varchar(36)	latin1_swedish_ci		No	None	
+2	id Index	int(11)			No	None		AUTO_INCREMENT	
+3	goal	text	latin1_swedish_ci		Yes	
+4	date	date			Yes	NULL
+5	score	float			Yes	NULL	
+6	baseline	float			No	None
