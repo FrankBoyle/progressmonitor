@@ -40,8 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_goal'])) {
     $newGoal = $_POST["edit_goal"];
     
-    // Update the goal in the Students table
-    $updateGoalSql = "UPDATE Students SET goal='$newGoal' WHERE name='$selectedStudent'";
+    // Update the goal in the Goals table
+    $updateGoalSql = "UPDATE Goals SET goal_description='$newGoal' WHERE student_id=(SELECT student_id FROM Students WHERE name='$selectedStudent')";
     if ($conn->query($updateGoalSql) !== TRUE) {
         echo "Error updating goal: " . $conn->error;
     }
@@ -88,6 +88,16 @@ $teacherResult = $conn->query($teacherSql);
 if ($teacherResult->num_rows > 0) {
     while ($row = $teacherResult->fetch_assoc()) {
         $teacherDataArray[] = $row;
+    }
+}
+
+// Fetch goal data for the selected student
+$goalDataArray = array();
+$goalSql = "SELECT goal_description, goal_date FROM Goals WHERE student_id=(SELECT student_id FROM Students WHERE name='$selectedStudent')";
+$goalResult = $conn->query($goalSql);
+if ($goalResult->num_rows > 0) {
+    while ($row = $goalResult->fetch_assoc()) {
+        $goalDataArray[] = $row;
     }
 }
 
