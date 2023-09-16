@@ -7,9 +7,9 @@ include("./users/auth_session.php");
 session_start(); // Start the session
 
 $servername = "localhost";
-$username = "YourUsername"; // Replace with your database username
-$password = "YourPassword"; // Replace with your database password
-$dbname = "YourDatabase"; // Replace with your database name
+$username = "AndersonSchool"; // Replace with your database username
+$password = "SpecialEd69$"; // Replace with your database password
+$dbname = "bFactor-test"; // Replace with your database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
