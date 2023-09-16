@@ -1,6 +1,6 @@
 <?php
 include("./users/auth_session.php");
-include("./users/student_data.php");
+//include("./users/student_data.php");
 ?>
 
 <?php
