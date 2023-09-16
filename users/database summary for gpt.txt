@@ -1,0 +1,21 @@
+actually my new system doesn't use a new table for each student. It has the following table set-ups:
+Table `accounts` SET `id`=[value-1],`fname`=[value-2],`lname`=[value-3],`email`=[value-4],`password`=[value-5] WHERE 1
+- id is the primary key
+Table `Students` SET `student_id`=[value-1],`name`=[value-2],`date_of_birth`=[value-3],`grade_level`=[value-4] WHERE 1
+- student_id is primary key
+Table `Teachers` SET `teacher_id`=[value-1],`name`=[value-2],`subject_taught`=[value-3],`account_id`=[value-4] WHERE 1
+- teacher_id is primary key
+- account_id is foreign key from 'accounts' table
+Table `Teacher_Student_Assignment` SET `assignment_id`=[value-1],`teacher_id`=[value-2],`student_id`=[value-3] WHERE 1
+- assignment_id is primary key
+- teacher_id is foreign key
+- student_id is foreign key
+- this table makes sure teachers who are assigned to students only can see their data
+Table `Metadata` SET `metadata_id`=[value-1],`title`=[value-2],`description`=[value-3],`category`=[value-4] WHERE 1
+- metadata_id is primary key
+- this table is used so schools can use different category names for scores in 'Performance' table
+Tables `Performance` SET `performance_id`=[value-1],`student_id`=[value-2],`teacher_id`=[value-3],`week_start_date`=[value-4],`week_number`=[value-5],`metadata_id`=[value-6],`score1`=[value-7],`score2`=[value-8],`score3`=[value-9],`score4`=[value-10],`score5`=[value-11] WHERE 1
+- performance_id is primary key
+- student_id is foreign key
+- teacher_id is foreign key
+- metadata_id is foreign key

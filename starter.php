@@ -1,15 +1,15 @@
 <?php
 include("./users/auth_session.php");
-include("./users/student_data.php")
+include("./users/student_data.php");
 ?>
 
 <?php
 session_start(); // Start the session
 
 $servername = "localhost";
-$username = "AndersonSchool";
-$password = "SpecialEd69$";
-$dbname = "AndersonSchool";
+$username = "YourUsername"; // Replace with your database username
+$password = "YourPassword"; // Replace with your database password
+$dbname = "YourDatabase"; // Replace with your database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -17,18 +17,18 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$selectedTable = $_POST['selected_table'] ?? $_SESSION['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
+$selectedStudent = $_POST['selected_student'] ?? $_SESSION['selected_student'] ?? 'DefaultStudent'; // Set a default student name
 
-//echo "Updating records in table: $selectedTable<br>";
-
-// Handle updates for ID, date, score, and baseline
+// Handle updates for assessment data
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    foreach ($_POST['id'] as $key => $id) {
-        $date = $_POST["date"][$key];
-        $score = $_POST["score"][$key];
-        $baseline = $_POST["baseline"][$key];
+    foreach ($_POST['performance_id'] as $key => $performance_id) {
+        $score1 = $_POST["score1"][$key];
+        $score2 = $_POST["score2"][$key];
+        $score3 = $_POST["score3"][$key];
+        $score4 = $_POST["score4"][$key];
+        $score5 = $_POST["score5"][$key];
 
-        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
+        $update_sql = "UPDATE Performance SET score1='$score1', score2='$score2', score3='$score3', score4='$score4', score5='$score5' WHERE performance_id=$performance_id";
        
         if ($conn->query($update_sql) !== TRUE) {
             echo "Error updating record: " . $conn->error;
@@ -40,60 +40,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_goal'])) {
     $newGoal = $_POST["edit_goal"];
     
-    // Update the goal in the database
-    $updateGoalSql = "UPDATE $selectedTable SET goal='$newGoal' WHERE 1";
+    // Update the goal in the Students table
+    $updateGoalSql = "UPDATE Students SET goal='$newGoal' WHERE name='$selectedStudent'";
     if ($conn->query($updateGoalSql) !== TRUE) {
         echo "Error updating goal: " . $conn->error;
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_student'])) {
     // Handle student selection
-    $selectedTable = $_POST['selected_table'];
-    $_SESSION['selected_table'] = $selectedTable; // Store the selected table value in a session variable
+    $selectedStudent = $_POST['selected_student'];
+    $_SESSION['selected_student'] = $selectedStudent; // Store the selected student value in a session variable
 }
 
-// Fetch data for the table
-$tableDataArray = array();
-$tableSql = "SELECT id, date, score, baseline, goal FROM $selectedTable";
-$tableResult = $conn->query($tableSql);
-if ($tableResult->num_rows > 0) {
-    while ($row = $tableResult->fetch_assoc()) {
-        $tableDataArray[] = $row;
+// Fetch assessment data for the selected student
+$assessmentDataArray = array();
+$assessmentSql = "SELECT P.performance_id, P.week_start_date, P.week_number, M.title, M.description, M.category, P.score1, P.score2, P.score3, P.score4, P.score5 
+                  FROM Performance P
+                  INNER JOIN Metadata M ON P.metadata_id = M.metadata_id
+                  INNER JOIN Students S ON P.student_id = S.student_id
+                  WHERE S.name='$selectedStudent'";
+$assessmentResult = $conn->query($assessmentSql);
+if ($assessmentResult->num_rows > 0) {
+    while ($row = $assessmentResult->fetch_assoc()) {
+        $assessmentDataArray[] = $row;
     }
 }
 
-// Fetch and store data from the database for the chart
-$chartDataArray1 = array();
-$chartSql1 = "SELECT date FROM $selectedTable";
-$chartResult1 = $conn->query($chartSql1);
-if ($chartResult1->num_rows > 0) {
-    while ($row = $chartResult1->fetch_assoc()) {
-        $chartDataArray1[] = array(
-            'x1' => $row['date'],     // Use the 'date' column as the x-variable
-        );
+// Fetch student data
+$studentDataArray = array();
+$studentSql = "SELECT student_id, date_of_birth, grade_level FROM Students WHERE name='$selectedStudent'";
+$studentResult = $conn->query($studentSql);
+if ($studentResult->num_rows > 0) {
+    while ($row = $studentResult->fetch_assoc()) {
+        $studentDataArray[] = $row;
     }
 }
 
-$chartDataArray2 = array();
-$chartSql2 = "SELECT baseline FROM $selectedTable";
-$chartResult2 = $conn->query($chartSql2);
-if ($chartResult2->num_rows > 0) {
-    while ($row = $chartResult2->fetch_assoc()) {
-        $chartDataArray2[] = array(
-            'y1' => $row['baseline'] // Use the 'baseline' column as the second y-variable
-        );
-    }
-}
-
-$chartDataArray3 = array();
-$chartSql3 = "SELECT score FROM $selectedTable";
-$chartResult3 = $conn->query($chartSql3);
-if ($chartResult3->num_rows > 0) {
-    while ($row = $chartResult3->fetch_assoc()) {
-        $chartDataArray3[] = array(
-            'y2' => $row['score'] // Use the 'baseline' column as the second y-variable
-        );
+// Fetch teacher data
+$teacherDataArray = array();
+$teacherSql = "SELECT T.name, T.subject_taught
+               FROM Teachers T
+               INNER JOIN Teacher_Student_Assignment A ON T.teacher_id = A.teacher_id
+               INNER JOIN Students S ON A.student_id = S.student_id
+               WHERE S.name='$selectedStudent'";
+$teacherResult = $conn->query($teacherSql);
+if ($teacherResult->num_rows > 0) {
+    while ($row = $teacherResult->fetch_assoc()) {
+        $teacherDataArray[] = $row;
     }
 }
 
