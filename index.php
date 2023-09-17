@@ -1388,6 +1388,11 @@ include("./users/auth_session.php");
                   <?php
 session_start(); // Start the session
 
+// Error reporting for development
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $servername = "localhost";
 $username = "AndersonSchool";
 $password = "SpecialEd69$";
@@ -1396,11 +1401,14 @@ $dbname = "bFactor-test";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
+} else {
+  echo "Connected successfully to the database";
 }
 
 // Assuming you have the logged in teacher's ID stored in a session variable
 $teacherId = $_SESSION['teacher_id'];
+echo "Teacher ID: " . $_SESSION['teacher_id'];
 
 $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher-Student-Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
 $stmt->bind_param('i', $teacherId);
