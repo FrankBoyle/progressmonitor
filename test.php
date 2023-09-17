@@ -34,8 +34,18 @@ $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher_Student_As
 $stmt->bind_param('i', $teacherId);
 $stmt->execute();
 
+// Check for errors during student fetch
+if ($stmt->error) {
+    die("Error during student fetch: " . $stmt->error);
+}
+
 $result = $stmt->get_result();
 $students = $result->fetch_all(MYSQLI_ASSOC);
+
+// Check if any students are retrieved
+if (empty($students)) {
+    die("No students found for this teacher.");
+}
 
 foreach ($students as $student) {
     echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
@@ -48,6 +58,11 @@ if (isset($_GET['student_id'])) {
     $stmt->bind_param('i', $studentId);
     $stmt->execute();
     
+    // Check for errors during performance data fetch
+    if ($stmt->error) {
+        die("Error during performance data fetch: " . $stmt->error);
+    }
+
     $result = $stmt->get_result();
     $performanceData = $result->fetch_all(MYSQLI_ASSOC);
     
