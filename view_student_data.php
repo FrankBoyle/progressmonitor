@@ -8,7 +8,6 @@ error_reporting(E_ALL);
 
 // Assuming your PDO connection code goes somewhere here
 // For the sake of this example, I'll use a placeholder.
-$pdo = new PDO(your_connection_data_here);
 
 // 3. PDO Error Mode
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
