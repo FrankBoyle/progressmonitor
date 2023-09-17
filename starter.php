@@ -129,7 +129,7 @@ if ($chartResult3->num_rows > 0) {
   <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
-  <script type="module" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
 
 
@@ -690,10 +690,10 @@ chart.render();
 
 <!-- jQuery -->
 
-<script type="module" src="./plugins/jquery/jquery.min.js"></script>
+<script src="./plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script type="module" src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script type="module" src="./dist/js/adminlte.min.js"></script>
+<script src="./dist/js/adminlte.min.js"></script>
 </body>
 </html>
