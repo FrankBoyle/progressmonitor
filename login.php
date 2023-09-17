@@ -17,7 +17,7 @@
                 $_SESSION['user'] = $result['email'];
                 
                 // Assuming you have an 'id' column in the 'accounts' table for the teacher's ID
-                $_SESSION['teacher_id'] = $result['id']; 
+                $_SESSION['teacher_id'] = $result['email']; 
 
                 // Additionally, if there's more data you want to save in session
                 // $_SESSION['some_other_data'] = $result['some_column'];
