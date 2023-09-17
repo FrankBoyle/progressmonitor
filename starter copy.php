@@ -131,12 +131,7 @@ if ($chartResult3->num_rows > 0) {
   <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
+
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
