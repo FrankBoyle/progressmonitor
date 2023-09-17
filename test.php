@@ -22,7 +22,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher-Student-Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
+$stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher_Student_Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
 $stmt->bind_param('i', $teacherId);
 $stmt->execute();
 
