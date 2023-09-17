@@ -14,13 +14,21 @@ if ($conn->connect_error) {
 
 echo "PHP is working!";
 
+// Start session
 session_start();
-echo "Teacher ID from session: " . $_SESSION['teacher_id'];
 
 // Error reporting for development
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// Ensure teacher_id is in the session
+if (!isset($_SESSION['teacher_id'])) {
+    die("Teacher ID not set in session");
+}
+
+$teacherId = $_SESSION['teacher_id'];
+echo "Teacher ID from session: " . $teacherId;
 
 $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher_Student_Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
 $stmt->bind_param('i', $teacherId);
