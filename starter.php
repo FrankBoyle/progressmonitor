@@ -111,8 +111,8 @@ if ($chartResult3->num_rows > 0) {
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- jsGrid -->
-  <link rel="stylesheet" href="./plugins/jsgrid/jsgrid.min.css">
-  <link rel="stylesheet" href="./plugins/jsgrid/jsgrid-theme.min.css">
+  <!-- <link rel="stylesheet" href="./plugins/jsgrid/jsgrid.min.css"> -->
+  <!-- <link rel="stylesheet" href="./plugins/jsgrid/jsgrid-theme.min.css"> -->
   <!-- Theme style -->
   <link rel="stylesheet" href="./dist/css/adminlte.min.css">
   <!-- Ionicons -->
@@ -129,8 +129,8 @@ if ($chartResult3->num_rows > 0) {
   <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
 
 
 </head>
