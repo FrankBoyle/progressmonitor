@@ -1,3 +1,5 @@
+
+
 <?php
 $studentId = $_GET['student_id'];
 
@@ -22,6 +24,7 @@ foreach ($performanceData as $data) {
 	echo "<td>" . $data['score8'] . "</td>";
 	echo "<td>" . $data['score9'] . "</td>";
 	echo "<td>" . $data['score10'] . "</td>";
+    // ... continue for other scores
     echo "</tr>";
 }
 
