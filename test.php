@@ -13,5 +13,9 @@ if ($conn->connect_error) {
 }
 
 echo "PHP is working!";
+
+session_start();
+echo "Teacher ID from session: " . $_SESSION['teacher_id'];
+
 ?>
 
