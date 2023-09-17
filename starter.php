@@ -443,8 +443,8 @@ if ($chartResult3->num_rows > 0) {
                     <input type='submit' name='update' value='Update'>
                   </form>
 
-                  
-                  <?php
+<!--                
+                  < ?php
 session_start(); // Start the session
 
 $servername = "localhost";
@@ -496,7 +496,7 @@ if (isset($_GET['student_id'])) {
     echo "</table>";
 }
 ?>
-
+-->
 
 
 
