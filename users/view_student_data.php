@@ -1,4 +1,3 @@
-This is the only part in view_student_data.php can I simplify this code somehow?
 
 
 <?php
