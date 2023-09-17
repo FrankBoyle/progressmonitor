@@ -442,6 +442,8 @@ if ($chartResult3->num_rows > 0) {
                     </table>
                     <input type='submit' name='update' value='Update'>
                   </form>
+
+                  
                   <?php
 session_start(); // Start the session
 
@@ -455,51 +457,48 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-?>
 
-<?php
 // Assuming you have the logged in teacher's ID stored in a session variable
 $teacherId = $_SESSION['teacher_id'];
 
-$stmt = $pdo->prepare("SELECT s.* FROM Students s INNER JOIN Teacher-Student-Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
-$stmt->execute([$teacherId]);
+$stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher-Student-Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
+$stmt->bind_param('i', $teacherId);
+$stmt->execute();
 
-$students = $stmt->fetchAll();
+$result = $stmt->get_result();
+$students = $result->fetch_all(MYSQLI_ASSOC);
 
 foreach ($students as $student) {
     echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
 }
-?>
-<?php
-$studentId = $_GET['student_id'];
 
-$stmt = $pdo->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");  // you can change the LIMIT as needed
-$stmt->execute([$studentId]);
+if (isset($_GET['student_id'])) {
+    $studentId = $_GET['student_id'];
 
-$performanceData = $stmt->fetchAll();
-
-echo "<table border='1'>";
-echo "<tr><th>Week Start Date</th><th>Score1</th><th>Score2</th>...<th>Score10</th></tr>";  // Add more headers if needed
-
-foreach ($performanceData as $data) {
-    echo "<tr>";
-    echo "<td>" . $data['week_start_date'] . "</td>";
-    echo "<td>" . $data['score1'] . "</td>";
-    echo "<td>" . $data['score2'] . "</td>";
-	echo "<td>" . $data['score3'] . "</td>";
-	echo "<td>" . $data['score4'] . "</td>";
-	echo "<td>" . $data['score5'] . "</td>";
-	echo "<td>" . $data['score6'] . "</td>";
-	echo "<td>" . $data['score7'] . "</td>";
-	echo "<td>" . $data['score8'] . "</td>";
-	echo "<td>" . $data['score9'] . "</td>";
-	echo "<td>" . $data['score10'] . "</td>";
-    // ... continue for other scores
-    echo "</tr>";
+    $stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");  // you can change the LIMIT as needed
+    $stmt->bind_param('i', $studentId);
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+    $performanceData = $result->fetch_all(MYSQLI_ASSOC);
+    
+    echo "<table border='1'>";
+    echo "<tr><th>Week Start Date</th><th>Score1</th><th>Score2</th>...<th>Score10</th></tr>";  // Add more headers if needed
+    
+    foreach ($performanceData as $data) {
+        echo "<tr>";
+        for ($i = 1; $i <= 10; $i++) {
+            echo "<td>" . $data['score' . $i] . "</td>";
+        }
+        echo "</tr>";
+    }
+    
+    echo "</table>";
 }
+?>
 
-echo "</table>";
-?> 
+
+
 
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
