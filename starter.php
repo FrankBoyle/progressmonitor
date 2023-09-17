@@ -413,6 +413,35 @@ if ($chartResult3->num_rows > 0) {
                           echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
                         }
                     ?>
+                    <?php
+session_start(); // Start the session
+
+$servername = "localhost";
+$username = "AndersonSchool";
+$password = "SpecialEd69$";
+$dbname = "bFactor-test";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
+<?php
+// Assuming you have the logged in teacher's ID stored in a session variable
+$teacherId = $_SESSION['teacher_id'];
+
+$stmt = $pdo->prepare("SELECT s.* FROM Students s INNER JOIN Teacher-Student-Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
+$stmt->execute([$teacherId]);
+
+$students = $stmt->fetchAll();
+
+foreach ($students as $student) {
+    echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
+}
+?>
+
                     <input type="submit" name="save_goal" value="Save Goal">
                   </form>
 
