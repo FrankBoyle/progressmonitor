@@ -48,7 +48,7 @@
         } catch (PDOException $e) {
             echo "Database Error: " . $e->getMessage(); // Show the exception error message
         }
-    }
+    }}
 ?>
 
 
