@@ -9,19 +9,28 @@
         $query->bindParam("email", $email, PDO::PARAM_STR);
         $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);  
-          if (!$result) {
+        
+        if (!$result) {
             echo '<p class="error">Username password combination is wrong!</p>';
-          } else {
+        } else {
             if (password_verify($password, $result['password'])) {
                 $_SESSION['user'] = $result['email'];
+                
+                // Assuming you have an 'id' column in the 'accounts' table for the teacher's ID
+                $_SESSION['teacher_id'] = $result['id']; 
+
+                // Additionally, if there's more data you want to save in session
+                // $_SESSION['some_other_data'] = $result['some_column'];
+
                 header("Location: index.php");
-                echo '<p class="success">Congratulations, you are logged in!</p>';
+                exit(); // Always call exit() after a header redirect to ensure no further script execution
             } else {
                 echo '<p class="error">Username password combination is wrong!</p>';
             }
         }
     }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
