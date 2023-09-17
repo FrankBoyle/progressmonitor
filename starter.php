@@ -441,6 +441,29 @@ foreach ($students as $student) {
     echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
 }
 ?>
+<?php
+$studentId = $_GET['student_id'];
+
+$stmt = $pdo->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");  // you can change the LIMIT as needed
+$stmt->execute([$studentId]);
+
+$performanceData = $stmt->fetchAll();
+
+echo "<table border='1'>";
+echo "<tr><th>Week Start Date</th><th>Score1</th><th>Score2</th>...<th>Score10</th></tr>";  // Add more headers if needed
+
+foreach ($performanceData as $data) {
+    echo "<tr>";
+    echo "<td>" . $data['week_start_date'] . "</td>";
+    echo "<td>" . $data['score1'] . "</td>";
+    echo "<td>" . $data['score2'] . "</td>";
+    // ... continue for other scores
+    echo "</tr>";
+}
+
+echo "</table>";
+?>
+
 
                     <input type="submit" name="save_goal" value="Save Goal">
                   </form>
