@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 // For the sake of this example, I'll use a placeholder.
 
 // 3. PDO Error Mode
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // 2. Check if `student_id` is Set
 if (!isset($_GET['student_id'])) {
