@@ -1,43 +1,55 @@
 <?php
     session_start();
+
+    // Error reporting for development
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
     include('./users/db.php');
 
     if (isset($_POST['login'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
-        $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
-        $query->bindParam("email", $email, PDO::PARAM_STR);
-        $query->execute();
-        $result = $query->fetch(PDO::FETCH_ASSOC);  
         
-        if (!$result) {
-            echo '<p class="error">Username or password is incorrect!</p>';
-        } else {
-            if (password_verify($password, $result['password'])) {
-                $_SESSION['user'] = $result['email'];
-
-                // After successful login, fetch the teacher_id from Teachers table using the email
-                $teacherQuery = $connection->prepare("SELECT teacher_id FROM Teachers WHERE email = :email");
-                $teacherQuery->bindParam("email", $email, PDO::PARAM_STR);
-                $teacherQuery->execute();
-
-                $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
-
-                if ($teacherResult) {
-                    $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
-                } else {
-                    echo '<p class="error">No teacher ID associated with this email.</p>';
-                    exit(); // This will terminate the script if no associated teacher ID is found.
-                }
-
-                header("Location: index.php");
-                exit(); 
-            } else {
+        try {
+            $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
+            $query->bindParam("email", $email, PDO::PARAM_STR);
+            $query->execute();
+            $result = $query->fetch(PDO::FETCH_ASSOC);  
+            
+            if (!$result) {
                 echo '<p class="error">Username or password is incorrect!</p>';
+            } else {
+                if (password_verify($password, $result['password'])) {
+                    $_SESSION['user'] = $result['email'];
+
+                    // After successful login, fetch the teacher_id from Teachers table using the email
+                    $teacherQuery = $connection->prepare("SELECT teacher_id FROM Teachers WHERE email = :email");
+                    $teacherQuery->bindParam("email", $email, PDO::PARAM_STR);
+                    $teacherQuery->execute();
+
+                    $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
+
+                    if ($teacherResult) {
+                        $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
+                    } else {
+                        echo '<p class="error">No teacher ID associated with this email.</p>';
+                        exit(); // This will terminate the script if no associated teacher ID is found.
+                    }
+
+                    header("Location: index.php");
+                    exit();
+                } else {
+                    echo '<p class="error">Username or password is incorrect!</p>';
+                }
             }
+        } catch (PDOException $e) {
+            echo "Database Error: " . $e->getMessage(); // Show the exception error message
         }
     }
 ?>
+
 
 
 
