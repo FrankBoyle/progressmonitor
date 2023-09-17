@@ -11,25 +11,34 @@
         $result = $query->fetch(PDO::FETCH_ASSOC);  
         
         if (!$result) {
-            echo '<p class="error">Username password combination is wrong!</p>';
+            echo '<p class="error">Username or password is incorrect!</p>';
         } else {
             if (password_verify($password, $result['password'])) {
                 $_SESSION['user'] = $result['email'];
-                
-                // Assuming you have an 'id' column in the 'accounts' table for the teacher's ID
-                $_SESSION['teacher_id'] = $result['id']; 
 
-                // Additionally, if there's more data you want to save in session
-                // $_SESSION['some_other_data'] = $result['some_column'];
+                // After successful login, fetch the teacher_id from Teachers table using the email
+                $teacherQuery = $connection->prepare("SELECT teacher_id FROM Teachers WHERE email = :email");
+                $teacherQuery->bindParam("email", $email, PDO::PARAM_STR);
+                $teacherQuery->execute();
+
+                $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
+
+                if ($teacherResult) {
+                    $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
+                } else {
+                    echo '<p class="error">No teacher ID associated with this email.</p>';
+                    exit(); // This will terminate the script if no associated teacher ID is found.
+                }
 
                 header("Location: index.php");
-                exit(); // Always call exit() after a header redirect to ensure no further script execution
+                exit(); 
             } else {
-                echo '<p class="error">Username password combination is wrong!</p>';
+                echo '<p class="error">Username or password is incorrect!</p>';
             }
         }
     }
 ?>
+
 
 
 <!DOCTYPE html>
