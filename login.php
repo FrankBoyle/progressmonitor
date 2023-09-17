@@ -21,28 +21,29 @@
             if (!$result) {
                 echo '<p class="error">Username or password is incorrect!</p>';
             } else {
-                if (password_verify($password, $result['password'])) {
-                    $_SESSION['user'] = $result['email'];
-
-                    // After successful login, fetch the teacher_id from Teachers table using the email
-                    $teacherQuery = $connection->prepare("SELECT teacher_id FROM Teachers WHERE email = :email");
-                    $teacherQuery->bindParam("email", $email, PDO::PARAM_STR);
-                    $teacherQuery->execute();
-
-                    $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
-
-                    if ($teacherResult) {
-                        $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
-                    } else {
-                        echo '<p class="error">No teacher ID associated with this email.</p>';
-                        exit(); // This will terminate the script if no associated teacher ID is found.
-                    }
-
-                    header("Location: index.php");
-                    exit();
+              if (password_verify($password, $result['password'])) {
+                $_SESSION['user'] = $result['email'];
+                
+                // Using the account_id from the result to fetch teacher_id
+                $accountId = $result['id'];
+                
+                $teacherQuery = $connection->prepare("SELECT teacher_id FROM Teachers WHERE account_id = :accountId");
+                $teacherQuery->bindParam("accountId", $accountId, PDO::PARAM_INT);
+                $teacherQuery->execute();
+            
+                $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
+            
+                if ($teacherResult) {
+                    $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
                 } else {
-                    echo '<p class="error">Username or password is incorrect!</p>';
+                    echo '<p class="error">No teacher ID associated with this account ID.</p>';
+                    exit(); 
                 }
+            
+                header("Location: index.php");
+                exit(); 
+            } else {
+                echo '<p class="error">Username or password is incorrect!</p>';
             }
         } catch (PDOException $e) {
             echo "Database Error: " . $e->getMessage(); // Show the exception error message
