@@ -38,8 +38,13 @@
                         field_name: fieldName,
                         new_value: newValue
                     }, function(response) {
-                        // Handle the response if needed
-                    });
+    if (response.success) {
+        alert('Data updated successfully!');
+    } else {
+        alert('There was an error updating the data.');
+    }
+});
+
                 });
 
                 // Pressing Enter key while editing should save changes
@@ -133,8 +138,12 @@
             $performanceData = $result->fetch_all(MYSQLI_ASSOC);
 
             echo "<table border='1'>";
-            echo "<tr><th>Week Start Date</th><th>Score1</th><th>Score2</th>...<th>Score10</th></tr>";
-
+            echo "<tr><th>Week Start Date</th>";
+            for ($i = 1; $i <= 10; $i++) {
+                echo "<th>Score" . $i . "</th>";
+            }
+            echo "</tr>";
+            
             foreach ($performanceData as $data) {
                 echo "<tr data-performance-id='" . $data['performance_id'] . "'>";
                 for ($i = 1; $i <= 10; $i++) {

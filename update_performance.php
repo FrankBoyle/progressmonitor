@@ -22,6 +22,14 @@ if ($_POST['performance_id'] && $_POST['field_name'] && $_POST['new_value']) {
     $stmt->bind_param('si', $newValue, $performanceId);
     $stmt->execute();
 
+    if ($stmt->affected_rows < 1 || $stmt->error) {
+        $response = array("success" => false, "error" => $stmt->error);
+    } else {
+        $response = array("success" => true);
+    }
+    echo json_encode($response);
+    
+
     // Handle any errors or success messages here
     // You can return a JSON response indicating success or failure
     $response = array("success" => true); // Modify as needed
