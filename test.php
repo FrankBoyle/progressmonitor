@@ -4,7 +4,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
     <title>Your Page Title</title>
-    <script>
+
+
+</head>
+<body>
+<script>
         $(document).ready(function() {
             // Add click event handler to editable cells
             $('.editable').click(function() {
@@ -47,116 +51,88 @@
             });
         });
     </script>
+<?php
+// Error tracking: Log PHP errors to a file
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-</head>
-<body>
+function logError($error) {
+    $logFile = 'error_log.txt';
+    $timestamp = date('Y-m-d H:i:s');
+    $logMessage = "[$timestamp] $error\n";
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+}
 
-    <?php
-    // Error tracking: Log PHP errors to a file
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-
-    function logError($error) {
-        $logFile = 'error_log.txt';
-        $timestamp = date('Y-m-d H:i:s');
-        $logMessage = "[$timestamp] $error\n";
-        file_put_contents($logFile, $logMessage, FILE_APPEND);
-    }
-
-    // Your existing PHP code here
-    try {
-        $servername = "localhost";
-        $username = "AndersonSchool";
-        $password = "SpecialEd69$";
-        $dbname = "bFactor-test";
-
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        if ($conn->connect_error) {
-            throw new Exception("Connection failed: " . $conn->connect_error);
-        } else {
-            echo "Connected successfully to the database";
+// Update logic
+if(isset($_POST['update'])) {
+    $performanceIds = $_POST['performance_id'];
+    foreach ($performanceIds as $index => $performanceId) {
+        $updatedScores = [];
+        for ($i = 1; $i <= 10; $i++) {
+            $updatedScores['score'.$i] = $_POST['score'.$i][$index];
         }
-
-        echo "PHP is working!";
-
-        // Start session
-        session_start();
-
-        // Ensure teacher_id is in the session
-        if (!isset($_SESSION['teacher_id'])) {
-            throw new Exception("Teacher ID not set in session");
+        // Prepare the SQL update query using the retrieved data
+        $sql = "UPDATE Performance SET ";
+        $setClauses = [];
+        for ($i = 1; $i <= 10; $i++) {
+            $setClauses[] = "score{$i} = ?";
         }
-
-        $teacherId = $_SESSION['teacher_id'];
-        echo "Teacher ID from session: " . $teacherId;
-
-        $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher_Student_Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
-        $stmt->bind_param('i', $teacherId);
+        $sql .= implode(', ', $setClauses) . " WHERE performance_id = ?";
+        
+        $stmt = $conn->prepare($sql);
+        $values = array_values($updatedScores);
+        $values[] = $performanceId;
+        $stmt->bind_param(str_repeat('i', count($values)), ...$values);
         $stmt->execute();
 
-        // Check for errors during student fetch
+        // Check for errors during the update
         if ($stmt->error) {
-            throw new Exception("Error during student fetch: " . $stmt->error);
+            throw new Exception("Error updating performance data: " . $stmt->error);
         }
+    }
+    echo "Data updated successfully!";
+}
 
-        $result = $stmt->get_result();
-        $students = $result->fetch_all(MYSQLI_ASSOC);
+// Your existing PHP code here
+try {
+    $servername = "localhost";
+    $username = "AndersonSchool";
+    $password = "SpecialEd69$";
+    $dbname = "bFactor-test";
 
-        // Check if any students are retrieved
-        if (empty($students)) {
-            throw new Exception("No students found for this teacher.");
-        }
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-        foreach ($students as $student) {
-            echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
-        }
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
+    } else {
+        echo "Connected successfully to the database";
+    }
 
-        if (isset($_GET['student_id'])) {
-            $studentId = $_GET['student_id'];
+    // ... [Rest of your code]
 
-            $stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
-            $stmt->bind_param('i', $studentId);
-            $stmt->execute();
+    if (isset($_GET['student_id'])) {
+        // ... [Previous code]
 
-            // Check for errors during performance data fetch
-            if ($stmt->error) {
-                throw new Exception("Error during performance data fetch: " . $stmt->error);
-            }
+        echo "<form method='post' action=''>";
+        echo "<table border='1'>";
+        // ... [Other rows and headers]
 
-            $result = $stmt->get_result();
-            $performanceData = $result->fetch_all(MYSQLI_ASSOC);
-
-            echo "<form method='post' action=''>"; // The action can be the same page or another script
-            echo "<table border='1'>";
-            echo "<tr><th>Performance ID</th><th>Week Start Date</th>";
+        foreach ($performanceData as $data) {
+            echo "<tr data-performance-id='" . $data['performance_id'] . "'>";
+            echo "<td><input type='hidden' name='performance_id[]' value='{$data["performance_id"]}'>{$data["performance_id"]}</td>";
+            echo "<td>{$data['week_start_date']}</td>"; // Assuming week_start_date is not editable
             for ($i = 1; $i <= 10; $i++) {
-                echo "<th>Score" . $i . "</th>";
+                echo "<td><input type='text' name='score{$i}[]' data-value='{$data["score" . $i]}' class='editable' value='{$data["score" . $i]}'></td>";
             }
             echo "</tr>";
-            
-            foreach ($performanceData as $data) {
-                echo "<tr data-performance-id='" . $data['performance_id'] . "'>";
-                echo "<td><input type='hidden' name='performance_id[]' value='{$data["performance_id"]}'>{$data["performance_id"]}</td>";
-                echo "<td>{$data['week_start_date']}</td>"; // Assuming week_start_date is not editable
-                for ($i = 1; $i <= 10; $i++) {
-                    echo "<td data-value='{$data["score" . $i]}' class='editable'>{$data["score" . $i]}</td>";
-                }
-                echo "</tr>";
-            }
-            echo "</table>";
-            echo "<input type='submit' name='update' value='Update'>";
-            echo "</form>";
-            
         }
-    } catch (Exception $e) {
-        // Log the error
-        logError($e->getMessage());
-
-        // Display a user-friendly error message
-        echo "An error occurred. Please try again later.";
+        // ... [Rest of your form]
     }
-    ?>
+} catch (Exception $e) {
+    // ... [Error handling]
+}
+?>
+
 </body>
 </html>
