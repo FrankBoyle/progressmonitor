@@ -115,16 +115,16 @@ $(document).ready(function() {
     <?php foreach ($performanceData as $data) : ?>
         <tr data-performance-id="<?php echo $data['performance_id']; ?>">
             <td><?php echo $data['week_start_date']; ?></td>
-            <td data-value="<?php echo $data['score1']; ?>"><?php echo $data['score1']; ?></td>
-            <td data-value="<?php echo $data['score2']; ?>"><?php echo $data['score2']; ?></td>
-            <td data-value="<?php echo $data['score3']; ?>"><?php echo $data['score3']; ?></td>
-            <td data-value="<?php echo $data['score4']; ?>"><?php echo $data['score4']; ?></td>
-            <td data-value="<?php echo $data['score5']; ?>"><?php echo $data['score5']; ?></td>
-            <td data-value="<?php echo $data['score6']; ?>"><?php echo $data['score6']; ?></td>
-            <td data-value="<?php echo $data['score7']; ?>"><?php echo $data['score7']; ?></td>
-            <td data-value="<?php echo $data['score8']; ?>"><?php echo $data['score8']; ?></td>
-            <td data-value="<?php echo $data['score9']; ?>"><?php echo $data['score9']; ?></td>
-            <td data-value="<?php echo $data['score10']; ?>"><?php echo $data['score10']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score1']; ?>" data-field-name="score1"><?php echo $data['score1']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score2']; ?>" data-field-name="score2"><?php echo $data['score2']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score3']; ?>" data-field-name="score3"><?php echo $data['score3']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score4']; ?>" data-field-name="score4"><?php echo $data['score4']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score5']; ?>" data-field-name="score5"><?php echo $data['score5']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score6']; ?>" data-field-name="score6"><?php echo $data['score6']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score7']; ?>" data-field-name="score7"><?php echo $data['score7']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score8']; ?>" data-field-name="score8"><?php echo $data['score8']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score9']; ?>" data-field-name="score9"><?php echo $data['score9']; ?></td>
+            <td class="editable" data-value="<?php echo $data['score10']; ?>" data-field-name="score10"><?php echo $data['score10']; ?></td>
         </tr>
     <?php endforeach; ?>
 
@@ -132,4 +132,5 @@ $(document).ready(function() {
 
 </body>
 </html>
+
 
