@@ -72,7 +72,7 @@ if (isset($_GET['student_id'])) {
     foreach ($performanceData as $data) {
         echo "<tr>";
         for ($i = 1; $i <= 10; $i++) {
-            echo "<td>" . $data['score' . $i] . "</td>";
+            echo "<td data-value='" . $data['score' . $i] . "' class='editable'>" . $data['score' . $i] . "</td>";
         }
         echo "</tr>";
     }
