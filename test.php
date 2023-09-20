@@ -4,8 +4,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
     <title>Your Page Title</title>
-</head>
-<body>
     <script>
         $(document).ready(function() {
             // Add click event handler to editable cells
@@ -53,6 +51,9 @@
             });
         });
     </script>
+
+</head>
+<body>
 
     <?php
     // Error tracking: Log PHP errors to a file
