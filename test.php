@@ -1,4 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Your Page Title</title>
+</head>
+<body>
 <script>
     $(document).ready(function() {
         // Add click event handler to editable cells
@@ -47,7 +54,6 @@
         });
     });
 </script>
-
 
 <?php
 $servername = "localhost";
@@ -132,4 +138,5 @@ if (isset($_GET['student_id'])) {
 }
 
 ?>
-
+</body>
+</html>
