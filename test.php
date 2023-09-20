@@ -33,17 +33,8 @@
                     const performanceId = cell.closest('tr').data('performance-id');
                     const fieldName = cell.index() - 1;
 
-                    $.post('update_performance.php', {
-                        performance_id: performanceId,
-                        field_name: fieldName,
-                        new_value: newValue
-                    }, function(response) {
-    if (response.success) {
-        alert('Data updated successfully!');
-    } else {
-        alert('There was an error updating the data.');
-    }
-});
+                    alert('Data updated locally. Remember to hit "Update" to save all changes.');
+
 
                 });
 
@@ -137,8 +128,9 @@
             $result = $stmt->get_result();
             $performanceData = $result->fetch_all(MYSQLI_ASSOC);
 
+            echo "<form method='post' action=''>"; // The action can be the same page or another script
             echo "<table border='1'>";
-            echo "<tr><th>Week Start Date</th>";
+            echo "<tr><th>Performance ID</th><th>Week Start Date</th>";
             for ($i = 1; $i <= 10; $i++) {
                 echo "<th>Score" . $i . "</th>";
             }
@@ -146,13 +138,17 @@
             
             foreach ($performanceData as $data) {
                 echo "<tr data-performance-id='" . $data['performance_id'] . "'>";
+                echo "<td><input type='hidden' name='performance_id[]' value='{$data["performance_id"]}'>{$data["performance_id"]}</td>";
+                echo "<td>{$data['week_start_date']}</td>"; // Assuming week_start_date is not editable
                 for ($i = 1; $i <= 10; $i++) {
-                    echo "<td data-value='" . $data['score' . $i] . "' class='editable'>" . $data['score' . $i] . "</td>";
+                    echo "<td data-value='{$data["score" . $i]}' class='editable'>{$data["score" . $i]}</td>";
                 }
                 echo "</tr>";
             }
-
             echo "</table>";
+            echo "<input type='submit' name='update' value='Update'>";
+            echo "</form>";
+            
         }
     } catch (Exception $e) {
         // Log the error
