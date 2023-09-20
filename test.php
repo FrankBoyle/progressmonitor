@@ -105,10 +105,10 @@ foreach ($students as $student) {
 if (isset($_GET['student_id'])) {
     $studentId = $_GET['student_id'];
 
-    $stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");  // you can change the LIMIT as needed
+    $stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
     $stmt->bind_param('i', $studentId);
     $stmt->execute();
-    
+
     // Check for errors during performance data fetch
     if ($stmt->error) {
         die("Error during performance data fetch: " . $stmt->error);
@@ -116,18 +116,18 @@ if (isset($_GET['student_id'])) {
 
     $result = $stmt->get_result();
     $performanceData = $result->fetch_all(MYSQLI_ASSOC);
-    
+
     echo "<table border='1'>";
-    echo "<tr><th>Week Start Date</th><th>Score1</th><th>Score2</th>...<th>Score10</th></tr>";  // Add more headers if needed
-    
+    echo "<tr><th>Week Start Date</th><th>Score1</th><th>Score2</th>...<th>Score10</th></tr>";
+
     foreach ($performanceData as $data) {
-        echo "<tr>";
+        echo "<tr data-performance-id='" . $data['performance_id'] . "'>";
         for ($i = 1; $i <= 10; $i++) {
             echo "<td data-value='" . $data['score' . $i] . "' class='editable'>" . $data['score' . $i] . "</td>";
         }
         echo "</tr>";
     }
-    
+
     echo "</table>";
 }
 
