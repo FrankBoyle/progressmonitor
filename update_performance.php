@@ -18,12 +18,11 @@ if ($_POST['performance_id'] && $_POST['field_name'] && $_POST['new_value']) {
     // Update the database
     $stmt = $conn->prepare("UPDATE Performance SET $fieldName = ? WHERE performance_id = ?");
     $stmt->bind_param('si', $newValue, $performanceId);
-    $stmt->execute();
 
-    if ($stmt->affected_rows < 0 || $stmt->error) {
-        $response = array("success" => false, "error" => "Database error: " . $stmt->error);
-    } else {
+    if ($stmt->execute()) {
         $response = array("success" => true);
+    } else {
+        $response = array("success" => false, "error" => "Database error: " . $stmt->error);
     }
 
     echo json_encode($response);
@@ -32,4 +31,5 @@ if ($_POST['performance_id'] && $_POST['field_name'] && $_POST['new_value']) {
     echo json_encode($response);
 }
 ?>
+
 
