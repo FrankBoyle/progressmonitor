@@ -1,3 +1,54 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Add click event handler to editable cells
+        $('.editable').click(function() {
+            const cell = $(this);
+            const originalValue = cell.data('value');
+
+            // Create an input field for editing
+            const input = $('<input type="text">');
+            input.val(originalValue);
+
+            // Replace the cell content with the input field
+            cell.html(input);
+
+            // Focus on the input field
+            input.focus();
+
+            // Add blur event handler to save changes
+            input.blur(function() {
+                const newValue = input.val();
+                cell.data('value', newValue);
+
+                // Update the cell content with the new value
+                cell.text(newValue);
+
+                // Perform AJAX request to update the database with the new value
+                const performanceId = cell.closest('tr').data('performance-id'); // You need to set a data attribute on the <tr> element with the performance ID
+                const fieldName = cell.index() - 1; // Adjust the index as needed
+
+                // Perform an AJAX request to update the database with the new value
+                $.post('update_performance.php', {
+                    performance_id: performanceId,
+                    field_name: fieldName,
+                    new_value: newValue
+                }, function(response) {
+                    // Handle the response if needed
+                });
+            });
+
+            // Pressing Enter key while editing should save changes
+            input.keypress(function(e) {
+                if (e.which === 13) {
+                    input.blur();
+                }
+            });
+        });
+    });
+</script>
+
+
 <?php
 $servername = "localhost";
 $username = "AndersonSchool";
