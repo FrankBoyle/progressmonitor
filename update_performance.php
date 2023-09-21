@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 
 if ($_POST['performance_id'] && $_POST['field_name'] && $_POST['new_value']) {
     $performanceId = $_POST['performance_id'];
-    $fieldName = 'score' . $_POST['field_name']; // Assuming you named the fields in the database like score1, score2, etc.
+    $fieldName = $_POST['field_name'];
     $newValue = $_POST['new_value'];
 
     // Update the database
