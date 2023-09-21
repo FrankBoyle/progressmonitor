@@ -6,6 +6,13 @@
 </head>
 <body>
 
+    <!-- Add New Student Form -->
+    <form method="post" action="">
+        <label for="new_student_name">New Student Name:</label>
+        <input type="text" id="new_student_name" name="new_student_name">
+        <input type="submit" name="add_new_student" value="Add New Student">
+    </form>
+
     <?php
     // Error tracking: Log PHP errors to a file
     ini_set('display_errors', 1);
@@ -20,13 +27,13 @@
     }
 
     try {
+        // Database connection
         $servername = "localhost";
         $username = "AndersonSchool";
         $password = "SpecialEd69$";
         $dbname = "bFactor-test";
 
         $conn = new mysqli($servername, $username, $password, $dbname);
-
         if ($conn->connect_error) {
             throw new Exception("Connection failed: " . $conn->connect_error);
         } else {
@@ -35,8 +42,6 @@
 
         // Start session
         session_start();
-
-        // Ensure teacher_id is in the session
         if (!isset($_SESSION['teacher_id'])) {
             throw new Exception("Teacher ID not set in session");
         }
@@ -44,6 +49,34 @@
         $teacherId = $_SESSION['teacher_id'];
         echo "Teacher ID from session: " . $teacherId . "<br>";
 
+        // Add New Student
+        if (isset($_POST['add_new_student'])) {
+            $newStudentName = $_POST['new_student_name'];
+
+            if (!empty($newStudentName)) {
+                $stmt = $conn->prepare("INSERT INTO Students (name) VALUES (?)");
+                $stmt->bind_param('s', $newStudentName);
+                $stmt->execute();
+
+                if ($stmt->error) {
+                    throw new Exception("Error adding new student: " . $stmt->error);
+                }
+
+                $newStudentId = $conn->insert_id;
+
+                $stmt = $conn->prepare("INSERT INTO Teacher_Student_Assignment (teacher_id, student_id) VALUES (?, ?)");
+                $stmt->bind_param('ii', $teacherId, $newStudentId);
+                $stmt->execute();
+
+                if ($stmt->error) {
+                    throw new Exception("Error associating new student with teacher: " . $stmt->error);
+                }
+
+                echo "New student added successfully.<br>";
+            }
+        }
+
+        // Existing Students
         $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher_Student_Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
         $stmt->bind_param('i', $teacherId);
         $stmt->execute();
