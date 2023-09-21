@@ -14,7 +14,7 @@ if (!isset($_GET['student_id'])) {
 
 $studentId = $_GET['student_id'];
 
-$stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
+$stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
 $stmt->execute([$studentId]);
 
 $performanceData = $stmt->fetchAll();
