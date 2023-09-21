@@ -60,7 +60,7 @@
         } else {
             echo "<h2>Students:</h2>";
             foreach ($students as $student) {
-                echo $student['name'] . "<br>";
+                echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
             }
         }
 
@@ -72,4 +72,5 @@
 
 </body>
 </html>
+
 
