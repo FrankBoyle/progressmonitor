@@ -8,7 +8,7 @@ $weekStartDate = $_POST['week_start_date'];
 $scores = $_POST['scores'];
 
 // Prepare SQL statement
-$stmt = $connection->prepare("INSERT INTO Performance (student_id, week_start_date, score1, score2, /* ... other score fields */) VALUES (?, ?, ?, ?, /* ... other score values */)");
+$stmt = $connection->prepare("INSERT INTO Performance (student_id, week_start_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10/* ... other score fields */) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?/* ... other score values */)");
 
 // Bind the parameters
 $stmt->bindParam(1, $studentId);
