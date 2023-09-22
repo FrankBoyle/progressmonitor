@@ -55,7 +55,7 @@ function attachEditableHandler() {
 
             const studentId = $('#currentStudentId').val();  
             const weekStartDate = $('#currentWeekStartDate').val();
-            
+
 let postData = {
     performance_id: performanceId,
     field_name: fieldName,
@@ -73,8 +73,8 @@ if (performanceId === 'new') {
 }
 
             // Fetch student ID and week start date dynamically
-            const studentId = $('#currentStudentId').val();  
-            const weekStartDate = $('#currentWeekStartDate').val();
+            //const studentId = $('#currentStudentId').val();  
+            //const weekStartDate = $('#currentWeekStartDate').val();
 
             $.ajax({ // <-- This is the replacement!
                     type: 'POST',
