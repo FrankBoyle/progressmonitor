@@ -72,9 +72,6 @@ if (performanceId === 'new') {
     postData.scores = scores;
 }
 
-            // Fetch student ID and week start date dynamically
-            //const studentId = $('#currentStudentId').val();  
-            //const weekStartDate = $('#currentWeekStartDate').val();
 
             $.ajax({ // <-- This is the replacement!
                     type: 'POST',
