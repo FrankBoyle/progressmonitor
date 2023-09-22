@@ -77,12 +77,15 @@ if (performanceId === 'new') {
                     type: 'POST',
                     url: targetUrl,
                     data: postData,
-                success: function(response) {
-                    if (performanceId === 'new') {
-                        // Optionally update the new row's performance-id with the ID returned from the server
-                    }
-                    alert('Data updated successfully');
-                },
+                    success: function(response) {
+    if (performanceId === 'new') {
+        // Update the new row's performance-id with the ID returned from the server
+        const newRow = $('tr[data-performance-id="new"]');
+        newRow.attr('data-performance-id', response.performance_id);
+    }
+    alert('Data added successfully');
+},
+
                 error: function() {
                     alert('Error updating data. Please try again later.');
                 }
