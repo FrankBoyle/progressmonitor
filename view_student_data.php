@@ -53,21 +53,30 @@ function attachEditableHandler() {
             const fieldName = cell.data('field-name');
 
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+let postData = {
+    performance_id: performanceId,
+    field_name: fieldName,
+    new_value: newValue,
+    student_id: studentId,
+    week_start_date: weekStartDate
+};
+
+if (performanceId === 'new') {
+    let scores = {};
+    for (let i = 1; i <= 10; i++) {
+        scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
+    }
+    postData.scores = scores;
+}
 
             // Fetch student ID and week start date dynamically
             const studentId = $('#currentStudentId').val();  
             const weekStartDate = $('#currentWeekStartDate').val();
 
-            $.ajax({
-                type: 'POST',
-                url: targetUrl,
-                data: {
-                    performance_id: performanceId,
-                    field_name: fieldName,
-                    new_value: newValue,
-                    student_id: studentId, 
-                    week_start_date: weekStartDate 
-                },
+            $.ajax({ // <-- This is the replacement!
+                    type: 'POST',
+                    url: targetUrl,
+                    data: postData,
                 success: function(response) {
                     if (performanceId === 'new') {
                         // Optionally update the new row's performance-id with the ID returned from the server

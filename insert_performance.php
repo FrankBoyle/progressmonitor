@@ -5,7 +5,7 @@ include('./users/db.php');
 // Fetch data from POST request
 $studentId = $_POST['student_id'];
 $weekStartDate = $_POST['week_start_date'];
-$scores = $_POST['scores'];
+$scores = isset($_POST['scores']) ? json_decode($_POST['scores'], true) : [];
 
 // Prepare SQL statement
 $stmt = $connection->prepare("INSERT INTO Performance (student_id, week_start_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10/* ... other score fields */) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?/* ... other score values */)");
