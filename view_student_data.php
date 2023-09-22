@@ -7,23 +7,18 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Initialize an empty array for performanceData
+$performanceData = array();
+
 // Check if `student_id` is provided in the URL
-if (!isset($_GET['student_id'])) {
-    die('Student ID is not provided.');
+if (isset($_GET['student_id'])) {
+    $studentId = $_GET['student_id'];
+
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
+    $stmt->execute([$studentId]);
+
+    $performanceData = $stmt->fetchAll();
 }
-
-$studentId = $_GET['student_id'];
-
-$stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
-$stmt->execute([$studentId]);
-
-$performanceData = $stmt->fetchAll();
-
-// Check Data Retrieval
-if (empty($performanceData)) {
-    die('No performance data found for the given student ID.');
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -41,33 +36,28 @@ $(document).ready(function() {
     function attachEditableHandler() {
         $('.editable').off('click').on('click', function() {
             const cell = $(this);
-            const originalValue = cell.text();  // Assuming that the text holds the value
+            const originalValue = cell.text();
 
-            // Create an input field for editing
             const input = $('<input type="text">');
             input.val(originalValue);
-            
-            // Replace the cell content with the input field
+
             cell.html(input);
-            
-            // Focus on the input field
             input.focus();
 
-            // Add blur event handler to save changes
             input.blur(function() {
                 const newValue = input.val();
-                cell.text(newValue);  // Update the cell content with the new value
+                cell.text(newValue);
 
-                // Perform AJAX request to update the database with the new value
                 const performanceId = cell.closest('tr').data('performance-id');
                 const fieldName = cell.data('field-name');
+
                 $.ajax({
                     type: 'POST',
-                    url: 'update_performance.php', // Your backend script to handle updates
+                    url: 'update_performance.php',
                     data: {
                         performance_id: performanceId,
                         field_name: fieldName,
-                        new_value: newValue
+                        new_value: newValue,
                     },
                     success: function(response) {
                         alert('Data updated successfully');
@@ -82,15 +72,13 @@ $(document).ready(function() {
 
     attachEditableHandler();
 
-    // Add a new data row when the "Add Data Row" button is clicked
+    // Add new data row
     $('#addDataRow').click(function() {
         const newRow = $('<tr>');
         newRow.append($('<td>').text('New Entry'));
-
         for (let i = 1; i <= 10; i++) {
             newRow.append($('<td>').addClass('editable').attr('data-field-name', 'score' + i).text(''));
         }
-
         $('table').append(newRow);
         attachEditableHandler();
     });
@@ -99,26 +87,27 @@ $(document).ready(function() {
 
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
+
 <table border="1">
     <tr>
         <th>Week Start Date</th>
-        <th>Score1</th>
-        <th>Score2</th>
-        <th>Score3</th>
-        <th>Score4</th>
-        <th>Score5</th>
-        <th>Score6</th>
-        <th>Score7</th>
-        <th>Score8</th>
-        <th>Score9</th>
-        <th>Score10</th>
-    </tr>
+        <th class="editable" data-field-name="score1">Score1</th>
+        <th class="editable" data-field-name="score2">Score2</th>
+        <th class="editable" data-field-name="score3">Score3</th>
+        <th class="editable" data-field-name="score4">Score4</th>
+        <th class="editable" data-field-name="score5">Score5</th>
+        <th class="editable" data-field-name="score6">Score6</th>
+        <th class="editable" data-field-name="score7">Score7</th>
+        <th class="editable" data-field-name="score8">Score8</th>
+        <th class="editable" data-field-name="score9">Score9</th>
+        <th class="editable" data-field-name="score10">Score10</th>
 
-    <?php 
-    if (empty($performanceData)) {
-        echo "<tr><td colspan='11'>No Data. Click 'Add Data Row' to add new data.</td></tr>";
-    } else {
-        foreach ($performanceData as $data) : ?>
+        <!-- more headers here -->
+    </tr>
+    <?php if (empty($performanceData)) : ?>
+        <tr><td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td></tr>
+    <?php else : ?>
+        <?php foreach ($performanceData as $data) : ?>
             <tr data-performance-id="<?php echo $data['performance_id']; ?>">
                 <td><?php echo $data['week_start_date']; ?></td>
                 <td class="editable" data-field-name="score1"><?php echo $data['score1']; ?></td>
@@ -134,9 +123,9 @@ $(document).ready(function() {
 
                 <!-- Add other columns here -->
             </tr>
-        <?php endforeach; 
-    }
-    ?>
+
+        <?php endforeach; ?>
+    <?php endif; ?>
 </table>
 
 </body>
