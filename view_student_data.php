@@ -109,7 +109,7 @@ $(document).ready(function() {
     <?php else : ?>
         <?php foreach ($performanceData as $data) : ?>
             <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td><?php echo $data['week_start_date']; ?></td>
+                <td class="editable" data-field-name="week_start_date"><?php echo $data['week_start_date']; ?></td>
                 <td class="editable" data-field-name="score1"><?php echo $data['score1']; ?></td>
                 <td class="editable" data-field-name="score2"><?php echo $data['score2']; ?></td>
                 <td class="editable" data-field-name="score3"><?php echo $data['score3']; ?></td>
