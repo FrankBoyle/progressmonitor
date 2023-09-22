@@ -138,7 +138,7 @@ $('#addDataRow').click(function() {
                 <td class="editable" data-field-name="score7"><?php echo $data['score7']; ?></td>
                 <td class="editable" data-field-name="score8"><?php echo $data['score8']; ?></td>
                 <td class="editable" data-field-name="score9"><?php echo $data['score9']; ?></td>
-                <td class="editable" data-field-name="score10"><?php echo $data['scor10']; ?></td>
+                <td class="editable" data-field-name="score10"><?php echo $data['score10']; ?></td>
 
                 <!-- Add other columns here -->
             </tr>
