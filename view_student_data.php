@@ -51,8 +51,11 @@ function attachEditableHandler() {
 
             const performanceId = cell.closest('tr').data('performance-id');
             const fieldName = cell.data('field-name');
-
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+
+            const studentId = $('#currentStudentId').val();  
+            const weekStartDate = $('#currentWeekStartDate').val();
+            
 let postData = {
     performance_id: performanceId,
     field_name: fieldName,
