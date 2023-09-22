@@ -111,8 +111,8 @@ if ($chartResult3->num_rows > 0) {
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- jsGrid -->
-<link rel="stylesheet" href="./plugins/jsgrid/jsgrid.min.css"> 
-<link rel="stylesheet" href="./plugins/jsgrid/jsgrid-theme.min.css"> 
+  <link rel="stylesheet" href="./plugins/jsgrid/jsgrid.min.css">
+  <link rel="stylesheet" href="./plugins/jsgrid/jsgrid-theme.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="./dist/css/adminlte.min.css">
   <!-- Ionicons -->
@@ -130,7 +130,7 @@ if ($chartResult3->num_rows > 0) {
   <!-- summernote -->
   <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
+<link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css" rel="stylesheet">
 
 
 </head>
@@ -413,9 +413,6 @@ if ($chartResult3->num_rows > 0) {
                           echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
                         }
                     ?>
-
-
-
                     <input type="submit" name="save_goal" value="Save Goal">
                   </form>
 
@@ -442,69 +439,13 @@ if ($chartResult3->num_rows > 0) {
                     </table>
                     <input type='submit' name='update' value='Update'>
                   </form>
-
-<!--                
-                  < ?php
-session_start(); // Start the session
-
-$servername = "localhost";
-$username = "AndersonSchool";
-$password = "SpecialEd69$";
-$dbname = "bFactor-test";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Assuming you have the logged in teacher's ID stored in a session variable
-$teacherId = $_SESSION['teacher_id'];
-
-$stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher-Student-Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
-$stmt->bind_param('i', $teacherId);
-$stmt->execute();
-
-$result = $stmt->get_result();
-$students = $result->fetch_all(MYSQLI_ASSOC);
-
-foreach ($students as $student) {
-    echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
-}
-
-if (isset($_GET['student_id'])) {
-    $studentId = $_GET['student_id'];
-
-    $stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");  // you can change the LIMIT as needed
-    $stmt->bind_param('i', $studentId);
-    $stmt->execute();
-    
-    $result = $stmt->get_result();
-    $performanceData = $result->fetch_all(MYSQLI_ASSOC);
-    
-    echo "<table border='1'>";
-    echo "<tr><th>Week Start Date</th><th>Score1</th><th>Score2</th>...<th>Score10</th></tr>";  // Add more headers if needed
-    
-    foreach ($performanceData as $data) {
-        echo "<tr>";
-        for ($i = 1; $i <= 10; $i++) {
-            echo "<td>" . $data['score' . $i] . "</td>";
-        }
-        echo "</tr>";
-    }
-    
-    echo "</table>";
-}
-?>
--->
-
-
+  
 
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
               </div>
             </div>
-            
+
             <!-- solid sales graph -->
             <div class="card info">
               <div class="card-header border-0">
@@ -749,10 +690,10 @@ chart.render();
 
 <!-- jQuery -->
 
-<script src="./plugins/jquery/jquery.min.js"></script>
+<script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="./dist/js/adminlte.min.js"></script>
+<script src="dist/js/adminlte.min.js"></script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 include("./users/auth_session.php");
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -457,7 +459,7 @@ include("./users/auth_session.php");
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
+                <a href="pages/tables/simple.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Simple Tables</p>
                 </a>
@@ -1382,7 +1384,9 @@ include("./users/auth_session.php");
                 </div>
               </div>
               <div class="card-body">
-                <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+               
+                  
+
               </div>
               <!-- /.card-body -->
               <div class="card-footer bg-transparent">
