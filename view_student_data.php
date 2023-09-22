@@ -30,18 +30,18 @@ if (isset($_GET['student_id'])) {
 </head>
 <body>
 
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="" />
+
 <script>
 $(document).ready(function() {
 
-// Function to attach click event handlers to editable cells
 function attachEditableHandler() {
     $('.editable').off('click').on('click', function() {
         const cell = $(this);
         const originalValue = cell.text();
-
         const input = $('<input type="text">');
         input.val(originalValue);
-
         cell.html(input);
         input.focus();
 
@@ -54,6 +54,10 @@ function attachEditableHandler() {
 
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
 
+            // Fetch student ID and week start date dynamically
+            const studentId = $('#currentStudentId').val();  
+            const weekStartDate = $('#currentWeekStartDate').val();
+
             $.ajax({
                 type: 'POST',
                 url: targetUrl,
@@ -61,24 +65,22 @@ function attachEditableHandler() {
                     performance_id: performanceId,
                     field_name: fieldName,
                     new_value: newValue,
-                    // Add other required fields for 'insert_performance.php' here, like student_id and week_start_date
-                    // student_id: studentId,
-                    // week_start_date: weekStartDate,
+                    student_id: studentId, 
+                    week_start_date: weekStartDate 
                 },
                 success: function(response) {
                     if (performanceId === 'new') {
-                        // Here, you could update the new row's performance-id with the ID returned from the server, if needed
-                        // e.g., newRow.data('performance-id', returnedId);
+                        // Optionally update the new row's performance-id with the ID returned from the server
                     }
                     alert('Data updated successfully');
                 },
                 error: function() {
                     alert('Error updating data. Please try again later.');
-                },
+                }
             });
         });
 
-        // Enable pressing Enter to save changes
+        // Pressing Enter to save changes
         input.keypress(function(e) {
             if (e.which === 13) {
                 input.blur();
@@ -89,7 +91,6 @@ function attachEditableHandler() {
 
 attachEditableHandler();
 
-// Add new data row
 $('#addDataRow').click(function() {
     const newRow = $('<tr data-performance-id="new">');
     newRow.append('<td class="editable" data-field-name="week_start_date">New Entry</td>');
