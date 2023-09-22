@@ -108,7 +108,13 @@ $('#addDataRow').click(function() {
     }
     $('table').append(newRow);
     attachEditableHandler();
+
+    // Set the current week start date for the new row, if needed
+    const currentDate = new Date();
+    const formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+    $('#currentWeekStartDate').val(formattedDate);
 });
+
 });
 
 </script>
