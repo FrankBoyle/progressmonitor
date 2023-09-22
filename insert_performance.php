@@ -15,14 +15,14 @@ $stmt->bindParam(1, $studentId);
 $stmt->bindParam(2, $weekStartDate);
 $stmt->bindParam(3, $scores['score1']);
 $stmt->bindParam(4, $scores['score2']);
-$stmt->bindParam(4, $scores['score3']);
-$stmt->bindParam(4, $scores['score4']);
-$stmt->bindParam(4, $scores['score5']);
-$stmt->bindParam(4, $scores['score6']);
-$stmt->bindParam(4, $scores['score7']);
-$stmt->bindParam(4, $scores['score8']);
-$stmt->bindParam(4, $scores['score9']);
-$stmt->bindParam(4, $scores['score10']);
+$stmt->bindParam(5, $scores['score3']);
+$stmt->bindParam(6, $scores['score4']);
+$stmt->bindParam(7, $scores['score5']);
+$stmt->bindParam(8, $scores['score6']);
+$stmt->bindParam(9, $scores['score7']);
+$stmt->bindParam(10, $scores['score8']);
+$stmt->bindParam(11, $scores['score9']);
+$stmt->bindParam(12, $scores['score10']);
 // ... continue for other score fields
 
 // Execute the statement
