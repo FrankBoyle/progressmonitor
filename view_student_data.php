@@ -90,7 +90,7 @@ $(document).ready(function() {
 
 <table border="1">
     <tr>
-        <th>Week Start Date</th>
+        <th class="editable" data-field-name="week_start_date">Week Start Date</th>
         <th class="editable" data-field-name="score1">Score1</th>
         <th class="editable" data-field-name="score2">Score2</th>
         <th class="editable" data-field-name="score3">Score3</th>
