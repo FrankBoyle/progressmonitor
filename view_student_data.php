@@ -46,8 +46,15 @@ function attachEditableHandler() {
         input.focus();
 
         input.blur(function() {
-            const newValue = input.val();
-            cell.text(newValue);
+    let newValue;
+    if (input.attr('type') === 'date') {
+        newValue = input.val();
+        $('#currentWeekStartDate').val(newValue);
+        cell.text(newValue); // Update the cell text with the selected date
+    } else {
+        newValue = input.val();
+        cell.text(newValue);
+    }
 
             const performanceId = cell.closest('tr').data('performance-id');
             const fieldName = cell.data('field-name');
@@ -104,17 +111,19 @@ if (performanceId === 'new') {
 attachEditableHandler();
 
 $('#addDataRow').click(function() {
+    const currentDate = new Date();
+    const formattedDate = currentDate.getFullYear() + '-' + String(currentDate.getMonth() + 1).padStart(2, '0') + '-' + String(currentDate.getDate()).padStart(2, '0');
+    
     const newRow = $('<tr data-performance-id="new">');
-    newRow.append('<td class="editable" data-field-name="week_start_date">New Entry</td>');
+    const dateInput = `<input type="date" value="${formattedDate}" class="date-input">`;
+    newRow.append(`<td class="editable" data-field-name="week_start_date">${dateInput}</td>`);
     for (let i = 1; i <= 10; i++) {
         newRow.append($('<td>').addClass('editable').attr('data-field-name', 'score' + i).text(''));
     }
     $('table').append(newRow);
     attachEditableHandler();
 
-    // Set the current week start date for the new row, if needed
-    const currentDate = new Date();
-    const formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+    // Set the current week start date for the new row
     $('#currentWeekStartDate').val(formattedDate);
 });
 
