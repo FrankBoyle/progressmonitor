@@ -135,7 +135,7 @@ if (performanceId === 'new') {
                 input.blur();
             }
         });
-    });
+
 }
 $('td[data-field-name="week_start_date"]').each(function() {
         const dateCell = $(this);
