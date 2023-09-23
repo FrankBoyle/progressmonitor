@@ -40,7 +40,7 @@ if (isset($_GET['student_id'])) {
 $(document).ready(function() {
 
     function convertToAmericanDate(dateString) {
-    if (!dateString || dateString === "New Entry") {
+    if (!dateString || dateString === "New Entry" || dateString.indexOf('/') !== -1) {
         return dateString;
     }
     const parts = dateString.split('-');
@@ -49,6 +49,7 @@ $(document).ready(function() {
     }
     return `${parts[1]}/${parts[2]}/${parts[0]}`;
 }
+
 
 
 function attachEditableHandler() {
@@ -61,11 +62,13 @@ function attachEditableHandler() {
             input = $('<input type="text">'); // use text type here
             input.val(convertToAmericanDate(originalValue));
             input.datepicker({
-                dateFormat: 'mm/dd/yy', // format to match your display format
-                onClose: function() {
-                    input.blur(); // trigger the blur event when the calendar is closed
-                }
-            });
+    dateFormat: 'mm/dd/yy', 
+    onClose: function(dateText) {
+        input.val(dateText);
+        input.blur(); // trigger the blur event after setting the value
+    }
+});
+
             cell.html(input);
             input.focus().datepicker("show"); // directly show the datepicker
         } else {
