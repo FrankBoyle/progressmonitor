@@ -37,25 +37,31 @@ if (isset($_GET['student_id'])) {
 $(document).ready(function() {
     
     function attachEditableHandler() {
-        $('.editable').off('click').on('click', function() {
-    const cell = $(this);
-    const originalValue = cell.text();
-    let input;
+    $('.editable').off('click').on('click', function() {
+        const cell = $(this);
+        const originalValue = cell.text();
+        let input;
 
-    // Check if the clicked cell is the week_start_date cell
-    if (cell.data('field-name') === 'week_start_date') {
-        input = $('<input type="date" class="date-input">');
-        const dateParts = originalValue.split("-");
-        if (dateParts.length === 3) { // to prevent error if date is not formatted correctly
-            input.val(dateParts[0] + '-' + (dateParts[1].length === 1 ? '0' : '') + dateParts[1] + '-' + (dateParts[2].length === 1 ? '0' : '') + dateParts[2]);
+        // Check if the clicked cell is the week_start_date cell
+        if (cell.data('field-name') === 'week_start_date') {
+            input = $('<input type="date" class="date-input">');
+            
+            // If the cell already contains a date input, use its value
+            if (cell.children('input[type="date"]').length > 0) {
+                input.val(cell.children('input[type="date"]').val());
+            } else {
+                const dateParts = originalValue.split("-");
+                if (dateParts.length === 3) { 
+                    input.val(dateParts[0] + '-' + (dateParts[1].length === 1 ? '0' : '') + dateParts[1] + '-' + (dateParts[2].length === 1 ? '0' : '') + dateParts[2]);
+                }
+            }
+        } else {
+            input = $('<input type="text">');
+            input.val(originalValue);
         }
-    } else {
-        input = $('<input type="text">');
-        input.val(originalValue);
-    }
 
-    cell.html(input);
-    input.focus();
+        cell.html(input);
+        input.focus();
 
 // Add the code here for the "Enter" key press event
 input.on('keydown', function(e) {
