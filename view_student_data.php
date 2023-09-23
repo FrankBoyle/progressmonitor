@@ -68,6 +68,7 @@ function attachEditableHandler() {
         input.blur();
     }
 });
+input.datepicker("show");
 
             cell.html(input);
             input.focus().datepicker("show"); // directly show the datepicker
