@@ -62,9 +62,12 @@ function attachEditableHandler() {
             input = $('<input type="text">'); // use text type here
             input.val(convertToAmericanDate(originalValue));
             input.datepicker({
-    dateFormat: 'yy-mm-dd'
+    dateFormat: 'yy-mm-dd', 
+    onClose: function(dateText) {
+        input.val(dateText);
+        input.blur();
+    }
 });
-input.datepicker("show");
 
             cell.html(input);
             input.focus().datepicker("show"); // directly show the datepicker
@@ -82,8 +85,6 @@ input.datepicker("show");
     } else {
         cell.text(newValue);
     }
-});
-
             cell.text(newValue);
 
             const performanceId = cell.closest('tr').data('performance-id');
@@ -135,7 +136,7 @@ if (performanceId === 'new') {
                 input.blur();
             }
         });
-
+    });
 }
 $('td[data-field-name="week_start_date"]').each(function() {
         const dateCell = $(this);
