@@ -59,19 +59,16 @@ function attachEditableHandler() {
         let input;
 
         if (cell.data('field-name') === 'week_start_date') {
-    input.datepicker({
-        dateFormat: "mm/dd/yy",
-        onClose: function(selectedDate) {
-            // When a date is selected, convert to YYYY-MM-DD for server
-            const parts = selectedDate.split('/');
+            input = $('<input type="text">');
+            // Convert MM/DD/YYYY back to YYYY-MM-DD for date input
+            const parts = originalValue.split('/');
             if (parts.length === 3) {
-                const serverFormatDate = `${parts[2]}-${parts[0]}-${parts[1]}`;
-                input.val(serverFormatDate);
+                input.val(`${parts[2]}-${parts[0]}-${parts[1]}`);
             }
+        } else {
+            input = $('<input type="text">');
+            input.val(originalValue);
         }
-    });
-}
-
 
         cell.html(input);
         input.focus();
