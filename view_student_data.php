@@ -29,7 +29,8 @@ if (isset($_GET['student_id'])) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Add jQuery UI library -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+
 </head>
 <body>
 
@@ -58,16 +59,19 @@ function attachEditableHandler() {
         let input;
 
         if (cell.data('field-name') === 'week_start_date') {
-            input = $('<input type="date">');
-            // Convert MM/DD/YYYY back to YYYY-MM-DD for date input
-            const parts = originalValue.split('/');
+    input.datepicker({
+        dateFormat: "mm/dd/yy",
+        onClose: function(selectedDate) {
+            // When a date is selected, convert to YYYY-MM-DD for server
+            const parts = selectedDate.split('/');
             if (parts.length === 3) {
-                input.val(`${parts[2]}-${parts[0]}-${parts[1]}`);
+                const serverFormatDate = `${parts[2]}-${parts[0]}-${parts[1]}`;
+                input.val(serverFormatDate);
             }
-        } else {
-            input = $('<input type="text">');
-            input.val(originalValue);
         }
+    });
+}
+
 
         cell.html(input);
         input.focus();
@@ -141,7 +145,7 @@ attachEditableHandler();
 
 $('#addDataRow').click(function() {
     const newRow = $('<tr data-performance-id="new">');
-    newRow.append('<td class="editable" data-field-name="week_start_date">New Entry</td>');
+    newRow.append('<td class="editable" data-field-name="week_start_date"></td>');  // Leave it empty for now.
     for (let i = 1; i <= 10; i++) {
         newRow.append($('<td>').addClass('editable').attr('data-field-name', 'score' + i).text(''));
     }
