@@ -58,19 +58,22 @@ function attachEditableHandler() {
         let input;
 
         if (cell.data('field-name') === 'week_start_date') {
-            input = $('<input type="date">');
-            // Convert MM/DD/YYYY back to YYYY-MM-DD for date input
-            const parts = originalValue.split('/');
-            if (parts.length === 3) {
-                input.val(`${parts[2]}-${parts[0]}-${parts[1]}`);
-            }
+            input = $('<input type="text">'); // use text type here
+            input.val(convertToAmericanDate(originalValue));
+            input.datepicker({
+                dateFormat: 'mm/dd/yy', // format to match your display format
+                onClose: function() {
+                    input.blur(); // trigger the blur event when the calendar is closed
+                }
+            });
+            cell.html(input);
+            input.focus().datepicker("show"); // directly show the datepicker
         } else {
             input = $('<input type="text">');
             input.val(originalValue);
+            cell.html(input);
+            input.focus();
         }
-
-        cell.html(input);
-        input.focus();
 
         input.blur(function() {
             const newValue = input.val();
