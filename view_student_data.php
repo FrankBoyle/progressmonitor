@@ -42,17 +42,16 @@ $(document).ready(function() {
             const originalValue = cell.text();
             let input;
 
-// Check if the clicked cell is the week_start_date cell and is in a valid format
-if (cell.data('field-name') === 'week_start_date' && /^\d{4}-\d{1,2}-\d{1,2}$/.test(originalValue)) {
+            if (cell.data('field-name') === 'week_start_date') {
     input = $('<input type="date" class="date-input">');
-    const dateParts = originalValue.split("-");
-    if (dateParts.length === 3) {
+    if (originalValue.includes('-')) {
+        const dateParts = originalValue.split("-");
         input.val(dateParts[0] + '-' + (dateParts[1].length === 1 ? '0' : '') + dateParts[1] + '-' + (dateParts[2].length === 1 ? '0' : '') + dateParts[2]);
+    } else {
+        input.val(originalValue); // If the value doesn't contain hyphens, don't try to split and reformat it, just set it as is.
     }
-} else {
-    input = $('<input type="text">');
-    input.val(originalValue);
 }
+
 
 
             cell.html(input);
