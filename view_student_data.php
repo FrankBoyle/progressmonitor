@@ -69,9 +69,12 @@ input.on('keydown', function(e) {
 
         // Check if it's a date input and format it for the database
         if (input.attr('type') === 'date') {
-            const dateObj = new Date(input.val());
-            newValue = dateObj.getFullYear() + '-' + (dateObj.getMonth() + 1).toString().padStart(2, '0') + '-' + dateObj.getDate().toString().padStart(2, '0');
-        }
+    const dateObj = new Date(input.val() + 'T00:00:00'); // Append T00:00:00 to ensure it's the start of the day
+    newValue = dateObj.getUTCFullYear() + '-' + 
+              (dateObj.getUTCMonth() + 1).toString().padStart(2, '0') + '-' + 
+              dateObj.getUTCDate().toString().padStart(2, '0');
+}
+
 
         cell.text(newValue); // update cell with the new value
 
