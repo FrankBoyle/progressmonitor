@@ -62,10 +62,10 @@ function attachEditableHandler() {
             input = $('<input type="text">'); // use text type here
             input.val(convertToAmericanDate(originalValue));
             input.datepicker({
-    dateFormat: 'mm/dd/yy', 
+    dateFormat: 'yy-mm-dd', 
     onClose: function(dateText) {
         input.val(dateText);
-        input.blur(); // trigger the blur event after setting the value
+        input.blur();
     }
 });
 
@@ -79,12 +79,12 @@ function attachEditableHandler() {
         }
 
         input.blur(function() {
-            const newValue = input.val();
-            if (cell.data('field-name') === 'week_start_date') {
-    cell.text(convertToAmericanDate(newValue));
-} else {
-    cell.text(newValue);
-}
+    const newValue = input.val();
+    if (cell.data('field-name') === 'week_start_date') {
+        cell.text(convertToAmericanDate(newValue));
+    } else {
+        cell.text(newValue);
+    }
             cell.text(newValue);
 
             const performanceId = cell.closest('tr').data('performance-id');
