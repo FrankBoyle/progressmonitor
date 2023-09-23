@@ -38,57 +38,63 @@ $(document).ready(function() {
     
     function attachEditableHandler() {
         $('.editable').off('click').on('click', function() {
-            const cell = $(this);
-            const originalValue = cell.text();
-            let input;
+    const cell = $(this);
+    const originalValue = cell.text();
+    let input;
 
-            if (cell.data('field-name') === 'week_start_date') {
-    input = $('<input type="date" class="date-input">');
-    if (originalValue.includes('-')) {
+    // Check if the clicked cell is the week_start_date cell
+    if (cell.data('field-name') === 'week_start_date') {
+        input = $('<input type="date" class="date-input">');
         const dateParts = originalValue.split("-");
-        input.val(dateParts[0] + '-' + (dateParts[1].length === 1 ? '0' : '') + dateParts[1] + '-' + (dateParts[2].length === 1 ? '0' : '') + dateParts[2]);
+        if (dateParts.length === 3) { // to prevent error if date is not formatted correctly
+            input.val(dateParts[0] + '-' + (dateParts[1].length === 1 ? '0' : '') + dateParts[1] + '-' + (dateParts[2].length === 1 ? '0' : '') + dateParts[2]);
+        }
     } else {
-        input.val(originalValue); // If the value doesn't contain hyphens, don't try to split and reformat it, just set it as is.
-    }
-}
-
-
-
-            cell.html(input);
-            input.focus();
-
-            input.blur(function() {
-    let newValue;
-
-    // Check if it's a date input
-    if (input.attr('type') === 'date') {
-        const dateObj = new Date(input.val());
-        newValue = dateObj.getFullYear() + '-' + (dateObj.getMonth() + 1).toString().padStart(2, '0') + '-' + dateObj.getDate().toString().padStart(2, '0');
-    } else {
-        newValue = input.val();
+        input = $('<input type="text">');
+        input.val(originalValue);
     }
 
-    cell.text(newValue);
+    cell.html(input);
+    input.focus();
 
-                if (newValue !== originalValue) {
-                    const performanceId = cell.data('performance-id');
-                    const fieldName = cell.data('field-name');
+// Add the code here for the "Enter" key press event
+input.on('keydown', function(e) {
+    if (e.key === "Enter" || e.keyCode === 13) {
+        $(this).blur();  // trigger the blur event to save
+    }
+});
 
-                    $.post('update_performance.php', {
-                        performance_id: performanceId,
-                        field_name: fieldName,
-                        new_value: newValue
-                    }, function(response) {
-                        if (response.success) {
-                            console.log('Updated successfully!');
-                        } else {
-                            alert('Error: ' + response.error);
-                            cell.text(originalValue); // revert back to the original value on failure
-                        }
-                    }, 'json');
+    input.on('blur', function() {
+        let newValue = input.val();
+
+        // Check if it's a date input and format it for the database
+        if (input.attr('type') === 'date') {
+            const dateObj = new Date(input.val());
+            newValue = dateObj.getFullYear() + '-' + (dateObj.getMonth() + 1).toString().padStart(2, '0') + '-' + dateObj.getDate().toString().padStart(2, '0');
+        }
+
+        cell.text(newValue); // update cell with the new value
+
+        if (newValue !== originalValue) {
+            const performanceId = cell.closest('tr').data('performance-id');
+            const fieldName = cell.data('field-name');
+
+            $.post('update_performance.php', {
+                performance_id: performanceId,
+                field_name: fieldName,
+                new_value: newValue
+            }, function(response) {
+                if (response.success) {
+                    console.log('Updated successfully!');
+                } else {
+                    alert('Error: ' + response.error);
+                    cell.text(originalValue); // revert back to the original value on failure
                 }
-            });
-        });
+            }, 'json');
+        }
+    });
+});
+
     }
     
     attachEditableHandler();
