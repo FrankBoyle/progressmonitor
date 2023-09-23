@@ -35,80 +35,61 @@ if (isset($_GET['student_id'])) {
 
 <script>
 $(document).ready(function() {
+    
+    function attachEditableHandler() {
+        $('.editable').off('click').on('click', function() {
+            const cell = $(this);
+            const originalValue = cell.text();
+            let input;
 
-function attachEditableHandler() {
-    $('.editable').off('click').on('click', function() {
-        const cell = $(this);
-        const originalValue = cell.text();
-        const input = $('<input type="text">');
-        input.val(originalValue);
-        cell.html(input);
-        input.focus();
+            // Check if the clicked cell is the week_start_date cell
+            if (cell.data('field-name') === 'week_start_date') {
+                input = $('<input type="date" class="date-input">');
+                const dateParts = originalValue.split("-");
+                input.val(dateParts[0] + '-' + (dateParts[1].length === 1 ? '0' : '') + dateParts[1] + '-' + (dateParts[2].length === 1 ? '0' : '') + dateParts[2]);
+            } else {
+                input = $('<input type="text">');
+                input.val(originalValue);
+            }
 
-        input.blur(function() {
+            cell.html(input);
+            input.focus();
+
+            input.blur(function() {
     let newValue;
+
+    // Check if it's a date input
     if (input.attr('type') === 'date') {
-        newValue = input.val();
-        $('#currentWeekStartDate').val(newValue);
-        cell.text(newValue); // Update the cell text with the selected date
+        const dateObj = new Date(input.val());
+        newValue = dateObj.getFullYear() + '-' + (dateObj.getMonth() + 1).toString().padStart(2, '0') + '-' + dateObj.getDate().toString().padStart(2, '0');
     } else {
         newValue = input.val();
-        cell.text(newValue);
     }
 
-            const performanceId = cell.closest('tr').data('performance-id');
-            const fieldName = cell.data('field-name');
-            const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+    cell.text(newValue);
 
-            const studentId = $('#currentStudentId').val();  
-            const weekStartDate = $('#currentWeekStartDate').val();
+                if (newValue !== originalValue) {
+                    const performanceId = cell.data('performance-id');
+                    const fieldName = cell.data('field-name');
 
-let postData = {
-    performance_id: performanceId,
-    field_name: fieldName,
-    new_value: newValue,
-    student_id: studentId,
-    week_start_date: weekStartDate
-};
-
-if (performanceId === 'new') {
-    let scores = {};
-    for (let i = 1; i <= 10; i++) {
-        scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
-    }
-    postData.scores = scores;
-}
-
-
-            $.ajax({ // <-- This is the replacement!
-                    type: 'POST',
-                    url: targetUrl,
-                    data: postData,
-                    success: function(response) {
-    if (performanceId === 'new') {
-        // Update the new row's performance-id with the ID returned from the server
-        const newRow = $('tr[data-performance-id="new"]');
-        newRow.attr('data-performance-id', response.performance_id);
-    }
-    alert('Data added successfully');
-},
-
-                error: function() {
-                    alert('Error updating data. Please try again later.');
+                    $.post('update_performance.php', {
+                        performance_id: performanceId,
+                        field_name: fieldName,
+                        new_value: newValue
+                    }, function(response) {
+                        if (response.success) {
+                            console.log('Updated successfully!');
+                        } else {
+                            alert('Error: ' + response.error);
+                            cell.text(originalValue); // revert back to the original value on failure
+                        }
+                    }, 'json');
                 }
             });
         });
-
-        // Pressing Enter to save changes
-        input.keypress(function(e) {
-            if (e.which === 13) {
-                input.blur();
-            }
-        });
-    });
-}
-
-attachEditableHandler();
+    }
+    
+    attachEditableHandler();
 
 $('#addDataRow').click(function() {
     const currentDate = new Date();
