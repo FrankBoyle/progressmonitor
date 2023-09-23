@@ -39,30 +39,46 @@ if (isset($_GET['student_id'])) {
 <script>
 $(document).ready(function() {
 
-function convertToAmericanDate(dateString) {
+    function convertToAmericanDate(dateString) {
+    if (!dateString || dateString === "New Entry") {
+        return dateString;
+    }
     const parts = dateString.split('-');
+    if (parts.length !== 3) {
+        return dateString;  // return original string if it doesn't match expected format
+    }
     return `${parts[1]}/${parts[2]}/${parts[0]}`;
 }
+
 
 function attachEditableHandler() {
     $('.editable').off('click').on('click', function() {
         const cell = $(this);
         const originalValue = cell.text();
-        
-        let input = $('<input type="text">');
-        
+        let input;
+
         if (cell.data('field-name') === 'week_start_date') {
-            input = $('<input type="text" class="datepicker">').datepicker({
-                dateFormat: 'mm/dd/yy'
-            });
+            input = $('<input type="date">');
+            // Convert MM/DD/YYYY back to YYYY-MM-DD for date input
+            const parts = originalValue.split('/');
+            if (parts.length === 3) {
+                input.val(`${parts[2]}-${parts[0]}-${parts[1]}`);
+            }
+        } else {
+            input = $('<input type="text">');
+            input.val(originalValue);
         }
-        
-        input.val(originalValue);
+
         cell.html(input);
         input.focus();
 
         input.blur(function() {
             const newValue = input.val();
+            if (cell.data('field-name') === 'week_start_date') {
+    cell.text(convertToAmericanDate(newValue));
+} else {
+    cell.text(newValue);
+}
             cell.text(newValue);
 
             const performanceId = cell.closest('tr').data('performance-id');
