@@ -24,9 +24,12 @@ if (isset($_GET['student_id'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <title>Student Performance Data</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Add jQuery UI library -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
 
@@ -36,11 +39,24 @@ if (isset($_GET['student_id'])) {
 <script>
 $(document).ready(function() {
 
+function convertToAmericanDate(dateString) {
+    const parts = dateString.split('-');
+    return `${parts[1]}/${parts[2]}/${parts[0]}`;
+}
+
 function attachEditableHandler() {
     $('.editable').off('click').on('click', function() {
         const cell = $(this);
         const originalValue = cell.text();
-        const input = $('<input type="text">');
+        
+        let input = $('<input type="text">');
+        
+        if (cell.data('field-name') === 'week_start_date') {
+            input = $('<input type="text" class="datepicker">').datepicker({
+                dateFormat: 'mm/dd/yy'
+            });
+        }
+        
         input.val(originalValue);
         cell.html(input);
         input.focus();
@@ -100,7 +116,11 @@ if (performanceId === 'new') {
         });
     });
 }
-
+$('td[data-field-name="week_start_date"]').each(function() {
+        const dateCell = $(this);
+        const originalValue = dateCell.text();
+        dateCell.text(convertToAmericanDate(originalValue));
+    });
 attachEditableHandler();
 
 $('#addDataRow').click(function() {
@@ -146,7 +166,7 @@ $('#addDataRow').click(function() {
     <?php else : ?>
         <?php foreach ($performanceData as $data) : ?>
             <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="week_start_date"><?php echo $data['week_start_date']; ?></td>
+            <td class="editable" data-field-name="week_start_date"><?php echo date("m/d/Y", strtotime($data['week_start_date'])); ?></td>
                 <td class="editable" data-field-name="score1"><?php echo $data['score1']; ?></td>
                 <td class="editable" data-field-name="score2"><?php echo $data['score2']; ?></td>
                 <td class="editable" data-field-name="score3"><?php echo $data['score3']; ?></td>
