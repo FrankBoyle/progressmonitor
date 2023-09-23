@@ -40,7 +40,7 @@ if (isset($_GET['student_id'])) {
 $(document).ready(function() {
 
     function convertToAmericanDate(dateString) {
-    if (!dateString || dateString === "New Entry" || dateString.indexOf('/') !== -1) {
+    if (!dateString || dateString === "New Entry") {
         return dateString;
     }
     const parts = dateString.split('-');
@@ -49,6 +49,7 @@ $(document).ready(function() {
     }
     return `${parts[1]}/${parts[2]}/${parts[0]}`;
 }
+
 
 
 
@@ -62,11 +63,7 @@ function attachEditableHandler() {
             input = $('<input type="text">'); // use text type here
             input.val(convertToAmericanDate(originalValue));
             input.datepicker({
-    dateFormat: 'yy-mm-dd', 
-    onClose: function(dateText) {
-        input.val(dateText);
-        input.blur();
-    }
+    dateFormat: 'yy-mm-dd'
 });
 input.datepicker("show");
 
@@ -86,8 +83,7 @@ input.datepicker("show");
     } else {
         cell.text(newValue);
     }
-            cell.text(newValue);
-
+});
             const performanceId = cell.closest('tr').data('performance-id');
             const fieldName = cell.data('field-name');
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
