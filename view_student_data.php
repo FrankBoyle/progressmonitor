@@ -39,7 +39,7 @@ if (isset($_GET['student_id'])) {
 <script>
 $(document).ready(function() {
 
-    function convertToAmericanDate(dateString) {
+function convertToAmericanDate(dateString) {
     if (!dateString || dateString === "New Entry" || dateString.indexOf('/') !== -1) {
         return dateString;
     }
@@ -50,42 +50,23 @@ $(document).ready(function() {
     return `${parts[1]}/${parts[2]}/${parts[0]}`;
 }
 
-
-
 function attachEditableHandler() {
     $('.editable').off('click').on('click', function() {
         const cell = $(this);
         const originalValue = cell.text();
-        let input;
-
-        if (cell.data('field-name') === 'week_start_date') {
-            input = $('<input type="text">'); // use text type here
-            input.val(convertToAmericanDate(originalValue));
-            input.datepicker({
-    dateFormat: 'yy-mm-dd', 
-    onClose: function(dateText) {
-        input.val(dateText);
-        input.blur();
-    }
-});
-
-            cell.html(input);
-            input.focus().datepicker("show"); // directly show the datepicker
-        } else {
-            input = $('<input type="text">');
-            input.val(originalValue);
-            cell.html(input);
-            input.focus();
-        }
+        let input = $('<input type="text">'); 
+        input.val(cell.data('field-name') === 'week_start_date' ? convertToAmericanDate(originalValue) : originalValue);
+        
+        cell.html(input);
+        input.focus();
 
         input.blur(function() {
-    const newValue = input.val();
-    if (cell.data('field-name') === 'week_start_date') {
-        cell.text(convertToAmericanDate(newValue));
-    } else {
-        cell.text(newValue);
-    }
-            cell.text(newValue);
+            const newValue = input.val();
+            if (cell.data('field-name') === 'week_start_date') {
+                cell.text(convertToAmericanDate(newValue));
+            } else {
+                cell.text(newValue);
+            }
 
             const performanceId = cell.closest('tr').data('performance-id');
             const fieldName = cell.data('field-name');
@@ -94,36 +75,33 @@ function attachEditableHandler() {
             const studentId = $('#currentStudentId').val();  
             const weekStartDate = $('#currentWeekStartDate').val();
 
-let postData = {
-    performance_id: performanceId,
-    field_name: fieldName,
-    new_value: newValue,
-    student_id: studentId,
-    week_start_date: weekStartDate
-};
+            let postData = {
+                performance_id: performanceId,
+                field_name: fieldName,
+                new_value: newValue,
+                student_id: studentId,
+                week_start_date: weekStartDate
+            };
 
-if (performanceId === 'new') {
-    let scores = {};
-    for (let i = 1; i <= 10; i++) {
-        scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
-    }
-    postData.scores = scores;
-}
+            if (performanceId === 'new') {
+                let scores = {};
+                for (let i = 1; i <= 10; i++) {
+                    scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
+                }
+                postData.scores = scores;
+            }
 
-
-            $.ajax({ // <-- This is the replacement!
-                    type: 'POST',
-                    url: targetUrl,
-                    data: postData,
-                    success: function(response) {
-    if (performanceId === 'new') {
-        // Update the new row's performance-id with the ID returned from the server
-        const newRow = $('tr[data-performance-id="new"]');
-        newRow.attr('data-performance-id', response.performance_id);
-    }
-    alert('Data added successfully');
-},
-
+            $.ajax({
+                type: 'POST',
+                url: targetUrl,
+                data: postData,
+                success: function(response) {
+                    if (performanceId === 'new') {
+                        const newRow = $('tr[data-performance-id="new"]');
+                        newRow.attr('data-performance-id', response.performance_id);
+                    }
+                    alert('Data added successfully');
+                },
                 error: function() {
                     alert('Error updating data. Please try again later.');
                 }
@@ -138,11 +116,13 @@ if (performanceId === 'new') {
         });
     });
 }
+
 $('td[data-field-name="week_start_date"]').each(function() {
-        const dateCell = $(this);
-        const originalValue = dateCell.text();
-        dateCell.text(convertToAmericanDate(originalValue));
-    });
+    const dateCell = $(this);
+    const originalValue = dateCell.text();
+    dateCell.text(convertToAmericanDate(originalValue));
+});
+
 attachEditableHandler();
 
 $('#addDataRow').click(function() {
@@ -163,7 +143,7 @@ $('#addDataRow').click(function() {
 });
 
 </script>
-
+ 
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
 
