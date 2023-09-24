@@ -225,7 +225,7 @@ $('#addDataRow').click(function() {
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-<script src="apexcharts-render.js"></script>
+<script src="https://quickchart.io/apex-charts/render"></script>
 
 <div id="chart"></div>
 <script>
