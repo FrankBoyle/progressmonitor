@@ -19,6 +19,13 @@ if (isset($_GET['student_id'])) {
 
     $performanceData = $stmt->fetchAll();
 }
+if (isset($studentId)) {
+    $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+
+    $result = $stmt->fetch();
+    $schoolID = $result ? $result['school_id'] : null;
+}
 
 $scoreNames = [];
 for($i = 1; $i <= 10; $i++) {
