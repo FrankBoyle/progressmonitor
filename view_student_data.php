@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<?php include('fetch_data.php'); ?>
+<?php include('./users/fetch_data.php'); ?>
 
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="" />
