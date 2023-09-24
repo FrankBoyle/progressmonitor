@@ -64,9 +64,8 @@ function attachEditableHandler() {
             input.datepicker({
     dateFormat: 'yy-mm-dd', 
     onClose: function(dateText) {
-        input.val(dateText);
-        input.blur();
-    }
+    input.val(convertToAmericanDate(dateText));
+}
 });
 
             cell.html(input);
