@@ -57,6 +57,10 @@ foreach ($performanceData as $record) {
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="" />
 
+<!-- Adding hidden divs for chart data -->
+<div id="chartDates" style="display:none;"><?php echo json_encode($chartDates); ?></div>
+<div id="chartScores" style="display:none;"><?php echo json_encode($chartScores); ?></div>
+
 <script>
 $(document).ready(function() {
 
