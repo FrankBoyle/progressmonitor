@@ -221,8 +221,53 @@ $('#addDataRow').click(function() {
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-<div id="chart"></div>
+<script src="apexcharts-render.js"></script>
 
+<div id="chart"></div>
+<script>
+// Including ApexCharts
+document.write('<script src="https://cdn.jsdelivr.net/npm/apexcharts"><\/script>');
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch data from PHP and convert to Javascript arrays
+    var chartDates = JSON.parse(document.getElementById('chartDates').textContent);
+    var chartScores = JSON.parse(document.getElementById('chartScores').textContent);
+
+    // Setting up the options for the chart
+    var options = {
+        series: [{
+            name: 'Average Score',
+            data: chartScores
+        }],
+        chart: {
+            height: 350,
+            type: 'line',
+            zoom: {
+                enabled: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        xaxis: {
+            type: 'datetime',
+            categories: chartDates.map(date => new Date(date).getTime())
+        },
+        tooltip: {
+            x: {
+                format: 'dd/MM/yy HH:mm'
+            },
+        },
+    };
+
+    // Render the chart
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+});
+</script>
 </body>
 </html>
 
