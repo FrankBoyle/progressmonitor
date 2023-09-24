@@ -30,6 +30,7 @@ if (isset($_GET['student_id'])) {
     <!-- Add jQuery UI library -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 </head>
 <body>
 
@@ -39,23 +40,32 @@ if (isset($_GET['student_id'])) {
 <script>
 $(document).ready(function() {
 
-function convertToAmericanDate(dateString) {
-    if (!dateString || dateString === "New Entry" || dateString.indexOf('/') !== -1) {
+function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+}
+
+function convertToDatabaseDate(dateString) {
+    if (!dateString || dateString === "New Entry") {
         return dateString;
     }
-    const parts = dateString.split('-');
+    const parts = dateString.split('/');
     if (parts.length !== 3) {
-        return dateString;  // return original string if it doesn't match expected format
+        return dateString;
     }
-    return `${parts[1]}/${parts[2]}/${parts[0]}`;
+    return `${parts[2]}-${parts[0]}-${parts[1]}`;
 }
 
 function attachEditableHandler() {
     $('.editable').off('click').on('click', function() {
         const cell = $(this);
         const originalValue = cell.text();
-        let input = $('<input type="text">'); 
-        input.val(cell.data('field-name') === 'week_start_date' ? convertToAmericanDate(originalValue) : originalValue);
+        let input = $('<input type="text">');
+        
+        input.val(originalValue);
+        
+        if (cell.data('field-name') === 'week_start_date') {
+            input.mask('00/00/0000');
+        }
         
         cell.html(input);
         input.focus();
@@ -63,7 +73,15 @@ function attachEditableHandler() {
         input.blur(function() {
             const newValue = input.val();
             if (cell.data('field-name') === 'week_start_date') {
-                cell.text(convertToAmericanDate(newValue));
+                const parts = newValue.split('/');
+                const constructedDate = new Date(parts[2], parts[0] - 1, parts[1]);
+                if (isValidDate(constructedDate)) {
+                    cell.text(newValue);
+                } else {
+                    alert('Invalid date. Please ensure the date is in MM/DD/YYYY format.');
+                    cell.text(originalValue);
+                    return;
+                }
             } else {
                 cell.text(newValue);
             }
@@ -97,6 +115,7 @@ function attachEditableHandler() {
                 data: postData,
                 success: function(response) {
                     if (performanceId === 'new') {
+                        // Update the new row's performance-id with the ID returned from the server
                         const newRow = $('tr[data-performance-id="new"]');
                         newRow.attr('data-performance-id', response.performance_id);
                     }
@@ -117,12 +136,6 @@ function attachEditableHandler() {
     });
 }
 
-$('td[data-field-name="week_start_date"]').each(function() {
-    const dateCell = $(this);
-    const originalValue = dateCell.text();
-    dateCell.text(convertToAmericanDate(originalValue));
-});
-
 attachEditableHandler();
 
 $('#addDataRow').click(function() {
@@ -136,14 +149,15 @@ $('#addDataRow').click(function() {
 
     // Set the current week start date for the new row, if needed
     const currentDate = new Date();
-    const formattedDate = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+    const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                          currentDate.getDate().toString().padStart(2, '0') + '/' + 
+                          currentDate.getFullYear();
     $('#currentWeekStartDate').val(formattedDate);
 });
-
 });
-
 </script>
- 
+
+
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
 
