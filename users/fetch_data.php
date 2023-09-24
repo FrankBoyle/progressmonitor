@@ -20,19 +20,16 @@ if (isset($_GET['student_id'])) {
     $performanceData = $stmt->fetchAll();
 }
 if (isset($studentId)) {
-    $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
+    // Update the column name to SchoolID
+    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
     $stmt->execute([$studentId]);
 
     $result = $stmt->fetch();
-    $schoolID = $result ? $result['school_id'] : null;
-}
-
-$scoreNames = [];
-for($i = 1; $i <= 10; $i++) {
-    $scoreNames['score'.$i] = 'Score'.$i;  // default names
+    $schoolID = $result ? $result['SchoolID'] : null;  // Update the column name to SchoolID
 }
 
 if (!empty($performanceData)) {
+    // Update the column name in the WHERE condition to SchoolID
     $stmt = $connection->prepare("SELECT original_name, custom_name FROM SchoolScoreNames WHERE SchoolID = ?");
     $stmt->execute([$schoolID]);
 
@@ -40,6 +37,7 @@ if (!empty($performanceData)) {
         $scoreNames[$row['original_name']] = $row['custom_name'];
     }
 }
+
 
 // Preparing the data for the chart
 $chartDates = [];
