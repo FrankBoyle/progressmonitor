@@ -54,35 +54,34 @@
             $newStudentName = $_POST['new_student_name'];
 
             if (!empty($newStudentName)) {
-                $stmt = $conn->prepare("INSERT INTO Students (name) VALUES (?)");
-                $stmt->bind_param('s', $newStudentName);
+                // Fetch the SchoolID of the current teacher
+                $schoolQuery = $conn->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+                $schoolQuery->bind_param('i', $teacherId);
+                $schoolQuery->execute();
+                $schoolResult = $schoolQuery->get_result();
+                $teacherInfo = $schoolResult->fetch_assoc();
+                $teacherSchoolID = $teacherInfo['SchoolID'];
+
+                // Insert the new student with the same SchoolID
+                $stmt = $conn->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+                $stmt->bind_param('si', $newStudentName, $teacherSchoolID);
                 $stmt->execute();
 
                 if ($stmt->error) {
                     throw new Exception("Error adding new student: " . $stmt->error);
                 }
 
-                $newStudentId = $conn->insert_id;
-
-                $stmt = $conn->prepare("INSERT INTO Teacher_Student_Assignment (teacher_id, student_id) VALUES (?, ?)");
-                $stmt->bind_param('ii', $teacherId, $newStudentId);
-                $stmt->execute();
-
-                if ($stmt->error) {
-                    throw new Exception("Error associating new student with teacher: " . $stmt->error);
-                }
-
                 echo "New student added successfully.<br>";
             }
         }
 
-        // Existing Students
-        $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher_Student_Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
+        // Fetch Existing Students for the Teacher based on the School
+        $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
         $stmt->bind_param('i', $teacherId);
         $stmt->execute();
 
         if ($stmt->error) {
-            throw new Exception("Error during student fetch: " . $stmt->error);
+            throw new Exception("Error fetching students: " . $stmt->error);
         }
 
         $result = $stmt->get_result();
