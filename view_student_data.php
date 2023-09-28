@@ -89,16 +89,28 @@ function updateChart(chart, scoreField) {
         }
     });
 
+    // Calculate trendline
+    var trendlineFunction = calculateTrendline(chartData);
+    var trendlineData = chartData.map(item => {
+        return {
+            x: item.x,
+            y: trendlineFunction(item.x)
+        };
+    });
+
     // Update chart series data and X categories
-    chart.updateOptions(getChartOptions(chartData, xCategories));
+    chart.updateOptions(getChartOptions([{
+        name: 'Selected Score',
+        data: chartData
+    }, {
+        name: 'Trendline',
+        data: trendlineData
+    }], xCategories));
 }
 
-function getChartOptions(data, xCategories) {
+function getChartOptions(dataSeries, xCategories) {
     return {
-        series: [{
-            name: 'Selected Score',
-            data: data
-        }],
+        series: dataSeries,
         chart: {
             type: 'line',
             stacked: false,
@@ -120,7 +132,7 @@ function getChartOptions(data, xCategories) {
         },
         stroke: {
             curve: 'smooth',
-            width: [1]
+            width: [1, 1]
         },
         markers: {
             size: 5,
@@ -174,9 +186,38 @@ function getChartOptions(data, xCategories) {
                 }
             }
         },
-        colors: ['#2196F3', '#4CAF50', '#FF5722']
+        colors: ['#2196F3', '#FF5722']  // Original and Trendline colors
     };
 }
+
+function calculateTrendline(data) {
+    var sumX = 0;
+    var sumY = 0;
+    var sumXY = 0;
+    var sumXX = 0;
+    var count = 0;
+
+    data.forEach(function (point) {
+        var x = point.x;
+        var y = point.y;
+
+        if (y !== null) {
+            sumX += x;
+            sumY += y;
+            sumXY += x * y;
+            sumXX += x * x;
+            count++;
+        }
+    });
+
+    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / count;
+
+    return function (x) {
+        return slope * x + intercept;
+    };
+}
+
 </script>
 
 <script>
