@@ -55,11 +55,11 @@
     <?php endfor; ?>
 </select>
 <div id="chart"></div>  <!-- Div to display the chart -->
+
 <script>
 $(document).ready(function() {
     // Initialize the chart with empty data
-    var options = getChartOptions([], []);
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    var chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
     chart.render();
 
     // Update chart when score selection changes
@@ -90,15 +90,7 @@ function updateChart(chart, scoreField) {
     });
 
     // Update chart series data and X categories
-    chart.updateOptions({
-        series: [{
-            name: 'Selected Score',
-            data: chartData
-        }],
-        xaxis: {
-            categories: xCategories
-        }
-    });
+    chart.updateOptions(getChartOptions(chartData, xCategories));
 }
 
 function getChartOptions(data, xCategories) {
@@ -126,20 +118,63 @@ function getChartOptions(data, xCategories) {
                 opacity: 0.2
             }
         },
+        stroke: {
+            curve: 'smooth',
+            width: [1]
+        },
+        markers: {
+            size: 5,
+            colors: undefined,
+            strokeColors: '#fff',
+            strokeWidth: 2,
+            strokeOpacity: 0.9,
+            strokeDashArray: 0,
+            fillOpacity: 1,
+            discrete: [],
+            shape: "circle",
+            radius: 2,
+            offsetX: 0,
+            offsetY: 0,
+            onClick: undefined,
+            onDblClick: undefined,
+            showNullDataPoints: true,
+            hover: {
+                size: undefined,
+                sizeOffset: 3
+            }
+        },
         xaxis: {
             categories: xCategories,
             type: 'datetime',
+            tickAmount: xCategories.length,
             labels: {
                 hideOverlappingLabels: false,
                 formatter: function(value, timestamp, opts) {
-                    return new Date(value).toLocaleDateString(); // Format date label
+                    return new Date(value).toLocaleDateString();
                 }
             },
             title: {
                 text: 'Date'
             }
         },
-        // ... [rest of your chart configuration options]
+        yaxis: {
+            title: {
+                text: 'Value'
+            },
+            labels: {
+                formatter: function(value) {
+                    return value.toFixed(0);
+                }
+            }
+        },
+        grid: {
+            xaxis: {
+                lines: {
+                    show: true
+                }
+            }
+        },
+        colors: ['#2196F3', '#4CAF50', '#FF5722']
     };
 }
 </script>
