@@ -62,7 +62,10 @@
 <div id="chart"></div>  <!-- Div to display the chart -->
 
 <script>
+var benchmark = null;
+
 $(document).ready(function() {
+
     // Initialize the chart with empty data
     var chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
     chart.render();
@@ -71,6 +74,18 @@ $(document).ready(function() {
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
         updateChart(chart, selectedScore);
+    });
+
+    // Update the chart when benchmark value changes
+    $("#updateBenchmark").click(function() {
+        var value = parseFloat($("#benchmarkValue").val());
+        if (!isNaN(value)) {
+            benchmark = value;
+            var selectedScore = $("#scoreSelector").val();
+            updateChart(chart, selectedScore);  // Re-render the chart with the benchmark
+        } else {
+            alert('Please enter a valid benchmark value.');
+        }
     });
 
     // Automatically update chart with default score1 data on page load
@@ -103,14 +118,28 @@ function updateChart(chart, scoreField) {
         };
     });
 
+    var benchmarkData = xCategories.map(date => {
+        return {
+            x: new Date(date).getTime(),
+            y: benchmark
+        };
+    });
+
     // Update chart series data and X categories
-    chart.updateOptions(getChartOptions([{
-        name: 'Selected Score',
-        data: chartData
-    }, {
-        name: 'Trendline',
-        data: trendlineData
-    }], xCategories));
+    chart.updateOptions(getChartOptions([
+        {
+            name: 'Selected Score',
+            data: chartData
+        },
+        {
+            name: 'Trendline',
+            data: trendlineData
+        },
+        {
+            name: 'Benchmark',
+            data: benchmarkData
+        }
+    ], xCategories));
 }
 
 function getChartOptions(dataSeries, xCategories) {
@@ -137,7 +166,7 @@ function getChartOptions(dataSeries, xCategories) {
         },
         stroke: {
             curve: 'smooth',
-            width: [1, 1]
+            width: [1, 1, 1]
         },
         markers: {
             size: 5,
@@ -191,7 +220,7 @@ function getChartOptions(dataSeries, xCategories) {
                 }
             }
         },
-        colors: ['#2196F3', '#FF5722']  // Original and Trendline colors
+        colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
 
