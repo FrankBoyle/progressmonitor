@@ -47,6 +47,103 @@
     <?php endif; ?>
 </table>
 
+
+<label>Select Score to Display: </label>
+<select id="scoreSelector">
+    <?php for ($i = 1; $i <= 10; $i++): ?>
+        <option value="score<?php echo $i; ?>">Score <?php echo $i; ?></option>
+    <?php endfor; ?>
+</select>
+<div id="chart"></div>  <!-- Div to display the chart -->
+<script>
+$(document).ready(function() {
+    // Initialize the chart with empty data
+    var options = getChartOptions([], []);
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+    // Update chart when score selection changes
+    $("#scoreSelector").change(function() {
+        var selectedScore = $(this).val();
+        updateChart(chart, selectedScore);
+    });
+
+    // Automatically update chart with default score1 data on page load
+    updateChart(chart, 'score1');
+});
+
+function updateChart(chart, scoreField) {
+    var chartData = [];
+    var xCategories = [];
+
+    $('tr[data-performance-id]').each(function() {
+        var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
+        var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
+
+        if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
+            chartData.push({
+                x: new Date(weekStartDate).getTime(),
+                y: parseFloat(scoreValue)
+            });
+            xCategories.push(weekStartDate);
+        }
+    });
+
+    // Update chart series data and X categories
+    chart.updateOptions({
+        series: [{
+            name: 'Selected Score',
+            data: chartData
+        }],
+        xaxis: {
+            categories: xCategories
+        }
+    });
+}
+
+function getChartOptions(data, xCategories) {
+    return {
+        series: [{
+            name: 'Selected Score',
+            data: data
+        }],
+        chart: {
+            type: 'line',
+            stacked: false,
+            width: 1000,
+            toolbar: {
+                show: true,
+                tools: {
+                    download: false
+                }
+            },
+            dropShadow: {
+                enabled: true,
+                color: '#000',
+                top: 18,
+                left: 7,
+                blur: 10,
+                opacity: 0.2
+            }
+        },
+        xaxis: {
+            categories: xCategories,
+            type: 'datetime',
+            labels: {
+                hideOverlappingLabels: false,
+                formatter: function(value, timestamp, opts) {
+                    return new Date(value).toLocaleDateString(); // Format date label
+                }
+            },
+            title: {
+                text: 'Date'
+            }
+        },
+        // ... [rest of your chart configuration options]
+    };
+}
+</script>
+
 <script>
 $(document).ready(function() {
 
