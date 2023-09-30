@@ -293,7 +293,6 @@ function attachEditableHandler() {
     input.focus();
 }
 
-
         input.blur(function() {
             let newValue = input.val();
             if (cell.data('field-name') === 'week_start_date') {
