@@ -337,10 +337,10 @@ function attachEditableHandler() {
                         const newRow = $('tr[data-performance-id="new"]');
                         newRow.attr('data-performance-id', response.performance_id);
                     }
-                    alert('Data added successfully');
+                    //alert('Data added successfully');
                 },
-                error: function() {
-                    alert('Error updating data. Please try again later.');
+                //error: function() {
+                    //alert('Error updating data. Please try again later.');
                 }
             });
         });
