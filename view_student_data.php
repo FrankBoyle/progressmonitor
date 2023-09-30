@@ -296,26 +296,32 @@ function attachEditableHandler() {
         let datePickerActive = false;
 
         if (cell.data('field-name') === 'week_start_date') {
-            input.datepicker({
-                dateFormat: 'mm/dd/yy',
-                beforeShow: function() {
-                    datePickerActive = true;
-                },
-                onClose: function(selectedDate) {
-                    if (isValidDate(new Date(selectedDate))) {
-                        cell.text(selectedDate);
-                        cell.append(input.hide());
-                    }
-                    datePickerActive = false;
-                }
-            });
-            cell.html(input);
-            input.focus();
-            input.datepicker("show");  // Automatically show the date picker
-        } else {
-            cell.html(input);
-            input.focus();
+    input.datepicker({
+        dateFormat: 'mm/dd/yy',
+        beforeShow: function() {
+            datePickerActive = true;
+        },
+        onClose: function(selectedDate) {
+            if (isValidDate(new Date(selectedDate))) {
+                cell.text(selectedDate);
+                cell.append(input.hide());
+            }
+            datePickerActive = false;
         }
+    });
+
+    cell.html(input);
+    input.focus();
+
+    setTimeout(() => {
+        input.datepicker("show");
+    }, 0);  // Wait until next cycle to show the datepicker to ensure it's been fully initialized
+}
+else {
+    cell.html(input);
+    input.focus();
+}
+
 
         input.blur(function() {
             const newValue = input.val();
