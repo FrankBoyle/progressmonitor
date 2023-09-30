@@ -401,27 +401,30 @@ $('#addDataRow').click(function() {
     }
 
     // Your code to add a new row
+    const currentDate = new Date();
+    const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                          currentDate.getDate().toString().padStart(2, '0') + '/' + 
+                          currentDate.getFullYear();
     var newRow = $("<tr data-performance-id='new'>");
-    newRow.append('<td class="editable" data-field-name="week_start_date">New Entry</td>');
+    newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set current date as default
     for (let i = 1; i <= 10; i++) {
         newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
     }
     $("table").append(newRow);
 
+    // Automatically trigger saving for the new row's "Week Start Date"
+    newRow.find('td[data-field-name="week_start_date"]').click().blur();
+
     attachEditableHandler();
 });
 
+const currentDate = new Date();
+const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                      currentDate.getDate().toString().padStart(2, '0') + '/' + 
+                      currentDate.getFullYear();
+$('#currentWeekStartDate').val(formattedDate);
 
-    
-    const currentDate = new Date();
-    const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-                          currentDate.getDate().toString().padStart(2, '0') + '/' + 
-                          currentDate.getFullYear();
-    $('#currentWeekStartDate').val(formattedDate);
-    
 });
-
-
 </script>
 
 </body>
