@@ -292,10 +292,7 @@ function attachEditableHandler() {
     cell.html(input);
     input.focus();
 }
-        } else {
-            cell.html(input);
-            input.focus();
-        }
+
 
         input.blur(function() {
             let newValue = input.val();
