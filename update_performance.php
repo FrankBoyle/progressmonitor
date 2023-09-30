@@ -1,5 +1,5 @@
-<?php
 
+<?php
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -7,10 +7,9 @@ error_reporting(E_ALL);
 
 include('./users/db.php');  // Include the database connection
 
-
 // Main logic
 if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
-    updatePerformance($connection, $_POST['performance_id'], $_POST['field_name'], $_POST['new_value']);
+    updatePerformance($connection, $_POST['performance_id'], $_POST['field_name'], $_POST['new_value']);  // Use $connection instead of $conn
 } else {
     handleError("Invalid data provided.");
 }
@@ -30,13 +29,14 @@ function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
     // Prepare SQL statement
     $sql = "UPDATE Performance SET $fieldName = ? WHERE performance_id = ?";
     $stmt = $connection->prepare($sql);
-    $stmt->bind_param('si', $newValue, $performanceId);
+    $stmt->bindParam(1, $newValue);
+    $stmt->bindParam(2, $performanceId);
 
     // Execute and respond
     if ($stmt->execute()) {
         sendResponse(["success" => true]);
     } else {
-        handleError("Database error: " . $stmt->error);
+        handleError("Database error: " . $stmt->errorInfo()[2]);
     }
 }
 
@@ -56,5 +56,9 @@ function sendResponse($response) {
 }
 
 ?>
+
+
+
+
 
 
