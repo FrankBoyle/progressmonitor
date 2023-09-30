@@ -276,8 +276,7 @@ function attachEditableHandler() {
     $('.editable').off('click').on('click', function() {
         const cell = $(this);
         const originalValue = cell.text();
-        let input = $('<input type="text">');
-        
+        const input = $('<input type="text">');
         input.val(originalValue);
         
         if (cell.data('field-name') === 'week_start_date') {
@@ -288,7 +287,8 @@ function attachEditableHandler() {
                     input.blur();
                 }
             });
-            input.focus();  // Focus to immediately open the datepicker
+            cell.html(input);
+            input.focus();
         } else {
             cell.html(input);
             input.focus();
@@ -302,11 +302,11 @@ function attachEditableHandler() {
                     cell.html(originalValue);
                     return;
                 }
-                newValue = `${parts[2]}-${parts[0]}-${parts[1]}`;  // Convert to YYYY-MM-DD format
+                newValue = `${parts[2]}-${parts[0]}-${parts[1]}`; // Convert to YYYY-MM-DD format
             }
             cell.html(newValue);
-    }
-
+            
+            // The following section is about sending data to the server for updating
             const performanceId = cell.closest('tr').data('performance-id');
             const fieldName = cell.data('field-name');
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
@@ -340,10 +340,9 @@ function attachEditableHandler() {
                         const newRow = $('tr[data-performance-id="new"]');
                         newRow.attr('data-performance-id', response.performance_id);
                     }
-                    //alert('Data added successfully');
                 },
                 error: function() {
-                    //alert('Error updating data. Please try again later.');
+                    // Handle any error here, e.g., show a notification to the user
                 }
             });
         });
@@ -376,6 +375,7 @@ $('#addDataRow').click(function() {
     $('#currentWeekStartDate').val(formattedDate);
 });
 });
+
 </script>
 
 </body>
