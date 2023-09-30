@@ -50,30 +50,40 @@
         echo "Teacher ID from session: " . $teacherId . "<br>";
 
         // Add New Student
-        if (isset($_POST['add_new_student'])) {
-            $newStudentName = $_POST['new_student_name'];
+if (isset($_POST['add_new_student'])) {
+    $newStudentName = $_POST['new_student_name'];
 
-            if (!empty($newStudentName)) {
-                // Fetch the SchoolID of the current teacher
-                $schoolQuery = $conn->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
-                $schoolQuery->bind_param('i', $teacherId);
-                $schoolQuery->execute();
-                $schoolResult = $schoolQuery->get_result();
-                $teacherInfo = $schoolResult->fetch_assoc();
-                $teacherSchoolID = $teacherInfo['SchoolID'];
+    if (!empty($newStudentName)) {
+        // Fetch the SchoolID of the current teacher
+        $schoolQuery = $conn->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+        $schoolQuery->bind_param('i', $teacherId);
+        $schoolQuery->execute();
+        $schoolResult = $schoolQuery->get_result();
+        $teacherInfo = $schoolResult->fetch_assoc();
+        $teacherSchoolID = $teacherInfo['SchoolID'];
 
-                // Insert the new student with the same SchoolID
-                $stmt = $conn->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
-                $stmt->bind_param('si', $newStudentName, $teacherSchoolID);
-                $stmt->execute();
+        // Check if the student with the same name and SchoolID already exists
+        $checkDuplication = $conn->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
+        $checkDuplication->bind_param('si', $newStudentName, $teacherSchoolID);
+        $checkDuplication->execute();
+        $duplicateStudent = $checkDuplication->get_result()->fetch_assoc();
 
-                if ($stmt->error) {
-                    throw new Exception("Error adding new student: " . $stmt->error);
-                }
+        if ($duplicateStudent) {
+            echo "Student with the same name already exists.<br>";
+        } else {
+            // Insert the new student with the same SchoolID
+            $stmt = $conn->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+            $stmt->bind_param('si', $newStudentName, $teacherSchoolID);
+            $stmt->execute();
 
-                echo "New student added successfully.<br>";
+            if ($stmt->error) {
+                throw new Exception("Error adding new student: " . $stmt->error);
             }
+
+            echo "New student added successfully.<br>";
         }
+    }
+}
 
         // Fetch Existing Students for the Teacher based on the School
         $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
