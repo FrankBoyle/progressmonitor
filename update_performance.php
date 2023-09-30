@@ -1,39 +1,45 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+include('./users/db.php');  // Assuming you have a separate connection script
 
-$servername = "localhost";
-$username = "AndersonSchool";
-$password = "SpecialEd69$";
-$dbname = "bFactor-test";
+$response = array();  // Prepare a response array
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Check if the necessary data is provided in the POST request
+if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+    // Define an array of allowed field names for security
+    $allowedFieldNames = ["week_start_date", "score1", "score2", "score3", "score4", "score5", "score6", "score7", "score8", "score9", "score10"];
 
-if ($_POST['performance_id'] && $_POST['field_name'] && $_POST['new_value']) {
     $performanceId = $_POST['performance_id'];
     $fieldName = $_POST['field_name'];
     $newValue = $_POST['new_value'];
 
-    // Update the database
+    // Check if the provided field name is in the list of allowed field names
+    if (!in_array($fieldName, $allowedFieldNames)) {
+        $response['success'] = false;
+        $response['error'] = "An error occurred. Please try again later.";
+        echo json_encode($response);
+        exit;
+    }
+
+    // Prepare and execute the SQL statement
     $stmt = $conn->prepare("UPDATE Performance SET $fieldName = ? WHERE performance_id = ?");
     $stmt->bind_param('si', $newValue, $performanceId);
 
     if ($stmt->execute()) {
-        $response = array("success" => true);
+        $response['success'] = true;
     } else {
-        $response = array("success" => false, "error" => "Database error: " . $stmt->error);
+        $response['success'] = false;
+        $response['error'] = "An error occurred. Please try again later.";  // Generic error message
     }
 
-    echo json_encode($response);
 } else {
-    $response = array("success" => false, "error" => "Invalid data provided.");
-    echo json_encode($response);
+    $response['success'] = false;
+    $response['error'] = "Invalid data provided.";  // This might be a bit revealing, consider making it more generic if desired
 }
+
+// Return the response as JSON
+echo json_encode($response);
+
 ?>
 
 
