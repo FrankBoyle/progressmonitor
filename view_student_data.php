@@ -272,6 +272,17 @@ function convertToDatabaseDate(dateString) {
     return `${parts[2]}-${parts[0]}-${parts[1]}`;
 }
 
+function convertToDisplayDate(databaseString) {
+    if (!databaseString || databaseString === "New Entry") {
+        return databaseString;
+    }
+    const parts = databaseString.split('-');
+    if (parts.length !== 3) {
+        return databaseString;
+    }
+    return `${parts[1]}/${parts[2]}/${parts[0]}`;  // Convert to mm/dd/yyyy format
+}
+
 function attachEditableHandler() {
     $('.editable').off('click').on('click', function() {
         const cell = $(this);
@@ -279,17 +290,17 @@ function attachEditableHandler() {
         const input = $('<input type="text">');
         input.val(originalValue);
 
-        let datePickerActive = false; // Track whether the datepicker is open
+        let datePickerActive = false;
 
         if (cell.data('field-name') === 'week_start_date') {
             input.datepicker({
                 dateFormat: 'mm/dd/yy',
                 beforeShow: function() {
-                    datePickerActive = true; // Set to true when datepicker is about to be shown
+                    datePickerActive = true;
                 },
                 onClose: function() {
-                    datePickerActive = false; // Set to false when datepicker is closed
-                    input.blur(); // Trigger blur event when datepicker is closed
+                    datePickerActive = false;
+                    input.blur();
                 }
             });
             cell.html(input);
@@ -301,10 +312,9 @@ function attachEditableHandler() {
 
         input.blur(function() {
             if (datePickerActive) {
-                // If datepicker is still active, don't execute the rest of the blur logic
                 return;
             }
-
+            
             let newValue = input.val();
             if (cell.data('field-name') === 'week_start_date') {
                 const parts = newValue.split('/');
@@ -312,7 +322,8 @@ function attachEditableHandler() {
                     cell.html(originalValue);
                     return;
                 }
-                newValue = `${parts[2]}-${parts[0]}-${parts[1]}`; // Convert to YYYY-MM-DD format
+                // Save the new value for database but display the original mm/dd/yyyy format to user
+                newValue = convertToDisplayDate(convertToDatabaseDate(newValue));
             }
             cell.html(newValue);
             
