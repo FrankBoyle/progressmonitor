@@ -298,10 +298,14 @@ function attachEditableHandler() {
                 beforeShow: function() {
                     datePickerActive = true;
                 },
-                onClose: function() {
-                    datePickerActive = false;
-                    input.blur();
-                }
+                onClose: function(selectedDate) {
+    if (isValidDate(new Date(selectedDate))) {
+        cell.text(selectedDate);  // Set the selected date
+        cell.append(input.hide());  // Hide the input to show the cell text
+    }
+    datePickerActive = false;
+}
+
             });
             cell.html(input);
             input.focus();
