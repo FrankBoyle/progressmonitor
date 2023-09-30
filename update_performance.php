@@ -5,15 +5,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('./users/db.php');
+include('./users/db.php');  // Include the database connection
 
-// Create a new database connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check the database connection
-if ($conn->connect_error) {
-    handleError("Connection failed: " . $conn->connect_error);
-}
 
 // Main logic
 if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
