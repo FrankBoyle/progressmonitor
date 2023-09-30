@@ -281,27 +281,30 @@ function attachEditableHandler() {
         input.val(originalValue);
         
         if (cell.data('field-name') === 'week_start_date') {
-            input.mask('00/00/0000');
+            input.datepicker({
+                dateFormat: 'mm/dd/yy',
+                onSelect: function() {
+                    // Once a date is selected, trigger blur to save
+                    input.blur();
+                }
+            });
+            input.focus();  // Focus to immediately open the datepicker
+        } else {
+            cell.html(input);
+            input.focus();
         }
-        
-        cell.html(input);
-        input.focus();
 
         input.blur(function() {
-    let newValue = input.val();
-    if (cell.data('field-name') === 'week_start_date') {
-        const parts = newValue.split('/');
-        const constructedDate = new Date(parts[2], parts[0] - 1, parts[1]);
-        if (isValidDate(constructedDate)) {
-            cell.text(newValue);
-            newValue = convertToDatabaseDate(newValue); // Convert to the correct format for database
-        } else {
-            alert('Invalid date. Please ensure the date is in MM/DD/YYYY format.');
-            cell.text(originalValue);
-            return;
-        }
-    } else {
-        cell.text(newValue);
+            let newValue = input.val();
+            if (cell.data('field-name') === 'week_start_date') {
+                const parts = newValue.split('/');
+                if (parts.length !== 3) {
+                    cell.html(originalValue);
+                    return;
+                }
+                newValue = `${parts[2]}-${parts[0]}-${parts[1]}`;  // Convert to YYYY-MM-DD format
+            }
+            cell.html(newValue);
     }
 
             const performanceId = cell.closest('tr').data('performance-id');
