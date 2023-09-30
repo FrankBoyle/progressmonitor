@@ -296,65 +296,39 @@ function attachEditableHandler() {
             cell.text(newValue);
             newValue = convertToDatabaseDate(newValue); // Convert to the correct format for database
         } else {
-            alert('Invalid date. Please ensure the date is in MM/DD/YYYY format.');
-            cell.text(originalValue);
+            alert('Invalid date. Please ensure the date is formatted MM/DD/YYYY.');
             return;
         }
     } else {
         cell.text(newValue);
     }
 
-            const performanceId = cell.closest('tr').data('performance-id');
-            const fieldName = cell.data('field-name');
-            const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+    const performanceId = cell.closest('tr').data('performance-id');
+    const fieldName = cell.data('field-name');
 
-            const studentId = $('#currentStudentId').val();  
-            const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
-
-            let postData = {
-                performance_id: performanceId,
-                field_name: fieldName,
-                new_value: newValue,
-                student_id: studentId,
-                week_start_date: weekStartDate
-            };
-
-            if (performanceId === 'new') {
-                let scores = {};
-                for (let i = 1; i <= 10; i++) {
-                    scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
-                }
-                postData.scores = scores;
+    // Send updated data to the server
+    $.ajax({
+        url: 'update_performance.php',
+        type: 'POST',
+        data: {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: newValue
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (!response.success) {
+                alert(response.error || 'Failed to update the data.');
             }
-
-            $.ajax({
-                type: 'POST',
-                url: targetUrl,
-                data: postData,
-                success: function(response) {
-                    if (performanceId === 'new') {
-                        // Update the new row's performance-id with the ID returned from the server
-                        const newRow = $('tr[data-performance-id="new"]');
-                        newRow.attr('data-performance-id', response.performance_id);
-                    }
-                    //alert('Data added successfully');
-                },
-                error: function() {
-                    //alert('Error updating data. Please try again later.');
-                }
-            });
-        });
-
-        // Pressing Enter to save changes
-        input.keypress(function(e) {
-            if (e.which === 13) {
-                input.blur();
-            }
-        });
+        },
+        error: function() {
+            alert('An error occurred while updating the data.');
+        }
     });
-}
+});
 
-attachEditableHandler();
+attachEditableHandler();  // Call this function to activate inline editing
+
 
 $('#addDataRow').click(function() {
     const newRow = $('<tr data-performance-id="new">');
