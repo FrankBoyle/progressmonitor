@@ -10,7 +10,7 @@ include('./users/db.php');  // Include the database connection
 
 // Main logic
 if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
-    updatePerformance($conn, $_POST['performance_id'], $_POST['field_name'], $_POST['new_value']);
+    updatePerformance($connection, $_POST['performance_id'], $_POST['field_name'], $_POST['new_value']);
 } else {
     handleError("Invalid data provided.");
 }
@@ -18,7 +18,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
 /**
  * Function to update the Performance data.
  */
-function updatePerformance($conn, $performanceId, $fieldName, $newValue) {
+function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
     // List of allowed field names to ensure security
     $allowedFields = ['week_start_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
 
@@ -29,7 +29,7 @@ function updatePerformance($conn, $performanceId, $fieldName, $newValue) {
 
     // Prepare SQL statement
     $sql = "UPDATE Performance SET $fieldName = ? WHERE performance_id = ?";
-    $stmt = $conn->prepare($sql);
+    $stmt = $connection->prepare($sql);
     $stmt->bind_param('si', $newValue, $performanceId);
 
     // Execute and respond
