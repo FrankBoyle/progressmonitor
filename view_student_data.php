@@ -65,34 +65,33 @@
 var benchmark = null;
 
 $(document).ready(function() {
+    initializeChart();
 
-    // Initialize the chart with empty data
-    var chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
-    chart.render();
-
-    // Update chart when score selection changes
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
-        updateChart(chart, selectedScore);
+        updateChart(selectedScore);
     });
 
-    // Update the chart when benchmark value changes
     $("#updateBenchmark").click(function() {
         var value = parseFloat($("#benchmarkValue").val());
         if (!isNaN(value)) {
             benchmark = value;
             var selectedScore = $("#scoreSelector").val();
-            updateChart(chart, selectedScore);  // Re-render the chart with the benchmark
+            updateChart(selectedScore);
         } else {
             alert('Please enter a valid benchmark value.');
         }
     });
 
-    // Automatically update chart with default score1 data on page load
-    updateChart(chart, 'score1');
+    updateChart('score1');  // Default
 });
 
-function updateChart(chart, scoreField) {
+function initializeChart() {
+    window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
+    window.chart.render();
+}
+
+function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
 
@@ -108,6 +107,11 @@ function updateChart(chart, scoreField) {
             xCategories.push(weekStartDate);
         }
     });
+    return {chartData, xCategories};
+}
+
+function updateChart(scoreField) {
+    var {chartData, xCategories} = getChartData(scoreField);
 
     // Calculate trendline
     var trendlineFunction = calculateTrendline(chartData);
@@ -125,8 +129,7 @@ function updateChart(chart, scoreField) {
         };
     });
 
-    // Update chart series data and X categories
-    chart.updateOptions(getChartOptions([
+    window.chart.updateOptions(getChartOptions([
         {
             name: 'Selected Score',
             data: chartData
