@@ -311,21 +311,23 @@ function attachEditableHandler() {
         }
 
         input.blur(function() {
-            if (datePickerActive) {
-                return;
-            }
-            
-            let newValue = input.val();
-            if (cell.data('field-name') === 'week_start_date') {
-                const parts = newValue.split('/');
-                if (parts.length !== 3) {
-                    cell.html(originalValue);
-                    return;
-                }
-                // Save the new value for database but display the original mm/dd/yyyy format to user
-                newValue = convertToDisplayDate(convertToDatabaseDate(newValue));
-            }
-            cell.html(newValue);
+    if (datePickerActive) {
+        return;
+    }
+
+    let newValue = input.val();
+    if (cell.data('field-name') === 'week_start_date') {
+        const parts = newValue.split('/');
+        if (parts.length !== 3) {
+            cell.html(originalValue);
+            return;
+        }
+        // Save the new value for database but display the original mm/dd/yyyy format to user
+        cell.html(newValue);  // The selected value from datepicker is already in mm/dd/yyyy format, so just display it
+        newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
+    } else {
+        cell.html(newValue);
+    }
             
             const performanceId = cell.closest('tr').data('performance-id');
             const fieldName = cell.data('field-name');
