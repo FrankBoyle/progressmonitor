@@ -278,13 +278,18 @@ function attachEditableHandler() {
         const originalValue = cell.text();
         const input = $('<input type="text">');
         input.val(originalValue);
-        
+
+        let datePickerActive = false; // Track whether the datepicker is open
+
         if (cell.data('field-name') === 'week_start_date') {
             input.datepicker({
                 dateFormat: 'mm/dd/yy',
-                onSelect: function() {
-                    // Once a date is selected, trigger blur to save
-                    input.blur();
+                beforeShow: function() {
+                    datePickerActive = true; // Set to true when datepicker is about to be shown
+                },
+                onClose: function() {
+                    datePickerActive = false; // Set to false when datepicker is closed
+                    input.blur(); // Trigger blur event when datepicker is closed
                 }
             });
             cell.html(input);
@@ -295,6 +300,11 @@ function attachEditableHandler() {
         }
 
         input.blur(function() {
+            if (datePickerActive) {
+                // If datepicker is still active, don't execute the rest of the blur logic
+                return;
+            }
+
             let newValue = input.val();
             if (cell.data('field-name') === 'week_start_date') {
                 const parts = newValue.split('/');
@@ -306,7 +316,6 @@ function attachEditableHandler() {
             }
             cell.html(newValue);
             
-            // The following section is about sending data to the server for updating
             const performanceId = cell.closest('tr').data('performance-id');
             const fieldName = cell.data('field-name');
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
@@ -336,13 +345,12 @@ function attachEditableHandler() {
                 data: postData,
                 success: function(response) {
                     if (performanceId === 'new') {
-                        // Update the new row's performance-id with the ID returned from the server
                         const newRow = $('tr[data-performance-id="new"]');
                         newRow.attr('data-performance-id', response.performance_id);
                     }
                 },
                 error: function() {
-                    // Handle any error here, e.g., show a notification to the user
+                    // Alert or handle the error appropriately
                 }
             });
         });
@@ -367,7 +375,6 @@ $('#addDataRow').click(function() {
     $('table').append(newRow);
     attachEditableHandler();
 
-    // Set the current week start date for the new row, if needed
     const currentDate = new Date();
     const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
                           currentDate.getDate().toString().padStart(2, '0') + '/' + 
