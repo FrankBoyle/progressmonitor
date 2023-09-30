@@ -353,19 +353,26 @@ function attachEditableHandler() {
             }
 
             $.ajax({
-                type: 'POST',
-                url: targetUrl,
-                data: postData,
-                success: function(response) {
-                    if (performanceId === 'new') {
-                        const newRow = $('tr[data-performance-id="new"]');
-                        newRow.attr('data-performance-id', response.performance_id);
-                    }
-                },
-                error: function() {
-                    // Alert or handle the error appropriately
-                }
-            });
+    type: 'POST',
+    url: targetUrl,
+    data: postData,
+    success: function(response) {
+        if (performanceId === 'new') {
+            // Update the new row's performance-id with the ID returned from the server
+            const newRow = $('tr[data-performance-id="new"]');
+            newRow.attr('data-performance-id', response.performance_id);
+
+            // Assuming your server response contains the saved date under the key 'saved_date'
+            // This updates the displayed date for the new row to the date that was saved in the database.
+            newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+        }
+    },
+    error: function() {
+        // Handle any error here, e.g., show a notification to the user
+        alert("There was an error updating the data.");
+    }
+});
+
         });
 
         // Pressing Enter to save changes
