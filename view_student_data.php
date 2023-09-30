@@ -292,10 +292,26 @@ function attachEditableHandler() {
         const originalValue = cell.text();
         const input = $('<input type="text">');
         input.val(originalValue);
-        
+
+        let datePickerActive = false;
+
         if (cell.data('field-name') === 'week_start_date') {
-            // Since we don't allow editing of the date, just return
-            return;
+            input.datepicker({
+                dateFormat: 'mm/dd/yy',
+                beforeShow: function() {
+                    datePickerActive = true;
+                },
+                onClose: function(selectedDate) {
+                    if (isValidDate(new Date(selectedDate))) {
+                        cell.text(selectedDate);
+                        cell.append(input.hide());
+                    }
+                    datePickerActive = false;
+                }
+            });
+            cell.html(input);
+            input.focus();
+            input.datepicker("show");  // Automatically show the date picker
         } else {
             cell.html(input);
             input.focus();
