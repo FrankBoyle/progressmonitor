@@ -361,21 +361,21 @@ function attachEditableHandler() {
     url: targetUrl,
     data: postData,
     success: function(response) {
-        if (performanceId === 'new') {
-            // Update the new row's performance-id with the ID returned from the server
-            const newRow = $('tr[data-performance-id="new"]');
-            newRow.attr('data-performance-id', response.performance_id);
+    if (response && response.performance_id) {
+        const newRow = $('tr[data-performance-id="new"]');
+        
+        newRow.attr('data-performance-id', response.performance_id);
 
-            // Assuming your server response contains the saved date under the key 'saved_date'
-            // This updates the displayed date for the new row to the date that was saved in the database.
-            newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
-        }
-    },
-    error: function() {
-        // Handle any error here, e.g., show a notification to the user
-        alert("There was an error updating the data.");
+        newRow.find('td').each(function() {
+            const td = $(this);
+            const inputValue = td.find('input').val();
+            if (inputValue) {
+                td.text(inputValue);
+            }
+        });
     }
-});
+}
+
 
         });
 
@@ -391,13 +391,23 @@ function attachEditableHandler() {
 attachEditableHandler();
 
 $('#addDataRow').click(function() {
-    const newRow = $('<tr data-performance-id="new">');
+    // Check if there's already a "new" row
+    if ($('tr[data-performance-id="new"]').length > 0) {
+        alert("Please save the existing new entry before adding another one.");
+        return;
+    }
+
+    // Your code to add a new row
+    var newRow = $("<tr data-performance-id='new'>");
     newRow.append('<td class="editable" data-field-name="week_start_date">New Entry</td>');
     for (let i = 1; i <= 10; i++) {
-        newRow.append($('<td>').addClass('editable').attr('data-field-name', 'score' + i).text(''));
+        newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
     }
-    $('table').append(newRow);
+    $("table").append(newRow);
+
     attachEditableHandler();
+});
+
 
     
     const currentDate = new Date();
@@ -407,7 +417,7 @@ $('#addDataRow').click(function() {
     $('#currentWeekStartDate').val(formattedDate);
     
 });
-});
+
 
 </script>
 
