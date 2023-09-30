@@ -388,11 +388,13 @@ $('#addDataRow').click(function() {
     $('table').append(newRow);
     attachEditableHandler();
 
+    /*
     const currentDate = new Date();
     const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
                           currentDate.getDate().toString().padStart(2, '0') + '/' + 
                           currentDate.getFullYear();
     $('#currentWeekStartDate').val(formattedDate);
+    */
 });
 });
 
