@@ -21,8 +21,9 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
         exit;
     }
 
-    // Prepare and execute the SQL statement
-    $stmt = $conn->prepare("UPDATE Performance SET $fieldName = ? WHERE performance_id = ?");
+    // Prepare SQL string using string concatenation for the field name
+    $sql = "UPDATE Performance SET " . $fieldName . " = ? WHERE performance_id = ?";
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param('si', $newValue, $performanceId);
 
     if ($stmt->execute()) {
@@ -34,7 +35,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
 
 } else {
     $response['success'] = false;
-    $response['error'] = "Invalid data provided.";  // This might be a bit revealing, consider making it more generic if desired
+    $response['error'] = "Invalid data provided.";
 }
 
 // Return the response as JSON
