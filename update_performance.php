@@ -1,9 +1,14 @@
 <?php
-include('./users/db.php');
+
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+$servername = "localhost";
+$username = "AndersonSchool";
+$password = "SpecialEd69$";
+$dbname = "bFactor-test";
 
 // Create a new database connection
 $conn = new mysqli($servername, $username, $password, $dbname);
