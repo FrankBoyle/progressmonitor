@@ -280,18 +280,19 @@ function attachEditableHandler() {
         input.val(originalValue);
         
         if (cell.data('field-name') === 'week_start_date') {
-    input.datepicker({
-        dateFormat: 'mm/dd/yy',
-        onClose: function(selectedDate) {
-            if (selectedDate) {
-                input.val(selectedDate);
-                input.blur();
-            }
+            input.datepicker({
+                dateFormat: 'mm/dd/yy',
+                onSelect: function() {
+                    // Once a date is selected, trigger blur to save
+                    input.blur();
+                }
+            });
+            cell.html(input);
+            input.focus();
+        } else {
+            cell.html(input);
+            input.focus();
         }
-    });
-    cell.html(input);
-    input.focus();
-}
 
         input.blur(function() {
             let newValue = input.val();
