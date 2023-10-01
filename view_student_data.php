@@ -253,8 +253,8 @@ function calculateTrendline(data) {
         return slope * x + intercept;
     };
 }
-
 </script>
+
 
 <script>
 $(document).ready(function() {
