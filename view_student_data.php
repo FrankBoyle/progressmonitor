@@ -260,114 +260,129 @@ function calculateTrendline(data) {
 <script>
 $(document).ready(function() {
 
-function isValidDate(d) {
-    return d instanceof Date && !isNaN(d);
-}
-
-function convertToDatabaseDate(dateString) {
-    if (!dateString || dateString === "New Entry") {
-        return dateString;
+    function isValidDate(d) {
+        return d instanceof Date && !isNaN(d);
     }
-    const parts = dateString.split('/');
-    if (parts.length !== 3) {
-        return dateString;
+
+    function convertToDatabaseDate(dateString) {
+        if (!dateString || dateString === "New Entry") {
+            return dateString;
+        }
+        const parts = dateString.split('/');
+        if (parts.length !== 3) {
+            return dateString;
+        }
+        return `${parts[2]}-${parts[0]}-${parts[1]}`;
     }
-    return `${parts[2]}-${parts[0]}-${parts[1]}`;
-}
 
-function convertToDisplayDate(databaseString) {
-    if (!databaseString || databaseString === "New Entry") {
-        return databaseString;
+    function convertToDisplayDate(databaseString) {
+        if (!databaseString || databaseString === "New Entry") {
+            return databaseString;
+        }
+        const parts = databaseString.split('-');
+        if (parts.length !== 3) {
+            return databaseString;
+        }
+        return `${parts[1]}/${parts[2]}/${parts[0]}`;
     }
-    const parts = databaseString.split('-');
-    if (parts.length !== 3) {
-        return databaseString;
-    }
-    return `${parts[1]}/${parts[2]}/${parts[0]}`;
-}
 
-function attachEditableHandler() {
-    $('.editable').off('click').on('click', function() {
-        const cell = $(this);
-        const originalValue = cell.text();
-        const input = $('<input type="text">');
-        input.val(originalValue);
+    function attachEditableHandler() {
+        $('.editable').off('click').on('click', function() {
+            const cell = $(this);
+            const originalValue = cell.text();
+            const input = $('<input type="text">');
+            input.val(originalValue);
+            
+            if (cell.data('field-name') === 'week_start_date') {
+                // Since we don't allow editing of the date, just return
+                return;
+            } else {
+                cell.html(input);
+                input.focus();
+            }
 
-        let datePickerActive = false;
+            input.blur(function() {
+                const newValue = input.val();
+                cell.html(newValue);
+                
+                const performanceId = cell.closest('tr').data('performance-id');
+                const fieldName = cell.data('field-name');
+                const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
 
-        if (cell.data('field-name') === 'week_start_date') {
-            input.datepicker({
-                dateFormat: 'mm/dd/yy',
-                beforeShow: function() {
-                    datePickerActive = true;
-                },
-                onClose: function(selectedDate) {
-                    if (isValidDate(new Date(selectedDate))) {
-                        cell.text(selectedDate);
+                const studentId = $('#currentStudentId').val();  
+                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+
+                let postData = {
+                    performance_id: performanceId,
+                    field_name: fieldName,
+                    new_value: newValue,
+                    student_id: studentId,
+                    week_start_date: weekStartDate
+                };
+
+                if (performanceId === 'new') {
+                    let scores = {};
+                    for (let i = 1; i <= 10; i++) {
+                        scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
                     }
-                    datePickerActive = false;
+                    postData.scores = scores;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: targetUrl,
+                    data: postData,
+                    success: function(response) {
+                        if (performanceId === 'new') {
+                            const newRow = $('tr[data-performance-id="new"]');
+                            newRow.attr('data-performance-id', response.performance_id);
+                            newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                        }
+                    },
+                    error: function() {
+                        alert("There was an error updating the data.");
+                    }
+                });
+            });
+
+            input.keypress(function(e) {
+                if (e.which === 13) {
+                    input.blur();
                 }
             });
-            cell.html(input);
-            input.focus();
-            setTimeout(() => {
-                input.datepicker("show");
-            }, 0);
-        } else {
-            cell.html(input);
-            input.focus();
+        });
+    }
+
+    attachEditableHandler();
+
+    $('#addDataRow').click(function() {
+        if ($('tr[data-performance-id="new"]').length > 0) {
+            alert("Please save the existing new entry before adding another one.");
+            return;
         }
 
-        input.blur(function() {
-            if (datePickerActive) {
-                return;
-            }
+        const currentDate = new Date();
+        const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                              currentDate.getDate().toString().padStart(2, '0') + '/' + 
+                              currentDate.getFullYear();
 
-            const newValue = input.val();
-            let processedValue = newValue;
+        const newRow = $("<tr data-performance-id='new'>");
+        newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');
+        for (let i = 1; i <= 10; i++) {
+            newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
+        }
+        $("table").append(newRow);
 
-            if (cell.data('field-name') === 'week_start_date') {
-                processedValue = convertToDatabaseDate(newValue);
-            }
-            
-            cell.html(newValue);
-
-            // Your AJAX logic here...
-        });
+        attachEditableHandler();
     });
-}
-
-attachEditableHandler();
-
-$('#addDataRow').click(function() {
-    if ($('tr[data-performance-id="new"]').length > 0) {
-        alert("Please save the existing new entry before adding another one.");
-        return;
-    }
 
     const currentDate = new Date();
     const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
                           currentDate.getDate().toString().padStart(2, '0') + '/' + 
                           currentDate.getFullYear();
-
-    const newRow = $("<tr data-performance-id='new'>");
-    newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');
-    for (let i = 1; i <= 10; i++) {
-        newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
-    }
-    $("table").append(newRow);
-
-    attachEditableHandler();
-});
-
-const currentDate = new Date();
-const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-                      currentDate.getDate().toString().padStart(2, '0') + '/' + 
-                      currentDate.getFullYear();
-$('#currentWeekStartDate').val(formattedDate);
+    $('#currentWeekStartDate').val(formattedDate);
 
 });
-
 
 </script>
 
