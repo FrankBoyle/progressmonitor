@@ -454,8 +454,27 @@ $(document).ready(function() {
         currentDate.getFullYear();
     $('#currentWeekStartDate').val(formattedDate);
 
+    // Add a button to trigger the datepicker for the "Week Start Date" column
+    $('#addDateButton').click(function() {
+        const currentDate = new Date();
+        const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
+            currentDate.getDate().toString().padStart(2, '0') + '/' +
+            currentDate.getFullYear();
+
+        // Create a new row for the "Week Start Date" and trigger the datepicker
+        var newRow = $("<tr data-performance-id='new'>");
+        newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
+        $("table").append(newRow);
+
+        // Automatically trigger the datepicker for the new row
+        newRow.find('td[data-field-name="week_start_date"]').click();
+
+        attachEditableHandler();
+    });
+
 });
 </script>
+
 
 
 </body>
