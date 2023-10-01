@@ -149,14 +149,7 @@ function updateChart(scoreField) {
         };
     });
 
-    var benchmarkData = xCategories.map(date => {
-        return {
-            x: new Date(date).getTime(),
-            y: benchmark
-        };
-    });
-
-    window.chart.updateOptions(getChartOptions([
+    var seriesData = [
         {
             name: 'Selected Score',
             data: chartData
@@ -164,13 +157,25 @@ function updateChart(scoreField) {
         {
             name: 'Trendline',
             data: trendlineData
-        },
-        {
+        }
+    ];
+
+    if (benchmark !== null) {
+        var benchmarkData = xCategories.map(date => {
+            return {
+                x: new Date(date).getTime(),
+                y: benchmark
+            };
+        });
+        seriesData.push({
             name: 'Benchmark',
             data: benchmarkData
-        }
-    ], xCategories));
+        });
+    }
+
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
+
 
 function getChartOptions(dataSeries, xCategories) {
     return {
