@@ -1,3 +1,6 @@
+
+
+view_student_data.php
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -292,31 +295,31 @@ function calculateTrendline(data) {
 <script>
 $(document).ready(function() {
 
-function isValidDate(d) {
-    return d instanceof Date && !isNaN(d);
-}
+    function isValidDate(d) {
+        return d instanceof Date && !isNaN(d);
+    }
 
-function convertToDatabaseDate(dateString) {
-    if (!dateString || dateString === "New Entry") {
-        return dateString;
+    function convertToDatabaseDate(dateString) {
+        if (!dateString || dateString === "New Entry") {
+            return dateString;
+        }
+        const parts = dateString.split('/');
+        if (parts.length !== 3) {
+            return dateString;
+        }
+        return `${parts[2]}-${parts[0]}-${parts[1]}`;
     }
-    const parts = dateString.split('/');
-    if (parts.length !== 3) {
-        return dateString;
-    }
-    return `${parts[2]}-${parts[0]}-${parts[1]}`;
-}
 
-function convertToDisplayDate(databaseString) {
-    if (!databaseString || databaseString === "New Entry") {
-        return databaseString;
+    function convertToDisplayDate(databaseString) {
+        if (!databaseString || databaseString === "New Entry") {
+            return databaseString;
+        }
+        const parts = databaseString.split('-');
+        if (parts.length !== 3) {
+            return databaseString;
+        }
+        return `${parts[1]}/${parts[2]}/${parts[0]}`;  // Convert to mm/dd/yyyy format
     }
-    const parts = databaseString.split('-');
-    if (parts.length !== 3) {
-        return databaseString;
-    }
-    return `${parts[1]}/${parts[2]}/${parts[0]}`;
-}
 
     function attachEditableHandler() {
         $('.editable').off('click').on('click', function() {
@@ -467,7 +470,6 @@ function convertToDisplayDate(databaseString) {
         const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
             currentDate.getDate().toString().padStart(2, '0') + '/' +
             currentDate.getFullYear();
-        
         var newRow = $("<tr data-performance-id='new'>");
         newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
         for (let i = 1; i <= 10; i++) {
@@ -475,11 +477,11 @@ function convertToDisplayDate(databaseString) {
         }
         $("table").append(newRow);
 
-        // Attach the editable handler to the new row
-        attachEditableHandler();
-
         // Automatically trigger saving for the new row's "Week Start Date"
         newRow.find('td[data-field-name="week_start_date"]').click().blur();
+        saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
+
+        attachEditableHandler();
     });
 
     const currentDate = new Date();
@@ -529,3 +531,177 @@ function convertToDisplayDate(databaseString) {
 
 </body>
 </html>
+
+
+insert_performance.php
+<?php
+// Include the database connection script
+include('./users/db.php');
+
+// Function to log errors server-side
+function logError($error) {
+    // Log error to a file (Make sure your server has write permissions for this file)
+    file_put_contents('error_log.txt', $error . PHP_EOL, FILE_APPEND);
+}
+
+$responseData = [];
+
+// Check if the request method is POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Validate that the necessary POST data is present
+    if (empty($_POST['student_id']) || empty($_POST['week_start_date']) || empty($_POST['scores'])) {
+        logError("Required data is missing.");
+        $responseData['error'] = 'An error occurred. Please try again later.';
+    } else {
+        $studentId = $_POST['student_id'];
+        $weekStartDate = $_POST['week_start_date'];
+        $scores = $_POST['scores']; // Assuming scores are passed as an array
+
+        $stmt = $connection->prepare("INSERT INTO Performance (student_id, week_start_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+        if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
+            $newPerformanceId = $connection->lastInsertId();
+            $responseData = [
+                'performance_id' => $newPerformanceId,
+                'week_start_date' => $weekStartDate,
+                'scores' => $scores,
+            ];
+        } else {
+            logError("Failed to insert data: " . $stmt->error);
+            $responseData['error'] = 'An error occurred. Please try again later.';
+        }
+    }
+
+} else {
+    logError("Invalid request method.");
+    $responseData['error'] = 'Invalid request.';
+}
+
+// Return response data as JSON
+echo json_encode($responseData);
+
+?>
+
+update_performance.php
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+include('./users/db.php');  // Include the database connection
+
+// Main logic
+if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
+    $performanceId = $_POST['performance_id'];
+    $fieldName = $_POST['field_name'];
+    $newValue = $_POST['new_value'];
+
+    // Validate and sanitize the date input (assuming it's for the 'week_start_date' field)
+    if ($fieldName === 'week_start_date') {
+        $newDate = date_create_from_format('Y-m-d', $newValue);
+        if ($newDate === false) {
+            handleError("Invalid date format.");
+        }
+        $newValue = date_format($newDate, 'Y-m-d');
+    }
+
+    updatePerformance($connection, $performanceId, $fieldName, $newValue);  
+} else {
+    handleError("Invalid data provided.");
+}
+
+/**
+ * Function to update the Performance data.
+ */
+function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
+    // List of allowed field names to ensure security
+    $allowedFields = ['week_start_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
+
+    if (!in_array($fieldName, $allowedFields)) {
+        handleError("Invalid field specified.");
+        return;
+    }
+
+    // Prepare SQL statement
+    $sql = "UPDATE Performance SET $fieldName = ? WHERE performance_id = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bindParam(1, $newValue);
+    $stmt->bindParam(2, $performanceId);
+
+    // Execute and respond
+    if ($stmt->execute()) {
+        sendResponse(["success" => true]);
+    } else {
+        handleError("Database error: " . $stmt->errorInfo()[2]);
+    }
+}
+
+/**
+ * Function to handle errors.
+ */
+function handleError($errorMessage) {
+    sendResponse(["success" => false, "error" => $errorMessage]);
+}
+
+/**
+ * Function to send a JSON response.
+ */
+function sendResponse($response) {
+    echo json_encode($response);
+    exit;
+}
+?>
+
+delete_performance.php
+<?php
+file_put_contents('post_log.txt', print_r($_POST, true));
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include('./users/db.php');
+
+$response = ['success' => false];
+
+// Check database connection
+if (!$connection) {
+    $response['message'] = "Connection to the database failed.";
+    echo json_encode($response);
+    exit;
+}
+
+if (isset($_POST['performance_id'])) {
+    $performanceId = $_POST['performance_id'];
+
+    try {
+        // Prepare the DELETE statement
+        $stmt = $connection->prepare("DELETE FROM Performance WHERE performance_id = :performanceId");
+
+        // Check if statement preparation is successful
+        if (!$stmt) {
+            $response['message'] = "Failed to prepare the statement.";
+            echo json_encode($response);
+            exit;
+        }
+
+        // Bind the parameters
+        $stmt->bindParam(':performanceId', $performanceId, PDO::PARAM_INT);
+
+        // Execute the statement
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            $response['success'] = true;
+        } else {
+            $response['message'] = "No rows affected. The provided performance_id might not exist in the database.";
+        }
+    } catch (PDOException $e) {
+        $response['message'] = "Database error: " . $e->getMessage();
+    }
+} else {
+    $response['message'] = "Performance ID not provided.";
+}
+
+echo json_encode($response);
+
+?>
