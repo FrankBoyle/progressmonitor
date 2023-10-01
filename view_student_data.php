@@ -394,33 +394,33 @@ function attachEditableHandler() {
 }
 
 function saveEditedDate(cell, newDate) {
-    const performanceId = cell.closest('tr').data('performance-id');
-    const fieldName = cell.data('field-name');
-    const targetUrl = 'update_performance.php';
+        const performanceId = cell.closest('tr').data('performance-id');
+        const fieldName = cell.data('field-name');
+        const targetUrl = 'update_performance.php';
 
-    const studentId = $('#currentStudentId').val();
+        const studentId = $('#currentStudentId').val();
 
-    let postData = {
-        performance_id: performanceId,
-        field_name: fieldName,
-        new_value: newDate,
-        student_id: studentId
-    };
+        let postData = {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+            student_id: studentId
+        };
 
-    $.ajax({
-        type: 'POST',
-        url: targetUrl,
-        data: postData,
-        success: function(response) {
-            // Assuming your server response contains the saved date under the key 'saved_date'
-            cell.data('saved-date', response.saved_date);
-        },
-        error: function() {
-            // Handle any error here, e.g., show a notification to the user
-            alert("There was an error saving the edited date.");
-        }
-    });
-}
+        $.ajax({
+            type: 'POST',
+            url: targetUrl,
+            data: postData,
+            success: function(response) {
+                // Assuming your server response contains the saved date under the key 'saved_date'
+                cell.data('saved-date', response.saved_date);
+            },
+            error: function() {
+                // Handle any error here, e.g., show a notification to the user
+                alert("There was an error saving the edited date.");
+            }
+        });
+    }
 
 attachEditableHandler();
 
