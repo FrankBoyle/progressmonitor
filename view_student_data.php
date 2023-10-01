@@ -215,14 +215,10 @@ function getChartOptions(dataSeries, xCategories) {
                 text: 'Value'
             },
             labels: {
-    formatter: function(value) {
-        if (value === null || value === undefined) {
-            return "N/A";  // Or return any default value or string you prefer
-        }
-        return value.toFixed(0);
-    }
-}
-
+                formatter: function(value) {
+                    return value.toFixed(0);
+                }
+            }
         },
         grid: {
             xaxis: {
