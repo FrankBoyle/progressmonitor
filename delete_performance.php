@@ -7,7 +7,7 @@ if (isset($_POST['performance_id'])) {
     $performanceId = $_POST['performance_id'];
 
     // Ensure you use prepared statements to prevent SQL injection
-    $stmt = $connection->prepare("DELETE FROM your_table_name WHERE performance_id = ?");
+    $stmt = $connection->prepare("DELETE FROM Performance WHERE performance_id = ?");
     if ($stmt === false) {
         $response['message'] = "Failed to prepare the statement. Error: " . $connection->error;
     } else {
