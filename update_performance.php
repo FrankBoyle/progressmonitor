@@ -7,7 +7,20 @@ include('./users/db.php');  // Include the database connection
 
 // Main logic
 if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
-    updatePerformance($connection, $_POST['performance_id'], $_POST['field_name'], $_POST['new_value']);  // Use $connection instead of $conn
+    $performanceId = $_POST['performance_id'];
+    $fieldName = $_POST['field_name'];
+    $newValue = $_POST['new_value'];
+
+    // Validate and sanitize the date input (assuming it's for the 'week_start_date' field)
+    if ($fieldName === 'week_start_date') {
+        $newDate = date_create_from_format('Y-m-d', $newValue);
+        if ($newDate === false) {
+            handleError("Invalid date format.");
+        }
+        $newValue = date_format($newDate, 'Y-m-d');
+    }
+
+    updatePerformance($connection, $performanceId, $fieldName, $newValue);  
 } else {
     handleError("Invalid data provided.");
 }
