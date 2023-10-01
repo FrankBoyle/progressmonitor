@@ -415,7 +415,6 @@ function saveEditedDate(cell, newDate) {
             alert("There was an error saving the edited date.");
         }
     });
-}
 
 attachEditableHandler();
 
@@ -456,3 +455,5 @@ $('#currentWeekStartDate').val(formattedDate);
 
 </body>
 </html>
+
+
