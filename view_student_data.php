@@ -23,15 +23,15 @@
 <button id="addDataRow">Add Data Row</button>
 
 <table border="1">
-<thead>
-    <tr>
-        <th>Week Start Date</th>
-        <?php for ($i = 1; $i <= 10; $i++): ?>
-            <th>Score <?php echo $i; ?></th>
-        <?php endfor; ?>
-        <th>Action</th>
-    </tr>
-</thead>
+    <thead>
+        <tr>
+            <th>Week Start Date</th>
+            <?php foreach ($scoreNames as $key => $name): ?>
+                <th><?php echo $name; ?></th>
+            <?php endforeach; ?>
+            <th>Action</th>
+        </tr>
+    </thead>
 
     <?php if (empty($performanceData)): ?>
         <tr>
