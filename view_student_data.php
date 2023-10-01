@@ -77,10 +77,15 @@
 <div id="chart"></div>  <!-- Div to display the chart -->
 
 <script>
-var benchmark = null;
+//var benchmark = null;
 
 $(document).ready(function() {
     initializeChart();
+
+    benchmark = parseFloat($("#benchmarkValue").val());
+    if (isNaN(benchmark)) {
+        benchmark = 0;  // Default benchmark value if the input is not provided
+    }
 
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
@@ -100,6 +105,7 @@ $(document).ready(function() {
 
     updateChart('score1');  // Default
 });
+
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
@@ -122,8 +128,14 @@ function getChartData(scoreField) {
             xCategories.push(weekStartDate);
         }
     });
+
+    if (benchmark === null) {
+        benchmark = 0; // Default value if benchmark is not set
+    }
+    
     return {chartData, xCategories};
 }
+
 
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
