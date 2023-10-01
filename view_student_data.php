@@ -441,7 +441,17 @@ $(document).ready(function() {
         currentDate.getFullYear();
     $('#currentWeekStartDate').val(formattedDate);
 
-    attachEditableHandler();
+    $.ajaxSetup({
+        complete: function(xhr, status) {
+            if (status !== 'success') {
+                const response = xhr.responseJSON || {};
+                const errorMsg = response.error || 'Unknown error';
+                alert(`There was an issue saving the data: ${errorMsg}`);
+                console.error(`Error response from server:`, response);
+            }
+        }
+    });
+
 });
 </script>
 
