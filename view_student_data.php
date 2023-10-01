@@ -66,23 +66,36 @@
 <div id="chart"></div>  <!-- Div to display the chart -->
 
 <script>
-<script>
-$(document).ready(function() {
-    // Initialize the chart with empty data
-    var chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
-    chart.render();
+var benchmark = null;
 
-    // Update chart when score selection changes
+$(document).ready(function() {
+    initializeChart();
+
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
-        updateChart(chart, selectedScore);
+        updateChart(selectedScore);
     });
 
-    // Automatically update chart with default score1 data on page load
-    updateChart(chart, 'score1');
+    $("#updateBenchmark").click(function() {
+        var value = parseFloat($("#benchmarkValue").val());
+        if (!isNaN(value)) {
+            benchmark = value;
+            var selectedScore = $("#scoreSelector").val();
+            updateChart(selectedScore);
+        } else {
+            alert('Please enter a valid benchmark value.');
+        }
+    });
+
+    updateChart('score1');  // Default
 });
 
-function updateChart(chart, scoreField) {
+function initializeChart() {
+    window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
+    window.chart.render();
+}
+
+function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
 
@@ -98,17 +111,47 @@ function updateChart(chart, scoreField) {
             xCategories.push(weekStartDate);
         }
     });
-
-    // Update chart series data and X categories
-    chart.updateOptions(getChartOptions(chartData, xCategories));
+    return {chartData, xCategories};
 }
 
-function getChartOptions(data, xCategories) {
-    return {
-        series: [{
+function updateChart(scoreField) {
+    var {chartData, xCategories} = getChartData(scoreField);
+
+    // Calculate trendline
+    var trendlineFunction = calculateTrendline(chartData);
+    var trendlineData = chartData.map(item => {
+        return {
+            x: item.x,
+            y: trendlineFunction(item.x)
+        };
+    });
+
+    var benchmarkData = xCategories.map(date => {
+        return {
+            x: new Date(date).getTime(),
+            y: benchmark
+        };
+    });
+
+    window.chart.updateOptions(getChartOptions([
+        {
             name: 'Selected Score',
-            data: data
-        }],
+            data: chartData
+        },
+        {
+            name: 'Trendline',
+            data: trendlineData
+        },
+        {
+            name: 'Benchmark',
+            data: benchmarkData
+        }
+    ], xCategories));
+}
+
+function getChartOptions(dataSeries, xCategories) {
+    return {
+        series: dataSeries,
         chart: {
             type: 'line',
             stacked: false,
@@ -130,7 +173,7 @@ function getChartOptions(data, xCategories) {
         },
         stroke: {
             curve: 'smooth',
-            width: [1]
+            width: [1, 1, 1]
         },
         markers: {
             size: 5,
@@ -184,9 +227,38 @@ function getChartOptions(data, xCategories) {
                 }
             }
         },
-        colors: ['#2196F3', '#4CAF50', '#FF5722']
+        colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
+
+function calculateTrendline(data) {
+    var sumX = 0;
+    var sumY = 0;
+    var sumXY = 0;
+    var sumXX = 0;
+    var count = 0;
+
+    data.forEach(function (point) {
+        var x = point.x;
+        var y = point.y;
+
+        if (y !== null) {
+            sumX += x;
+            sumY += y;
+            sumXY += x * y;
+            sumXX += x * x;
+            count++;
+        }
+    });
+
+    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / count;
+
+    return function (x) {
+        return slope * x + intercept;
+    };
+}
+
 </script>
 
 <script>
