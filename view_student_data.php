@@ -498,29 +498,29 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on('click', '.delete-row', function() {
-    var row = $(this).closest('tr');
-    var performanceId = row.data('performance-id');
-    if (confirm('Are you sure you want to delete this row?')) {
-        $.ajax({
-            type: 'POST',
-            url: 'delete_performance.php',
-            data: { performance_id: performanceId },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    row.remove();
-                    alert("Data deleted successfully!");
-                } else {
-                    alert("There was an error deleting the data: " + response.message);
-                }
-            },
-            error: function() {
-                alert("Error while sending request to server.");
-            }
-        });
+    $(document).on('click', '.deleteRow', function() {
+    const row = $(this);  // Capture the button element for later use
+    const performanceId = $(this).data('performance-id');
+    
+    // Confirm before delete
+    if (!confirm('Are you sure you want to delete this row?')) {
+        return;
     }
+    
+    // Send a request to delete the data from the server
+    $.post('./users/delete_data.php', {
+        performance_id: performanceId
+    }, function(response) {
+        // Handle the response, e.g., check if the deletion was successful
+        if (response.success) {
+            // Remove the corresponding row from the table
+            row.closest('tr').remove();
+        } else {
+            alert('Failed to delete data. Please try again.');
+        }
+    }, 'json');
 });
+
 
 });
 </script>
