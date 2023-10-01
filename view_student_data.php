@@ -462,7 +462,7 @@ $(document).ready(function() {
             if (status !== 'success') {
                 const response = xhr.responseJSON || {};
                 const errorMsg = response.error || 'Unknown error';
-                alert(`There was an issue saving the data: ${errorMsg}`);
+                //alert(`There was an issue saving the data: ${errorMsg}`);
                 console.error(`Error response from server:`, response);
             }
         }
