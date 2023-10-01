@@ -453,6 +453,11 @@ const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') +
     currentDate.getFullYear();
 $('#currentWeekStartDate').val(formattedDate);
 
+// Initialize the selected date with the default value
+const newDate = $('#currentWeekStartDate').val();
+$('tr[data-performance-id="new"]').find('td[data-field-name="week_start_date"]').text(newDate);
+
+
 });
 
 </script>
