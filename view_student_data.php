@@ -292,31 +292,31 @@ function calculateTrendline(data) {
 <script>
 $(document).ready(function() {
 
-function isValidDate(d) {
-    return d instanceof Date && !isNaN(d);
-}
+    function isValidDate(d) {
+        return d instanceof Date && !isNaN(d);
+    }
 
-function convertToDatabaseDate(dateString) {
-    if (!dateString || dateString === "New Entry") {
-        return dateString;
+    function convertToDatabaseDate(dateString) {
+        if (!dateString || dateString === "New Entry") {
+            return dateString;
+        }
+        const parts = dateString.split('/');
+        if (parts.length !== 3) {
+            return dateString;
+        }
+        return `${parts[2]}-${parts[0]}-${parts[1]}`;
     }
-    const parts = dateString.split('/');
-    if (parts.length !== 3) {
-        return dateString;
-    }
-    return `${parts[2]}-${parts[0]}-${parts[1]}`;
-}
 
-function convertToDisplayDate(databaseString) {
-    if (!databaseString || databaseString === "New Entry") {
-        return databaseString;
+    function convertToDisplayDate(databaseString) {
+        if (!databaseString || databaseString === "New Entry") {
+            return databaseString;
+        }
+        const parts = databaseString.split('-');
+        if (parts.length !== 3) {
+            return databaseString;
+        }
+        return `${parts[1]}/${parts[2]}/${parts[0]}`;  // Convert to mm/dd/yyyy format
     }
-    const parts = databaseString.split('-');
-    if (parts.length !== 3) {
-        return databaseString;
-    }
-    return `${parts[1]}/${parts[2]}/${parts[0]}`;
-}
 
     function attachEditableHandler() {
         $('.editable').off('click').on('click', function() {
@@ -467,7 +467,6 @@ function convertToDisplayDate(databaseString) {
         const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
             currentDate.getDate().toString().padStart(2, '0') + '/' +
             currentDate.getFullYear();
-        
         var newRow = $("<tr data-performance-id='new'>");
         newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
         for (let i = 1; i <= 10; i++) {
@@ -475,11 +474,11 @@ function convertToDisplayDate(databaseString) {
         }
         $("table").append(newRow);
 
-        // Attach the editable handler to the new row
-        attachEditableHandler();
-
         // Automatically trigger saving for the new row's "Week Start Date"
         newRow.find('td[data-field-name="week_start_date"]').click().blur();
+        saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
+
+        attachEditableHandler();
     });
 
     const currentDate = new Date();
@@ -509,7 +508,7 @@ function convertToDisplayDate(databaseString) {
     }
     
     // Send a request to delete the data from the server
-    $.post('delete_performance.php', {
+    $.post('./users/delete_performance.php', {
         performance_id: performanceId
     }, function(response) {
         // Handle the response, e.g., check if the deletion was successful
