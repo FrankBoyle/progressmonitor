@@ -23,13 +23,14 @@
 <button id="addDataRow">Add Data Row</button>
 
 <table border="1">
-    <tr>
-        <th class="editable" data-field-name="week_start_date">Week Start Date</th>
-        <!-- Add other headers using loop based on score names-->
-        <?php foreach ($scoreNames as $key => $name): ?>
-            <th class="editable" data-field-name="<?php echo $key; ?>"><?php echo $name; ?></th>
-        <?php endforeach; ?>
-    </tr>
+<tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                <td class="editable" data-field-name="week_start_date"><?php echo date("m/d/Y", strtotime($data['week_start_date'])); ?></td>
+                <!-- Add scores using loop -->
+                <?php for ($i = 1; $i <= 10; $i++): ?>
+                    <td class="editable" data-field-name="score<?php echo $i; ?>"><?php echo $data['score'.$i]; ?></td>
+                <?php endfor; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
+            </tr>
     <?php if (empty($performanceData)): ?>
         <tr>
             <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
@@ -453,6 +454,41 @@ $(document).ready(function() {
         currentDate.getDate().toString().padStart(2, '0') + '/' +
         currentDate.getFullYear();
     $('#currentWeekStartDate').val(formattedDate);
+
+    $.ajaxSetup({
+        complete: function(xhr, status) {
+            if (status !== 'success') {
+                const response = xhr.responseJSON || {};
+                const errorMsg = response.error || 'Unknown error';
+                //alert(`There was an issue saving the data: ${errorMsg}`);
+                console.error(`Error response from server:`, response);
+            }
+        }
+    });
+
+    $(document).on('click', '.delete-row', function() {
+    var row = $(this).closest('tr');
+    var performanceId = row.data('performance-id');
+    if (confirm('Are you sure you want to delete this row?')) {
+        $.ajax({
+            type: 'POST',
+            url: 'delete_performance.php',
+            data: { performance_id: performanceId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    row.remove();
+                    alert("Data deleted successfully!");
+                } else {
+                    alert("There was an error deleting the data: " + response.message);
+                }
+            },
+            error: function() {
+                alert("Error while sending request to server.");
+            }
+        });
+    }
+});
 
 });
 </script>
