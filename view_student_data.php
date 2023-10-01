@@ -406,28 +406,26 @@ $(document).ready(function() {
     };
 
     $.ajax({
-        type: 'POST',
-        url: targetUrl,
-        data: postData,
-        dataType: 'json',  // Expecting a JSON response from the server
-        success: function(response) {
-            if (response.success) {
-                if (response.saved_date) {
-                    // Update the cell with the saved date
-                    cell.text(convertToDisplayDate(response.saved_date));
-                    cell.data('saved-date', response.saved_date);
-                } else {
-                    console.warn("Server returned success, but did not provide the saved date.");
-                }
-            } else {
-                alert("There was an issue saving the data: " + (response.error || "Unknown error"));
+    type: 'POST',
+    url: targetUrl,
+    data: postData,
+    success: function(response) {
+        if (performanceId === 'new') {
+            // Update the new row's performance-id with the ID returned from the server
+            const newRow = $('tr[data-performance-id="new"]');
+            newRow.attr('data-performance-id', response.performance_id);
+
+            // Update the displayed date for the new row to the date that was saved in the database (if provided by the server)
+            if (response.saved_date) {
+                newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
             }
-        },
-        error: function() {
-            alert("There was an error communicating with the server.");
         }
-    });
-}
+    },
+    error: function() {
+        // Commented out the alert. You can delete the following line if you don't want the error message.
+        // alert("There was an error updating the data.");
+    }
+});
 
 
 
