@@ -14,7 +14,7 @@
 <?php include('./users/fetch_data.php'); ?>
 
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
-<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="" />
 
 <div id="chartDates" style="display:none;"><?php echo json_encode($chartDates); ?></div>
 <div id="chartScores" style="display:none;"><?php echo json_encode($chartScores); ?></div>
@@ -37,7 +37,7 @@
     <?php else: ?>
         <?php foreach ($performanceData as $data): ?>
             <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="week_start_date"><?php echo date("m/d/Y", strtotime($data['week_start_date'])); ?></td>
+                <td class="editable" data-field-name="week_start_date" data-saved-date="<?php echo date("m/d/Y", strtotime($data['week_start_date'])); ?>"><?php echo date("m/d/Y", strtotime($data['week_start_date'])); ?></td>
                 <!-- Add scores using loop -->
                 <?php for ($i = 1; $i <= 10; $i++): ?>
                     <td class="editable" data-field-name="score<?php echo $i; ?>"><?php echo $data['score'.$i]; ?></td>
@@ -46,6 +46,7 @@
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
+
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
@@ -254,11 +255,6 @@ function calculateTrendline(data) {
     };
 }
 
-</script>
-
-<script>
-$(document).ready(function() {
-
 function isValidDate(d) {
     return d instanceof Date && !isNaN(d);
 }
@@ -393,63 +389,37 @@ function attachEditableHandler() {
 }
 
 function saveEditedDate(cell, newDate) {
-        const performanceId = cell.closest('tr').data('performance-id');
-        const fieldName = cell.data('field-name');
-        const targetUrl = 'update_performance.php';
+    const performanceId = cell.closest('tr').data('performance-id');
+    const fieldName = cell.data('field-name');
+    const targetUrl = 'update_performance.php';
 
-        const studentId = $('#currentStudentId').val();
+    const studentId = $('#currentStudentId').val();
 
-        let postData = {
-            performance_id: performanceId,
-            field_name: fieldName,
-            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
-            student_id: studentId
-        };
+    let postData = {
+        performance_id: performanceId,
+        field_name: fieldName,
+        new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+        student_id: studentId
+    };
 
-        $.ajax({
-            type: 'POST',
-            url: targetUrl,
-            data: postData,
-            success: function(response) {
-                // Assuming your server response contains the saved date under the key 'saved_date'
-                cell.data('saved-date', response.saved_date);
-            },
-            error: function() {
-                // Handle any error here, e.g., show a notification to the user
-                alert("There was an error saving the edited date.");
-            }
-        });
-    }
+    $.ajax({
+        type: 'POST',
+        url: targetUrl,
+        data: postData,
+        success: function(response) {
+            // Assuming your server response contains the saved date under the key 'saved_date'
+            cell.data('saved-date', response.saved_date);
+        },
+        error: function() {
+            // Handle any error here, e.g., show a notification to the user
+            alert("There was an error saving the edited date.");
+        }
+    });
+}
 
 attachEditableHandler();
 
 $('#addDataRow').click(function() {
-    $('#addDataRow').click(function() {
-    // Check if there's already a "new" row
-    if ($('tr[data-performance-id="new"]').length > 0) {
-        alert("Please save the existing new entry before adding another one.");
-        return;
-    }
-
-    // Your code to add a new row
-    const currentDate = new Date();
-    const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-        currentDate.getDate().toString().padStart(2, '0') + '/' +
-        currentDate.getFullYear();
-    var newRow = $("<tr data-performance-id='new'>");
-    newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
-    for (let i = 1; i <= 10; i++) {
-        newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
-    }
-    $("table").append(newRow);
-
-    // Automatically trigger saving for the new row's "Week Start Date"
-    newRow.find('td[data-field-name="week_start_date"]').click().blur();
-    saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
-
-    attachEditableHandler();
-});
-
     // Check if there's already a "new" row
     if ($('tr[data-performance-id="new"]').length > 0) {
         alert("Please save the existing new entry before adding another one.");
