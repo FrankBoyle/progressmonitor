@@ -259,140 +259,139 @@ function calculateTrendline(data) {
 <script>
 $(document).ready(function() {
 
-function isValidDate(d) {
-    return d instanceof Date && !isNaN(d);
-}
-
-function convertToDatabaseDate(dateString) {
-    if (!dateString || dateString === "New Entry") {
-        return dateString;
+    function isValidDate(d) {
+        return d instanceof Date && !isNaN(d);
     }
-    const parts = dateString.split('/');
-    if (parts.length !== 3) {
-        return dateString;
-    }
-    return `${parts[2]}-${parts[0]}-${parts[1]}`;
-}
 
-function convertToDisplayDate(databaseString) {
-    if (!databaseString || databaseString === "New Entry") {
-        return databaseString;
-    }
-    const parts = databaseString.split('-');
-    if (parts.length !== 3) {
-        return databaseString;
-    }
-    return `${parts[1]}/${parts[2]}/${parts[0]}`;  // Convert to mm/dd/yyyy format
-}
-
-function attachEditableHandler() {
-    $('.editable').off('click').on('click', function() {
-        const cell = $(this);
-        const originalValue = cell.text();
-        const input = $('<input type="text">');
-        input.val(originalValue);
-
-        let datePickerActive = false;
-
-        if (cell.data('field-name') === 'week_start_date') {
-            input.datepicker({
-                dateFormat: 'mm/dd/yy',
-                beforeShow: function() {
-                    datePickerActive = true;
-                },
-                onClose: function(selectedDate) {
-                    if (isValidDate(new Date(selectedDate))) {
-                        cell.text(selectedDate);  // Set the selected date
-                        cell.append(input.hide());  // Hide the input to show the cell text
-                        saveEditedDate(cell, selectedDate); // Save the edited date
-                    }
-                    datePickerActive = false;
-                }
-            });
-            cell.html(input);
-            input.focus();
-        } else {
-            cell.html(input);
-            input.focus();
+    function convertToDatabaseDate(dateString) {
+        if (!dateString || dateString === "New Entry") {
+            return dateString;
         }
+        const parts = dateString.split('/');
+        if (parts.length !== 3) {
+            return dateString;
+        }
+        return `${parts[2]}-${parts[0]}-${parts[1]}`;
+    }
 
-        input.blur(function() {
-            if (datePickerActive) {
-                return;
+    function convertToDisplayDate(databaseString) {
+        if (!databaseString || databaseString === "New Entry") {
+            return databaseString;
+        }
+        const parts = databaseString.split('-');
+        if (parts.length !== 3) {
+            return databaseString;
+        }
+        return `${parts[1]}/${parts[2]}/${parts[0]}`;  // Convert to mm/dd/yyyy format
+    }
+
+    function attachEditableHandler() {
+        $('.editable').off('click').on('click', function() {
+            const cell = $(this);
+            const originalValue = cell.text();
+            const input = $('<input type="text">');
+            input.val(originalValue);
+
+            let datePickerActive = false;
+
+            if (cell.data('field-name') === 'week_start_date') {
+                input.datepicker({
+                    dateFormat: 'mm/dd/yy',
+                    beforeShow: function() {
+                        datePickerActive = true;
+                    },
+                    onClose: function(selectedDate) {
+                        if (isValidDate(new Date(selectedDate))) {
+                            cell.text(selectedDate);  // Set the selected date
+                            cell.append(input.hide());  // Hide the input to show the cell text
+                            saveEditedDate(cell, selectedDate); // Save the edited date
+                        }
+                        datePickerActive = false;
+                    }
+                });
+                cell.html(input);
+                input.focus();
+            } else {
+                cell.html(input);
+                input.focus();
             }
 
-            let newValue = input.val();
-            if (cell.data('field-name') === 'week_start_date') {
-                const parts = newValue.split('/');
-                if (parts.length !== 3) {
-                    cell.html(originalValue);
+            input.blur(function() {
+                if (datePickerActive) {
                     return;
                 }
-                // Save the new value for the database but display the original mm/dd/yyyy format to the user
-                cell.html(newValue);  // The selected value from datepicker is already in mm/dd/yyyy format, so just display it
-                newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
-                saveEditedDate(cell, newValue); // Save the edited date
-            } else {
-                cell.html(newValue);
-            }
 
-            const performanceId = cell.closest('tr').data('performance-id');
-            const fieldName = cell.data('field-name');
-            const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-
-            const studentId = $('#currentStudentId').val();
-            const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
-
-            let postData = {
-                performance_id: performanceId,
-                field_name: fieldName,
-                new_value: newValue,
-                student_id: studentId,
-                week_start_date: weekStartDate
-            };
-
-            if (performanceId === 'new') {
-                let scores = {};
-                for (let i = 1; i <= 10; i++) {
-                    scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
-                }
-                postData.scores = scores;
-            }
-
-            $.ajax({
-                type: 'POST',
-                url: targetUrl,
-                data: postData,
-                success: function(response) {
-                    if (performanceId === 'new') {
-                        // Update the new row's performance-id with the ID returned from the server
-                        const newRow = $('tr[data-performance-id="new"]');
-                        newRow.attr('data-performance-id', response.performance_id);
-
-                        // Assuming your server response contains the saved date under the key 'saved_date'
-                        // This updates the displayed date for the new row to the date that was saved in the database.
-                        newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
-                        newRow.find('td[data-field-name="week_start_date"]').data('saved-date', response.saved_date);
+                let newValue = input.val();
+                if (cell.data('field-name') === 'week_start_date') {
+                    const parts = newValue.split('/');
+                    if (parts.length !== 3) {
+                        cell.html(originalValue);
+                        return;
                     }
-                },
-                error: function() {
-                    // Handle any error here, e.g., show a notification to the user
-                    alert("There was an error updating the data.");
+                    // Save the new value for the database but display the original mm/dd/yyyy format to the user
+                    cell.html(newValue);  // The selected value from datepicker is already in mm/dd/yyyy format, so just display it
+                    newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
+                    saveEditedDate(cell, newValue); // Save the edited date
+                } else {
+                    cell.html(newValue);
                 }
+
+                const performanceId = cell.closest('tr').data('performance-id');
+                const fieldName = cell.data('field-name');
+                const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+
+                const studentId = $('#currentStudentId').val();
+                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+
+                let postData = {
+                    performance_id: performanceId,
+                    field_name: fieldName,
+                    new_value: newValue,
+                    student_id: studentId,
+                    week_start_date: weekStartDate
+                };
+
+                if (performanceId === 'new') {
+                    let scores = {};
+                    for (let i = 1; i <= 10; i++) {
+                        scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
+                    }
+                    postData.scores = scores;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: targetUrl,
+                    data: postData,
+                    success: function(response) {
+                        if (performanceId === 'new') {
+                            // Update the new row's performance-id with the ID returned from the server
+                            const newRow = $('tr[data-performance-id="new"]');
+                            newRow.attr('data-performance-id', response.performance_id);
+
+                            // Assuming your server response contains the saved date under the key 'saved_date'
+                            // This updates the displayed date for the new row to the date that was saved in the database.
+                            newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                            newRow.find('td[data-field-name="week_start_date"]').data('saved-date', response.saved_date);
+                        }
+                    },
+                    error: function() {
+                        // Handle any error here, e.g., show a notification to the user
+                        alert("There was an error updating the data.");
+                    }
+                });
             });
 
+            // Pressing Enter to save changes
+            input.keypress(function(e) {
+                if (e.which === 13) {
+                    input.blur();
+                }
+            });
         });
+    }
 
-        // Pressing Enter to save changes
-        input.keypress(function(e) {
-            if (e.which === 13) {
-                input.blur();
-            }
-        });
-    });
-}
-
-function saveEditedDate(cell, newDate) {
+    function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const targetUrl = 'update_performance.php';
@@ -421,68 +420,43 @@ function saveEditedDate(cell, newDate) {
         });
     }
 
-attachEditableHandler();
+    attachEditableHandler();
 
-$('#addDataRow').click(function() {
     $('#addDataRow').click(function() {
-    // Check if there's already a "new" row
-    if ($('tr[data-performance-id="new"]').length > 0) {
-        alert("Please save the existing new entry before adding another one.");
-        return;
-    }
+        // Check if there's already a "new" row
+        if ($('tr[data-performance-id="new"]').length > 0) {
+            alert("Please save the existing new entry before adding another one.");
+            return;
+        }
 
-    // Your code to add a new row
+        // Your code to add a new row
+        const currentDate = new Date();
+        const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
+            currentDate.getDate().toString().padStart(2, '0') + '/' +
+            currentDate.getFullYear();
+        var newRow = $("<tr data-performance-id='new'>");
+        newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
+        for (let i = 1; i <= 10; i++) {
+            newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
+        }
+        $("table").append(newRow);
+
+        // Automatically trigger saving for the new row's "Week Start Date"
+        newRow.find('td[data-field-name="week_start_date"]').click().blur();
+        saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
+
+        attachEditableHandler();
+    });
+
     const currentDate = new Date();
     const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
         currentDate.getDate().toString().padStart(2, '0') + '/' +
         currentDate.getFullYear();
-    var newRow = $("<tr data-performance-id='new'>");
-    newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
-    for (let i = 1; i <= 10; i++) {
-        newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
-    }
-    $("table").append(newRow);
-
-    // Automatically trigger saving for the new row's "Week Start Date"
-    newRow.find('td[data-field-name="week_start_date"]').click().blur();
-    saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
-
-    attachEditableHandler();
-});
-
-    // Check if there's already a "new" row
-    if ($('tr[data-performance-id="new"]').length > 0) {
-        alert("Please save the existing new entry before adding another one.");
-        return;
-    }
-
-    // Your code to add a new row
-    const currentDate = new Date();
-    const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-        currentDate.getDate().toString().padStart(2, '0') + '/' +
-        currentDate.getFullYear();
-    var newRow = $("<tr data-performance-id='new'>");
-    newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
-    for (let i = 1; i <= 10; i++) {
-        newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
-    }
-    $("table").append(newRow);
-
-    // Automatically trigger saving for the new row's "Week Start Date"
-    newRow.find('td[data-field-name="week_start_date"]').click().blur();
-
-    attachEditableHandler();
-});
-
-const currentDate = new Date();
-const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-    currentDate.getDate().toString().padStart(2, '0') + '/' +
-    currentDate.getFullYear();
-$('#currentWeekStartDate').val(formattedDate);
+    $('#currentWeekStartDate').val(formattedDate);
 
 });
-
 </script>
+
 
 </body>
 </html>
