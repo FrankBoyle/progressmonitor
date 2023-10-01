@@ -374,7 +374,7 @@ $(document).ready(function() {
                                 newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
                             }
                         } else {
-                            alert("There was an issue saving the data: " + (response.error || "Unknown error"));
+                            //alert("There was an issue saving the data: " + (response.error || "Unknown error"));
                         }
                     },
                     error: function() {
