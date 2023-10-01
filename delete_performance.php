@@ -1,26 +1,28 @@
 <?php
-// Connect to the database
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 include('./users/db.php');
 
-$response = ['success' => false];
+$response = ['success' => false, 'message' => 'Unknown error.'];
 
 if (isset($_POST['performance_id'])) {
     $performanceId = $_POST['performance_id'];
 
     // Ensure you use prepared statements to prevent SQL injection
-    $stmt = $connection->prepare("DELETE FROM Performance WHERE performance_id = ?");
-    $stmt->bind_param("i", $performanceId);
+    $stmt = $connection->prepare("DELETE FROM your_table_name WHERE performance_id = ?");
+    if ($stmt === false) {
+        $response['message'] = "Failed to prepare the statement. Error: " . $connection->error;
+    } else {
+        $stmt->bind_param("i", $performanceId);
 
-    if ($stmt->execute()) {
-        $response['success'] = true;
+        if ($stmt->execute()) {
+            $response['success'] = true;
+        } else {
+            $response['message'] = "Failed to execute the statement. Error: " . $stmt->error;
+        }
+
+        $stmt->close();
     }
-
-    $stmt->close();
 }
 
 echo json_encode($response);
 ?>
+
