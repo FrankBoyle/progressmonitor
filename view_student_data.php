@@ -129,9 +129,9 @@ function getChartData(scoreField) {
         }
     });
 
-    if (benchmark === null) {
-        benchmark = 0; // Default value if benchmark is not set
-    }
+    //if (benchmark === null) {
+    //    benchmark = 0; // Default value if benchmark is not set
+    //}
     
     return {chartData, xCategories};
 }
