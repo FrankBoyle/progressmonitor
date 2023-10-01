@@ -8,6 +8,13 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        #chart {
+    width: 100%;   /* make it responsive to the container width */
+    height: 500px; /* fixed height for better visibility */
+    overflow: visible;
+}
+</style>
 </head>
 <body>
 
