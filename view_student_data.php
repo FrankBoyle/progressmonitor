@@ -424,6 +424,32 @@ function saveEditedDate(cell, newDate) {
 attachEditableHandler();
 
 $('#addDataRow').click(function() {
+    $('#addDataRow').click(function() {
+    // Check if there's already a "new" row
+    if ($('tr[data-performance-id="new"]').length > 0) {
+        alert("Please save the existing new entry before adding another one.");
+        return;
+    }
+
+    // Your code to add a new row
+    const currentDate = new Date();
+    const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
+        currentDate.getDate().toString().padStart(2, '0') + '/' +
+        currentDate.getFullYear();
+    var newRow = $("<tr data-performance-id='new'>");
+    newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
+    for (let i = 1; i <= 10; i++) {
+        newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
+    }
+    $("table").append(newRow);
+
+    // Automatically trigger saving for the new row's "Week Start Date"
+    newRow.find('td[data-field-name="week_start_date"]').click().blur();
+    saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
+
+    attachEditableHandler();
+});
+
     // Check if there's already a "new" row
     if ($('tr[data-performance-id="new"]').length > 0) {
         alert("Please save the existing new entry before adding another one.");
