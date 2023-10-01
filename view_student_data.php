@@ -14,7 +14,7 @@
 <?php include('./users/fetch_data.php'); ?>
 
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
-<input type="hidden" id="currentWeekStartDate" value="" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 
 <div id="chartDates" style="display:none;"><?php echo json_encode($chartDates); ?></div>
 <div id="chartScores" style="display:none;"><?php echo json_encode($chartScores); ?></div>
@@ -46,7 +46,6 @@
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
@@ -432,9 +431,12 @@ $('#addDataRow').click(function() {
     }
 
     // Your code to add a new row
-    const newDate = $('#currentWeekStartDate').val(); // Get the selected date from the hidden input
+    const currentDate = new Date();
+    const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
+        currentDate.getDate().toString().padStart(2, '0') + '/' +
+        currentDate.getFullYear();
     var newRow = $("<tr data-performance-id='new'>");
-    newRow.append('<td class="editable" data-field-name="week_start_date">' + newDate + '</td>');  // Use the selected date
+    newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
     for (let i = 1; i <= 10; i++) {
         newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
     }
@@ -446,22 +448,15 @@ $('#addDataRow').click(function() {
     attachEditableHandler();
 });
 
-
 const currentDate = new Date();
 const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
     currentDate.getDate().toString().padStart(2, '0') + '/' +
     currentDate.getFullYear();
 $('#currentWeekStartDate').val(formattedDate);
 
-// Initialize the selected date with the default value
-const newDate = $('#currentWeekStartDate').val();
-$('tr[data-performance-id="new"]').find('td[data-field-name="week_start_date"]').text(newDate);
-
-
 });
 
 </script>
-
 
 </body>
 </html>
