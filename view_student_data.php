@@ -427,6 +427,8 @@ $(document).ready(function() {
     }
 });
 
+}
+
 
 
     $('#addDataRow').click(function() {
