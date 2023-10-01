@@ -22,6 +22,7 @@
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
 
+
 <table border="1">
     <tr>
         <th class="editable" data-field-name="week_start_date">Week Start Date</th>
@@ -29,10 +30,12 @@
         <?php foreach ($scoreNames as $key => $name): ?>
             <th class="editable" data-field-name="<?php echo $key; ?>"><?php echo $name; ?></th>
         <?php endforeach; ?>
+        <th>Action</th> <!-- New column header for the delete button -->
     </tr>
+
     <?php if (empty($performanceData)): ?>
         <tr>
-            <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+            <td colspan="12">No Data Found. Click "Add Data Row" to add new data.</td>
         </tr>
     <?php else: ?>
         <?php foreach ($performanceData as $data): ?>
@@ -42,6 +45,7 @@
                 <?php for ($i = 1; $i <= 10; $i++): ?>
                     <td class="editable" data-field-name="score<?php echo $i; ?>"><?php echo $data['score'.$i]; ?></td>
                 <?php endfor; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
@@ -468,6 +472,31 @@ $(document).ready(function() {
         }
     });
 
+    $('.deleteRow').on('click', function() {
+        var performanceId = $(this).data('performance-id');
+        var row = $(this).closest('tr');
+
+        // Confirm deletion
+        var isConfirmed = confirm("Are you sure you want to delete this row?");
+
+        if (isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                url: 'delete_performance.php', // Name of your server-side script to handle the deletion
+                data: {performance_id: performanceId},
+                success: function(response) {
+                    if (response && response.success) {
+                        row.remove();
+                    } else {
+                        alert("There was an error deleting the data.");
+                    }
+                },
+                error: function() {
+                    alert("There was an error deleting the data.");
+                }
+            });
+        }
+    });
 });
 </script>
 
