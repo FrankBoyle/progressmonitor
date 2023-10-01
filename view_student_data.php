@@ -84,7 +84,7 @@ $(document).ready(function() {
 
     benchmark = parseFloat($("#benchmarkValue").val());
     if (isNaN(benchmark)) {
-        benchmark = 0;  // Default benchmark value if the input is not provided
+        benchmark = null;  // Default benchmark value if the input is not provided
     }
 
     $("#scoreSelector").change(function() {
