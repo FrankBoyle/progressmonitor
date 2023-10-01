@@ -10,6 +10,8 @@ if (!$connection) {
     die("Connection failed: " . $connection->errorInfo());
 }
 
+$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 $response = ['success' => false, 'message' => 'Unknown error.'];
 
 if (isset($_POST['performance_id'])) {
@@ -24,10 +26,15 @@ if (isset($_POST['performance_id'])) {
 
         try {
             $stmt->execute();
-            $response['success'] = true;
+            if ($stmt->rowCount() > 0) {
+                $response['success'] = true;
+            } else {
+                $response['message'] = "No rows affected. The provided performance_id might not exist in the database.";
+            }
         } catch (PDOException $e) {
-            $response['message'] = $e->getMessage();
+            $response['message'] = "Database error: " . $e->getMessage();
         }
+        
         
 
         $stmt->close();
