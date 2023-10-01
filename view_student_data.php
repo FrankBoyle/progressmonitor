@@ -77,7 +77,7 @@
 <div id="chart"></div>  <!-- Div to display the chart -->
 
 <script>
-var benchmark = null;
+//var benchmark = null;
 
 $(document).ready(function() {
     initializeChart();
