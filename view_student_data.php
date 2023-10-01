@@ -211,14 +211,16 @@ function getChartOptions(dataSeries, xCategories) {
             }
         },
         yaxis: {
-            title: {
-                text: 'Value'
-            },
-            labels: {
-                formatter: function(value) {
-                    return value.toFixed(0);
-                }
-            }
+            min: Math.min(...chartData.map(data => data.y)) - 5,  // 5 units less than the smallest data point
+    max: Math.max(...chartData.map(data => data.y)) + 5,  // 5 units more than the largest data point
+    title: {
+        text: 'Value'
+    },
+    labels: {
+        formatter: function(value) {
+            return value.toFixed(0);
+        }
+    }
         },
         grid: {
             xaxis: {
