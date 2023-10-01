@@ -23,14 +23,6 @@
 <button id="addDataRow">Add Data Row</button>
 
 <table border="1">
-<tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="week_start_date"><?php echo date("m/d/Y", strtotime($data['week_start_date'])); ?></td>
-                <!-- Add scores using loop -->
-                <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <td class="editable" data-field-name="score<?php echo $i; ?>"><?php echo $data['score'.$i]; ?></td>
-                <?php endfor; ?>
-                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
-            </tr>
     <?php if (empty($performanceData)): ?>
         <tr>
             <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
@@ -38,11 +30,24 @@
     <?php else: ?>
         <?php foreach ($performanceData as $data): ?>
             <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="week_start_date"><?php echo date("m/d/Y", strtotime($data['week_start_date'])); ?></td>
+                <td class="editable" data-field-name="week_start_date">
+                    <?php
+                    if (isset($data['week_start_date'])) {
+                        echo date("m/d/Y", strtotime($data['week_start_date']));
+                    }
+                    ?>
+                </td>
                 <!-- Add scores using loop -->
                 <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <td class="editable" data-field-name="score<?php echo $i; ?>"><?php echo $data['score'.$i]; ?></td>
+                    <td class="editable" data-field-name="score<?php echo $i; ?>">
+                        <?php
+                        if (isset($data['score'.$i])) {
+                            echo $data['score'.$i];
+                        }
+                        ?>
+                    </td>
                 <?php endfor; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
