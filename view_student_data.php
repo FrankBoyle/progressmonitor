@@ -284,26 +284,6 @@ $(document).ready(function() {
         }
         return `${parts[1]}/${parts[2]}/${parts[0]}`;  // Convert to mm/dd/yyyy format
     }
-    $("#addDataRow").click(function() {
-        var today = new Date();
-        var dateString = (today.getMonth()+1) + '/' + today.getDate() + '/' + today.getFullYear();
-
-        // Add new row with today's date
-        var newRow = $('<tr data-performance-id="new">');
-        newRow.append('<td class="editable" data-field-name="week_start_date">' + dateString + '</td>');
-
-        for (let i = 1; i <= 10; i++) {
-            newRow.append('<td class="editable" data-field-name="score' + i + '">0</td>');  // default score of 0
-        }
-
-        $("table").append(newRow);
-
-        // Attach the editable handler to new cells
-        attachEditableHandler();
-
-        // Now, trigger the edit mode for the date cell so that it gets saved immediately.
-        newRow.find('td[data-field-name="week_start_date"]').click();
-    });
 
     function attachEditableHandler() {
         $('.editable').off('click').on('click', function() {
@@ -449,11 +429,11 @@ $(document).ready(function() {
             return;
         }
 
+        // Your code to add a new row
         const currentDate = new Date();
         const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
             currentDate.getDate().toString().padStart(2, '0') + '/' +
             currentDate.getFullYear();
-
         var newRow = $("<tr data-performance-id='new'>");
         newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
         for (let i = 1; i <= 10; i++) {
@@ -473,6 +453,7 @@ $(document).ready(function() {
         currentDate.getDate().toString().padStart(2, '0') + '/' +
         currentDate.getFullYear();
     $('#currentWeekStartDate').val(formattedDate);
+
 });
 </script>
 
