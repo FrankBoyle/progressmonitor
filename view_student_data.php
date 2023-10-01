@@ -388,32 +388,36 @@ $(document).ready(function() {
     }
 
     function saveEditedDate(cell, newDate) {
-        const performanceId = cell.closest('tr').data('performance-id');
-        const fieldName = cell.data('field-name');
-        const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+    console.log('Trying to save date:', newDate);  // Log this
 
-        const studentId = $('#currentStudentId').val();
+    const performanceId = cell.closest('tr').data('performance-id');
+    const fieldName = cell.data('field-name');
+    const targetUrl = 'update_performance.php';
 
-        let postData = {
-            performance_id: performanceId,
-            field_name: fieldName,
-            new_value: convertToDatabaseDate(newDate),
-            student_id: studentId
-        };
+    const studentId = $('#currentStudentId').val();
 
-        $.ajax({
-            type: 'POST',
-            url: targetUrl,
-            data: postData,
-            dataType: 'json',
-            success: function(response) {
-                cell.data('saved-date', response.saved_date);
-            },
-            error: function() {
-                alert("There was an error saving the edited date.");
-            }
-        });
-    }
+    let postData = {
+        performance_id: performanceId,
+        field_name: fieldName,
+        new_value: convertToDatabaseDate(newDate),
+        student_id: studentId
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: targetUrl,
+        data: postData,
+        success: function(response) {
+            console.log('Saved date response:', response);  // Log this too
+            cell.data('saved-date', response.saved_date);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert("There was an error saving the edited date: " + textStatus);
+            console.error('Error:', errorThrown);  // Log any error
+        }
+    });
+}
+
 
     $('#addDataRow').click(function() {
         if ($('tr[data-performance-id="new"]').length > 0) {
