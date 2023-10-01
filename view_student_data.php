@@ -288,6 +288,19 @@ function calculateTrendline(data) {
 }
 </script>
 
+<div id="dataModal" style="display:none;">
+    <div>
+        <label for="modalWeekStartDate">Week Start Date:</label>
+        <input type="text" id="modalWeekStartDate" name="week_start_date">
+    </div>
+    <?php for ($i = 1; $i <= 10; $i++): ?>
+        <div>
+            <label for="modalScore<?php echo $i; ?>">Score <?php echo $i; ?>:</label>
+            <input type="text" id="modalScore<?php echo $i; ?>" name="score<?php echo $i; ?>">
+        </div>
+    <?php endfor; ?>
+    <button id="submitModal">Submit</button>
+</div>
 
 <script>
 $(document).ready(function() {
@@ -456,30 +469,51 @@ $(document).ready(function() {
     attachEditableHandler();
 
     $('#addDataRow').click(function() {
-        // Check if there's already a "new" row
-        if ($('tr[data-performance-id="new"]').length > 0) {
-            alert("Please save the existing new entry before adding another one.");
-            return;
-        }
-
-        // Your code to add a new row
-        const currentDate = new Date();
-        const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-            currentDate.getDate().toString().padStart(2, '0') + '/' +
-            currentDate.getFullYear();
-        var newRow = $("<tr data-performance-id='new'>");
-        newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
-        for (let i = 1; i <= 10; i++) {
-            newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
-        }
-        $("table").append(newRow);
-
-        // Automatically trigger saving for the new row's "Week Start Date"
-        newRow.find('td[data-field-name="week_start_date"]').click().blur();
-        saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
-
-        attachEditableHandler();
+    // Open the modal
+    $('#dataModal').show();
+    
+    // Initialize the datepicker
+    $('#modalWeekStartDate').datepicker({
+        dateFormat: 'mm/dd/yy'
     });
+});
+
+$('#submitModal').click(function() {
+    const studentId = $('#currentStudentId').val();
+    let postData = {
+        student_id: studentId
+    };
+
+    // Collect data from the modal inputs
+    postData.week_start_date = convertToDatabaseDate($('#modalWeekStartDate').val());
+    for (let i = 1; i <= 10; i++) {
+        postData['score' + i] = $('#modalScore' + i).val();
+    }
+
+    // Send the data to the server
+    $.ajax({
+        type: 'POST',
+        url: 'insert_performance.php',
+        data: postData,
+        success: function(response) {
+            // Close the modal
+            $('#dataModal').hide();
+
+            // Append the new row to the table
+            const newRow = $("<tr data-performance-id='" + response.performance_id + "'>");
+            newRow.append('<td class="editable" data-field-name="week_start_date">' + $('#modalWeekStartDate').val() + '</td>');
+            for (let i = 1; i <= 10; i++) {
+                newRow.append('<td class="editable" data-field-name="score' + i + '">' + $('#modalScore' + i).val() + '</td>');
+            }
+            $("table").append(newRow);
+            
+            attachEditableHandler();
+        },
+        error: function() {
+            alert("There was an error adding the data.");
+        }
+    });
+});
 
     const currentDate = new Date();
     const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
