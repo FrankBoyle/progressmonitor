@@ -23,6 +23,16 @@
 <button id="addDataRow">Add Data Row</button>
 
 <table border="1">
+<thead>
+    <tr>
+        <th>Week Start Date</th>
+        <?php for ($i = 1; $i <= 10; $i++): ?>
+            <th>Score <?php echo $i; ?></th>
+        <?php endfor; ?>
+        <th>Action</th>
+    </tr>
+</thead>
+
     <?php if (empty($performanceData)): ?>
         <tr>
             <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
