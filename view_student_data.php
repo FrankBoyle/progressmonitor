@@ -392,8 +392,6 @@ $(document).ready(function() {
     }
 
     function saveEditedDate(cell, newDate) {
-    console.log('Trying to save date:', newDate);  // Log this
-
     const performanceId = cell.closest('tr').data('performance-id');
     const fieldName = cell.data('field-name');
     const targetUrl = 'update_performance.php';
@@ -411,16 +409,26 @@ $(document).ready(function() {
         type: 'POST',
         url: targetUrl,
         data: postData,
+        dataType: 'json',  // Expecting a JSON response from the server
         success: function(response) {
-            console.log('Saved date response:', response);  // Log this too
-            cell.data('saved-date', response.saved_date);
+            if (response.success) {
+                if (response.saved_date) {
+                    // Update the cell with the saved date
+                    cell.text(convertToDisplayDate(response.saved_date));
+                    cell.data('saved-date', response.saved_date);
+                } else {
+                    console.warn("Server returned success, but did not provide the saved date.");
+                }
+            } else {
+                alert("There was an issue saving the data: " + (response.error || "Unknown error"));
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert("There was an error saving the edited date: " + textStatus);
-            console.error('Error:', errorThrown);  // Log any error
+        error: function() {
+            alert("There was an error communicating with the server.");
         }
     });
 }
+
 
 
     $('#addDataRow').click(function() {
