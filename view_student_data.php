@@ -296,37 +296,43 @@ function attachEditableHandler() {
         let datePickerActive = false;
 
         if (cell.data('field-name') === 'week_start_date') {
-    input.datepicker({
-        dateFormat: 'mm/dd/yy',
-        beforeShow: function() {
-            datePickerActive = true;
-        },
-        onClose: function(selectedDate) {
-            if (isValidDate(new Date(selectedDate))) {
-                cell.text(selectedDate);
-                cell.append(input.hide());
-            }
-            datePickerActive = false;
+            input.datepicker({
+                dateFormat: 'mm/dd/yy',
+                beforeShow: function() {
+                    datePickerActive = true;
+                },
+                onClose: function(selectedDate) {
+                    if (isValidDate(new Date(selectedDate))) {
+                        cell.text(selectedDate);
+                    }
+                    datePickerActive = false;
+                    input.remove();
+                }
+            });
+
+            cell.contents().hide();
+            cell.append(input);
+            input.focus();
+
+            setTimeout(() => {
+                input.datepicker("show");
+            }, 0);
+        } else {
+            cell.contents().hide();
+            cell.append(input);
+            input.focus();
         }
-    });
-
-    cell.html(input);
-    input.focus();
-
-    setTimeout(() => {
-        input.datepicker("show");
-    }, 0);  // Wait until next cycle to show the datepicker to ensure it's been fully initialized
-}
-else {
-    cell.html(input);
-    input.focus();
-}
-
 
         input.blur(function() {
+            if (datePickerActive) {
+                return;
+            }
+
             const newValue = input.val();
             cell.html(newValue);
-            
+            input.remove();
+            cell.contents().show();
+
             const performanceId = cell.closest('tr').data('performance-id');
             const fieldName = cell.data('field-name');
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
@@ -365,6 +371,7 @@ else {
                     alert("There was an error updating the data.");
                 }
             });
+
         });
 
         input.keypress(function(e) {
