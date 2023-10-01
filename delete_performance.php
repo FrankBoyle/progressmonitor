@@ -6,8 +6,8 @@ ini_set('display_errors', 1);
 
 include('./users/db.php');
 
-if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
+if (!$connection) {
+    die("Connection failed: " . $connection->errorInfo());
 }
 
 $response = ['success' => false, 'message' => 'Unknown error.'];
@@ -22,11 +22,13 @@ if (isset($_POST['performance_id'])) {
     } else {
         $stmt->bind_param("i", $performanceId);
 
-        if ($stmt->execute()) {
+        try {
+            $stmt->execute();
             $response['success'] = true;
-        } else {
-            $response['message'] = "Failed to execute the statement. Error: " . $stmt->error;
+        } catch (PDOException $e) {
+            $response['message'] = $e->getMessage();
         }
+        
 
         $stmt->close();
     }
