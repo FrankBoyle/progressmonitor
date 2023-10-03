@@ -138,17 +138,13 @@ function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
 
     // Calculate trendline
-    var trendlineFunction = calculateTrendline(chartData.map(item => ({
-    x: new Date(item.x).getTime(),
-    y: item.y
-})));
-var trendlineData = xTimestamps.map(timestamp => {
-    return {
-        x: new Date(timestamp).toLocaleDateString(),
-        y: trendlineFunction(timestamp)
-    };
-});
-
+    var trendlineFunction = calculateTrendline(chartData);
+    var trendlineData = chartData.map(item => {
+        return {
+            x: item.x,
+            y: trendlineFunction(item.x)
+        };
+    });
 
     var seriesData = [
         {
@@ -165,13 +161,12 @@ var trendlineData = xTimestamps.map(timestamp => {
     ];
 
     if (benchmark !== null) {
-        var benchmarkData = xTimestamps.map(timestamp => {
-    return {
-        x: new Date(timestamp).toLocaleDateString(),
-        y: benchmark
-    };
-});
-
+        var benchmarkData = xCategories.map(date => {
+            return {
+                x: new Date(date).getTime(),
+                y: benchmark
+            };
+        }).reverse();
         seriesData.push({
             name: 'Benchmark',
             data: benchmarkData
@@ -242,7 +237,6 @@ function getChartOptions(dataSeries, xCategories) {
             }
         },
         xaxis: {
-            categories: xCategories,
     type: 'datetime',
     tickAmount: xCategories.length,
     labels: {
