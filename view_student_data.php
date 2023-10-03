@@ -115,24 +115,29 @@ function initializeChart() {
 function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
-    var xTimestamps = [];
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
-        
+
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-                x: weekStartDate, // using date string for x-axis value
-                y: parseFloat(scoreValue)
-            });
+    x: new Date(weekStartDate).getTime(),
+    y: parseFloat(scoreValue)
+});
+
             xCategories.push(weekStartDate);
-            xTimestamps.push(new Date(weekStartDate).getTime());
         }
     });
 
-    return { chartData, xCategories, xTimestamps };
+    //if (benchmark === null) {
+    //    benchmark = 0; // Default value if benchmark is not set
+    //}
+    chartData.reverse();
+    xCategories.reverse();  
+    return {chartData, xCategories};
 }
+
 
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
