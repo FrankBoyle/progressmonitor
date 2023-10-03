@@ -115,41 +115,40 @@ function initializeChart() {
 function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
+    var xTimestamps = [];
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
-
+        
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-    x: new Date(weekStartDate).getTime(),
-    y: parseFloat(scoreValue)
-});
-
+                x: weekStartDate, // using date string for x-axis value
+                y: parseFloat(scoreValue)
+            });
             xCategories.push(weekStartDate);
+            xTimestamps.push(new Date(weekStartDate).getTime());
         }
     });
 
-    //if (benchmark === null) {
-    //    benchmark = 0; // Default value if benchmark is not set
-    //}
-    chartData.reverse();
-    xCategories.reverse();  
-    return {chartData, xCategories};
+    return { chartData, xCategories, xTimestamps };
 }
-
 
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
 
     // Calculate trendline
-    var trendlineFunction = calculateTrendline(chartData);
-    var trendlineData = chartData.map(item => {
-        return {
-            x: item.x,
-            y: trendlineFunction(item.x)
-        };
-    });
+    var trendlineFunction = calculateTrendline(chartData.map(item => ({
+    x: new Date(item.x).getTime(),
+    y: item.y
+})));
+var trendlineData = xTimestamps.map(timestamp => {
+    return {
+        x: new Date(timestamp).toLocaleDateString(),
+        y: trendlineFunction(timestamp)
+    };
+});
+
 
     var seriesData = [
         {
@@ -166,12 +165,13 @@ function updateChart(scoreField) {
     ];
 
     if (benchmark !== null) {
-        var benchmarkData = xCategories.map(date => {
-            return {
-                x: new Date(date).getTime(),
-                y: benchmark
-            };
-        }).reverse();
+        var benchmarkData = xTimestamps.map(timestamp => {
+    return {
+        x: new Date(timestamp).toLocaleDateString(),
+        y: benchmark
+    };
+});
+
         seriesData.push({
             name: 'Benchmark',
             data: benchmarkData
@@ -242,6 +242,7 @@ function getChartOptions(dataSeries, xCategories) {
             }
         },
         xaxis: {
+            categories: xCategories,
     type: 'datetime',
     tickAmount: xCategories.length,
     labels: {
