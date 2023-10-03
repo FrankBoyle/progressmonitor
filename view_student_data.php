@@ -216,7 +216,7 @@ function getChartOptions(dataSeries, xCategories) {
 
         stroke: {
             curve: 'smooth',
-            width: [1, 1, 1]
+            width: [1, 1]
         },
         markers: {
             size: 5,
