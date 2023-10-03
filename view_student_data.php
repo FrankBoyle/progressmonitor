@@ -122,9 +122,10 @@ function getChartData(scoreField) {
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-    x: weekStartDate,
+    x: new Date(weekStartDate).getTime(),
     y: parseFloat(scoreValue)
 });
+
             xCategories.push(weekStartDate);
         }
     });
@@ -132,7 +133,8 @@ function getChartData(scoreField) {
     //if (benchmark === null) {
     //    benchmark = 0; // Default value if benchmark is not set
     //}
-    
+    chartData.reverse();
+    xCategories.reverse();  
     return {chartData, xCategories};
 }
 
@@ -169,7 +171,7 @@ function updateChart(scoreField) {
                 x: new Date(date).getTime(),
                 y: benchmark
             };
-        });
+        }).reverse();
         seriesData.push({
             name: 'Benchmark',
             data: benchmarkData
@@ -240,11 +242,11 @@ function getChartOptions(dataSeries, xCategories) {
             }
         },
         xaxis: {
-    categories: xCategories,  // It will use these categories directly.
+    type: 'datetime',
     tickAmount: xCategories.length,
     labels: {
         hideOverlappingLabels: false,
-        formatter: function(value) {
+        formatter: function(value, timestamp, opts) {
             return new Date(value).toLocaleDateString();
         }
     },
@@ -252,6 +254,7 @@ function getChartOptions(dataSeries, xCategories) {
         text: 'Date'
     }
 },
+
         yaxis: {
             title: {
                 text: 'Value'
