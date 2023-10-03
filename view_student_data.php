@@ -202,7 +202,8 @@ function getChartOptions(dataSeries, xCategories) {
         dataLabels: {
     enabled: true,
     formatter: function(value, dataPointIndex, w) {
-        if (w.globals.seriesNames[w.seriesIndex] === "Selected Score") { 
+        // Since the "Selected Score" series is the first in the dataSeries array
+        if (w.seriesIndex === 0) { 
             return value.toFixed(0);
         }
         return null; // Return null to hide labels for other series
@@ -213,6 +214,7 @@ function getChartOptions(dataSeries, xCategories) {
         colors: ['#333']
     }
 },
+
 
         stroke: {
             curve: 'smooth',
