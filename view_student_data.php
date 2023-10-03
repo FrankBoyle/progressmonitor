@@ -152,7 +152,10 @@ function updateChart(scoreField) {
     var seriesData = [
         {
             name: 'Selected Score',
-            data: chartData
+            data: chartData,
+            stroke: {
+                width: 3  // Adjust this value to your desired thickness
+            }
         },
         {
             name: 'Trendline',
