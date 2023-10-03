@@ -241,19 +241,20 @@ function getChartOptions(dataSeries, xCategories) {
                 sizeOffset: 3
             }
         },
+        
         xaxis: {
-    type: 'datetime',
-    tickAmount: xCategories.length,
-    labels: {
-        hideOverlappingLabels: false,
-        formatter: function(value, timestamp, opts) {
-            return new Date(value).toLocaleDateString();
-        }
-    },
-    title: {
-        text: 'Date'
-    }
-},
+            type: 'category',  // Change this to 'category'
+            categories: xCategories,  // Add this line to explicitly set the categories (dates) to show on the x-axis
+            labels: {
+                hideOverlappingLabels: false,
+                formatter: function(value, timestamp, opts) {
+                    return value;  // Simply return the value since we've changed the x-axis type to 'category'
+                }
+            },
+            title: {
+                text: 'Date'
+            }
+        },
 
         yaxis: {
             title: {
