@@ -177,6 +177,7 @@ function updateChart(scoreField) {
 }
 
 
+
 function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
@@ -199,22 +200,16 @@ function getChartOptions(dataSeries, xCategories) {
                 opacity: 0.2
             }
         },
+
         dataLabels: {
     enabled: true,
-    formatter: function(value, dataPointIndex, w) {
-        // Since the "Selected Score" series is the first in the dataSeries array
-        if (w.seriesIndex === 0) { 
-            return value.toFixed(0);
-        }
-        return null; // Return null to hide labels for other series
-    },
+    enabledOnSeries: [0],  // enable only on the first series
     offsetY: -5,
     style: {
         fontSize: '12px',
         colors: ['#333']
     }
 },
-
 
         stroke: {
             curve: 'smooth',
