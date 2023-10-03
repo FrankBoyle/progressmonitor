@@ -155,13 +155,15 @@ function updateChart(scoreField) {
         {
             name: 'Selected Score',
             data: chartData,
+            connectNulls: true,  // Add this line here
             stroke: {
                 width: 7  // Adjust this value to your desired thickness
             }
         },
         {
             name: 'Trendline',
-            data: trendlineData
+            data: trendlineData,
+            connectNulls: true  // And add it here as well, if you want to connect null values for the trendline too
         }
     ];
 
@@ -174,12 +176,14 @@ function updateChart(scoreField) {
         }).reverse();
         seriesData.push({
             name: 'Benchmark',
-            data: benchmarkData
+            data: benchmarkData,
+            connectNulls: true  // And add it here for the benchmark series
         });
     }
 
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
+
 
 
 
