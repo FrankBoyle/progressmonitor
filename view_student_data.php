@@ -473,6 +473,10 @@ $(document).ready(function() {
         newRow.find('td[data-field-name="week_start_date"]').click().blur();
         saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
 
+// Inside the `$('#addDataRow').click` function:
+newRow.append('<td><button class="saveRow">Save</button></td>');
+
+
         attachEditableHandler();
     });
 
@@ -514,6 +518,41 @@ $(document).ready(function() {
             alert('Failed to delete data. Please try again.');
         }
     }, 'json');
+});
+
+$(document).on('click', '.saveRow', function() {
+    const row = $(this).closest('tr');
+    const performanceId = row.data('performance-id');
+    
+    if (performanceId === 'new') {
+        let postData = {
+            performance_id: performanceId,
+            student_id: $('#currentStudentId').val(),
+            week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text())
+        };
+        
+        let scores = {};
+        for (let i = 1; i <= 10; i++) {
+            scores['score' + i] = row.find(`td[data-field-name="score${i}"]`).text() || 'default_value'; // replace 'default_value' with whatever default you want
+        }
+        postData.scores = scores;
+
+        $.ajax({
+            type: 'POST',
+            url: 'insert_performance.php',
+            data: postData,
+            success: function(response) {
+                row.attr('data-performance-id', response.performance_id);
+                row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                
+                // Once saved, you might want to disable the save button or replace it with some other control.
+                row.find('.saveRow').prop('disabled', true);
+            },
+            error: function() {
+                alert("There was an error saving the new row.");
+            }
+        });
+    }
 });
 
 
