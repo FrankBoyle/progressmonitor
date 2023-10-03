@@ -200,19 +200,19 @@ function getChartOptions(dataSeries, xCategories) {
             }
         },
         dataLabels: {
-            enabled: true,
-            formatter: function(value, dataPointIndex, seriesIndex) {
-                if (seriesIndex === 0) { // Only show for "Selected Score" series
-                    return value.toFixed(0);
-                }
-                return ""; // Return an empty string to hide labels for other series
-            },
-            offsetY: -5,
-            style: {
-                fontSize: '12px',
-                colors: ['#333']
-            }
-        },
+    enabled: true,
+    formatter: function(value, dataPointIndex, w) {
+        if (w.config.series[dataPointIndex].name === "Selected Score") { 
+            return value.toFixed(0);
+        }
+        return null; // Return null to hide labels for other series
+    },
+    offsetY: -5,
+    style: {
+        fontSize: '12px',
+        colors: ['#333']
+    }
+},
         stroke: {
             curve: 'smooth',
             width: [1, 1, 1]
