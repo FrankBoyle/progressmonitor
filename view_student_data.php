@@ -201,8 +201,11 @@ function getChartOptions(dataSeries, xCategories) {
         },
         dataLabels: {
             enabled: true,
-            formatter: function(value) {
-                return value.toFixed(0);
+            formatter: function(value, dataPointIndex, seriesIndex) {
+                if (seriesIndex === 0) { // Only show for "Selected Score" series
+                    return value.toFixed(0);
+                }
+                return ""; // Return an empty string to hide labels for other series
             },
             offsetY: -5,
             style: {
