@@ -199,6 +199,17 @@ function getChartOptions(dataSeries, xCategories) {
                 opacity: 0.2
             }
         },
+        dataLabels: {
+            enabled: true,
+            formatter: function(value) {
+                return value.toFixed(0);
+            },
+            offsetY: -5,
+            style: {
+                fontSize: '12px',
+                colors: ['#333']
+            }
+        },
         stroke: {
             curve: 'smooth',
             width: [1, 1, 1]
@@ -258,6 +269,7 @@ function getChartOptions(dataSeries, xCategories) {
         colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
+
 
 function calculateTrendline(data) {
     var sumX = 0;
