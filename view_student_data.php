@@ -122,9 +122,9 @@ function getChartData(scoreField) {
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-                x: new Date(weekStartDate).getTime(),
-                y: parseFloat(scoreValue)
-            });
+    x: weekStartDate,
+    y: parseFloat(scoreValue)
+});
             xCategories.push(weekStartDate);
         }
     });
@@ -240,19 +240,18 @@ function getChartOptions(dataSeries, xCategories) {
             }
         },
         xaxis: {
-            categories: xCategories,
-            type: 'datetime',
-            tickAmount: xCategories.length,
-            labels: {
-                hideOverlappingLabels: false,
-                formatter: function(value, timestamp, opts) {
-                    return new Date(value).toLocaleDateString();
-                }
-            },
-            title: {
-                text: 'Date'
-            }
-        },
+    categories: xCategories,  // It will use these categories directly.
+    tickAmount: xCategories.length,
+    labels: {
+        hideOverlappingLabels: false,
+        formatter: function(value) {
+            return new Date(value).toLocaleDateString();
+        }
+    },
+    title: {
+        text: 'Date'
+    }
+},
         yaxis: {
             title: {
                 text: 'Value'
