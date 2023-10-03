@@ -154,7 +154,7 @@ function updateChart(scoreField) {
             name: 'Selected Score',
             data: chartData,
             stroke: {
-                width: 3  // Adjust this value to your desired thickness
+                width: 7  // Adjust this value to your desired thickness
             }
         },
         {
