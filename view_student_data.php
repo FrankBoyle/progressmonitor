@@ -440,6 +440,8 @@ $(document).ready(function() {
                             const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
                             const average = (score1 + score2 + score3 + score4) / 4;
                             row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
+                            // Update the score8 value in the database
+                            updateScoreInDatabase(row, 'score8', average.toFixed(2));
                         }
                     },
                     error: function() {
@@ -488,6 +490,34 @@ $(document).ready(function() {
     }
 
     attachEditableHandler();
+
+    function updateScoreInDatabase(row, fieldName, newValue) {
+        const performanceId = row.data('performance-id');
+        const studentId = $('#currentStudentId').val();
+        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+
+    $.ajax({
+        type: 'POST',
+        url: 'update_performance.php',
+        data: {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: newValue,
+            student_id: studentId,
+            week_start_date: weekStartDate
+        },
+        success: function(response) {
+            if (response && !response.success) {
+                alert("Error updating the average score in the database.");
+            }
+        },
+        error: function() {
+            alert("There was an error updating the average score in the database.");
+        }
+    });
+}
+
+
 
     $('#addDataRow').click(function() {
         // Check if there's already a "new" row
@@ -589,9 +619,11 @@ $(document).on('click', '.saveRow', function() {
                 const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
                 const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
                 const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
+                
                 const average = (score1 + score2 + score3 + score4) / 4;
                 row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
-                // New code for updating score8 ends here
+                // Update the score8 value in the database
+                updateScoreInDatabase(row, 'score8', average.toFixed(2));
                 // Once saved, you might want to disable the save button or replace it with some other control.
                 row.find('.saveRow').prop('disabled', true);
             },
