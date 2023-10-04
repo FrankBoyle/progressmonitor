@@ -11,6 +11,13 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     $fieldName = $_POST['field_name'];
     $newValue = $_POST['new_value'];
 
+    // If the field being updated is one of the score fields and the value is empty, set it to NULL.
+    if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'])) {
+        if ($newValue === '' || !isset($newValue)) {
+            $newValue = NULL;
+        }
+    }
+
     // Validate and sanitize the date input (assuming it's for the 'week_start_date' field)
     if ($fieldName === 'week_start_date') {
         $newDate = date_create_from_format('Y-m-d', $newValue);
