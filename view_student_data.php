@@ -156,6 +156,8 @@ function getChartData(scoreField) {
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
 
+    console.log(chartData, xCategories);  // Debugging line
+
     if (chartData.length === 0) {
         alert('No data available for the selected score.');
         return;
