@@ -133,10 +133,14 @@ function getChartData(scoreField) {
     var xCategories = [];
 
     $('tr[data-performance-id]').each(function() {
-        var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text().trim();
-        var scoreValueText = $(this).find(`td[data-field-name="${scoreField}"]`).text().trim();
+        var weekStartDateColumn = $(this).find('td[data-field-name="week_start_date"]');
+        var scoreValueColumn = $(this).find(`td[data-field-name="${scoreField}"]`);
+
         console.log("Week Start Date Column HTML:", weekStartDateColumn.html());
         console.log("Score Value Column HTML:", scoreValueColumn.html());
+
+        var weekStartDate = weekStartDateColumn.text().trim();
+        var scoreValueText = scoreValueColumn.text().trim();
         var scoreValue = parseFloat(scoreValueText);
 
         if (weekStartDate && weekStartDate !== 'New Entry' && !isNaN(scoreValue)) {
@@ -153,6 +157,7 @@ function getChartData(scoreField) {
     xCategories.reverse();  
     return {chartData, xCategories};
 }
+
 
 
 function updateChart(scoreField) {
