@@ -144,7 +144,7 @@ function updateChart(scoreField) {
 
     // Calculate trendline
     var trendlineFunction = calculateTrendline(chartData);
-    var trendlineData = chartData.map(item => {
+    var trendlineData = chartData.map((item, index) => {
         return {
             x: item.x,
             y: trendlineFunction(index)
