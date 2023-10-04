@@ -123,7 +123,7 @@ function getChartData(scoreField) {
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-                x: weekStartDate,  // Directly use the date string
+                x: weekStartDate,
                 y: parseFloat(scoreValue)
             });
 
@@ -131,13 +131,11 @@ function getChartData(scoreField) {
         }
     });
 
-    //if (benchmark === null) {
-    //    benchmark = 0; // Default value if benchmark is not set
-    //}
     chartData.reverse();
     xCategories.reverse();  
     return {chartData, xCategories};
 }
+
 
 
 function updateChart(scoreField) {
