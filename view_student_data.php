@@ -17,8 +17,8 @@
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 
 <!--
-<div id="chartDates" style="display:none;"><?php echo json_encode($chartDates); ?></div>
-<div id="chartScores" style="display:none;"><?php echo json_encode($chartScores); ?></div>
+<div id="chartDates" style="display:none;">< ?php echo json_encode($chartDates); ?></div>
+<div id="chartScores" style="display:none;">< ?php echo json_encode($chartScores); ?></div>
 -->
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
