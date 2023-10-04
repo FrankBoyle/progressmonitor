@@ -147,7 +147,7 @@ function updateChart(scoreField) {
     var trendlineData = chartData.map(item => {
         return {
             x: item.x,
-            y: trendlineFunction(item.x)
+            y: trendlineFunction(index)
         };
     });
 
@@ -166,7 +166,7 @@ function updateChart(scoreField) {
             connectNulls: true  // And add it here as well, if you want to connect null values for the trendline too
         }
     ];
-    
+
     if (benchmark !== null) {
     var benchmarkData = xCategories.map(date => {
         return {
@@ -291,8 +291,8 @@ function calculateTrendline(data) {
     var sumXX = 0;
     var count = 0;
 
-    data.forEach(function (point) {
-        var x = point.x;
+    data.forEach(function (point, index) {
+        var x = index; // Use index as the x value
         var y = point.y;
 
         if (y !== null) {
@@ -311,6 +311,7 @@ function calculateTrendline(data) {
         return slope * x + intercept;
     };
 }
+
 </script>
 
 
