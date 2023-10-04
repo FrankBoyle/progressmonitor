@@ -64,11 +64,13 @@
     <?php endif; ?>
 </table>
 
+<label>Select Score to Display: </label>
 <select id="scoreSelector">
-    <?php foreach ($scoreNames as $key => $name): ?>
-        <option value="<?php echo $key; ?>"><?php echo $name; ?></option>
+    <?php foreach ($scoreNames as $originalName => $customName): ?>
+        <option value="<?php echo $originalName; ?>"><?php echo $customName; ?></option>
     <?php endforeach; ?>
 </select>
+
 
 
 <label>Enter Benchmark Value: </label>
