@@ -46,11 +46,11 @@ $chartScores = [];
 foreach ($performanceData as $record) {
     $chartDates[] = $record['week_start_date'];
     
-    $totalScore = 0;
-    for($i = 1; $i <= 10; $i++) {
-        $totalScore += $record['score'.$i];
-    }
-    $avgScore = $totalScore / 10;
-    $chartScores[] = $avgScore;
+    //$totalScore = 0;
+    //for($i = 1; $i <= 10; $i++) {
+        //$totalScore += $record['score'.$i];
+    //}
+    //$avgScore = $totalScore / 10;
+    //$chartScores[] = $avgScore;
 }
 ?>
