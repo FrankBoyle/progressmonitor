@@ -22,6 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $weekStartDate = $_POST['week_start_date'];
         $scores = $_POST['scores']; // Assuming scores are passed as an array
 
+        // Handle NULL values for scores
+        foreach ($scores as $key => $score) {
+            if ($score === '' || !isset($score)) {
+                $scores[$key] = NULL;
+            }
+        }
+
         $stmt = $connection->prepare("INSERT INTO Performance (student_id, week_start_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
