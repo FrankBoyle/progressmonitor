@@ -508,7 +508,7 @@ $(document).ready(function() {
         },
         success: function(response) {
             if (response && !response.success) {
-                alert("Error updating the average score in the database.");
+                //alert("Error updating the average score in the database.");
             }
         },
         error: function() {
