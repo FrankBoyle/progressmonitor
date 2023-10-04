@@ -122,9 +122,9 @@ function getChartData(scoreField) {
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-    x: new Date(weekStartDate).getTime(),
-    y: parseFloat(scoreValue)
-});
+                x: weekStartDate,  // Directly use the date string
+                y: parseFloat(scoreValue)
+            });
 
             xCategories.push(weekStartDate);
         }
@@ -166,20 +166,21 @@ function updateChart(scoreField) {
             connectNulls: true  // And add it here as well, if you want to connect null values for the trendline too
         }
     ];
-
+    
     if (benchmark !== null) {
-        var benchmarkData = xCategories.map(date => {
-            return {
-                x: new Date(date).getTime(),
-                y: benchmark
-            };
-        }).reverse();
-        seriesData.push({
-            name: 'Benchmark',
-            data: benchmarkData,
-            connectNulls: true  // And add it here for the benchmark series
-        });
-    }
+    var benchmarkData = xCategories.map(date => {
+        return {
+            x: date,
+            y: benchmark
+        };
+    }).reverse();
+    seriesData.push({
+        name: 'Benchmark',
+        data: benchmarkData,
+        connectNulls: true  // Keep this if you want to connect null values for the benchmark series
+    });
+}
+
 
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
@@ -247,18 +248,19 @@ function getChartOptions(dataSeries, xCategories) {
         },
 
         xaxis: {
-    type: 'datetime',
-    tickAmount: xCategories.length,
-    labels: {
-        hideOverlappingLabels: true,
-        formatter: function(value, timestamp, opts) {
-            return new Date(value).toLocaleDateString();
-        }
-    },
+                type: 'category', 
+                categories: xCategories,
+            labels: {
+                hideOverlappingLabels: false,
+                formatter: function(value) {
+                    return value;  // Simply return the value since we're not working with timestamps anymore
+                }
+            },
             title: {
                 text: 'Date'
             }
         },
+
 
         yaxis: {
             title: {
