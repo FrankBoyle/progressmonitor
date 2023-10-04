@@ -64,6 +64,16 @@
     <?php endif; ?>
 </table>
 
+    <!--
+<label>Select Score to Display: </label>
+<select id="scoreSelector">
+    <?php for ($i = 1; $i <= 10; $i++): ?>
+        <option value="score<?php echo $i; ?>">Score <?php echo $i; ?></option>
+    <?php endfor; ?>
+</select>
+    -->
+
+
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
     <?php foreach ($scoreNames as $original => $custom): ?>
@@ -89,23 +99,25 @@ $(document).ready(function() {
         benchmark = null;  // Default benchmark value if the input is not provided
     }
 
+    // Event handler when the score dropdown changes
     $("#scoreSelector").change(function() {
-        var selectedScore = $(this).val();
-        updateChart(selectedScore);
+        var selectedScore = $(this).val(); // This will capture values like 'score1', 'score2', etc.
+        updateChart(selectedScore); // Update chart based on the selected score
     });
 
     $("#updateBenchmark").click(function() {
         var value = parseFloat($("#benchmarkValue").val());
         if (!isNaN(value)) {
             benchmark = value;
-            var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore);
+            var selectedScore = $("#scoreSelector").val(); // Get the selected score value from the dropdown
+            updateChart(selectedScore); // Update chart based on the selected score and benchmark
         } else {
             alert('Please enter a valid benchmark value.');
         }
     });
 
-    updateChart('score1');  // Default
+    // Load chart with default score
+    updateChart('score1');  
 });
 
 
