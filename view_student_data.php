@@ -133,8 +133,8 @@ function getChartData(scoreField) {
     var xCategories = [];
 
     $('tr[data-performance-id]').each(function() {
-        var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
-        var scoreValueText = $(this).find(`td[data-field-name="${scoreField}"]`).text();
+        var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text().trim();
+        var scoreValueText = $(this).find(`td[data-field-name="${scoreField}"]`).text().trim();
         console.log("Week Start Date:", weekStartDate, "Score Value:", scoreValueText);  // Debugging line
         var scoreValue = parseFloat(scoreValueText);
 
