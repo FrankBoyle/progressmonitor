@@ -132,6 +132,8 @@ function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
 
+    console.log("scoreField:", scoreField);  // This line is added
+
     $('tr[data-performance-id]').each(function() {
         var weekStartDateColumn = $(this).find('td[data-field-name="week_start_date"]');
         var scoreValueColumn = $(this).find(`td[data-field-name="${scoreField}"]`);
@@ -157,6 +159,7 @@ function getChartData(scoreField) {
     xCategories.reverse();  
     return {chartData, xCategories};
 }
+
 
 
 
