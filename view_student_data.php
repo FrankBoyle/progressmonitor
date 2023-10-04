@@ -512,7 +512,7 @@ $(document).ready(function() {
             }
         },
         error: function() {
-            alert("There was an error updating the average score in the database.");
+            //alert("There was an error updating the average score in the database.");
         }
     });
 }
