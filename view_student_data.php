@@ -132,14 +132,19 @@ function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
 
-    console.log("scoreField:", scoreField);  // This line is added
+    console.log("Processing for scoreField:", scoreField);
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDateColumn = $(this).find('td[data-field-name="week_start_date"]');
         var scoreValueColumn = $(this).find(`td[data-field-name="${scoreField}"]`);
 
         console.log("Week Start Date Column HTML:", weekStartDateColumn.html());
-        console.log("Score Value Column HTML:", scoreValueColumn.html());
+
+        if (scoreValueColumn.length === 0) {
+            console.log(`No Score Value Column found for ${scoreField}`);
+        } else {
+            console.log("Score Value Column HTML:", scoreValueColumn.html());
+        }
 
         var weekStartDate = weekStartDateColumn.text().trim();
         var scoreValueText = scoreValueColumn.text().trim();
@@ -159,6 +164,7 @@ function getChartData(scoreField) {
     xCategories.reverse();  
     return {chartData, xCategories};
 }
+
 
 
 
