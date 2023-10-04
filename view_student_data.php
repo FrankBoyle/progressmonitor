@@ -103,6 +103,7 @@ $(document).ready(function() {
     // Event handler when the score dropdown changes
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val(); // This will capture values like 'score1', 'score2', etc.
+        console.log("Selected Score:", selectedScore);  // Debugging line
         updateChart(selectedScore); // Update chart based on the selected score
     });
 
@@ -118,7 +119,7 @@ $(document).ready(function() {
     });
 
     // Load chart with default score
-    updateChart('score1');  
+    //updateChart('score1');  
 });
 
 
