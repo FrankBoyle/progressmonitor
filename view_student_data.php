@@ -64,23 +64,12 @@
     <?php endif; ?>
 </table>
 
-    <!--
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
-    < ?php for ($i = 1; $i <= 10; $i++): ?>
+    <?php for ($i = 1; $i <= 10; $i++): ?>
         <option value="score<?php echo $i; ?>">Score <?php echo $i; ?></option>
-    < ?php endfor; ?>
+    <?php endfor; ?>
 </select>
-    -->
-
-
-<label>Select Score to Display: </label>
-<select id="scoreSelector">
-    <?php foreach ($scoreNames as $original => $custom): ?>
-        <option value="<?php echo $original; ?>"><?php echo $custom; ?></option>
-    <?php endforeach; ?>
-</select>
-
 
 <label>Enter Benchmark Value: </label>
 <input type="text" id="benchmarkValue">
@@ -93,33 +82,29 @@ var benchmark = null;
 
 $(document).ready(function() {
     initializeChart();
-    updateChart($("#scoreSelector").find("option:first").val());  // Default load with the first score
 
     benchmark = parseFloat($("#benchmarkValue").val());
     if (isNaN(benchmark)) {
         benchmark = null;  // Default benchmark value if the input is not provided
     }
 
-    // Event handler when the score dropdown changes
     $("#scoreSelector").change(function() {
-        var selectedScore = $(this).val(); // This will capture values like 'score1', 'score2', etc.
-        console.log("Selected Score:", selectedScore);  // Debugging line
-        updateChart(selectedScore); // Update chart based on the selected score
+        var selectedScore = $(this).val();
+        updateChart(selectedScore);
     });
 
     $("#updateBenchmark").click(function() {
         var value = parseFloat($("#benchmarkValue").val());
         if (!isNaN(value)) {
             benchmark = value;
-            var selectedScore = $("#scoreSelector").val(); // Get the selected score value from the dropdown
-            updateChart(selectedScore); // Update chart based on the selected score and benchmark
+            var selectedScore = $("#scoreSelector").val();
+            updateChart(selectedScore);
         } else {
             alert('Please enter a valid benchmark value.');
         }
     });
 
-    // Load chart with default score
-    //updateChart('score1');  
+    updateChart('score1');  // Default
 });
 
 
@@ -132,52 +117,32 @@ function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
 
-    console.log("Processing for scoreField:", scoreField);
-
     $('tr[data-performance-id]').each(function() {
-        var weekStartDateColumn = $(this).find('td[data-field-name="week_start_date"]');
-        var scoreValueColumn = $(this).find(`td[data-field-name="${scoreField}"]`);
+        var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
+        var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
 
-        console.log("Week Start Date Column HTML:", weekStartDateColumn.html());
-
-        if (scoreValueColumn.length === 0) {
-            console.log(`No Score Value Column found for ${scoreField}`);
-        } else {
-            console.log("Score Value Column HTML:", scoreValueColumn.html());
-        }
-
-        var weekStartDate = weekStartDateColumn.text().trim();
-        var scoreValueText = scoreValueColumn.text().trim();
-        var scoreValue = parseFloat(scoreValueText);
-
-        if (weekStartDate && weekStartDate !== 'New Entry' && !isNaN(scoreValue)) {
+        if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-                x: weekStartDate,
-                y: scoreValue
+                x: weekStartDate,  // Directly use the date string
+                y: parseFloat(scoreValue)
             });
 
             xCategories.push(weekStartDate);
         }
     });
 
+    //if (benchmark === null) {
+    //    benchmark = 0; // Default value if benchmark is not set
+    //}
     chartData.reverse();
     xCategories.reverse();  
     return {chartData, xCategories};
 }
 
 
-
-
-
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
 
-    console.log(chartData, xCategories);  // Debugging line
-
-    if (chartData.length === 0) {
-        alert('No data available for the selected score.');
-        return;
-    }
     // Calculate trendline
     var trendlineFunction = calculateTrendline(chartData);
     var trendlineData = chartData.map((item, index) => {
@@ -547,7 +512,7 @@ $(document).ready(function() {
             }
         },
         error: function() {
-            //alert("There was an error updating the average score in the database.");
+            alert("There was an error updating the average score in the database.");
         }
     });
 }
