@@ -425,12 +425,23 @@ $(document).ready(function() {
                     url: targetUrl,
                     data: postData,
                     success: function(response) {
-    if (performanceId === 'new') {
-        const newRow = $('tr[data-performance-id="new"]');
-        newRow.attr('data-performance-id', response.performance_id);
-        newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
-    }
-},
+                        if (performanceId === 'new') {
+                            const newRow = $('tr[data-performance-id="new"]');
+                            newRow.attr('data-performance-id', response.performance_id);
+                            newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                        }
+    
+    // New code for updating score8 starts here
+                        if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
+                            const row = cell.closest('tr');
+                            const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
+                            const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
+                            const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
+                            const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
+                            const average = (score1 + score2 + score3 + score4) / 4;
+                            row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
+                        }
+                    },
                     error: function() {
                         // Handle any error here, e.g., show a notification to the user
                         alert("There was an error updating the data.");
@@ -573,7 +584,14 @@ $(document).on('click', '.saveRow', function() {
             success: function(response) {
                 row.attr('data-performance-id', response.performance_id);
                 row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
-                
+                // New code for updating score8 starts here
+                const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
+                const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
+                const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
+                const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
+                const average = (score1 + score2 + score3 + score4) / 4;
+                row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
+                // New code for updating score8 ends here
                 // Once saved, you might want to disable the save button or replace it with some other control.
                 row.find('.saveRow').prop('disabled', true);
             },
