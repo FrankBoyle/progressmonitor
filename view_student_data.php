@@ -93,6 +93,7 @@ var benchmark = null;
 
 $(document).ready(function() {
     initializeChart();
+    updateChart('score1');  // Default load with score1
 
     benchmark = parseFloat($("#benchmarkValue").val());
     if (isNaN(benchmark)) {
@@ -132,21 +133,19 @@ function getChartData(scoreField) {
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
-        var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
+        var scoreValueText = $(this).find(`td[data-field-name="${scoreField}"]`).text();
+        var scoreValue = parseFloat(scoreValueText);
 
-        if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
+        if (weekStartDate !== 'New Entry' && !isNaN(scoreValue)) {
             chartData.push({
-                x: weekStartDate,  // Directly use the date string
-                y: parseFloat(scoreValue)
+                x: weekStartDate,
+                y: scoreValue
             });
 
             xCategories.push(weekStartDate);
         }
     });
 
-    //if (benchmark === null) {
-    //    benchmark = 0; // Default value if benchmark is not set
-    //}
     chartData.reverse();
     xCategories.reverse();  
     return {chartData, xCategories};
@@ -156,6 +155,10 @@ function getChartData(scoreField) {
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
 
+    if (chartData.length === 0) {
+        alert('No data available for the selected score.');
+        return;
+    }
     // Calculate trendline
     var trendlineFunction = calculateTrendline(chartData);
     var trendlineData = chartData.map((item, index) => {
