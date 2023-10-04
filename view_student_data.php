@@ -59,8 +59,6 @@
                     </td>
                 <?php endfor; ?>
                 <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
-                <td><button class="deleteRow" data-performance-id="test">Delete</button></td>
-
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
@@ -95,7 +93,7 @@ var benchmark = null;
 
 $(document).ready(function() {
     initializeChart();
-    updateChart('score1');  // Default load with score1
+    updateChart($("#scoreSelector").find("option:first").val());  // Default load with the first score
 
     benchmark = parseFloat($("#benchmarkValue").val());
     if (isNaN(benchmark)) {
@@ -138,7 +136,7 @@ function getChartData(scoreField) {
         var scoreValueText = $(this).find(`td[data-field-name="${scoreField}"]`).text();
         var scoreValue = parseFloat(scoreValueText);
 
-        if (weekStartDate !== 'New Entry' && !isNaN(scoreValue)) {
+        if (weekStartDate && weekStartDate !== 'New Entry' && !isNaN(scoreValue)) {
             chartData.push({
                 x: weekStartDate,
                 y: scoreValue
