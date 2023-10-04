@@ -59,6 +59,8 @@
                     </td>
                 <?php endfor; ?>
                 <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
+                <td><button class="deleteRow" data-performance-id="test">Delete</button></td>
+
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
