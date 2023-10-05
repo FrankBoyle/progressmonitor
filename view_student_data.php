@@ -66,10 +66,11 @@
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
-    <?php for ($i = 1; $i <= 10; $i++): ?>
-        <option value="score<?php echo $i; ?>">Score <?php echo $i; ?></option>
-    <?php endfor; ?>
+    <?php foreach ($scoreNames as $key => $name): ?>
+        <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($name); ?></option>
+    <?php endforeach; ?>
 </select>
+
 
 <label>Enter Benchmark Value: </label>
 <input type="text" id="benchmarkValue">
