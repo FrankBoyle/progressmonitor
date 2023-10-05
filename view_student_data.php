@@ -64,6 +64,7 @@
     <?php endif; ?>
 </table>
 
+<label>Select Score to Display: </label>
 <select name="performance" id="performance">
     <?php foreach ($performanceData as $performanceItem) { ?>
         <option value="<?= $performanceItem ?>">
