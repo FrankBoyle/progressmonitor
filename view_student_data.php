@@ -66,12 +66,10 @@
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
-    <?php foreach ($scoreNames as $originalName => $customName): ?>
-        <option value="<?php echo $originalName; ?>"><?php echo $customName; ?></option>
-    <?php endforeach; ?>
+    <?php for ($i = 1; $i <= 10; $i++): ?>
+        <option value="score<?php echo $i; ?>">Score <?php echo $i; ?></option>
+    <?php endfor; ?>
 </select>
-
-
 
 <label>Enter Benchmark Value: </label>
 <input type="text" id="benchmarkValue">
@@ -125,7 +123,7 @@ function getChartData(scoreField) {
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-                x: weekStartDate,
+                x: weekStartDate,  // Directly use the date string
                 y: parseFloat(scoreValue)
             });
 
@@ -133,11 +131,13 @@ function getChartData(scoreField) {
         }
     });
 
+    //if (benchmark === null) {
+    //    benchmark = 0; // Default value if benchmark is not set
+    //}
     chartData.reverse();
     xCategories.reverse();  
     return {chartData, xCategories};
 }
-
 
 
 function updateChart(scoreField) {
