@@ -19,9 +19,10 @@ view_student_data.php
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 
-<div id="chartDates" style="display:none;"><?php echo json_encode($chartDates); ?></div>
-<div id="chartScores" style="display:none;"><?php echo json_encode($chartScores); ?></div>
-
+<!--
+<div id="chartDates" style="display:none;">< ?php echo json_encode($chartDates); ?></div>
+<div id="chartScores" style="display:none;">< ?php echo json_encode($chartScores); ?></div>
+-->
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
 
@@ -125,9 +126,10 @@ function getChartData(scoreField) {
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
-                x: new Date(weekStartDate).getTime(),
+                x: weekStartDate,  // Directly use the date string
                 y: parseFloat(scoreValue)
             });
+
             xCategories.push(weekStartDate);
         }
     });
@@ -135,7 +137,8 @@ function getChartData(scoreField) {
     //if (benchmark === null) {
     //    benchmark = 0; // Default value if benchmark is not set
     //}
-    
+    chartData.reverse();
+    xCategories.reverse();  
     return {chartData, xCategories};
 }
 
@@ -145,39 +148,48 @@ function updateChart(scoreField) {
 
     // Calculate trendline
     var trendlineFunction = calculateTrendline(chartData);
-    var trendlineData = chartData.map(item => {
+    var trendlineData = chartData.map((item, index) => {
         return {
             x: item.x,
-            y: trendlineFunction(item.x)
+            y: trendlineFunction(index)
         };
     });
 
     var seriesData = [
         {
             name: 'Selected Score',
-            data: chartData
+            data: chartData,
+            connectNulls: true,  // Add this line here
+            stroke: {
+                width: 7  // Adjust this value to your desired thickness
+            }
         },
         {
             name: 'Trendline',
-            data: trendlineData
+            data: trendlineData,
+            connectNulls: true  // And add it here as well, if you want to connect null values for the trendline too
         }
     ];
 
     if (benchmark !== null) {
-        var benchmarkData = xCategories.map(date => {
-            return {
-                x: new Date(date).getTime(),
-                y: benchmark
-            };
-        });
-        seriesData.push({
-            name: 'Benchmark',
-            data: benchmarkData
-        });
-    }
+    var benchmarkData = xCategories.map(date => {
+        return {
+            x: date,
+            y: benchmark
+        };
+    }).reverse();
+    seriesData.push({
+        name: 'Benchmark',
+        data: benchmarkData,
+        connectNulls: true  // Keep this if you want to connect null values for the benchmark series
+    });
+}
+
 
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
+
+
 
 
 function getChartOptions(dataSeries, xCategories) {
@@ -202,9 +214,20 @@ function getChartOptions(dataSeries, xCategories) {
                 opacity: 0.2
             }
         },
+
+        dataLabels: {
+    enabled: true,
+    enabledOnSeries: [0],  // enable only on the first series
+    offsetY: -5,
+    style: {
+        fontSize: '12px',
+        colors: ['#333']
+    }
+},
+
         stroke: {
             curve: 'smooth',
-            width: [1, 1, 1]
+            width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1)  // Set width based on series name
         },
         markers: {
             size: 5,
@@ -227,20 +250,22 @@ function getChartOptions(dataSeries, xCategories) {
                 sizeOffset: 3
             }
         },
+
         xaxis: {
-            categories: xCategories,
-            type: 'datetime',
-            tickAmount: xCategories.length,
+                type: 'category', 
+                categories: xCategories,
             labels: {
                 hideOverlappingLabels: false,
-                formatter: function(value, timestamp, opts) {
-                    return new Date(value).toLocaleDateString();
+                formatter: function(value) {
+                    return value;  // Simply return the value since we're not working with timestamps anymore
                 }
             },
             title: {
                 text: 'Date'
             }
         },
+
+
         yaxis: {
             title: {
                 text: 'Value'
@@ -262,6 +287,7 @@ function getChartOptions(dataSeries, xCategories) {
     };
 }
 
+
 function calculateTrendline(data) {
     var sumX = 0;
     var sumY = 0;
@@ -269,8 +295,8 @@ function calculateTrendline(data) {
     var sumXX = 0;
     var count = 0;
 
-    data.forEach(function (point) {
-        var x = point.x;
+    data.forEach(function (point, index) {
+        var x = index; // Use index as the x value
         var y = point.y;
 
         if (y !== null) {
@@ -289,6 +315,7 @@ function calculateTrendline(data) {
         return slope * x + intercept;
     };
 }
+
 </script>
 
 
@@ -390,7 +417,8 @@ $(document).ready(function() {
                 if (performanceId === 'new') {
                     let scores = {};
                     for (let i = 1; i <= 10; i++) {
-                        scores['score' + i] = $('tr[data-performance-id="new"]').find(`td[data-field-name="score${i}"]`).text();
+                        //const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+                        scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
                     }
                     postData.scores = scores;
                 }
@@ -401,14 +429,22 @@ $(document).ready(function() {
                     data: postData,
                     success: function(response) {
                         if (performanceId === 'new') {
-                            // Update the new row's performance-id with the ID returned from the server
                             const newRow = $('tr[data-performance-id="new"]');
                             newRow.attr('data-performance-id', response.performance_id);
-
-                            // Assuming your server response contains the saved date under the key 'saved_date'
-                            // This updates the displayed date for the new row to the date that was saved in the database.
                             newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
-                            newRow.find('td[data-field-name="week_start_date"]').data('saved-date', response.saved_date);
+                        }
+    
+    // New code for updating score8 starts here
+                        if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
+                            const row = cell.closest('tr');
+                            const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
+                            const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
+                            const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
+                            const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
+                            const average = (score1 + score2 + score3 + score4) / 4;
+                            row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
+                            // Update the score8 value in the database
+                            updateScoreInDatabase(row, 'score8', average.toFixed(2));
                         }
                     },
                     error: function() {
@@ -458,6 +494,34 @@ $(document).ready(function() {
 
     attachEditableHandler();
 
+    function updateScoreInDatabase(row, fieldName, newValue) {
+        const performanceId = row.data('performance-id');
+        const studentId = $('#currentStudentId').val();
+        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+
+    $.ajax({
+        type: 'POST',
+        url: 'update_performance.php',
+        data: {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: newValue,
+            student_id: studentId,
+            week_start_date: weekStartDate
+        },
+        success: function(response) {
+            if (response && !response.success) {
+                //alert("Error updating the average score in the database.");
+            }
+        },
+        error: function() {
+            alert("There was an error updating the average score in the database.");
+        }
+    });
+}
+
+
+
     $('#addDataRow').click(function() {
         // Check if there's already a "new" row
         if ($('tr[data-performance-id="new"]').length > 0) {
@@ -480,6 +544,10 @@ $(document).ready(function() {
         // Automatically trigger saving for the new row's "Week Start Date"
         newRow.find('td[data-field-name="week_start_date"]').click().blur();
         saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
+
+// Inside the `$('#addDataRow').click` function:
+newRow.append('<td><button class="saveRow">Save</button></td>');
+
 
         attachEditableHandler();
     });
@@ -522,6 +590,51 @@ $(document).ready(function() {
             alert('Failed to delete data. Please try again.');
         }
     }, 'json');
+});
+
+$(document).on('click', '.saveRow', function() {
+    const row = $(this).closest('tr');
+    const performanceId = row.data('performance-id');
+    
+    if (performanceId === 'new') {
+        let postData = {
+            performance_id: performanceId,
+            student_id: $('#currentStudentId').val(),
+            week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text())
+        };
+        
+        let scores = {};
+        for (let i = 1; i <= 10; i++) {
+            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+            scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
+        }
+        postData.scores = scores;
+
+        $.ajax({
+            type: 'POST',
+            url: 'insert_performance.php',
+            data: postData,
+            success: function(response) {
+                row.attr('data-performance-id', response.performance_id);
+                row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                // New code for updating score8 starts here
+                const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
+                const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
+                const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
+                const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
+                
+                const average = (score1 + score2 + score3 + score4) / 4;
+                row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
+                // Update the score8 value in the database
+                updateScoreInDatabase(row, 'score8', average.toFixed(2));
+                // Once saved, you might want to disable the save button or replace it with some other control.
+                row.find('.saveRow').prop('disabled', true);
+            },
+            error: function() {
+                alert("There was an error saving the new row.");
+            }
+        });
+    }
 });
 
 
@@ -704,4 +817,62 @@ if (isset($_POST['performance_id'])) {
 
 echo json_encode($response);
 
+?>
+
+fetch_data.php
+<?php
+// Database connection and error reporting settings
+include('./users/db.php');
+
+// Error Reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Initialize an empty array for performanceData
+$performanceData = [];
+
+// Check if `student_id` is provided in the URL
+if (isset($_GET['student_id'])) {
+    $studentId = $_GET['student_id'];
+
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
+    $stmt->execute([$studentId]);
+
+    $performanceData = $stmt->fetchAll();
+}
+if (isset($studentId)) {
+    // Update the column name to SchoolID
+    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+
+    $result = $stmt->fetch();
+    $schoolID = $result ? $result['SchoolID'] : null;  // Update the column name to SchoolID
+}
+
+if (!empty($performanceData)) {
+    // Update the column name in the WHERE condition to SchoolID
+    $stmt = $connection->prepare("SELECT original_name, custom_name FROM SchoolScoreNames WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+
+    while ($row = $stmt->fetch()) {
+        $scoreNames[$row['original_name']] = $row['custom_name'];
+    }
+}
+
+
+// Preparing the data for the chart
+$chartDates = [];
+$chartScores = [];
+
+foreach ($performanceData as $record) {
+    $chartDates[] = $record['week_start_date'];
+    
+    //$totalScore = 0;
+    //for($i = 1; $i <= 10; $i++) {
+        //$totalScore += $record['score'.$i];
+    //}
+    //$avgScore = $totalScore / 10;
+    //$chartScores[] = $avgScore;
+}
 ?>
