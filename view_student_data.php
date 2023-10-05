@@ -64,17 +64,14 @@
     <?php endif; ?>
 </table>
 
-<label>Select Score to Display: </label>
-<select id="scoreSelector">
-    <?php for ($i = 1; $i <= 10; $i++): ?>
-        <option value="score<?php echo $i; ?>">
-            <?php 
-                // Check if a custom name exists for this score
-                echo isset($scoreNames["score$i"]) ? $scoreNames["score$i"] : "Score $i"; 
-            ?>
+<select name="performance" id="performance">
+    <?php foreach ($performanceData as $performanceItem) { ?>
+        <option value="<?= $performanceItem ?>">
+            <?= isset($scoreNames[$performanceItem]) ? $scoreNames[$performanceItem] : $performanceItem ?>
         </option>
-    <?php endfor; ?>
+    <?php } ?>
 </select>
+
 
 
 <label>Enter Benchmark Value: </label>

@@ -35,10 +35,8 @@ if (!empty($performanceData)) {
 
     while ($row = $stmt->fetch()) {
         $scoreNames[$row['original_name']] = $row['custom_name'];
+
     }
-    echo "<pre>";
-print_r($scoreNames);
-echo "</pre>";
 
 }
 
