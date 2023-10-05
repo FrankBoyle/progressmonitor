@@ -66,12 +66,19 @@
 
 <label>Select Score to Display: </label>
 <select name="performance" id="performance">
-    <?php foreach ($performanceData as $performanceItem) { ?>
-        <option value="<?= $performanceItem ?>">
-            <?= isset($scoreNames[$performanceItem]) ? $scoreNames[$performanceItem] : $performanceItem ?>
-        </option>
-    <?php } ?>
+    <?php 
+    if (isset($performanceData) && is_array($performanceData) && isset($scoreNames) && is_array($scoreNames)) {
+        foreach ($performanceData as $performanceItem) {
+            if (isset($scoreNames[$performanceItem])) {
+                echo '<option value="' . htmlspecialchars($performanceItem) . '">' . htmlspecialchars($scoreNames[$performanceItem]) . '</option>';
+            } else {
+                echo '<option value="' . htmlspecialchars($performanceItem) . '">' . htmlspecialchars($performanceItem) . '</option>';
+            }
+        }
+    } 
+    ?>
 </select>
+
 
 
 
