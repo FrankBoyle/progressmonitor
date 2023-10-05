@@ -65,22 +65,11 @@
 </table>
 
 <label>Select Score to Display: </label>
-<select name="performance" id="performance">
-    <?php 
-    if (isset($performanceData) && is_array($performanceData) && isset($scoreNames) && is_array($scoreNames)) {
-        foreach ($performanceData as $performanceItem) {
-            if (isset($scoreNames[$performanceItem])) {
-                echo '<option value="' . htmlspecialchars($performanceItem) . '">' . htmlspecialchars($scoreNames[$performanceItem]) . '</option>';
-            } else {
-                echo '<option value="' . htmlspecialchars($performanceItem) . '">' . htmlspecialchars($performanceItem) . '</option>';
-            }
-        }
-    } 
-    ?>
+<select id="scoreSelector">
+    <?php for ($i = 1; $i <= 10; $i++): ?>
+        <option value="score<?php echo $i; ?>">Score <?php echo $i; ?></option>
+    <?php endfor; ?>
 </select>
-
-
-
 
 <label>Enter Benchmark Value: </label>
 <input type="text" id="benchmarkValue">
