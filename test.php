@@ -1,5 +1,5 @@
 <?php
-include 'fetch_data.php';
+include './users/fetch_data.php';
 session_start();
 
 if (!isset($_SESSION['teacher_id'])) {
