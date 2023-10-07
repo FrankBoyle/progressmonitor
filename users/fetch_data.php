@@ -32,6 +32,13 @@ function fetchScoreNames($schoolID) {
     return $scoreNames;
 }
 
+function fetchStudentsByTeacher($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    return $stmt->fetchAll();
+}
+
 function addNewStudent($studentName, $teacherId) {
     global $connection;
 
