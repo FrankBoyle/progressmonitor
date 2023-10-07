@@ -7,9 +7,17 @@ if (!isset($_SESSION['teacher_id'])) {
 }
 
 $teacherId = $_SESSION['teacher_id'];
-$students = fetchStudentsByTeacher($teacherId);
+$message = "";  // Initialize an empty message variable
 
-// Rest of your code related to form handling and other logic...
+// Handle form submission for adding new student
+if (isset($_POST['add_new_student'])) {
+    $newStudentName = $_POST['new_student_name'];
+    if (!empty($newStudentName)) {
+        $message = addNewStudent($newStudentName, $teacherId);
+    }
+}
+
+$students = fetchStudentsByTeacher($teacherId);
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +34,10 @@ $students = fetchStudentsByTeacher($teacherId);
         <input type="submit" name="add_new_student" value="Add New Student">
     </form>
 
+    <?php if ($message): ?>
+        <p><?= $message ?></p>
+    <?php endif; ?>
+
     <?php if (!empty($students)): ?>
         <h2>Students:</h2>
         <?php foreach ($students as $student): ?>
@@ -36,5 +48,6 @@ $students = fetchStudentsByTeacher($teacherId);
     <?php endif; ?>
 </body>
 </html>
+
 
 

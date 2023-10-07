@@ -32,6 +32,30 @@ function fetchScoreNames($schoolID) {
     return $scoreNames;
 }
 
+function addNewStudent($studentName, $teacherId) {
+    global $connection;
+
+    // Fetch the SchoolID of the current teacher
+    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    $teacherInfo = $stmt->fetch();
+    $teacherSchoolID = $teacherInfo['SchoolID'];
+
+    // Check if the student with the same name and SchoolID already exists
+    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
+    $stmt->execute([$studentName, $teacherSchoolID]);
+    $duplicateStudent = $stmt->fetch();
+
+    if ($duplicateStudent) {
+        return "Student with the same name already exists.";
+    } 
+
+    // Insert the new student with the same SchoolID
+    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+    $stmt->execute([$studentName, $teacherSchoolID]);
+    return "New student added successfully.";
+}
+
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
