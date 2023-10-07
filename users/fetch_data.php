@@ -1,5 +1,4 @@
 <?php
-// Database connection and error reporting settings
 include('./users/db.php');
 
 // Error Reporting
@@ -7,17 +6,48 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Initialize an empty array for performanceData
-$performanceData = [];
-
-// Check if `student_id` is provided in the URL
-if (isset($_GET['student_id'])) {
-    $studentId = $_GET['student_id'];
+function fetchPerformanceData($studentId) {
+    global $connection;
 
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
     $stmt->execute([$studentId]);
 
-    $performanceData = $stmt->fetchAll();
+    return $stmt->fetchAll();
+}
+
+function fetchSchoolIdForStudent($studentId) {
+    global $connection;
+
+    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+
+    $result = $stmt->fetch();
+    return $result ? $result['SchoolID'] : null;
+}
+
+function fetchScoreNames($schoolID) {
+    global $connection;
+
+    $scoreNames = [];
+    $stmt = $connection->prepare("SELECT original_name, custom_name FROM SchoolScoreNames WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+
+    while ($row = $stmt->fetch()) {
+        $scoreNames[$row['original_name']] = $row['custom_name'];
+    }
+
+    return $scoreNames;
+}
+
+// This section remains mostly unchanged but uses the functions above
+$performanceData = [];
+$scoreNames = [];
+
+if (isset($_GET['student_id'])) {
+    $studentId = $_GET['student_id'];
+    $performanceData = fetchPerformanceData($studentId);
+    $schoolID = fetchSchoolIdForStudent($studentId);
+    $scoreNames = fetchScoreNames($schoolID);
 }
 if (isset($studentId)) {
     // Update the column name to SchoolID
