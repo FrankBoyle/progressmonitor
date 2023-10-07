@@ -1,4 +1,5 @@
-
+I have this code, and I know it's a lot at once. I have an issue that I added some additional functionality and linking in my database.
+I would like to click the student name on test.php that takes me to view_student_data.php. However, when I get to that page I would like a drop down that allows me to use the new database system you just helped me with to filter the data that I can see and graph as a user. Can you as an expert full stack dev give me code suggestions to complete that task?
 
 view_student_data.php
 <!DOCTYPE html>
@@ -11,18 +12,108 @@ view_student_data.php
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        /* General Styles */
+body {
+    font-family: 'Arial', sans-serif;  /* Assuming Arial as it's a common font for admin panels */
+    background-color: #f4f6f9;
+    color: #333;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+table thead {
+    background-color: #f5f5f5;
+}
+
+table thead th {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+    background-color: #eef1f4;
+}
+
+table tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Button Styles */
+button {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #c0c0c0;
+    cursor: not-allowed;
+}
+
+/* Form & Input Styles */
+select, input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 10px;
+    width: auto;
+}
+
+label {
+    margin-right: 10px;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    table, select, input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+</style>
 </head>
 <body>
-
 <?php include('./users/fetch_data.php'); ?>
-
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 
-<!--
-<div id="chartDates" style="display:none;">< ?php echo json_encode($chartDates); ?></div>
-<div id="chartScores" style="display:none;">< ?php echo json_encode($chartScores); ?></div>
--->
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
 
@@ -69,9 +160,9 @@ view_student_data.php
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
-    <?php for ($i = 1; $i <= 10; $i++): ?>
-        <option value="score<?php echo $i; ?>">Score <?php echo $i; ?></option>
-    <?php endfor; ?>
+    <?php foreach ($scoreNames as $key => $name): ?>
+        <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($name); ?></option>
+    <?php endforeach; ?>
 </select>
 
 <label>Enter Benchmark Value: </label>
@@ -79,7 +170,6 @@ view_student_data.php
 <button id="updateBenchmark">Update Benchmark</button>
 
 <div id="chart"></div>  <!-- Div to display the chart -->
-
 <script>
 var benchmark = null;
 
@@ -109,7 +199,6 @@ $(document).ready(function() {
 
     updateChart('score1');  // Default
 });
-
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
@@ -141,7 +230,6 @@ function getChartData(scoreField) {
     xCategories.reverse();  
     return {chartData, xCategories};
 }
-
 
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
@@ -189,9 +277,6 @@ function updateChart(scoreField) {
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
 
-
-
-
 function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
@@ -215,7 +300,7 @@ function getChartOptions(dataSeries, xCategories) {
             }
         },
 
-        dataLabels: {
+    dataLabels: {
     enabled: true,
     enabledOnSeries: [0],  // enable only on the first series
     offsetY: -5,
@@ -264,8 +349,6 @@ function getChartOptions(dataSeries, xCategories) {
                 text: 'Date'
             }
         },
-
-
         yaxis: {
             title: {
                 text: 'Value'
@@ -286,7 +369,6 @@ function getChartOptions(dataSeries, xCategories) {
         colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
-
 
 function calculateTrendline(data) {
     var sumX = 0;
@@ -315,10 +397,7 @@ function calculateTrendline(data) {
         return slope * x + intercept;
     };
 }
-
 </script>
-
-
 <script>
 $(document).ready(function() {
 
@@ -402,7 +481,6 @@ $(document).ready(function() {
                 const performanceId = cell.closest('tr').data('performance-id');
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-
                 const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
 
@@ -491,7 +569,6 @@ $(document).ready(function() {
             }
         });
     }
-
     attachEditableHandler();
 
     function updateScoreInDatabase(row, fieldName, newValue) {
@@ -520,8 +597,6 @@ $(document).ready(function() {
     });
 }
 
-
-
     $('#addDataRow').click(function() {
         // Check if there's already a "new" row
         if ($('tr[data-performance-id="new"]').length > 0) {
@@ -547,7 +622,6 @@ $(document).ready(function() {
 
 // Inside the `$('#addDataRow').click` function:
 newRow.append('<td><button class="saveRow">Save</button></td>');
-
 
         attachEditableHandler();
     });
@@ -636,15 +710,10 @@ $(document).on('click', '.saveRow', function() {
         });
     }
 });
-
-
 });
 </script>
-
-
 </body>
 </html>
-
 
 insert_performance.php
 <?php
@@ -693,7 +762,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Return response data as JSON
 echo json_encode($responseData);
-
 ?>
 
 update_performance.php
@@ -814,9 +882,7 @@ if (isset($_POST['performance_id'])) {
 } else {
     $response['message'] = "Performance ID not provided.";
 }
-
 echo json_encode($response);
-
 ?>
 
 fetch_data.php
@@ -860,7 +926,6 @@ if (!empty($performanceData)) {
     }
 }
 
-
 // Preparing the data for the chart
 $chartDates = [];
 $chartScores = [];
@@ -876,3 +941,121 @@ foreach ($performanceData as $record) {
     //$chartScores[] = $avgScore;
 }
 ?>
+
+test.php
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Page Title</title>
+</head>
+<body>
+
+    <!-- Add New Student Form -->
+    <form method="post" action="">
+        <label for="new_student_name">New Student Name:</label>
+        <input type="text" id="new_student_name" name="new_student_name">
+        <input type="submit" name="add_new_student" value="Add New Student">
+    </form>
+
+    <?php
+    // Error tracking: Log PHP errors to a file
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+    function logError($error) {
+        $logFile = 'error_log.txt';
+        $timestamp = date('Y-m-d H:i:s');
+        $logMessage = "[$timestamp] $error\n";
+        file_put_contents($logFile, $logMessage, FILE_APPEND);
+    }
+
+    try {
+        // Database connection
+        $servername = "localhost";
+        $username = "AndersonSchool";
+        $password = "SpecialEd69$";
+        $dbname = "bFactor-test";
+
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) {
+            throw new Exception("Connection failed: " . $conn->connect_error);
+        } else {
+            echo "Connected successfully to the database<br>";
+        }
+
+        // Start session
+        session_start();
+        if (!isset($_SESSION['teacher_id'])) {
+            throw new Exception("Teacher ID not set in session");
+        }
+
+        $teacherId = $_SESSION['teacher_id'];
+        echo "Teacher ID from session: " . $teacherId . "<br>";
+
+        // Add New Student
+if (isset($_POST['add_new_student'])) {
+    $newStudentName = $_POST['new_student_name'];
+
+    if (!empty($newStudentName)) {
+        // Fetch the SchoolID of the current teacher
+        $schoolQuery = $conn->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+        $schoolQuery->bind_param('i', $teacherId);
+        $schoolQuery->execute();
+        $schoolResult = $schoolQuery->get_result();
+        $teacherInfo = $schoolResult->fetch_assoc();
+        $teacherSchoolID = $teacherInfo['SchoolID'];
+
+        // Check if the student with the same name and SchoolID already exists
+        $checkDuplication = $conn->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
+        $checkDuplication->bind_param('si', $newStudentName, $teacherSchoolID);
+        $checkDuplication->execute();
+        $duplicateStudent = $checkDuplication->get_result()->fetch_assoc();
+
+        if ($duplicateStudent) {
+            echo "Student with the same name already exists.<br>";
+        } else {
+            // Insert the new student with the same SchoolID
+            $stmt = $conn->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+            $stmt->bind_param('si', $newStudentName, $teacherSchoolID);
+            $stmt->execute();
+
+            if ($stmt->error) {
+                throw new Exception("Error adding new student: " . $stmt->error);
+            }
+
+            echo "New student added successfully.<br>";
+        }
+    }
+}
+
+        // Fetch Existing Students for the Teacher based on the School
+        $stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+        $stmt->bind_param('i', $teacherId);
+        $stmt->execute();
+
+        if ($stmt->error) {
+            throw new Exception("Error fetching students: " . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        $students = $result->fetch_all(MYSQLI_ASSOC);
+
+        if (empty($students)) {
+            echo "No students found for this teacher.";
+        } else {
+            echo "<h2>Students:</h2>";
+            foreach ($students as $student) {
+                echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
+            }
+        }
+
+    } catch (Exception $e) {
+        logError($e->getMessage());
+        echo "An error occurred. Please try again later.";
+    }
+    ?>
+
+</body>
+</html>
