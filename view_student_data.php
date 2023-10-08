@@ -211,13 +211,14 @@ function getChartOptions(dataSeries, xCategories) {
                 }
             },
             dropShadow: {
-                enabled: true,
-                color: '#000',
-                top: 18,
-                left: 7,
-                blur: 10,
-                opacity: 0.2
-            }
+    enabled: true,
+    color: '#000',
+    top: 15,          // Adjusted the vertical offset a bit
+    left: 5,          // Adjusted the horizontal offset a bit
+    blur: 15,         // Increased the blur to make it more spread out
+    opacity: 0.4      // Increased the opacity to make it darker
+}
+
         },
 
         dataLabels: {
