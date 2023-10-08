@@ -542,15 +542,15 @@ $(document).ready(function() {
             alert("Please save the existing new entry before adding another one.");
             return;
         }
-        
+
         const currentDate = getCurrentDate();
         const newRow = $("<tr data-performance-id='new'>");
         newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);
-        
+    
         for (let i = 1; i <= 10; i++) {
-            newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+            newRow.append(`<td></td>`); // Create non-editable cells for scores
         }
-        
+
         newRow.append('<td><button class="saveRow">Save</button></td>');
         $("table").append(newRow);
 
@@ -558,33 +558,26 @@ $(document).ready(function() {
         attachEditableHandler();
         const dateCell = newRow.find('td[data-field-name="week_start_date"]');
         dateCell.click();
-});
+    });
 
-$(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
-    const row = $(this).closest('tr');
-   
-    let scores = {};
-    for (let i = 1; i <= 10; i++) {
-        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-        scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
-    }
 
-    const postData = {
-        student_id: CURRENT_STUDENT_ID,
-        week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text()),
-        scores: scores
-    };
+    $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
+        const row = $(this).closest('tr');
 
-    const response = await ajaxCall('POST', 'insert_performance.php', postData);
-    if (response && response.performance_id) {
-        // Update the row with the data returned from the server
-        row.attr('data-performance-id', response.performance_id);
-        row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
-        // If you have any default scores or other fields returned from the server, update them here too
+        const postData = {
+            student_id: CURRENT_STUDENT_ID,
+            week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text())
+        };
+
+        const response = await ajaxCall('POST', 'insert_performance.php', postData);
+        if (response && response.performance_id) {
+            // Refresh the page to ensure the new row is added and ready for data input
+            location.reload();
         } else {
             alert("There was an error saving the data.");
         }
     });
+
 
 $(document).on('keypress', '.saveRow', function(e) {
     if (e.which === 13) {
