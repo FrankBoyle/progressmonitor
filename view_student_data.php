@@ -551,9 +551,32 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.saveRow', async function() {
-        const row = $(this).closest('tr');
-        // ... Logic to extract values from the row, make AJAX call to save the row ...
+    const row = $(this).closest('tr');
+    
+    let postData = {
+        performance_id: row.data('performance-id'),
+        student_id: $('#currentStudentId').val(),
+        week_start_date: row.find('td[data-field-name="week_start_date"]').text()
+    };
+
+    let scores = {};
+    for (let i = 1; i <= 10; i++) {
+        scores['score' + i] = row.find(`td[data-field-name="score${i}"]`).text() || null; // Send null if score is empty
+    }
+    postData.scores = scores;
+
+    try {
+        const response = await ajaxCall('POST', 'insert_performance.php', postData);
+        if (response && response.success) {
+            row.attr('data-performance-id', response.performance_id);
+        } else {
+            alert('Failed to save data. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error during AJAX call:', error);
+    }
     });
+
 
     // Initialize the editable cells
     //attachEditableHandler();

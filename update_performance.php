@@ -20,9 +20,11 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
 
     // Validate and sanitize the date input (assuming it's for the 'week_start_date' field)
     if ($fieldName === 'week_start_date') {
+        // Inside the `if ($fieldName === 'week_start_date') { ... }` block:
         $newDate = date_create_from_format('Y-m-d', $newValue);
-        if ($newDate === false) {
-            handleError("Invalid date format.");
+        if (!$newDate) {
+            handleError("Invalid date format received. Expected 'Y-m-d' format but received: " . $newValue);
+            return;
         }
         $newValue = date_format($newDate, 'Y-m-d');
     }
@@ -45,7 +47,7 @@ function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
     }
 
     // Prepare SQL statement
-    $sql = "UPDATE Performance SET $fieldName = ? WHERE performance_id = ?";
+    $sql = "UPDATE `Performance` SET `$fieldName` = ? WHERE `performance_id` = ?";
     $stmt = $connection->prepare($sql);
     $stmt->bindParam(1, $newValue);
     $stmt->bindParam(2, $performanceId);
