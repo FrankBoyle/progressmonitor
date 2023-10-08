@@ -640,6 +640,8 @@ $(document).ready(function() {
 
         $('table').DataTable({
             "order": [[0, "asc"]]  // This will initially order by the first column (date) in ascending order
+            "lengthChange": false, // Disables the dropdown
+            "searching": false    // Disables the search box
         });
 
 });
