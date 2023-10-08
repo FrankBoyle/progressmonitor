@@ -421,11 +421,11 @@ $(document).ready(function() {
     }
 
     function attachEditableHandler() {
-    $('table').on('click', '.editable', function() {
-        const cell = $(this);
-        const originalValue = cell.text();
-        const input = $('<input type="text">');
-        input.val(originalValue);
+        $('table').on('click', '.editable', function() {
+            const cell = $(this);
+            const originalValue = cell.text();
+            const input = $('<input type="text">');
+            input.val(originalValue);
 
             let datePickerActive = false;
 
@@ -536,34 +536,33 @@ $(document).ready(function() {
         });
     }
 
-    $('#addDataRow').off('click').click(async function() {
-    // Check for an existing "new" row
-    if ($('tr[data-performance-id="new"]').length) {
-        alert("Please save the existing new entry before adding another one.");
-        return;
-    }
-    
-    const currentDate = getCurrentDate();
-    const newRow = $("<tr data-performance-id='new'>");
-    newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);
-    
-    for (let i = 1; i <= 10; i++) {
-        newRow.append(`<td></td>`);
-    }
-    
-    newRow.append('<td><button class="saveRow">Save</button></td>');
-    $("table").append(newRow);
+    $('#addDataRow').off('click').click(function() {
+        // Check for an existing "new" row
+        if ($('tr[data-performance-id="new"]').length) {
+            alert("Please save the existing new entry before adding another one.");
+            return;
+        }
+        
+        const currentDate = getCurrentDate();
+        const newRow = $("<tr data-performance-id='new'>");
+        newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);
+        
+        for (let i = 1; i <= 10; i++) {
+            newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+        }
+        
+        newRow.append('<td><button class="saveRow">Save</button></td>');
+        $("table").append(newRow);
 
-    const dateCell = newRow.find('td[data-field-name="week_start_date"]');
-    dateCell.click();
+        newRow.find('td[data-field-name="week_start_date"]').click().blur();
+        attachEditableHandler();
+        const dateCell = newRow.find('td[data-field-name="week_start_date"]');
+        dateCell.click();
 });
-
-
 
 $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
     const row = $(this).closest('tr');
-    const performanceId = row.data('performance-id');
-
+   
     let scores = {};
     for (let i = 1; i <= 10; i++) {
         const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
@@ -576,24 +575,16 @@ $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
         scores: scores
     };
 
-    let targetUrl;
-    if (performanceId === 'new') {
-        targetUrl = 'insert_performance.php';
-    } else {
-        postData.performance_id = performanceId;
-        targetUrl = 'update_performance.php';
-    }
-
-    const response = await ajaxCall('POST', targetUrl, postData);
+    const response = await ajaxCall('POST', 'insert_performance.php', postData);
     if (response && response.performance_id) {
         // Update the row with the data returned from the server
         row.attr('data-performance-id', response.performance_id);
         row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
-    } else {
-        alert("There was an error saving the data.");
-    }
-});
-
+        // If you have any default scores or other fields returned from the server, update them here too
+        } else {
+            alert("There was an error saving the data.");
+        }
+    });
 
 $(document).on('keypress', '.saveRow', function(e) {
     if (e.which === 13) {
