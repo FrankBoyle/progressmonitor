@@ -533,7 +533,7 @@ $(document).ready(function() {
                 }
             });
         });
-    }
+    
 
     $('#addDataRow').off('click').click(async function() {
     // Check for an existing "new" row
