@@ -559,29 +559,31 @@ $(document).ready(function() {
 
     $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
-        let scores = {};
     
+        let scores = {};
         for (let i = 1; i <= 10; i++) {
-            scores['score' + i] = row.find(`td[data-field-name="score${i}"]`).text().trim();
+            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+            scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
         }
 
-        const studentId = $('#currentStudentId').val();
-        const weekStartDate = row.find('td[data-field-name="week_start_date"]').text();
-
         const postData = {
-            student_id: studentId,
-            week_start_date: weekStartDate,
+            student_id: CURRENT_STUDENT_ID,
+            week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text()),
             scores: scores
         };
 
         const response = await ajaxCall('POST', 'insert_performance.php', postData);
-
-        if (response.error) {
-            alert(response.error);
+    
+        if (response && response.performance_id) {
+            // Update the row with the data returned from the server
+            row.attr('data-performance-id', response.performance_id);
+            row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
+            // If you have any default scores or other fields returned from the server, update them here too
         } else {
-        // Successful insertion. You can update the UI here as necessary.
+            alert("There was an error saving the data.");
         }
-});
+    });
+
 
 
 
