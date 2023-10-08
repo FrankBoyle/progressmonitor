@@ -8,6 +8,8 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 </head>
 <body>
 
@@ -22,6 +24,8 @@
 <table border="1">
     <thead>
         <tr>
+        <button id="toggleDateOrder">Toggle Date Order</button>
+
             <th>Week Start Date</th>
             <?php foreach ($scoreNames as $key => $name): ?>
                 <th><?php echo $name; ?></th>
@@ -374,6 +378,16 @@ $(document).ready(function() {
         });
     }
 
+    let dateAscending = true; // to keep track of current order
+
+    $('#toggleDateOrder').on('click', function() {
+        const table = $('table').DataTable();
+        dateAscending = !dateAscending; // flip the state
+
+        table.order([0, dateAscending ? 'asc' : 'desc']).draw();
+    });
+
+
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
         const performanceId = $(this).data('performance-id');
@@ -606,6 +620,11 @@ $(document).on('keypress', '.saveRow', function(e) {
     // Initialization code
     $('#currentWeekStartDate').val(getCurrentDate());
     attachEditableHandler();
+
+    $('table').DataTable({
+        "order": [[0, "asc"]]  // This will initially order by the first column (date) in ascending order
+    });
+
 });
 
 </script>
