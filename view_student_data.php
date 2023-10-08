@@ -350,9 +350,7 @@ $(document).ready(function() {
         }
     }
 
-    // ... Rest of the code as before ...
 
-    // ... Rest of the code as before ...
 
     function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
@@ -371,6 +369,29 @@ $(document).ready(function() {
             }
         });
     }
+
+    $(document).on('click', '.deleteRow', function() {
+        const row = $(this);  // Capture the button element for later use
+        const performanceId = $(this).data('performance-id');
+    
+        // Confirm before delete
+        if (!confirm('Are you sure you want to delete this row?')) {
+            return;
+        }
+    
+        // Send a request to delete the data from the server
+        $.post('delete_performance.php', {
+            performance_id: performanceId
+        }, function(response) {
+            // Handle the response, e.g., check if the deletion was successful
+            if (response.success) {
+                // Remove the corresponding row from the table
+                row.closest('tr').remove();
+            } else {
+                alert('Failed to delete data. Please try again.');
+            }
+        }, 'json');
+    });
 
     function updateScoreInDatabase(row, fieldName, newValue) {
         const performanceId = row.data('performance-id');
