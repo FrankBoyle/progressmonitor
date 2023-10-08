@@ -24,8 +24,6 @@
 <table border="1">
     <thead>
         <tr>
-        <button id="toggleDateOrder">Toggle Date Order</button>
-
             <th>Week Start Date</th>
             <?php foreach ($scoreNames as $key => $name): ?>
                 <th><?php echo $name; ?></th>
