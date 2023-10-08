@@ -457,6 +457,14 @@ $(document).ready(function() {
                 }
 
                 let newValue = input.val();
+                cell.html(newValue);
+                const performanceId = cell.closest('tr').data('performance-id');
+    
+                // Check if it's a new row. If so, just return and don't do any AJAX call. 
+                if (performanceId === 'new') {
+                    return;
+                }
+
                 if (cell.data('field-name') === 'week_start_date') {
                     const parts = newValue.split('/');
                     if (parts.length !== 3) {
@@ -562,6 +570,13 @@ $(document).ready(function() {
 
 $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
     const row = $(this).closest('tr');
+    const performanceId = row.data('performance-id');
+    
+    // If it's not a new entry, simply return and do nothing.
+    if (performanceId !== 'new') {
+        alert("This row is not a new entry. Please click on the cells to edit them.");
+        return;
+    }
    
     let scores = {};
     for (let i = 1; i <= 10; i++) {
