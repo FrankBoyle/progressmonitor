@@ -610,11 +610,7 @@ $('#currentWeekStartDate').val(getCurrentDate());
 attachEditableHandler();
 
 });
-
-
 </script>
-
-
 
 </body>
 </html>
