@@ -613,28 +613,26 @@ $(document).ready(function() {
             }
         });
 
-        $("#startDateFilter").datepicker({
-            dateFormat: 'mm/dd/yy'
-        });
-
-        $("#startDateFilter").on("change", function() {
-    let selectedDate = $(this).datepicker("getDate");
-    if (selectedDate) {
-        table.draw();  // Redraw the table after updating the filter
-    } else {
-        table.search('').columns().search('').draw();  // Reset the filter if the input is cleared
-    }
+        // Initialize the datepicker
+$("#startDateFilter").datepicker({
+    dateFormat: 'mm/dd/yy'
 });
 
+// Add event listener to the datepicker
+$("#startDateFilter").on("change", function() {
+    table.draw(); // Redraw the table after updating the filter
+});
+
+// Custom filter for DataTables
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     let selectedDate = $("#startDateFilter").datepicker("getDate");
     if (!selectedDate) {
-        return true;  // If no date selected, show all rows
+        return true; // If no date selected, show all rows
     }
-
     let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
-    return rowDate >= selectedDate;
+    return rowDate && selectedDate && rowDate >= selectedDate;
 });
+
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
@@ -663,10 +661,11 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             "paging": false,
             "info": false,
             "columns": [
-                { "type": "date-us" },  // This tells DataTables to treat the first column as a US date
-                null, null, null, null, null, null, null, null, null, null, null  // The rest of your columns remain unchanged
+                { "type": "date-us" },
+                null, null, null, null, null, null, null, null, null, null, null
             ]
         });
+
 
 
 });
