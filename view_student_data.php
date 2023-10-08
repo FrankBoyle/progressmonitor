@@ -215,8 +215,8 @@ function getChartOptions(dataSeries, xCategories) {
     color: '#000',
     top: 15,          // Adjusted the vertical offset a bit
     left: 5,          // Adjusted the horizontal offset a bit
-    blur: 4,         // Increased the blur to make it more spread out
-    opacity: 0.6      // Increased the opacity to make it darker
+    blur: 7,         // Increased the blur to make it more spread out
+    opacity: 0.4      // Increased the opacity to make it darker
 }
 
         },
