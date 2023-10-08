@@ -202,7 +202,7 @@ function getChartOptions(dataSeries, xCategories) {
         series: dataSeries,
         chart: {
             type: 'line',
-            stacked: true,
+            stacked: false,
             width: 1000,
             toolbar: {
                 show: true,
