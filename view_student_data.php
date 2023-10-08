@@ -139,13 +139,17 @@ function getChartData(scoreField) {
         }
     });
 
-    //if (benchmark === null) {
-    //    benchmark = 0; // Default value if benchmark is not set
-    //}
-    chartData.reverse();
-    xCategories.reverse();  
-    return {chartData, xCategories};
+    // Sorting logic starts here
+    const sortedChartData = chartData.sort((a, b) => {
+        return new Date(a.x) - new Date(b.x);
+    });
+    const sortedCategories = xCategories.sort((a, b) => {
+        return new Date(a) - new Date(b);
+    });
+
+    return { chartData: sortedChartData, xCategories: sortedCategories };
 }
+
 
 
 function updateChart(scoreField) {
@@ -210,14 +214,15 @@ function getChartOptions(dataSeries, xCategories) {
                     download: false
                 }
             },
+
             dropShadow: {
-    enabled: true,
-    color: '#000',
-    top: 15,          // Adjusted the vertical offset a bit
-    left: 5,          // Adjusted the horizontal offset a bit
-    blur: 5,         // Increased the blur to make it more spread out
-    opacity: 0.4      // Increased the opacity to make it darker
-}
+                enabled: true,
+                color: '#000',
+                top: 15,          // Adjusted the vertical offset a bit
+                left: 5,          // Adjusted the horizontal offset a bit
+                blur: 5,         // Increased the blur to make it more spread out
+                opacity: 0.4      // Increased the opacity to make it darker
+            }
 
         },
 
