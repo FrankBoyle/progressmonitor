@@ -356,9 +356,6 @@ $(document).ready(function() {
         }   
     }
 
-
-
-
     function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
@@ -570,7 +567,7 @@ $(document).ready(function() {
 
 $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
     const row = $(this).closest('tr');
-    const performanceId = row.data('performance-id');
+    let performanceIdForSave = row.data('performance-id');
     
     // If it's not a new entry, simply return and do nothing.
     if (performanceId !== 'new') {
