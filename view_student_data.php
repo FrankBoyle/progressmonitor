@@ -420,36 +420,35 @@ $(document).ready(function() {
         });
     }
 
-    function attachEditableHandler() {
-    $('table').on('click', '.editable', function() {
-        const cell = $(this);
-        const originalValue = cell.text();
-        const input = $('<input type="text">');
-        input.val(originalValue);
+    //function attachEditableHandler() {
+        $('table').on('click', '.editable', function() {
+    const cell = $(this);
+    const originalValue = cell.text();
+    const input = $('<input type="text">');
+    input.val(originalValue);
 
-            let datePickerActive = false;
+    let datePickerActive = false;
 
-            if (cell.data('field-name') === 'week_start_date') {
-                input.datepicker({
-                    dateFormat: 'mm/dd/yy',
-                    beforeShow: function() {
-                        datePickerActive = true;
-                    },
-                    onClose: function(selectedDate) {
-                        if (isValidDate(new Date(selectedDate))) {
-                            cell.text(selectedDate);  // Set the selected date
-                            cell.append(input.hide());  // Hide the input to show the cell text
-                            saveEditedDate(cell, selectedDate); // Save the edited date
-                        }
-                        datePickerActive = false;
-                    }
-                });
-                cell.html(input);
-                input.focus();
-            } else {
-                cell.html(input);
-                input.focus();
+    if (cell.data('field-name') === 'week_start_date') {
+        input.datepicker({
+            dateFormat: 'mm/dd/yy',
+            beforeShow: function() {
+                datePickerActive = true;
+            },
+            onClose: function(selectedDate) {
+                if (isValidDate(new Date(selectedDate))) {
+                    cell.text(selectedDate);  // Set the selected date
+                    cell.append(input.hide());  // Hide the input to show the cell text
+                }
+                datePickerActive = false;
             }
+        });
+        cell.html(input);
+        input.focus();
+    } else {
+        cell.html(input);
+        input.focus();
+    }
 
             input.blur(function() {
                 if (datePickerActive) {
@@ -602,7 +601,7 @@ $(document).on('keypress', '.saveRow', function(e) {
 });
     // Initialization code
     $('#currentWeekStartDate').val(getCurrentDate());
-    attachEditableHandler();
+    //attachEditableHandler();
 });
 
 </script>
