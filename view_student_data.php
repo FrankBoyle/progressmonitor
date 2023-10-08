@@ -527,7 +527,7 @@ $(document).ready(function() {
             });
 
             // Pressing Enter to save changes
-            input.keypress(function(e) {
+            input.off('keypress').keypress(function(e) {
                 if (e.which === 13) {
                     e.preventDefault();       // Prevent the default action
                     e.stopPropagation();     // Stop the event from bubbling up
@@ -537,7 +537,7 @@ $(document).ready(function() {
         });
     }
 
-    $('#addDataRow').click(function() {
+    $('#addDataRow').off('click').click(function() {
         // Check if there's already a "new" row
         if ($('tr[data-performance-id="new"]').length > 0) {
             alert("Please save the existing new entry before adding another one.");
