@@ -205,7 +205,7 @@ function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
         chart: {
-            type: 'area',
+            type: 'line',
             stacked: false,
             width: 1000,
             toolbar: {
@@ -227,24 +227,25 @@ function getChartOptions(dataSeries, xCategories) {
         },
 
         dataLabels: {
-    enabled: true,
-    enabledOnSeries: [0],  // enable only on the first series
-    offsetY: -7,
-    style: {
-        fontSize: '12px',
-        colors: ['#333']
-    }
-},
+            enabled: true,
+            enabledOnSeries: [0],  // enable only on the first series
+            offsetY: -7,
+            style: {
+                fontSize: '12px',
+                colors: ['#333']
+            }
+        },
 
         stroke: {
             curve: 'smooth',
             width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1)  // Set width based on series name
         },
+
         markers: {
             size: 5,
             colors: undefined,
             strokeColors: '#fff',
-            strokeWidth: 2,
+            strokeWidth: 3,
             strokeOpacity: 0.9,
             strokeDashArray: 0,
             fillOpacity: 1,
