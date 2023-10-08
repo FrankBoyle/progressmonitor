@@ -618,10 +618,10 @@ $(document).ready(function() {
         $("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',
             onSelect: function() {
-                console.log("Table rows before draw: " + table.rows().count());
-                console.log("Date selected: " + $(this).val());
+                //console.log("Table rows before draw: " + table.rows().count());
+                //console.log("Date selected: " + $(this).val());
                 table.draw();
-                console.log("Table rows after draw: " + table.rows().count());
+                //console.log("Table rows after draw: " + table.rows().count());
             }
         });
 
@@ -639,7 +639,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     let rowDateTime = rowDate.getTime();
     let selectedDateTime = selectedDate.getTime();
 
-    console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDateTime >= selectedDateTime}`);
+    //console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDateTime >= selectedDateTime}`);
     return rowDateTime >= selectedDateTime;
 });
 
