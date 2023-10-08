@@ -421,7 +421,7 @@ $(document).ready(function() {
     }
 
     function attachEditableHandler() {
-        $('.editable').off('click').on('click', function() {
+        $('table').on('click', '.editable', function() {
             const cell = $(this);
             const originalValue = cell.text();
             const input = $('<input type="text">');
