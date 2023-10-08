@@ -78,11 +78,6 @@
 var benchmark = null;
 
 $(document).ready(function() {
-    function getCurrentDate() {
-        const currentDate = new Date();
-        return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
-    }
-
     initializeChart();
 
     benchmark = parseFloat($("#benchmarkValue").val());
@@ -318,6 +313,11 @@ function calculateTrendline(data) {
 
 <script>
 $(document).ready(function() {
+
+    function getCurrentDate() {
+        const currentDate = new Date();
+        return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+    }
 
     // Constants & Variables
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
