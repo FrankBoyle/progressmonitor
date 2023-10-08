@@ -341,14 +341,21 @@ $(document).ready(function() {
 
     async function ajaxCall(type, url, data) {
         try {
-            const response = await $.ajax({ type, url, data });
+            const response = await $.ajax({
+                type: type,
+                url: url,
+                data: data,
+                dataType: 'json',  // Expecting server to return JSON
+                cache: false,      // Don't cache results (especially important for POST requests)
+            });
             return response;
         } catch (error) {
             console.error('Error during AJAX call:', error);
             alert('An error occurred. Please try again.');
             return null;
-        }
+        }   
     }
+
 
 
 
