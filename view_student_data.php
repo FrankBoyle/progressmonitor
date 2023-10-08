@@ -357,7 +357,7 @@ $(document).ready(function() {
     }
 
     function saveEditedDate(cell, newDate) {
-        //const performanceId = cell.closest('tr').data('performance-id');
+        const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
         const postData = {
@@ -476,7 +476,7 @@ $(document).ready(function() {
                     cell.html(newValue);
                 }
 
-                const performanceId = cell.closest('tr').data('performance-id');
+                //const performanceId = cell.closest('tr').data('performance-id');
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
