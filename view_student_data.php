@@ -589,11 +589,11 @@ $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
         // Update the row with the data returned from the server
         row.attr('data-performance-id', response.performance_id);
         row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
-        // If you have any default scores or other fields returned from the server, update them here too
     } else {
         alert("There was an error saving the data.");
     }
 });
+
 
 $(document).on('keypress', '.saveRow', function(e) {
     if (e.which === 13) {
