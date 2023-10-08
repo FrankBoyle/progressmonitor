@@ -479,6 +479,7 @@ $(document).ready(function() {
                 };
 
                 if (performanceId === 'new') {
+                    const row = $(this).closest('tr');
                     let scores = {};
                     for (let i = 1; i <= 10; i++) {
                         const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
