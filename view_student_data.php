@@ -634,12 +634,15 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     }
 
     let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
-    return rowDate >= selectedDate;
-    const result = rowDate >= selectedDate;
-    console.log("Should row display?: " + result);
-    console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDate >= selectedDate}`);
-    return result;
+
+    // Convert both dates to time for a safer comparison
+    let rowDateTime = rowDate.getTime();
+    let selectedDateTime = selectedDate.getTime();
+
+    console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDateTime >= selectedDateTime}`);
+    return rowDateTime >= selectedDateTime;
 });
+
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
@@ -664,7 +667,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         let table = $('table').DataTable({
             "order": [[0, "asc"]],
             "lengthChange": false,
-            "searching": false,
+            //"searching": false,
             "paging": false,
             "info": false,
             "columns": [
