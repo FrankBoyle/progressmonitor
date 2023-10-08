@@ -235,10 +235,10 @@ function getChartOptions(dataSeries, xCategories) {
             width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1)  // Set width based on series name
         },
         markers: {
-            size: 10,
+            size: 5,
             colors: undefined,
             strokeColors: '#fff',
-            strokeWidth: 4,
+            strokeWidth: 2,
             strokeOpacity: 0.9,
             strokeDashArray: 0,
             fillOpacity: 1,
