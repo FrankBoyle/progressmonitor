@@ -205,7 +205,7 @@ function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
         chart: {
-            type: 'line',
+            type: 'area',
             stacked: false,
             width: 1000,
             toolbar: {
