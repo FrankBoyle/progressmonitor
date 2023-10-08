@@ -638,14 +638,27 @@ $(document).ready(function() {
         $('#currentWeekStartDate').val(getCurrentDate());
         attachEditableHandler();
 
-        $('table').DataTable({
-    "order": [[0, "asc"]],   // This will initially order by the first column (date) in ascending order
-    "lengthChange": false,   // Disables the dropdown
-    "searching": false,      // Disables the search box
-    "paging": false,         // Disables pagination
-    "info": false            // Disables information display
-});
+        $.fn.dataTable.ext.type.detect.unshift(function(value) {
+            return value && value.match(/^(\d{1,2}\/\d{1,2}\/\d{4})$/) ? 'date-us' : null;
+        });
 
+        $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
+            var date = data.split('/');
+            return (date[2] + date[0] + date[1]) * 1;
+        };
+
+
+        $('table').DataTable({
+            "order": [[0, "asc"]],
+            "lengthChange": false,
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "columns": [
+                { "type": "date-us" },  // This tells DataTables to treat the first column as a US date
+                null, null, null, null, null, null, null, null, null, null, null  // The rest of your columns remain unchanged
+            ]
+        });
 
 
 });
