@@ -591,7 +591,7 @@ $(document).ready(function() {
 
 
     // Initialize the editable cells
-    //attachEditableHandler();
+    attachEditableHandler();
 
     // Initialization code
     $('#currentWeekStartDate').val(getCurrentDate());
