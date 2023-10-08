@@ -555,6 +555,8 @@ $(document).ready(function() {
 
         newRow.find('td[data-field-name="week_start_date"]').click().blur();
         attachEditableHandler();
+        const dateCell = newRow.find('td[data-field-name="week_start_date"]');
+        dateCell.click();  // This triggers the datepicker immediately
     });
 
     $(document).on('click', '.saveRow', async function() {
