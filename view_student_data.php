@@ -637,6 +637,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     return rowDate >= selectedDate;
     const result = rowDate >= selectedDate;
     console.log("Should row display?: " + result);
+    console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDate >= selectedDate}`);
     return result;
 });
 
