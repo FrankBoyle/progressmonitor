@@ -223,7 +223,7 @@ function getChartOptions(dataSeries, xCategories) {
         dataLabels: {
     enabled: true,
     enabledOnSeries: [0],  // enable only on the first series
-    offsetY: -5,
+    offsetY: -7,
     style: {
         fontSize: '12px',
         colors: ['#333']
@@ -235,10 +235,10 @@ function getChartOptions(dataSeries, xCategories) {
             width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1)  // Set width based on series name
         },
         markers: {
-            size: 5,
+            size: 10,
             colors: undefined,
             strokeColors: '#fff',
-            strokeWidth: 2,
+            strokeWidth: 4,
             strokeOpacity: 0.9,
             strokeDashArray: 0,
             fillOpacity: 1,
