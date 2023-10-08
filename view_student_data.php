@@ -21,8 +21,8 @@
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
 
-<label for="startDate">Filter from date:</label>
-<input type="date" id="startDate">
+<label for="startDateFilter">Show entries from: </label>
+<input type="text" id="startDateFilter" placeholder="Select a date...">
 
 <table border="1">
     <thead>
@@ -613,20 +613,28 @@ $(document).ready(function() {
             }
         });
 
-        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-            const startDate = $('#startDate').val();
-            const rowDate = data[0];
-
-            if (!startDate) {
-                return true;
-            }
-
-            return Date.parse(rowDate) >= Date.parse(startDate); 
+        $("#startDateFilter").datepicker({
+            dateFormat: 'mm/dd/yy'
         });
 
-        $('#startDate').on('change', function() {
-            $('table').DataTable().draw();
-        });
+        $("#startDateFilter").on("change", function() {
+    let selectedDate = $(this).datepicker("getDate");
+    if (selectedDate) {
+        table.draw();  // Redraw the table after updating the filter
+    } else {
+        table.search('').columns().search('').draw();  // Reset the filter if the input is cleared
+    }
+});
+
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+    let selectedDate = $("#startDateFilter").datepicker("getDate");
+    if (!selectedDate) {
+        return true;  // If no date selected, show all rows
+    }
+
+    let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
+    return rowDate >= selectedDate;
+});
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
@@ -648,7 +656,7 @@ $(document).ready(function() {
         };
 
 
-        $('table').DataTable({
+        let table = $('table').DataTable({
             "order": [[0, "asc"]],
             "lengthChange": false,
             "searching": false,
