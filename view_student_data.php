@@ -21,8 +21,9 @@
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
 
-<label for="startDateFilter">Show entries from: </label>
-<input type="text" id="startDateFilter" placeholder="Select a date...">
+<label for="startDateFilter">Filter by Start Date:</label>
+<input type="text" id="startDateFilter">
+
 
 <table border="1">
     <thead>
@@ -614,25 +615,28 @@ $(document).ready(function() {
         });
 
         // Initialize the datepicker
-$("#startDateFilter").datepicker({
-    dateFormat: 'mm/dd/yy'
-});
+        $("#startDateFilter").datepicker({
+            dateFormat: 'mm/dd/yy',
+            onSelect: function() {
+                table.draw();
+                console.log("Date selected: " + $(this).val());
+            }
+        });
 
-// Add event listener to the datepicker
-$("#startDateFilter").on("change", function() {
-    table.draw(); // Redraw the table after updating the filter
-});
 
 // Custom filter for DataTables
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     let selectedDate = $("#startDateFilter").datepicker("getDate");
     if (!selectedDate) {
-        return true; // If no date selected, show all rows
+        return true; // if no date selected, show all rows
     }
-    let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
-    return rowDate && selectedDate && rowDate >= selectedDate;
-});
 
+    let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
+    return rowDate >= selectedDate;
+    console.log("Selected date: " + selectedDate);
+    console.log("Row date: " + rowDate);
+
+});
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
