@@ -529,17 +529,16 @@ $(document).ready(function() {
             // Pressing Enter to save changes
             input.off('keypress').keypress(function(e) {
                 if (e.which === 13) {
-                    e.preventDefault();       // Prevent the default action
-                    e.stopPropagation();     // Stop the event from bubbling up
-                    input.blur();            // Trigger the blur event to save the data
+                    e.preventDefault();
+                    input.blur();
                 }
             });
         });
     }
 
     $('#addDataRow').off('click').click(function() {
-        // Check if there's already a "new" row
-        if ($('tr[data-performance-id="new"]').length > 0) {
+        // Check for an existing "new" row
+        if ($('tr[data-performance-id="new"]').length) {
             alert("Please save the existing new entry before adding another one.");
             return;
         }
@@ -561,7 +560,7 @@ $(document).ready(function() {
         dateCell.click();  // This triggers the datepicker immediately
     });
 
-    $(document).on('click', '.saveRow', async function() {
+    $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
     
         let scores = {};
