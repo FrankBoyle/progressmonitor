@@ -537,28 +537,25 @@ $(document).ready(function() {
     }
 
     $('#addDataRow').off('click').click(function() {
-        // Check for an existing "new" row
         if ($('tr[data-performance-id="new"]').length) {
             alert("Please save the existing new entry before adding another one.");
             return;
         }
-        
+    
         const currentDate = getCurrentDate();
         const newRow = $("<tr data-performance-id='new'>");
         newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);
-        
+    
         for (let i = 1; i <= 10; i++) {
-            newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+            newRow.append(`<td data-field-name="score${i}"></td>`); // Made this non-editable for now
         }
-        
+    
         newRow.append('<td><button class="saveRow">Save</button></td>');
         $("table").append(newRow);
 
-        newRow.find('td[data-field-name="week_start_date"]').click().blur();
-        attachEditableHandler();
-        const dateCell = newRow.find('td[data-field-name="week_start_date"]');
-        dateCell.click();
-});
+        newRow.find('td[data-field-name="week_start_date"]').click();
+    });
+
 
 $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
     const row = $(this).closest('tr');
