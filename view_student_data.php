@@ -529,7 +529,9 @@ $(document).ready(function() {
             // Pressing Enter to save changes
             input.keypress(function(e) {
                 if (e.which === 13) {
-                    input.blur();
+                    e.preventDefault();       // Prevent the default action
+                    e.stopPropagation();     // Stop the event from bubbling up
+                    input.blur();            // Trigger the blur event to save the data
                 }
             });
         });
