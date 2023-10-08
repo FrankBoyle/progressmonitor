@@ -639,10 +639,13 @@ $(document).ready(function() {
         attachEditableHandler();
 
         $('table').DataTable({
-            "order": [[0, "asc"]],  // This will initially order by the first column (date) in ascending order
-            "lengthChange": false,  // Disables the dropdown
-            "searching": false      // Disables the search box
-        });
+    "order": [[0, "asc"]],   // This will initially order by the first column (date) in ascending order
+    "lengthChange": false,   // Disables the dropdown
+    "searching": false,      // Disables the search box
+    "paging": false,         // Disables pagination
+    "info": false            // Disables information display
+});
+
 
 
 });
