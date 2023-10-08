@@ -421,11 +421,11 @@ $(document).ready(function() {
     }
 
     function attachEditableHandler() {
-        $('table').on('click', '.editable', function() {
-            const cell = $(this);
-            const originalValue = cell.text();
-            const input = $('<input type="text">');
-            input.val(originalValue);
+    $('table').on('click', '.editable', function() {
+        const cell = $(this);
+        const originalValue = cell.text();
+        const input = $('<input type="text">');
+        input.val(originalValue);
 
             let datePickerActive = false;
 
@@ -562,7 +562,8 @@ $(document).ready(function() {
 
 $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
     const row = $(this).closest('tr');
-   
+    const performanceId = row.data('performance-id');
+
     let scores = {};
     for (let i = 1; i <= 10; i++) {
         const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
@@ -575,16 +576,24 @@ $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
         scores: scores
     };
 
-    const response = await ajaxCall('POST', 'insert_performance.php', postData);
+    let targetUrl;
+    if (performanceId === 'new') {
+        targetUrl = 'insert_performance.php';
+    } else {
+        postData.performance_id = performanceId;
+        targetUrl = 'update_performance.php';
+    }
+
+    const response = await ajaxCall('POST', targetUrl, postData);
     if (response && response.performance_id) {
         // Update the row with the data returned from the server
         row.attr('data-performance-id', response.performance_id);
         row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
         // If you have any default scores or other fields returned from the server, update them here too
-        } else {
-            alert("There was an error saving the data.");
-        }
-    });
+    } else {
+        alert("There was an error saving the data.");
+    }
+});
 
 $(document).on('keypress', '.saveRow', function(e) {
     if (e.which === 13) {
