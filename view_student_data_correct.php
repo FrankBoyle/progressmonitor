@@ -313,35 +313,38 @@ function calculateTrendline(data) {
 </script>
 
 <script>
-$(document).ready(function() {
+ $(document).ready(function() {
 
-    function isValidDate(d) {
-        return d instanceof Date && !isNaN(d);
+const CURRENT_STUDENT_ID = $('#currentStudentId').val();
+
+function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+}
+
+function convertToDatabaseDate(dateString) {
+    if (!dateString || dateString === "New Entry") return dateString;
+    const [month, day, year] = dateString.split('/');
+    return `${year}-${month}-${day}`;
+}
+
+function convertToDisplayDate(databaseString) {
+    if (!databaseString || databaseString === "New Entry") return databaseString;
+    const [year, month, day] = databaseString.split('-');
+    return `${month}/${day}/${year}`;
+}
+
+async function ajaxCall(type, url, data) {
+    try {
+        const response = await $.ajax({ type, url, data });
+        return response;
+    } catch (error) {
+        console.error('Error during AJAX call:', error);
+        alert('An error occurred. Please try again.');
+        return null;
     }
+}
 
-    function convertToDatabaseDate(dateString) {
-        if (!dateString || dateString === "New Entry") {
-            return dateString;
-        }
-        const parts = dateString.split('/');
-        if (parts.length !== 3) {
-            return dateString;
-        }
-        return `${parts[2]}-${parts[0]}-${parts[1]}`;
-    }
-
-    function convertToDisplayDate(databaseString) {
-        if (!databaseString || databaseString === "New Entry") {
-            return databaseString;
-        }
-        const parts = databaseString.split('-');
-        if (parts.length !== 3) {
-            return databaseString;
-        }
-        return `${parts[1]}/${parts[2]}/${parts[0]}`;  // Convert to mm/dd/yyyy format
-    }
-
-    function attachEditableHandler() {
+function attachEditableHandler() {
         $('.editable').off('click').on('click', function() {
             const cell = $(this);
             const originalValue = cell.text();
@@ -456,183 +459,162 @@ $(document).ready(function() {
         });
     }
 
-    function saveEditedDate(cell, newDate) {
-        const performanceId = cell.closest('tr').data('performance-id');
-        const fieldName = cell.data('field-name');
-        const targetUrl = 'update_performance.php';
-
-        const studentId = $('#currentStudentId').val();
-
-        let postData = {
-            performance_id: performanceId,
-            field_name: fieldName,
-            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
-            student_id: studentId
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: targetUrl,
-            data: postData,
-            success: function(response) {
-                // Assuming your server response contains the saved date under the key 'saved_date'
-                cell.data('saved-date', response.saved_date);
-            },
-            error: function() {
-                // Handle any error here, e.g., show a notification to the user
-                alert("There was an error saving the edited date.");
-            }
-        });
-    }
-
-    attachEditableHandler();
-
-    function updateScoreInDatabase(row, fieldName, newValue) {
-        const performanceId = row.data('performance-id');
-        const studentId = $('#currentStudentId').val();
-        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
-
-    $.ajax({
-        type: 'POST',
-        url: 'update_performance.php',
-        data: {
-            performance_id: performanceId,
-            field_name: fieldName,
-            new_value: newValue,
-            student_id: studentId,
-            week_start_date: weekStartDate
-        },
-        success: function(response) {
-            if (response && !response.success) {
-                //alert("Error updating the average score in the database.");
-            }
-        },
-        error: function() {
-            alert("There was an error updating the average score in the database.");
-        }
-    });
+async function updateDatabase({ performanceId, fieldName, newValue, studentId, weekStartDate, scores }) {
+    const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+    const postData = { performanceId, fieldName, newValue, studentId, weekStartDate, scores };
+    
+    return await ajaxCall('POST', targetUrl, postData);
 }
 
+function getCurrentDate() {
+    const currentDate = new Date();
+    return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+}
 
+function addNewDataRow() {
+    // Check if there's already a "new" row
+    if ($('tr[data-performance-id="new"]').length > 0) {
+        alert("Please save the existing new entry before adding another one.");
+        return;
+    }
 
-    $('#addDataRow').click(function() {
-        // Check if there's already a "new" row
-        if ($('tr[data-performance-id="new"]').length > 0) {
-            alert("Please save the existing new entry before adding another one.");
+    const currentDate = getCurrentDate();
+    const newRow = $("<tr data-performance-id='new'>");
+    newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);  // Set the current date as default
+    for (let i = 1; i <= 10; i++) {
+        newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
+    }
+    newRow.append('<td><button class="saveRow">Save</button></td>');
+    $("table").append(newRow);
+
+    // Automatically trigger saving for the new row's "Week Start Date"
+    newRow.find('td[data-field-name="week_start_date"]').click().blur();
+    // Once you add a row, you should attach the editable handler again to it.
+    attachEditableHandler();
+}
+
+$(document).on('click', '.editable', function() {
+    const cell = $(this);
+    const originalValue = cell.text();
+    const input = $('<input type="text">');
+    input.val(originalValue);
+
+    let datePickerActive = false;
+
+    // If the cell is a date field, apply the datepicker
+    if (cell.data('field-name') === 'week_start_date') {
+        input.datepicker({
+            dateFormat: 'mm/dd/yy',
+            beforeShow: function() {
+                datePickerActive = true;
+            },
+            onClose: function(selectedDate) {
+                if (isValidDate(new Date(selectedDate))) {
+                    cell.text(selectedDate); // Set the selected date
+                    cell.append(input.hide());  // Hide the input to show the cell text
+                    saveEditedDate(cell, selectedDate); // Save the edited date
+                }
+                datePickerActive = false;
+            }
+        });
+        cell.html(input);
+        input.focus();
+    } else {
+        cell.html(input);
+        input.focus();
+    }
+
+    input.blur(function() {
+        if (datePickerActive) {
             return;
         }
 
-        // Your code to add a new row
-        const currentDate = new Date();
-        const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-            currentDate.getDate().toString().padStart(2, '0') + '/' +
-            currentDate.getFullYear();
-        var newRow = $("<tr data-performance-id='new'>");
-        newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
-        for (let i = 1; i <= 10; i++) {
-            newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
-        }
-        $("table").append(newRow);
-
-        // Automatically trigger saving for the new row's "Week Start Date"
-        newRow.find('td[data-field-name="week_start_date"]').click().blur();
-        saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
-
-// Inside the `$('#addDataRow').click` function:
-newRow.append('<td><button class="saveRow">Save</button></td>');
-
-
-        attachEditableHandler();
-    });
-
-    const currentDate = new Date();
-    const formattedDate = (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-        currentDate.getDate().toString().padStart(2, '0') + '/' +
-        currentDate.getFullYear();
-    $('#currentWeekStartDate').val(formattedDate);
-
-    $.ajaxSetup({
-        complete: function(xhr, status) {
-            if (status !== 'success') {
-                const response = xhr.responseJSON || {};
-                const errorMsg = response.error || 'Unknown error';
-                //alert(`There was an issue saving the data: ${errorMsg}`);
-                console.error(`Error response from server:`, response);
-            }
-        }
-    });
-
-    $(document).on('click', '.deleteRow', function() {
-    const row = $(this);  // Capture the button element for later use
-    const performanceId = $(this).data('performance-id');
-    
-    // Confirm before delete
-    if (!confirm('Are you sure you want to delete this row?')) {
-        return;
-    }
-    
-    // Send a request to delete the data from the server
-    $.post('delete_performance.php', {
-        performance_id: performanceId
-    }, function(response) {
-        // Handle the response, e.g., check if the deletion was successful
-        if (response.success) {
-            // Remove the corresponding row from the table
-            row.closest('tr').remove();
+        let newValue = input.val();
+        if (cell.data('field-name') === 'week_start_date') {
+            newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
+            cell.html(convertToDisplayDate(newValue));  // Display in mm/dd/yyyy format
+            saveEditedDate(cell, newValue); // Save the edited date
         } else {
-            alert('Failed to delete data. Please try again.');
+            cell.html(newValue);
         }
-    }, 'json');
-});
 
-$(document).on('click', '.saveRow', function() {
-    const row = $(this).closest('tr');
-    const performanceId = row.data('performance-id');
-    
-    if (performanceId === 'new') {
-        let postData = {
-            performance_id: performanceId,
-            student_id: $('#currentStudentId').val(),
-            week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text())
-        };
-        
-        let scores = {};
-        for (let i = 1; i <= 10; i++) {
-            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-            scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
-        }
-        postData.scores = scores;
+        ???//... your AJAX call to save the new value ...
 
-        $.ajax({
-            type: 'POST',
-            url: 'insert_performance.php',
-            data: postData,
-            success: function(response) {
-                row.attr('data-performance-id', response.performance_id);
-                row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
-                // New code for updating score8 starts here
-                const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
-                const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
-                const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
-                const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
-                
-                const average = (score1 + score2 + score3 + score4) / 4;
-                row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
-                // Update the score8 value in the database
-                updateScoreInDatabase(row, 'score8', average.toFixed(2));
-                // Once saved, you might want to disable the save button or replace it with some other control.
-                row.find('.saveRow').prop('disabled', true);
-            },
-            error: function() {
-                alert("There was an error saving the new row.");
+        // Pressing Enter to save changes
+        input.keypress(function(e) {
+            if (e.which === 13) {
+                input.blur();
             }
         });
+    });
+});
+
+$(document).on('click', '.saveRow', async function() {
+    const row = $(this).closest('tr');
+    const performanceId = row.data('performance-id');
+    const studentId = $('#currentStudentId').val();
+    const weekStartDate = convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text());
+    
+    let scores = {};
+    for (let i = 1; i <= 10; i++) {
+        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+        scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
+    }
+
+    const data = {
+        performance_id: performanceId,
+        student_id: studentId,
+        week_start_date: weekStartDate,
+        scores: scores
+    };
+
+    try {
+        const response = await updateDatabase(data);
+        if (response && response.success) {
+            // Handle the successful response
+            if (performanceId === 'new' && response.performance_id) {
+                row.attr('data-performance-id', response.performance_id);
+            }
+            if (response.saved_date) {
+                row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+            }
+            $(this).prop('disabled', true);  // Optionally, disable the save button after a successful save.
+        } else {
+            alert('Failed to save data. Please try again.');
+        }
+    } catch (error) {
+        console.error("Error updating data:", error);
+        alert('Failed to save data. Please try again.');
     }
 });
 
+async function updateDatabase(data) {
+    const targetUrl = (data.performance_id === 'new') ? 'insert_performance.php' : 'update_performance.php';
+    try {
+        const response = await $.ajax({
+            type: 'POST',
+            url: targetUrl,
+            data: data,
+            dataType: 'json'
+        });
+        return response;
+    } catch (error) {
+        throw new Error("Failed to update database");
+    }
+}
+
+$('#addDataRow').click(addNewDataRow);
+
+// Initialization code
+$('#currentWeekStartDate').val(getCurrentDate());
+attachEditableHandler();
 
 });
+
+
 </script>
+
+
 
 </body>
 </html>
