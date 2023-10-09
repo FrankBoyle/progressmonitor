@@ -462,6 +462,11 @@ $(document).ready(function() {
                     },
                     onClose: function(selectedDate) {
                         if (isValidDate(new Date(selectedDate))) {
+                            if (isDateDuplicate(selectedDate)) {
+                                alert("This date already exists. Please choose a different date.");
+                                cell.html(originalValue); // Revert to the original value
+                                return;
+                            }
                             cell.text(selectedDate);  // Set the selected date
                             cell.append(input.hide());  // Hide the input to show the cell text
                             saveEditedDate(cell, selectedDate); // Save the edited date
@@ -567,6 +572,18 @@ $(document).ready(function() {
                 }
             });
         });
+    }
+
+    function isDateDuplicate(dateString) {
+        let isDuplicate = false;
+        $('tr[data-performance-id]').each(function() {
+            const weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
+            if (dateString === weekStartDate) {
+                isDuplicate = true;
+                return false; // Break out of the .each loop
+            }
+        });
+        return isDuplicate;
     }
 
     $('#addDataRow').off('click').click(function() {
