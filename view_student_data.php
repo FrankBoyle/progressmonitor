@@ -486,32 +486,26 @@ $(document).ready(function() {
             }
 
             input.blur(function() {
-                if (datePickerActive) {
-                    return;
-                }
+    if (datePickerActive) {
+        return;
+    }
 
-                let newValue = input.val();
-                cell.html(newValue);
-                const performanceId = cell.closest('tr').data('performance-id');
-    
-                // Check if it's a new row. If so, just return and don't do any AJAX call. 
-                if (performanceId === 'new') {
-                    return;
-                }
+    let newValue = input.val();
 
-                if (cell.data('field-name') === 'week_start_date') {
-                    const parts = newValue.split('/');
-                    if (parts.length !== 3) {
-                        cell.html(originalValue);
-                        return;
-                    }
-                    // Save the new value for the database but display the original mm/dd/yyyy format to the user
-                    cell.html(newValue);  // The selected value from datepicker is already in mm/dd/yyyy format, so just display it
-                    newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
-                    saveEditedDate(cell, newValue); // Save the edited date
-                } else {
-                    cell.html(newValue);
-                }
+    if (cell.data('field-name') === 'week_start_date') {
+        const currentPerformanceId = cell.closest('tr').data('performance-id');
+        if (isDateDuplicate(newValue, currentPerformanceId)) {
+            alert("This date already exists. Please choose a different date.");
+            cell.html(originalValue);
+            return;
+        }
+
+        cell.html(newValue);
+        newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
+        saveEditedDate(cell, newValue); // Save the edited date
+    } else {
+        cell.html(newValue);
+    }
 
                 //const performanceId = cell.closest('tr').data('performance-id');
                 const fieldName = cell.data('field-name');
