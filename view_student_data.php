@@ -461,21 +461,20 @@ $(document).ready(function() {
                         datePickerActive = true;
                     },
 
-onClose: function(selectedDate) {
-    if (isValidDate(new Date(selectedDate))) {
-        const currentPerformanceId = cell.closest('tr').data('performance-id');
-        if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-            alert("This date already exists. Please choose a different date.");
-            cell.html(originalValue); // Revert to the original value
-            return;
-        }
-        cell.text(selectedDate);  // Set the selected date
-        cell.append(input.hide());  // Hide the input to show the cell text
-        saveEditedDate(cell, selectedDate); // Save the edited date
-    }
-    datePickerActive = false;
-}
-
+                    onClose: function(selectedDate) {
+                        if (isValidDate(new Date(selectedDate))) {
+                            const currentPerformanceId = cell.closest('tr').data('performance-id');
+                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+                                alert("This date already exists. Please choose a different date.");
+                                cell.html(originalValue); // Revert to the original value
+                                return;
+                            }
+                            cell.text(selectedDate);  // Set the selected date
+                            cell.append(input.hide());  // Hide the input to show the cell text
+                            saveEditedDate(cell, selectedDate); // Save the edited date
+                        }
+                        datePickerActive = false;
+                    }
 
                 });
                 cell.html(input);
