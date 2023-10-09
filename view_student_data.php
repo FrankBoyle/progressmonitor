@@ -460,7 +460,6 @@ $(document).ready(function() {
                     beforeShow: function() {
                         datePickerActive = true;
                     },
-
                     onClose: function(selectedDate) {
                         if (isValidDate(new Date(selectedDate))) {
                             const currentPerformanceId = cell.closest('tr').data('performance-id');
@@ -474,7 +473,8 @@ $(document).ready(function() {
                             saveEditedDate(cell, selectedDate); // Save the edited date
                         }
                         datePickerActive = false;
-                    }
+                }
+
 
                 });
                 cell.html(input);
