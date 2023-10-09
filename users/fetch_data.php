@@ -39,7 +39,7 @@ function fetchStudentsByTeacher($teacherId) {
     return $stmt->fetchAll();
 }
 
-function addNewStudent($studentName, $teacherId) {
+function addNewStudent($studentName, $teacherId, $weekStartDate) {
     global $connection;
 
     // Fetch the SchoolID of the current teacher
@@ -55,11 +55,20 @@ function addNewStudent($studentName, $teacherId) {
 
     if ($duplicateStudent) {
         return "Student with the same name already exists.";
-    } 
+    }
+
+    // Check if a student with the same week start date already exists
+    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE week_start_date = ?");
+    $stmt->execute([$weekStartDate]);
+    $duplicateDateStudent = $stmt->fetch();
+
+    if ($duplicateDateStudent) {
+        return "A student with the same week start date already exists.";
+    }
 
     // Insert the new student with the same SchoolID
-    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
-    $stmt->execute([$studentName, $teacherSchoolID]);
+    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID, week_start_date) VALUES (?, ?, ?)");
+    $stmt->execute([$studentName, $teacherSchoolID, $weekStartDate]);
     return "New student added successfully.";
 }
 
