@@ -576,15 +576,15 @@ $(document).ready(function() {
 
     function isDateDuplicate(dateString) {
         let isDuplicate = false;
-        $('tr[data-performance-id]').each(function() {
-            const weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
-            if (dateString === weekStartDate) {
+        $('table').find('td[data-field-name="week_start_date"]').each(function() {
+            if ($(this).text() === dateString) {
                 isDuplicate = true;
                 return false; // Break out of the .each loop
             }
         });
         return isDuplicate;
     }
+
 
     $('#addDataRow').off('click').click(function() {
         // Check for an existing "new" row
