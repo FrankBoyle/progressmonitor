@@ -492,6 +492,7 @@ $(document).ready(function() {
 
     let newValue = input.val();
 
+    // Check for duplicate date if the cell being edited is the date field
     if (cell.data('field-name') === 'week_start_date') {
         const currentPerformanceId = cell.closest('tr').data('performance-id');
         if (isDateDuplicate(newValue, currentPerformanceId)) {
@@ -500,36 +501,42 @@ $(document).ready(function() {
             return;
         }
 
-        cell.html(newValue);
+        const parts = newValue.split('/');
+        if (parts.length !== 3) {
+            cell.html(originalValue);
+            return;
+        }
+        // Save the new value for the database but display the original mm/dd/yyyy format to the user
+        cell.html(newValue);  // The selected value from datepicker is already in mm/dd/yyyy format, so just display it
         newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
         saveEditedDate(cell, newValue); // Save the edited date
     } else {
         cell.html(newValue);
     }
 
-                //const performanceId = cell.closest('tr').data('performance-id');
-                const fieldName = cell.data('field-name');
-                const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-                const studentId = $('#currentStudentId').val();
-                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+    const performanceId = cell.closest('tr').data('performance-id');
+    const fieldName = cell.data('field-name');
+    const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+    const studentId = $('#currentStudentId').val();
+    const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
 
-                let postData = {
-                    performance_id: performanceId,
-                    field_name: fieldName,
-                    new_value: newValue,
-                    student_id: studentId,
-                    week_start_date: weekStartDate
-                };
+    let postData = {
+        performance_id: performanceId,
+        field_name: fieldName,
+        new_value: newValue,
+        student_id: studentId,
+        week_start_date: weekStartDate
+    };
 
-                if (performanceId === 'new') {
-                    const row = $(this).closest('tr');
-                    let scores = {};
-                    for (let i = 1; i <= 10; i++) {
-                        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-                        scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
-                    }
-                    postData.scores = scores;
-                }
+    if (performanceId === 'new') {
+        const row = $(this).closest('tr');
+        let scores = {};
+        for (let i = 1; i <= 10; i++) {
+            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+            scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
+        }
+        postData.scores = scores;
+    }
 
                 $.ajax({
                     type: 'POST',
@@ -563,12 +570,12 @@ $(document).ready(function() {
             });
 
             // Pressing Enter to save changes
-            input.off('keypress').keypress(function(e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-                    input.blur();
-                }
-            });
+            //input.off('keypress').keypress(function(e) {
+                //if (e.which === 13) {
+                    //e.preventDefault();
+                    //input.blur();
+                //}
+            //});
         });
     }
 
