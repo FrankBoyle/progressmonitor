@@ -369,7 +369,7 @@ $(document).ready(function() {
             return response;
         } catch (error) {
             console.error('Error during AJAX call:', error);
-            alert('An error occurred. Please try again.');
+            //alert('An error occurred. Please try again.');
             return null;
         }   
     }
