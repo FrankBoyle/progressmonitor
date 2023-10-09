@@ -477,12 +477,12 @@ $(document).ready(function() {
                     },
                     onClose: function(selectedDate) {
                         if (isValidDate(new Date(selectedDate))) {
-                            const currentPerformanceId = cell.closest('tr').data('performance-id');
-                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                alert("This date already exists. Please choose a different date.");
-                                cell.html(originalValue); // Revert to the original value
-                                return;
-                            }
+    const currentPerformanceId = cell.closest('tr').data('performance-id');
+    if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+        alert("This date already exists. Please choose a different date.");
+        cell.html(originalValue); // Revert to the original value
+        return;
+    }
                             cell.text(selectedDate);  // Set the selected date
                             cell.append(input.hide());  // Hide the input to show the cell text
                             saveEditedDate(cell, selectedDate); // Save the edited date
@@ -592,35 +592,6 @@ $(document).ready(function() {
         });
     }
 
-    function standardizeDateFormat(dateString) {
-    if (!dateString) return "";
-
-    const parts = dateString.split(/[-/]/);
-    
-    // If date is in YYYY-MM-DD format
-    if (parts[0].length === 4) {
-        return `${parts[1]}/${parts[2]}/${parts[0]}`;
-    }
-    
-    // If date is already in MM/DD/YYYY or other formats
-    return dateString;
-}
-
-
-    function isDateDuplicate(dateString) {
-        console.log("Checking for duplicate of:", dateString);
-    let isDuplicate = false;
-    $('table').find('td[data-field-name="week_start_date"]').each(function() {
-        if ($(this).text() === dateString) {
-            isDuplicate = true;
-            return false; // Break out of the .each loop
-        }
-    });
-    return isDuplicate;
-}
-
-
-
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
     if ($('tr[data-performance-id="new"]').length) {
@@ -629,12 +600,10 @@ $('#addDataRow').off('click').click(function() {
     }
     
     const currentDate = getCurrentDate();
-    const standardizedDate = standardizeDateFormat(currentDate);
-
-    if (isDateDuplicate(standardizedDate)) {
-        alert("An entry for this date already exists. Please choose a different date.");
-        return;
-    }
+if (isDateDuplicate(currentDate)) {
+    alert("An entry for this date already exists. Please choose a different date.");
+    return;
+}
         const newRow = $("<tr data-performance-id='new'>");
         newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);
         
