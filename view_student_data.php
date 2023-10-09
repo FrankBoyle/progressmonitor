@@ -460,20 +460,21 @@ $(document).ready(function() {
                     beforeShow: function() {
                         datePickerActive = true;
                     },
+
                     onClose: function(selectedDate) {
-                        if (isValidDate(new Date(selectedDate))) {
-                            const currentPerformanceId = cell.closest('tr').data('performance-id');
-                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                alert("This date already exists. Please choose a different date.");
-                                cell.html(originalValue); // Revert to the original value
-                                return;
-                            }
-                            cell.text(selectedDate);  // Set the selected date
-                            cell.append(input.hide());  // Hide the input to show the cell text
-                            saveEditedDate(cell, selectedDate); // Save the edited date
-                        }
-                        datePickerActive = false;
-                    }
+    if (isValidDate(new Date(selectedDate))) {
+        if (isDateDuplicate(selectedDate, cell.closest('tr'))) {
+            alert("This date already exists. Please choose a different date.");
+            cell.html(originalValue); // Revert to the original value
+            return;
+        }
+        cell.text(selectedDate);  // Set the selected date
+        cell.append(input.hide());  // Hide the input to show the cell text
+        saveEditedDate(cell, selectedDate); // Save the edited date
+    }
+    datePickerActive = false;
+}
+
 
 
                 });
@@ -484,12 +485,17 @@ $(document).ready(function() {
                 input.focus();
             }
 
-            input.blur(function() {
-                if (datePickerActive) {
-                    return;
-                }
+input.blur(function() {
+    if (datePickerActive) {
+        return;
+    }
 
-                let newValue = input.val();
+    let newValue = input.val();
+    if (cell.data('field-name') === 'week_start_date' && isDateDuplicate(newValue, cell.closest('tr'))) {
+        alert("This date already exists. Please choose a different date.");
+        cell.html(originalValue);
+        return;
+    }
                 cell.html(newValue);
                 const performanceId = cell.closest('tr').data('performance-id');
     
@@ -577,17 +583,20 @@ $(document).ready(function() {
         });
     }
 
-    function isDateDuplicate(dateString, excludeId) {
+    function isDateDuplicate(dateString, excludeRow) {
     let isDuplicate = false;
     $('table').find('td[data-field-name="week_start_date"]').each(function() {
-        const performanceId = $(this).closest('tr').data('performance-id');
-        if ($(this).text() === dateString && performanceId !== excludeId) {
+        if (excludeRow && $(this).closest('tr').is(excludeRow)) {
+            return true; // continue to the next iteration
+        }
+        if ($(this).text() === dateString) {
             isDuplicate = true;
-            return false; // Break out of the .each loop
+            return false; // exit the loop
         }
     });
     return isDuplicate;
 }
+
 
 
     $('#addDataRow').off('click').click(function() {
