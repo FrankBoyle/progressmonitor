@@ -246,7 +246,7 @@ function getChartOptions(dataSeries, xCategories) {
             colors: undefined,
             strokeColors: '#fff',
             strokeWidth: 3,
-            strokeOpacity: 0.9,
+            strokeOpacity: 1.0,
             strokeDashArray: 0,
             fillOpacity: 1,
             discrete: [],
@@ -446,7 +446,7 @@ $(document).ready(function() {
     }
 
     function attachEditableHandler() {
-        $('table').on('click', '.editable', function() {
+        $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
             const cell = $(this);
             const originalValue = cell.text();
             const input = $('<input type="text">');
