@@ -473,7 +473,7 @@ $(document).ready(function() {
                             saveEditedDate(cell, selectedDate); // Save the edited date
                         }
                         datePickerActive = false;
-                    }
+}
 
 
                 });
