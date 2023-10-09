@@ -577,6 +577,21 @@ $(document).ready(function() {
         });
     }
 
+    function standardizeDateFormat(dateString) {
+    if (!dateString) return "";
+
+    const parts = dateString.split(/[-/]/);
+    
+    // If date is in YYYY-MM-DD format
+    if (parts[0].length === 4) {
+        return `${parts[1]}/${parts[2]}/${parts[0]}`;
+    }
+    
+    // If date is already in MM/DD/YYYY or other formats
+    return dateString;
+}
+
+
     function isDateDuplicate(dateString) {
         console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
@@ -599,7 +614,9 @@ $('#addDataRow').off('click').click(function() {
     }
     
     const currentDate = getCurrentDate();
-    if (isDateDuplicate(currentDate)) {
+    const standardizedDate = standardizeDateFormat(currentDate);
+
+    if (isDateDuplicate(standardizedDate)) {
         alert("An entry for this date already exists. Please choose a different date.");
         return;
     }
