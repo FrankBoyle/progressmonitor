@@ -460,20 +460,21 @@ $(document).ready(function() {
                     beforeShow: function() {
                         datePickerActive = true;
                     },
-                        onClose: function(selectedDate) {
-                            if (isValidDate(new Date(selectedDate))) {
-                                const currentPerformanceId = cell.closest('tr').data('performance-id');
-                                if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                    alert("This date already exists. Please choose a different date.");
-                                    cell.html(originalValue); // Revert to the original value
-                                    return;
-                                }
+                    onClose: function(selectedDate) {
+                        if (isValidDate(new Date(selectedDate))) {
+                            const currentPerformanceId = cell.closest('tr').data('performance-id');
+                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+                                alert("This date already exists. Please choose a different date.");
+                                cell.html(originalValue); // Revert to the original value
+                                return;
+                            }
                             cell.text(selectedDate);  // Set the selected date
                             cell.append(input.hide());  // Hide the input to show the cell text
                             saveEditedDate(cell, selectedDate); // Save the edited date
                         }
                         datePickerActive = false;
                     }
+
 
                 });
                 cell.html(input);
@@ -580,14 +581,13 @@ $(document).ready(function() {
     let isDuplicate = false;
     $('table').find('td[data-field-name="week_start_date"]').each(function() {
         const performanceId = $(this).closest('tr').data('performance-id');
-        if ($(this).text() === dateString && (!excludeId || performanceId !== excludeId)) {
+        if ($(this).text() === dateString && performanceId !== excludeId) {
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
     });
     return isDuplicate;
 }
-
 
 
     $('#addDataRow').off('click').click(function() {
