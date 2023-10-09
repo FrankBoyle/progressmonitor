@@ -591,18 +591,18 @@ $(document).ready(function() {
 
 
 
-    $('#addDataRow').off('click').click(function() {
-        // Check for an existing "new" row
-        if ($('tr[data-performance-id="new"]').length) {
-            alert("Please save the existing new entry before adding another one.");
-            return;
-        }
-        
-        const currentDate = getCurrentDate();
-        if (isDateDuplicate(currentDate)) {
-            alert("An entry for this date already exists. Please choose a different date.");
-            return;
-        }
+$('#addDataRow').off('click').click(function() {
+    // Check for an existing "new" row
+    if ($('tr[data-performance-id="new"]').length) {
+        alert("Please save the existing new entry before adding another one.");
+        return;
+    }
+    
+    const currentDate = getCurrentDate();
+    if (isDateDuplicate(currentDate)) {
+        alert("An entry for this date already exists. Please choose a different date.");
+        return;
+    }
         const newRow = $("<tr data-performance-id='new'>");
         newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);
         
@@ -640,6 +640,11 @@ $(document).ready(function() {
             week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text()),
             scores: scores
         };
+
+        if (isDateDuplicate(postData.week_start_date)) {
+        alert("An entry for this date already exists. Please choose a different date.");
+        return;
+    }
 
         const response = await ajaxCall('POST', 'insert_performance.php', postData);
         if (response && response.performance_id) {
