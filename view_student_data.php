@@ -461,7 +461,7 @@ $(document).ready(function() {
                         datePickerActive = true;
                     },
 
-                    onClose: function(selectedDate) {
+onClose: function(selectedDate) {
     if (isValidDate(new Date(selectedDate))) {
         const currentPerformanceId = cell.closest('tr').data('performance-id');
         if (isDateDuplicate(selectedDate, currentPerformanceId)) {
@@ -569,12 +569,12 @@ $(document).ready(function() {
             });
 
             // Pressing Enter to save changes
-            //input.off('keypress').keypress(function(e) {
-                //if (e.which === 13) {
-                    //e.preventDefault();
-                    //input.blur();
-                //}
-            //});
+            input.off('keypress').keypress(function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    input.blur();
+                }
+            });
         });
     }
 
