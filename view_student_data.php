@@ -460,8 +460,7 @@ $(document).ready(function() {
                     beforeShow: function() {
                         datePickerActive = true;
                     },
-
-                    onClose: function(selectedDate) {
+onClose: function(selectedDate) {
     if (isValidDate(new Date(selectedDate))) {
         if (isDateDuplicate(selectedDate, cell.closest('tr'))) {
             alert("This date already exists. Please choose a different date.");
@@ -485,17 +484,12 @@ $(document).ready(function() {
                 input.focus();
             }
 
-input.blur(function() {
-    if (datePickerActive) {
-        return;
-    }
+            input.blur(function() {
+                if (datePickerActive) {
+                    return;
+                }
 
-    let newValue = input.val();
-    if (cell.data('field-name') === 'week_start_date' && isDateDuplicate(newValue, cell.closest('tr'))) {
-        alert("This date already exists. Please choose a different date.");
-        cell.html(originalValue);
-        return;
-    }
+                let newValue = input.val();
                 cell.html(newValue);
                 const performanceId = cell.closest('tr').data('performance-id');
     
