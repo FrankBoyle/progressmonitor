@@ -445,6 +445,21 @@ $(document).ready(function() {
         });
     }
 
+    function isDateDuplicate(dateString, performanceId = null) {
+    console.log("Checking for duplicate of:", dateString);
+    let isDuplicate = false;
+    $('table').find('td[data-field-name="week_start_date"]').each(function() {
+        if (performanceId && $(this).closest('tr').data('performance-id') == performanceId) {
+            return true; // Continue to the next iteration for the current performance id
+        }
+        if ($(this).text() === dateString) {
+            isDuplicate = true;
+            return false; // Break out of the .each loop
+        }
+    });
+    return isDuplicate;
+}
+
     function attachEditableHandler() {
         $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
             const cell = $(this);
