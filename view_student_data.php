@@ -581,13 +581,14 @@ $(document).ready(function() {
     let isDuplicate = false;
     $('table').find('td[data-field-name="week_start_date"]').each(function() {
         const performanceId = $(this).closest('tr').data('performance-id');
-        if ($(this).text() === dateString && performanceId !== excludeId) {
+        if ($(this).text() === dateString && (!excludeId || performanceId !== excludeId)) {
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
     });
     return isDuplicate;
 }
+
 
 
     $('#addDataRow').off('click').click(function() {
