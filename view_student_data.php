@@ -590,7 +590,6 @@ $(document).ready(function() {
 }
 
 
-
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
     if ($('tr[data-performance-id="new"]').length) {
