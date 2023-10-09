@@ -577,17 +577,18 @@ $(document).ready(function() {
         });
     }
 
-    function isDateDuplicate(dateString, excludeId) {
+    function isDateDuplicate(dateString) {
+        console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
     $('table').find('td[data-field-name="week_start_date"]').each(function() {
-        const performanceId = $(this).closest('tr').data('performance-id');
-        if ($(this).text() === dateString && (!excludeId || performanceId !== excludeId)) {
+        if ($(this).text() === dateString) {
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
     });
     return isDuplicate;
 }
+
 
 
 $('#addDataRow').off('click').click(function() {
