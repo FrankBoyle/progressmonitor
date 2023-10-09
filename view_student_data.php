@@ -445,20 +445,21 @@ $(document).ready(function() {
         });
     }
 
-    function isDateDuplicate(dateString, performanceId = null) {
+    function isDateDuplicate(dateString, currentPerformanceId = null) {
     console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
     $('table').find('td[data-field-name="week_start_date"]').each(function() {
-        if (performanceId && $(this).closest('tr').data('performance-id') == performanceId) {
-            return true; // Continue to the next iteration for the current performance id
-        }
-        if ($(this).text() === dateString) {
+        const cellDate = $(this).text();
+        const performanceId = $(this).closest('tr').data('performance-id');
+        if (cellDate === dateString && performanceId !== currentPerformanceId) {
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
     });
     return isDuplicate;
 }
+
+
 
     function attachEditableHandler() {
         $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
@@ -476,19 +477,20 @@ $(document).ready(function() {
                         datePickerActive = true;
                     },
                     onClose: function(selectedDate) {
-                        if (isValidDate(new Date(selectedDate))) {
-    const currentPerformanceId = cell.closest('tr').data('performance-id');
-    if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-        alert("This date already exists. Please choose a different date.");
-        cell.html(originalValue); // Revert to the original value
-        return;
+    if (isValidDate(new Date(selectedDate))) {
+        const currentPerformanceId = cell.closest('tr').data('performance-id');
+        if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+            alert("This date already exists. Please choose a different date.");
+            cell.html(originalValue); // Revert to the original value
+            return;
+        }
+        cell.text(selectedDate);  // Set the selected date
+        cell.append(input.hide());  // Hide the input to show the cell text
+        saveEditedDate(cell, selectedDate); // Save the edited date
     }
-                            cell.text(selectedDate);  // Set the selected date
-                            cell.append(input.hide());  // Hide the input to show the cell text
-                            saveEditedDate(cell, selectedDate); // Save the edited date
-                        }
-                        datePickerActive = false;
-                }
+    datePickerActive = false;
+}
+
 
 
                 });
