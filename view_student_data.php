@@ -653,7 +653,7 @@ $('#addDataRow').off('click').click(function() {
             row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
             // If you have any default scores or other fields returned from the server, update them here too
             } else {
-                alert("There was an error saving the data.");
+                //alert("There was an error saving the data.");
             }
         });
 
