@@ -386,23 +386,14 @@ async function saveEditedDate(cell, newDate) {
 
     const response = await ajaxCall('POST', 'update_performance.php', postData);
 
-    if (response) {
-    if (response.success) {
-        if (response.saved_date) {
-            cell.data('saved-date', response.saved_date);
-        } // You might want to handle other successful scenarios here if necessary.
+    if (response && response.error && response.error === 'Duplicate date not allowed') {
+        alert("Duplicate date not allowed!");
+        cell.html(cell.data('saved-date') || '');  // Revert the cell's content back to the previously saved date or empty string if there's no saved date.
+    } else if (response && response.saved_date) {
+        cell.data('saved-date', response.saved_date);
     } else {
-        if (response.error) {
-            alert(response.error); // This will show 'Duplicate date not allowed' or other error messages.
-        } else {
-            alert('An unknown error occurred.');
-        }
-        // Revert the cell's content back to the previously saved date or empty string if there's no saved date.
-        cell.html(cell.data('saved-date') || ''); 
+        alert('An error occurred. Please try again.');
     }
-} else {
-    alert('No response from server. Please try again.');
-}
 }
 
 
