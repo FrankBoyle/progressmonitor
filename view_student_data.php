@@ -375,7 +375,7 @@ $(document).ready(function() {
         alert(errorData.error || 'An error occurred. Please try again.');
     } catch (e) {
         // Non-JSON response
-        alert('An unexpected server error occurred. Please try again.');
+        //alert('An unexpected server error occurred. Please try again.');
     }
 } else {
     alert('An unknown error occurred. Please try again.');
