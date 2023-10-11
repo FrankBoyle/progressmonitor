@@ -2,6 +2,8 @@
 // Include the database connection script
 include('./users/db.php');
 
+header('Content-Type: application/json');
+
 // Function to log errors server-side
 function logError($error) {
     // Log error to a file (Ensure your server has write permissions for this file)
