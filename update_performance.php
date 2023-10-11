@@ -24,7 +24,7 @@ if ($fieldName === 'week_start_date') {
     $checkStmt->execute([$studentId, $newValue, $performanceId]);
 
     if ($checkStmt->fetchColumn() > 0) {
-        handleError("An entry for this date already exists for this student.");
+        handleError("Duplicate date not allowed");
         exit;
     }
 
