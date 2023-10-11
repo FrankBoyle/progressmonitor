@@ -29,7 +29,8 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    
+    fetchGroups();
+
     // Function to fetch groups and populate the dropdown
     function fetchGroups() {
         $.ajax({
@@ -37,9 +38,9 @@ $(document).ready(function() {
             method: 'GET',
             dataType: 'json',
             success: function(groups) {
-                let dropdown = $('#scoreGroupDropdown');
+                let dropdown = $('#groupSelector'); // Assuming your dropdown has the ID "groupSelector"
                 dropdown.empty(); // Clear existing options
-                
+    
                 groups.forEach(function(group) {
                     dropdown.append($('<option>', {
                         value: group,
@@ -52,6 +53,7 @@ $(document).ready(function() {
             }
         });
     }
+    
 
     // Call the fetchGroups function to populate the dropdown on page load
     fetchGroups();
@@ -69,6 +71,8 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
+    fetchGroups();
+
     $('#groupSelector').on('change', function() {
         const selectedGroup = $(this).val();
 
@@ -317,6 +321,7 @@ function calculateTrendline(data) {
 
 
 $(document).ready(function() {
+    fetchGroups();
 
     function getCurrentDate() {
         const currentDate = new Date();
