@@ -25,7 +25,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
         $count = $checkStmt->fetchColumn();
     
         if ($count > 0) {
-            handleError("An entry for this date already exists for this student.");
+            handleError("Duplicate date not allowed!");
             return;
         }
         
