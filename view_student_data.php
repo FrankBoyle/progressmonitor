@@ -368,8 +368,18 @@ $(document).ready(function() {
         });
         return response;
     } catch (error) {
-        console.error('Error during AJAX call:', error);
-        return error.responseJSON;  // Return the parsed JSON error message
+    console.error('Error during AJAX call:', error);
+
+    // Check if responseJSON is available
+    if (error.responseJSON) {
+        console.error('Server JSON response:', error.responseJSON);
+        return error.responseJSON;
+    } else if (error.responseText) {
+        console.error('Server response text:', error.responseText);
+        return { error: 'An unexpected error occurred. Please check the server logs.' };
+    } else {
+        console.error('Unknown error:', error);
+        return { error: 'An unknown error occurred. Please check the server logs.' };
     }
 }
 
