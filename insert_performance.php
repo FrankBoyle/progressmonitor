@@ -30,7 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $stmt = $connection->prepare("INSERT INTO Performance (student_id, week_start_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
+        $checkStmt->execute([$studentId, $weekStartDate]);
+        $count = $checkStmt->fetchColumn();
+        
+        if ($count > 0) {
+            $responseData['error'] = 'An entry for this date already exists for this student.';
+            echo json_encode($responseData);
+            exit;
+        }
+        
         if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
             $newPerformanceId = $connection->lastInsertId();
             $responseData = [

@@ -20,6 +20,15 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
 
     // Validate and sanitize the date input (assuming it's for the 'week_start_date' field)
     if ($fieldName === 'week_start_date') {
+        $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND week_start_date = ? AND performance_id != ?");
+        $checkStmt->execute([$studentId, $newValue, $performanceId]); // Ensure to grab the $studentId in this script too.
+        $count = $checkStmt->fetchColumn();
+    
+        if ($count > 0) {
+            handleError("An entry for this date already exists for this student.");
+            return;
+        }
+        
         // Inside the `if ($fieldName === 'week_start_date') { ... }` block:
         $newDate = date_create_from_format('Y-m-d', $newValue);
         if (!$newDate) {

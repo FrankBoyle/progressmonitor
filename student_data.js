@@ -281,11 +281,11 @@ $(document).ready(function() {
         } catch (error) {
             console.error('Error during AJAX call:', error);
             //alert('An error occurred. Please try again.');
-            return null;
+            return error.responseJSON;  // Return the parsed JSON error message
         }   
     }
 
-    function saveEditedDate(cell, newDate) {
+    async function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
@@ -295,13 +295,19 @@ $(document).ready(function() {
             new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
             student_id: studentId
         };
-
-        ajaxCall('POST', 'update_performance.php', postData).then(response => {
-            if (response && response.saved_date) {
-                cell.data('saved-date', response.saved_date);
-            }
-        });
+    
+        const response = await ajaxCall('POST', 'update_performance.php', postData);
+    
+        if (response && response.error && response.error === 'An entry for this date already exists for this student.') {
+            alert("Duplicate date not allowed!");
+            cell.html(cell.data('saved-date') || '');  // Revert the cell's content back to the previously saved date or empty string if there's no saved date.
+        } else if (response && response.saved_date) {
+            cell.data('saved-date', response.saved_date);
+        } else {
+            alert('An error occurred. Please try again.');
+        }
     }
+    
 
     let dateAscending = true; // to keep track of current order
 
