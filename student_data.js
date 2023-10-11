@@ -56,7 +56,7 @@ $(document).ready(function() {
     
 
     // Call the fetchGroups function to populate the dropdown on page load
-    fetchGroups();
+    //fetchGroups();
 
     // Event handler for when an option is selected from the dropdown
     $('#scoreGroupDropdown').on('change', function() {
