@@ -5,30 +5,28 @@ error_reporting(E_ALL);
 
 include('./users/db.php');  // Include the database connection
 
-header('Content-Type: application/json');
-
 // Main logic
-if (!isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
-    handleError("Invalid data provided.");
-    exit;
-}
+if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
+    $performanceId = $_POST['performance_id'];
+    $fieldName = $_POST['field_name'];
+    $newValue = $_POST['new_value'];
 
-$performanceId = $_POST['performance_id'];
-$fieldName = $_POST['field_name'];
-$newValue = $_POST['new_value'];
-$studentId = $_POST['student_id'] ?? null;
+    // If the field being updated is one of the score fields and the value is empty, set it to NULL.
+    if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'])) {
+        if ($newValue === '' || !isset($newValue)) {
+            $newValue = NULL;
+        }
+    }
 
-if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10']) && ($newValue === '' || !isset($newValue))) {
-    $newValue = NULL;
-}
-
-if ($fieldName === 'week_start_date') {
-    $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND week_start_date = ? AND performance_id != ?");
-    $checkStmt->execute([$studentId, $newValue, $performanceId]);
-
-    if ($checkStmt->fetchColumn() > 0) {
-        handleError("Duplicate date not allowed");
-        exit;
+    // Validate and sanitize the date input (assuming it's for the 'week_start_date' field)
+    if ($fieldName === 'week_start_date') {
+        // Inside the `if ($fieldName === 'week_start_date') { ... }` block:
+        $newDate = date_create_from_format('Y-m-d', $newValue);
+        if (!$newDate) {
+            handleError("Invalid date format received. Expected 'Y-m-d' format but received: " . $newValue);
+            return;
+        }
+        $newValue = date_format($newDate, 'Y-m-d');
     }
 
     updatePerformance($connection, $performanceId, $fieldName, $newValue);  
@@ -77,7 +75,6 @@ function sendResponse($response) {
     exit;
 }
 ?>
-
 
 
 
