@@ -67,8 +67,16 @@ function fetchGroupNames() {
     global $connection;
     $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+    $stmt->bindColumn(1, $groupName);
+    
+    $groups = [];
+    while ($stmt->fetch(PDO::FETCH_BOUND)) {
+        $groups[] = $groupName;
+    }
+    
+    return $groups;
 }
+
 
 // Initialize empty arrays and variables
 $performanceData = [];
