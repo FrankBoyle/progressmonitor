@@ -382,6 +382,7 @@ $(document).ready(function() {
         return { error: 'An unknown error occurred. Please check the server logs.' };
     }
 }
+}
 
 async function saveEditedDate(cell, newDate) {
     const performanceId = cell.closest('tr').data('performance-id');
