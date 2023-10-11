@@ -33,7 +33,7 @@ $(document).ready(function() {
     // Function to fetch groups and populate the dropdown
     function fetchGroups() {
         $.ajax({
-            url: 'fetch_data.php?action=fetchGroups',
+            url: './users/fetch_data.php?action=fetchGroups',
             method: 'GET',
             dataType: 'json',
             success: function(groups) {
