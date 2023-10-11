@@ -240,6 +240,7 @@ function calculateTrendline(data) {
     };
 }
 
+
 $(document).ready(function() {
 
     function getCurrentDate() {
@@ -268,45 +269,39 @@ $(document).ready(function() {
     }
 
     async function ajaxCall(type, url, data) {
-    try {
-        const response = await $.ajax({
-            type: type,
-            url: url,
-            data: data,
-            dataType: 'json',
-            cache: false,
-        });
-        return response;
-    } catch (error) {
-        console.error('Error during AJAX call:', error);
-        return error.responseJSON;  // Return the parsed JSON error message
+        try {
+            const response = await $.ajax({
+                type: type,
+                url: url,
+                data: data,
+                dataType: 'json',  // Expecting server to return JSON
+                cache: false,      // Don't cache results (especially important for POST requests)
+            });
+            return response;
+        } catch (error) {
+            console.error('Error during AJAX call:', error);
+            //alert('An error occurred. Please try again.');
+            return null;
+        }   
     }
-}
 
-async function saveEditedDate(cell, newDate) {
-    const performanceId = cell.closest('tr').data('performance-id');
-    const fieldName = cell.data('field-name');
-    const studentId = CURRENT_STUDENT_ID;
-    const postData = {
-        performance_id: performanceId,
-        field_name: fieldName,
-        new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
-        student_id: studentId
-    };
+    function saveEditedDate(cell, newDate) {
+        const performanceId = cell.closest('tr').data('performance-id');
+        const fieldName = cell.data('field-name');
+        const studentId = CURRENT_STUDENT_ID;
+        const postData = {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+            student_id: studentId
+        };
 
-    const response = await ajaxCall('POST', 'update_performance.php', postData);
-
-    if (response && response.error && response.error === 'Duplicate date not allowed') {
-    alert("Duplicate date not allowed!");
-    cell.html(cell.data('saved-date') || '');  // Revert the cell's content back to the previously saved date or empty string if there's no saved date.
-} else if (response && response.saved_date) {
-    cell.data('saved-date', response.saved_date);
-} else {
-    alert('An error occurred. Please try again.');
-}
-
-}
-
+        ajaxCall('POST', 'update_performance.php', postData).then(response => {
+            if (response && response.saved_date) {
+                cell.data('saved-date', response.saved_date);
+            }
+        });
+    }
 
     let dateAscending = true; // to keep track of current order
 
@@ -355,17 +350,10 @@ async function saveEditedDate(cell, newDate) {
         };
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
-    console.log(response); // <-- This is the debug line. 
-
-    if (response && response.error && response.error === 'Duplicate date not allowed') {
-        alert("Duplicate date not allowed!");
-        cell.html(cell.data('saved-date') || '');  
-    } else if (response && response.saved_date) {
-        cell.data('saved-date', response.saved_date);
-    } else {
-        alert('An error occurred. Please try again.');
-    }
-});
+            if (response && !response.success) {
+                alert('Error updating the average score in the database.');
+            }
+        });
     }
 
     function isDateDuplicate(dateString, currentPerformanceId = null) {
@@ -573,9 +561,7 @@ if (isDateDuplicate(currentDate)) {
     }
 
         const response = await ajaxCall('POST', 'insert_performance.php', postData);
-        if (response && response.error && response.error === 'Duplicate date not allowed') {
-            alert("Duplicate date not allowed!");
-        } else if (response && response.performance_id) {
+        if (response && response.performance_id) {
             // Update the row with the data returned from the server
             row.attr('data-performance-id', response.performance_id);
             row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
