@@ -445,10 +445,17 @@ async function saveEditedDate(cell, newDate) {
         };
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
-            if (response && !response.success) {
-                alert('Error updating the average score in the database.');
-            }
-        });
+    console.log(response); // <-- This is the debug line. 
+
+    if (response && response.error && response.error === 'Duplicate date not allowed') {
+        alert("Duplicate date not allowed!");
+        cell.html(cell.data('saved-date') || '');  
+    } else if (response && response.saved_date) {
+        cell.data('saved-date', response.saved_date);
+    } else {
+        alert('An error occurred. Please try again.');
+    }
+});
     }
 
     function isDateDuplicate(dateString, currentPerformanceId = null) {
