@@ -87,6 +87,14 @@ $(document).ready(function() {
     });
 });
 
+$(document).ready(function() {
+    $('#groupSelector').on('change', function() {
+        const selectedGroup = $(this).val();
+
+        // Call a function to update the chart's visibility based on the selected group
+        updateChartVisibility(selectedGroup);
+    });
+});
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
