@@ -22,7 +22,7 @@
 
 <?php include('./users/fetch_data.php'); ?>
 
-<a href="test.php" class="btn btn-primary">HOME</a>
+<a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
