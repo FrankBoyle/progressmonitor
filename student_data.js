@@ -53,37 +53,18 @@ $(document).ready(function() {
         });
     }
 
-    function fetchDataForGroup(selectedGroup) {
-        $.ajax({
-            url: 'fetch_data.php',
-            method: 'GET',
-            data: { group: selectedGroup },  // This will send the selected group to the server.
-            dataType: 'json',
-            success: function(data) {
-                // Here you handle and display the data. 
-                // For instance, if the data was a list of scores, you might display them in a table or list.
-                // Just as an example:
-                let list = $("#dataList");
-                list.empty();
-                data.forEach(function(item) {
-                    list.append('<li>' + item + '</li>');
-                });
-            },
-            error: function(err) {
-                console.error('Failed to fetch data for group', err);
-            }
-        });
-    }
-
     // Call the fetchGroups function to populate the dropdown on page load
     fetchGroups();
 
     // Event handler for when an option is selected from the dropdown
     $('#scoreGroupDropdown').on('change', function() {
         let selectedValue = $(this).val();
-        
+
         // Fetch data for the selected group
         fetchDataForGroup(selectedValue);
+
+        // Call a function to update the chart's visibility based on the selected group
+        updateChartVisibility(selectedValue);
     });
 });
 
@@ -95,6 +76,29 @@ $(document).ready(function() {
         updateChartVisibility(selectedGroup);
     });
 });
+
+// Define the updateChartVisibility function here
+function updateChartVisibility(selectedGroup) {
+    // Assuming you have a reference to the ApexCharts instance
+    let chart = new ApexCharts(document.querySelector("#chart-container"), chartOptions);
+
+    // Create an array to store the updated series
+    let updatedSeries = [];
+
+    // Loop through your original series and filter based on the selected group
+    for (let i = 0; i < originalSeries.length; i++) {
+        if (originalSeries[i].group === selectedGroup) {
+            updatedSeries.push(originalSeries[i]);
+        }
+    }
+
+    // Update the chart series with the filtered data
+    chart.updateSeries(updatedSeries);
+
+    // Render the updated chart
+    chart.render();
+}
+
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
@@ -307,6 +311,10 @@ function calculateTrendline(data) {
         return slope * x + intercept;
     };
 }
+
+
+///////////////
+
 
 $(document).ready(function() {
 
