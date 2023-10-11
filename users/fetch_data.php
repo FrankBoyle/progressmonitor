@@ -1,5 +1,5 @@
 <?php
-include('./users/db.php');
+include('db.php');
 
 // Error Reporting
 ini_set('display_errors', 1);
