@@ -63,11 +63,33 @@ function addNewStudent($studentName, $teacherId) {
     return "New student added successfully.";
 }
 
+function fetchGroupNames() {
+    global $connection;
+    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups"); // Replace groups_table_name with your actual table name.
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+}
+
+function insertIntoSecondTable($scoreGroup, $schoolIDIndex, $originalName, $customName) {
+    global $connection;
+
+    $stmt = $connection->prepare("INSERT INTO second_table_name (SchoolIDIndex, original_name, custom_name, ScoreGroup) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
+
+    return $connection->lastInsertId();  // Return the ID of the inserted row.
+}
+
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
+
+// Check if the action is set to 'fetchGroups' and handle it
+if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
+    echo json_encode(fetchGroupNames());
+    exit;
+}
 
 // If student_id is not set, exit early
 if (!isset($_GET['student_id'])) {
@@ -89,6 +111,19 @@ $scoreNames = fetchScoreNames($schoolID);
 foreach ($performanceData as $record) {
     $chartDates[] = $record['week_start_date'];
     // You can add more logic here if needed
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
+    $schoolIDIndex = $_POST['SchoolIDIndex'];
+    $originalName = $_POST['original_name'];
+    $customName = $_POST['custom_name'];
+    $scoreGroup = $_POST['ScoreGroup'];
+
+    $insertedId = insertIntoSecondTable($scoreGroup, $schoolIDIndex, $originalName, $customName);
+    
+    // Respond with the ID of the inserted row
+    echo json_encode(['id' => $insertedId]);
+    exit;
 }
 ?>
 
