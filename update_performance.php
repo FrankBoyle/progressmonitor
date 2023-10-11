@@ -4,6 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 include('./users/db.php');  // Include the database connection
+header('Content-Type: application/json');
 
 // Main logic
 if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {

@@ -1,6 +1,7 @@
 <?php
 // Include the database connection script
 include('./users/db.php');
+header('Content-Type: application/json');
 
 // Function to log errors server-side
 function logError($error) {
