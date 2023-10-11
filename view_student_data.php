@@ -370,15 +370,16 @@ $(document).ready(function() {
         } catch (error) {
         console.error('Error during AJAX call:', error);
         if (error && error.responseText) {
-            const errorData = JSON.parse(error.responseText);
-            if (errorData && errorData.error) {
-                alert(errorData.error); // Alert the user with the specific error message
-            } else {
-                alert('An unknown error occurred. Please try again.');
-            }
-        } else {
-            alert('An unknown error occurred. Please try again.');
-        }
+    try {
+        const errorData = JSON.parse(error.responseText);
+        alert(errorData.error || 'An error occurred. Please try again.');
+    } catch (e) {
+        // Non-JSON response
+        alert('An unexpected server error occurred. Please try again.');
+    }
+} else {
+    alert('An unknown error occurred. Please try again.');
+}
         return null;
     }   
 }
