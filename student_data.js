@@ -240,6 +240,7 @@ function calculateTrendline(data) {
     };
 }
 
+////////////////////////////////////////////////
 
 $(document).ready(function() {
 
@@ -546,7 +547,9 @@ if (isDateDuplicate(currentDate)) {
     $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
-    
+        
+        // Disable the save button to prevent multiple clicks
+        $(this).prop('disabled', true);
     // If it's not a new entry, simply return and do nothing.
         if (performanceId !== 'new') {
             alert("This row is not a new entry. Please click on the cells to edit them.");
@@ -576,10 +579,12 @@ if (isDateDuplicate(currentDate)) {
             row.attr('data-performance-id', response.performance_id);
             row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
             // If you have any default scores or other fields returned from the server, update them here too
-            } else {
-                //alert("There was an error saving the data.");
-            }
-        });
+            // Reload the chart or refresh the page
+            location.reload();
+        } else {
+            //alert("There was an error saving the data.");
+        }
+    });
 
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
