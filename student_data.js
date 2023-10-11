@@ -299,7 +299,7 @@ $(document).ready(function() {
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             console.log(response); // <-- This is the debug line. 
         
-            if (response && response.error && response.error === 'Duplicate date not allowed') {
+            if (response && response.error && response.error === 'Duplicate date not allowed!') {
                 alert("Duplicate date not allowed!");
                 cell.html(cell.data('saved-date') || '');  
             } else if (response && response.saved_date) {
