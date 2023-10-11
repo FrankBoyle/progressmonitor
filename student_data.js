@@ -1,4 +1,3 @@
-
 var benchmark = null;
 
 $(document).ready(function() {
@@ -27,77 +26,6 @@ $(document).ready(function() {
 
     updateChart('score1');  // Default
 });
-
-$(document).ready(function() {
-    
-    // Function to fetch groups and populate the dropdown
-    function fetchGroups() {
-        $.ajax({
-            url: './users/fetch_data.php?action=fetchGroups',
-            method: 'GET',
-            dataType: 'json',
-            success: function(groups) {
-                let dropdown = $('#scoreGroupDropdown');
-                dropdown.empty(); // Clear existing options
-                
-                groups.forEach(function(group) {
-                    dropdown.append($('<option>', {
-                        value: group,
-                        text: group
-                    }));
-                });
-            },
-            error: function(err) {
-                console.error('Failed to fetch groups', err);
-            }
-        });
-    }
-
-    // Call the fetchGroups function to populate the dropdown on page load
-    fetchGroups();
-
-    // Event handler for when an option is selected from the dropdown
-    $('#scoreGroupDropdown').on('change', function() {
-        let selectedValue = $(this).val();
-
-        // Fetch data for the selected group
-        fetchDataForGroup(selectedValue);
-
-        // Call a function to update the chart's visibility based on the selected group
-        updateChartVisibility(selectedValue);
-    });
-});
-
-$(document).ready(function() {
-    $('#groupSelector').on('change', function() {
-        const selectedGroup = $(this).val();
-
-        // Call a function to update the chart's visibility based on the selected group
-        updateChartVisibility(selectedGroup);
-    });
-});
-
-// Define the updateChartVisibility function here
-function updateChartVisibility(selectedGroup) {
-    // Assuming you have a reference to the ApexCharts instance
-    let chart = new ApexCharts(document.querySelector("#chart-container"), chartOptions);
-
-    // Create an array to store the updated series
-    let updatedSeries = [];
-
-    // Loop through your original series and filter based on the selected group
-    for (let i = 0; i < originalSeries.length; i++) {
-        if (originalSeries[i].group === selectedGroup) {
-            updatedSeries.push(originalSeries[i]);
-        }
-    }
-
-    // Update the chart series with the filtered data
-    chart.updateSeries(updatedSeries);
-
-    // Render the updated chart
-    chart.render();
-}
 
 
 function initializeChart() {
@@ -312,10 +240,6 @@ function calculateTrendline(data) {
     };
 }
 
-
-///////////////
-
-
 $(document).ready(function() {
 
     function getCurrentDate() {
@@ -368,7 +292,6 @@ $(document).ready(function() {
         return { error: 'An unknown error occurred. Please check the server logs.' };
     }
 }
-}
 
 async function saveEditedDate(cell, newDate) {
     const performanceId = cell.closest('tr').data('performance-id');
@@ -389,7 +312,7 @@ async function saveEditedDate(cell, newDate) {
 } else if (response && response.saved_date) {
     cell.data('saved-date', response.saved_date);
 } else {
-    //alert('An error occurred. Please try again.');
+    alert('An error occurred. Please try again.');
 }
 
 }
@@ -450,7 +373,7 @@ async function saveEditedDate(cell, newDate) {
     } else if (response && response.saved_date) {
         cell.data('saved-date', response.saved_date);
     } else {
-        //alert('An error occurred. Please try again.');
+        alert('An error occurred. Please try again.');
     }
 });
     }
@@ -733,4 +656,8 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 null, null, null, null, null, null, null, null, null, null, null
             ]
         });
+
+
+
 });
+
