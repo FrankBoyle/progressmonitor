@@ -70,17 +70,6 @@ $(document).ready(function() {
     });
 });
 
-$(document).ready(function() {
-    fetchGroups();
-
-    $('#groupSelector').on('change', function() {
-        const selectedGroup = $(this).val();
-
-        // Call a function to update the chart's visibility based on the selected group
-        updateChartVisibility(selectedGroup);
-    });
-});
-
 // Define the updateChartVisibility function here
 function updateChartVisibility(selectedGroup) {
     // Assuming you have a reference to the ApexCharts instance
@@ -102,7 +91,6 @@ function updateChartVisibility(selectedGroup) {
     // Render the updated chart
     chart.render();
 }
-
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
@@ -137,8 +125,6 @@ function getChartData(scoreField) {
 
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
-
-
 
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
@@ -185,9 +171,6 @@ function updateChart(scoreField) {
 
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
-
-
-
 
 function getChartOptions(dataSeries, xCategories) {
     return {
@@ -287,7 +270,6 @@ function getChartOptions(dataSeries, xCategories) {
     };
 }
 
-
 function calculateTrendline(data) {
     var sumX = 0;
     var sumY = 0;
@@ -374,6 +356,17 @@ $(document).ready(function() {
     }
 }
 }
+
+$(document).ready(function() {
+    fetchGroups();
+
+    $('#groupSelector').on('change', function() {
+        const selectedGroup = $(this).val();
+
+        // Call a function to update the chart's visibility based on the selected group
+        updateChartVisibility(selectedGroup);
+    });
+});
 
 async function saveEditedDate(cell, newDate) {
     const performanceId = cell.closest('tr').data('performance-id');
