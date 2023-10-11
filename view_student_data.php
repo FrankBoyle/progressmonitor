@@ -368,11 +368,20 @@ $(document).ready(function() {
             });
             return response;
         } catch (error) {
-            console.error('Error during AJAX call:', error);
-            //alert('An error occurred. Please try again.');
-            return null;
-        }   
-    }
+        console.error('Error during AJAX call:', error);
+        if (error && error.responseText) {
+            const errorData = JSON.parse(error.responseText);
+            if (errorData && errorData.error) {
+                alert(errorData.error); // Alert the user with the specific error message
+            } else {
+                alert('An unknown error occurred. Please try again.');
+            }
+        } else {
+            alert('An unknown error occurred. Please try again.');
+        }
+        return null;
+    }   
+}
 
     function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
