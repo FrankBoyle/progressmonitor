@@ -306,7 +306,7 @@ $(document).ready(function() {
             } else if (response && response.saved_date) {
                 cell.data('saved-date', response.saved_date);
             } else {
-                alert('An error occurred. Please try again.');
+                //alert('An error occurred. Please try again.');
             }
         });
         
