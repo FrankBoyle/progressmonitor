@@ -65,18 +65,9 @@ function addNewStudent($studentName, $teacherId) {
 
 function fetchGroupNames() {
     global $connection;
-    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups"); // Replace groups_table_name with your actual table name.
+    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-}
-
-function insertIntoSecondTable($scoreGroup, $schoolIDIndex, $originalName, $customName) {
-    global $connection;
-
-    $stmt = $connection->prepare("INSERT INTO second_table_name (SchoolIDIndex, original_name, custom_name, ScoreGroup) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
-
-    return $connection->lastInsertId();  // Return the ID of the inserted row.
 }
 
 // Initialize empty arrays and variables
@@ -113,16 +104,19 @@ foreach ($performanceData as $record) {
     // You can add more logic here if needed
 }
 
+// Handling the data POST from the dropdown functionality
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     $schoolIDIndex = $_POST['SchoolIDIndex'];
     $originalName = $_POST['original_name'];
     $customName = $_POST['custom_name'];
     $scoreGroup = $_POST['ScoreGroup'];
 
-    $insertedId = insertIntoSecondTable($scoreGroup, $schoolIDIndex, $originalName, $customName);
+    // Inserting into the SchoolScoreNames table
+    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, original_name, custom_name, group_name) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
     
     // Respond with the ID of the inserted row
-    echo json_encode(['id' => $insertedId]);
+    echo json_encode(['id' => $connection->lastInsertId()]);
     exit;
 }
 ?>

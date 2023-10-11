@@ -28,6 +28,65 @@ $(document).ready(function() {
     updateChart('score1');  // Default
 });
 
+$(document).ready(function() {
+    
+    // Function to fetch groups and populate the dropdown
+    function fetchGroups() {
+        $.ajax({
+            url: 'fetch_data.php?action=fetchGroups',
+            method: 'GET',
+            dataType: 'json',
+            success: function(groups) {
+                let dropdown = $('#scoreGroupDropdown');
+                dropdown.empty(); // Clear existing options
+                
+                groups.forEach(function(group) {
+                    dropdown.append($('<option>', {
+                        value: group,
+                        text: group
+                    }));
+                });
+            },
+            error: function(err) {
+                console.error('Failed to fetch groups', err);
+            }
+        });
+    }
+
+    function fetchDataForGroup(selectedGroup) {
+        $.ajax({
+            url: 'fetch_data.php',
+            method: 'GET',
+            data: { group: selectedGroup },  // This will send the selected group to the server.
+            dataType: 'json',
+            success: function(data) {
+                // Here you handle and display the data. 
+                // For instance, if the data was a list of scores, you might display them in a table or list.
+                // Just as an example:
+                let list = $("#dataList");
+                list.empty();
+                data.forEach(function(item) {
+                    list.append('<li>' + item + '</li>');
+                });
+            },
+            error: function(err) {
+                console.error('Failed to fetch data for group', err);
+            }
+        });
+    }
+
+    // Call the fetchGroups function to populate the dropdown on page load
+    fetchGroups();
+
+    // Event handler for when an option is selected from the dropdown
+    $('#scoreGroupDropdown').on('change', function() {
+        let selectedValue = $(this).val();
+        
+        // Fetch data for the selected group
+        fetchDataForGroup(selectedValue);
+    });
+});
+
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
