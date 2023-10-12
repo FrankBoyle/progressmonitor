@@ -5,6 +5,7 @@
     if (isset($_POST['register'])) {
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
+        $SchoolID = $_POST['SchoolID'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
@@ -16,9 +17,10 @@
             echo '<p class="error">The email address is already registered!</p>';
         }
         if ($query->rowCount() == 0) {
-            $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password) VALUES (:fname,:lname,:email,:password_hash)");
-            $query->bindParam("fname", $fname, PDO::PARAM_STR);
+          $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password,SchoolID) VALUES (:fname,:lname,:email,:password_hash,:SchoolID)");
+          $query->bindParam("fname", $fname, PDO::PARAM_STR);
             $query->bindParam("lname", $lname, PDO::PARAM_STR);
+            $query->bindParam("SchoolID", $SchoolID, PDO::PARAM_INT);  // Assuming SchoolID is an integer
             $query->bindParam("email", $email, PDO::PARAM_STR);
             $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
             $result = $query->execute();
