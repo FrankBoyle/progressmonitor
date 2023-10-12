@@ -1,6 +1,5 @@
 <?php
 
-include('./users/db.php');
 include('./users/forgot_password.php');
 // Include your script with database connection and logic here
 
