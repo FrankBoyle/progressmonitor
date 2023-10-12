@@ -980,6 +980,11 @@
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
+      <?php
+    if (isset($_GET['reset']) && $_GET['reset'] == 1) {
+        echo '<p class="info">If this email exists in our system, a reset link has been sent. Please check your inbox (and spam folder).</p>';
+    }
+    ?>
       <form action="./users/forgot_password.php" method="post">
     <label for="email">Email:</label>
     <input type="email" name="email" required>
