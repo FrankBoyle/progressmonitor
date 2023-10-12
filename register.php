@@ -934,7 +934,7 @@
 
 <!-- Here's the new SchoolID input field -->
 <div class="input-group mb-3">
-    <input type="text" class="form-control" name="SchoolIDIndex" id="SchoolIDIndex" placeholder="School ID">
+    <input type="text" class="form-control" name="SchoolID" id="SchoolID" placeholder="School ID">
     <div class="input-group-append">
         <div class="input-group-text">
             <span class="fas fa-school"></span>
