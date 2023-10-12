@@ -35,7 +35,7 @@ if (isset($_POST['forgot_password'])) {
 
         // Send the reset link to the user's email
         $resetLink = "https://bfactor.org/reset_password.php?token=$token"; // Note the https://
-        // Here, use a reliable method to send the email.
+        mail($email, "Password Reset Request", "Click the link to reset your password: $resetLink");
     } else {
         echo '<p class="info">If this email exists in our system, a reset link will be sent.</p>';
     }
