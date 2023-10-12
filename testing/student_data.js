@@ -27,7 +27,6 @@ $(document).ready(function() {
     updateChart('score1');  // Default
 });
 
-
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
     window.chart.render();
@@ -61,8 +60,6 @@ function getChartData(scoreField) {
 
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
-
-
 
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
@@ -110,9 +107,6 @@ function updateChart(scoreField) {
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
 
-
-
-
 function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
@@ -120,12 +114,6 @@ function getChartOptions(dataSeries, xCategories) {
             type: 'line',
             stacked: false,
             width: 1000,
-            toolbar: {
-                show: true,
-                tools: {
-                    download: false
-                }
-            },
 
             dropShadow: {
                 enabled: true,
@@ -210,7 +198,6 @@ function getChartOptions(dataSeries, xCategories) {
         colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
-
 
 function calculateTrendline(data) {
     var sumX = 0;
@@ -308,11 +295,8 @@ $(document).ready(function() {
             } else {
                 //alert('An error occurred. Please try again.');
             }
-        });
-        
-        
+        });  
     }
-    
 
     let dateAscending = true; // to keep track of current order
 
@@ -322,7 +306,6 @@ $(document).ready(function() {
 
         table.order([0, dateAscending ? 'asc' : 'desc']).draw();
     });
-
 
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
@@ -381,8 +364,6 @@ $(document).ready(function() {
     return isDuplicate;
 }
 
-
-
     function attachEditableHandler() {
         $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
             const cell = $(this);
@@ -412,8 +393,6 @@ $(document).ready(function() {
     }
     datePickerActive = false;
 }
-
-
 
                 });
                 cell.html(input);
@@ -597,7 +576,6 @@ if (isDateDuplicate(currentDate)) {
             }
         });
 
-
 // Custom filter for DataTables
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     let selectedDate = $("#startDateFilter").datepicker("getDate");
@@ -614,7 +592,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     //console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDateTime >= selectedDateTime}`);
     return rowDateTime >= selectedDateTime;
 });
-
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
@@ -635,7 +612,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-
         let table = $('table').DataTable({
             "order": [[0, "asc"]],
             "lengthChange": false,
@@ -647,7 +623,4 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 null, null, null, null, null, null, null, null, null, null, null
             ]
         });
-
-
-
 });
