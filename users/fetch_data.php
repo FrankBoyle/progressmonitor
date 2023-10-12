@@ -24,10 +24,10 @@ function fetchSchoolIdForStudent($studentId) {
 function fetchScoreNames($schoolID) {
     global $connection;
     $scoreNames = [];
-    $stmt = $connection->prepare("SELECT ScoreColumn, custom_name FROM SchoolScoreNames WHERE SchoolID = ?");
+    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE SchoolID = ?");
     $stmt->execute([$schoolID]);
     while ($row = $stmt->fetch()) {
-        $scoreNames[$row['ScoreColumn']] = $row['custom_name'];
+        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
     }
     return $scoreNames;
 }
@@ -116,11 +116,11 @@ foreach ($performanceData as $record) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     $schoolIDIndex = $_POST['SchoolIDIndex'];
     $originalName = $_POST['ScoreColumn'];
-    $customName = $_POST['custom_name'];
+    $customName = $_POST['CustomName'];
     $scoreGroup = $_POST['ScoreGroup'];
 
     // Inserting into the SchoolScoreNames table
-    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, ScoreColumn, custom_name, group_name) VALUES (?, ?, ?, ?)");
+    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
     $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
     
     // Respond with the ID of the inserted row
