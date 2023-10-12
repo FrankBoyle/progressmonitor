@@ -1,14 +1,11 @@
 <?php
-
-include('./users/forgot_password.php');
-// Include your script with database connection and logic here
+include('./users/db.php');
 
 // Check if token is set in the URL
-if(isset($_GET['token'])) {
+if (isset($_GET['token'])) {
     $token = $_GET['token'];
-    // You can optionally validate the token here or just let the user input the new password
     ?>
-    <form action=".users/forgot_password.php" method="post">
+    <form action="./users/forgot_password.php" method="post">
         <input type="hidden" name="token" value="<?php echo $token; ?>">
         <label for="newPassword">New Password:</label>
         <input type="password" name="newPassword" required>
@@ -16,12 +13,5 @@ if(isset($_GET['token'])) {
     </form>
     <?php
 } else {
-    // Display the form to request the password reset email
-    ?>
-    <form action=".users/forgot_password.php" method="post">
-        <label for="email">Email:</label>
-        <input type="email" name="email" required>
-        <input type="submit" name="forgot_password" value="Request Password Reset">
-    </form>
-    <?php
+    echo "<p>Invalid token or token not provided.</p>";
 }
