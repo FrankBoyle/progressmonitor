@@ -114,21 +114,6 @@ function getChartOptions(dataSeries, xCategories) {
             type: 'line',
             stacked: false,
             width: 1000,
-                toolbar: {
-                    show: true,
-                    offsetX: 0,
-                    offsetY: 0,
-                    tools: {
-                      download: true,
-                      selection: true,
-                      zoom: true,
-                      zoomin: true,
-                      zoomout: true,
-                      pan: true,
-                      reset: true | '<img src="/static/icons/reset.png" width="20">',
-                      customIcons: []
-                    },
-            },
 
             dropShadow: {
                 enabled: true,
