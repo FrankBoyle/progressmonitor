@@ -978,7 +978,7 @@
       <!-- /.social-auth-links -->
 
       <p class="mb-1">
-      <form action=".users/forgot_password.php" method="post">
+      <form action="./users/forgot_password.php" method="post">
     <label for="email">Email:</label>
     <input type="email" name="email" required>
     <input type="submit" name="forgot_password" value="Request Password Reset">
