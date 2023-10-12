@@ -7,6 +7,8 @@
     error_reporting(E_ALL);
 
     include('./users/db.php');
+    include('./users/forgot_password.php')
+
 
     if (isset($_POST['login'])) {
         $email = $_POST['email'];
