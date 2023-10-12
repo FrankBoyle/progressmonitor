@@ -123,7 +123,7 @@ function getChartOptions(dataSeries, xCategories) {
             toolbar: {
                 show: true,
                 tools: {
-                    download: false
+                    download: true
                 }
             },
 
