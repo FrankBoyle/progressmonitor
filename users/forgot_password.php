@@ -6,9 +6,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
 if (isset($_POST['forgot_password'])) {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo '<p class="error">Invalid email format!</p>';
         exit;
@@ -34,13 +34,13 @@ if (isset($_POST['forgot_password'])) {
         $query->execute();
 
         // Send the reset link to the user's email
-        $resetLink = "https://bfactor.org/reset_password.php?token=$token"; // Note the https://
+        $resetLink = "https://bfactor.org/reset_password.php?token=$token";
         mail($email, "Password Reset Request", "Click the link to reset your password: $resetLink");
+        
         header("Location: login.php?reset=1");
         exit();
-        
+    }  // This closing brace was missing
 }
-
 
 if (isset($_POST['reset_password'])) {
     $token = $_POST['token'];
@@ -58,9 +58,11 @@ if (isset($_POST['reset_password'])) {
         $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
         $query->bindParam("token", $token, PDO::PARAM_STR);
         $query->execute();
+        
         echo '<p class="success">Password reset successful!</p>';
     } else {
         echo '<p class="error">Invalid or expired token!</p>';
     }
 }
 ?>
+
