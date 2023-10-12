@@ -5,7 +5,7 @@ include('./users/db.php');
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
     ?>
-    <form action="./users/forgot_password.php" method="post">
+    <form action="forgot_password.php" method="post">
         <input type="hidden" name="token" value="<?php echo $token; ?>">
         <label for="newPassword">New Password:</label>
         <input type="password" name="newPassword" required>
