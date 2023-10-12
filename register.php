@@ -914,22 +914,33 @@
         
 
         <form method="post" action="" name="registration">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-user"></span>
-              </div>
-            </div>
-          </div>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name">
-            <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-user"></span>
-              </div>
-            </div>
-          </div>
+        <div class="input-group mb-3">
+    <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
+    <div class="input-group-append">
+        <div class="input-group-text">
+            <span class="fas fa-user"></span>
+        </div>
+    </div>
+</div>
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name">
+    <div class="input-group-append">
+        <div class="input-group-text">
+            <span class="fas fa-user"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Here's the new SchoolID input field -->
+<div class="input-group mb-3">
+    <input type="text" class="form-control" name="SchoolIDIndex" id="SchoolIDIndex" placeholder="School ID">
+    <div class="input-group-append">
+        <div class="input-group-text">
+            <span class="fas fa-school"></span>
+        </div>
+    </div>
+</div>
           <div class="input-group mb-3">
             <input type="email" class="form-control" name="email" id="email" placeholder="Email">
             <div class="input-group-append">
