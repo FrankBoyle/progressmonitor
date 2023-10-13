@@ -21,7 +21,8 @@
 <body>
 
 <?php include('./users/fetch_data.php'); ?>
-
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>

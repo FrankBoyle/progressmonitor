@@ -286,7 +286,7 @@ $(document).ready(function() {
 
         };
         console.log(postData);
-        console.log(student_id);
+        console.log("studentID:", student_id);
 
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
