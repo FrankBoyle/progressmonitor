@@ -237,8 +237,8 @@ $(document).ready(function() {
     }
 
     // Constants & Variables
-    const CURRENT_STUDENT_ID = $('#currentStudentId').val();
-    console.log("CURRENT_STUDENT_ID:", CURRENT_STUDENT_ID);
+    //const CURRENT_STUDENT_ID = $('#currentStudentId').val();
+    //console.log("CURRENT_STUDENT_ID:", CURRENT_STUDENT_ID);
 
     // Utility Functions
     function isValidDate(d) {
