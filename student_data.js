@@ -248,7 +248,7 @@ $(document).ready(function() {
     }
 
     // Constants & Variables
-    //const CURRENT_STUDENT_ID = $('#currentStudentId').val();
+    const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
     // Utility Functions
     function isValidDate(d) {
