@@ -136,6 +136,7 @@ function getChartOptions(dataSeries, xCategories) {
 
         },
 
+        /*
         dataLabels: {
             enabled: true,
             enabledOnSeries: [0],  // enable only on the first series
@@ -145,7 +146,7 @@ function getChartOptions(dataSeries, xCategories) {
                 colors: ['#333']
             }
         },
-
+        */
         stroke: {
             curve: 'smooth',
             width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1)  // Set width based on series name
