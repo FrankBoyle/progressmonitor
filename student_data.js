@@ -555,12 +555,19 @@ if (isDateDuplicate(currentDate)) {
     
         const response = await ajaxCall('POST', 'insert_performance.php', postData);
         if (response && response.performance_id) {
-            // Update the row with the data returned from the server
-            row.attr('data-performance-id', response.performance_id);
-            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
-            // If you have any default scores or other fields returned from the server, update them here too
-            // Reload the chart or refresh the page
-            location.reload();
+            // Update the table with the newly inserted row
+            const newRow = $('tr[data-performance-id="new"]');
+            newRow.attr('data-performance-id', response.performance_id);
+            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
+            // If you have default scores or other fields returned from the server, update them here too
+        
+            // Clear the input fields and enable the save button for future entries
+            newRow.find('td.editable').text('');
+            newRow.find('.saveRow').prop('disabled', false);
+        
+            // Optionally, display a success message
+            // alert("Data saved successfully!");
+        
         } else {
             // Handle the error response appropriately
             if (response && response.error) {
@@ -569,6 +576,7 @@ if (isDateDuplicate(currentDate)) {
                 alert("There was an error saving the data.");
             }
         }
+        
     });
     
 

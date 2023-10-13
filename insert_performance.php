@@ -23,6 +23,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+if (empty($_POST['student_id']) || empty($_POST['score_date']) || empty($_POST['scores'])) {
+    $missingData = [];
+    if (empty($_POST['student_id'])) {
+        $missingData[] = 'student_id';
+    }
+    if (empty($_POST['score_date'])) {
+        $missingData[] = 'score_date';
+    }
+    if (empty($_POST['scores'])) {
+        $missingData[] = 'scores';
+    }
+    
+    handleError("Required data is missing.", $missingData);
+    exit;
+}
+
 // Validate that the necessary POST data is present
 if (empty($_POST['student_id']) || empty($_POST['score_date']) || empty($_POST['scores'])) {
     handleError("Required data is missing.");
