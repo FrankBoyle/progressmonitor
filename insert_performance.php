@@ -3,6 +3,8 @@
 include('./users/db.php');
 header('Content-Type: application/json');
 
+file_put_contents('post_data_debug.txt', print_r($_POST, true));
+
 // Function to log errors server-side
 function logError($error) {
     // Log error to a file (Ensure your server has write permissions for this file)
@@ -23,21 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-if (empty($_POST['student_id']) || empty($_POST['week_start_date']) || empty($_POST['scores'])) {
-    $missingData = [];
-    if (empty($_POST['student_id'])) {
-        $missingData[] = 'student_id';
-    }
-    if (empty($_POST['week_start_date'])) {
-        $missingData[] = 'week_start_date';
-    }
-    if (empty($_POST['scores'])) {
-        $missingData[] = 'scores';
-    }
-    
-    handleError("Required data is missing.", $missingData);
+// Check if the request method is POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    handleError("Invalid request method.");
     exit;
 }
+
+if (empty($_POST['student_id'])) {
+    handleError("student_id is missing.");
+    exit;
+}
+if (empty($_POST['week_start_date'])) {
+    handleError("week_start_date is missing.");
+    exit;
+}
+if (empty($_POST['scores'])) {
+    handleError("scores are missing.");
+    exit;
+}
+
 
 $studentId = $_POST['student_id'];
 $weekStartDate = $_POST['week_start_date'];
