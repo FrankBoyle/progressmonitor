@@ -352,19 +352,7 @@ $(document).ready(function() {
         });
     }
 
-    function isDateDuplicate(dateString, currentPerformanceId = null) {
-    //console.log("Checking for duplicate of:", dateString);
-    let isDuplicate = false;
-    $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = $(this).text();
-        const performanceId = $(this).closest('tr').data('performance-id');
-        if (cellDate === dateString && performanceId !== currentPerformanceId) {
-            isDuplicate = true;
-            return false; // Break out of the .each loop
-        }
-    });
-    return isDuplicate;
-}
+
 
     function attachEditableHandler() {
         $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
