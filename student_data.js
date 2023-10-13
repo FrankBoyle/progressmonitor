@@ -159,7 +159,7 @@ function getChartOptions(dataSeries, xCategories) {
             showNullDataPoints: true,
             hover: {
                 size: undefined,
-                sizeOffset: 2
+                sizeOffset: 1.5
             }
         },
 
