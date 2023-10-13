@@ -105,12 +105,16 @@ function updateChart(scoreField) {
         seriesData.push({
             name: 'Benchmark',
             data: benchmarkData,
-            connectNulls: true
+            connectNulls: true,
+            dataLabels: {
+                enabled: false // Disable data labels for the Benchmark series
+            }
         });
     }
 
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
+
 
 
 function getChartOptions(dataSeries, xCategories) {
