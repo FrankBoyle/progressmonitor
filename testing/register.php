@@ -5,7 +5,6 @@
     if (isset($_POST['register'])) {
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
-        $SchoolID = $_POST['SchoolID'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
@@ -17,10 +16,9 @@
             echo '<p class="error">The email address is already registered!</p>';
         }
         if ($query->rowCount() == 0) {
-          $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password,SchoolID) VALUES (:fname,:lname,:email,:password_hash,:SchoolID)");
-          $query->bindParam("fname", $fname, PDO::PARAM_STR);
+            $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password) VALUES (:fname,:lname,:email,:password_hash)");
+            $query->bindParam("fname", $fname, PDO::PARAM_STR);
             $query->bindParam("lname", $lname, PDO::PARAM_STR);
-            $query->bindParam("SchoolID", $SchoolID, PDO::PARAM_INT);  // Assuming SchoolID is an integer
             $query->bindParam("email", $email, PDO::PARAM_STR);
             $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
             $result = $query->execute();
@@ -916,33 +914,22 @@
         
 
         <form method="post" action="" name="registration">
-        <div class="input-group mb-3">
-    <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
-    <div class="input-group-append">
-        <div class="input-group-text">
-            <span class="fas fa-user"></span>
-        </div>
-    </div>
-</div>
-
-<div class="input-group mb-3">
-    <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name">
-    <div class="input-group-append">
-        <div class="input-group-text">
-            <span class="fas fa-user"></span>
-        </div>
-    </div>
-</div>
-
-<!-- Here's the new SchoolID input field -->
-<div class="input-group mb-3">
-    <input type="text" class="form-control" name="SchoolID" id="SchoolID" placeholder="School ID">
-    <div class="input-group-append">
-        <div class="input-group-text">
-            <span class="fas fa-school"></span>
-        </div>
-    </div>
-</div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-user"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-user"></span>
+              </div>
+            </div>
+          </div>
           <div class="input-group mb-3">
             <input type="email" class="form-control" name="email" id="email" placeholder="Email">
             <div class="input-group-append">

@@ -475,7 +475,7 @@ foreach ($students as $student) {
 if (isset($_GET['student_id'])) {
     $studentId = $_GET['student_id'];
 
-    $stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");  // you can change the LIMIT as needed
+    $stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");  // you can change the LIMIT as needed
     $stmt->bind_param('i', $studentId);
     $stmt->execute();
     

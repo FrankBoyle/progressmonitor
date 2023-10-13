@@ -20,9 +20,9 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
         }
     }
 
-    // Validate and sanitize the date input (assuming it's for the 'score_date' field)
-    if ($fieldName === 'score_date') {
-        $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ? AND performance_id != ?");
+    // Validate and sanitize the date input (assuming it's for the 'week_start_date' field)
+    if ($fieldName === 'week_start_date') {
+        $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND week_start_date = ? AND performance_id != ?");
         $checkStmt->execute([$studentId, $newValue, $performanceId]); // Ensure to grab the $studentId in this script too.
         $count = $checkStmt->fetchColumn();
     
@@ -31,7 +31,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
             return;
         }
         
-        // Inside the `if ($fieldName === 'score_date') { ... }` block:
+        // Inside the `if ($fieldName === 'week_start_date') { ... }` block:
         $newDate = date_create_from_format('Y-m-d', $newValue);
         if (!$newDate) {
             handleError("Invalid date format received. Expected 'Y-m-d' format but received: " . $newValue);
@@ -50,7 +50,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
  */
 function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
     // List of allowed field names to ensure security
-    $allowedFields = ['score_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
+    $allowedFields = ['week_start_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
 
     if (!in_array($fieldName, $allowedFields)) {
         handleError("Invalid field specified.");

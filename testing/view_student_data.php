@@ -55,10 +55,10 @@
     <?php else: ?>
         <?php foreach ($performanceData as $data): ?>
             <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="score_date">
+                <td class="editable" data-field-name="week_start_date">
                     <?php
-                    if (isset($data['score_date'])) {
-                        echo date("m/d/Y", strtotime($data['score_date']));
+                    if (isset($data['week_start_date'])) {
+                        echo date("m/d/Y", strtotime($data['week_start_date']));
                     }
                     ?>
                 </td>
