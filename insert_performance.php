@@ -10,8 +10,8 @@ function logError($error) {
 }
 
 // Function to handle and send back errors
-function handleError($errorMessage) {
-    echo json_encode(['success' => false, 'error' => $errorMessage]);
+function handleError($errorMessage, $missingData = []) {
+    echo json_encode(['success' => false, 'error' => $errorMessage, 'missing_data' => $missingData]);
     exit;
 }
 
