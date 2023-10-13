@@ -238,7 +238,6 @@ $(document).ready(function() {
 
     // Constants & Variables
     //const CURRENT_STUDENT_ID = $('#currentStudentId').val();
-    //console.log("CURRENT_STUDENT_ID:", CURRENT_STUDENT_ID);
 
     // Utility Functions
     function isValidDate(d) {
@@ -269,7 +268,6 @@ $(document).ready(function() {
             return response;
         } catch (error) {
             console.error('Error during AJAX call:', error);
-            //alert('An error occurred. Please try again.');
             return error.responseJSON;  // Return the parsed JSON error message
         }   
     }
@@ -298,7 +296,6 @@ $(document).ready(function() {
             } else if (response && response.saved_date) {
                 cell.data('saved-date', response.saved_date);
             } else {
-                //alert('An error occurred. Please try again.');
             }
         });  
     }
@@ -350,7 +347,7 @@ $(document).ready(function() {
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             if (response && !response.success) {
-                alert('Error updating the average score in the database.');
+                //alert('Error updating the average score in the database.');
             }
         });
     }
@@ -388,7 +385,7 @@ $(document).ready(function() {
     if (isValidDate(new Date(selectedDate))) {
         const currentPerformanceId = cell.closest('tr').data('performance-id');
         if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-            alert("This date already exists. Please choose a different date.");
+            //alert("This date already exists. Please choose a different date.");
             cell.html(originalValue); // Revert to the original value
             return;
         }
@@ -485,7 +482,7 @@ $(document).ready(function() {
                     },
                     error: function() {
                         // Handle any error here, e.g., show a notification to the user
-                        alert("There was an error updating the data.");
+                        //alert("There was an error updating the data.");
                     }
                 });
             });
@@ -509,7 +506,7 @@ $('#addDataRow').off('click').click(function() {
     
     const currentDate = getCurrentDate();
 if (isDateDuplicate(currentDate)) {
-    alert("An entry for this date already exists. Please choose a different date.");
+    //alert("An entry for this date already exists. Please choose a different date.");
     return;
 }
         const newRow = $("<tr data-performance-id='new'>");
@@ -537,7 +534,7 @@ if (isDateDuplicate(currentDate)) {
     
         // If it's not a new entry, simply return and do nothing.
         if (performanceId !== 'new') {
-            alert("This row is not a new entry. Please click on the cells to edit them.");
+            //alert("This row is not a new entry. Please click on the cells to edit them.");
             return;
         }
     
@@ -554,7 +551,7 @@ if (isDateDuplicate(currentDate)) {
         };
     
         if (isDateDuplicate(postData.score_date)) {
-            alert("An entry for this date already exists. Please choose a different date.");
+           // alert("An entry for this date already exists. Please choose a different date.");
             return;
         }
     
