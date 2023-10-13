@@ -145,7 +145,7 @@ function getChartOptions(dataSeries, xCategories) {
             size: 5,
             colors: undefined,
             strokeColors: '#fff',
-            strokeWidth: 2,
+            strokeWidth: 0,
             strokeOpacity: 0,
             strokeDashArray: 0,
             fillOpacity: 1,
@@ -159,7 +159,7 @@ function getChartOptions(dataSeries, xCategories) {
             showNullDataPoints: true,
             hover: {
                 size: undefined,
-                sizeOffset: 3
+                sizeOffset: 1
             }
         },
 
