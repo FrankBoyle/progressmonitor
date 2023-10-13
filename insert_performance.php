@@ -39,12 +39,6 @@ if (empty($_POST['student_id']) || empty($_POST['score_date']) || empty($_POST['
     exit;
 }
 
-// Validate that the necessary POST data is present
-if (empty($_POST['student_id']) || empty($_POST['score_date']) || empty($_POST['scores'])) {
-    handleError("Required data is missing.");
-    exit;
-}
-
 $studentId = $_POST['student_id'];
 $weekStartDate = $_POST['score_date'];
 $scores = $_POST['scores'];
