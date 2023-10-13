@@ -131,12 +131,12 @@ function getChartOptions(dataSeries, xCategories) {
                 top: 15,          // Adjusted the vertical offset a bit
                 left: 5,          // Adjusted the horizontal offset a bit
                 blur: 10,         // Increased the blur to make it more spread out
-                opacity: 0.7      // Increased the opacity to make it darker
+                opacity: 0.6      // Increased the opacity to make it darker
             }
 
         },
 
-        /*
+        
         dataLabels: {
             enabled: true,
             enabledOnSeries: [0],  // enable only on the first series
@@ -146,7 +146,7 @@ function getChartOptions(dataSeries, xCategories) {
                 colors: ['#333']
             }
         },
-        */
+        
         stroke: {
             curve: 'smooth',
             width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1)  // Set width based on series name
