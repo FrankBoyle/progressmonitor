@@ -151,7 +151,7 @@ function getChartOptions(dataSeries, xCategories) {
             fillOpacity: 1,
             discrete: [],
             shape: "circle",
-            radius: 2,
+            radius: 1,
             offsetX: 0,
             offsetY: 0,
             onClick: undefined,
