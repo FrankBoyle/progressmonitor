@@ -43,7 +43,7 @@ Table 'Performance'
 1	performance_id Primary	int(11)			No	None		AUTO_INCREMENT	
 2	student_id Index	int(11)			Yes	NULL		
 3	teacher_id Index	int(11)			Yes	NULL	
-4	week_start_date	date			Yes	NULL
+4	score_date	date			Yes	NULL
 5	week_number	int(11)			Yes	NULL	
 6	metadata_id Index	int(11)			Yes	NULL
 7	score1	decimal(5,2)			Yes	NULL	
