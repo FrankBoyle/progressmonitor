@@ -283,8 +283,11 @@ $(document).ready(function() {
             field_name: fieldName,
             new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
             student_id: studentId
+
         };
         console.log(postData);
+        console.log(student_id);
+
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             console.log(response); // <-- This is the debug line. 
@@ -435,7 +438,7 @@ $(document).ready(function() {
                 //const performanceId = cell.closest('tr').data('performance-id');
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-                //const studentId = $('#currentStudentId').val();
+                const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
 
                 let postData = {
