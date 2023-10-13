@@ -523,35 +523,36 @@ if (isDateDuplicate(currentDate)) {
         dateCell.click();
     });
 
-    $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
+    $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
-        
+    
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
-    // If it's not a new entry, simply return and do nothing.
+    
+        // If it's not a new entry, simply return and do nothing.
         if (performanceId !== 'new') {
             alert("This row is not a new entry. Please click on the cells to edit them.");
             return;
         }
-   
+    
         let scores = {};
         for (let i = 1; i <= 10; i++) {
             const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-            scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
+            scores[`score${i}`] = scoreValue ? scoreValue : null; // Send null if score is empty
         }
-
+    
         const postData = {
             student_id: CURRENT_STUDENT_ID,
             score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
-            scores: scores
+            scores: scores // Include the scores object in postData
         };
-
+    
         if (isDateDuplicate(postData.score_date)) {
-        alert("An entry for this date already exists. Please choose a different date.");
-        return;
-    }
-
+            alert("An entry for this date already exists. Please choose a different date.");
+            return;
+        }
+    
         const response = await ajaxCall('POST', 'insert_performance.php', postData);
         if (response && response.performance_id) {
             // Update the row with the data returned from the server
@@ -561,9 +562,15 @@ if (isDateDuplicate(currentDate)) {
             // Reload the chart or refresh the page
             location.reload();
         } else {
-            //alert("There was an error saving the data.");
+            // Handle the error response appropriately
+            if (response && response.error) {
+                alert("Error: " + response.error);
+            } else {
+                alert("There was an error saving the data.");
+            }
         }
     });
+    
 
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
