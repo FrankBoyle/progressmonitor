@@ -139,7 +139,7 @@ function getChartOptions(dataSeries, xCategories) {
         
         dataLabels: {
             enabled: true,
-            enabledOnSeries: [0],  // enable only on the first series
+            enabledOnSeries: [1],  // enable only on the first series
             offsetY: -10,
             style: {
                 fontSize: '12px',
