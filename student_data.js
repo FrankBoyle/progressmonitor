@@ -435,7 +435,7 @@ $(document).ready(function() {
                 //const performanceId = cell.closest('tr').data('performance-id');
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-                const studentId = $('#currentStudentId').val();
+                //const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
 
                 let postData = {
