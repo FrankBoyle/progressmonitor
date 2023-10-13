@@ -353,7 +353,7 @@ $(document).ready(function() {
     }
 
     function isDateDuplicate(dateString, currentPerformanceId = null) {
-    console.log("Checking for duplicate of:", dateString);
+    //console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellDate = $(this).text();
