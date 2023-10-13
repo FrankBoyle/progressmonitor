@@ -37,7 +37,7 @@ function getChartData(scoreField) {
     var xCategories = [];
 
     $('tr[data-performance-id]').each(function() {
-        var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
+        var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
@@ -333,14 +333,14 @@ $(document).ready(function() {
     function updateScoreInDatabase(row, fieldName, newValue) {
         const performanceId = row.data('performance-id');
         const studentId = CURRENT_STUDENT_ID;
-        const weekStartDate = convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text());
+        const weekStartDate = convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text());
 
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
             new_value: newValue,
             student_id: studentId,
-            week_start_date: weekStartDate
+            score_date: weekStartDate
         };
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
@@ -353,7 +353,7 @@ $(document).ready(function() {
     function isDateDuplicate(dateString, currentPerformanceId = null) {
     console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
-    $('table').find('td[data-field-name="week_start_date"]').each(function() {
+    $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellDate = $(this).text();
         const performanceId = $(this).closest('tr').data('performance-id');
         if (cellDate === dateString && performanceId !== currentPerformanceId) {
@@ -373,7 +373,7 @@ $(document).ready(function() {
 
             let datePickerActive = false;
 
-            if (cell.data('field-name') === 'week_start_date') {
+            if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     beforeShow: function() {
@@ -416,7 +416,7 @@ $(document).ready(function() {
                     return;
                 }
 
-                if (cell.data('field-name') === 'week_start_date') {
+                if (cell.data('field-name') === 'score_date') {
                     const parts = newValue.split('/');
                     if (parts.length !== 3) {
                         cell.html(originalValue);
@@ -441,7 +441,7 @@ $(document).ready(function() {
                     field_name: fieldName,
                     new_value: newValue,
                     student_id: studentId,
-                    week_start_date: weekStartDate
+                    score_date: weekStartDate
                 };
 
                 if (performanceId === 'new') {
@@ -462,7 +462,7 @@ $(document).ready(function() {
                         if (performanceId === 'new') {
                             const newRow = $('tr[data-performance-id="new"]');
                             newRow.attr('data-performance-id', response.performance_id);
-                            newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                         }
     
     // New code for updating score8 starts here
@@ -508,7 +508,7 @@ if (isDateDuplicate(currentDate)) {
     return;
 }
         const newRow = $("<tr data-performance-id='new'>");
-        newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);
+        newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
         
         for (let i = 1; i <= 10; i++) {
             newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
@@ -517,9 +517,9 @@ if (isDateDuplicate(currentDate)) {
         newRow.append('<td><button class="saveRow">Save</button></td>');
         $("table").append(newRow);
 
-        newRow.find('td[data-field-name="week_start_date"]').click().blur();
+        newRow.find('td[data-field-name="score_date"]').click().blur();
         attachEditableHandler();
-        const dateCell = newRow.find('td[data-field-name="week_start_date"]');
+        const dateCell = newRow.find('td[data-field-name="score_date"]');
         dateCell.click();
     });
 
@@ -543,11 +543,11 @@ if (isDateDuplicate(currentDate)) {
 
         const postData = {
             student_id: CURRENT_STUDENT_ID,
-            week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text()),
+            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
             scores: scores
         };
 
-        if (isDateDuplicate(postData.week_start_date)) {
+        if (isDateDuplicate(postData.score_date)) {
         alert("An entry for this date already exists. Please choose a different date.");
         return;
     }
@@ -556,7 +556,7 @@ if (isDateDuplicate(currentDate)) {
         if (response && response.performance_id) {
             // Update the row with the data returned from the server
             row.attr('data-performance-id', response.performance_id);
-            row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
+            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
             // If you have any default scores or other fields returned from the server, update them here too
             // Reload the chart or refresh the page
             location.reload();

@@ -24,13 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Validate that the necessary POST data is present
-if (empty($_POST['student_id']) || empty($_POST['week_start_date']) || empty($_POST['scores'])) {
+if (empty($_POST['student_id']) || empty($_POST['score_date']) || empty($_POST['scores'])) {
     handleError("Required data is missing.");
     exit;
 }
 
 $studentId = $_POST['student_id'];
-$weekStartDate = $_POST['week_start_date'];
+$weekStartDate = $_POST['score_date'];
 $scores = $_POST['scores'];
 
 foreach ($scores as $key => $score) {
@@ -40,7 +40,7 @@ foreach ($scores as $key => $score) {
 }
 
 // Check for duplicate date entry
-$checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND week_start_date = ?");
+$checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ?");
 $checkStmt->execute([$studentId, $weekStartDate]);
 
 if ($checkStmt->fetchColumn() > 0) {
@@ -48,14 +48,14 @@ if ($checkStmt->fetchColumn() > 0) {
     exit;
 }
 
-$stmt = $connection->prepare("INSERT INTO Performance (student_id, week_start_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt = $connection->prepare("INSERT INTO Performance (student_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
     $newPerformanceId = $connection->lastInsertId();
     $responseData = [
         'success' => true,
         'performance_id' => $newPerformanceId,
-        'week_start_date' => $weekStartDate,
+        'score_date' => $weekStartDate,
         'scores' => $scores,
     ];
     echo json_encode($responseData);

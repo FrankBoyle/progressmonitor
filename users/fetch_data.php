@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 function fetchPerformanceData($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
     $stmt->execute([$studentId]);
     return $stmt->fetchAll();
 }
@@ -108,7 +108,7 @@ $scoreNames = fetchScoreNames($schoolID);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
-    $chartDates[] = $record['week_start_date'];
+    $chartDates[] = $record['score_date'];
     // You can add more logic here if needed
 }
 
