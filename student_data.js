@@ -283,7 +283,8 @@ $(document).ready(function() {
             new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
             student_id: studentId
         };
-    
+        console.log(postData);
+
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             console.log(response); // <-- This is the debug line. 
         
