@@ -120,8 +120,8 @@ function getChartOptions(dataSeries, xCategories) {
                 color: '#000',
                 top: 15,          // Adjusted the vertical offset a bit
                 left: 5,          // Adjusted the horizontal offset a bit
-                blur: 7,         // Increased the blur to make it more spread out
-                opacity: 0.8      // Increased the opacity to make it darker
+                blur: 10,         // Increased the blur to make it more spread out
+                opacity: 0.7      // Increased the opacity to make it darker
             }
 
         },
@@ -129,7 +129,7 @@ function getChartOptions(dataSeries, xCategories) {
         dataLabels: {
             enabled: true,
             enabledOnSeries: [0],  // enable only on the first series
-            offsetY: -7,
+            offsetY: -10,
             style: {
                 fontSize: '12px',
                 colors: ['#333']
