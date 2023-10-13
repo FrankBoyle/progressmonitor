@@ -75,37 +75,43 @@ function updateChart(scoreField) {
 
     var seriesData = [
         {
-            name: 'Selected Score',
-            data: chartData,
-            connectNulls: true,  // Add this line here
-            stroke: {
-                width: 7  // Adjust this value to your desired thickness
+            name: 'Trendline',
+            data: trendlineData,
+            connectNulls: true,
+            dataLabels: {
+                enabled: false // Disable data labels for the Trendline series
             }
         },
         {
-            name: 'Trendline',
-            data: trendlineData,
-            connectNulls: true  // And add it here as well, if you want to connect null values for the trendline too
+            name: 'Selected Score',
+            data: chartData,
+            connectNulls: true,
+            dataLabels: {
+                enabled: true // Enable data labels for the Selected Score series
+            },
+            stroke: {
+                width: 7
+            }
         }
     ];
 
     if (benchmark !== null) {
-    var benchmarkData = xCategories.map(date => {
-        return {
-            x: date,
-            y: benchmark
-        };
-    }).reverse();
-    seriesData.push({
-        name: 'Benchmark',
-        data: benchmarkData,
-        connectNulls: true  // Keep this if you want to connect null values for the benchmark series
-    });
-}
-
+        var benchmarkData = xCategories.map(date => {
+            return {
+                x: date,
+                y: benchmark
+            };
+        }).reverse();
+        seriesData.push({
+            name: 'Benchmark',
+            data: benchmarkData,
+            connectNulls: true
+        });
+    }
 
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
+
 
 function getChartOptions(dataSeries, xCategories) {
     return {
