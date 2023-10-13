@@ -145,7 +145,7 @@ function getChartOptions(dataSeries, xCategories) {
             size: 5,
             colors: undefined,
             strokeColors: '#fff',
-            strokeWidth: 1,
+            strokeWidth: 2,
             strokeOpacity: 0,
             strokeDashArray: 0,
             fillOpacity: 1,
