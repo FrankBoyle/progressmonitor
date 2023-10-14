@@ -135,12 +135,14 @@ function getChartOptions(dataSeries, xCategories) {
             }
 
         },
-
+        toolbar: {
+            autoSelected: 'zoom' 
+        },
         pan: {
             enabled: true,  // Enable panning
             mode: 'x',      // Enable horizontal panning
         },   
-             
+
         dataLabels: {
             enabled: true,
             enabledOnSeries: [1],  // enable only on the first series
