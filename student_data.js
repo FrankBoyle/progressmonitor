@@ -149,7 +149,7 @@ function getChartOptions(dataSeries, xCategories) {
         
         stroke: {
             curve: 'smooth',
-            width: dataSeries.map(series => series.name === 'Selected Score' ? 4 : 2)  // Set width based on series name
+            width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1.5)  // Set width based on series name
         },
 
         markers: {
