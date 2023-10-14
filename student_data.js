@@ -123,7 +123,7 @@ function getChartOptions(dataSeries, xCategories) {
         chart: {
             type: 'line',
             stacked: false,
-            width: 1000,
+            width: 600,
 
             dropShadow: {
                 enabled: true,
@@ -149,7 +149,7 @@ function getChartOptions(dataSeries, xCategories) {
         
         stroke: {
             curve: 'smooth',
-            width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1)  // Set width based on series name
+            width: dataSeries.map(series => series.name === 'Selected Score' ? 4 : 2)  // Set width based on series name
         },
 
         markers: {
