@@ -153,7 +153,13 @@ function getChartOptions(dataSeries, xCategories) {
         },
 
         markers: {
-            size: 5,
+            size: dataSeries.map(series => {
+                if (series.name === 'Selected Score') {
+                    return 5;  // or whatever size you want for the "Selected Score" series
+                } else {
+                    return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
+                }
+            }),
             colors: undefined,
             strokeColors: '#fff',
             strokeWidth: 1.7,
