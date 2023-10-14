@@ -124,7 +124,18 @@ function getChartOptions(dataSeries, xCategories) {
             type: 'line',
             stacked: false,
             width: 600,
-
+            zoom: {
+                type: 'x',
+                enabled: true,   // Ensure zooming is enabled
+                autoScaleYaxis: true  // This will auto-scale the Y-axis when zooming in
+            },
+            toolbar: {
+                autoSelected: 'zoom' 
+            },
+            pan: {
+                enabled: true,  // Enable panning
+                mode: 'x',      // Enable horizontal panning
+            },   
             dropShadow: {
                 enabled: true,
                 color: '#000',
@@ -133,15 +144,8 @@ function getChartOptions(dataSeries, xCategories) {
                 blur: 7,         // Increased the blur to make it more spread out
                 opacity: 0.5      // Increased the opacity to make it darker
             }
+        },
 
-        },
-        toolbar: {
-            autoSelected: 'zoom' 
-        },
-        pan: {
-            enabled: true,  // Enable panning
-            mode: 'x',      // Enable horizontal panning
-        },   
 
         dataLabels: {
             enabled: true,
