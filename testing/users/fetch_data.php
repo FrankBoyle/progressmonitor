@@ -94,27 +94,14 @@ if (isset($_GET['student_id'])) {
         ];
     }
 
-// Construct the data to send to the client
-$responseData = [
-    'columnHeaders' => $columnHeaders,
-    'performanceData' => $performanceData,
-];
+    // Construct the data to send to the client
+    $responseData = [
+        'columnHeaders' => $columnHeaders,
+        'performanceData' => $performanceData,
+    ];
 
-// Handle null values in columnHeaders
-foreach ($responseData['columnHeaders'] as $key => $value) {
-    if ($value === null) {
-        $responseData['columnHeaders'][$key] = "N/A";
-    }
+    echo json_encode($responseData);
+} else {
+    echo json_encode(['error' => 'student_id parameter is missing']);
 }
-
-// Handle null values in performanceData
-foreach ($responseData['performanceData'] as &$item) {
-    foreach ($item as $key => $value) {
-        if ($value === null) {
-            $item[$key] = "N/A";
-        }
-    }
-}
-
-echo json_encode($responseData);
 ?>
