@@ -357,10 +357,9 @@ function fetchMetadata(metadataId) {
         url: './users/fetch_data.php',
         type: 'GET',
         data: {
-            action: 'fetchMetadata', // Change to 'fetchMetadata'
-            metadata_id: metadataId,
+            action: 'fetchMetadata',
+            metadata_id: metadataId, // Include metadataId as a query parameter
             student_id: studentId
-
         },
         dataType: 'json',
         success: function (response) {
@@ -368,14 +367,14 @@ function fetchMetadata(metadataId) {
                 // Check for null values and replace with appropriate text or handle them as needed
                 var columnHeaders = response.columnHeaders;
                 var performanceData = response.performanceData;
-        
+
                 // Check and handle null values in column headers
                 for (var key in columnHeaders) {
                     if (columnHeaders[key] === null) {
                         columnHeaders[key] = "N/A"; // Replace with appropriate text
                     }
                 }
-        
+
                 // Handle performance data
                 $.each(performanceData, function (index, item) {
                     // Check and handle null values in performance data fields
@@ -384,15 +383,16 @@ function fetchMetadata(metadataId) {
                             item[key] = "N/A"; // Replace with appropriate text
                         }
                     }
-        
+
                     // Now you can use the updated data for display or processing
                 });
-        
+
                 // Rest of your code
             }
         },
     });
 }
+
 
 
 
