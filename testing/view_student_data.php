@@ -1,3 +1,8 @@
+<?php include('./users/fetch_data.php'); ?>
+<?php $currentWeekStartDate = date('Y-m-d', strtotime('monday this week'));  // Adjust the date format as needed ?>
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,10 +25,6 @@
 </head>
 <body>
 
-<?php include('./users/fetch_data.php'); ?>
-<?php $currentWeekStartDate = date('Y-m-d', strtotime('monday this week'));  // Adjust the date format as needed ?>
-<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
-<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
@@ -42,45 +43,43 @@
     <?php endforeach; ?>
 </select>
 
-<table border="1">
+<table border="1" id="performanceDataTable">
     <thead>
         <tr>
-            <th>Week Start Date</th>
-            <?php foreach ($scoreNames as $key => $name): ?>
-                <th><?php echo $name; ?></th>
+            <th>Date</th>
+            <?php foreach ($scoreNames as $name): // Ensure $scoreNames is fetched or defined earlier ?>
+                <th><?php echo htmlspecialchars($name); ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
     </thead>
-
-    <?php if (empty($performanceData)): ?>
-        <tr>
-            <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-        </tr>
-    <?php else: ?>
-        <?php foreach ($performanceData as $data): ?>
-            <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="score_date">
-                    <?php
-                    if (isset($data['score_date'])) {
-                        echo date("m/d/Y", strtotime($data['score_date']));
-                    }
-                    ?>
-                </td>
-                <!-- Add scores using loop -->
-                <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <td class="editable" data-field-name="score<?php echo $i; ?>">
-                        <?php
-                        if (isset($data['score'.$i])) {
-                            echo $data['score'.$i];
-                        }
-                        ?>
-                    </td>
-                <?php endfor; ?>
-                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
+    <tbody>
+        <?php if (empty($performanceData)): ?>
+            <tr>
+                <td colspan="<?php echo count($scoreNames) + 2; ?>">No Data Found. Click "Add Data Row" to add new data.</td>
             </tr>
-        <?php endforeach; ?>
-    <?php endif; ?>
+        <?php else: ?>
+            <?php foreach ($performanceData as $data): ?>
+                <tr data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">
+                    <td class="editable" data-field-name="score_date"><?php echo date("m/d/Y", strtotime($data['score_date'])); ?></td>
+                    
+                    <?php
+                    // Assuming your scores are in columns named score1, score2, etc.
+                    for ($i = 1; $i <= 10; $i++): // Adjust if you have more scores
+                        $scoreField = 'score' . $i;
+                    ?>
+                        <td class="editable" data-field-name="<?php echo $scoreField; ?>">
+                            <?php echo isset($data[$scoreField]) ? htmlspecialchars($data[$scoreField]) : ''; ?>
+                        </td>
+                    <?php endfor; ?>
+                    
+                    <td>
+                        <button class="deleteRow" data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">Delete</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
 </table>
 
 <label>Select Score to Display: </label>
