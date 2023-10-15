@@ -327,7 +327,7 @@ $(document).ready(function() {
         });  
     }
 
-    let dateAscending = true; // to keep track of current order
+    //let dateAscending = true; // to keep track of current order
 
     $('#toggleDateOrder').on('click', function() {
         const table = $('table').DataTable();
