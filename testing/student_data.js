@@ -433,31 +433,42 @@ $(document).ready(function() {
         });
     }
 
+    function populateMetadataDropdown(data) {
+        const dropdown = document.getElementById("metadataDropdown"); // Assuming you have a dropdown with this ID
+    
+        // Clear any existing options
+        dropdown.innerHTML = '';
+    
+        // Add new options
+        data.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.metadata_id;
+            option.textContent = item.category_name;
+            dropdown.appendChild(option);
+        });
+    }
+    
+
     // This function fetches metadata when the page loads and populates the dropdown.
 function fetchMetadataOnLoad() {
-    fetch("./users/fetch_metadata.php")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.text();
-        })
-        .then(data => {
-            if (data.trim().length > 0) {
-                const parsedData = JSON.parse(data);
-                populateMetadataDropdown(parsedData);
-            } else {
-                throw new Error("Empty response from server");
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
+    fetch("/testing/users/fetch_metadata.php")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json(); 
+    })
+    .then(data => {
+        populateMetadataDropdown(data);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
 }
 
 // This function updates the chart based on the selected metadata ID.
 function fetchScoresOnMetadataChange(metadataId) {
-    fetch(`/testing/users/fetch_metadata.php?metadata_id=${metadataId}`)
+    fetch(`./users/fetch_metadata.php?metadata_id=${metadataId}`)
     .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
