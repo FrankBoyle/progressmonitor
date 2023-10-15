@@ -309,7 +309,7 @@ $('#metadataIdSelector').on('change', function() {
         error: function(xhr, status, error) {
             // Handle errors if any
             console.error(error);
-            fetchMetadata(selectedMetadataId);
+            //fetchMetadata(selectedMetadataId);
         }
     });
 });
