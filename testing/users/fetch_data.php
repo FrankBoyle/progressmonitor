@@ -7,12 +7,10 @@ error_reporting(E_ALL);
 include('db.php');
 
 function fetchPerformanceData($studentId, $metadataId) {
-    // Rest of the function remains the same
     global $connection;
     try {
-        // Adjust your SQL query to filter by both studentId and metadataId
         $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
-        $stmt->execute([$studentId, $metadataId]);
+        $stmt->execute([$studentId, $metadataId]); // Pass both studentId and metadataId as parameters
         return $stmt->fetchAll();
     } catch (PDOException $e) {
         // Handle the database error here, e.g., log the error, return an error response, etc.
@@ -20,6 +18,7 @@ function fetchPerformanceData($studentId, $metadataId) {
         exit;
     }
 }
+
 
 
 if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
