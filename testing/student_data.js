@@ -452,6 +452,28 @@ $(document).ready(function() {
             }
         });
     }
+    function updateChartWithScores(scores) {
+        // Assuming you have a chart object named "chart" already initialized
+        
+        // Extract labels and data from the "scores" object
+        const labels = Object.keys(scores);
+        const data = Object.values(scores);
+    
+        // Assuming you have a function called "updateSeries" to update chart data series
+        chart.updateSeries([
+            {
+                data: data
+            }
+        ]);
+    
+        // Assuming you have a function called "updateOptions" to update chart options
+        chart.updateOptions({
+            xaxis: {
+                categories: labels
+            }
+        });
+    }
+    
 
     function populateMetadataDropdown(data) {
         const dropdown = document.getElementById("metadataIdSelector"); // Assuming you have a dropdown with this ID
