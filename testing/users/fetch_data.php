@@ -128,7 +128,8 @@ if (isset($_GET['student_id'])) {
         echo json_encode(['error' => 'No SchoolID found for the student']);
         exit;
     }
-
+    $studentId = $_GET['student_id'];
+    $metadataId = $_GET['metadata_id']; // Assuming you have metadata_id
     // Fetch performance data
     $performanceData = fetchPerformanceData($studentId, $metadataId);
 
