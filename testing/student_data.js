@@ -314,7 +314,30 @@ function fetchMetadata(metadataId) {
         dataType: 'json',
         success: function (response) {
             if (response) {
-                // Handle the response data here
+                // Check for null values and replace with appropriate text or handle them as needed
+                var columnHeaders = response.columnHeaders;
+                var performanceData = response.performanceData;
+        
+                // Check and handle null values in column headers
+                for (var key in columnHeaders) {
+                    if (columnHeaders[key] === null) {
+                        columnHeaders[key] = "N/A"; // Replace with appropriate text
+                    }
+                }
+        
+                // Handle performance data
+                $.each(performanceData, function (index, item) {
+                    // Check and handle null values in performance data fields
+                    for (var key in item) {
+                        if (item[key] === null) {
+                            item[key] = "N/A"; // Replace with appropriate text
+                        }
+                    }
+        
+                    // Now you can use the updated data for display or processing
+                });
+        
+                // Rest of your code
             }
         },
     });
