@@ -1,6 +1,10 @@
 <?php include('./users/fetch_data.php');
 $currentWeekStartDate = date('Y-m-d', strtotime('monday this week'));  // Adjust the date format as needed
 
+if (!isset($_GET['metadata_id']) || empty($_GET['metadata_id'])) {
+    // No valid metadata_id provided, handle the error, e.g., display a message, or redirect, etc.
+    die('No valid metadata ID provided.');
+}
 // Assume $studentId and $metadataId are obtained earlier in your script
 // For example, they could be from a logged-in user's session or from a form input
 $studentId = $_GET['student_id']; // or another method to get the student ID
