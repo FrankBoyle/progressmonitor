@@ -61,7 +61,6 @@ function addNewStudent($studentName, $teacherId) {
 
 // Initialize empty arrays and variables
 $performanceData = [];
-$scoreNames = [];
 $chartDates = [];
 $chartScores = [];
 
@@ -85,7 +84,6 @@ if (!$schoolID) {
 
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($schoolID);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
