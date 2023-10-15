@@ -143,6 +143,7 @@ try {
     // Initialize chart data
     $chartDates = [];
     $chartScores = []; // Assuming you want to process scores too
+    $groupNames = [];
 
     // Preparing the data for the chart
     foreach ($performanceData as $record) {
