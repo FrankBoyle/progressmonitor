@@ -109,8 +109,8 @@ if (!isset($_GET['student_id'])) {
 }
 
 $studentId = $_GET['student_id'];
+$matadataID = $_GET['metadata_id'];
 $schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
-$matadataID = 1;
 
 // Replace with your actual SchoolID and metadata_id
 
