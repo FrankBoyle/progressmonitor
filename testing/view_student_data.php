@@ -1,7 +1,15 @@
-<?php include('./users/fetch_data.php'); ?>
-<?php $currentWeekStartDate = date('Y-m-d', strtotime('monday this week'));  // Adjust the date format as needed ?>
-<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
-<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
+<?php include('./users/fetch_data.php');
+$currentWeekStartDate = date('Y-m-d', strtotime('monday this week'));  // Adjust the date format as needed
+
+// Assume $studentId and $metadataId are obtained earlier in your script
+// For example, they could be from a logged-in user's session or from a form input
+$studentId = $_GET['student_id']; // or another method to get the student ID
+$metadataId = $_GET['metadata_id']; // or another method to get the metadata ID
+
+// Fetch performance data and score names using the functions in fetch_data.php
+$performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
+$scoreNames = fetchScoreNamesByMetadata($metadataId);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +32,8 @@
 </style>
 </head>
 <body>
-
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
