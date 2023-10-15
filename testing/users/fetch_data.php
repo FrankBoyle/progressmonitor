@@ -112,8 +112,6 @@ $studentId = $_GET['student_id'];
 $schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
 
 // Replace with your actual SchoolID and metadata_id
-$schoolID = 'your_school_id';
-$metadataID = 'your_metadata_id';
 
 echo "schoolID: $schoolID<br>";
 echo "metadataID: $metadataID<br>";
