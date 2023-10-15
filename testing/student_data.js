@@ -435,7 +435,7 @@ $(document).ready(function() {
 
     // This function fetches metadata when the page loads and populates the dropdown.
 function fetchMetadataOnLoad() {
-    fetch("/users/fetch_metadata.php")
+    fetch("./users/fetch_metadata.php")
         .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
