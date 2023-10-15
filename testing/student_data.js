@@ -315,6 +315,7 @@ $('#metadataIdSelector').on('change', function() {
 });
 
 
+
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
     var studentId = $('#currentStudentId').val();
