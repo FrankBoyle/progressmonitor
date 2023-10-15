@@ -6,8 +6,15 @@ error_reporting(E_ALL);
 
 include('db.php');
 
+class DatabaseOperations {
+    private $connection;
+
+    public function __construct($connection) {
+        $this->connection = $connection;
+    }
+    
 function fetchPerformanceDataByMetadata($studentId, $metadataId) {
-    global $connection;
+    $this->$connection;
     $stmt = $connection->prepare("
         SELECT * FROM Performance 
         WHERE student_id = ? AND metadata_id = ? 
@@ -18,14 +25,14 @@ function fetchPerformanceDataByMetadata($studentId, $metadataId) {
 }
 
 function fetchMetadataCategories($schoolID) {
-    global $connection;
+    $this->$connection;
     $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
     $stmt->execute([$schoolID]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function fetchSchoolIdForStudent($studentId) {
-    global $connection;
+    $this->$connection;
     $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch();
@@ -33,7 +40,7 @@ function fetchSchoolIdForStudent($studentId) {
 }
 
 function fetchScoreNamesByMetadata($metadataId) {
-    global $connection;
+    $this->$connection;
     $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataId]);
     // Check for errors
@@ -62,14 +69,14 @@ function fetchScoreNamesByMetadata($metadataId) {
 }
 
 function fetchStudentsByTeacher($teacherId) {
-    global $connection;
+    $this->$connection;
     $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
 
 function addNewStudent($studentName, $teacherId) {
-    global $connection;
+    $this->$connection;
 
     // Fetch the SchoolID of the current teacher
     $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
@@ -92,29 +99,10 @@ function addNewStudent($studentName, $teacherId) {
     return "New student added successfully.";
 }
 
-function fetchGroupNames() {
-    global $connection;
-    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
-    $stmt->execute();
-    $stmt->bindColumn(1, $groupName);
-    
-    $groups = [];
-    while ($stmt->fetch(PDO::FETCH_BOUND)) {
-        $groups[] = $groupName;
-    }
-    
-    return $groups;
+public function handleError($e) {
+    error_log('Database error: ' . $e->getMessage());
+    die("An internal server error occurred; please try again later.");
 }
-
-
-// Initialize empty arrays and variables
-$performanceData = [];
-$scoreNames = [];
-$chartDates = [];
-$chartScores = [];
-
-$metadataEntries = array();
-
 // Prepare the SQL query to fetch metadata entries
 $query = "SELECT metadata_id, category_name FROM Metadata";  
 
@@ -131,31 +119,14 @@ try {
     // Handle error during execution
     echo "Database error: " . $e->getMessage();
 }
-
-try {
-    // Your database operations or other potential error-prone operations here
-    // For example:
-    $stmt = $connection->prepare($query);
-    $stmt->execute();
-    
-    // If the above operations fail, the script will jump to the catch block below
-
-} catch (PDOException $e) {
-    // Now $e is defined, and you can access its methods
-    error_log('Database error: ' . $e->getMessage());
-
-    // Instead of echoing the error details to the user, consider showing a generic error message
-    echo "An error occurred. Please try again later.";
-
-    // Stop the script or handle the error gracefully
-    exit;
 }
+// Initialize empty arrays and variables
+$performanceData = [];
+$scoreNames = [];
+$chartDates = [];
+$chartScores = [];
+$metadataEntries = array();
 
-// Check if the action is set to 'fetchGroups' and handle it
-if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
-    echo json_encode(fetchGroupNames());
-    exit;
-}
 
 // If student_id is not set, exit early
 if (!isset($_GET['student_id'])) {
@@ -173,7 +144,7 @@ if (!isset($_GET['metadata_id'])) {
     echo "Database error: " . $e->getMessage();
     return;
 }
-$metadataId = $_GET['metadata_id'];
+//$metadataId = $_GET['metadata_id'];
 
 // Fetch performance data and score names
 $performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
@@ -184,23 +155,41 @@ foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
     // You can add more logic here if needed
 }
+// ... (previous code)
 
+// Create an instance of your database operations class
+$dbOps = new DatabaseOperations($connection);
 
+try {
+    if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
+        echo json_encode($dbOps->fetchGroupNames());
+        exit;
+    }
 
-// Handling the data POST from the dropdown functionality
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
-    $schoolIDIndex = $_POST['SchoolIDIndex'];
-    $originalName = $_POST['ScoreColumn'];
-    $customName = $_POST['CustomName'];
-    $scoreGroup = $_POST['ScoreGroup'];
+    if (!isset($_GET['student_id'])) {
+        throw new Exception("Student ID not provided");
+    }
 
-    // Inserting into the SchoolScoreNames table
-    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
-    
-    // Respond with the ID of the inserted row
-    echo json_encode(['id' => $connection->lastInsertId()]);
-    exit;
+    $studentId = $_GET['student_id'];
+    $schoolID = $dbOps->fetchSchoolIdForStudent($studentId);
+
+    if (!$schoolID) {
+        throw new Exception("No school ID found for provided student ID");
+    }
+
+    if (!isset($_GET['metadata_id'])) {
+        throw new Exception("Metadata ID not provided");
+    }
+
+    $metadataId = $_GET['metadata_id'];
+
+    // ... (other operations)
+
+} catch (Exception $e) {
+    $dbOps->handleError($e);
 }
+
+// ... (POST request handling, if needed)
+
 ?>
 
