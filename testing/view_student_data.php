@@ -35,7 +35,7 @@
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
         <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
-            <?php echo htmlspecialchars($entry['category_name']); ?>
+            <?php echo isset($entry['category_name']) ? htmlspecialchars($entry['category_name']) : ''; ?>
         </option>
     <?php endforeach; ?>
 </select>
@@ -46,7 +46,7 @@
             <th>Week Start Date</th>
             <!-- Dynamically generate table headers based on columnHeaders data -->
             <?php foreach ($columnHeaders as $key => $name): ?>
-                <th><?php echo $name; ?></th>
+                <th><?php echo isset($name) ? $name : ''; ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
@@ -81,6 +81,7 @@
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
+
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
