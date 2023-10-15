@@ -258,23 +258,62 @@ function calculateTrendline(data) {
 
 $(document).ready(function() {
 // Listen for changes in the metadata dropdown
-$('#metadataIdSelector').change(function () {
+
+function updateTableHeaders() {
+    // Clear existing headers
+    $('#dataTable thead tr th:not(:first-child)').remove();
+
+    // Add new headers based on columnHeaders data
+    $.each(columnHeaders, function (key, name) {
+        $('#dataTable thead tr').append('<th>' + (name || '') + '</th>');
+    });
+}
+
+// Function to fetch metadata groups and update the dropdown
+function fetchMetadataGroups() {
+    $.ajax({
+        url: 'fetch_data.php',
+        type: 'GET',
+        data: { action: 'fetchGroups' },
+        dataType: 'json',
+        success: function (response) {
+            if (response) {
+                $('#metadataIdSelector').empty();
+                $.each(response, function (index, item) {
+                    $('#metadataIdSelector').append('<option value="' + item.metadata_id + '">' + item.category_name + '</option>');
+                });
+            }
+        },
+    });
+}
+
+// Initial table header update and metadata group fetch
+updateTableHeaders();
+fetchMetadataGroups();
+
+// Handle metadata group selection change
+$('#metadataIdSelector').on('change', function () {
     var selectedMetadataId = $(this).val();
 
-    // Send AJAX request to fetch column headers based on selected metadata
+    // Perform an AJAX request to fetch column headers based on metadata_id
     $.ajax({
-        url: 'fetch_column_headers.php',
-        method: 'POST',
-        data: { metadataId: selectedMetadataId },
-        success: function (data) {
-            // Update column headers with fetched column names
-            var columnHeaders = JSON.parse(data);
-            for (var i = 1; i <= 10; i++) {
-                $('#scoreHeader' + i).text(columnHeaders['score' + i]);
+        url: 'fetch_data.php',
+        type: 'GET',
+        data: { metadata_id: selectedMetadataId },
+        dataType: 'json',
+        success: function (response) {
+            if (response.columnHeaders) {
+                // Update the columnHeaders variable with the fetched data
+                columnHeaders = response.columnHeaders;
+
+                // Update the table headers
+                updateTableHeaders();
             }
-        }
+        },
     });
 });
+});
+
     function getCurrentDate() {
         const currentDate = new Date();
         return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
@@ -689,4 +728,3 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 null, null, null, null, null, null, null, null, null, null, null
             ]
         });
-});
