@@ -140,4 +140,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     echo json_encode(['id' => $connection->lastInsertId()]);
     exit;
 }
+
+// Fetch metadata entries from the Metadata table for the specified SchoolID
+$metadataEntries = [];
+$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+$stmt->execute([$schoolID]);
+
+// Populate the $metadataEntries array with fetched data
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $metadataEntries[] = $row;
+}
 ?>
