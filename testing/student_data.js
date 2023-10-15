@@ -338,6 +338,7 @@ $(document).ready(function() {
             });
     });
     
+});
 
     // Utility Functions
     function isValidDate(d) {
