@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('db.php');
+include('./users/db.php');
 
 function fetchPerformanceData($studentId) {
     global $connection;
@@ -21,27 +21,16 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['SchoolID'] : null;
 }
 
-function fetchScoreNamesFromMetadata($schoolID) {
+function fetchScoreNames($schoolID) {
     global $connection;
     $scoreNames = [];
-
-    $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ?");
+    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE SchoolID = ?");
     $stmt->execute([$schoolID]);
-    
-    $metadata = $stmt->fetch();
-    if ($metadata) {
-        for ($i = 1; $i <= 10; $i++) {
-            $key = "score" . $i . "_name";
-            if (isset($metadata[$key]) && $metadata[$key]) {
-                $scoreNames["score" . $i] = $metadata[$key];
-            }
-        }
+    while ($row = $stmt->fetch()) {
+        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
     }
-
     return $scoreNames;
 }
-
-
 
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
@@ -115,16 +104,12 @@ if (!$schoolID) {
 
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNamesFromMetadata($schoolID);
+$scoreNames = fetchScoreNames($schoolID);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
-    foreach ($scoreNames as $originalName => $customName) {
-        if (isset($record[$originalName])) {
-            $chartScores[$customName][] = $record[$originalName]; // Use custom names for chart scores
-        }
-    }
+    // You can add more logic here if needed
 }
 
 // Handling the data POST from the dropdown functionality
@@ -139,11 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
     
     // Respond with the ID of the inserted row
-    echo json_encode([
-        'dates' => $chartDates,
-        'scores' => $chartScores
-    ]);
-        exit;
+    echo json_encode(['id' => $connection->lastInsertId()]);
+    exit;
 }
 ?>
 

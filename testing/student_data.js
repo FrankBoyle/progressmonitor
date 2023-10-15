@@ -266,88 +266,6 @@ $(document).ready(function() {
     // Constants & Variables
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
-    fetch("./users/fetch_metadata.php")
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.text(); // Get the response as text
-    })
-    .then(text => {
-        if (!text) {
-            throw new Error("Empty response from server");
-        }
-        return JSON.parse(text); // Parse the text as JSON
-    })
-    .then(data => {
-        // Handle the parsed metadata data here
-        console.log(data); // Example: Log the data to the console
-    })
-    .catch(error => {
-        console.error("Error fetching metadata:", error);
-    });
-
-
-
-    fetch("./users/fetch_data.php?student_id=" + CURRENT_STUDENT_ID)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.error) {
-            console.error("Server error:", data.error);
-            return;
-        }
-
-        const dates = data.dates;
-        const scores = data.scores;
-
-        const seriesData = [];
-
-        for (const [label, scoreData] of Object.entries(scores)) {
-            seriesData.push({
-                name: label,
-                data: scoreData
-            });
-        }
-
-        // Assuming you have initialized your chart elsewhere and it's stored in a variable named "chart".
-        // You can update the series and x-axis categories as follows:
-        chart.updateOptions({
-            xaxis: {
-                categories: dates
-            },
-            series: seriesData
-        });
-
-    })
-    .catch(error => {
-        console.error("Fetch error:", error);
-    });
-
-
-
-    fetch('./users/fetch_metadata.php')
-.then(response => response.json())
-.then(data => {
-    let dropdown = document.getElementById('metadataIdSelector');
-    dropdown.addEventListener('change', function() {
-        let selectedMetadataId = dropdown.value;
-        fetch(`/testing/users/fetch_metadata.php?metadata_id=${selectedMetadataId}`)
-            .then(response => response.json())
-            .then(data => {
-                // handle the data here. Update the page, chart, etc.
-            })
-            .catch(error => {
-                console.error('There was an error fetching the metadata:', error);
-            });
-    });
-    
-});
-
     // Utility Functions
     function isValidDate(d) {
         return d instanceof Date && !isNaN(d);
@@ -409,7 +327,7 @@ $(document).ready(function() {
         });  
     }
 
-    let dateAscending = true; // to keep track of current order
+    //let dateAscending = true; // to keep track of current order
 
     $('#toggleDateOrder').on('click', function() {
         const table = $('table').DataTable();
@@ -441,112 +359,29 @@ $(document).ready(function() {
         }, 'json');
     });
 
-    function updateScoreInDatabase(row, fieldName, newValue) {
+    function updateScoreInDatabase(row, metadataFieldName, newValue) {
         const performanceId = row.data('performance-id');
         const studentId = CURRENT_STUDENT_ID;
-        const weekStartDate = convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text());
-
+        const score_date = row.find('td[data-field-name="score_date"]').text();
+        
+        // Assuming that metadataFieldName would be something like "score1_name" and we'd need to update "score1"
+        const fieldNameToUpdate = metadataFieldName.replace('_name', '');
+    
         const postData = {
             performance_id: performanceId,
-            field_name: fieldName,
+            field_name: fieldNameToUpdate, // Use the extracted field name to update the appropriate score column
             new_value: newValue,
             student_id: studentId,
-            score_date: weekStartDate
+            score_date: score_date
         };
-
+    
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             if (response && !response.success) {
-                //alert('Error updating the average score in the database.');
-            }
-        });
-    }
-    function updateChartWithScores(scores) {
-        // Assuming you have a chart object named "chart" already initialized
-        
-        // Extract labels and data from the "scores" object
-        const labels = Object.keys(scores);
-        const data = Object.values(scores);
-    
-        // Assuming you have a function called "updateSeries" to update chart data series
-        chart.updateSeries([
-            {
-                data: data
-            }
-        ]);
-    
-        // Assuming you have a function called "updateOptions" to update chart options
-        chart.updateOptions({
-            xaxis: {
-                categories: labels
+                console.error('Error updating the score in the database.');
             }
         });
     }
     
-
-    function populateMetadataDropdown(data) {
-        const dropdown = document.getElementById("metadataIdSelector"); // Assuming you have a dropdown with this ID
-    
-        // Clear any existing options
-        dropdown.innerHTML = '';
-    
-        // Add new options
-        data.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.metadata_id;
-            option.textContent = item.category_name;
-            dropdown.appendChild(option);
-        });
-    }
-    
-
-    // This function fetches metadata when the page loads and populates the dropdown.
-function fetchMetadataOnLoad() {
-    fetch("./users/fetch_metadata.php")
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json(); 
-    })
-    .then(data => {
-        populateMetadataDropdown(data);
-    })
-    .catch(error => {
-        console.error("Error:", error);
-    });
-}
-
-// This function updates the chart based on the selected metadata ID.
-function fetchScoresOnMetadataChange(metadataId) {
-    fetch(`./users/fetch_metadata.php?metadata_id=${metadataId}`)
-    .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.text();
-        })
-        .then(data => {
-            if (data.trim().length > 0) {
-                const parsedData = JSON.parse(data);
-                updateChartWithScores(parsedData);
-            } else {
-                throw new Error("Empty response from server");
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
-}
-
-// This is your event listener for when a new metadata is selected.
-document.getElementById("metadataIdSelector").addEventListener("change", function(event) {
-    const selectedMetadataId = event.target.value;
-    fetchScoresOnMetadataChange(selectedMetadataId);
-});
-
-// Call the initial metadata fetch when the page loads.
-fetchMetadataOnLoad();
-
 
     function isDateDuplicate(dateString, currentPerformanceId = null) {
     //console.log("Checking for duplicate of:", dateString);
@@ -778,27 +613,7 @@ if (isDateDuplicate(currentDate)) {
  
     });
     
-    document.getElementById('metadataIdSelector').addEventListener('change', function(e) {
-        const selectedMetadataId = e.target.value;
-    
-        fetch(`./users/fetch_metadata.php?metadata_id=${selectedMetadataId}`)
-            .then(response => response.json())
-            .then(data => {
-                // Here, assuming the server returns an array of score names in the order
-                // [score1_name, score2_name, ...]
-    
-                data.forEach((scoreName, index) => {
-                    const scoreElement = document.getElementById(`score${index + 1}Name`);
-                    if(scoreElement) {
-                        scoreElement.textContent = scoreName;
-                    }
-                });
-            })
-            .catch(error => {
-                console.error("Failed to fetch metadata:", error);
-            });
-    });
-    
+
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',
