@@ -266,7 +266,7 @@ $(document).ready(function() {
     // Constants & Variables
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
-    fetch("./users/fetch_data.php?student_CURRENT_STUDENT_ID")
+    fetch("/users/fetch_data.php?student_CURRENT_STUDENT_ID")
     .then(response => {
         if (!response.ok) {
             throw new Error("Network response was not ok");
