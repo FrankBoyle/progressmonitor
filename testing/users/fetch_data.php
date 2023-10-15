@@ -130,7 +130,7 @@ if (isset($_GET['student_id'])) {
     }
 
     // Fetch performance data
-    $performanceData = fetchPerformanceData($studentId);
+    $performanceData = fetchPerformanceData($studentId, $metadataId);
 
     // Check if the metadataId is provided in the request
     if (isset($_GET['metadata_id'])) {
