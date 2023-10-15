@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: application/json');
+//header('Content-Type: application/json');
 
 // Error Reporting
 ini_set('display_errors', 1);
