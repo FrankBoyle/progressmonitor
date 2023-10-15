@@ -37,7 +37,7 @@ class DatabaseOperations {
     }
 
 function fetchScoreNamesByMetadata($metadataId) {
-    $stmt = $this->$connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
+    $stmt = $this->connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataId]);
     // Check for errors
     if ($stmt->errorCode() != '00000') {
@@ -65,20 +65,20 @@ function fetchScoreNamesByMetadata($metadataId) {
 }
 
 function fetchStudentsByTeacher($teacherId) {
-    $stmt = $this->$connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+    $stmt = $this->connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
 
 function addNewStudent($studentName, $teacherId) {
     // Fetch the SchoolID of the current teacher
-    $stmt = $this->$connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    $stmt = $this->connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
     $stmt->execute([$teacherId]);
     $teacherInfo = $stmt->fetch();
     $teacherSchoolID = $teacherInfo['SchoolID'];
 
     // Check if the student with the same name and SchoolID already exists
-    $stmt = $this->$connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
+    $stmt = $this->connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
     $stmt->execute([$studentName, $teacherSchoolID]);
     $duplicateStudent = $stmt->fetch();
 
@@ -87,14 +87,14 @@ function addNewStudent($studentName, $teacherId) {
     } 
 
     // Insert the new student with the same SchoolID
-    $stmt = $this->$connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+    $stmt = $this->connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
     $stmt->execute([$studentName, $teacherSchoolID]);
     return "New student added successfully.";
 }
 
 public function fetchAllMetadataEntries() {
     $query = "SELECT metadata_id, category_name FROM Metadata";  
-    $stmt = $this->connection->prepare($query);
+    $stmt = this->connection->prepare($query);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
