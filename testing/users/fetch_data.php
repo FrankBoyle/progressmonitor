@@ -109,7 +109,11 @@ $scoreNames = fetchScoreNames($schoolID);
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
-    // You can add more logic here if needed
+    foreach ($scoreNames as $originalName => $customName) {
+        if (isset($record[$originalName])) {
+            $chartScores[$customName][] = $record[$originalName]; // Use custom names for chart scores
+        }
+    }
 }
 
 // Handling the data POST from the dropdown functionality
