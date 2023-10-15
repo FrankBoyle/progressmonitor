@@ -136,12 +136,9 @@ foreach ($responseData['performanceData'] as &$item) {
         }
     }
 }
-    // Output the JSON response
-    header('Content-Type: application/json'); // Set content type
-    echo json_encode($responseData); // Output JSON data
-    exit; // Terminate script
+
+    //echo json_encode($responseData);
 } else {
     echo json_encode(['error' => 'student_id parameter is missing']);
-    exit;
 }
 ?>
