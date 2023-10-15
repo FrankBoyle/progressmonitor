@@ -85,6 +85,7 @@ function fetchColumnHeaders($metadataId) {
 }
 
 $response = [];
+$metadataId = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null; // Initialize metadataId
 
 if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
     $studentId = $_GET['student_id'];
