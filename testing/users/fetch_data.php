@@ -55,7 +55,7 @@ if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
 
     $response = $responseData; // Set the response array to the constructed data
 } else {
-    $response['error'] = 'Invalid request'; // Handle the case when parameters are missing
+    $response['error'] = 'metadata_id parameter is missing'; // Handle the case when metadata_id is missing
 }
 
 echo json_encode($response); // Send the response as JSON
