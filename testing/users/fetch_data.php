@@ -138,32 +138,31 @@ if (isset($_GET['student_id'])) {
         echo json_encode(['error' => 'No SchoolID found for the student']);
         exit;
     }
-    $studentId = $_GET['student_id'];
-    $metadataId = $_GET['metadata_id']; // Assuming you have metadata_id
+    // $studentId = $_GET['student_id']; // Remove this line, you already have $studentId
+    // $metadataId = $_GET['metadata_id']; // Remove this line, you already have $metadataId
     // Fetch performance data
     $performanceData = fetchPerformanceData($studentId, $metadataId);
 
     // Check if the metadataId is provided in the request
-    if (isset($_GET['metadata_id'])) {
-        $metadataId = $_GET['metadata_id'];
-
-        // Fetch the column headers based on the selected metadataId
-        $columnHeaders = fetchColumnHeaders($metadataId);
-    } else {
-        // Default column headers if metadataId is not provided
-        $columnHeaders = [
-            "score1" => "Score 1",
-            "score2" => "Score 2",
-            "score3" => "Score 3",
-            "score4" => "Score 4",
-            "score5" => "Score 5",
-            "score6" => "Score 6",
-            "score7" => "Score 7",
-            "score8" => "Score 8",
-            "score9" => "Score 9",
-            "score10" => "Score 10",
-        ];
-    }
+    // if (isset($_GET['metadata_id'])) { // Remove this line, you already checked it above
+    //     $metadataId = $_GET['metadata_id'];
+    // Fetch the column headers based on the selected metadataId
+    $columnHeaders = fetchColumnHeaders($metadataId);
+    // } else {
+    //     // Default column headers if metadataId is not provided
+    //     $columnHeaders = [
+    //         "score1" => "Score 1",
+    //         "score2" => "Score 2",
+    //         "score3" => "Score 3",
+    //         "score4" => "Score 4",
+    //         "score5" => "Score 5",
+    //         "score6" => "Score 6",
+    //         "score7" => "Score 7",
+    //         "score8" => "Score 8",
+    //         "score9" => "Score 9",
+    //         "score10" => "Score 10",
+    //     ];
+    // }
 
     // Construct the data to send to the client
     $responseData = [
