@@ -110,6 +110,7 @@ if (!isset($_GET['student_id'])) {
 
 $studentId = $_GET['student_id'];
 $schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
+$matadataID = fetchMetadataCategoriesFromDatabase($schoolID);
 
 // Replace with your actual SchoolID and metadata_id
 
@@ -175,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 $metadataEntries = [];
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
 $stmt->execute([$schoolID]);
-
+//$stmt->execute([$metadataID]);
 // Populate the $metadataEntries array with fetched data
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
