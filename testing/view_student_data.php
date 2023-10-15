@@ -1,5 +1,5 @@
 <?php 
-include('./users/fetch_data.php'); 
+include('/users/fetch_data.php'); 
 $metadataEntries = []; // Initialize as an empty array
 ?>
 <!DOCTYPE html>
