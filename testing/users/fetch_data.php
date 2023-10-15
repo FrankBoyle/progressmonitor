@@ -17,7 +17,19 @@ function fetchPerformanceData($studentId, $metadataId) {
         exit;
     }
 }
-
+function fetchSchoolIdForStudent($studentId) {
+    global $connection;
+    try {
+        $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
+        $stmt->execute([$studentId]);
+        $result = $stmt->fetch();
+        return $result ? $result['SchoolID'] : null;
+    } catch (PDOException $e) {
+        // Handle the database error here, e.g., log the error, return an error response, etc.
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        exit;
+    }
+}
 $response = [];
 
 if (isset($_GET['student_id'])) {
