@@ -255,6 +255,7 @@ function calculateTrendline(data) {
 }
 
 ////////////////////////////////////////////////
+let columnHeaders = []; // Initialize as an empty array
 
 $(document).ready(function() {
 // Listen for changes in the metadata dropdown
