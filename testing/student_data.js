@@ -284,11 +284,13 @@ function fetchMetadataCategories() {
         type: 'GET',
         data: { 
             action: 'fetchMetadataCategories',
-            student_id: studentId // Pass student_id in the request
+            student_id: studentId, // Pass student_id in the request
+            metadata_id: metadataId
         },
         dataType: 'json',
         success: function (response) {
             if (response) {
+                console.log(response);
                 $('#metadataIdSelector').empty();
                 $.each(response, function (index, item) {
                     $('#metadataIdSelector').append('<option value="' + item.metadata_id + '">' + item.category_name + '</option>');
