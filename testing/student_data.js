@@ -266,6 +266,22 @@ $(document).ready(function() {
     // Constants & Variables
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
+    fetch("/testing/users/fetch_metadata.php")
+    .then(response => response.text())  // First get the response as text
+    .then(text => {
+        if (!text) {
+            throw new Error("Empty response from server");
+        }
+        return JSON.parse(text);  // Parse the text as JSON
+    })
+    .then(data => {
+        // Handle the parsed data here
+    })
+    .catch(error => {
+        console.error("Error fetching data:", error);
+    });
+
+
     fetch("./users/fetch_data.php?student_id=" + CURRENT_STUDENT_ID)
     .then(response => {
         if (!response.ok) {
