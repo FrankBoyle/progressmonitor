@@ -190,7 +190,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 // Query to find the lowest metadata_id for the specified SchoolID
 $sql = "SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?";
-$stmt = $pdo->prepare($sql);
+$stmt = $connection->prepare($sql);
 $stmt->execute([$schoolID]);
 
 // Fetch the result
