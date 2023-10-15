@@ -308,11 +308,12 @@ $('#metadataIdSelector').on('change', function() {
         },
         error: function(xhr, status, error) {
             // Handle errors if any
-            console.error(error);
-            //fetchMetadata(selectedMetadataId);
+            console.error('Error:', error);
+            console.log('Response:', xhr.responseText); // Log the response text for debugging
         }
     });
 });
+
 
 
 
