@@ -112,11 +112,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-<?php
-} else {
-    echo "No column headers or metadata entries available.";
-}
-?>
+
 
 
 <label>Select Score to Display: </label>
