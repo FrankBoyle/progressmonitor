@@ -257,7 +257,24 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
+// Listen for changes in the metadata dropdown
+$('#metadataIdSelector').change(function () {
+    var selectedMetadataId = $(this).val();
 
+    // Send AJAX request to fetch column headers based on selected metadata
+    $.ajax({
+        url: 'fetch_column_headers.php',
+        method: 'POST',
+        data: { metadataId: selectedMetadataId },
+        success: function (data) {
+            // Update column headers with fetched column names
+            var columnHeaders = JSON.parse(data);
+            for (var i = 1; i <= 10; i++) {
+                $('#scoreHeader' + i).text(columnHeaders['score' + i]);
+            }
+        }
+    });
+});
     function getCurrentDate() {
         const currentDate = new Date();
         return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
