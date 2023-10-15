@@ -272,7 +272,7 @@ function updateTableHeaders() {
 // Function to fetch metadata groups and update the dropdown
 function fetchMetadataGroups() {
     $.ajax({
-        url: 'fetch_data.php',
+        url: './users/fetch_data.php',
         type: 'GET',
         data: { action: 'fetchGroups' },
         dataType: 'json',
@@ -297,7 +297,7 @@ $('#metadataIdSelector').on('change', function () {
 
     // Perform an AJAX request to fetch column headers based on metadata_id
     $.ajax({
-        url: 'fetch_data.php',
+        url: './users/fetch_data.php',
         type: 'GET',
         data: { metadata_id: selectedMetadataId },
         dataType: 'json',
@@ -308,6 +308,7 @@ $('#metadataIdSelector').on('change', function () {
 
                 // Update the table headers
                 updateTableHeaders();
+                table.draw();
             }
         },
     });
@@ -727,4 +728,5 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 { "type": "date-us" },
                 null, null, null, null, null, null, null, null, null, null, null
             ]
+            
         });
