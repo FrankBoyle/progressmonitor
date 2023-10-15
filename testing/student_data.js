@@ -808,5 +808,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             
         });
         //fetchMetadataCategories();
-
+        console.log('<?php echo $schoolID; ?>'); // Log the value of $schoolID
+        console.log('<?php echo $metadataID; ?>'); // Log the value of $metadataID
     });
