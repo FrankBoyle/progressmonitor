@@ -18,6 +18,9 @@ if (isset($_POST['add_new_student'])) {
 }
 
 $students = fetchStudentsByTeacher($teacherId);
+
+// Fetch metadata categories for the dropdown
+$metadataCategories = fetchMetadataCategoriesFromDatabase($teacherId);
 ?>
 
 <!DOCTYPE html>
@@ -42,10 +45,29 @@ $students = fetchStudentsByTeacher($teacherId);
     <?php if (!empty($students)): ?>
         <h2>Students:</h2>
         <?php foreach ($students as $student): ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=1'><?= $student['name'] ?></a><br>
+            <label><?= $student['name'] ?>:</label>
+            <select class="metadata-selector">
+                <?php foreach ($metadataCategories as $category): ?>
+                    <option value="<?= $category['metadata_id'] ?>"><?= $category['category_name'] ?></option>
+                <?php endforeach; ?>
+            </select>
+            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>' class="view-data-link">View Data</a><br>
         <?php endforeach; ?>
     <?php else: ?>
         No students found for this teacher.
     <?php endif; ?>
+
+    <script>
+        // JavaScript to handle metadata selection and view data links
+        const metadataSelectors = document.querySelectorAll(".metadata-selector");
+        const viewDataLinks = document.querySelectorAll(".view-data-link");
+
+        metadataSelectors.forEach((selector, index) => {
+            selector.addEventListener("change", () => {
+                const selectedMetadataId = selector.value;
+                viewDataLinks[index].href += `&metadata_id=${selectedMetadataId}`;
+            });
+        });
+    </script>
 </body>
 </html>
