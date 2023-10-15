@@ -59,6 +59,25 @@ function addNewStudent($studentName, $teacherId) {
     return "New student added successfully.";
 }
 
+function fetchScoreNamesBasedOnMetadata($metadataId) {
+    global $connection;
+    
+    // Initialize an array to store the score names
+    $scoreNames = [];
+
+    // Prepare and execute a query to fetch score names based on metadata_id
+    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
+    $stmt->execute([$metadataId]);
+
+    // Fetch the score names and populate the $scoreNames array
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    for ($i = 1; $i <= 10; $i++) {
+        $scoreNames["score" . $i] = $row["score" . $i . "_name"];
+    }
+
+    return $scoreNames;
+}
+
 // Initialize empty arrays and variables
 $performanceData = [];
 $chartDates = [];
