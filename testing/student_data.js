@@ -267,32 +267,42 @@ $(document).ready(function() {
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
     fetch("./users/fetch_data.php?student_CURRENT_STUDENT_ID")
-        .then(response => response.json())
-        .then(data => {
-            const dates = data.dates;
-            const scores = data.scores;
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            console.error("Server error:", data.error);
+            return; // Exit out of the success callback if there's an error.
+        }
 
-            const series = [];
+        const dates = data.dates;
+        const scores = data.scores;
 
-         for (const [label, scoreData] of Object.entries(scores)) {
-            series.push({
-                name: label,
+        const seriesData = [];
+
+        for (const [label, scoreData] of Object.entries(scores)) {
+            seriesData.push({
+                name: label, // This will use the custom name
                 data: scoreData
             });
         }
 
-        var options = {
-            chart: {
-                type: 'line'
-            },
-            series: series,
+        // Assuming you have already initialized your chart elsewhere and it's stored in a variable named "chart".
+        // You can update the series and x-axis categories as:
+        chart.updateOptions({
             xaxis: {
                 categories: dates
-            }
-        }
+            },
+            series: seriesData
+        });
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+    })
+    .catch(error => {
+        console.error("Fetch error:", error);
     });
 
     // Utility Functions
