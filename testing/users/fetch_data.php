@@ -134,7 +134,7 @@ if (isset($_GET['student_id'])) {
         exit;
     }
     $studentId = $_GET['student_id'];
-    $metadataId = $_GET['metadata_id']; // Assuming you have metadata_id
+    //$metadataId = $_GET['metadata_id']; // Assuming you have metadata_id
     // Fetch performance data
     $performanceData = fetchPerformanceData($studentId, $metadataId);
 
