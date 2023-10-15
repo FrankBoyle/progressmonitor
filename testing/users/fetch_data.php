@@ -133,6 +133,8 @@ if (!$schoolID) {
     return;  // If there's no SchoolID, exit early
 }
 
+$metadataId = $_GET['metadata_id'];
+
 // Fetch performance data and score names
 $performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
 $scoreNames = fetchScoreNamesByMetadata($metadataId);
@@ -148,7 +150,6 @@ if (!isset($_GET['metadata_id'])) {
     return;
 }
 
-$metadataId = $_GET['metadata_id'];
 // Handling the data POST from the dropdown functionality
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     $schoolIDIndex = $_POST['SchoolIDIndex'];
