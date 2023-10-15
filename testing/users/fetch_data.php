@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('./users/db.php');
+include('db.php');
 
 // Function to fetch performance data for a student
 function fetchPerformanceData($studentId) {
