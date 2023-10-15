@@ -1,6 +1,6 @@
 <?php 
 include('./users/fetch_data.php'); 
-$metadataEntries = []; // Initialize as an empty array
+$metadataEntries = fetchMetadataCategories($schoolID); // Use your actual function to fetch data
 ?>
 <!DOCTYPE html>
 <html lang="en">
