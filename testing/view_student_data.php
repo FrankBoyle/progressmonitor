@@ -48,9 +48,12 @@
 <table border="1">
     <thead>
         <tr>
-            <th>Date</th>
-            <?php foreach ($scoreNames as $key => $name): ?>
-                <th><?php echo $name; ?></th>
+            <th>Week Start Date</th>
+            <?php
+            // Loop through the score names based on the selected metadata
+            foreach ($scoreNames as $key => $name):
+            ?>
+                <th><?php echo htmlspecialchars($name); ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
@@ -71,20 +74,24 @@
                     ?>
                 </td>
                 <!-- Add scores using loop -->
-                <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <td class="editable" data-field-name="score<?php echo $i; ?>">
+                <?php
+                // Loop through the score names based on the selected metadata
+                foreach ($scoreNames as $key => $name):
+                ?>
+                    <td class="editable" data-field-name="<?php echo htmlspecialchars($key); ?>">
                         <?php
-                        if (isset($data['score'.$i])) {
-                            echo $data['score'.$i];
+                        if (isset($data[$key])) {
+                            echo htmlspecialchars($data[$key]);
                         }
                         ?>
                     </td>
-                <?php endfor; ?>
-                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
+                <?php endforeach; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
+
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
