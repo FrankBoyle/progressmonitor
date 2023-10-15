@@ -116,7 +116,7 @@ $chartScores = [];
 $metadataEntries = array();
 
 // Prepare the SQL query to fetch metadata entries
-$query = "SELECT metadata_id, category_name FROM Metadata";  // replace 'your_table_name' with your actual table name
+$query = "SELECT metadata_id, category_name FROM Metadata";  
 
 try {
     // Prepare the SQL query
