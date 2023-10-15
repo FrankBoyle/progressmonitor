@@ -21,16 +21,26 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['SchoolID'] : null;
 }
 
-function fetchScoreNamesFromMetadata() {
+function fetchScoreNamesFromMetadata($schoolID) {
     global $connection;
     $scoreNames = [];
-    $stmt = $connection->prepare("SELECT original_name, custom_name FROM Metadata");
-    $stmt->execute();
-    while ($row = $stmt->fetch()) {
-        $scoreNames[$row['original_name']] = $row['custom_name'];
+
+    $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+    
+    $metadata = $stmt->fetch();
+    if ($metadata) {
+        for ($i = 1; $i <= 10; $i++) {
+            $key = "score" . $i . "_name";
+            if (isset($metadata[$key]) && $metadata[$key]) {
+                $scoreNames["score" . $i] = $metadata[$key];
+            }
+        }
     }
+
     return $scoreNames;
 }
+
 
 
 function fetchStudentsByTeacher($teacherId) {
@@ -105,7 +115,7 @@ if (!$schoolID) {
 
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNamesFromMetadata();
+$scoreNames = fetchScoreNamesFromMetadata($schoolID);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
