@@ -118,21 +118,22 @@ $chartScores = [];
 $metadataEntries = array();
 
 // Prepare the SQL query to fetch metadata entries
-$query = "SELECT metadata_id, category_name FROM your_table_name";  // replace 'your_table_name' with your actual table name
+$query = "SELECT metadata_id, category_name FROM Metadata";  // replace 'your_table_name' with your actual table name
 
-// Execute the query
-$result = mysqli_query($connection, $query);
+try {
+    // Prepare the SQL query
+    $stmt = $connection->prepare($query);
 
-// Check if the query was successful
-if ($result) {
-    // Fetch each row as an associative array and add it to $metadataEntries
-    while ($row = mysqli_fetch_assoc($result)) {
-        $metadataEntries[] = $row;
-    }
-} else {
-    // Handle error during query execution
-    echo "Error: " . mysqli_error($connection);
+    // Execute the query
+    $stmt->execute();
+
+    // Fetch all results into an array
+    $metadataEntries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // Handle error during execution
+    echo "Database error: " . $e->getMessage();
 }
+
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
