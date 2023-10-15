@@ -285,7 +285,7 @@ function fetchMetadataCategories() {
         data: { 
             action: 'fetchMetadataCategories',
             student_id: studentId, // Pass student_id in the request
-            metadata_id: metadataId
+
         },
         dataType: 'json',
         success: function (response) {
