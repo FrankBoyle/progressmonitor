@@ -433,6 +433,60 @@ $(document).ready(function() {
         });
     }
 
+    // This function fetches metadata when the page loads and populates the dropdown.
+function fetchMetadataOnLoad() {
+    fetch("/users/fetch_metadata.php")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.text();
+        })
+        .then(data => {
+            if (data.trim().length > 0) {
+                const parsedData = JSON.parse(data);
+                populateMetadataDropdown(parsedData);
+            } else {
+                throw new Error("Empty response from server");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
+// This function updates the chart based on the selected metadata ID.
+function fetchScoresOnMetadataChange(metadataId) {
+    fetch(`/path/to/script_that_fetches_scores_based_on_metadata.php?metadata_id=${metadataId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.text();
+        })
+        .then(data => {
+            if (data.trim().length > 0) {
+                const parsedData = JSON.parse(data);
+                updateChartWithScores(parsedData);
+            } else {
+                throw new Error("Empty response from server");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
+// This is your event listener for when a new metadata is selected.
+document.getElementById("metadataIdSelector").addEventListener("change", function(event) {
+    const selectedMetadataId = event.target.value;
+    fetchScoresOnMetadataChange(selectedMetadataId);
+});
+
+// Call the initial metadata fetch when the page loads.
+fetchMetadataOnLoad();
+
+
     function isDateDuplicate(dateString, currentPerformanceId = null) {
     //console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
