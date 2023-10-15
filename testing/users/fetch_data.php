@@ -32,6 +32,13 @@ function fetchMetadataCategories($schoolID) {
     }
 }
 
+function fetchStudentsByTeacher($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    return $stmt->fetchAll();
+}
+
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
     $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
@@ -66,7 +73,7 @@ function fetchColumnHeaders($metadataId) {
         // Handle the case where no data is returned
         die('No data found for metadata_id: ' . $metadataId);
     }
-    
+
     for ($i = 1; $i <= 10; $i++) {
         $columnHeaders["score" . $i] = $row["score" . $i . "_name"];
     }
