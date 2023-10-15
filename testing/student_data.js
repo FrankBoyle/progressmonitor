@@ -298,7 +298,7 @@ $('#metadataIdSelector').on('change', function () {
 
     // Perform an AJAX request to fetch column headers based on metadata_id
     $.ajax({
-        url: '/users/fetch_data.php',
+        url: './users/fetch_data.php',
         type: 'GET',
         data: { metadata_id: selectedMetadataId },
         dataType: 'json',
