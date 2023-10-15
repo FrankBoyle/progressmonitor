@@ -4,139 +4,140 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('db.php');
+include('./users/db.php');
 
-function fetchPerformanceData($studentId, $metadataId) {
+// Function to fetch performance data for a student
+function fetchPerformanceData($studentId) {
     global $connection;
-    try {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
-        $stmt->execute([$studentId, $metadataId]);
-        return $stmt->fetchAll();
-    } catch (PDOException $e) {
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        exit;
-    }
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
+    $stmt->execute([$studentId]);
+    return $stmt->fetchAll();
 }
+
+// Function to fetch metadata categories for a school
+function fetchMetadataCategories($schoolID) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Function to fetch the SchoolID for a student
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
-    try {
-        $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
-        $stmt->execute([$studentId]);
-        $result = $stmt->fetch();
-        return $result ? $result['SchoolID'] : null;
-    } catch (PDOException $e) {
-        // Handle the database error here, e.g., log the error, return an error response, etc.
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        exit;
-    }
+    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+    $result = $stmt->fetch();
+    return $result ? $result['SchoolID'] : null;
 }
-function fetchMetadataCategoriesFromDatabase($schoolID) {
+
+// Function to fetch score names for a school
+function fetchScoreNames($schoolID) {
     global $connection;
-    try {
-        $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
-        $stmt->execute([$schoolID]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        // Handle the database error here, e.g., log the error, return an error response, etc.
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        exit;
+    $scoreNames = [];
+    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+    while ($row = $stmt->fetch()) {
+        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
     }
+    return $scoreNames;
 }
+
+// Function to fetch students by teacher
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
     $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
-function fetchColumnHeaders($metadataId) {
+
+// Function to add a new student
+function addNewStudent($studentName, $teacherId) {
     global $connection;
 
-    // Initialize an array to store the column headers
-    $columnHeaders = [];
+    // Fetch the SchoolID of the current teacher
+    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    $teacherInfo = $stmt->fetch();
+    $teacherSchoolID = $teacherInfo['SchoolID'];
 
-    // Prepare and execute a query to fetch score names based on metadataId
-    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
-    
-    if (!$stmt) {
-        // Handle the query preparation error here
-        die('Error preparing query: ' . $connection->error);
-    }
-    
-    $stmt->execute([$metadataId]);
+    // Check if the student with the same name and SchoolID already exists
+    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
+    $stmt->execute([$studentName, $teacherSchoolID]);
+    $duplicateStudent = $stmt->fetch();
 
-    if (!$stmt) {
-        // Handle the query execution error here
-        die('Error executing query: ' . $connection->error);
-    }
+    if ($duplicateStudent) {
+        return "Student with the same name already exists.";
+    } 
 
-    // Fetch the column headers and populate the $columnHeaders array
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$row) {
-        // Handle the case where no data is returned
-        die('No data found for metadata_id: ' . $metadataId);
-    }
-
-    for ($i = 1; $i <= 10; $i++) {
-        $columnHeaders["score" . $i] = $row["score" . $i . "_name"];
-    }
-
-    return $columnHeaders;
+    // Insert the new student with the same SchoolID
+    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+    $stmt->execute([$studentName, $teacherSchoolID]);
+    return "New student added successfully.";
 }
 
-$response = [];
-$metadataId = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null; // Initialize metadataId
-
-if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
-    $studentId = $_GET['student_id'];
-    $metadataId = $_GET['metadata_id'];
-
-    // Fetch performance data based on studentId and metadataId
-    $performanceData = fetchPerformanceData($studentId, $metadataId);
-
-    // Fetch the column headers based on the selected metadataId
-    $columnHeaders = fetchColumnHeaders($metadataId);
-
-    // Construct the data to send to the client
-    $responseData = [
-        'columnHeaders' => $columnHeaders,
-        'performanceData' => $performanceData,
-    ];
-
-    // Handle null values in columnHeaders
-    foreach ($responseData['columnHeaders'] as $key => $value) {
-        if ($value === null) {
-            $responseData['columnHeaders'][$key] = "N/A";
-        }
+// Function to fetch group names
+function fetchGroupNames() {
+    global $connection;
+    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
+    $stmt->execute();
+    $stmt->bindColumn(1, $groupName);
+    
+    $groups = [];
+    while ($stmt->fetch(PDO::FETCH_BOUND)) {
+        $groups[] = $groupName;
     }
-
-    // Handle null values in performanceData
-    foreach ($responseData['performanceData'] as &$item) {
-        foreach ($item as $key => $value) {
-            if ($value === null) {
-                $item[$key] = "N/A";
-            }
-        }
-    }
-
-    $response = $responseData; // Set the response array to the constructed data
-} else {
-    $response['error'] = 'metadata_id parameter is missing'; // Handle the case when parameters are missing
+    
+    return $groups;
 }
 
-echo json_encode($response); // Send the response as JSON
+// Initialize empty arrays and variables
+$performanceData = [];
+$scoreNames = [];
+$chartDates = [];
+$chartScores = [];
 
-// Fetch the column headers based on the selected metadataId
-$columnHeaders = fetchColumnHeaders($metadataId);
+// Check if the action is set to 'fetchGroups' and handle it
+if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
+    echo json_encode(fetchGroupNames());
+    exit;
+}
 
-// Construct the data to send to the client
-$responseData = [
-    'columnHeaders' => $columnHeaders,
-    'performanceData' => $performanceData,
-];
+// If student_id is not set, exit early
+if (!isset($_GET['student_id'])) {
+    return;
+}
 
-// ...
+$studentId = $_GET['student_id'];
+$schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
 
-echo json_encode($responseData); // Send the response as JSON
+if (!$schoolID) {
+    return;  // If there's no SchoolID, exit early
+}
 
+// Fetch performance data and score names
+$performanceData = fetchPerformanceData($studentId);
+$scoreNames = fetchScoreNames($schoolID);
+
+// Preparing the data for the chart
+foreach ($performanceData as $record) {
+    $chartDates[] = $record['score_date'];
+    // You can add more logic here if needed
+}
+
+// Handling the data POST from the dropdown functionality
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
+    $schoolIDIndex = $_POST['SchoolIDIndex'];
+    $originalName = $_POST['ScoreColumn'];
+    $customName = $_POST['CustomName'];
+    $scoreGroup = $_POST['ScoreGroup'];
+
+    // Inserting into the SchoolScoreNames table
+    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
+    
+    // Respond with the ID of the inserted row
+    echo json_encode(['id' => $connection->lastInsertId()]);
+    exit;
+}
 ?>
