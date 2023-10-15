@@ -99,27 +99,19 @@ function addNewStudent($studentName, $teacherId) {
     return "New student added successfully.";
 }
 
+public function fetchAllMetadataEntries() {
+    $query = "SELECT metadata_id, category_name FROM Metadata";  
+    $stmt = $this->connection->prepare($query);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 public function handleError($e) {
     error_log('Database error: ' . $e->getMessage());
     die("An internal server error occurred; please try again later.");
 }
-// Prepare the SQL query to fetch metadata entries
-$query = "SELECT metadata_id, category_name FROM Metadata";  
-
-try {
-    // Prepare the SQL query
-    $stmt = $connection->prepare($query);
-
-    // Execute the query
-    $stmt->execute();
-
-    // Fetch all results into an array
-    $metadataEntries = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    // Handle error during execution
-    echo "Database error: " . $e->getMessage();
 }
-}
+
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
@@ -145,19 +137,6 @@ if (!isset($_GET['metadata_id'])) {
     return;
 }
 //$metadataId = $_GET['metadata_id'];
-
-// Fetch performance data and score names
-$performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
-$scoreNames = fetchScoreNamesByMetadata($metadataId);
-
-// Preparing the data for the chart
-foreach ($performanceData as $record) {
-    $chartDates[] = $record['score_date'];
-    // You can add more logic here if needed
-}
-// ... (previous code)
-
-// Create an instance of your database operations class
 $dbOps = new DatabaseOperations($connection);
 
 try {
@@ -182,14 +161,24 @@ try {
     }
 
     $metadataId = $_GET['metadata_id'];
+    $performanceData = $dbOps->fetchPerformanceDataByMetadata($studentId, $metadataId);
+    $scoreNames = $dbOps->fetchScoreNamesByMetadata($metadataId);
+    $metadataEntries = $dbOps->fetchAllMetadataEntries();
+// Fetch performance data and score names
+$performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
+$scoreNames = fetchScoreNamesByMetadata($metadataId);
 
-    // ... (other operations)
-
+// Preparing the data for the chart
+foreach ($performanceData as $record) {
+    $chartDates[] = $record['score_date'];
+    // You can add more logic here if needed
+}
+// ... (previous code)
 } catch (Exception $e) {
     $dbOps->handleError($e);
 }
+// Create an instance of your database operations class
 
-// ... (POST request handling, if needed)
 
 ?>
 
