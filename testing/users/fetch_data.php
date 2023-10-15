@@ -128,8 +128,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
     
     // Respond with the ID of the inserted row
-    echo json_encode(['id' => $connection->lastInsertId()]);
-    exit;
+    echo json_encode([
+        'dates' => $chartDates,
+        'scores' => $chartScores
+    ]);
+        exit;
 }
 ?>
 
