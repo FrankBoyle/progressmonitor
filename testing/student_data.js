@@ -305,6 +305,21 @@ $(document).ready(function() {
         console.error("Fetch error:", error);
     });
 
+
+    fetch('./users/fetch_metadata.php')
+.then(response => response.json())
+.then(data => {
+    const dropdown = document.getElementById('metadataIdSelector');
+    dropdown.innerHTML = '';  // Clear existing options
+
+    data.forEach(entry => {
+        const option = document.createElement('option');
+        option.value = entry.metadata_id;
+        option.textContent = entry.category_name;
+        dropdown.appendChild(option);
+    });
+});
+
     // Utility Functions
     function isValidDate(d) {
         return d instanceof Date && !isNaN(d);
@@ -648,7 +663,27 @@ if (isDateDuplicate(currentDate)) {
  
     });
     
-
+    document.getElementById('metadataIdSelector').addEventListener('change', function(e) {
+        const selectedMetadataId = e.target.value;
+    
+        fetch(`/path_to_your_endpoint/fetch_metadata.php?metadata_id=${selectedMetadataId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Here, assuming the server returns an array of score names in the order
+                // [score1_name, score2_name, ...]
+    
+                data.forEach((scoreName, index) => {
+                    const scoreElement = document.getElementById(`score${index + 1}Name`);
+                    if(scoreElement) {
+                        scoreElement.textContent = scoreName;
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Failed to fetch metadata:", error);
+            });
+    });
+    
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',

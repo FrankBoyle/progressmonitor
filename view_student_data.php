@@ -31,10 +31,12 @@
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
-<label>Select Group to Display: </label>
-<select id="groupSelector">
-    <?php foreach ($groupNames as $groupName): ?>
-        <option value="<?php echo htmlspecialchars($groupName); ?>"><?php echo htmlspecialchars($groupName); ?></option>
+<label>Select Metadata Group to Display: </label>
+<select id="metadataIdSelector">
+    <?php foreach ($metadataEntries as $entry): ?>
+        <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
+            <?php echo htmlspecialchars($entry['category_name']); ?>
+        </option>
     <?php endforeach; ?>
 </select>
 
