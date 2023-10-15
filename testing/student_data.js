@@ -299,7 +299,7 @@ updateTableHeaders();
 // Handle metadata group selection change
 $('#metadataIdSelector').on('change', function() {
     var selectedMetadataId = $(this).val();
-    fetchMetadata(selectedMetadataId);
+    fetchMetadata(studentId, selectedMetadataId);
 });
 
 function fetchMetadata(metadataId) {
