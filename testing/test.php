@@ -1,6 +1,6 @@
 <?php
-include './users/fetch_data.php';
 session_start();
+include './users/fetch_data.php';
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
@@ -42,13 +42,10 @@ $students = fetchStudentsByTeacher($teacherId);
     <?php if (!empty($students)): ?>
         <h2>Students:</h2>
         <?php foreach ($students as $student): ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>'><?= $student['name'] ?></a><br>
+            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=1'><?= $student['name'] ?></a><br>
         <?php endforeach; ?>
     <?php else: ?>
         No students found for this teacher.
     <?php endif; ?>
 </body>
 </html>
-
-
-
