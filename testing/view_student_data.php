@@ -1,6 +1,19 @@
 <?php 
 include('./users/fetch_data.php'); 
 // Initialize empty arrays and variables
+$columnHeaders = [
+    'score1_name',
+    'score2_name',
+    'score3_name',
+    'score4_name',
+    'score5_name',
+    'score6_name',
+    'score7_name',
+    'score8_name',
+    'score9_name',
+    'score10_name'
+];
+
 $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
