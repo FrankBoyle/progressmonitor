@@ -42,6 +42,12 @@ function fetchMetadataCategoriesFromDatabase($schoolID) {
         exit;
     }
 }
+function fetchStudentsByTeacher($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    return $stmt->fetchAll();
+}
 $response = [];
 
 if (isset($_GET['student_id'])) {
