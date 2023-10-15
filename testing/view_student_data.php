@@ -1,8 +1,6 @@
 <?php 
 include('./users/fetch_data.php'); 
 
-// Assuming you have fetched $columnHeaders and $metadataEntries from your database
-
 // Define and initialize the $columnHeaders array based on your table structure
 $columnHeaders = [
     'score1_name',
@@ -18,7 +16,7 @@ $columnHeaders = [
 ];
 
 // Replace with your actual SchoolID (e.g., 1) and fetch metadata entries for that SchoolID
-$schoolID = 1; // Replace with the actual SchoolID
+//$schoolID = 1; // Replace with the actual SchoolID
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID
 $metadataEntries = [];
