@@ -99,12 +99,13 @@ public function fetchAllMetadataEntries() {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
-//public function handleError($e) {
-//    error_log('Database error: ' . $e->getMessage());
- //   die("An internal server error occurred; please try again later.");
-//}
-//}
+/*
+public function handleError($e) {
+    error_log('Database error: ' . $e->getMessage());
+   die("An internal server error occurred; please try again later.");
+}
+*/
+}
 
 $dbOps = new DatabaseOperations($connection);
 
