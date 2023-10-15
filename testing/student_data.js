@@ -325,16 +325,19 @@ $(document).ready(function() {
     fetch('./users/fetch_metadata.php')
 .then(response => response.json())
 .then(data => {
-    const dropdown = document.getElementById('metadataIdSelector');
-    dropdown.innerHTML = '';  // Clear existing options
-
-    data.forEach(entry => {
-        const option = document.createElement('option');
-        option.value = entry.metadata_id;
-        option.textContent = entry.category_name;
-        dropdown.appendChild(option);
+    let dropdown = document.getElementById('metadataIdSelector');
+    dropdown.addEventListener('change', function() {
+        let selectedMetadataId = dropdown.value;
+        fetch(`/testing/users/fetch_metadata.php?metadata_id=${selectedMetadataId}`)
+            .then(response => response.json())
+            .then(data => {
+                // handle the data here. Update the page, chart, etc.
+            })
+            .catch(error => {
+                console.error('There was an error fetching the metadata:', error);
+            });
     });
-});
+    
 
     // Utility Functions
     function isValidDate(d) {
