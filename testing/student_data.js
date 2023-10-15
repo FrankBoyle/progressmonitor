@@ -307,9 +307,9 @@ function fetchMetadata(metadataId) {
         url: './users/fetch_data.php',
         type: 'GET',
         data: {
-            action: 'fetchMetadataCategories',
-            student_id: studentId, // Use the studentId you retrieved earlier
-            metadata_id: metadataId // Set the metadata_id based on the dropdown selection
+            action: 'fetchMetadata', // Change to 'fetchMetadata'
+            student_id: studentId,
+            metadata_id: metadataId
         },
         dataType: 'json',
         success: function (response) {
