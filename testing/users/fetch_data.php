@@ -28,17 +28,6 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['SchoolID'] : null;
 }
 
-function fetchScoreNames($schoolID) {
-    global $connection;
-    $scoreNames = [];
-    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE SchoolID = ?");
-    $stmt->execute([$schoolID]);
-    while ($row = $stmt->fetch()) {
-        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
-    }
-    return $scoreNames;
-}
-
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
     $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
@@ -69,21 +58,6 @@ function addNewStudent($studentName, $teacherId) {
     $stmt->execute([$studentName, $teacherSchoolID]);
     return "New student added successfully.";
 }
-
-function fetchGroupNames() {
-    global $connection;
-    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
-    $stmt->execute();
-    $stmt->bindColumn(1, $groupName);
-    
-    $groups = [];
-    while ($stmt->fetch(PDO::FETCH_BOUND)) {
-        $groups[] = $groupName;
-    }
-    
-    return $groups;
-}
-
 
 // Initialize empty arrays and variables
 $performanceData = [];
@@ -136,3 +110,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 }
 ?>
 
+
+function fetchScoreNames($schoolID) {
+    global $connection;
+    $scoreNames = [];
+    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+    while ($row = $stmt->fetch()) {
+        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
+    }
+    return $scoreNames;
+}
+
+function fetchGroupNames() {
+    global $connection;
+    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
+    $stmt->execute();
+    $stmt->bindColumn(1, $groupName);
+    
+    $groups = [];
+    while ($stmt->fetch(PDO::FETCH_BOUND)) {
+        $groups[] = $groupName;
+    }
+    
+    return $groups;
+}

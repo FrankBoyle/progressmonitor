@@ -33,12 +33,17 @@
 
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
-    <?php foreach ($metadataEntries as $entry): ?>
-        <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
-            <?php echo htmlspecialchars($entry['category_name']); ?>
-        </option>
-    <?php endforeach; ?>
+    <?php
+    // Replace 'fetchMetadataCategories' with your actual function name that fetches metadata categories.
+    $metadataCategories = fetchMetadataCategories($schoolID);
+
+    foreach ($metadataCategories as $category) {
+        echo '<option value="' . htmlspecialchars($category['metadata_id']) . '">'
+             . htmlspecialchars($category['category_name']) . '</option>';
+    }
+    ?>
 </select>
+
 
 <table border="1">
     <thead>
