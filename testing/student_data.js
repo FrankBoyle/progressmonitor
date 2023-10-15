@@ -278,15 +278,15 @@ $('#metadataIdSelector').on('change', function() {
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
     var studentId = $('#currentStudentId').val();
+    var selectedMetadataId = $('#metadataIdSelector').val(); // Get the selected metadata_id
 
     $.ajax({
         url: './users/fetch_data.php',
         type: 'GET',
         data: { 
             action: 'fetchMetadataCategories',
-            student_id: studentId, // Pass student_id in the request
-            metadata_id: metadataId
-
+            student_id: studentId,
+            metadata_id: selectedMetadataId, // Pass the selected metadata_id
         },
         dataType: 'json',
         success: function (response) {
@@ -300,6 +300,7 @@ function fetchMetadataCategories() {
         },
     });
 }
+
 
 // Initial table header update and metadata group fetch
 updateTableHeaders();
