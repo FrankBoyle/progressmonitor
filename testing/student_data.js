@@ -366,7 +366,7 @@ function fetchMetadata(metadataId) {
     async function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
-        const studentId = CURRENT_STUDENT_ID;
+        const studentId = $("#currentStudentId").val();
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
@@ -425,7 +425,7 @@ function fetchMetadata(metadataId) {
 
     function updateScoreInDatabase(row, metadataFieldName, newValue) {
         const performanceId = row.data('performance-id');
-        const studentId = CURRENT_STUDENT_ID;
+        const studentId = $("#currentStudentId").val();
         const score_date = row.find('td[data-field-name="score_date"]').text();
         
         // Assuming that metadataFieldName would be something like "score1_name" and we'd need to update "score1"
