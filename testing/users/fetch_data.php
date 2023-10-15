@@ -28,126 +28,68 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['SchoolID'] : null;
 }
 
-function fetchStudentsByTeacher($teacherId) {
-    global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
-    $stmt->execute([$teacherId]);
-    return $stmt->fetchAll();
-}
-
-function addNewStudent($studentName, $teacherId) {
+// Function to fetch column headers based on metadataId
+function fetchColumnHeaders($metadataId) {
     global $connection;
 
-    // Fetch the SchoolID of the current teacher
-    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
-    $stmt->execute([$teacherId]);
-    $teacherInfo = $stmt->fetch();
-    $teacherSchoolID = $teacherInfo['SchoolID'];
+    // Initialize an array to store the column headers
+    $columnHeaders = [];
 
-    // Check if the student with the same name and SchoolID already exists
-    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
-    $stmt->execute([$studentName, $teacherSchoolID]);
-    $duplicateStudent = $stmt->fetch();
-
-    if ($duplicateStudent) {
-        return "Student with the same name already exists.";
-    } 
-
-    // Insert the new student with the same SchoolID
-    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
-    $stmt->execute([$studentName, $teacherSchoolID]);
-    return "New student added successfully.";
-}
-
-function fetchScoreNamesBasedOnMetadata($metadataId) {
-    global $connection;
-    
-    // Initialize an array to store the score names
-    $scoreNames = [];
-
-    // Prepare and execute a query to fetch score names based on metadata_id
+    // Prepare and execute a query to fetch score names based on metadataId
     $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataId]);
 
-    // Fetch the score names and populate the $scoreNames array
+    // Fetch the column headers and populate the $columnHeaders array
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     for ($i = 1; $i <= 10; $i++) {
-        $scoreNames["score" . $i] = $row["score" . $i . "_name"];
+        $columnHeaders["score" . $i] = $row["score" . $i . "_name"];
     }
 
-    return $scoreNames;
+    return $columnHeaders;
 }
 
-// Initialize empty arrays and variables
-$performanceData = [];
-$chartDates = [];
-$chartScores = [];
+if (isset($_GET['student_id'])) {
+    $studentId = $_GET['student_id'];
+    $schoolID = fetchSchoolIdForStudent($studentId);
 
-// Check if the action is set to 'fetchGroups' and handle it
-if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
-    echo json_encode(fetchGroupNames());
-    exit;
-}
-
-// If student_id is not set, exit early
-if (!isset($_GET['student_id'])) {
-    return;
-}
-
-$studentId = $_GET['student_id'];
-$schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
-
-if (!$schoolID) {
-    return;  // If there's no SchoolID, exit early
-}
-
-// Fetch performance data and score names
-$performanceData = fetchPerformanceData($studentId);
-
-// Preparing the data for the chart
-foreach ($performanceData as $record) {
-    $chartDates[] = $record['score_date'];
-    // You can add more logic here if needed
-}
-
-// Handling the data POST from the dropdown functionality
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
-    $schoolIDIndex = $_POST['SchoolIDIndex'];
-    $originalName = $_POST['ScoreColumn'];
-    $customName = $_POST['CustomName'];
-    $scoreGroup = $_POST['ScoreGroup'];
-
-    // Inserting into the SchoolScoreNames table
-    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
-    
-    // Respond with the ID of the inserted row
-    echo json_encode(['id' => $connection->lastInsertId()]);
-    exit;
-}
-
-if (isset($_GET['metadata_id'])) {
-    $metadataId = $_GET['metadata_id'];
-
-    // Fetch score names based on the selected metadata_id from the Metadata table
-    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
-    $stmt->execute([$metadataId]);
-
-    // Fetch the score names and return them as JSON
-    $scoreNames = [];
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Add each score name to the $scoreNames array
-    for ($i = 1; $i <= 10; $i++) {
-        $scoreNames["score" . $i] = $row["score" . $i . "_name"];
+    if (!$schoolID) {
+        echo json_encode(['error' => 'No SchoolID found for the student']);
+        exit;
     }
 
-    echo json_encode($scoreNames);
+    // Fetch performance data
+    $performanceData = fetchPerformanceData($studentId);
+
+    // Check if the metadataId is provided in the request
+    if (isset($_GET['metadata_id'])) {
+        $metadataId = $_GET['metadata_id'];
+
+        // Fetch the column headers based on the selected metadataId
+        $columnHeaders = fetchColumnHeaders($metadataId);
+    } else {
+        // Default column headers if metadataId is not provided
+        $columnHeaders = [
+            "score1" => "Score 1",
+            "score2" => "Score 2",
+            "score3" => "Score 3",
+            "score4" => "Score 4",
+            "score5" => "Score 5",
+            "score6" => "Score 6",
+            "score7" => "Score 7",
+            "score8" => "Score 8",
+            "score9" => "Score 9",
+            "score10" => "Score 10",
+        ];
+    }
+
+    // Construct the data to send to the client
+    $responseData = [
+        'columnHeaders' => $columnHeaders,
+        'performanceData' => $performanceData,
+    ];
+
+    echo json_encode($responseData);
 } else {
-    // Handle the case where metadata_id is not provided
-    echo json_encode(['error' => 'metadata_id parameter is missing']);
+    echo json_encode(['error' => 'student_id parameter is missing']);
 }
-
 ?>
-
-
