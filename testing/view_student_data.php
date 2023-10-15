@@ -16,7 +16,7 @@ $columnHeaders = [
 ];
 
 // Replace with your actual SchoolID (e.g., 1) and fetch metadata entries for that SchoolID
-//$schoolID = 1; // Replace with the actual SchoolID
+$schoolID = '';
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID
 $metadataEntries = [];
