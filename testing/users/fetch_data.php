@@ -115,6 +115,8 @@ $schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
 $schoolID = 'your_school_id';
 $metadataID = 'your_metadata_id';
 
+echo "schoolID: $schoolID<br>";
+echo "metadataID: $metadataID<br>";
 // Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $metadataEntries = [];
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
