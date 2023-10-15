@@ -273,7 +273,7 @@ function updateTableHeaders() {
 // Function to fetch metadata groups and update the dropdown
 function fetchMetadataGroups() {
     $.ajax({
-        url: '/users/fetch_data.php',
+        url: './users/fetch_data.php',
         type: 'GET',
         data: { action: 'fetchGroups' },
         dataType: 'json',
