@@ -272,7 +272,7 @@ function updateTableHeaders() {
 
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
-    var studentId = $('#studentData').data('student-id'); // Retrieve student_id
+    var studentId = $('#currentStudentId').val();
 
     $.ajax({
         url: './users/fetch_data.php',
