@@ -47,32 +47,28 @@
     <thead>
         <tr>
             <th>Date</th>
-            <?php foreach ($scoreNames as $name): // Ensure $scoreNames is fetched or defined earlier ?>
+            <!-- This assumes you have a predefined array of score names. Adjust as necessary. -->
+            <?php foreach ($scoreNames as $name): ?>
                 <th><?php echo htmlspecialchars($name); ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        <?php if (empty($performanceData)): ?>
+        <?php if (empty($performanceRows)): ?>
             <tr>
                 <td colspan="<?php echo count($scoreNames) + 2; ?>">No Data Found. Click "Add Data Row" to add new data.</td>
             </tr>
         <?php else: ?>
-            <?php foreach ($performanceData as $data): ?>
+            <?php foreach ($performanceRows as $data): ?>
                 <tr data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">
                     <td class="editable" data-field-name="score_date"><?php echo date("m/d/Y", strtotime($data['score_date'])); ?></td>
-                    
-                    <?php
-                    // Assuming your scores are in columns named score1, score2, etc.
-                    for ($i = 1; $i <= 10; $i++): // Adjust if you have more scores
-                        $scoreField = 'score' . $i;
-                    ?>
-                        <td class="editable" data-field-name="<?php echo $scoreField; ?>">
-                            <?php echo isset($data[$scoreField]) ? htmlspecialchars($data[$scoreField]) : ''; ?>
+                    <!-- Here we assume your database columns are named 'score1', 'score2', etc. -->
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <td class="editable" data-field-name="score<?php echo $i; ?>">
+                            <?php echo htmlspecialchars($data['score'.$i]) ?? ''; // Show scores or empty if not set ?>
                         </td>
                     <?php endfor; ?>
-                    
                     <td>
                         <button class="deleteRow" data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">Delete</button>
                     </td>
