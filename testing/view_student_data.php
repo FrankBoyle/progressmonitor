@@ -1,35 +1,38 @@
 <?php 
 include('./users/fetch_data.php'); 
+// Initialize empty arrays and variables
+$performanceData = [];
+$scoreNames = [];
+$chartDates = [];
+$chartScores = [];
 
-// Define and initialize the $columnHeaders array based on your table structure
-$columnHeaders = [
-    'score1_name',
-    'score2_name',
-    'score3_name',
-    'score4_name',
-    'score5_name',
-    'score6_name',
-    'score7_name',
-    'score8_name',
-    'score9_name',
-    'score10_name'
-];
-
-// Replace with your actual SchoolID (e.g., 1) and fetch metadata entries for that SchoolID
-$schoolID = '';
-
-// Fetch metadata entries from the Metadata table for the specified SchoolID
-$metadataEntries = [];
-$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
-$stmt->execute([$schoolID]);
-
-// Populate the $metadataEntries array with fetched data
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $metadataEntries[] = $row;
+// Check if the action is set to 'fetchGroups' and handle it
+if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
+    echo json_encode(fetchGroupNames());
+    exit;
 }
 
-// Close the database connection if needed
-// $connection = null; // Uncomment if required
+// If student_id is not set, exit early
+if (!isset($_GET['student_id'])) {
+    return;
+}
+
+$studentId = $_GET['student_id'];
+$schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
+
+if (!$schoolID) {
+    return;  // If there's no SchoolID, exit early
+}
+
+// Fetch performance data and score names
+$performanceData = fetchPerformanceData($studentId);
+$scoreNames = fetchScoreNames($schoolID);
+
+// Preparing the data for the chart
+foreach ($performanceData as $record) {
+    $chartDates[] = $record['score_date'];
+    // You can add more logic here if needed
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
