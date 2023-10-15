@@ -49,10 +49,24 @@ function fetchColumnHeaders($metadataId) {
 
     // Prepare and execute a query to fetch score names based on metadataId
     $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
+    if (!$stmt) {
+        // Handle the query preparation error here
+        die('Error preparing query: ' . $connection->error);
+    }
+    
     $stmt->execute([$metadataId]);
+    if (!$stmt) {
+        // Handle the query execution error here
+        die('Error executing query: ' . $connection->error);
+    }
 
     // Fetch the column headers and populate the $columnHeaders array
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$row) {
+        // Handle the case where no data is returned
+        die('No data found for metadata_id: ' . $metadataId);
+    }
+    
     for ($i = 1; $i <= 10; $i++) {
         $columnHeaders["score" . $i] = $row["score" . $i . "_name"];
     }
