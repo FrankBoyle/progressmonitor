@@ -13,6 +13,13 @@ function fetchPerformanceData($studentId) {
     return $stmt->fetchAll();
 }
 
+function fetchMetadataCategories($schoolID) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
     $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");

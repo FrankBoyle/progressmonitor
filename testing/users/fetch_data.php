@@ -6,11 +6,22 @@ error_reporting(E_ALL);
 
 include('./users/db.php');
 
-function fetchPerformanceData($studentId) {
+function fetchPerformanceDataByMetadata($studentId, $metadataId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
-    $stmt->execute([$studentId]);
-    return $stmt->fetchAll();
+    $stmt = $connection->prepare("
+        SELECT * FROM Performance 
+        WHERE student_id = ? AND metadata_id = ? 
+        ORDER BY score_date DESC LIMIT 41
+    ");
+    $stmt->execute([$studentId, $metadataId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function fetchMetadataCategories($schoolID) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function fetchSchoolIdForStudent($studentId) {
@@ -21,13 +32,18 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['SchoolID'] : null;
 }
 
-function fetchScoreNames($schoolID) {
+function fetchScoreNamesByMetadata($metadataId) {
     global $connection;
+    $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
+    $stmt->execute([$metadataId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Extract only the score names (assuming columns are like 'score1_name', 'score2_name', etc.)
     $scoreNames = [];
-    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE SchoolID = ?");
-    $stmt->execute([$schoolID]);
-    while ($row = $stmt->fetch()) {
-        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
+    foreach ($result as $key => $value) {
+        if (strpos($key, 'score') === 0) { // if the key starts with 'score'
+            $scoreNames[$key] = $value;
+        }
     }
     return $scoreNames;
 }
@@ -103,8 +119,8 @@ if (!$schoolID) {
 }
 
 // Fetch performance data and score names
-$performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($schoolID);
+$performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
+$scoreNames = fetchScoreNamesByMetadata($metadataId);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
@@ -112,6 +128,12 @@ foreach ($performanceData as $record) {
     // You can add more logic here if needed
 }
 
+if (!isset($_GET['metadata_id'])) {
+    // You might want to handle this more gracefully, e.g., by returning an error message in your response.
+    return;
+}
+
+$metadataId = $_GET['metadata_id'];
 // Handling the data POST from the dropdown functionality
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     $schoolIDIndex = $_POST['SchoolIDIndex'];
