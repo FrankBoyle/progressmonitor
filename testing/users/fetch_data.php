@@ -15,7 +15,7 @@ function fetchPerformanceData($studentId) {
 }
 
 // Function to fetch metadata categories for a school
-function fetchMetadataCategories($schoolID) {
+function fetchMetadataCategoriesFromDatabase($schoolID) {
     global $connection;
     $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
     $stmt->execute([$schoolID]);
