@@ -81,6 +81,25 @@ function fetchColumnHeaders($metadataId) {
     return $columnHeaders;
 }
 
+if ($_GET['action'] === 'fetchPerformanceData' && isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
+    $studentId = $_GET['student_id'];
+    $metadataId = $_GET['metadata_id'];
+    
+    // Fetch performance data based on studentId and metadataId
+    $performanceData = fetchPerformanceData($studentId, $metadataId);
+    $columnHeaders = fetchColumnHeaders($metadataId);
+
+    // Construct the data to send to the client
+    $responseData = [
+        'columnHeaders' => $columnHeaders,
+        'performanceData' => $performanceData,
+    ];
+
+    echo json_encode($responseData);
+} else {
+    echo json_encode(['error' => 'Invalid request']);
+}
+
 if (isset($_GET['student_id'])) {
     $studentId = $_GET['student_id'];
     $schoolID = fetchSchoolIdForStudent($studentId);
@@ -141,4 +160,6 @@ foreach ($responseData['performanceData'] as &$item) {
 } else {
     echo json_encode(['error' => 'student_id parameter is missing']);
 }
+
+
 ?>

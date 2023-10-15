@@ -272,8 +272,48 @@ function updateTableHeaders() {
 // Handle metadata group selection change
 $('#metadataIdSelector').on('change', function() {
     var selectedMetadataId = $(this).val();
-    fetchMetadata(selectedMetadataId);
+    var studentId = $('#currentStudentId').val(); // Get student_id from somewhere
+
+    // Make an AJAX request to fetch data based on selected values
+    $.ajax({
+        url: './users/fetch_data.php',
+        type: 'GET',
+        data: {
+            action: 'fetchPerformanceData',
+            student_id: studentId,
+            metadata_id: selectedMetadataId
+        },
+        dataType: 'json',
+        success: function(response) {
+            if (response) {
+                // Update the table with the new data
+                var tableBody = $('table tbody');
+                tableBody.empty();
+
+                $.each(response.performanceData, function(index, item) {
+                    var row = '<tr>';
+                    row += '<td class="editable" data-field-name="score_date">' + (item.score_date ? item.score_date : '') + '</td>';
+
+                    // Dynamically generate table cells for scores based on columnHeaders data
+                    $.each(response.columnHeaders, function(headerKey, headerValue) {
+                        row += '<td class="editable" data-field-name="' + headerKey + '">' + (item[headerKey] ? item[headerKey] : '') + '</td>';
+                    });
+
+                    row += '<td><button class="deleteRow" data-performance-id="' + item.performance_id + '">Delete</button></td>';
+                    row += '</tr>';
+
+                    tableBody.append(row);
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            // Handle errors if any
+            console.error(error);
+            fetchMetadata(selectedMetadataId);
+        }
+    });
 });
+
 
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
