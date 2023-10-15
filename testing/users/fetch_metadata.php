@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include ('db.php');
 
 if (isset($_GET['metadata_id'])) {
     // Fetch specific score names for the provided metadata_id
