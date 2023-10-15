@@ -301,9 +301,9 @@ function fetchMetadataCategories() {
     });
 }
 
-
 // Initial table header update and metadata group fetch
 updateTableHeaders();
+fetchMetadataCategories()
 
 function fetchMetadata(metadataId) {
     var studentId = $('#currentStudentId').val();
