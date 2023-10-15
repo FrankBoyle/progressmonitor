@@ -13,6 +13,9 @@ $metadataId = $_GET['metadata_id']; // or another method to get the metadata ID
 // Fetch performance data and score names using the functions in fetch_data.php
 $performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
 $scoreNames = fetchScoreNamesByMetadata($metadataId);
+
+var_dump($_GET); // This will show all the data in the $_GET array
+
 ?>
 
 <!DOCTYPE html>
