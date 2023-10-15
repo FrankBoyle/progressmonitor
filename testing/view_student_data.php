@@ -82,13 +82,10 @@ foreach ($performanceData as $record) {
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
-        <?php if (!empty($entry['metadata_name'])): ?>
-            <option value="<?php echo $entry['metadata_id']; ?>" <?php if ($selectedMetadataId == $entry['metadata_id']) { echo 'selected'; } ?>>
-                <?php echo htmlspecialchars($entry['metadata_name']); ?>
-            </option>
-        <?php endif; ?>
+        <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
     <?php endforeach; ?>
 </select>
+
 
 
 
