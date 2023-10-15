@@ -28,17 +28,6 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['SchoolID'] : null;
 }
 
-function fetchScoreNames($schoolID) {
-    global $connection;
-    $scoreNames = [];
-    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE SchoolID = ?");
-    $stmt->execute([$schoolID]);
-    while ($row = $stmt->fetch()) {
-        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
-    }
-    return $scoreNames;
-}
-
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
     $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
@@ -70,24 +59,27 @@ function addNewStudent($studentName, $teacherId) {
     return "New student added successfully.";
 }
 
-function fetchGroupNames() {
+function fetchScoreNamesBasedOnMetadata($metadataId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
-    $stmt->execute();
-    $stmt->bindColumn(1, $groupName);
     
-    $groups = [];
-    while ($stmt->fetch(PDO::FETCH_BOUND)) {
-        $groups[] = $groupName;
-    }
-    
-    return $groups;
-}
+    // Initialize an array to store the score names
+    $scoreNames = [];
 
+    // Prepare and execute a query to fetch score names based on metadata_id
+    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
+    $stmt->execute([$metadataId]);
+
+    // Fetch the score names and populate the $scoreNames array
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    for ($i = 1; $i <= 10; $i++) {
+        $scoreNames["score" . $i] = $row["score" . $i . "_name"];
+    }
+
+    return $scoreNames;
+}
 
 // Initialize empty arrays and variables
 $performanceData = [];
-$scoreNames = [];
 $chartDates = [];
 $chartScores = [];
 
@@ -111,7 +103,6 @@ if (!$schoolID) {
 
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($schoolID);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
@@ -134,5 +125,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     echo json_encode(['id' => $connection->lastInsertId()]);
     exit;
 }
+
+if (isset($_GET['metadata_id'])) {
+    $metadataId = $_GET['metadata_id'];
+
+    // Fetch score names based on the selected metadata_id from the Metadata table
+    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
+    $stmt->execute([$metadataId]);
+
+    // Fetch the score names and return them as JSON
+    $scoreNames = [];
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Add each score name to the $scoreNames array
+    for ($i = 1; $i <= 10; $i++) {
+        $scoreNames["score" . $i] = $row["score" . $i . "_name"];
+    }
+
+    echo json_encode($scoreNames);
+} else {
+    // Handle the case where metadata_id is not provided
+    echo json_encode(['error' => 'metadata_id parameter is missing']);
+}
+
 ?>
+
 

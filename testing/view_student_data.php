@@ -31,7 +31,7 @@
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
-<label>Select Metadata Group to Display: </label>
+<label>Select Score Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
         <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
@@ -43,10 +43,18 @@
 <table border="1">
     <thead>
         <tr>
-            <th>Week Start Date</th>
-            <?php foreach ($scoreNames as $key => $name): ?>
-                <th><?php echo $name; ?></th>
-            <?php endforeach; ?>
+            <th>Date</th>
+            <!-- Use JavaScript to dynamically update these column headers -->
+            <th id="scoreHeader1"></th>
+            <th id="scoreHeader2"></th>
+            <th id="scoreHeader3"></th>
+            <th id="scoreHeader4"></th>
+            <th id="scoreHeader5"></th>
+            <th id="scoreHeader6"></th>
+            <th id="scoreHeader7"></th>
+            <th id="scoreHeader8"></th>
+            <th id="scoreHeader9"></th>
+            <th id="scoreHeader10"></th>
             <th>Action</th>
         </tr>
     </thead>
@@ -80,6 +88,7 @@
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
+
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
