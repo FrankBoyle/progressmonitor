@@ -137,7 +137,7 @@ foreach ($responseData['performanceData'] as &$item) {
     }
 }
 
-    //echo json_encode($responseData);
+    echo json_encode($responseData);
 } else {
     echo json_encode(['error' => 'student_id parameter is missing']);
 }
