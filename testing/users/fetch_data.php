@@ -86,52 +86,44 @@ function fetchColumnHeaders($metadataId) {
 
 $response = [];
 
-if (isset($_GET['student_id'])) {
+if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
     $studentId = $_GET['student_id'];
-    $schoolID = fetchSchoolIdForStudent($studentId);
+    $metadataId = $_GET['metadata_id'];
 
-    if (!$schoolID) {
-        $response['error'] = 'No SchoolID found for the student';
-    } else {
-        if (isset($_GET['metadata_id'])) {
-            $metadataId = $_GET['metadata_id'];
-            $performanceData = fetchPerformanceData($studentId, $metadataId);
+    // Fetch performance data based on studentId and metadataId
+    $performanceData = fetchPerformanceData($studentId, $metadataId);
 
-            if ($performanceData) {
-                $columnHeaders = fetchColumnHeaders($metadataId);
-                
-                $responseData = [
-                    'columnHeaders' => $columnHeaders,
-                    'performanceData' => $performanceData,
-                ];
+    // Fetch the column headers based on the selected metadataId
+    $columnHeaders = fetchColumnHeaders($metadataId);
 
-                foreach ($responseData['columnHeaders'] as $key => $value) {
-                    if ($value === null) {
-                        $responseData['columnHeaders'][$key] = "N/A";
-                    }
-                }
+    // Construct the data to send to the client
+    $responseData = [
+        'columnHeaders' => $columnHeaders,
+        'performanceData' => $performanceData,
+    ];
 
-                foreach ($responseData['performanceData'] as &$item) {
-                    foreach ($item as $key => $value) {
-                        if ($value === null) {
-                            $item[$key] = "N/A";
-                        }
-                    }
-                }
-
-                $response = $responseData;
-            } else {
-                $response['error'] = 'No data found for metadata_id: ' . $metadataId;
-            }
-        } else {
-            $response['error'] = 'metadata_id parameter is missing';
+    // Handle null values in columnHeaders
+    foreach ($responseData['columnHeaders'] as $key => $value) {
+        if ($value === null) {
+            $responseData['columnHeaders'][$key] = "N/A";
         }
     }
+
+    // Handle null values in performanceData
+    foreach ($responseData['performanceData'] as &$item) {
+        foreach ($item as $key => $value) {
+            if ($value === null) {
+                $item[$key] = "N/A";
+            }
+        }
+    }
+
+    $response = $responseData; // Set the response array to the constructed data
 } else {
-    $response['error'] = 'student_id parameter is missing';
+    $response['error'] = 'metadata_id parameter is missing'; // Handle the case when parameters are missing
 }
 
-echo json_encode($response);
+echo json_encode($response); // Send the response as JSON
 
 // Fetch the column headers based on the selected metadataId
 $columnHeaders = fetchColumnHeaders($metadataId);
