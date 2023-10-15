@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 include('db.php');
 
 function fetchPerformanceData($studentId, $metadataId) {
+    // Rest of the function remains the same
     global $connection;
     try {
         // Adjust your SQL query to filter by both studentId and metadataId
@@ -19,6 +20,7 @@ function fetchPerformanceData($studentId, $metadataId) {
         exit;
     }
 }
+
 
 if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
     $studentId = $_GET['student_id'];
