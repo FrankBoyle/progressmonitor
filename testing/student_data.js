@@ -731,7 +731,7 @@ if (isDateDuplicate(currentDate)) {
     document.getElementById('metadataIdSelector').addEventListener('change', function(e) {
         const selectedMetadataId = e.target.value;
     
-        fetch(`/path_to_your_endpoint/fetch_metadata.php?metadata_id=${selectedMetadataId}`)
+        fetch(`./users/fetch_metadata.php?metadata_id=${selectedMetadataId}`)
             .then(response => response.json())
             .then(data => {
                 // Here, assuming the server returns an array of score names in the order
