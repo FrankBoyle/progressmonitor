@@ -13,35 +13,31 @@ class DatabaseOperations {
         $this->connection = $connection;
     }
     
-function fetchPerformanceDataByMetadata($studentId, $metadataId) {
-    $this->$connection;
-    $stmt = $connection->prepare("
-        SELECT * FROM Performance 
-        WHERE student_id = ? AND metadata_id = ? 
-        ORDER BY score_date DESC LIMIT 41
-    ");
-    $stmt->execute([$studentId, $metadataId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    public function fetchPerformanceDataByMetadata($studentId, $metadataId) {
+        $stmt = $this->connection->prepare("
+            SELECT * FROM Performance 
+            WHERE student_id = ? AND metadata_id = ? 
+            ORDER BY score_date DESC LIMIT 41
+        ");
+        $stmt->execute([$studentId, $metadataId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-function fetchMetadataCategories($schoolID) {
-    $this->$connection;
-    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
-    $stmt->execute([$schoolID]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+    public function fetchMetadataCategories($schoolID) {
+        $stmt = $this->connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+        $stmt->execute([$schoolID]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-function fetchSchoolIdForStudent($studentId) {
-    $this->$connection;
-    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
-    $stmt->execute([$studentId]);
-    $result = $stmt->fetch();
-    return $result ? $result['SchoolID'] : null;
-}
+    public function fetchSchoolIdForStudent($studentId) {
+        $stmt = $this->connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
+        $stmt->execute([$studentId]);
+        $result = $stmt->fetch();
+        return $result ? $result['SchoolID'] : null;
+    }
 
 function fetchScoreNamesByMetadata($metadataId) {
-    $this->$connection;
-    $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
+    $stmt = $this->$connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataId]);
     // Check for errors
     if ($stmt->errorCode() != '00000') {
@@ -69,23 +65,20 @@ function fetchScoreNamesByMetadata($metadataId) {
 }
 
 function fetchStudentsByTeacher($teacherId) {
-    $this->$connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+    $stmt = $this->$connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
 
 function addNewStudent($studentName, $teacherId) {
-    $this->$connection;
-
     // Fetch the SchoolID of the current teacher
-    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    $stmt = $this->$connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
     $stmt->execute([$teacherId]);
     $teacherInfo = $stmt->fetch();
     $teacherSchoolID = $teacherInfo['SchoolID'];
 
     // Check if the student with the same name and SchoolID already exists
-    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
+    $stmt = $this->$connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
     $stmt->execute([$studentName, $teacherSchoolID]);
     $duplicateStudent = $stmt->fetch();
 
@@ -94,7 +87,7 @@ function addNewStudent($studentName, $teacherId) {
     } 
 
     // Insert the new student with the same SchoolID
-    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+    $stmt = $this->$connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
     $stmt->execute([$studentName, $teacherSchoolID]);
     return "New student added successfully.";
 }
@@ -112,73 +105,58 @@ public function handleError($e) {
 }
 }
 
-// Initialize empty arrays and variables
-$performanceData = [];
-$scoreNames = [];
-$chartDates = [];
-$chartScores = [];
-$metadataEntries = array();
-
-
-// If student_id is not set, exit early
-if (!isset($_GET['student_id'])) {
-    return;
-}
-
-$studentId = $_GET['student_id'];
-$schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
-
-if (!$schoolID) {
-    return;  // If there's no SchoolID, exit early
-}
-
-if (!isset($_GET['metadata_id'])) {
-    echo "Database error: " . $e->getMessage();
-    return;
-}
-//$metadataId = $_GET['metadata_id'];
 $dbOps = new DatabaseOperations($connection);
 
 try {
+    // Check if action is set to 'fetchGroups'
     if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
         echo json_encode($dbOps->fetchGroupNames());
         exit;
     }
 
+    // Check if the student ID is provided
     if (!isset($_GET['student_id'])) {
         throw new Exception("Student ID not provided");
     }
 
     $studentId = $_GET['student_id'];
+    
+    // Fetch the school ID for the student
     $schoolID = $dbOps->fetchSchoolIdForStudent($studentId);
-
     if (!$schoolID) {
         throw new Exception("No school ID found for provided student ID");
     }
 
+    // Check if the metadata ID is provided
     if (!isset($_GET['metadata_id'])) {
         throw new Exception("Metadata ID not provided");
     }
 
     $metadataId = $_GET['metadata_id'];
+
+    // Fetch the required data using the appropriate class methods
     $performanceData = $dbOps->fetchPerformanceDataByMetadata($studentId, $metadataId);
     $scoreNames = $dbOps->fetchScoreNamesByMetadata($metadataId);
     $metadataEntries = $dbOps->fetchAllMetadataEntries();
-// Fetch performance data and score names
-$performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
-$scoreNames = fetchScoreNamesByMetadata($metadataId);
 
-// Preparing the data for the chart
-foreach ($performanceData as $record) {
-    $chartDates[] = $record['score_date'];
-    // You can add more logic here if needed
-}
-// ... (previous code)
+    // Initialize chart data
+    $chartDates = [];
+    $chartScores = []; // Assuming you want to process scores too
+
+    // Preparing the data for the chart
+    foreach ($performanceData as $record) {
+        $chartDates[] = $record['score_date'];
+        // Assuming the score is also stored in the record, add it to the chart scores
+        // $chartScores[] = $record['score']; // Uncomment and adjust if necessary
+    }
+
+    // ... (Any additional logic for processing or output)
+
 } catch (Exception $e) {
+    // Handle exceptions by calling the error handling method of your class
     $dbOps->handleError($e);
 }
-// Create an instance of your database operations class
 
+// ... (Any final logic or closing tags, if necessary)
 
 ?>
-
