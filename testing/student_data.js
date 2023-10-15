@@ -290,7 +290,7 @@ function fetchMetadataCategories() {
 
 // Initial table header update and metadata group fetch
 updateTableHeaders();
-fetchMetadataGroups();
+fetchMetadataCategories();
 
 // Handle metadata group selection change
 $('#metadataIdSelector').on('change', function () {
