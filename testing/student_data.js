@@ -274,6 +274,8 @@ $('#metadataIdSelector').on('change', function() {
     var selectedMetadataId = $(this).val();
     var studentId = $('#currentStudentId').val(); // Get student_id from somewhere
 
+    var newUrl = 'view_student_data.php?student_id=' + studentId + '&metadata_id=' + selectedMetadataId;
+    window.location.href = newUrl; // Redirect to the new URL
     // Make an AJAX request to fetch data based on selected values
     $.ajax({
         url: './users/fetch_data.php',
