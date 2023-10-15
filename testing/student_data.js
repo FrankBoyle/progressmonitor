@@ -275,7 +275,7 @@ function fetchMetadataGroups() {
     $.ajax({
         url: './users/fetch_data.php',
         type: 'GET',
-        data: { action: 'fetchGroups' },
+        data: { action: 'fetchMetadataCategories' }, // Change 'fetchGroups' to 'fetchMetadataCategories'
         dataType: 'json',
         success: function (response) {
             if (response) {
@@ -287,6 +287,7 @@ function fetchMetadataGroups() {
         },
     });
 }
+
 
 // Initial table header update and metadata group fetch
 updateTableHeaders();
