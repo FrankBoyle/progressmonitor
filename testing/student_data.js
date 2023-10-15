@@ -266,6 +266,28 @@ $(document).ready(function() {
     // Constants & Variables
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
+    fetch("./users/fetch_data.php?student_CURRENT_STUDENT_ID")
+        .then(response => response.json())
+        .then(data => {
+            const dates = data.dates;
+            const scores = data.scores;
+            
+            const series = [];
+            for (const [label, scoreData] of Object.entries(scores)) {
+                series.push({
+                    name: label,
+                    data: scoreData,
+                });
+            }
+
+            chart.updateOptions({
+                series: series,
+                xaxis: {
+                    categories: dates,
+                }
+            });
+        });
+
     // Utility Functions
     function isValidDate(d) {
         return d instanceof Date && !isNaN(d);
