@@ -132,6 +132,25 @@ try {
     echo "Database error: " . $e->getMessage();
 }
 
+try {
+    // Your database operations or other potential error-prone operations here
+    // For example:
+    $stmt = $connection->prepare($query);
+    $stmt->execute();
+    
+    // If the above operations fail, the script will jump to the catch block below
+
+} catch (PDOException $e) {
+    // Now $e is defined, and you can access its methods
+    error_log('Database error: ' . $e->getMessage());
+
+    // Instead of echoing the error details to the user, consider showing a generic error message
+    echo "An error occurred. Please try again later.";
+
+    // Stop the script or handle the error gracefully
+    exit;
+}
+
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
