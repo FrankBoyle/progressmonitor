@@ -33,27 +33,19 @@
 
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
-    <?php
-    // Replace 'fetchMetadataCategories' with your actual function name that fetches metadata categories.
-    $metadataCategories = fetchMetadataCategories($schoolID);
-
-    foreach ($metadataCategories as $category) {
-        echo '<option value="' . htmlspecialchars($category['metadata_id']) . '">'
-             . htmlspecialchars($category['category_name']) . '</option>';
-    }
-    ?>
+    <?php foreach ($metadataEntries as $entry): ?>
+        <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
+            <?php echo htmlspecialchars($entry['category_name']); ?>
+        </option>
+    <?php endforeach; ?>
 </select>
-
 
 <table border="1">
     <thead>
         <tr>
-            <th>Date</th>
-            <?php
-            // Loop through the score names based on the selected metadata
-            foreach ($scoreNames as $key => $name):
-            ?>
-                <th><?php echo htmlspecialchars($name); ?></th>
+            <th>Week Start Date</th>
+            <?php foreach ($scoreNames as $key => $name): ?>
+                <th><?php echo $name; ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
@@ -74,24 +66,20 @@
                     ?>
                 </td>
                 <!-- Add scores using loop -->
-                <?php
-                // Loop through the score names based on the selected metadata
-                foreach ($scoreNames as $key => $name):
-                ?>
-                    <td class="editable" data-field-name="<?php echo htmlspecialchars($key); ?>">
+                <?php for ($i = 1; $i <= 10; $i++): ?>
+                    <td class="editable" data-field-name="score<?php echo $i; ?>">
                         <?php
-                        if (isset($data[$key])) {
-                            echo htmlspecialchars($data[$key]);
+                        if (isset($data['score'.$i])) {
+                            echo $data['score'.$i];
                         }
                         ?>
                     </td>
-                <?php endforeach; ?>
-                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                <?php endfor; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
