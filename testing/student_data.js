@@ -257,7 +257,28 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
+    $('#metadataIdSelector').change(function () {
+        var metadataId = $(this).val();
+        fetchScoreNames(metadataId);
+    });
 
+    function fetchScoreNames(metadataId) {
+        $.ajax({
+            url: 'fetch_score_names.php', // URL to your PHP script
+            type: 'GET',
+            data: { metadata_id: metadataId },
+            dataType: 'json',
+            success: function (response) {
+                // Handle the received score names (response) and update your chart here
+                console.log(response); // You can use console.log to inspect the response
+            },
+            error: function (xhr, status, error) {
+                // Handle any errors here
+                console.error(xhr.responseText);
+            }
+        });
+    }
+    
     function getCurrentDate() {
         const currentDate = new Date();
         return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;

@@ -48,7 +48,7 @@
 <table border="1">
     <thead>
         <tr>
-            <th>Week Start Date</th>
+            <th>Date</th>
             <?php foreach ($scoreNames as $key => $name): ?>
                 <th><?php echo $name; ?></th>
             <?php endforeach; ?>
