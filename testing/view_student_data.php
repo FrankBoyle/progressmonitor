@@ -31,7 +31,7 @@
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
-<label>Select Score Group to Display: </label>
+<label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
         <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
@@ -43,25 +43,18 @@
 <table border="1">
     <thead>
         <tr>
-            <th>Date</th>
-            <!-- Use JavaScript to dynamically update these column headers -->
-            <th id="scoreHeader1"></th>
-            <th id="scoreHeader2"></th>
-            <th id="scoreHeader3"></th>
-            <th id="scoreHeader4"></th>
-            <th id="scoreHeader5"></th>
-            <th id="scoreHeader6"></th>
-            <th id="scoreHeader7"></th>
-            <th id="scoreHeader8"></th>
-            <th id="scoreHeader9"></th>
-            <th id="scoreHeader10"></th>
+            <th>Week Start Date</th>
+            <!-- Dynamically generate table headers based on columnHeaders data -->
+            <?php foreach ($columnHeaders as $key => $name): ?>
+                <th><?php echo $name; ?></th>
+            <?php endforeach; ?>
             <th>Action</th>
         </tr>
     </thead>
 
     <?php if (empty($performanceData)): ?>
         <tr>
-            <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+            <td colspan="<?php echo count($columnHeaders) + 2; ?>">No Data Found. Click "Add Data Row" to add new data.</td>
         </tr>
     <?php else: ?>
         <?php foreach ($performanceData as $data): ?>
@@ -73,22 +66,21 @@
                     }
                     ?>
                 </td>
-                <!-- Add scores using loop -->
-                <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <td class="editable" data-field-name="score<?php echo $i; ?>">
+                <!-- Dynamically generate table cells for scores based on columnHeaders data -->
+                <?php foreach ($columnHeaders as $key => $name): ?>
+                    <td class="editable" data-field-name="<?php echo $key; ?>">
                         <?php
-                        if (isset($data['score'.$i])) {
-                            echo $data['score'.$i];
+                        if (isset($data[$key])) {
+                            echo $data[$key];
                         }
                         ?>
                     </td>
-                <?php endfor; ?>
-                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
+                <?php endforeach; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
             </tr>
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
