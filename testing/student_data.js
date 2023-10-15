@@ -266,20 +266,27 @@ $(document).ready(function() {
     // Constants & Variables
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
-    fetch("/testing/users/fetch_metadata.php")
-    .then(response => response.text())  // First get the response as text
+    fetch("./users/fetch_metadata.php")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.text(); // Get the response as text
+    })
     .then(text => {
         if (!text) {
             throw new Error("Empty response from server");
         }
-        return JSON.parse(text);  // Parse the text as JSON
+        return JSON.parse(text); // Parse the text as JSON
     })
     .then(data => {
-        // Handle the parsed data here
+        // Handle the parsed metadata data here
+        console.log(data); // Example: Log the data to the console
     })
     .catch(error => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching metadata:", error);
     });
+
 
 
     fetch("./users/fetch_data.php?student_id=" + CURRENT_STUDENT_ID)
@@ -292,7 +299,7 @@ $(document).ready(function() {
     .then(data => {
         if (data.error) {
             console.error("Server error:", data.error);
-            return; // Exit out of the success callback if there's an error.
+            return;
         }
 
         const dates = data.dates;
@@ -302,13 +309,13 @@ $(document).ready(function() {
 
         for (const [label, scoreData] of Object.entries(scores)) {
             seriesData.push({
-                name: label, // This will use the custom name
+                name: label,
                 data: scoreData
             });
         }
 
-        // Assuming you have already initialized your chart elsewhere and it's stored in a variable named "chart".
-        // You can update the series and x-axis categories as:
+        // Assuming you have initialized your chart elsewhere and it's stored in a variable named "chart".
+        // You can update the series and x-axis categories as follows:
         chart.updateOptions({
             xaxis: {
                 categories: dates
@@ -320,6 +327,7 @@ $(document).ready(function() {
     .catch(error => {
         console.error("Fetch error:", error);
     });
+
 
 
     fetch('./users/fetch_metadata.php')
