@@ -59,6 +59,10 @@ $metadataCategories = fetchMetadataCategoriesFromDatabase($teacherId);
 
     <script>
         // JavaScript to handle metadata selection and view data links
+        <?php foreach ($students as $student): ?>
+    <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?php echo $selectedMetadataId; ?>'><?= $student['name'] ?></a><br>
+<?php endforeach; ?>
+
         const metadataSelectors = document.querySelectorAll(".metadata-selector");
         const viewDataLinks = document.querySelectorAll(".view-data-link");
 
