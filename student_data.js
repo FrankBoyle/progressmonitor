@@ -359,25 +359,29 @@ $(document).ready(function() {
         }, 'json');
     });
 
-    function updateScoreInDatabase(row, fieldName, newValue) {
+    function updateScoreInDatabase(row, metadataFieldName, newValue) {
         const performanceId = row.data('performance-id');
         const studentId = CURRENT_STUDENT_ID;
-        const weekStartDate = convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text());
-
+        const score_date = row.find('td[data-field-name="score_date"]').text();
+        
+        // Assuming that metadataFieldName would be something like "score1_name" and we'd need to update "score1"
+        const fieldNameToUpdate = metadataFieldName.replace('_name', '');
+    
         const postData = {
             performance_id: performanceId,
-            field_name: fieldName,
+            field_name: fieldNameToUpdate, // Use the extracted field name to update the appropriate score column
             new_value: newValue,
             student_id: studentId,
-            score_date: weekStartDate
+            score_date: score_date
         };
-
+    
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             if (response && !response.success) {
-                //alert('Error updating the average score in the database.');
+                console.error('Error updating the score in the database.');
             }
         });
     }
+    
 
     function isDateDuplicate(dateString, currentPerformanceId = null) {
     //console.log("Checking for duplicate of:", dateString);
