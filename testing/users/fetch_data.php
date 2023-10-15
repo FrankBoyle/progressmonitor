@@ -8,16 +8,28 @@ include('db.php');
 
 function fetchPerformanceData($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
-    $stmt->execute([$studentId]);
-    return $stmt->fetchAll();
+    try {
+        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
+        $stmt->execute([$studentId]);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        // Handle the database error here, e.g., log the error, return an error response, etc.
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        exit;
+    }
 }
 
 function fetchMetadataCategories($schoolID) {
     global $connection;
-    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
-    $stmt->execute([$schoolID]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+        $stmt->execute([$schoolID]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // Handle the database error here, e.g., log the error, return an error response, etc.
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        exit;
+    }
 }
 
 function fetchSchoolIdForStudent($studentId) {
