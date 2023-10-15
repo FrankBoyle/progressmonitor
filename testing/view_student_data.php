@@ -34,51 +34,57 @@
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
-        <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
-            <?php echo htmlspecialchars($entry['category_name']); ?>
+        <!-- Continue using htmlspecialchars for escaping to prevent XSS -->
+        <option value="<?php echo htmlspecialchars($entry['metadata_id'], ENT_QUOTES, 'UTF-8'); ?>">
+            <?php echo htmlspecialchars($entry['category_name'], ENT_QUOTES, 'UTF-8'); ?>
         </option>
     <?php endforeach; ?>
 </select>
 
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>Week Start Date</th>
-            <?php foreach ($scoreNames as $key => $name): ?>
-                <th><?php echo $name; ?></th>
+            <!-- Dynamically create headers for scores -->
+            <?php foreach ($scoreNames as $name): ?>
+                <th><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
     </thead>
-
-    <?php if (empty($performanceData)): ?>
-        <tr>
-            <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-        </tr>
-    <?php else: ?>
-        <?php foreach ($performanceData as $data): ?>
-            <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="score_date">
-                    <?php
-                    if (isset($data['score_date'])) {
-                        echo date("m/d/Y", strtotime($data['score_date']));
-                    }
-                    ?>
-                </td>
-                <!-- Add scores using loop -->
-                <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <td class="editable" data-field-name="score<?php echo $i; ?>">
+    <tbody>
+        <?php if (empty($performanceData)): ?>
+            <tr>
+                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+            </tr>
+        <?php else: ?>
+            <?php foreach ($performanceData as $data): ?>
+                <tr data-performance-id="<?php echo htmlspecialchars($data['performance_id'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <td class="editable" data-field-name="score_date">
                         <?php
-                        if (isset($data['score'.$i])) {
-                            echo $data['score'.$i];
+                        // Check and display the date, if available
+                        if (isset($data['score_date'])) {
+                            echo htmlspecialchars(date("m/d/Y", strtotime($data['score_date'])), ENT_QUOTES, 'UTF-8');
                         }
                         ?>
                     </td>
-                <?php endfor; ?>
-                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
-            </tr>
-        <?php endforeach; ?>
-    <?php endif; ?>
+                    <!-- Insert scores dynamically -->
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <td class="editable" data-field-name="score<?php echo $i; ?>">
+                            <?php
+                            // Check and display the score, if available
+                            if (isset($data["score$i"])) {
+                                echo htmlspecialchars($data["score$i"], ENT_QUOTES, 'UTF-8');
+                            }
+                            ?>
+                        </td>
+                    <?php endfor; ?>
+                    <!-- Action button for deletion per row -->
+                    <td><button class="deleteRow" data-performance-id="<?php echo htmlspecialchars($data['performance_id'], ENT_QUOTES, 'UTF-8'); ?>">Delete</button></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
 </table>
 
 <label>Select Score to Display: </label>
