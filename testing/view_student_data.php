@@ -81,17 +81,10 @@ foreach ($performanceData as $record) {
 
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
-    <?php foreach ($metadataEntries as $entry): ?>
-        <?php if (!empty($entry['metadata_name'])): ?>
-            <option value="<?php echo $entry['metadata_id']; ?>" <?php if ($selectedMetadataId == $entry['metadata_id']) { echo 'selected'; } ?>>
-                <?php echo htmlspecialchars($entry['metadata_name']); ?>
-            </option>
-        <?php endif; ?>
-    <?php endforeach; ?>
+    <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+        <option value="<?= $row['metadata_id'] ?>"><?= $row['category_name'] ?></option>
+    <?php endwhile; ?>
 </select>
-
-
-
 
 <table border="1">
 <thead>
