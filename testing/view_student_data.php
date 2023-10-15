@@ -1,23 +1,3 @@
-<?php include('./users/fetch_data.php');
-$currentWeekStartDate = date('Y-m-d', strtotime('monday this week'));  // Adjust the date format as needed
-
-if (!isset($_GET['metadata_id']) || empty($_GET['metadata_id'])) {
-    // No valid metadata_id provided, handle the error, e.g., display a message, or redirect, etc.
-    die('No valid metadata ID provided.');
-}
-// Assume $studentId and $metadataId are obtained earlier in your script
-// For example, they could be from a logged-in user's session or from a form input
-$studentId = $_GET['student_id']; // or another method to get the student ID
-$metadataId = $_GET['metadata_id']; // or another method to get the metadata ID
-
-// Fetch performance data and score names using the functions in fetch_data.php
-$performanceData = fetchPerformanceDataByMetadata($studentId, $metadataId);
-$scoreNames = fetchScoreNamesByMetadata($metadataId);
-
-var_dump($_GET); // This will show all the data in the $_GET array
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,6 +19,8 @@ var_dump($_GET); // This will show all the data in the $_GET array
 </style>
 </head>
 <body>
+
+<?php include('./users/fetch_data.php'); ?>
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>
@@ -52,9 +34,8 @@ var_dump($_GET); // This will show all the data in the $_GET array
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
-        <!-- Continue using htmlspecialchars for escaping to prevent XSS -->
-        <option value="<?php echo htmlspecialchars($entry['metadata_id'], ENT_QUOTES, 'UTF-8'); ?>">
-            <?php echo htmlspecialchars($entry['category_name'], ENT_QUOTES, 'UTF-8'); ?>
+        <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
+            <?php echo htmlspecialchars($entry['category_name']); ?>
         </option>
     <?php endforeach; ?>
 </select>
@@ -62,33 +43,42 @@ var_dump($_GET); // This will show all the data in the $_GET array
 <table border="1">
     <thead>
         <tr>
-            <th>Date</th>
+            <th>Week Start Date</th>
             <?php foreach ($scoreNames as $key => $name): ?>
-                <th><?php echo htmlspecialchars($name); ?></th>
+                <th><?php echo $name; ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
     </thead>
-    <tbody>
-        <?php if (empty($performanceData)): ?>
-            <tr>
-                <td colspan="<?php echo count($scoreNames) + 2; ?>">No Data Found. Click "Add Data Row" to add new data.</td>
+
+    <?php if (empty($performanceData)): ?>
+        <tr>
+            <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+        </tr>
+    <?php else: ?>
+        <?php foreach ($performanceData as $data): ?>
+            <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                <td class="editable" data-field-name="score_date">
+                    <?php
+                    if (isset($data['score_date'])) {
+                        echo date("m/d/Y", strtotime($data['score_date']));
+                    }
+                    ?>
+                </td>
+                <!-- Add scores using loop -->
+                <?php for ($i = 1; $i <= 10; $i++): ?>
+                    <td class="editable" data-field-name="score<?php echo $i; ?>">
+                        <?php
+                        if (isset($data['score'.$i])) {
+                            echo $data['score'.$i];
+                        }
+                        ?>
+                    </td>
+                <?php endfor; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
             </tr>
-        <?php else: ?>
-            <?php foreach ($performanceData as $data): ?>
-                <tr data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">
-                    <td class="editable" data-field-name="score_date"><?php echo date("m/d/Y", strtotime($data['score_date'])); ?></td>
-                    <!-- Iterate over the scores dynamically based on the fetched score names -->
-                    <?php foreach ($scoreNames as $key => $value): ?>
-                        <td class="editable" data-field-name="<?php echo htmlspecialchars($key); ?>">
-                            <?php echo isset($data[$key]) ? htmlspecialchars($data[$key]) : ''; ?>
-                        </td>
-                    <?php endforeach; ?>
-                    <td><button class="deleteRow" data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">Delete</button></td>
-                </tr>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </tbody>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </table>
 
 <label>Select Score to Display: </label>

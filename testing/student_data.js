@@ -258,8 +258,6 @@ function calculateTrendline(data) {
 
 $(document).ready(function() {
 
-    $('#performanceDataTable').DataTable(); // Adjust based on your DataTable configuration
-
     function getCurrentDate() {
         const currentDate = new Date();
         return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
