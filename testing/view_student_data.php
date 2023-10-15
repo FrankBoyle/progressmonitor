@@ -21,7 +21,8 @@
 <body>
 
 <?php include('./users/fetch_data.php'); ?>
-
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
@@ -55,10 +56,10 @@
     <?php else: ?>
         <?php foreach ($performanceData as $data): ?>
             <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="week_start_date">
+                <td class="editable" data-field-name="score_date">
                     <?php
-                    if (isset($data['week_start_date'])) {
-                        echo date("m/d/Y", strtotime($data['week_start_date']));
+                    if (isset($data['score_date'])) {
+                        echo date("m/d/Y", strtotime($data['score_date']));
                     }
                     ?>
                 </td>

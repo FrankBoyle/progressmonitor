@@ -1,6 +1,9 @@
 {
+
   "files": [
+
     {
+
       "path": "./dist/css/adminlte.css",
       "maxSize": "128.3 kB"
     },

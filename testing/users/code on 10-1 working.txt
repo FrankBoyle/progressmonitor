@@ -135,10 +135,10 @@ label {
     <?php else: ?>
         <?php foreach ($performanceData as $data): ?>
             <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="week_start_date">
+                <td class="editable" data-field-name="score_date">
                     <?php
-                    if (isset($data['week_start_date'])) {
-                        echo date("m/d/Y", strtotime($data['week_start_date']));
+                    if (isset($data['score_date'])) {
+                        echo date("m/d/Y", strtotime($data['score_date']));
                     }
                     ?>
                 </td>
@@ -210,7 +210,7 @@ function getChartData(scoreField) {
     var xCategories = [];
 
     $('tr[data-performance-id]').each(function() {
-        var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
+        var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
@@ -436,7 +436,7 @@ $(document).ready(function() {
 
             let datePickerActive = false;
 
-            if (cell.data('field-name') === 'week_start_date') {
+            if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     beforeShow: function() {
@@ -464,7 +464,7 @@ $(document).ready(function() {
                 }
 
                 let newValue = input.val();
-                if (cell.data('field-name') === 'week_start_date') {
+                if (cell.data('field-name') === 'score_date') {
                     const parts = newValue.split('/');
                     if (parts.length !== 3) {
                         cell.html(originalValue);
@@ -489,7 +489,7 @@ $(document).ready(function() {
                     field_name: fieldName,
                     new_value: newValue,
                     student_id: studentId,
-                    week_start_date: weekStartDate
+                    score_date: weekStartDate
                 };
 
                 if (performanceId === 'new') {
@@ -509,7 +509,7 @@ $(document).ready(function() {
                         if (performanceId === 'new') {
                             const newRow = $('tr[data-performance-id="new"]');
                             newRow.attr('data-performance-id', response.performance_id);
-                            newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                         }
     
     // New code for updating score8 starts here
@@ -584,7 +584,7 @@ $(document).ready(function() {
             field_name: fieldName,
             new_value: newValue,
             student_id: studentId,
-            week_start_date: weekStartDate
+            score_date: weekStartDate
         },
         success: function(response) {
             if (response && !response.success) {
@@ -610,15 +610,15 @@ $(document).ready(function() {
             currentDate.getDate().toString().padStart(2, '0') + '/' +
             currentDate.getFullYear();
         var newRow = $("<tr data-performance-id='new'>");
-        newRow.append('<td class="editable" data-field-name="week_start_date">' + formattedDate + '</td>');  // Set the current date as default
+        newRow.append('<td class="editable" data-field-name="score_date">' + formattedDate + '</td>');  // Set the current date as default
         for (let i = 1; i <= 10; i++) {
             newRow.append('<td class="editable" data-field-name="score' + i + '"></td>');
         }
         $("table").append(newRow);
 
         // Automatically trigger saving for the new row's "Week Start Date"
-        newRow.find('td[data-field-name="week_start_date"]').click().blur();
-        saveEditedDate(newRow.find('td[data-field-name="week_start_date"]'), formattedDate); // Save the edited date
+        newRow.find('td[data-field-name="score_date"]').click().blur();
+        saveEditedDate(newRow.find('td[data-field-name="score_date"]'), formattedDate); // Save the edited date
 
 // Inside the `$('#addDataRow').click` function:
 newRow.append('<td><button class="saveRow">Save</button></td>');
@@ -674,7 +674,7 @@ $(document).on('click', '.saveRow', function() {
         let postData = {
             performance_id: performanceId,
             student_id: $('#currentStudentId').val(),
-            week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text())
+            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text())
         };
         
         let scores = {};
@@ -690,7 +690,7 @@ $(document).on('click', '.saveRow', function() {
             data: postData,
             success: function(response) {
                 row.attr('data-performance-id', response.performance_id);
-                row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                 // New code for updating score8 starts here
                 const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
                 const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
@@ -732,21 +732,21 @@ $responseData = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate that the necessary POST data is present
-    if (empty($_POST['student_id']) || empty($_POST['week_start_date']) || empty($_POST['scores'])) {
+    if (empty($_POST['student_id']) || empty($_POST['score_date']) || empty($_POST['scores'])) {
         logError("Required data is missing.");
         $responseData['error'] = 'An error occurred. Please try again later.';
     } else {
         $studentId = $_POST['student_id'];
-        $weekStartDate = $_POST['week_start_date'];
+        $weekStartDate = $_POST['score_date'];
         $scores = $_POST['scores']; // Assuming scores are passed as an array
 
-        $stmt = $connection->prepare("INSERT INTO Performance (student_id, week_start_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $connection->prepare("INSERT INTO Performance (student_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
             $newPerformanceId = $connection->lastInsertId();
             $responseData = [
                 'performance_id' => $newPerformanceId,
-                'week_start_date' => $weekStartDate,
+                'score_date' => $weekStartDate,
                 'scores' => $scores,
             ];
         } else {
@@ -778,8 +778,8 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     $fieldName = $_POST['field_name'];
     $newValue = $_POST['new_value'];
 
-    // Validate and sanitize the date input (assuming it's for the 'week_start_date' field)
-    if ($fieldName === 'week_start_date') {
+    // Validate and sanitize the date input (assuming it's for the 'score_date' field)
+    if ($fieldName === 'score_date') {
         $newDate = date_create_from_format('Y-m-d', $newValue);
         if ($newDate === false) {
             handleError("Invalid date format.");
@@ -797,7 +797,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
  */
 function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
     // List of allowed field names to ensure security
-    $allowedFields = ['week_start_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
+    $allowedFields = ['score_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
 
     if (!in_array($fieldName, $allowedFields)) {
         handleError("Invalid field specified.");
@@ -902,7 +902,7 @@ $performanceData = [];
 if (isset($_GET['student_id'])) {
     $studentId = $_GET['student_id'];
 
-    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY week_start_date DESC LIMIT 41");
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
     $stmt->execute([$studentId]);
 
     $performanceData = $stmt->fetchAll();
@@ -931,7 +931,7 @@ $chartDates = [];
 $chartScores = [];
 
 foreach ($performanceData as $record) {
-    $chartDates[] = $record['week_start_date'];
+    $chartDates[] = $record['score_date'];
     
     //$totalScore = 0;
     //for($i = 1; $i <= 10; $i++) {

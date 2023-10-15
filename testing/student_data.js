@@ -27,7 +27,6 @@ $(document).ready(function() {
     updateChart('score1');  // Default
 });
 
-
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
     window.chart.render();
@@ -38,7 +37,7 @@ function getChartData(scoreField) {
     var xCategories = [];
 
     $('tr[data-performance-id]').each(function() {
-        var weekStartDate = $(this).find('td[data-field-name="week_start_date"]').text();
+        var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
@@ -62,8 +61,6 @@ function getChartData(scoreField) {
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
-
-
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
 
@@ -78,38 +75,45 @@ function updateChart(scoreField) {
 
     var seriesData = [
         {
-            name: 'Selected Score',
-            data: chartData,
-            connectNulls: true,  // Add this line here
-            stroke: {
-                width: 7  // Adjust this value to your desired thickness
+            name: 'Trendline',
+            data: trendlineData,
+            connectNulls: true,
+            dataLabels: {
+                enabled: false // Disable data labels for the Trendline series
             }
         },
         {
-            name: 'Trendline',
-            data: trendlineData,
-            connectNulls: true  // And add it here as well, if you want to connect null values for the trendline too
+            name: 'Selected Score',
+            data: chartData,
+            connectNulls: true,
+            dataLabels: {
+                enabled: true // Enable data labels for the Selected Score series
+            },
+            stroke: {
+                width: 7
+            }
         }
     ];
 
     if (benchmark !== null) {
-    var benchmarkData = xCategories.map(date => {
-        return {
-            x: date,
-            y: benchmark
-        };
-    }).reverse();
-    seriesData.push({
-        name: 'Benchmark',
-        data: benchmarkData,
-        connectNulls: true  // Keep this if you want to connect null values for the benchmark series
-    });
-}
-
+        var benchmarkData = xCategories.map(date => {
+            return {
+                x: date,
+                y: benchmark
+            };
+        }).reverse();
+        seriesData.push({
+            name: 'Benchmark',
+            data: benchmarkData,
+            connectNulls: true,
+            dataLabels: {
+                enabled: false // Disable data labels for the Benchmark series
+            }
+        });
+    }
 
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
-
 
 
 
@@ -119,46 +123,57 @@ function getChartOptions(dataSeries, xCategories) {
         chart: {
             type: 'line',
             stacked: false,
-            width: 1000,
-            toolbar: {
-                show: true,
-                tools: {
-                    download: false
-                }
+            width: 600,
+            zoom: {
+                type: 'x',
+                enabled: true,   // Ensure zooming is enabled
+                autoScaleYaxis: true  // This will auto-scale the Y-axis when zooming in
             },
-
+            toolbar: {
+                autoSelected: 'zoom' 
+            },
+            pan: {
+                enabled: true,  // Enable panning
+                mode: 'x',      // Enable horizontal panning
+            },   
             dropShadow: {
                 enabled: true,
                 color: '#000',
                 top: 15,          // Adjusted the vertical offset a bit
                 left: 5,          // Adjusted the horizontal offset a bit
                 blur: 7,         // Increased the blur to make it more spread out
-                opacity: 0.8      // Increased the opacity to make it darker
+                opacity: 0.5      // Increased the opacity to make it darker
             }
-
         },
+
 
         dataLabels: {
             enabled: true,
-            enabledOnSeries: [0],  // enable only on the first series
-            offsetY: -7,
+            enabledOnSeries: [1],  // enable only on the first series
+            offsetY: -10,
             style: {
                 fontSize: '12px',
                 colors: ['#333']
             }
         },
-
+        
         stroke: {
             curve: 'smooth',
-            width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1)  // Set width based on series name
+            width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1.5)  // Set width based on series name
         },
 
         markers: {
-            size: 5,
+            size: dataSeries.map(series => {
+                if (series.name === 'Selected Score') {
+                    return 5;  // or whatever size you want for the "Selected Score" series
+                } else {
+                    return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
+                }
+            }),
             colors: undefined,
             strokeColors: '#fff',
-            strokeWidth: 3,
-            strokeOpacity: 1.0,
+            strokeWidth: 1.7,
+            strokeOpacity: 1,
             strokeDashArray: 0,
             fillOpacity: 1,
             discrete: [],
@@ -171,7 +186,7 @@ function getChartOptions(dataSeries, xCategories) {
             showNullDataPoints: true,
             hover: {
                 size: undefined,
-                sizeOffset: 3
+                sizeOffset: 1.5
             }
         },
 
@@ -210,7 +225,6 @@ function getChartOptions(dataSeries, xCategories) {
         colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
-
 
 function calculateTrendline(data) {
     var sumX = 0;
@@ -281,7 +295,6 @@ $(document).ready(function() {
             return response;
         } catch (error) {
             console.error('Error during AJAX call:', error);
-            //alert('An error occurred. Please try again.');
             return error.responseJSON;  // Return the parsed JSON error message
         }   
     }
@@ -295,8 +308,12 @@ $(document).ready(function() {
             field_name: fieldName,
             new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
             student_id: studentId
+
         };
-    
+        console.log(postData);
+        //console.log("studentID:", student_id);
+
+
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             console.log(response); // <-- This is the debug line. 
         
@@ -306,13 +323,9 @@ $(document).ready(function() {
             } else if (response && response.saved_date) {
                 cell.data('saved-date', response.saved_date);
             } else {
-                //alert('An error occurred. Please try again.');
             }
-        });
-        
-        
+        });  
     }
-    
 
     let dateAscending = true; // to keep track of current order
 
@@ -322,7 +335,6 @@ $(document).ready(function() {
 
         table.order([0, dateAscending ? 'asc' : 'desc']).draw();
     });
-
 
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
@@ -350,27 +362,27 @@ $(document).ready(function() {
     function updateScoreInDatabase(row, fieldName, newValue) {
         const performanceId = row.data('performance-id');
         const studentId = CURRENT_STUDENT_ID;
-        const weekStartDate = convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text());
+        const weekStartDate = convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text());
 
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
             new_value: newValue,
             student_id: studentId,
-            week_start_date: weekStartDate
+            score_date: weekStartDate
         };
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             if (response && !response.success) {
-                alert('Error updating the average score in the database.');
+                //alert('Error updating the average score in the database.');
             }
         });
     }
 
     function isDateDuplicate(dateString, currentPerformanceId = null) {
-    console.log("Checking for duplicate of:", dateString);
+    //console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
-    $('table').find('td[data-field-name="week_start_date"]').each(function() {
+    $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellDate = $(this).text();
         const performanceId = $(this).closest('tr').data('performance-id');
         if (cellDate === dateString && performanceId !== currentPerformanceId) {
@@ -381,8 +393,6 @@ $(document).ready(function() {
     return isDuplicate;
 }
 
-
-
     function attachEditableHandler() {
         $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
             const cell = $(this);
@@ -392,7 +402,7 @@ $(document).ready(function() {
 
             let datePickerActive = false;
 
-            if (cell.data('field-name') === 'week_start_date') {
+            if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     beforeShow: function() {
@@ -402,7 +412,7 @@ $(document).ready(function() {
     if (isValidDate(new Date(selectedDate))) {
         const currentPerformanceId = cell.closest('tr').data('performance-id');
         if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-            alert("This date already exists. Please choose a different date.");
+            //alert("This date already exists. Please choose a different date.");
             cell.html(originalValue); // Revert to the original value
             return;
         }
@@ -412,8 +422,6 @@ $(document).ready(function() {
     }
     datePickerActive = false;
 }
-
-
 
                 });
                 cell.html(input);
@@ -437,7 +445,7 @@ $(document).ready(function() {
                     return;
                 }
 
-                if (cell.data('field-name') === 'week_start_date') {
+                if (cell.data('field-name') === 'score_date') {
                     const parts = newValue.split('/');
                     if (parts.length !== 3) {
                         cell.html(originalValue);
@@ -462,7 +470,7 @@ $(document).ready(function() {
                     field_name: fieldName,
                     new_value: newValue,
                     student_id: studentId,
-                    week_start_date: weekStartDate
+                    score_date: weekStartDate
                 };
 
                 if (performanceId === 'new') {
@@ -483,7 +491,7 @@ $(document).ready(function() {
                         if (performanceId === 'new') {
                             const newRow = $('tr[data-performance-id="new"]');
                             newRow.attr('data-performance-id', response.performance_id);
-                            newRow.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.saved_date));
+                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                         }
     
     // New code for updating score8 starts here
@@ -501,7 +509,7 @@ $(document).ready(function() {
                     },
                     error: function() {
                         // Handle any error here, e.g., show a notification to the user
-                        alert("There was an error updating the data.");
+                        //alert("There was an error updating the data.");
                     }
                 });
             });
@@ -525,11 +533,11 @@ $('#addDataRow').off('click').click(function() {
     
     const currentDate = getCurrentDate();
 if (isDateDuplicate(currentDate)) {
-    alert("An entry for this date already exists. Please choose a different date.");
+    //alert("An entry for this date already exists. Please choose a different date.");
     return;
 }
         const newRow = $("<tr data-performance-id='new'>");
-        newRow.append(`<td class="editable" data-field-name="week_start_date">${currentDate}</td>`);
+        newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
         
         for (let i = 1; i <= 10; i++) {
             newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
@@ -538,53 +546,69 @@ if (isDateDuplicate(currentDate)) {
         newRow.append('<td><button class="saveRow">Save</button></td>');
         $("table").append(newRow);
 
-        newRow.find('td[data-field-name="week_start_date"]').click().blur();
+        newRow.find('td[data-field-name="score_date"]').click().blur();
         attachEditableHandler();
-        const dateCell = newRow.find('td[data-field-name="week_start_date"]');
+        const dateCell = newRow.find('td[data-field-name="score_date"]');
         dateCell.click();
     });
 
-    $(document).off('click', '.saveRow').on('click', '.saveRow', async function() {
+    $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
-        
+    
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
-    // If it's not a new entry, simply return and do nothing.
+    
+        // If it's not a new entry, simply return and do nothing.
         if (performanceId !== 'new') {
-            alert("This row is not a new entry. Please click on the cells to edit them.");
+            //alert("This row is not a new entry. Please click on the cells to edit them.");
             return;
         }
-   
+    
         let scores = {};
         for (let i = 1; i <= 10; i++) {
             const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-            scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
+            scores[`score${i}`] = scoreValue ? scoreValue : null; // Send null if score is empty
         }
-
+    
         const postData = {
             student_id: CURRENT_STUDENT_ID,
-            week_start_date: convertToDatabaseDate(row.find('td[data-field-name="week_start_date"]').text()),
-            scores: scores
+            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+            scores: scores // Include the scores object in postData
         };
-
-        if (isDateDuplicate(postData.week_start_date)) {
-        alert("An entry for this date already exists. Please choose a different date.");
-        return;
-    }
-
+    
+        if (isDateDuplicate(postData.score_date)) {
+           // alert("An entry for this date already exists. Please choose a different date.");
+            return;
+        }
+    
         const response = await ajaxCall('POST', 'insert_performance.php', postData);
         if (response && response.performance_id) {
-            // Update the row with the data returned from the server
-            row.attr('data-performance-id', response.performance_id);
-            row.find('td[data-field-name="week_start_date"]').text(convertToDisplayDate(response.week_start_date));
-            // If you have any default scores or other fields returned from the server, update them here too
-            // Reload the chart or refresh the page
-            location.reload();
+            // Update the table with the newly inserted row
+            const newRow = $('tr[data-performance-id="new"]');
+            newRow.attr('data-performance-id', response.performance_id);
+            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
+            // If you have default scores or other fields returned from the server, update them here too
+        
+            // Clear the input fields and enable the save button for future entries
+            newRow.find('td.editable').text('');
+            newRow.find('.saveRow').prop('disabled', false);
+        
+            // Optionally, display a success message
+            // alert("Data saved successfully!");
+        
         } else {
-            //alert("There was an error saving the data.");
+            // Handle the error response appropriately
+            if (response && response.error) {
+                alert("Error: " + response.error);
+            } else {
+                alert("There was an error saving the data.");
+            }
         }
+        location.reload();
+ 
     });
+    
 
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
@@ -596,7 +620,6 @@ if (isDateDuplicate(currentDate)) {
                 //console.log("Table rows after draw: " + table.rows().count());
             }
         });
-
 
 // Custom filter for DataTables
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
@@ -614,7 +637,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     //console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDateTime >= selectedDateTime}`);
     return rowDateTime >= selectedDateTime;
 });
-
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
@@ -635,7 +657,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-
         let table = $('table').DataTable({
             "order": [[0, "asc"]],
             "lengthChange": false,
@@ -647,7 +668,4 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 null, null, null, null, null, null, null, null, null, null, null
             ]
         });
-
-
-
 });
