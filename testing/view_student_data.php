@@ -48,7 +48,7 @@
 <table border="1">
     <thead>
         <tr>
-            <th>Week Start Date</th>
+            <th>Date</th>
             <?php
             // Loop through the score names based on the selected metadata
             foreach ($scoreNames as $key => $name):

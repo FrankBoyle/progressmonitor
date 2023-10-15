@@ -107,18 +107,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     exit;
 }
 
-
 if (isset($_GET['metadata_id'])) {
     $metadataId = $_GET['metadata_id'];
 
-    // Modify the SQL query to fetch score names based on the selected metadata_id
-    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE MetadataID = ?");
+    // Fetch score names based on the selected metadata_id from the Metadata table
+    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataId]);
 
     // Fetch the score names and return them as JSON
     $scoreNames = [];
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Add each score name to the $scoreNames array
+    for ($i = 1; $i <= 10; $i++) {
+        $scoreNames["score" . $i] = $row["score" . $i . "_name"];
     }
 
     echo json_encode($scoreNames);
@@ -126,6 +128,7 @@ if (isset($_GET['metadata_id'])) {
     // Handle the case where metadata_id is not provided
     echo json_encode(['error' => 'metadata_id parameter is missing']);
 }
+
 ?>
 
 
