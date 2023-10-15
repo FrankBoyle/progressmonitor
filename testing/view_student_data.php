@@ -21,6 +21,7 @@
 <body>
 
 <?php include('./users/fetch_data.php'); ?>
+<?php $currentWeekStartDate = date('Y-m-d', strtotime('monday this week'));  // Adjust the date format as needed ?>
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>

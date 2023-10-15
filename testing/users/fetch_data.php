@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('./users/db.php');
+include('db.php');
 
 function fetchPerformanceDataByMetadata($studentId, $metadataId) {
     global $connection;
@@ -115,6 +115,24 @@ $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
 
+$metadataEntries = array();
+
+// Prepare the SQL query to fetch metadata entries
+$query = "SELECT metadata_id, category_name FROM your_table_name";  // replace 'your_table_name' with your actual table name
+
+// Execute the query
+$result = mysqli_query($connection, $query);
+
+// Check if the query was successful
+if ($result) {
+    // Fetch each row as an associative array and add it to $metadataEntries
+    while ($row = mysqli_fetch_assoc($result)) {
+        $metadataEntries[] = $row;
+    }
+} else {
+    // Handle error during query execution
+    echo "Error: " . mysqli_error($connection);
+}
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
