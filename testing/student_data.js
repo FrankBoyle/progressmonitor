@@ -303,6 +303,7 @@ $('#metadataIdSelector').on('change', function() {
 });
 
 function fetchMetadata(metadataId) {
+    var studentId = $('#currentStudentId').val();
     $.ajax({
         url: './users/fetch_data.php',
         type: 'GET',
