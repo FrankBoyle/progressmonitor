@@ -109,9 +109,15 @@ if (!isset($_GET['student_id'])) {
 }
 
 $studentId = $_GET['student_id'];
-$matadataID = $_GET['metadata_id'];
-$schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
+if (isset($_GET['metadata_id'])) {
+    $metadataID = $_GET['metadata_id'];
+} else {
+    // Handle the case where metadata_id is not set in the URL
+    echo "metadata_id parameter is missing in the URL.";
+    exit;
+}
 
+$schoolID = fetchSchoolIdForStudent($studentId); // Fetch SchoolID
 // Replace with your actual SchoolID and metadata_id
 
 echo "schoolID: $schoolID<br>";
