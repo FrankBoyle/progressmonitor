@@ -51,8 +51,6 @@ function fetchScoreNamesByMetadata($metadataId) {
         die("No data found for provided metadata_id");
     }
 
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
     // Extract only the score names (assuming columns are like 'score1_name', 'score2_name', etc.)
     $scoreNames = [];
     foreach ($result as $key => $value) {
