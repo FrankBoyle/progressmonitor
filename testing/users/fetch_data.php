@@ -111,6 +111,36 @@ if (!isset($_GET['student_id'])) {
 $studentId = $_GET['student_id'];
 $schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
 
+// Replace with your actual SchoolID and metadata_id
+$schoolID = 'your_school_id';
+$metadataID = 'your_metadata_id';
+
+// Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
+$metadataEntries = [];
+$stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
+$stmt->execute([$schoolID, $metadataID]);
+
+if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    // Populate the $displayedColumns array with column names from the metadata entry
+    $displayedColumns = [
+        'score1' => $row['score1_name'],
+        'score2' => $row['score2_name'],
+        'score3' => $row['score3_name'],
+        'score4' => $row['score4_name'],
+        'score5' => $row['score5_name'],
+        'score6' => $row['score6_name'],
+        'score7' => $row['score7_name'],
+        'score8' => $row['score8_name'],
+        'score9' => $row['score9_name'],
+        'score10' => $row['score10_name'],
+        'score_date' => 'Week Start Date', // You can customize this label
+    ];
+} else {
+    // Handle the case where no metadata entry is found for the specified SchoolID and metadata_id
+    echo "Metadata entry not found.";
+    exit;
+}
+
 if (!$schoolID) {
     return;  // If there's no SchoolID, exit early
 }
