@@ -19,8 +19,6 @@ function fetchPerformanceData($studentId, $metadataId) {
     }
 }
 
-
-
 if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
     $studentId = $_GET['student_id'];
     $metadataId = $_GET['metadata_id'];
@@ -118,6 +116,13 @@ function fetchColumnHeaders($metadataId) {
     }
 
     return $columnHeaders;
+}
+
+if (isset($_GET['metadata_id'])) {
+    $metadataId = $_GET['metadata_id'];
+    // Rest of your code here
+} else {
+    echo json_encode(['error' => 'metadata_id parameter is missing']);
 }
 
 if (isset($_GET['student_id'])) {
