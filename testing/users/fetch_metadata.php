@@ -8,7 +8,7 @@ if (isset($_GET['metadata_id'])) {
     // Fetch specific score names for the provided metadata_id
     $metadataId = $_GET['metadata_id'];
 
-    $query = $pdo->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM metadata WHERE metadata_id = ?");
+    $query = $pdo->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
     $query->execute([$metadataId]);
 
     $result = $query->fetch(PDO::FETCH_ASSOC);
