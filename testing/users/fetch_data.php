@@ -187,4 +187,15 @@ $stmt->execute([$schoolID]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
+
+// Query to find the lowest metadata_id for the specified SchoolID
+$sql = "SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$schoolID]);
+
+// Fetch the result
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Default to the lowest metadata_id, or 1 if no metadata_id is found
+$defaultMetadataID = $row['min_metadata_id'] ?? 1;
 ?>
