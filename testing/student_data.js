@@ -269,6 +269,11 @@ function updateTableHeaders() {
         $('#dataTable thead tr').append('<th>' + (name || '') + '</th>');
     });
 }
+// Handle metadata group selection change
+$('#metadataIdSelector').on('change', function() {
+    var selectedMetadataId = $(this).val();
+    fetchMetadata(selectedMetadataId);
+});
 
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
@@ -295,12 +300,6 @@ function fetchMetadataCategories() {
 
 // Initial table header update and metadata group fetch
 updateTableHeaders();
-
-// Handle metadata group selection change
-$('#metadataIdSelector').on('change', function() {
-    var selectedMetadataId = $(this).val();
-    fetchMetadata(selectedMetadataId);
-});
 
 function fetchMetadata(metadataId) {
     var studentId = $('#currentStudentId').val();
