@@ -295,30 +295,31 @@ function fetchMetadataCategories() {
 
 // Initial table header update and metadata group fetch
 updateTableHeaders();
-fetchMetadataCategories();
 
 // Handle metadata group selection change
-$('#metadataIdSelector').on('change', function () {
+$('#metadataIdSelector').on('change', function() {
     var selectedMetadataId = $(this).val();
+    fetchMetadata(selectedMetadataId);
+});
 
-    // Perform an AJAX request to fetch column headers based on metadata_id
+function fetchMetadata(metadataId) {
     $.ajax({
         url: './users/fetch_data.php',
         type: 'GET',
-        data: { metadata_id: selectedMetadataId },
+        data: {
+            action: 'fetchMetadataCategories',
+            student_id: studentId, // Use the studentId you retrieved earlier
+            metadata_id: metadataId // Set the metadata_id based on the dropdown selection
+        },
         dataType: 'json',
         success: function (response) {
-            if (response.columnHeaders) {
-                // Update the columnHeaders variable with the fetched data
-                columnHeaders = response.columnHeaders;
-
-                // Update the table headers
-                updateTableHeaders();
-                table.draw();
+            if (response) {
+                // Handle the response data here
             }
         },
     });
-});
+}
+
 
 
     function getCurrentDate() {
