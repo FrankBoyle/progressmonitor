@@ -1,7 +1,37 @@
 <?php 
 include('./users/fetch_data.php'); 
-$metadataEntries = fetchMetadataCategoriesFromDatabase($schoolID); // Use your actual function to fetch data
 
+// Assuming you have fetched $columnHeaders and $metadataEntries from your database
+
+// Define and initialize the $columnHeaders array based on your table structure
+$columnHeaders = [
+    'score1_name',
+    'score2_name',
+    'score3_name',
+    'score4_name',
+    'score5_name',
+    'score6_name',
+    'score7_name',
+    'score8_name',
+    'score9_name',
+    'score10_name'
+];
+
+// Replace with your actual SchoolID (e.g., 1) and fetch metadata entries for that SchoolID
+$schoolID = 1; // Replace with the actual SchoolID
+
+// Fetch metadata entries from the Metadata table for the specified SchoolID
+$metadataEntries = [];
+$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+$stmt->execute([$schoolID]);
+
+// Populate the $metadataEntries array with fetched data
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $metadataEntries[] = $row;
+}
+
+// Close the database connection if needed
+// $connection = null; // Uncomment if required
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,14 +65,7 @@ $metadataEntries = fetchMetadataCategoriesFromDatabase($schoolID); // Use your a
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
-<?php
-// Assuming you have defined $columnHeaders and $metadataEntries elsewhere in your code
-$columnHeaders = []; // Initialize as an empty array
-$metadataEntries = []; // Initialize as an empty array
 
-// Check if $columnHeaders and $metadataEntries are defined and not empty
-if (!empty($columnHeaders) && !empty($metadataEntries)) {
-?>
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
