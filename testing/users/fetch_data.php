@@ -151,7 +151,7 @@ if (!$schoolID) {
 }
 
 if (!isset($_GET['metadata_id'])) {
-    // You might want to handle this more gracefully, e.g., by returning an error message in your response.
+    echo "Database error: " . $e->getMessage();
     return;
 }
 $metadataId = $_GET['metadata_id'];
