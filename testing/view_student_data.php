@@ -1,5 +1,5 @@
 <?php 
-include('./users/fetch_data.php'); 
+include('../users/fetch_data.php'); 
 $metadataEntries = fetchMetadataCategories($schoolID); // Use your actual function to fetch data
 ?>
 <!DOCTYPE html>
