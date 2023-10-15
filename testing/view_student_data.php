@@ -52,35 +52,32 @@ $scoreNames = fetchScoreNamesByMetadata($metadataId);
     <?php endforeach; ?>
 </select>
 
-<table border="1" id="performanceDataTable">
+<table border="1">
     <thead>
         <tr>
             <th>Date</th>
-            <!-- This assumes you have a predefined array of score names. Adjust as necessary. -->
-            <?php foreach ($scoreNames as $name): ?>
+            <?php foreach ($scoreNames as $key => $name): ?>
                 <th><?php echo htmlspecialchars($name); ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        <?php if (empty($performanceRows)): ?>
+        <?php if (empty($performanceData)): ?>
             <tr>
                 <td colspan="<?php echo count($scoreNames) + 2; ?>">No Data Found. Click "Add Data Row" to add new data.</td>
             </tr>
         <?php else: ?>
-            <?php foreach ($performanceRows as $data): ?>
+            <?php foreach ($performanceData as $data): ?>
                 <tr data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">
                     <td class="editable" data-field-name="score_date"><?php echo date("m/d/Y", strtotime($data['score_date'])); ?></td>
-                    <!-- Here we assume your database columns are named 'score1', 'score2', etc. -->
-                    <?php for ($i = 1; $i <= 10; $i++): ?>
-                        <td class="editable" data-field-name="score<?php echo $i; ?>">
-                            <?php echo htmlspecialchars($data['score'.$i]) ?? ''; // Show scores or empty if not set ?>
+                    <!-- Iterate over the scores dynamically based on the fetched score names -->
+                    <?php foreach ($scoreNames as $key => $value): ?>
+                        <td class="editable" data-field-name="<?php echo htmlspecialchars($key); ?>">
+                            <?php echo isset($data[$key]) ? htmlspecialchars($data[$key]) : ''; ?>
                         </td>
-                    <?php endfor; ?>
-                    <td>
-                        <button class="deleteRow" data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">Delete</button>
-                    </td>
+                    <?php endforeach; ?>
+                    <td><button class="deleteRow" data-performance-id="<?php echo htmlspecialchars($data['performance_id']); ?>">Delete</button></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
