@@ -27,6 +27,8 @@ $students = fetchStudentsByTeacher($teacherId);
     <title>Your Page Title</title>
 </head>
 <body>
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+
     <!-- Add New Student Form -->
     <form method="post" action="">
         <label for="new_student_name">New Student Name:</label>
