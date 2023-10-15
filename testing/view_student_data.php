@@ -1,3 +1,7 @@
+<?php 
+include('./users/fetch_data.php'); 
+$metadataEntries = []; // Initialize as an empty array
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +24,7 @@
 </head>
 <body>
 
-<?php include('./users/fetch_data.php'); ?>
+
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>
 
@@ -32,11 +36,9 @@
 
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
-    <?php foreach ($metadataEntries as $entry): ?>
-        <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
-            <?php echo isset($entry['category_name']) ? htmlspecialchars($entry['category_name']) : ''; ?>
-        </option>
-    <?php endforeach; ?>
+    <?php foreach ($metadataEntries as $entry) { ?>
+        <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
+    <?php } ?>
 </select>
 
 <table border="1">
