@@ -133,6 +133,10 @@ if (!$schoolID) {
     return;  // If there's no SchoolID, exit early
 }
 
+if (!isset($_GET['metadata_id'])) {
+    // You might want to handle this more gracefully, e.g., by returning an error message in your response.
+    return;
+}
 $metadataId = $_GET['metadata_id'];
 
 // Fetch performance data and score names
@@ -145,10 +149,7 @@ foreach ($performanceData as $record) {
     // You can add more logic here if needed
 }
 
-if (!isset($_GET['metadata_id'])) {
-    // You might want to handle this more gracefully, e.g., by returning an error message in your response.
-    return;
-}
+
 
 // Handling the data POST from the dropdown functionality
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
