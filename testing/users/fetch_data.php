@@ -6,17 +6,55 @@ error_reporting(E_ALL);
 
 include('db.php');
 
-function fetchPerformanceData($studentId) {
+function fetchPerformanceData($studentId, $metadataId) {
     global $connection;
     try {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
-        $stmt->execute([$studentId]);
+        // Adjust your SQL query to filter by both studentId and metadataId
+        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
+        $stmt->execute([$studentId, $metadataId]);
         return $stmt->fetchAll();
     } catch (PDOException $e) {
         // Handle the database error here, e.g., log the error, return an error response, etc.
         echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
         exit;
     }
+}
+
+if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
+    $studentId = $_GET['student_id'];
+    $metadataId = $_GET['metadata_id'];
+
+    // Fetch performance data based on studentId and metadataId
+    $performanceData = fetchPerformanceData($studentId, $metadataId);
+
+    // Fetch the column headers based on the selected metadataId
+    $columnHeaders = fetchColumnHeaders($metadataId);
+
+    // Construct the data to send to the client
+    $responseData = [
+        'columnHeaders' => $columnHeaders,
+        'performanceData' => $performanceData,
+    ];
+
+    // Handle null values in columnHeaders
+    foreach ($responseData['columnHeaders'] as $key => $value) {
+        if ($value === null) {
+            $responseData['columnHeaders'][$key] = "N/A";
+        }
+    }
+
+    // Handle null values in performanceData
+    foreach ($responseData['performanceData'] as &$item) {
+        foreach ($item as $key => $value) {
+            if ($value === null) {
+                $item[$key] = "N/A";
+            }
+        }
+    }
+
+    echo json_encode($responseData);
+} else {
+    echo json_encode(['error' => 'Invalid request']);
 }
 
 function fetchMetadataCategoriesfromDatabase($schoolID) {
