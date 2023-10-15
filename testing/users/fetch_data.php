@@ -30,6 +30,18 @@ function fetchSchoolIdForStudent($studentId) {
         exit;
     }
 }
+function fetchMetadataCategoriesFromDatabase($schoolID) {
+    global $connection;
+    try {
+        $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+        $stmt->execute([$schoolID]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // Handle the database error here, e.g., log the error, return an error response, etc.
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+        exit;
+    }
+}
 $response = [];
 
 if (isset($_GET['student_id'])) {
