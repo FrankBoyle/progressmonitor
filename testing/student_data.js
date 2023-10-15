@@ -273,6 +273,7 @@ function updateTableHeaders() {
 $('#metadataIdSelector').on('change', function() {
     var selectedMetadataId = $(this).val();
     var studentId = $('#currentStudentId').val(); // Get student_id from somewhere
+    console.log('Selected Metadata ID:', selectedMetadataId);
 
     // Make an AJAX request to fetch data based on selected values
     $.ajax({
@@ -309,7 +310,6 @@ $('#metadataIdSelector').on('change', function() {
         error: function(xhr, status, error) {
             // Handle errors if any
             console.error(error);
-            // fetchMetadata(selectedMetadataId);
         }
     });
 });
