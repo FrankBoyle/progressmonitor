@@ -17,7 +17,7 @@ if (isset($_GET['metadata_id'])) {
     echo json_encode(array_values($result));
 } else {
     // Fetch all metadata entries for dropdown
-    $query = $connection->prepare("SELECT metadata_id, category_name FROM metadata");
+    $query = $connection->prepare("SELECT metadata_id, category_name FROM Metadata");
     $query->execute();
 
     $metadataEntries = $query->fetchAll(PDO::FETCH_ASSOC);
