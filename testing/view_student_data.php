@@ -24,8 +24,8 @@ $metadataEntries = fetchMetadataCategories($schoolID); // Use your actual functi
 </head>
 <body>
 
-
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+
 <a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
