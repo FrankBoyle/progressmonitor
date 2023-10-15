@@ -454,7 +454,7 @@ $(document).ready(function() {
     }
 
     function populateMetadataDropdown(data) {
-        const dropdown = document.getElementById("metadataDropdown"); // Assuming you have a dropdown with this ID
+        const dropdown = document.getElementById("metadataIdSelector"); // Assuming you have a dropdown with this ID
     
         // Clear any existing options
         dropdown.innerHTML = '';
