@@ -19,175 +19,59 @@ function fetchPerformanceData($studentId, $metadataId) {
     }
 }
 
-$response = []; // Create an empty response array
-
-if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
-    $studentId = $_GET['student_id'];
-    $metadataId = $_GET['metadata_id'];
-
-    // Fetch performance data based on studentId and metadataId
-    $performanceData = fetchPerformanceData($studentId, $metadataId);
-
-    // Fetch the column headers based on the selected metadataId
-    $columnHeaders = fetchColumnHeaders($metadataId);
-
-    // Construct the data to send to the client
-    $responseData = [
-        'columnHeaders' => $columnHeaders,
-        'performanceData' => $performanceData,
-    ];
-
-    // Handle null values in columnHeaders
-    foreach ($responseData['columnHeaders'] as $key => $value) {
-        if ($value === null) {
-            $responseData['columnHeaders'][$key] = "N/A";
-        }
-    }
-
-    // Handle null values in performanceData
-    foreach ($responseData['performanceData'] as &$item) {
-        foreach ($item as $key => $value) {
-            if ($value === null) {
-                $item[$key] = "N/A";
-            }
-        }
-    }
-
-    $response = $responseData; // Set the response array to the constructed data
-} else {
-    $response['error'] = 'metadata_id parameter is missing'; // Handle the case when metadata_id is missing
-}
-
-echo json_encode($response); // Send the response as JSON
-
-
-function fetchMetadataCategoriesfromDatabase($schoolID) {
-    global $connection;
-    try {
-        $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
-        $stmt->execute([$schoolID]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        // Handle the database error here, e.g., log the error, return an error response, etc.
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-        exit;
-    }
-}
-
-function fetchStudentsByTeacher($teacherId) {
-    global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
-    $stmt->execute([$teacherId]);
-    return $stmt->fetchAll();
-}
-
-function fetchSchoolIdForStudent($studentId) {
-    global $connection;
-    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
-    $stmt->execute([$studentId]);
-    $result = $stmt->fetch();
-    return $result ? $result['SchoolID'] : null;
-}
-
-// Function to fetch column headers based on metadataId
-function fetchColumnHeaders($metadataId) {
-    global $connection;
-
-    // Initialize an array to store the column headers
-    $columnHeaders = [];
-
-    // Prepare and execute a query to fetch score names based on metadataId
-    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
-    if (!$stmt) {
-        // Handle the query preparation error here
-        die('Error preparing query: ' . $connection->error);
-    }
-    
-    $stmt->execute([$metadataId]);
-    if (!$stmt) {
-        // Handle the query execution error here
-        die('Error executing query: ' . $connection->error);
-    }
-
-    // Fetch the column headers and populate the $columnHeaders array
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$row) {
-        // Handle the case where no data is returned
-        die('No data found for metadata_id: ' . $metadataId);
-    }
-
-    for ($i = 1; $i <= 10; $i++) {
-        $columnHeaders["score" . $i] = $row["score" . $i . "_name"];
-    }
-
-    return $columnHeaders;
-}
-
-if (isset($_GET['metadata_id'])) {
-    $metadataId = $_GET['metadata_id'];
-    // Rest of your code here
-} else {
-    echo json_encode(['error' => 'metadata_id parameter is missing']);
-}
+// Initialize the response array
+$response = [];
 
 if (isset($_GET['student_id'])) {
     $studentId = $_GET['student_id'];
     $schoolID = fetchSchoolIdForStudent($studentId);
 
     if (!$schoolID) {
-        echo json_encode(['error' => 'No SchoolID found for the student']);
-        exit;
-    }
-    // $studentId = $_GET['student_id']; // Remove this line, you already have $studentId
-    // $metadataId = $_GET['metadata_id']; // Remove this line, you already have $metadataId
-    // Fetch performance data
-    $performanceData = fetchPerformanceData($studentId, $metadataId);
+        $response['error'] = 'No SchoolID found for the student';
+    } else {
+        // Check if the metadata_id parameter is provided
+        if (isset($_GET['metadata_id'])) {
+            $metadataId = $_GET['metadata_id'];
 
-    // Check if the metadataId is provided in the request
-    // if (isset($_GET['metadata_id'])) { // Remove this line, you already checked it above
-    //     $metadataId = $_GET['metadata_id'];
-    // Fetch the column headers based on the selected metadataId
-    $columnHeaders = fetchColumnHeaders($metadataId);
-    // } else {
-    //     // Default column headers if metadataId is not provided
-    //     $columnHeaders = [
-    //         "score1" => "Score 1",
-    //         "score2" => "Score 2",
-    //         "score3" => "Score 3",
-    //         "score4" => "Score 4",
-    //         "score5" => "Score 5",
-    //         "score6" => "Score 6",
-    //         "score7" => "Score 7",
-    //         "score8" => "Score 8",
-    //         "score9" => "Score 9",
-    //         "score10" => "Score 10",
-    //     ];
-    // }
+            // Fetch performance data based on studentId and metadataId
+            $performanceData = fetchPerformanceData($studentId, $metadataId);
 
-    // Construct the data to send to the client
-    $responseData = [
-        'columnHeaders' => $columnHeaders,
-        'performanceData' => $performanceData,
-    ];
+            // Fetch the column headers based on the selected metadataId
+            $columnHeaders = fetchColumnHeaders($metadataId);
 
-    // Handle null values in columnHeaders
-foreach ($responseData['columnHeaders'] as $key => $value) {
-    if ($value === null) {
-        $responseData['columnHeaders'][$key] = "N/A";
-    }
-}
+            // Construct the data to send to the client
+            $responseData = [
+                'columnHeaders' => $columnHeaders,
+                'performanceData' => $performanceData,
+            ];
 
-// Handle null values in performanceData
-foreach ($responseData['performanceData'] as &$item) {
-    foreach ($item as $key => $value) {
-        if ($value === null) {
-            $item[$key] = "N/A";
+            // Handle null values in columnHeaders
+            foreach ($responseData['columnHeaders'] as $key => $value) {
+                if ($value === null) {
+                    $responseData['columnHeaders'][$key] = "N/A";
+                }
+            }
+
+            // Handle null values in performanceData
+            foreach ($responseData['performanceData'] as &$item) {
+                foreach ($item as $key => $value) {
+                    if ($value === null) {
+                        $item[$key] = "N/A";
+                    }
+                }
+            }
+
+            // Set the response array to the constructed data
+            $response = $responseData;
+        } else {
+            $response['error'] = 'metadata_id parameter is missing';
         }
     }
+} else {
+    $response['error'] = 'student_id parameter is missing';
 }
 
-    //echo json_encode($responseData);
-} else {
-    //echo json_encode(['error' => 'student_id parameter is missing']);
-}
+// Send the response as JSON
+echo json_encode($response);
+
 ?>
