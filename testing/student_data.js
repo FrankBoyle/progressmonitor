@@ -270,12 +270,12 @@ function updateTableHeaders() {
     });
 }
 
-// Function to fetch metadata groups and update the dropdown
-function fetchMetadataGroups() {
+// Function to fetch metadata categories and update the dropdown
+function fetchMetadataCategories() {
     $.ajax({
         url: './users/fetch_data.php',
         type: 'GET',
-        data: { action: 'fetchMetadataCategories' }, // Change 'fetchGroups' to 'fetchMetadataCategories'
+        data: { action: 'fetchMetadataCategories' },
         dataType: 'json',
         success: function (response) {
             if (response) {
@@ -287,7 +287,6 @@ function fetchMetadataGroups() {
         },
     });
 }
-
 
 // Initial table header update and metadata group fetch
 updateTableHeaders();
