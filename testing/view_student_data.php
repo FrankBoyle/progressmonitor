@@ -41,50 +41,45 @@
     <?php endforeach; ?>
 </select>
 
-<table>
+<table border="1">
     <thead>
         <tr>
             <th>Week Start Date</th>
-            <!-- Dynamically create headers for scores -->
-            <?php foreach ($scoreNames as $name): ?>
-                <th><?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?></th>
+            <?php foreach ($scoreNames as $key => $name): ?>
+                <th><?php echo $name; ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
     </thead>
-    <tbody>
-        <?php if (empty($performanceData)): ?>
-            <tr>
-                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-            </tr>
-        <?php else: ?>
-            <?php foreach ($performanceData as $data): ?>
-                <tr data-performance-id="<?php echo htmlspecialchars($data['performance_id'], ENT_QUOTES, 'UTF-8'); ?>">
-                    <td class="editable" data-field-name="score_date">
+
+    <?php if (empty($performanceData)): ?>
+        <tr>
+            <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+        </tr>
+    <?php else: ?>
+        <?php foreach ($performanceData as $data): ?>
+            <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                <td class="editable" data-field-name="score_date">
+                    <?php
+                    if (isset($data['score_date'])) {
+                        echo date("m/d/Y", strtotime($data['score_date']));
+                    }
+                    ?>
+                </td>
+                <!-- Add scores using loop -->
+                <?php for ($i = 1; $i <= 10; $i++): ?>
+                    <td class="editable" data-field-name="score<?php echo $i; ?>">
                         <?php
-                        // Check and display the date, if available
-                        if (isset($data['score_date'])) {
-                            echo htmlspecialchars(date("m/d/Y", strtotime($data['score_date'])), ENT_QUOTES, 'UTF-8');
+                        if (isset($data['score'.$i])) {
+                            echo $data['score'.$i];
                         }
                         ?>
                     </td>
-                    <!-- Insert scores dynamically -->
-                    <?php for ($i = 1; $i <= 10; $i++): ?>
-                        <td class="editable" data-field-name="score<?php echo $i; ?>">
-                            <?php
-                            // Check and display the score, if available
-                            if (isset($data["score$i"])) {
-                                echo htmlspecialchars($data["score$i"], ENT_QUOTES, 'UTF-8');
-                            }
-                            ?>
-                        </td>
-                    <?php endfor; ?>
-                    <!-- Action button for deletion per row -->
-                    <td><button class="deleteRow" data-performance-id="<?php echo htmlspecialchars($data['performance_id'], ENT_QUOTES, 'UTF-8'); ?>">Delete</button></td>
-                </tr>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </tbody>
+                <?php endfor; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </table>
 
 <label>Select Score to Display: </label>
