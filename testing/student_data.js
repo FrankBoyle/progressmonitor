@@ -358,8 +358,9 @@ function fetchMetadata(metadataId) {
         type: 'GET',
         data: {
             action: 'fetchMetadata', // Change to 'fetchMetadata'
-            student_id: studentId,
-            metadata_id: metadataId
+            metadata_id: metadataId,
+            student_id: studentId
+
         },
         dataType: 'json',
         success: function (response) {
