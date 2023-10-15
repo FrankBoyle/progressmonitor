@@ -36,6 +36,21 @@ function fetchScoreNamesByMetadata($metadataId) {
     global $connection;
     $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataId]);
+    // Check for errors
+    if ($stmt->errorCode() != '00000') {
+        // Handle error here; for example, log it and/or send an error response
+        error_log('PDOStatement::errorInfo(): ' . print_r($stmt->errorInfo(), true));
+        die("Error executing query");
+    }
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Make sure $result is an array, as expected
+    if (!is_array($result)) {
+        // Handle the unexpected result here (e.g., the query returned false or null)
+        die("No data found for provided metadata_id");
+    }
+
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Extract only the score names (assuming columns are like 'score1_name', 'score2_name', etc.)
