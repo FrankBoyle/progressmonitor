@@ -457,7 +457,7 @@ function fetchMetadataOnLoad() {
 
 // This function updates the chart based on the selected metadata ID.
 function fetchScoresOnMetadataChange(metadataId) {
-    fetch(`./users/fetch_metadata.php?metadata_id=${metadataId}`)
+    fetch(`/testing/users/fetch_metadata.php?metadata_id=${metadataId}`)
     .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
