@@ -79,16 +79,15 @@ foreach ($performanceData as $record) {
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
-
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
-        <option value="<?php echo $entry['metadata_id']; ?>"
-            <?php if ($entry['metadata_id'] == $metadataID): ?> selected <?php endif; ?>>
-            <?php echo $entry['metadata_name']; ?>
+        <option value="<?php echo $entry['metadata_id']; ?>" <?php if (isset($entry['metadata_name'])) { echo 'selected'; } ?>>
+            <?php echo isset($entry['metadata_name']) ? htmlspecialchars($entry['metadata_name']) : ''; ?>
         </option>
     <?php endforeach; ?>
 </select>
+
 
 
 <table border="1">
