@@ -41,7 +41,7 @@ $students = fetchStudentsByTeacher($teacherId);
     <?php if (!empty($students)): ?>
         <h2>Students:</h2>
         <?php foreach ($students as $student): ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>'><?= $student['name'] ?></a><br>
+            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=1'><?= $student['name'] ?></a><br>
         <?php endforeach; ?>
     <?php else: ?>
         No students found for this teacher.
