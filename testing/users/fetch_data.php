@@ -96,4 +96,18 @@ if (isset($_GET['student_id'])) {
 }
 
 echo json_encode($response);
+
+// Fetch the column headers based on the selected metadataId
+$columnHeaders = fetchColumnHeaders($metadataId);
+
+// Construct the data to send to the client
+$responseData = [
+    'columnHeaders' => $columnHeaders,
+    'performanceData' => $performanceData,
+];
+
+// ...
+
+echo json_encode($responseData); // Send the response as JSON
+
 ?>
