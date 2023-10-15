@@ -313,7 +313,7 @@ $('#metadataIdSelector').on('change', function () {
         },
     });
 });
-});
+
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -730,3 +730,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             ]
             
         });
+        fetchMetadataGroups();
+
+    });
