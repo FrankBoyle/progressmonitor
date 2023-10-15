@@ -19,6 +19,8 @@ function fetchPerformanceData($studentId, $metadataId) {
     }
 }
 
+$response = []; // Create an empty response array
+
 if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
     $studentId = $_GET['student_id'];
     $metadataId = $_GET['metadata_id'];
@@ -51,10 +53,13 @@ if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
         }
     }
 
-    echo json_encode($responseData);
+    $response = $responseData; // Set the response array to the constructed data
 } else {
-    echo json_encode(['error' => 'Invalid request']);
+    $response['error'] = 'Invalid request'; // Handle the case when parameters are missing
 }
+
+echo json_encode($response); // Send the response as JSON
+
 
 function fetchMetadataCategoriesfromDatabase($schoolID) {
     global $connection;
@@ -134,7 +139,7 @@ if (isset($_GET['student_id'])) {
         exit;
     }
     $studentId = $_GET['student_id'];
-    //$metadataId = $_GET['metadata_id']; // Assuming you have metadata_id
+    $metadataId = $_GET['metadata_id']; // Assuming you have metadata_id
     // Fetch performance data
     $performanceData = fetchPerformanceData($studentId, $metadataId);
 
