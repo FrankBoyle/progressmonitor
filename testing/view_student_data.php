@@ -1,6 +1,7 @@
 <?php 
 include('./users/fetch_data.php'); 
 $metadataEntries = fetchMetadataCategoriesFromDatabase($schoolID); // Use your actual function to fetch data
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,11 +35,19 @@ $metadataEntries = fetchMetadataCategoriesFromDatabase($schoolID); // Use your a
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
+<?php
+// Assuming you have defined $columnHeaders and $metadataEntries elsewhere in your code
+$columnHeaders = []; // Initialize as an empty array
+$metadataEntries = []; // Initialize as an empty array
+
+// Check if $columnHeaders and $metadataEntries are defined and not empty
+if (!empty($columnHeaders) && !empty($metadataEntries)) {
+?>
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
-    <?php foreach ($metadataEntries as $entry) { ?>
+    <?php foreach ($metadataEntries as $entry): ?>
         <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
-    <?php } ?>
+    <?php endforeach; ?>
 </select>
 
 <table border="1">
@@ -82,6 +91,11 @@ $metadataEntries = fetchMetadataCategoriesFromDatabase($schoolID); // Use your a
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
+<?php
+} else {
+    echo "No column headers or metadata entries available.";
+}
+?>
 
 
 <label>Select Score to Display: </label>
