@@ -1,10 +1,14 @@
 <?php
 session_start();
+
 if (isset($_SESSION['teacher_id'])) {
-    echo "Teacher ID is set: " . $_SESSION['teacher_id'];
+    $teacherId = $_SESSION['teacher_id'];
+    // Now you can use $teacherId in your page logic
 } else {
-    echo "Teacher ID is NOT set!";
+    // Handle the case where teacher_id is not set in the session
+    echo "Teacher ID is missing in the session.";
 }
+
 
 include './users/fetch_data.php';
 
