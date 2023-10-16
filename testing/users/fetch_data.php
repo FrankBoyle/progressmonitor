@@ -151,6 +151,8 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 if (!$schoolID) {
     return;  // If there's no SchoolID, exit early
 }
+
+$defaultMetadataID = 1;  // Default value in case of any issues
 // Query to find the lowest metadata_id for the specified SchoolID
 $sql = "SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?";
 $stmt = $connection->prepare($sql);
