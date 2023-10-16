@@ -11,39 +11,41 @@ include('./users/db.php');
 if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
-    
+
     try {
         $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
         $query->bindParam("email", $email, PDO::PARAM_STR);
         $query->execute();
-        $result = $query->fetch(PDO::FETCH_ASSOC);  
-        
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
         if (!$result) {
             echo '<p class="error">Username or password is incorrect!</p>';
         } else {
             if (password_verify($password, $result['password'])) {
                 $_SESSION['user'] = $result['email'];
-                
+
                 // Using the account_id from the result to fetch teacher_id
                 $accountId = $result['id'];
-                
+
                 $teacherQuery = $connection->prepare("SELECT teacher_id FROM Teachers WHERE account_id = :accountId");
                 $teacherQuery->bindParam("accountId", $accountId, PDO::PARAM_INT);
                 $teacherQuery->execute();
-            
-                $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
-            
-                if ($teacherResult) {
-                    $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
-                    // Assuming you have fetched the SchoolID from somewhere in your code
-                    $_SESSION['SchoolID'] = $schoolIdFromDatabase;
 
-                    // Redirect to the desired page
-                    header("Location: test.php");
-                    exit();
-                } else {
-                    echo '<p class="error">Username or password is incorrect!</p>';
-                }
+                $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
+
+// After successfully verifying the user's credentials and fetching the teacher_id
+if ($teacherResult) {
+  $_SESSION['user'] = $result['email'];
+  $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
+  // Assuming you have fetched the SchoolID from somewhere in your code
+  $_SESSION['SchoolID'] = $schoolIdFromDatabase;
+
+  // Redirect to the desired page
+  header("Location: test.php");
+  exit();
+} else {
+  echo '<p class="error">Username or password is incorrect!</p>';
+}
             } else {
                 echo '<p class="error">Username or password is incorrect!</p>';
             }
@@ -51,13 +53,6 @@ if (isset($_POST['login'])) {
     } catch (PDOException $e) {
         echo "Database Error: " . $e->getMessage(); // Show the exception error message
     }
-}
-
-// Check if a teacher is logged in
-if (isset($_SESSION['teacher_id'], $_SESSION['SchoolID'])) {
-    $teacherId = $_SESSION['teacher_id'];
-    $schoolId = $_SESSION['SchoolID'];
-    // Perform operations related to the teacher's session data
 }
 ?>
 
