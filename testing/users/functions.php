@@ -51,7 +51,7 @@ function fetchMetadataIdsBySchool($connection, $schoolID) {
     $metadataIds = [];
     try {
         // Prepare your query: select metadata IDs from your metadata table where the SchoolID matches
-        $stmt = $connection->prepare("SELECT metadata_id FROM metadata WHERE SchoolID = :schoolID");
+        $stmt = $connection->prepare("SELECT metadata_id FROM Metadata WHERE SchoolID = :schoolID");
         // Execute the query with the provided SchoolID
         $stmt->execute(['schoolID' => $schoolID]);
         // Fetch all the metadata IDs
