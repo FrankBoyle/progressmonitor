@@ -88,7 +88,10 @@ foreach ($performanceData as $record) {
 
 
 
-
+<?php
+// Debugging statement
+echo "Count of displayedColumns: " . count($displayedColumns);
+?>
 
 <table border="1">
 <thead>
