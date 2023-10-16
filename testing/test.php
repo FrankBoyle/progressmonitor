@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // Make sure to start the session at the beginning of each page
 
 if (isset($_SESSION['teacher_id'])) {
     $teacherId = $_SESSION['teacher_id'];
@@ -12,11 +12,6 @@ if (isset($_SESSION['teacher_id'])) {
 
 include './users/fetch_data.php';
 
-if (!isset($_SESSION['teacher_id'])) {
-    die("Teacher ID not set in session");
-}
-
-$teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
 // Define a default metadata ID (you can change this as needed)
