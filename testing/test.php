@@ -1,12 +1,17 @@
 <?php
-session_start(); // Start the session at the beginning of the page
 include './users/fetch_data.php';
 
+session_start(); // Start the session at the beginning of the page
+
+// Check if teacher_id is set in the session
 if (!isset($_SESSION['teacher_id'])) {
-    header("Location: login.php"); // Redirect to the login page if teacher_id is not set in the session
+    // Handle the case where teacher_id is not set in the session
+    echo "Teacher ID is missing in the session.";
     exit;
 }
 
+// Now you can safely use $_SESSION['teacher_id'] in your page logic.
+$teacherId = $_SESSION['teacher_id'];
 // Now you can safely use $_SESSION['teacher_id'] in your page logic.
 $teacherId = $_SESSION['teacher_id'];
 
