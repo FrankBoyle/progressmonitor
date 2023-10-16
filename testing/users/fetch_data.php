@@ -14,6 +14,15 @@ error_reporting(E_ALL);
 
 include('db.php');
 
+if (!isset($_GET['teacher_id'])) {
+    echo "Teacher ID is missing in the URL.";
+    exit;
+}
+
+$teacherId = $_GET['teacher_id'];
+// Continue with the rest of your script...
+
+
 // Function to fetch performance data for a student
 function fetchPerformanceData($studentId) {
     global $connection;
