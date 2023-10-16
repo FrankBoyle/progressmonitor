@@ -56,13 +56,6 @@ $students = fetchStudentsByTeacher($teacherId);
     No students found for this teacher.
 <?php endif; ?>
 
-<script>
-    // JavaScript to handle changing the link when the user selects a different metadata_id
-    $('#metadataIdSelector').on('change', function () {
-        var selectedLink = $(this).val();
-        window.location.href = selectedLink; // Redirect to the selected link
-    });
-</script>
 </body>
 </html>
 
