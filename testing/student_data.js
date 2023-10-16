@@ -804,21 +804,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             
         });
         //fetchMetadataCategories();
-        // Get the select element
-        var metadataSelect = document.getElementById("metadataIdSelector");
 
-        // Get the hidden input field
-        var currentMetadataIDInput = document.getElementById("currentMetadataID");
-
-        // Add an event listener to the select element
-        metadataSelect.addEventListener("change", function() {
-            // Update the hidden input field with the selected value
-            currentMetadataIDInput.value = metadataSelect.value;
-
-            // Submit a form or send an AJAX request to update the metadataID on the server
-            // You can implement this based on your specific needs
-            // Example: You can submit a form using JavaScript
-            // document.forms["yourFormName"].submit();
-        });
 
     });
