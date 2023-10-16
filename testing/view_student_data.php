@@ -105,26 +105,25 @@ foreach ($performanceData as $record) {
 
 <?php if (!empty($performanceData)): ?>
     <?php foreach ($performanceData as $data): ?>
-        <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-            <td class="editable" data-field-name="score_date">
-                <?php
-                if (isset($data['score_date'])) {
-                    echo date("m/d/Y", strtotime($data['score_date']));
-                }
-                ?>
-            </td>
-            <!-- Dynamically generate table cells for scores based on $displayedColumns -->
-            <?php foreach ($displayedColumns as $columnName): ?>
-                <td class="editable" data-field-name="<?php echo $columnName; ?>">
-                    <?php
-                    if (isset($data[$columnName])) {
-                        echo $data[$columnName];
-                    }
-                    ?>
-                </td>
-            <?php endforeach; ?>
-            <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
-        </tr>
+        <tr data-performance-id="2654">
+    <td class="editable" data-field-name="score_date">
+        10/29/2023
+    </td>
+    <?php foreach ($displayedColumns as $columnName => $columnLabel): ?>
+        <td class="editable" data-field-name="<?= $columnName ?>">
+            <?php
+            // Check if the column name exists in performance data and display the value
+            if (isset($performanceData[$columnName])) {
+                echo $performanceData[$columnName];
+            } else {
+                echo "N/A"; // Or any default value for missing data
+            }
+            ?>
+        </td>
+    <?php endforeach; ?>
+    <td><button class="deleteRow" data-performance-id="2654">Delete</button></td>
+</tr>
+
     <?php endforeach; ?>
 <?php endif; ?>
 
