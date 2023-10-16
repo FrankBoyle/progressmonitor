@@ -40,12 +40,9 @@
               
                   // Redirect to the desired page
                   header("Location: test.php");
-                  exit();          
-            } else {
-                echo '<p class="error">Username or password is incorrect!</p>';
-            }}
-        } catch (PDOException $e) {
-            echo "Database Error: " . $e->getMessage(); // Show the exception error message
+                  exit();
+              } else {
+                  echo '<p class="error">Username or password is incorrect!</p>';
         }
     }
 ?>
