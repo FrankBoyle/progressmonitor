@@ -1,5 +1,6 @@
 <?php
 session_start(); // Make sure to start the session at the beginning of each page
+include './users/fetch_data.php';
 
 if (isset($_SESSION['teacher_id'])) {
     $teacherId = $_SESSION['teacher_id'];
@@ -11,7 +12,18 @@ if (isset($_SESSION['teacher_id'])) {
 
 error_log(print_r($_SESSION, true)); // Log the session variables
 
-include './users/fetch_data.php';
+if ($teacherResult) {
+    $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
+    // Assuming you have fetched the SchoolID from somewhere in your code
+    $_SESSION['SchoolID'] = $schoolIdFromDatabase;
+
+    // Redirect to the desired page
+    header("Location: test.php");
+    exit();
+} else {
+    echo '<p class="error">Username or password is incorrect!</p>';
+}
+
 
 $message = "";  // Initialize an empty message variable
 
