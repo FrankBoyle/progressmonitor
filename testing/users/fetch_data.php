@@ -72,15 +72,25 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     exit;
 }
 
-// Get the teacher's ID from the session
-$teacherId = $_SESSION['teacher_id'];
+// Function to fetch the SchoolID for a teacher
+function fetchSchoolIdForTeacher($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    $result = $stmt->fetch();
+    return $result ? $result['SchoolID'] : null;
+}
+
+// ...
+
+$teacherId = $_GET['teacher_id']; // Assuming you have a way to get the teacher's ID
 
 // Fetch the SchoolID associated with the teacher
-$teacherSchoolID = fetchSchoolIdForStudent($teacherId);
+$teacherSchoolID = fetchSchoolIdForTeacher($teacherId);
 
-// If the teacher doesn't have a SchoolID, handle it accordingly
 if (!$teacherSchoolID) {
-    echo "Teacher is not associated with a school.";
+    // Handle the case where the teacher is not associated with any school
+    echo "Teacher is not associated with any school.";
     exit;
 }
 
