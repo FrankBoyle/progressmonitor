@@ -8,16 +8,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Check if 'student_id' is set in the session or in the URL parameters.
-if (isset($_SESSION['student_id'])) {
-    $studentId = $_SESSION['student_id'];
-} elseif (isset($_GET['student_id'])) {
-    $studentId = $_GET['student_id'];
-} else {
-    // Handle the case where 'student_id' is not available.
-    echo "Error: student_id is missing.";
-    exit(); // Or handle this in a way appropriate for your application.
-}
 $studentId = $_GET['student_id'];
 
 // Initialize empty arrays and variables
