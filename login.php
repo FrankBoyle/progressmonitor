@@ -34,14 +34,13 @@
                 $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
             
                 if ($teacherResult) {
-                    $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
-                } else {
-                    echo '<p class="error">No teacher ID associated with this account ID.</p>';
-                    exit(); 
-                }
-            
-                header("Location: test.php");
-                //exit(); 
+                  $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
+                  // Assuming you have fetched the SchoolID from somewhere in your code
+                  $_SESSION['SchoolID'] = $schoolIdFromDatabase;
+              
+                  // Redirect to the desired page
+                  header("Location: test.php");
+                  exit();          
             } else {
                 echo '<p class="error">Username or password is incorrect!</p>';
             }}
