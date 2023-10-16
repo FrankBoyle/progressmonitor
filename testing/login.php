@@ -1,13 +1,5 @@
 <?php
-    session_start();
-
-    // Error reporting for development
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-
     include('./users/login_backend.php');
-
 ?>
 
 <!DOCTYPE html>
