@@ -85,7 +85,6 @@ foreach ($performanceData as $record) {
         <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
     <?php endforeach; ?>
 </select>
-<?php var_dump($scoreNames); ?>
 
 <table border="1">
 <thead>
