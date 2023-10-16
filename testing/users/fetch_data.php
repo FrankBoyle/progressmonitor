@@ -8,11 +8,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// If student_id is not set, exit early
-if (!$schoolID) {
-    // If there's no SchoolID, nothing more we can do
-    echo "SchoolID is missing.";
-    exit;
+// Check if 'SchoolID' is set in the session before using it.
+if (isset($_SESSION['SchoolID'])) {
+    // It's important to use the same case as you used when you set the session variable.
+    // 'SchoolID' is different from 'schoolID' or 'schoolId'.
+    $schoolID = $_SESSION['SchoolID'];
+} else {
+    // Handle the case where 'SchoolID' is not set in the session.
+    // Depending on your application's logic, this might involve redirecting the user,
+    // showing an error message, or setting a default value for testing.
+    echo "Error: SchoolID is not set in the session.";
+    exit(); // Stop the script, or handle this situation differently as per your requirements.
 }
 $studentId = $_GET['student_id'];
 
