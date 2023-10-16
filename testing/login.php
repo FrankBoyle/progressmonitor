@@ -53,6 +53,18 @@
         } catch (PDOException $e) {
             echo "Database Error: " . $e->getMessage(); // Show the exception error message
         }
+
+        // After verifying login credentials for a teacher
+$_SESSION['teacher_id'] = $teacherIdFromDatabase;
+$_SESSION['SchoolID'] = $schoolIdFromDatabase;
+
+// Check if a teacher is logged in
+if (isset($_SESSION['teacher_id'], $_SESSION['SchoolID'])) {
+  $teacherId = $_SESSION['teacher_id'];
+  $schoolId = $_SESSION['SchoolID'];
+  // Perform operations related to the teacher's session data
+}
+
     }
 ?>
 
