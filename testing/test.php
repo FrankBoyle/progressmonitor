@@ -9,6 +9,9 @@ if (!isset($_SESSION['teacher_id'])) {
 $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
+// Define a default metadata ID (you can change this as needed)
+$defaultMetadataID = 1;
+
 // Handle form submission for adding new student
 if (isset($_POST['add_new_student'])) {
     $newStudentName = $_POST['new_student_name'];
@@ -48,6 +51,5 @@ $students = fetchStudentsByTeacher($teacherId);
     <?php endif; ?>
 </body>
 </html>
-
 
 
