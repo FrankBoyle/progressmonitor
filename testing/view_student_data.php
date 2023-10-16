@@ -70,6 +70,7 @@ foreach ($performanceData as $record) {
 <body>
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentMetadataID" name="currentMetadataID" value="<?php echo $currentMetadataID; ?>">
 
 <a href="test.php" class="btn btn-primary">Student List</a>
 
@@ -82,9 +83,10 @@ foreach ($performanceData as $record) {
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
-        <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
+        <option value="<?php echo $entry['metadata_id']; ?>" <?php echo ($entry['metadata_id'] == $currentMetadataID) ? 'selected' : ''; ?>><?php echo $entry['category_name']; ?></option>
     <?php endforeach; ?>
 </select>
+
 
 <table border="1">
 <thead>
