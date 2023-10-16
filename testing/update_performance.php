@@ -7,11 +7,12 @@ include('./users/db.php');  // Include the database connection
 header('Content-Type: application/json');
 
 // Main logic
-if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
+if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'], $POST['metadata_id'])) {
     $performanceId = $_POST['performance_id'];
     $fieldName = $_POST['field_name'];
     $newValue = $_POST['new_value'];
     $studentId = $_POST['student_id'] ?? null;
+    $metadataId = $_POST['metadata_id'] ?? null;
 
     // If the field being updated is one of the score fields and the value is empty, set it to NULL.
     if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'])) {
