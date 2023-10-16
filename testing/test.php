@@ -37,18 +37,28 @@ $students = fetchStudentsByTeacher($teacherId);
         <input type="submit" name="add_new_student" value="Add New Student">
     </form>
 
-    <?php if ($message): ?>
-        <p><?= $message ?></p>
-    <?php endif; ?>
-
     <?php if (!empty($students)): ?>
-        <h2>Students:</h2>
+    <h2>Students:</h2>
+    <select id="metadataIdSelector">
         <?php foreach ($students as $student): ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $defaultMetadataID ?>'><?= $student['name'] ?></a><br>
+            <?php
+            // Dynamically generate the link with metadata_id as a query parameter
+            $studentLink = 'view_student_data.php?student_id=' . $student['student_id'] . '&metadata_id=' . $defaultMetadataID;
+            ?>
+            <option value="<?= $studentLink ?>"><?= $student['name'] ?></option>
         <?php endforeach; ?>
-    <?php else: ?>
-        No students found for this teacher.
-    <?php endif; ?>
+    </select>
+<?php else: ?>
+    No students found for this teacher.
+<?php endif; ?>
+
+<script>
+    // JavaScript to handle changing the link when the user selects a different metadata_id
+    $('#metadataIdSelector').on('change', function () {
+        var selectedLink = $(this).val();
+        window.location.href = selectedLink; // Redirect to the selected link
+    });
+</script>
 </body>
 </html>
 
