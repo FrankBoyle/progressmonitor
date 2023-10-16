@@ -66,30 +66,10 @@ foreach ($performanceData as $record) {
         display: none;
     }
 </style>
-<script>
-        // Get the select element
-        var metadataSelect = document.getElementById("metadataIdSelector");
-
-        // Get the hidden input field
-        var currentMetadataIDInput = document.getElementById("currentMetadataID");
-
-        // Add an event listener to the select element
-        metadataSelect.addEventListener("change", function() {
-            // Update the hidden input field with the selected value
-            currentMetadataIDInput.value = metadataSelect.value;
-
-            // Submit a form or send an AJAX request to update the metadataID on the server
-            // You can implement this based on your specific needs
-            // Example: You can submit a form using JavaScript
-            // document.forms["yourFormName"].submit();
-        });
-    </script>
-
 </head>
 <body>
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
-<input type="hidden" id="currentMetadataID" name="currentMetadataID" value="<?php echo $currentMetadataID; ?>">
 
 <a href="test.php" class="btn btn-primary">Student List</a>
 
@@ -102,7 +82,7 @@ foreach ($performanceData as $record) {
 <label>Select Metadata Group to Display: </label>
 <select id="metadataIdSelector">
     <?php foreach ($metadataEntries as $entry): ?>
-        <option value="<?php echo $entry['metadata_id']; ?>" <?php echo ($entry['metadata_id'] == $currentMetadataID) ? 'selected' : ''; ?>><?php echo $entry['category_name']; ?></option>
+        <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
     <?php endforeach; ?>
 </select>
 
