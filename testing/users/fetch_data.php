@@ -1,15 +1,19 @@
 <?php
-// Error Reporting
+session_start(); // Start the session at the beginning of the page
+include('db.php');
+
+// Check if teacher_id is set in the session
+if (!isset($_SESSION['teacher_id'])) {
+    // Handle the case where teacher_id is not set in the session
+    echo "Teacher ID is missing in the session.";
+    exit;
+}
+
+// Now you can safely use $_SESSION['teacher_id'] in your page logic.
+$teacherId = $_SESSION['teacher_id'];
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-include('db.php');
-
-if (!isset($_GET['teacher_id'])) {
-    echo "Teacher ID is missing in the URL.";
-    exit;
-}
 
 $teacherId = $_GET['teacher_id'];
 // Continue with the rest of your script...
