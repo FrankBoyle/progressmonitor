@@ -36,18 +36,16 @@
                 if ($teacherResult) {
                   $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
               
-                  // Debug statement
-                  echo "teacher_id in session: " . $_SESSION['teacher_id'];
-              
                   // Append teacher_id to the URL and redirect to test.php
                   header("Location: test.php?teacher_id=" . $_SESSION['teacher_id']);
+                  exit(); // Make sure to exit after the redirection
               } else {
                   echo '<p class="error">No teacher ID associated with this account ID.</p>';
                   exit(); 
               }
-              
+                         
             
-                header("Location: test.php");
+                //header("Location: test.php");
                 //exit(); 
             } else {
                 echo '<p class="error">Username or password is incorrect!</p>';
