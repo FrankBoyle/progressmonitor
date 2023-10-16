@@ -257,7 +257,18 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
-
+    
+    const postData = {
+        performance_id: performanceId,
+        field_name: fieldName,
+        new_value: newValue,
+        student_id: studentId,
+        metadata_id: metadataId, // Include metadata_id here
+        score_date: convertToDatabaseDate(newDate)
+    };
+    
+    // ... Rest of your code
+    
     function getCurrentDate() {
         const currentDate = new Date();
         return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
