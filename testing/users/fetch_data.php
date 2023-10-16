@@ -8,14 +8,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Initialize empty arrays and variables
-$metadataEntries = [];
-$displayedColumns = [];
-$performanceData = [];
-$scoreNames = [];
-$chartDates = [];
-$defaultMetadataID = 1; // Default value in case of any issues
-
 // Check if 'SchoolID' is set in the session before using it.
 if (isset($_SESSION['SchoolID'])) {
     // It's important to use the same case as you used when you set the session variable.
@@ -28,6 +20,20 @@ if (isset($_SESSION['SchoolID'])) {
     echo "Error: SchoolID is not set in the session.";
     exit(); // Stop the script, or handle this situation differently as per your requirements.
 }
+
+// You can create a function to fetch student IDs by SchoolID, e.g., fetchStudentIdsBySchool
+$studentIds = fetchStudentIdsBySchool($connection, $schoolID); 
+
+// Similarly, you can create a function to fetch metadata IDs by SchoolID, e.g., fetchMetadataIdsBySchool
+$metadataIds = fetchMetadataIdsBySchool($connection, $schoolID); 
+// Initialize empty arrays and variables
+$metadataEntries = [];
+$displayedColumns = [];
+$performanceData = [];
+$scoreNames = [];
+$chartDates = [];
+$defaultMetadataID = 1; // Default value in case of any issues
+
 // Check if 'metadata_id' is present in the URL parameters.
 if (isset($_GET['metadata_id'])) {
     $metadataId = $_GET['metadata_id'];

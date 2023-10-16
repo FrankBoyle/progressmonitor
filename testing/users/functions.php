@@ -18,6 +18,25 @@ function fetchMetadataCategoriesFromDatabase($connection, $schoolID) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function fetchStudentIdsBySchool($connection, $schoolID) {
+    // This array will hold the student IDs
+    $studentIds = [];
+    try {
+        // Prepare your query: select student IDs from your students table where the SchoolID matches
+        $stmt = $connection->prepare("SELECT student_id FROM students WHERE SchoolID = :schoolID");
+        // Execute the query with the provided SchoolID
+        $stmt->execute(['schoolID' => $schoolID]);
+        // Fetch all the student IDs
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $studentIds[] = $row['student_id'];  // Adjust 'student_id' if your column name is different
+        }
+    } catch (PDOException $e) {
+        // You might want to handle errors, log them, or rethrow them, depending on your error strategy
+        throw $e;
+    }
+    return $studentIds;
+}
+
 // Function to fetch the SchoolID for a student
 function fetchSchoolIdForStudent($connection, $studentId) {
     // Adjusted to use parameter
@@ -25,6 +44,25 @@ function fetchSchoolIdForStudent($connection, $studentId) {
     $stmt->execute([$studentId]);
     $result = $stmt->fetch();
     return $result ? $result['SchoolID'] : null;
+}
+
+function fetchMetadataIdsBySchool($connection, $schoolID) {
+    // This array will hold the metadata IDs
+    $metadataIds = [];
+    try {
+        // Prepare your query: select metadata IDs from your metadata table where the SchoolID matches
+        $stmt = $connection->prepare("SELECT metadata_id FROM metadata WHERE SchoolID = :schoolID");
+        // Execute the query with the provided SchoolID
+        $stmt->execute(['schoolID' => $schoolID]);
+        // Fetch all the metadata IDs
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $metadataIds[] = $row['metadata_id'];  // Adjust 'metadata_id' if your column name is different
+        }
+    } catch (PDOException $e) {
+        // Handle errors as per your error handling strategy
+        throw $e;
+    }
+    return $metadataIds;
 }
 
 // Function to fetch score names for a school
