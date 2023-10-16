@@ -31,7 +31,7 @@ function fetchSchoolIdForStudent($connection, $studentId) {
 function fetchScoreNames($connection, $schoolID) {
     // Code refined to use the $connection parameter
     $scoreNames = [];
-    $stmt = the $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE SchoolID = ?");
+    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE SchoolID = ?");
     $stmt->execute([$schoolID]);
     if ($row = $stmt->fetch()) {
         for ($i = 1; $i <= 10; $i++) {
@@ -45,7 +45,7 @@ function fetchScoreNames($connection, $schoolID) {
 // Function to fetch students by teacher
 function fetchStudentsByTeacher($connection, $teacherId) {
     // Dependency on $connection removed from the global scope
-    $stmt = the $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
@@ -53,13 +53,13 @@ function fetchStudentsByTeacher($connection, $teacherId) {
 // Function to add a new student
 function addNewStudent($connection, $studentName, $teacherId) {
     // Replaced global with function parameter
-    $stmt = the $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
     $stmt->execute([$teacherId]);
     $teacherInfo = $stmt->fetch();
     $teacherSchoolID = $teacherInfo['SchoolID'];
 
     // Check for duplicates
-    $stmt = the $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
+    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
     $stmt->execute([$studentName, $teacherSchoolID]);
     $duplicateStudent = $stmt->fetch();
 
@@ -68,7 +68,7 @@ function addNewStudent($connection, $studentName, $teacherId) {
     } 
 
     // Insert the new student
-    $stmt = the $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
     $stmt->execute([$studentName, $teacherSchoolID]);
     return "New student added successfully.";
 }
