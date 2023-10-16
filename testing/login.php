@@ -33,17 +33,19 @@
             
                 $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
             
-                if ($teacherResult) {
-                  $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
-              
-                  // Append teacher_id to the URL and redirect to test.php
-                  header("Location: test.php?teacher_id=" . $_SESSION['teacher_id']);
-                  exit(); // Make sure to exit after the redirection
-              } else {
-                  echo '<p class="error">No teacher ID associated with this account ID.</p>';
-                  exit(); 
-              }
-                         
+// After verifying login credentials for a teacher
+if ($teacherResult) {
+  $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
+  // Assuming you have fetched the SchoolID from somewhere in your code
+  $_SESSION['SchoolID'] = $schoolIdFromDatabase;
+
+  // Redirect to the desired page
+  header("Location: test.php");
+  exit();
+} else {
+  echo '<p class="error">Username or password is incorrect!</p>';
+}
+
             
                 //header("Location: test.php");
                 //exit(); 
