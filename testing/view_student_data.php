@@ -90,7 +90,7 @@ foreach ($performanceData as $record) {
 
 <?php
 // Debugging statement
-echo "Count of displayedColumns: " . count($displayedColumns);
+var_dump($displayedColumns);
 ?>
 
 <table border="1">
