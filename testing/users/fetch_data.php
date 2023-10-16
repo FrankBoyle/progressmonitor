@@ -10,7 +10,7 @@ if (!isset($_SESSION['teacher_id'])) {
 }
 
 // Now you can safely use $_SESSION['teacher_id'] in your page logic.
-$teacherId = $_SESSION['teacher_id'];
+//$teacherId = $_SESSION['teacher_id'];
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
