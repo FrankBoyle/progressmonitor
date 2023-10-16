@@ -1,39 +1,6 @@
 <?php
-    session_start();
-    include('./users/db.php');
-
-    if (isset($_POST['register'])) {
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
-        $SchoolID = $_POST['SchoolID'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $password_hash = password_hash($password, PASSWORD_BCRYPT);
-        $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
-        $query->bindParam("email", $email, PDO::PARAM_STR);
-        $query->execute();
-        
-        if ($query->rowCount() > 0) {
-            echo '<p class="error">The email address is already registered!</p>';
-        }
-        if ($query->rowCount() == 0) {
-          $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password,SchoolID) VALUES (:fname,:lname,:email,:password_hash,:SchoolID)");
-          $query->bindParam("fname", $fname, PDO::PARAM_STR);
-            $query->bindParam("lname", $lname, PDO::PARAM_STR);
-            $query->bindParam("SchoolID", $SchoolID, PDO::PARAM_INT);  // Assuming SchoolID is an integer
-            $query->bindParam("email", $email, PDO::PARAM_STR);
-            $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
-            $result = $query->execute();
-            if ($result) {
-              header("Location: login.php");
-              echo '<p class="success">Your registration was successful!</p>';
-            } else {
-              echo '<p class="error">Something went wrong!</p>';
-            }
-        }
-    }
+    include('./users/register_backend.php');
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -915,7 +882,7 @@
         <p class="login-box-msg">Register a new membership</p>
         
 
-        <form method="post" action="" name="registration">
+        <form method="post" action="./users/register_backend.php" name="registration">
         <div class="input-group mb-3">
     <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
     <div class="input-group-append">
