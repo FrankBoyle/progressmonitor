@@ -384,18 +384,30 @@ $(document).ready(function() {
     
 
     function isDateDuplicate(dateString, currentPerformanceId = null) {
-    //console.log("Checking for duplicate of:", dateString);
-    let isDuplicate = false;
-    $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = $(this).text();
-        const performanceId = $(this).closest('tr').data('performance-id');
-        if (cellDate === dateString && performanceId !== currentPerformanceId) {
-            isDuplicate = true;
-            return false; // Break out of the .each loop
-        }
-    });
-    return isDuplicate;
-}
+        // Initialize variables for student_id and metadata_id
+        const currentStudentId = $('#currentStudentId').val();
+        const currentMetadataFieldName = $('#currentMetadataFieldName').val();
+
+        let isDuplicate = false;
+        $('table').find('td[data-field-name="score_date"]').each(function() {
+            const cellDate = $(this).text();
+            const performanceId = $(this).closest('tr').data('performance-id');
+            const studentId = $(this).closest('tr').data('student-id');
+            const metadataFieldName = $(this).closest('tr').data('metadata-field-name');
+
+            // Check for duplicates only when student_id and metadata_id match
+            if (
+                cellDate === dateString &&
+                studentId === currentStudentId &&
+                metadataFieldName === currentMetadataFieldName &&
+                performanceId !== currentPerformanceId
+            ) {
+                isDuplicate = true;
+                return false; // Break out of the .each loop
+            }
+        });
+        return isDuplicate;
+    }
 
     function attachEditableHandler() {
         $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
@@ -528,18 +540,18 @@ $(document).ready(function() {
         });
     }
 
-$('#addDataRow').off('click').click(function() {
-    // Check for an existing "new" row
-    if ($('tr[data-performance-id="new"]').length) {
-        alert("Please save the existing new entry before adding another one.");
-        return;
-    }
-    
-    const currentDate = getCurrentDate();
-if (isDateDuplicate(currentDate)) {
-    //alert("An entry for this date already exists. Please choose a different date.");
-    return;
-}
+    $('#addDataRow').off('click').click(function() {
+        // Check for an existing "new" row
+        if ($('tr[data-performance-id="new"]').length) {
+            alert("Please save the existing new entry before adding another one.");
+            return;
+        }
+
+        const currentDate = getCurrentDate();
+        if (isDateDuplicate(currentDate)) {
+            alert("An entry for this date already exists. Please choose a different date.");
+            return;
+        }
         const newRow = $("<tr data-performance-id='new'>");
         newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
         
