@@ -75,11 +75,21 @@ $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
 
+
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
     exit;
 }
+
+// Check if the teacher_id is provided in the URL
+if (!isset($_GET['teacher_id'])) {
+    echo "Teacher ID is missing in the URL.";
+    exit;
+}
+
+$teacherId = $_GET['teacher_id'];
+$schoolID = fetchSchoolIdForTeacher($teacherId); // Fetch SchoolID for the teacher
 
 // Function to fetch the SchoolID for a teacher
 function fetchSchoolIdForTeacher($teacherId) {
