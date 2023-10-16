@@ -92,15 +92,17 @@ foreach ($performanceData as $record) {
 <table border="1">
 <thead>
     <tr>
-        <th><?php echo isset($scoreNames['score_date']) ? $scoreNames['score_date'] : ''; ?></th>
+        <th>Date</th>
+        <!-- Dynamically generate table headers based on $displayedColumns -->
         <?php foreach ($displayedColumns as $columnName): ?>
             <?php if ($columnName !== "Week Start Date"): ?>
-                <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : $columnName; ?></th>
+                <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : ''; ?></th>
             <?php endif; ?>
         <?php endforeach; ?>
         <th>Action</th>
     </tr>
 </thead>
+
 
 
     <?php if (!empty($performanceData)): ?>
