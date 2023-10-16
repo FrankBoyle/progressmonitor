@@ -35,8 +35,8 @@ function collectPerformanceIds($studentId) {
     return $performanceIds;
 }
 
-$performanceData = fetchPerformanceData($studentId);
-$performanceIds = collectPerformanceIds($studentId); // Collect performance IDs
+//$performanceData = fetchPerformanceData($studentId);
+//$performanceIds = collectPerformanceIds($studentId); // Collect performance IDs
 
 
 // Function to fetch the SchoolID for a student
