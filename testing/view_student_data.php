@@ -32,7 +32,6 @@ if (!isset($_GET['student_id'])) {
 
 $studentId = $_GET['student_id'];
 $schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
-$performanceId = collectPerformanceIds($studentId); // Collect performance IDs
 
 if (!$schoolID) {
     return;  // If there's no SchoolID, exit early

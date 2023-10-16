@@ -1,23 +1,10 @@
 <?php
-session_start(); // Start the session at the beginning of the page
-include('db.php');
-
-// Check if teacher_id is set in the session
-if (!isset($_SESSION['teacher_id'])) {
-    // Handle the case where teacher_id is not set in the session
-    echo "Teacher ID is missing in the session.";
-    exit;
-}
-
-// Now you can safely use $_SESSION['teacher_id'] in your page logic.
-//$teacherId = $_SESSION['teacher_id'];
+// Error Reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-//$teacherId = $_GET['teacher_id'];
-// Continue with the rest of your script...
-
+include('db.php');
 
 // Function to fetch performance data for a student
 function fetchPerformanceData($studentId) {
@@ -25,6 +12,23 @@ function fetchPerformanceData($studentId) {
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
     $stmt->execute([$studentId]);
     return $stmt->fetchAll();
+}
+
+// Function to fetch metadata categories for a school
+function fetchMetadataCategoriesFromDatabase($schoolID) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Function to fetch the SchoolID for a student
+function fetchSchoolIdForStudent($studentId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+    $result = $stmt->fetch();
+    return $result ? $result['SchoolID'] : null;
 }
 
 // Function to fetch score names for a school
@@ -42,12 +46,38 @@ function fetchScoreNames($schoolID) {
     return $scoreNames;
 }
 
+
 // Function to fetch students by teacher
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
     $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
+}
+
+// Function to add a new student
+function addNewStudent($studentName, $teacherId) {
+    global $connection;
+
+    // Fetch the SchoolID of the current teacher
+    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    $teacherInfo = $stmt->fetch();
+    $teacherSchoolID = $teacherInfo['SchoolID'];
+
+    // Check if the student with the same name and SchoolID already exists
+    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
+    $stmt->execute([$studentName, $teacherSchoolID]);
+    $duplicateStudent = $stmt->fetch();
+
+    if ($duplicateStudent) {
+        return "Student with the same name already exists.";
+    } 
+
+    // Insert the new student with the same SchoolID
+    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
+    $stmt->execute([$studentName, $teacherSchoolID]);
+    return "New student added successfully.";
 }
 
 // Function to fetch group names
@@ -71,49 +101,113 @@ $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
 
-
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
     exit;
 }
 
-// Check if the teacher_id is provided in the URL
-if (!isset($_GET['teacher_id'])) {
-    echo "Teacher ID is missing in the URL.";
+// If student_id is not set, exit early
+if (!isset($_GET['student_id'])) {
+    return;
+}
+
+$studentId = $_GET['student_id'];
+if (isset($_GET['metadata_id'])) {
+    $metadataID = $_GET['metadata_id'];
+} else {
+    // Handle the case where metadata_id is not set in the URL
+    echo "metadata_id parameter is missing in the URL.";
     exit;
 }
 
-$teacherId = $_GET['teacher_id'];
-$schoolID = fetchSchoolIdForTeacher($teacherId); // Fetch SchoolID for the teacher
+$schoolID = fetchSchoolIdForStudent($studentId); // Fetch SchoolID
+// Replace with your actual SchoolID and metadata_id
 
-// Function to fetch the SchoolID for a teacher
-function fetchSchoolIdForTeacher($teacherId) {
-    global $connection;
-    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
-    $stmt->execute([$teacherId]);
-    $result = $stmt->fetch();
-    return $result ? $result['SchoolID'] : null;
-}
+echo "schoolID: $schoolID<br>";
+echo "metadataID: $metadataID<br>";
+// Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
+$metadataEntries = [];
+$stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
+$stmt->execute([$schoolID, $metadataID]);
 
-// ...
-
-$teacherId = $_GET['teacher_id']; // Assuming you have a way to get the teacher's ID
-
-// Fetch the SchoolID associated with the teacher
-$teacherSchoolID = fetchSchoolIdForTeacher($teacherId);
-
-if (!$teacherSchoolID) {
-    // Handle the case where the teacher is not associated with any school
-    echo "Teacher is not associated with any school.";
+if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    // Populate the $displayedColumns array with column names from the metadata entry
+    $displayedColumns = [
+        'score1' => $row['score1_name'],
+        'score2' => $row['score2_name'],
+        'score3' => $row['score3_name'],
+        'score4' => $row['score4_name'],
+        'score5' => $row['score5_name'],
+        'score6' => $row['score6_name'],
+        'score7' => $row['score7_name'],
+        'score8' => $row['score8_name'],
+        'score9' => $row['score9_name'],
+        'score10' => $row['score10_name'],
+        'score_date' => 'Week Start Date', // You can customize this label
+    ];
+} else {
+    // Handle the case where no metadata entry is found for the specified SchoolID and metadata_id
+    echo "Metadata entry not found.";
     exit;
 }
 
-// Fetch students associated with the teacher
-$students = fetchStudentsByTeacher($teacherId);
+if (!$schoolID) {
+    return;  // If there's no SchoolID, exit early
+}
 
-// Optionally, you can fetch performance data for each student here
-// and organize it based on the SchoolID and student ID.
+$defaultMetadataID = 1;  // Default value in case of any issues
+// Query to find the lowest metadata_id for the specified SchoolID
+$sql = "SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?";
+$stmt = $connection->prepare($sql);
+$stmt->execute([$schoolID]);
 
-// ...
+// Fetch the result
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Default to the lowest metadata_id, or 1 if no metadata_id is found
+$defaultMetadataID = $row['min_metadata_id'] ?? 1;
+// Fetch performance data and score names
+$performanceData = fetchPerformanceData($studentId);
+$scoreNames = fetchScoreNames($schoolID);
+
+// Preparing the data for the chart
+foreach ($performanceData as $record) {
+    $chartDates[] = $record['score_date'];
+    // You can add more logic here if needed
+}
+
+// Handling the data POST from the dropdown functionality
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
+    $schoolIDIndex = $_POST['SchoolIDIndex'];
+    $originalName = $_POST['ScoreColumn'];
+    $customName = $_POST['CustomName'];
+    $scoreGroup = $_POST['ScoreGroup'];
+
+    // Inserting into the SchoolScoreNames table
+    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
+    
+    // Respond with the ID of the inserted row
+    echo json_encode(['id' => $connection->lastInsertId()]);
+    exit;
+}
+
+// Fetch metadata entries from the Metadata table for the specified SchoolID
+$metadataEntries = [];
+$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+$stmt->execute([$schoolID]);
+//$stmt->execute([$metadataID]);
+// Populate the $metadataEntries array with fetched data
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $metadataEntries[] = $row;
+}
+
+if (isset($_GET['metadata_id'])) {
+    $metadataID = $_GET['metadata_id'];
+} else {
+    // Handle the case where metadata_id is not set in the URL
+    echo "metadata_id parameter is missing in the URL.";
+    exit;
+}
 ?>

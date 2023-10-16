@@ -1,15 +1,12 @@
 <?php
-session_start(); // Start the session at the beginning of the page
 include './users/fetch_data.php';
+session_start();
 
 if (!isset($_SESSION['teacher_id'])) {
-    header("Location: login.php"); // Redirect to the login page if teacher_id is not set in the session
-    exit;
+    die("Teacher ID not set in session");
 }
 
-// Now you can safely use $_SESSION['teacher_id'] in your page logic.
 $teacherId = $_SESSION['teacher_id'];
-
 $message = "";  // Initialize an empty message variable
 
 // Handle form submission for adding new student

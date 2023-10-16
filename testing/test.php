@@ -1,21 +1,16 @@
 <?php
 include './users/fetch_data.php';
+session_start();
 
-session_start(); // Start the session at the beginning of the page
-
-// Check if teacher_id is set in the session
 if (!isset($_SESSION['teacher_id'])) {
-    // Handle the case where teacher_id is not set in the session
-    echo "Teacher ID is missing in the session.";
-    exit;
+    die("Teacher ID not set in session");
 }
 
-// Now you can safely use $_SESSION['teacher_id'] in your page logic.
 $teacherId = $_SESSION['teacher_id'];
-// Now you can safely use $_SESSION['teacher_id'] in your page logic.
-$teacherId = $_SESSION['teacher_id'];
-
 $message = "";  // Initialize an empty message variable
+
+// Define a default metadata ID (you can change this as needed)
+$defaultMetadataID = 1;
 
 // Handle form submission for adding new student
 if (isset($_POST['add_new_student'])) {
@@ -42,17 +37,27 @@ $students = fetchStudentsByTeacher($teacherId);
         <input type="submit" name="add_new_student" value="Add New Student">
     </form>
 
-    <?php if ($message): ?>
-        <p><?= $message ?></p>
-    <?php endif; ?>
-
     <?php if (!empty($students)): ?>
-        <h2>Students:</h2>
-        <?php foreach ($students as $student): ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>'><?= $student['name'] ?></a><br>
-        <?php endforeach; ?>
-    <?php else: ?>
-        No students found for this teacher.
-    <?php endif; ?>
+    <h2>Students:</h2>
+    <?php foreach ($students as $student): ?>
+        <?php
+        // Dynamically generate the link with metadata_id as a query parameter
+        $studentLink = 'view_student_data.php?student_id=' . $student['student_id'] . '&metadata_id=' . $defaultMetadataID;
+        ?>
+        <a href="<?= $studentLink ?>"><?= $student['name'] ?></a><br>
+    <?php endforeach; ?>
+<?php else: ?>
+    No students found for this teacher.
+<?php endif; ?>
+
+<script>
+    // JavaScript to handle changing the link when the user selects a different metadata_id
+    $('#metadataIdSelector').on('change', function () {
+        var selectedLink = $(this).val();
+        window.location.href = selectedLink; // Redirect to the selected link
+    });
+</script>
 </body>
 </html>
+
+
