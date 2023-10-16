@@ -23,7 +23,7 @@ function fetchStudentIdsBySchool($connection, $schoolID) {
     $studentIds = [];
     try {
         // Prepare your query: select student IDs from your students table where the SchoolID matches
-        $stmt = $connection->prepare("SELECT student_id FROM students WHERE SchoolID = :schoolID");
+        $stmt = $connection->prepare("SELECT student_id FROM Students WHERE SchoolID = :schoolID");
         // Execute the query with the provided SchoolID
         $stmt->execute(['schoolID' => $schoolID]);
         // Fetch all the student IDs
