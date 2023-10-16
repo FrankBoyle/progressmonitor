@@ -76,7 +76,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
 $teacherId = $_SESSION['teacher_id'];
 
 // Fetch the SchoolID associated with the teacher
-$teacherSchoolID = fetchSchoolIdForTeacher($teacherId);
+$teacherSchoolID = fetchSchoolIdForStudent($teacherId);
 
 // If the teacher doesn't have a SchoolID, handle it accordingly
 if (!$teacherSchoolID) {
