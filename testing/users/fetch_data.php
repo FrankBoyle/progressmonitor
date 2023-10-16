@@ -18,7 +18,7 @@ if (isset($_SESSION['student_id'])) {
     echo "Error: student_id is missing.";
     exit(); // Or handle this in a way appropriate for your application.
 }
-//$studentId = $_GET['student_id'];
+$studentId = $_GET['student_id'];
 
 // Initialize empty arrays and variables
 $metadataEntries = [];
@@ -28,6 +28,18 @@ $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 
+// Check if 'SchoolID' is set in the session before using it.
+if (isset($_SESSION['SchoolID'])) {
+    // It's important to use the same case as you used when you set the session variable.
+    // 'SchoolID' is different from 'schoolID' or 'schoolId'.
+    $schoolID = $_SESSION['SchoolID'];
+} else {
+    // Handle the case where 'SchoolID' is not set in the session.
+    // Depending on your application's logic, this might involve redirecting the user,
+    // showing an error message, or setting a default value for testing.
+    echo "Error: SchoolID is not set in the session.";
+    exit(); // Stop the script, or handle this situation differently as per your requirements.
+}
 // Check if 'metadata_id' is present in the URL parameters.
 if (isset($_GET['metadata_id'])) {
     $metadataId = $_GET['metadata_id'];
