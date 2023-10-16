@@ -68,6 +68,7 @@ foreach ($performanceData as $record) {
 </style>
 </head>
 <body>
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 
 <a href="test.php" class="btn btn-primary">Student List</a>
@@ -91,9 +92,7 @@ foreach ($performanceData as $record) {
             <th><?php echo isset($scoreNames['score_date']) ? $scoreNames['score_date'] : ''; ?></th>
             <!-- Dynamically generate table headers based on $displayedColumns -->
             <?php foreach ($displayedColumns as $columnName): ?>
-                <?php if ($columnName !== "Week Start Date"): ?>
-                    <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : ''; ?></th>
-                <?php endif; ?>
+                <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : ''; ?></th>
             <?php endforeach; ?>
             <th>Action</th>
         </tr>
