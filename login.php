@@ -33,17 +33,19 @@ if (isset($_POST['login'])) {
 
                 $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
 
-                if ($teacherResult) {
-                    $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
-                    // Assuming you have fetched the SchoolID from somewhere in your code
-                    $_SESSION['SchoolID'] = $schoolIdFromDatabase;
+// After successfully verifying the user's credentials and fetching the teacher_id
+if ($teacherResult) {
+  $_SESSION['user'] = $result['email'];
+  $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
+  // Assuming you have fetched the SchoolID from somewhere in your code
+  $_SESSION['SchoolID'] = $schoolIdFromDatabase;
 
-                    // Redirect to the desired page
-                    header("Location: test.php");
-                    exit();
-                } else {
-                    echo '<p class="error">Username or password is incorrect!</p>';
-                }
+  // Redirect to the desired page
+  header("Location: test.php");
+  exit();
+} else {
+  echo '<p class="error">Username or password is incorrect!</p>';
+}
             } else {
                 echo '<p class="error">Username or password is incorrect!</p>';
             }
