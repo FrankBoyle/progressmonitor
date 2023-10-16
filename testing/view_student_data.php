@@ -86,7 +86,8 @@ foreach ($performanceData as $record) {
     <?php endforeach; ?>
 </select>
 <?php var_dump($scoreNames); ?>
-
+<?php var_dump($displayedColumns); ?>
+<?php var_dump($columnNames); ?>
 <table border="1">
 <thead>
     <tr>
