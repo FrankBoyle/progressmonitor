@@ -9,7 +9,12 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 $studentId = $_GET['student_id'];
-
+// Validate that $studentId is the expected data type, e.g., an integer
+if (!filter_var($studentId, FILTER_VALIDATE_INT)) {
+    // If $studentId is not valid, handle the error by exiting or giving a message
+    echo "Error: Invalid student ID.";
+    exit();
+}
 // Initialize empty arrays and variables
 $metadataEntries = [];
 $displayedColumns = [];
