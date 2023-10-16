@@ -1,27 +1,27 @@
 <?php
-    session_start();
+session_start();
 
-    // Error reporting for development
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+// Error reporting for development
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-    include('./users/db.php');
+include('./users/db.php');
 
-    if (isset($_POST['login'])) {
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+if (isset($_POST['login'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    
+    try {
+        $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
+        $query->bindParam("email", $email, PDO::PARAM_STR);
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);  
         
-        try {
-            $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
-            $query->bindParam("email", $email, PDO::PARAM_STR);
-            $query->execute();
-            $result = $query->fetch(PDO::FETCH_ASSOC);  
-            
-            if (!$result) {
-                echo '<p class="error">Username or password is incorrect!</p>';
-            } else {
-              if (password_verify($password, $result['password'])) {
+        if (!$result) {
+            echo '<p class="error">Username or password is incorrect!</p>';
+        } else {
+            if (password_verify($password, $result['password'])) {
                 $_SESSION['user'] = $result['email'];
                 
                 // Using the account_id from the result to fetch teacher_id
@@ -33,44 +33,33 @@
             
                 $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
             
-// After verifying login credentials for a teacher
-if ($teacherResult) {
-  $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
-  // Assuming you have fetched the SchoolID from somewhere in your code
-  $_SESSION['SchoolID'] = $schoolIdFromDatabase;
+                if ($teacherResult) {
+                    $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
+                    // Assuming you have fetched the SchoolID from somewhere in your code
+                    $_SESSION['SchoolID'] = $schoolIdFromDatabase;
 
-  // Redirect to the desired page
-  header("Location: test.php");
-  exit();
-} else {
-  echo '<p class="error">Username or password is incorrect!</p>';
-}
-
-            
-                //header("Location: test.php");
-                //exit(); 
+                    // Redirect to the desired page
+                    header("Location: test.php");
+                    exit();
+                } else {
+                    echo '<p class="error">Username or password is incorrect!</p>';
+                }
             } else {
                 echo '<p class="error">Username or password is incorrect!</p>';
-            }}
-        } catch (PDOException $e) {
-            echo "Database Error: " . $e->getMessage(); // Show the exception error message
+            }
         }
-
-        // After verifying login credentials for a teacher
-$_SESSION['teacher_id'] = $teacherIdFromDatabase;
-$_SESSION['SchoolID'] = $schoolIdFromDatabase;
+    } catch (PDOException $e) {
+        echo "Database Error: " . $e->getMessage(); // Show the exception error message
+    }
+}
 
 // Check if a teacher is logged in
 if (isset($_SESSION['teacher_id'], $_SESSION['SchoolID'])) {
-  $teacherId = $_SESSION['teacher_id'];
-  $schoolId = $_SESSION['SchoolID'];
-  // Perform operations related to the teacher's session data
+    $teacherId = $_SESSION['teacher_id'];
+    $schoolId = $_SESSION['SchoolID'];
+    // Perform operations related to the teacher's session data
 }
-session_start(); // Make sure to start the session at the beginning of each page
-
-    }
 ?>
-
 
 
 
