@@ -9,6 +9,7 @@ if (isset($_SESSION['teacher_id'])) {
     echo "Teacher ID is missing in the session.";
 }
 
+error_log(print_r($_SESSION, true)); // Log the session variables
 
 include './users/fetch_data.php';
 
