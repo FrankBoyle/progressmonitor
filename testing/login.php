@@ -66,6 +66,15 @@ if (isset($_SESSION['teacher_id'], $_SESSION['SchoolID'])) {
   $schoolId = $_SESSION['SchoolID'];
   // Perform operations related to the teacher's session data
 }
+session_start(); // Make sure to start the session at the beginning of each page
+
+if (isset($_SESSION['teacher_id'])) {
+    $teacherId = $_SESSION['teacher_id'];
+    // Now you can use $teacherId in your page logic
+} else {
+    // Handle the case where teacher_id is not set in the session
+    echo "Teacher ID is missing in the session.";
+}
 
     }
 ?>
