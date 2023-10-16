@@ -198,4 +198,12 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Default to the lowest metadata_id, or 1 if no metadata_id is found
 $defaultMetadataID = $row['min_metadata_id'] ?? 1;
+
+if (isset($_GET['metadata_id'])) {
+    $metadataID = $_GET['metadata_id'];
+} else {
+    // Handle the case where metadata_id is not set in the URL
+    echo "metadata_id parameter is missing in the URL.";
+    exit;
+}
 ?>
