@@ -8,7 +8,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$studentId = $_GET['student_id'];
+if (isset($_GET['student_id'])) {
+    $studentId = $_GET['student_id'];
+} else {
+    // Redirect to a login page, or error page, or simply exit the script after displaying an error
+    echo "Error: student_id is missing.";
+    // Optionally redirect: header("Location: error_page.php");
+    exit();
+}
+
 // Validate that $studentId is the expected data type, e.g., an integer
 if (!filter_var($studentId, FILTER_VALIDATE_INT)) {
     // If $studentId is not valid, handle the error by exiting or giving a message
