@@ -1,12 +1,4 @@
 <?php
-session_start();
-
-// Check if the teacher is logged in, if not, redirect to the login page
-if (!isset($_SESSION['teacher_id'])) {
-    header("Location: login.php"); // Replace with your login page URL
-    exit;
-}
-
 // Error Reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);

@@ -24,7 +24,6 @@ if ($teacherResult) {
     echo '<p class="error">Username or password is incorrect!</p>';
 }
 
-
 $message = "";  // Initialize an empty message variable
 
 // Define a default metadata ID (you can change this as needed)
