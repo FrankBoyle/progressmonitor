@@ -87,43 +87,43 @@ foreach ($performanceData as $record) {
 </select>
 
 <table border="1">
-<thead>
-    <tr>
-        <th><?php echo isset($scoreNames['score_date']) ? $scoreNames['score_date'] : ''; ?></th>
-<!-- Dynamically generate table headers based on $displayedColumns -->
-<?php foreach ($displayedColumns as $columnName): ?>
-    <?php if ($columnName !== "Week Start Date"): ?>
-        <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : ''; ?></th>
-    <?php endif; ?>
-<?php endforeach; ?>
-<th>Action</th>
-
-    </tr>
-</thead>
-
-<?php if (!empty($performanceData)): ?>
-    <?php foreach ($performanceData as $data): ?>
-        <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-            <td class="editable" data-field-name="score_date">
-                <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ''; ?>
-            </td>
-            <!-- Dynamically generate table cells for scores based on $displayedColumns -->
+    <thead>
+        <tr>
+            <th><?php echo isset($scoreNames['score_date']) ? $scoreNames['score_date'] : ''; ?></th>
+            <!-- Dynamically generate table headers based on $displayedColumns -->
             <?php foreach ($displayedColumns as $columnName): ?>
-                <td class="editable" data-field-name="<?php echo $columnName; ?>">
-                    <?php echo isset($data[$columnName]) ? $data[$columnName] : ''; ?>
-                </td>
+                <?php if ($columnName !== "Week Start Date"): ?>
+                    <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : ''; ?></th>
+                <?php endif; ?>
             <?php endforeach; ?>
-            <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+            <th>Action</th>
         </tr>
-    <?php endforeach; ?>
-<?php else: ?>
-    <tr>
-        <td colspan="<?php echo count($displayedColumns) + 2; ?>">No data available.</td>
-    </tr>
-<?php endif; ?>
+    </thead>
 
-
+    <?php if (!empty($performanceData)): ?>
+        <?php foreach ($performanceData as $data): ?>
+            <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                <td class="editable" data-field-name="score_date">
+                    <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ''; ?>
+                </td>
+                <!-- Dynamically generate table cells for scores based on $displayedColumns -->
+                <?php foreach ($displayedColumns as $columnName): ?>
+                    <?php if ($columnName !== "Week Start Date"): ?>
+                        <td class="editable" data-field-name="<?php echo $columnName; ?>">
+                            <?php echo isset($data[$columnName]) ? $data[$columnName] : ''; ?>
+                        </td>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="<?php echo count($displayedColumns) + 2; ?>">No data available.</td>
+        </tr>
+    <?php endif; ?>
 </table>
+
 
 
 
