@@ -283,6 +283,40 @@ $(document).ready(function() {
         return `${month}/${day}/${year}`;
     }
 
+        // Function to populate the DataTable with fetched data
+        function populateDataTable(studentId, metadataId) {
+            fetchData(studentId, metadataId).then(data => {
+                // Clear the existing table data
+                $('table').DataTable().clear();
+    
+                // Populate the DataTable with the fetched data
+                data.forEach(item => {
+                    const row = $('<tr>').attr('data-performance-id', item.performance_id);
+                    row.append(`<td class="editable" data-field-name="score_date">${item.score_date}</td>`);
+    
+                    for (let i = 1; i <= 10; i++) {
+                        row.append(`<td class="editable" data-field-name="score${i}">${item[`score${i}`]}</td>`);
+                    }
+    
+                    row.append('<td><button class="saveRow">Save</button></td>');
+                    $('table').DataTable().row.add(row);
+                });
+    
+                // Redraw the table
+                $('table').DataTable().draw();
+            });
+        }
+
+    // Event handler for when a different student or metadata is selected
+    $('#selectStudentAndMetadata').on('change', function() {
+        const selectedOption = $(this).find(':selected');
+        const studentId = selectedOption.data('student-id');
+        const metadataId = selectedOption.data('metadata-id');
+
+        // Call the function to populate the DataTable with data for the selected student and metadata
+        populateDataTable(studentId, metadataId);
+    });
+    
     async function ajaxCall(type, url, data) {
         try {
             const response = await $.ajax({
@@ -325,6 +359,22 @@ $(document).ready(function() {
             } else {
             }
         });  
+    }
+
+    // Function to fetch data for the specified student_id and metadata_id
+    async function fetchData(studentId, metadataId) {
+        const postData = {
+            student_id: studentId,
+            metadata_id: metadataId,
+        };
+
+        try {
+            const response = await ajaxCall('POST', 'fetch_performance_data.php', postData);
+            return response;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return [];
+        }
     }
 
     //let dateAscending = true; // to keep track of current order
@@ -409,6 +459,56 @@ $(document).ready(function() {
         return isDuplicate;
     }
 
+                // Function to initialize the DataTable
+                function initializeDataTable(studentID, metadataID) {
+                    const table = $('#dataTable').DataTable({
+                        "order": [[0, "asc"]],
+                        "lengthChange": false,
+                        "paging": false,
+                        "info": false,
+                        "columns": [
+                            { "type": "date-us" },
+                            null, null, null, null, null, null, null, null, null, null, null
+                        ],
+                        "ajax": {
+                            "url": "your_data_source.php", // Replace with the actual URL to fetch data
+                            "type": "POST",
+                            "data": {
+                                "studentID": studentID,
+                                "metadataID": metadataID
+                            },
+                            "dataSrc": function (data) {
+                                // Filter the data based on studentID and metadataID
+                                const filteredData = data.filter(function (row) {
+                                    return row.student_id === studentID && row.metadata_id === metadataID;
+                                });
+    
+                                // Check if there's no matching data, and return an empty array if so
+                                if (filteredData.length === 0) {
+                                    return [];
+                                }
+    
+                                return filteredData;
+                            }
+                        }
+                    });
+    
+                    return table;
+                }
+    
+                // Event handler for when a different student or metadata is selected
+                $('#selectStudentAndMetadata').on('change', function() {
+                    const selectedOption = $(this).find(':selected');
+                    const studentID = selectedOption.data('student-id');
+                    const metadataID = selectedOption.data('metadata-id');
+    
+                    // Initialize the DataTable with data for the selected student and metadata
+                    const dataTable = initializeDataTable(studentID, metadataID);
+    
+                    // Redraw the table
+                    dataTable.draw();
+                });
+    
     function attachEditableHandler() {
         $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
             const cell = $(this);
@@ -684,4 +784,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 null, null, null, null, null, null, null, null, null, null, null
             ]
         });
+        const INITIAL_STUDENT_ID = $('#currentStudentId').val();
+            const INITIAL_METADATA_ID = $('#currentMetadataId').val();
+            const initialDataTable = initializeDataTable(INITIAL_STUDENT_ID, INITIAL_METADATA_ID);
 });
