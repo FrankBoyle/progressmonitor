@@ -316,11 +316,6 @@ $('#metadataIdSelector').on('change', function() {
     });
 });
 
-
-
-
-
-
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
     var studentId = $('#currentStudentId').val();
@@ -393,10 +388,7 @@ function fetchMetadata(metadataId) {
     });
 }
 
-
-
-
-    function getCurrentDate() {
+function getCurrentDate() {
         const currentDate = new Date();
         return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
     }
@@ -807,7 +799,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             "info": false,
             "columns": [
                 { "type": "date-us" },
-                null, null, null, null, null, null, null, null, null, null, null
+                null, null, null, null, null, null, null, null, null, null, null, null
             ]
             
         });
