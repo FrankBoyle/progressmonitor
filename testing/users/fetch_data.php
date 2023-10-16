@@ -22,6 +22,23 @@ function fetchMetadataCategoriesFromDatabase($schoolID) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function collectPerformanceIds($studentId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT performance_id FROM Performance WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+    
+    $performanceIds = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $performanceIds[] = $row['performance_id'];
+    }
+    
+    return $performanceIds;
+}
+
+$performanceData = fetchPerformanceData($studentId);
+$performanceIds = collectPerformanceIds($studentId); // Collect performance IDs
+
+
 // Function to fetch the SchoolID for a student
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
@@ -175,8 +192,6 @@ foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
     // You can add more logic here if needed
 }
-
-
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID
 $metadataEntries = [];
