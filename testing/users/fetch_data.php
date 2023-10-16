@@ -18,7 +18,7 @@ if (isset($_SESSION['student_id'])) {
     echo "Error: student_id is missing.";
     exit(); // Or handle this in a way appropriate for your application.
 }
-$studentId = $_GET['student_id'];
+//$studentId = $_GET['student_id'];
 
 // Initialize empty arrays and variables
 $metadataEntries = [];
