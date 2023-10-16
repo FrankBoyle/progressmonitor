@@ -8,17 +8,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Check if 'SchoolID' is set in the session before using it.
-if (isset($_SESSION['SchoolID'])) {
-    // It's important to use the same case as you used when you set the session variable.
-    // 'SchoolID' is different from 'schoolID' or 'schoolId'.
-    $schoolID = $_SESSION['SchoolID'];
+// Check if 'student_id' is set in the session or in the URL parameters.
+if (isset($_SESSION['student_id'])) {
+    $studentId = $_SESSION['student_id'];
+} elseif (isset($_GET['student_id'])) {
+    $studentId = $_GET['student_id'];
 } else {
-    // Handle the case where 'SchoolID' is not set in the session.
-    // Depending on your application's logic, this might involve redirecting the user,
-    // showing an error message, or setting a default value for testing.
-    echo "Error: SchoolID is not set in the session.";
-    exit(); // Stop the script, or handle this situation differently as per your requirements.
+    // Handle the case where 'student_id' is not available.
+    echo "Error: student_id is missing.";
+    exit(); // Or handle this in a way appropriate for your application.
 }
 $studentId = $_GET['student_id'];
 
@@ -30,12 +28,13 @@ $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 
-// Check if 'metadata_id' is present in the URL parameters
+// Check if 'metadata_id' is present in the URL parameters.
 if (isset($_GET['metadata_id'])) {
-    $metadataID = $_GET['metadata_id'];
+    $metadataId = $_GET['metadata_id'];
 } else {
-    echo "metadata_id parameter is missing in the URL.";
-    exit;
+    // Handle the case where 'metadata_id' is not set.
+    echo "Error: metadata_id parameter is missing in the URL.";
+    exit(); // Or handle it appropriately.
 }
 
 // Optionally, you can add an additional check if 'metadata_id' should not just be present but also needs to satisfy some conditions (like being a positive integer)
