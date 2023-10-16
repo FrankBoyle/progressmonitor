@@ -40,7 +40,7 @@
                     exit(); 
                 }
             
-                header("Location: ./test.php");
+                header("Location: ../test.php");
                 //exit(); 
             } else {
                 echo '<p class="error">Username or password is incorrect!</p>';
