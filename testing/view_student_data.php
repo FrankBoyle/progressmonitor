@@ -88,19 +88,20 @@ foreach ($performanceData as $record) {
 <?php var_dump($scoreNames); ?>
 <?php var_dump($displayedColumns); ?>
 <?php var_dump($columnName); ?>
+
 <table border="1">
-    <thead>
-        <tr>
-            <th><?php echo isset($scoreNames['score_date']) ? $scoreNames['score_date'] : ''; ?></th>
-            <!-- Dynamically generate table headers based on $displayedColumns -->
-            <?php foreach ($displayedColumns as $columnName): ?>
-                <?php if ($columnName !== "Week Start Date"): ?>
+<thead>
+    <tr>
+        <th><?php echo isset($scoreNames['score_date']) ? $scoreNames['score_date'] : ''; ?></th>
+        <!-- Dynamically generate table headers based on $displayedColumns -->
+        <?php foreach ($displayedColumns as $columnName): ?>
+            <?php if ($columnName !== "Week Start Date"): ?>
                 <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : ''; ?></th>
-                <?php endif; ?>
-            <?php endforeach; ?>
-            <th>Action</th>
-        </tr>
-    </thead>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <th>Action</th>
+    </tr>
+</thead>
 
 
     <?php if (!empty($performanceData)): ?>
