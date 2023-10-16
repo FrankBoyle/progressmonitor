@@ -1,6 +1,12 @@
 <?php
-include './users/fetch_data.php';
 session_start();
+if (isset($_SESSION['teacher_id'])) {
+    echo "Teacher ID is set: " . $_SESSION['teacher_id'];
+} else {
+    echo "Teacher ID is NOT set!";
+}
+
+include './users/fetch_data.php';
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
