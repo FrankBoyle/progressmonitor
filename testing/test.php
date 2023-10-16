@@ -39,15 +39,13 @@ $students = fetchStudentsByTeacher($teacherId);
 
     <?php if (!empty($students)): ?>
     <h2>Students:</h2>
-    <select id="metadataIdSelector">
-        <?php foreach ($students as $student): ?>
-            <?php
-            // Dynamically generate the link with metadata_id as a query parameter
-            $studentLink = 'view_student_data.php?student_id=' . $student['student_id'] . '&metadata_id=' . $defaultMetadataID;
-            ?>
-            <option value="<?= $studentLink ?>"><?= $student['name'] ?></option>
-        <?php endforeach; ?>
-    </select>
+    <?php foreach ($students as $student): ?>
+        <?php
+        // Dynamically generate the link with metadata_id as a query parameter
+        $studentLink = 'view_student_data.php?student_id=' . $student['student_id'] . '&metadata_id=' . $defaultMetadataID;
+        ?>
+        <a href="<?= $studentLink ?>"><?= $student['name'] ?></a><br>
+    <?php endforeach; ?>
 <?php else: ?>
     No students found for this teacher.
 <?php endif; ?>
