@@ -63,8 +63,8 @@ if (isset($_GET['metadata_id'])) {
     }
 }
 
-echo "schoolID: $schoolID<br>";
-echo "metadataID: $metadataID<br>";
+echo "schoolID: $schoolID";
+echo "metadataID: $metadataID";
 
 //Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
