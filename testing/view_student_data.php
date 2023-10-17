@@ -109,16 +109,14 @@ foreach ($performanceData as $record) {
 
 </table>
 
-
-
-
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
-    <?php foreach ($scoreNames as $key => $name): ?>
-        <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($name); ?></option>
+    <?php foreach ($displayedColumns as $columnName => $columnLabel): ?>
+        <?php if ($columnName !== "Date"): ?>
+            <option value="<?php echo $columnName; ?>"><?php echo htmlspecialchars($columnLabel); ?></option>
+        <?php endif; ?>
     <?php endforeach; ?>
 </select>
-
 
 <label>Enter Benchmark Value: </label>
 <input type="text" id="benchmarkValue">
