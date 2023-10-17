@@ -288,7 +288,7 @@ $('#metadataIdSelector').on('change', function () {
         type: 'GET',
         url: './users/fetch_data.php',
         data: { metadataId: selectedMetadataId }, // Pass the selected metadata_id
-        dataType: 'json',
+        dataType: 'html',
         success: function (response) {
             // Update table headers with new column names from the response.
             updateTableHeaders(response.columnHeaders);
