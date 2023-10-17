@@ -262,8 +262,8 @@ let columnHeaders = []; // Initialize as an empty array
 $(document).ready(function() {
 // Listen for changes in the metadata dropdown
     // Check if metadataID is set in the URL, and if so, load the data.
-    //var urlParams = new URLSearchParams(window.location.search);
-    //var metadataID = urlParams.get('metadata_id');
+    var urlParams = new URLSearchParams(window.location.search);
+    var metadataID = urlParams.get('metadata_id');
     
     if (metadataID) {
         // Make an AJAX request
