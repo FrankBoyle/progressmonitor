@@ -266,7 +266,7 @@ $(document).ready(function() {
     var metadataID = urlParams.get('metadata_id');
     if (metadataID) {
         // If you have a function to fetch data via AJAX, call it here
-        fetchDataBasedOnmetadataID(metadataID);
+        fetchPerformanceDataBymetadataID(metadataID);
     }
 // Update the change event for the metadata group selector
 // Update the change event for the metadata group selector
