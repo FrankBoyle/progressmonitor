@@ -261,7 +261,7 @@ let columnHeaders = []; // Initialize as an empty array
 
 $(document).ready(function () {
     // Set the default value of the metadata dropdown to "Behavior" and trigger the change event
-    $('#metadataIdSelector').val('Behavior').trigger('change');
+    $('#metadataIdSelector').val('<?php echo $defaultMetadataID; ?>').trigger('change');
 });
 
 // Update the change event for the metadata group selector
