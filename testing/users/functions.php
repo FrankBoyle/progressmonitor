@@ -119,7 +119,7 @@ function fetchColumnNamesByMetadataID($connection, $metadataID) {
     $columnNames = [];
     
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $columnNames[] = $row['column_name'];
+        $columnNames[] = $row['category_name'];
     }
     
     return $columnNames;
