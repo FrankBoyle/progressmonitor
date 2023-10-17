@@ -287,10 +287,9 @@ $('#metadataIdSelector').on('change', function () {
             }
         });
     }
-});
 
 
-$(document).ready(function () {
+
 
 // Modify the updateTableHeaders function to handle the new column names
 function updateTableHeaders(newColumnHeaders) {
