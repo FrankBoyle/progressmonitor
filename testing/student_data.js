@@ -259,11 +259,10 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 let columnHeaders = []; // Initialize as an empty array
 
-$(document).ready(function () {
-    // Set the default value of the metadata dropdown to "Behavior" and trigger the change event
-    $('#metadataIdSelector').val('<?php echo $defaultMetadataID; ?>').trigger('change');
-});
+$(document).ready(function() {
+// Listen for changes in the metadata dropdown
 
+// Update the change event for the metadata group selector
 // Update the change event for the metadata group selector
 $('#metadataIdSelector').on('change', function () {
     const selectedMetadataId = $(this).val();
@@ -287,6 +286,8 @@ $('#metadataIdSelector').on('change', function () {
             }
         });
     }
+});
+
 
 // Modify the updateTableHeaders function to handle the new column names
 function updateTableHeaders(newColumnHeaders) {
