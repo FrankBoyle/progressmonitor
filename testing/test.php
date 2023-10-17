@@ -13,7 +13,7 @@ $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
 // Define a default metadata ID (you can change this as needed)
-//$defaultmetadataID = 1;
+$defaultmetadataID = $metadataID;
 
 // Handle form submission for adding new student
 if (isset($_POST['add_new_student'])) {
