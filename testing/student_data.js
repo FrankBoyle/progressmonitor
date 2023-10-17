@@ -263,6 +263,7 @@ $(document).ready(function() {
 // Listen for changes in the metadata dropdown
 
 // Update the change event for the metadata group selector
+// Update the change event for the metadata group selector
 $('#metadataIdSelector').on('change', function () {
     const selectedMetadataId = $(this).val();
 
@@ -285,11 +286,6 @@ $('#metadataIdSelector').on('change', function () {
             }
         });
     }
-});
-
-// Trigger the change event on page load to load default headers
-$(document).ready(function () {
-    $('#metadataIdSelector').trigger('change');
 });
 
 
