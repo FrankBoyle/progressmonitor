@@ -112,14 +112,30 @@ function addNewStudent($connection, $studentName, $teacherId) {
 }
 
 // Function to fetch column names based on metadataId
-function fetchMetadataByMetadataID($connection, $metadataID) {
-    $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
+function fetchColumnNamesByMetadataID($connection, $metadataID) {
+    $stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataID]);
-
-    $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    return $metadata;
+    
+    $columnNames = [];
+    
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $columnNames[] = $row['category_name'];
+    }
+    
+    return $columnNames;
 }
 
+function fetchColumnNamesByMetadataID($connection, $metadataID) {
+    $stmt = $connection->prepare("SELECT column_name FROM MetadataColumns WHERE metadata_id = ?");
+    $stmt->execute([$metadataID]);
+    
+    $columnNames = [];
+    
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $columnNames[] = $row['column_name'];
+    }
+    
+    return $columnNames;
+}
 
 ?>
