@@ -94,7 +94,7 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         'score8' => $row['score8_name'],
         'score9' => $row['score9_name'],
         'score10' => $row['score10_name'],
-        'score_date' => 'Date', // You can customize this label
+        //'score_date' => 'Date', // You can customize this label
     ];
 } else {
     // Handle the case where no metadata entry is found for the specified SchoolID and metadata_id
