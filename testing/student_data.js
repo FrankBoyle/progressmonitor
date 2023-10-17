@@ -791,18 +791,23 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-        let table = $('table').DataTable({
-            "order": [[0, "asc"]],
-            "lengthChange": false,
-            //"searching": false,
-            "paging": false,
-            "info": false,
-            "columns": [
-                { "type": "date-us" },
-                null, null, null, null, null, null, null, null, null, null, null
-            ]
-            
-        });
+// Assuming you have an array of column headers in response.columnHeaders
+const columns = [
+    { "type": "date-us" },
+    ...response.columnHeaders.map(header => ({ title: header })),
+];
+
+const table = $('table').DataTable({
+    "order": [[0, "asc"]],
+    "lengthChange": false,
+    "paging": true,  // Enable pagination if needed
+    "searching": true,  // Enable searching if needed
+    "info": false,
+    "columns": columns
+});
+
+// Assuming you have an array of data rows in response.performanceData
+table.rows.add(response.performanceData).draw();
         //fetchMetadataCategories();
 
 
