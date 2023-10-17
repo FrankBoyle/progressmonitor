@@ -43,14 +43,10 @@ $defaultMetadataID = 1; // Default value in case of any issues
 
 // If 'metadata_id' is present, use it.
 if (isset($_GET['metadata_id'])) {
-    $metadataId = $_GET['metadata_id'];
+    $metadataID = $_GET['metadata_id'];
 } else {
-    // If 'metadata_id' is not required at this stage, you can comment out or remove the error message and 'exit' call.
-    // Instead, set a default value or adjust the script's behavior to work without this parameter.
-    // echo "Error: metadata_id parameter is missing in the URL.";
-    // exit(); // Comment out or remove this line.
-    // Optional: Set a default value if it makes sense for your script's logic.
-    // $metadataId = 'default_value'; 
+    echo "Error: 'metadata_id' is missing.";
+    exit(); // Stop the script because the metadata_id is crucial for the next steps.
 }
 
 echo "schoolID: $schoolID<br>";
