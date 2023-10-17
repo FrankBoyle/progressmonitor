@@ -41,16 +41,16 @@ $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 
-// If 'metadata_id' is present, use it.
+/* If 'metadata_id' is present, use it.
 if (isset($_GET['metadata_id'])) {
     $metadataID = $_GET['metadata_id'];
 } else {
     echo "Error: 'metadata_id' is missing.";
     exit(); // Stop the script because the metadata_id is crucial for the next steps.
 }
-
+*/
 echo "schoolID: $schoolID<br>";
-echo "metadataID: $metadataID<br>";
+//echo "metadataID: $metadataID<br>";
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
