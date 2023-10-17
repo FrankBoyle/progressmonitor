@@ -106,12 +106,12 @@ foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
     // You can add more logic here if needed
 }
-/*
+
 // Fetch metadata entries from the Metadata table for the specified SchoolID
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
 $stmt->execute([$schoolID]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
-*/
+
 ?>
