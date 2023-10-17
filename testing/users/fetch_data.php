@@ -1,7 +1,7 @@
 <?php
-session_start ();
-include ('db.php');
-include ('functions.php');
+session_start();
+include('db.php');
+include('functions.php');
 
 // Error Reporting
 ini_set('display_errors', 1);
@@ -29,10 +29,10 @@ if (isset($_GET['student_id'])) {
 }
 
 // You can create a function to fetch student IDs by SchoolID, e.g., fetchStudentIdsBySchool
-$studentIds = fetchStudentIdsBySchool($connection, $schoolID); 
+$studentIds = fetchStudentIdsBySchool($connection, $schoolID);
 
 // Similarly, you can create a function to fetch metadata IDs by SchoolID, e.g., fetchMetadataIdsBySchool
-$metadataIds = fetchMetadataIdsBySchool($connection, $schoolID); 
+$metadataIds = fetchMetadataIdsBySchool($connection, $schoolID);
 // Initialize empty arrays and variables
 
 $columnHeaders = [
@@ -77,7 +77,7 @@ if (isset($_GET['metadata_id'])) {
     }
 }
 
-//Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
+// Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
 $stmt->execute([$schoolID, $metadataID]);
 
@@ -102,25 +102,6 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     exit;
 }
 
-// Create an associative array representing the response data
-$responseData = array(
-    'schoolID' => $schoolID,
-    'metadataID' => $metadataID,
-    'columnHeaders' => array_values($displayedColumns),
-    'performanceData' => $performanceData // Replace with your actual data
-);
-
-// Send the combined response as a single JSON object
-header('Content-Type: application/json');
-echo json_encode($responseData);
-
-
-// Query to find the lowest metadata_id for the specified SchoolID
-$stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
-$stmt->execute([$schoolID]);
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-$defaultMetadataID = $row['min_metadata_id'] ?? 1;
-
 // Fetch performance data and score names based on the metadata
 $performanceData = fetchPerformanceData($connection, $studentId);
 $scoreNames = fetchScoreNames($connection, $schoolID);
@@ -137,5 +118,4 @@ $stmt->execute([$schoolID]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
-
 ?>
