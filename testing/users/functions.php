@@ -24,7 +24,7 @@ function fetchPerformanceDataBymetadataID($connection, $metadataID) {
 
     try {
         // Prepare the SQL query
-        $query = "SELECT * FROM YourTableName WHERE metadata_id = :metadataID";
+        $query = "SELECT * FROM Metadata WHERE metadata_id = :metadataID";
         $stmt = $connection->prepare($query);
 
         // Bind the metadata ID to the placeholder
