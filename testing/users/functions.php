@@ -111,7 +111,7 @@ function addNewStudent($connection, $studentName, $teacherId) {
     return "New student added successfully.";
 }
 
-// Function to fetch column names based on metadataId
+/* Function to fetch column names based on metadataId
 function fetchColumnNamesByMetadataID($connection, $metadataID) {
     $stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataID]);
@@ -124,4 +124,5 @@ function fetchColumnNamesByMetadataID($connection, $metadataID) {
     
     return $columnNames;
 }
+*/
 ?>
