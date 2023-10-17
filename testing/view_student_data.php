@@ -76,8 +76,8 @@ foreach ($performanceData as $record) {
         <th>Date</th>
         <!-- Dynamically generate table headers based on $displayedColumns -->
         <?php foreach ($displayedColumns as $columnName => $displayName): ?>
-            <?php if (strpos($columnName, 'ABLE') !== false): ?>
-                <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : $columnName; ?></th>
+            <?php if ($columnName !== "Date"): ?>
+                <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : $displayName; ?></th>
             <?php endif; ?>
         <?php endforeach; ?>
         <th>Action</th>
@@ -91,7 +91,7 @@ foreach ($performanceData as $record) {
             </td>
             <!-- Dynamically generate table cells for scores based on $displayedColumns -->
             <?php foreach ($displayedColumns as $columnName => $columnLabel): ?>
-                <?php if (strpos($columnName, 'ABLE') !== false): ?>
+                <?php if ($columnName !== "Date"): ?>
                     <td class="editable" data-field-name="<?php echo $columnName; ?>">
                         <?php echo isset($data[$columnName]) ? $data[$columnName] : ''; ?>
                     </td>
@@ -105,8 +105,8 @@ foreach ($performanceData as $record) {
         <td colspan="<?php echo count($displayedColumns) + 1; ?>">No data available.</td>
     </tr>
 <?php endif; ?>
-</table>
 
+</table>
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
