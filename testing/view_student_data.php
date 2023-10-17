@@ -83,8 +83,6 @@ foreach ($performanceData as $record) {
         <th>Action</th>
     </tr>
 </thead>
-
-
 <?php if (!empty($performanceData)): ?>
     <?php foreach ($performanceData as $data): ?>
         <tr data-performance-id="<?php echo $data['performance_id']; ?>">
@@ -107,14 +105,6 @@ foreach ($performanceData as $record) {
         <td colspan="<?php echo count($displayedColumns) + 1; ?>">No data available.</td>
     </tr>
 <?php endif; ?>
-<?php
-// Debugging: Output contents of $displayedColumns and $performanceData
-echo "Displayed Columns: ";
-print_r($displayedColumns);
-
-echo "Performance Data: ";
-print_r($performanceData);
-?>
 
 </table>
 
