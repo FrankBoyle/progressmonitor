@@ -93,7 +93,7 @@ foreach ($performanceData as $record) {
             <!-- Dynamically generate table cells for scores based on $displayedColumns -->
             <?php foreach ($displayedColumns as $columnName => $columnLabel): ?>
                 <?php if ($columnName !== "score_date"): ?>
-                    <td class="editable" data-field-name="<?php echo $columnName; ?>">
+                    <td class="editable" data-field-name="<?php echo $columnLabel; ?>">
                         <?php echo isset($data[$columnName]) ? $data[$columnName] : ''; ?>
                     </td>
                 <?php endif; ?>
@@ -108,6 +108,7 @@ foreach ($performanceData as $record) {
 <?php endif; ?>
 
 </table>
+
 
 
 <label>Select Score to Display: </label>
