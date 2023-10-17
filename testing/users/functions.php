@@ -45,6 +45,30 @@ function fetchPerformanceDataBymetadataID($connection, $metadataID) {
     return $performanceData;
 }
 
+function fetchDisplayedColumnsBymetadataID($connection, $metadataID) {
+    // The array to hold the data
+    $columns = [];
+
+    try {
+        // Prepare your query: SELECT * FROM ... WHERE metadata_id = :metadataId
+        $stmt = $connection->prepare("YOUR SQL QUERY HERE");
+
+        // Bind the metadata ID to the placeholder
+        $stmt->bindParam(':metadataID', $metadataID, PDO::PARAM_INT);
+
+        // Execute the query
+        $stmt->execute();
+
+        // Fetch all the matching rows
+        $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // Handle exception
+        echo 'Error: ' . $e->getMessage();
+    }
+
+    return $columns;
+}
+
 function fetchStudentIdsBySchool($connection, $schoolID) {
     // This array will hold the student IDs
     $studentIds = [];
