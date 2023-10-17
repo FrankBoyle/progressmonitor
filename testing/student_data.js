@@ -569,16 +569,16 @@ function getCurrentDate() {
                 if (datePickerActive) {
                     return;
                 }
-
+            
                 let newValue = input.val();
                 cell.html(newValue);
                 const performanceId = cell.closest('tr').data('performance-id');
-    
-                // Check if it's a new row. If so, just return and don't do any AJAX call. 
+            
+                // Check if it's a new row. If so, just return and don't do any AJAX call.
                 if (performanceId === 'new') {
                     return;
                 }
-
+            
                 if (cell.data('field-name') === 'score_date') {
                     const parts = newValue.split('/');
                     if (parts.length !== 3) {
@@ -592,13 +592,12 @@ function getCurrentDate() {
                 } else {
                     cell.html(newValue);
                 }
-
-                //const performanceId = cell.closest('tr').data('performance-id');
+            
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
-
+            
                 let postData = {
                     performance_id: performanceId,
                     field_name: fieldName,
@@ -606,7 +605,7 @@ function getCurrentDate() {
                     student_id: studentId,
                     score_date: weekStartDate
                 };
-
+            
                 if (performanceId === 'new') {
                     const row = $(this).closest('tr');
                     let scores = {};
@@ -616,7 +615,7 @@ function getCurrentDate() {
                     }
                     postData.scores = scores;
                 }
-
+            
                 $.ajax({
                     type: 'POST',
                     url: targetUrl,
@@ -630,7 +629,7 @@ function getCurrentDate() {
                                 newRow.attr('data-performance-id', response.performance_id);
                                 newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                             }
-                
+            
                             // New code for updating score8 starts here
                             if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
                                 const row = cell.closest('tr');
@@ -653,8 +652,8 @@ function getCurrentDate() {
                         console.error('AJAX Error:', error);
                     }
                 });
-                
             });
+            
 
             // Pressing Enter to save changes
             input.off('keypress').keypress(function(e) {
