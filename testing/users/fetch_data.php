@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once 'db.php';
 require_once 'functions.php';
 
@@ -91,22 +90,6 @@ $scoreNames = fetchScoreNames($connection, $schoolID);
 foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
     // You can add more logic here if needed
-}
-
-// Handling the data POST from the dropdown functionality
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
-    $schoolIDIndex = $_POST['SchoolIDIndex'];
-    $originalName = $_POST['ScoreColumn'];
-    $customName = $_POST['CustomName'];
-    $scoreGroup = $_POST['ScoreGroup'];
-
-    // Inserting into the SchoolScoreNames table
-    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
-    
-    // Respond with the ID of the inserted row
-    echo json_encode(['id' => $connection->lastInsertId()]);
-    exit;
 }
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID
