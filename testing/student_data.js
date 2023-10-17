@@ -664,7 +664,7 @@ function getCurrentDate() {
                 }
             });
         });
-    
+    }
 
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
