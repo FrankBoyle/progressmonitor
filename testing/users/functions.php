@@ -18,6 +18,33 @@ function fetchMetadataCategoriesFromDatabase($connection, $schoolID) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function fetchPerformanceDataBymetadataID($connection, $metadataID) {
+    // The array to hold the data
+    $performanceData = [];
+
+    try {
+        // Prepare the SQL query
+        $query = "SELECT * FROM YourTableName WHERE metadata_id = :metadataID";
+        $stmt = $connection->prepare($query);
+
+        // Bind the metadata ID to the placeholder
+        $stmt->bindParam(':metadataID', $metadataID, PDO::PARAM_INT);
+
+        // Execute the query
+        $stmt->execute();
+
+        // Fetch all the matching rows
+        $performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // If an error occurs, you might want to handle it here, for example, by logging it or displaying an error message
+        echo 'Error fetching data: ' . $e->getMessage();
+        // Alternatively, you could rethrow the exception or handle it in another appropriate way
+    }
+
+    // Return the fetched data (which could be an empty array if no records were found)
+    return $performanceData;
+}
+
 function fetchStudentIdsBySchool($connection, $schoolID) {
     // This array will hold the student IDs
     $studentIds = [];
