@@ -90,7 +90,7 @@ foreach ($performanceData as $record) {
                 <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ''; ?>
             </td>
             <!-- Dynamically generate table cells for scores based on $displayedColumns -->
-            <?php foreach ($displayedColumns as $columnName => $displayName): ?>
+            <?php foreach ($displayedColumns as $columnName => $columnLabel): ?>
                 <?php if ($columnName !== "Date"): ?>
                     <td class="editable" data-field-name="<?php echo $columnName; ?>">
                         <?php echo isset($data[$columnName]) ? $data[$columnName] : ''; ?>
@@ -105,8 +105,6 @@ foreach ($performanceData as $record) {
         <td colspan="<?php echo count($displayedColumns) + 1; ?>">No data available.</td>
     </tr>
 <?php endif; ?>
-
-
 </table>
 
 <label>Select Score to Display: </label>
