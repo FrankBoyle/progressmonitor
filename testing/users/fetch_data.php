@@ -41,12 +41,26 @@ $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 
-//If 'metadata_id' is present, use it.
+// Initialize $metadataID to null to check later if it was set
+$metadataID = null;
+
+// If 'metadata_id' is present, use it.
 if (isset($_GET['metadata_id'])) {
     $metadataID = $_GET['metadata_id'];
 } else {
-    echo "Error: 'metadata_id' is missing.";
-    exit(); // Stop the script because the metadata_id is crucial for the next steps.
+    // 'metadata_id' not provided, fetch the default (minimum) 'metadata_id' from the database.
+    $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
+    $stmt->execute([$schoolID]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row && $row['min_metadata_id'] !== null) {
+        // Minimum 'metadata_id' found, use it.
+        $metadataID = $row['min_metadata_id'];
+    } else {
+        // No metadata records for this school, handle as appropriate.
+        echo "Error: No metadata records found for the specified school.";
+        exit(); // Stop the script because the metadata_id is crucial for the next steps.
+    }
 }
 
 echo "schoolID: $schoolID<br>";
@@ -92,12 +106,12 @@ foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
     // You can add more logic here if needed
 }
-
+/*
 // Fetch metadata entries from the Metadata table for the specified SchoolID
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
 $stmt->execute([$schoolID]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
-
+*/
 ?>
