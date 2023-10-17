@@ -69,7 +69,6 @@ foreach ($performanceData as $record) {
 </select>
 
 
-
 <table border="1">
 <thead>
     <tr>
