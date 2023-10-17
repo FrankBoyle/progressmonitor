@@ -34,19 +34,16 @@ $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 
-// Check if 'metadata_id' is present in the URL parameters.
+// If 'metadata_id' is present, use it.
 if (isset($_GET['metadata_id'])) {
     $metadataId = $_GET['metadata_id'];
 } else {
-    // Handle the case where 'metadata_id' is not set.
-    echo "Error: metadata_id parameter is missing in the URL.";
-    exit(); // Or handle it appropriately.
-}
-
-// Optionally, you can add an additional check if 'metadata_id' should not just be present but also needs to satisfy some conditions (like being a positive integer)
-if (!is_numeric($metadataID) || $metadataID <= 0) {
-    echo "Error: Invalid 'metadata_id' parameter.";
-    exit; // Terminate if the value doesn't meet the criteria
+    // If 'metadata_id' is not required at this stage, you can comment out or remove the error message and 'exit' call.
+    // Instead, set a default value or adjust the script's behavior to work without this parameter.
+    // echo "Error: metadata_id parameter is missing in the URL.";
+    // exit(); // Comment out or remove this line.
+    // Optional: Set a default value if it makes sense for your script's logic.
+    // $metadataId = 'default_value'; 
 }
 
 $schoolID = fetchSchoolIdForStudent($connection, $studentId);
