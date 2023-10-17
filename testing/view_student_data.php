@@ -75,9 +75,9 @@ foreach ($performanceData as $record) {
     <tr>
         <th>Date</th>
         <!-- Dynamically generate table headers based on $displayedColumns -->
-        <?php foreach ($displayedColumns as $columnName => $columnLabel): ?>
+        <?php foreach ($displayedColumns as $columnName): ?>
             <?php if ($columnName !== "Date"): ?>
-                <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : $columnLabel; ?></th>
+                <th><?php echo isset($scoreNames[$columnName]) ? $scoreNames[$columnName] : $columnName; ?></th>
             <?php endif; ?>
         <?php endforeach; ?>
         <th>Action</th>
