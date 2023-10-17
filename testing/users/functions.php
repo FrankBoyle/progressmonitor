@@ -111,18 +111,15 @@ function addNewStudent($connection, $studentName, $teacherId) {
     return "New student added successfully.";
 }
 
-/* Function to fetch column names based on metadataId
-function fetchColumnNamesByMetadataID($connection, $metadataID) {
-    $stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ?");
+// Function to fetch column names based on metadataId
+function fetchMetadataByMetadataID($connection, $metadataID) {
+    $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataID]);
-    
-    $columnNames = [];
-    
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $columnNames[] = $row['category_name'];
-    }
-    
-    return $columnNames;
+
+    $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $metadata;
 }
-*/
+
+
 ?>
