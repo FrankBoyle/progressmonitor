@@ -828,7 +828,9 @@ $.ajax({
     },
     error: function(xhr, status, error) {
         console.error('AJAX Error:', error);
+        console.error('Response Text:', xhr.responseText);
     }
+    
 });
 
     });
