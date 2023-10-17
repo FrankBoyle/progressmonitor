@@ -18,57 +18,6 @@ function fetchMetadataCategoriesFromDatabase($connection, $schoolID) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function fetchPerformanceDataBymetadataID($connection, $metadataID) {
-    // The array to hold the data
-    $performanceData = [];
-
-    try {
-        // Prepare the SQL query
-        $query = "SELECT * FROM Metadata WHERE metadata_id = :metadataID";
-        $stmt = $connection->prepare($query);
-
-        // Bind the metadata ID to the placeholder
-        $stmt->bindParam(':metadataID', $metadataID, PDO::PARAM_INT);
-
-        // Execute the query
-        $stmt->execute();
-
-        // Fetch all the matching rows
-        $performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        // If an error occurs, you might want to handle it here, for example, by logging it or displaying an error message
-        echo 'Error fetching data: ' . $e->getMessage();
-        // Alternatively, you could rethrow the exception or handle it in another appropriate way
-    }
-
-    // Return the fetched data (which could be an empty array if no records were found)
-    return $performanceData;
-}
-
-function fetchDisplayedColumnsBymetadataID($connection, $metadataID) {
-    // The array to hold the data
-    $columns = [];
-
-    try {
-        // Prepare your query: SELECT * FROM ... WHERE metadata_id = :metadataId
-        $stmt = $connection->prepare("YOUR SQL QUERY HERE");
-
-        // Bind the metadata ID to the placeholder
-        $stmt->bindParam(':metadataID', $metadataID, PDO::PARAM_INT);
-
-        // Execute the query
-        $stmt->execute();
-
-        // Fetch all the matching rows
-        $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        // Handle exception
-        echo 'Error: ' . $e->getMessage();
-    }
-
-    return $columns;
-}
-
 function fetchStudentIdsBySchool($connection, $schoolID) {
     // This array will hold the student IDs
     $studentIds = [];
@@ -97,9 +46,9 @@ function fetchSchoolIdForStudent($connection, $studentId) {
     return $result ? $result['SchoolID'] : null;
 }
 
-function fetchmetadataIDsBySchool($connection, $schoolID) {
+function fetchMetadataIdsBySchool($connection, $schoolID) {
     // This array will hold the metadata IDs
-    $metadataIDs = [];
+    $metadataIds = [];
     try {
         // Prepare your query: select metadata IDs from your metadata table where the SchoolID matches
         $stmt = $connection->prepare("SELECT metadata_id FROM Metadata WHERE SchoolID = :schoolID");
@@ -107,13 +56,13 @@ function fetchmetadataIDsBySchool($connection, $schoolID) {
         $stmt->execute(['schoolID' => $schoolID]);
         // Fetch all the metadata IDs
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $metadataIDs[] = $row['metadata_id'];  // Adjust 'metadata_id' if your column name is different
+            $metadataIds[] = $row['metadata_id'];  // Adjust 'metadata_id' if your column name is different
         }
     } catch (PDOException $e) {
         // Handle errors as per your error handling strategy
         throw $e;
     }
-    return $metadataIDs;
+    return $metadataIds;
 }
 
 // Function to fetch score names for a school
@@ -162,8 +111,8 @@ function addNewStudent($connection, $studentName, $teacherId) {
     return "New student added successfully.";
 }
 
-// Function to fetch column names based on metadataID
-function fetchColumnNamesBymetadataID($connection, $metadataID) {
+// Function to fetch column names based on metadataId
+function fetchColumnNamesByMetadataID($connection, $metadataID) {
     $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataID]);
     

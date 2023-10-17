@@ -31,8 +31,8 @@ if (isset($_GET['student_id'])) {
 // You can create a function to fetch student IDs by SchoolID, e.g., fetchStudentIdsBySchool
 $studentIds = fetchStudentIdsBySchool($connection, $schoolID);
 
-// Similarly, you can create a function to fetch metadata IDs by SchoolID, e.g., fetchmetadataIDsBySchool
-$metadataIDs = fetchmetadataIDsBySchool($connection, $schoolID);
+// Similarly, you can create a function to fetch metadata IDs by SchoolID, e.g., fetchMetadataIdsBySchool
+$metadataIds = fetchMetadataIdsBySchool($connection, $schoolID);
 // Initialize empty arrays and variables
 
 $columnHeaders = [
@@ -53,18 +53,18 @@ $displayedColumns = [];
 $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
-$defaultmetadataID = 1; // Default value in case of any issues
+$defaultMetadataID = 1; // Default value in case of any issues
 
 // Initialize $metadataID to null to check later if it was set
 $metadataID = null;
 
-// Check if 'metadata_id' is provided in the URL
+// If 'metadata_id' is present, use it.
 if (isset($_GET['metadata_id'])) {
     $metadataID = $_GET['metadata_id'];
 } else {
-    // 'metadata_id' not provided, so we fetch the default (minimum) 'metadata_id' from the database.
+    // 'metadata_id' not provided, fetch the default (minimum) 'metadata_id' from the database.
     $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
-    $stmt->execute([$schoolID]);  // Ensure $schoolID is defined before this line
+    $stmt->execute([$schoolID]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row && $row['min_metadata_id'] !== null) {
@@ -73,27 +73,24 @@ if (isset($_GET['metadata_id'])) {
     } else {
         // No metadata records for this school, handle as appropriate.
         echo "Error: No metadata records found for the specified school.";
-        exit();  // Stop the script because the metadata_id is crucial for the next steps.
+        exit(); // Stop the script because the metadata_id is crucial for the next steps.
+    }
+}
+// Add code to fetch column names based on the selected metadata_id
+if (isset($_GET['metadataId'])) {
+    $metadataID = $_GET['metadataId'];
+
+    // Fetch column names based on $metadataID (You need to implement this function)
+    $columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
+
+    if ($columnNames !== false) {
+        // Return the column names as JSON
+        echo json_encode(['columnHeaders' => $columnNames]);
+        exit;
     }
 }
 
-// At this point, $metadataID is set, either from $_GET or the default from the database.
 
-// Now, fetch the column names based on the $metadataID.
-// Note: This assumes you have a function 'getColumnNamesByMetadataID' to fetch column names.
-$columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
-
-// After determining the $metadataID, we proceed to fetch the associated data.
-
-// Fetch column names based on $metadataID. You need to implement the function fetchColumnNamesBymetadataID.
-// It should return the column names related to the passed metadataID.
-$columnNames = fetchColumnNamesBymetadataID($connection, $metadataID);
-
-if ($columnNames === false) {
-    // Handle error when fetching column names (e.g., no column names found for the metadataID)
-    echo "Error: No column names found for the provided metadata_id.";
-    exit();
-}
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
@@ -128,19 +125,6 @@ $scoreNames = fetchScoreNames($connection, $schoolID);
 foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
     // You can add more logic here if needed
-}
-
-if (isset($_GET['metadata_id'])) {
-    $metadataID = $_GET['metadata_id'];
-    
-    // Fetch data based on the provided metadata_id
-    $data = fetchPerformanceDataBymetadataID($connection, $metadataID);
-
-    // Return the data as JSON
-    echo json_encode($data);
-} else {
-    // You can handle the error case here
-    echo json_encode(['error' => 'No metadata_id provided']);
 }
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID

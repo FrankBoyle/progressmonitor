@@ -61,23 +61,12 @@ foreach ($performanceData as $record) {
 <input type="text" id="startDateFilter">
 
 <label>Select Metadata Group to Display: </label>
-<select id="metadataIDSelector">
-    <?php 
-    // Ensure $metadataEntries is not null and is an array
-    if (isset($metadataEntries) && is_array($metadataEntries)) {
-        foreach ($metadataEntries as $entry) {
-            // Check if the expected keys exist in the $entry array
-            if (isset($entry['metadata_id']) && isset($entry['category_name'])) {
-                echo "<option value='" . htmlspecialchars($entry['metadata_id']) . "'>" . htmlspecialchars($entry['category_name']) . "</option>";
-            }
-        }
-    } else {
-        // Handle cases where $metadataEntries is null or not set
-        echo "<option value=''>No metadata available</option>";
-    }
-    ?>
+<select id="metadataIdSelector">
+    
+    <?php foreach ($metadataEntries as $entry): ?>
+        <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
+    <?php endforeach; ?>
 </select>
-
 
 
 <table border="1">
