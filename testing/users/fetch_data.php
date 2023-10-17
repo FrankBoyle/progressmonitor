@@ -81,7 +81,7 @@ if (isset($_GET['metadata_id'])) {
 
 // Now, fetch the column names based on the $metadataID.
 // Note: This assumes you have a function 'getColumnNamesByMetadataID' to fetch column names.
-$columnNames = getColumnNamesByMetadataID($connection, $metadataID);
+$columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
 
 if ($columnNames !== false) {
     // If column names are fetched successfully, return them as JSON.
