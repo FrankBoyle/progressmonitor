@@ -798,24 +798,37 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-// Assuming you have an array of column headers in response.columnHeaders
-const columns = [
-    { "type": "date-us" },
-    ...response.columnHeaders.map(header => ({ title: header })),
-];
+// Declare the columns variable before the AJAX call
+let columns;
 
-const table = $('table').DataTable({
-    "order": [[0, "asc"]],
-    "lengthChange": false,
-    "paging": true,  // Enable pagination if needed
-    "searching": true,  // Enable searching if needed
-    "info": false,
-    "columns": columns
+// Perform an AJAX request to retrieve the data
+$.ajax({
+    type: 'GET', // Adjust the type as needed
+    url: './users/fetch_data.php',
+    dataType: 'json', // Adjust the data type as needed
+    success: function(response) {
+        // Define the columns based on the response data
+        columns = [
+            { "type": "date-us" },
+            ...response.columnHeaders.map(header => ({ title: header })),
+        ];
+
+        // Create the DataTable with the defined columns
+        const table = $('table').DataTable({
+            "order": [[0, "asc"]],
+            "lengthChange": false,
+            "paging": true,
+            "searching": true,
+            "info": false,
+            "columns": columns
+        });
+
+        // Assuming you have an array of data rows in response.performanceData
+        table.rows.add(response.performanceData).draw();
+    },
+    error: function(xhr, status, error) {
+        console.error('AJAX Error:', error);
+    }
 });
-
-// Assuming you have an array of data rows in response.performanceData
-table.rows.add(response.performanceData).draw();
-        //fetchMetadataCategories();
-
 
     });
