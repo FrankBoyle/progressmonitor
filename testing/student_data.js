@@ -261,7 +261,13 @@ let columnHeaders = []; // Initialize as an empty array
 
 $(document).ready(function() {
 // Listen for changes in the metadata dropdown
-
+    // Check if metadataId is set in the URL, and if so, load the data.
+    var urlParams = new URLSearchParams(window.location.search);
+    var metadataId = urlParams.get('metadata_id');
+    if (metadataId) {
+        // If you have a function to fetch data via AJAX, call it here
+        fetchDataBasedOnMetadataId(metadataId);
+    }
 // Update the change event for the metadata group selector
 // Update the change event for the metadata group selector
 $('#metadataIdSelector').on('change', function () {
