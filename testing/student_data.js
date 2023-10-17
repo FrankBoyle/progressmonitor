@@ -268,7 +268,7 @@ $(document).ready(function() {
     if (metadataID) {
         // Make an AJAX request
         $.ajax({
-            url: 'get_performance_data.php', // the path to your PHP script
+            url: 'fetch_data.php', // the path to your PHP script
             type: 'GET',
             data: { metadata_id: metadataID },
             dataType: 'json',
