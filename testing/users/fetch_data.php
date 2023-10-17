@@ -90,9 +90,7 @@ if (isset($_GET['metadataId'])) {
     }
 }
 
-// Handle errors or default response
-echo json_encode(['columnHeaders' => []]); // You can customize the error response
-exit;
+
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
