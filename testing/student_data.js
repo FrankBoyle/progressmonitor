@@ -808,29 +808,28 @@ $.ajax({
     dataType: 'json', // Adjust the data type as needed
     success: function(response) {
         // Define the columns based on the response data
-        columns = [
-            { "type": "date-us" },
-            ...response.columnHeaders.map(header => ({ title: header })),
-        ];
-
-        // Create the DataTable with the defined columns
-        const table = $('table').DataTable({
-            "order": [[0, "asc"]],
-            "lengthChange": false,
-            "paging": true,
-            "searching": true,
-            "info": false,
-            "columns": columns
-        });
-
-        // Assuming you have an array of data rows in response.performanceData
-        table.rows.add(response.performanceData).draw();
-    },
-    error: function(xhr, status, error) {
-        console.error('AJAX Error:', error);
-        console.error('Response Text:', xhr.responseText);
+        if (response && Array.isArray(response.columnHeaders)) {
+            const columns = [
+                { "type": "date-us" },
+                ...response.columnHeaders.map(header => ({ title: header })),
+            ];
+        
+            // Now you can use the 'columns' array as intended
+            const table = $('table').DataTable({
+                "order": [[0, "asc"]],
+                "lengthChange": false,
+                "paging": true,
+                "searching": true,
+                "info": false,
+                "columns": columns
+            });
+        
+            // Assuming you have an array of data rows in response.performanceData
+            table.rows.add(response.performanceData).draw();
+        } else {
+            console.error("Invalid or missing 'response.columnHeaders'");
+        }
     }
-    
 });
 
     });
