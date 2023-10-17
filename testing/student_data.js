@@ -270,51 +270,50 @@ function updateTableHeaders() {
     });
 }
 // Handle metadata group selection change
-$('#metadataIdSelector').on('change', function() {
+
+$('#metadataIdSelector').on('change', function () {
     var selectedMetadataId = $(this).val();
-    var studentId = $('#currentStudentId').val(); // Get student_id from somewhere
 
-    var newUrl = 'view_student_data.php?student_id=' + studentId + '&metadata_id=' + selectedMetadataId;
-    window.location.href = newUrl; // Redirect to the new URL
-    // Make an AJAX request to fetch data based on selected values
+    // Make an AJAX request to fetch column names based on the selected metadata group.
     $.ajax({
-        url: './users/fetch_data.php',
         type: 'GET',
-        data: {
-            action: 'fetchPerformanceData',
-            student_id: studentId,
-            metadata_id: selectedMetadataId // Pass the selected metadata_id
-        },
+        url: './users/fetch_data.php', 
+        data: { metadataId: selectedMetadataId },
         dataType: 'json',
-        success: function(response) {
-            if (response) {
-                // Update the table with the new data
-                var tableBody = $('table tbody');
-                tableBody.empty();
-
-                $.each(response.performanceData, function(index, item) {
-                    var row = '<tr>';
-                    row += '<td class="editable" data-field-name="score_date">' + (item.score_date ? item.score_date : '') + '</td>';
-
-                    // Dynamically generate table cells for scores based on columnHeaders data
-                    $.each(response.columnHeaders, function(headerKey, headerValue) {
-                        row += '<td class="editable" data-field-name="' + headerKey + '">' + (item[headerKey] ? item[headerKey] : '') + '</td>';
-                    });
-
-                    row += '<td><button class="deleteRow" data-performance-id="' + item.performance_id + '">Delete</button></td>';
-                    row += '</tr>';
-
-                    tableBody.append(row);
-                });
-            }
+        success: function (response) {
+            // Update table headers with new column names from the response.
+            updateTableHeaders(response.columnHeaders);
         },
-        error: function(xhr, status, error) {
-            // Handle errors if any
-            console.error('Error:', error);
-            console.log('Response:', xhr.responseText); // Log the response text for debugging
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
         }
     });
 });
+
+function updateTableHeaders(newColumnHeaders) {
+    var table = $('table'); // Adjust this selector based on your HTML structure.
+
+    // Remove existing table headers.
+    table.find('thead').remove();
+
+    // Generate new table headers based on newColumnHeaders.
+    var thead = $('<thead>');
+    var headerRow = $('<tr>');
+
+    // Always include the "Date" column.
+    headerRow.append($('<th>Date</th>'));
+
+    // Add new columns based on newColumnHeaders.
+    $.each(newColumnHeaders, function (index, columnName) {
+        headerRow.append($('<th>' + columnName + '</th>'));
+    });
+
+    // Add the "Action" column.
+    headerRow.append($('<th>Action</th>'));
+
+    thead.append(headerRow);
+    table.append(thead);
+}
 
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
