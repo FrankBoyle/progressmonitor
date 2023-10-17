@@ -54,28 +54,30 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
-
-// Initialize $metadataID to null to check later if it was set
 $metadataID = null;
 
-// If 'metadata_id' is present, use it.
-if (isset($_GET['metadata_id'])) {
-    $metadataID = $_GET['metadata_id'];
-} else {
-    // 'metadata_id' not provided, fetch the default (minimum) 'metadata_id' from the database.
+// Initialize $metadataID to null to check later if it was set
+
+try {
     $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
     $stmt->execute([$schoolID]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row && $row['min_metadata_id'] !== null) {
-        // Minimum 'metadata_id' found, use it.
         $metadataID = $row['min_metadata_id'];
     } else {
-        // No metadata records for this school, handle as appropriate.
-        echo "Error: No metadata records found for the specified school.";
-        exit(); // Stop the script because the metadata_id is crucial for the next steps.
+        throw new Exception("No metadata records found for the specified school.");
     }
+} catch (PDOException $e) {
+    // Catch and handle any PDO-specific exceptions
+    echo "Database error: " . $e->getMessage();
+    exit();
+} catch (Exception $e) {
+    // Catch and handle general exceptions
+    echo "Error: " . $e->getMessage();
+    exit();
 }
+
 // Add code to fetch column names based on the selected metadata_id
 if (isset($_GET['metadataId'])) {
     $metadataID = $_GET['metadataId'];
