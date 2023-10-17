@@ -84,6 +84,7 @@ foreach ($performanceData as $record) {
     </tr>
 </thead>
 
+
 <?php if (!empty($performanceData)): ?>
     <?php foreach ($performanceData as $data): ?>
         <tr data-performance-id="<?php echo $data['performance_id']; ?>">
