@@ -52,7 +52,7 @@ if (isset($_GET['metadata_id'])) {
 echo "schoolID: $schoolID<br>";
 //echo "metadataID: $metadataID<br>";
 
-// Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
+/* Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
 $stmt->execute([$schoolID, $metadataID]);
 
@@ -76,7 +76,7 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     echo "Metadata entry not found.";
     exit;
 }
-
+*/
 // Query to find the lowest metadata_id for the specified SchoolID
 $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
 $stmt->execute([$schoolID]);
