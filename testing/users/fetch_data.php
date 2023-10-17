@@ -58,13 +58,13 @@ $defaultMetadataID = 1; // Default value in case of any issues
 // Initialize $metadataID to null to check later if it was set
 $metadataID = null;
 
-// If 'metadata_id' is present, use it.
+// Check if 'metadata_id' is provided in the URL
 if (isset($_GET['metadata_id'])) {
     $metadataID = $_GET['metadata_id'];
 } else {
-    // 'metadata_id' not provided, fetch the default (minimum) 'metadata_id' from the database.
+    // 'metadata_id' not provided, so we fetch the default (minimum) 'metadata_id' from the database.
     $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
-    $stmt->execute([$schoolID]);
+    $stmt->execute([$schoolID]);  // Ensure $schoolID is defined before this line
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row && $row['min_metadata_id'] !== null) {
@@ -73,21 +73,20 @@ if (isset($_GET['metadata_id'])) {
     } else {
         // No metadata records for this school, handle as appropriate.
         echo "Error: No metadata records found for the specified school.";
-        exit(); // Stop the script because the metadata_id is crucial for the next steps.
+        exit();  // Stop the script because the metadata_id is crucial for the next steps.
     }
 }
-// Add code to fetch column names based on the selected metadata_id
-if (isset($_GET['metadataId'])) {
-    $metadataID = $_GET['metadataId'];
 
-    // Fetch column names based on $metadataID (You need to implement this function)
-    $columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
+// After determining the $metadataID, we proceed to fetch the associated data.
 
-    if ($columnNames !== false) {
-        // Return the column names as JSON
-        echo json_encode(['columnHeaders' => $columnNames]);
-        exit;
-    }
+// Fetch column names based on $metadataID. You need to implement the function fetchColumnNamesByMetadataID.
+// It should return the column names related to the passed metadataID.
+$columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
+
+if ($columnNames === false) {
+    // Handle error when fetching column names (e.g., no column names found for the metadataID)
+    echo "Error: No column names found for the provided metadata_id.";
+    exit();
 }
 
 
