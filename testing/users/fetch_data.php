@@ -77,6 +77,21 @@ if (isset($_GET['metadata_id'])) {
     }
 }
 
+// At this point, $metadataID is set, either from $_GET or the default from the database.
+
+// Now, fetch the column names based on the $metadataID.
+// Note: This assumes you have a function 'getColumnNamesByMetadataID' to fetch column names.
+$columnNames = getColumnNamesByMetadataID($connection, $metadataID);
+
+if ($columnNames !== false) {
+    // If column names are fetched successfully, return them as JSON.
+    header('Content-Type: application/json');
+    echo json_encode(['columnHeaders' => $columnNames]);
+} else {
+    // Handle the error appropriately if column names couldn't be fetched.
+    echo "Error: Unable to fetch column names.";
+}
+
 // After determining the $metadataID, we proceed to fetch the associated data.
 
 // Fetch column names based on $metadataID. You need to implement the function fetchColumnNamesBymetadataID.
