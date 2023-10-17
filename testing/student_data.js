@@ -263,24 +263,31 @@ $(document).ready(function() {
 // Listen for changes in the metadata dropdown
 
 // Update the change event for the metadata group selector
+// Update the change event for the metadata group selector
 $('#metadataIdSelector').on('change', function () {
-    var selectedMetadataId = $(this).val();
+    const selectedMetadataId = $(this).val();
 
-    // Make an AJAX request to fetch column names based on the selected metadata group.
-    $.ajax({
-        type: 'GET',
-        url: './users/fetch_data.php',
-        data: { metadataId: selectedMetadataId }, // Pass the selected metadata_id
-        dataType: 'json',
-        success: function (response) {
-            // Update table headers with new column names from the response.
-            updateTableHeaders(response.columnHeaders);
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    });
+    if (selectedMetadataId === '0') {
+        // Load default headers for "Select Metadata Group" option
+        loadDefaultHeaders();
+    } else {
+        // Make an AJAX request to fetch column names based on the selected metadata group
+        $.ajax({
+            type: 'GET',
+            url: './users/fetch_data.php',
+            data: { metadataId: selectedMetadataId },
+            dataType: 'json',
+            success: function (response) {
+                // Update table headers with new column names from the response
+                updateTableHeaders(response.columnHeaders);
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', error);
+            }
+        });
+    }
 });
+
 
 // Modify the updateTableHeaders function to handle the new column names
 function updateTableHeaders(newColumnHeaders) {
