@@ -261,19 +261,19 @@ let columnHeaders = []; // Initialize as an empty array
 
 $(document).ready(function() {
 // Listen for changes in the metadata dropdown
-    // Check if metadataId is set in the URL, and if so, load the data.
+    // Check if metadataID is set in the URL, and if so, load the data.
     var urlParams = new URLSearchParams(window.location.search);
-    var metadataId = urlParams.get('metadata_id');
-    if (metadataId) {
+    var metadataID = urlParams.get('metadata_id');
+    if (metadataID) {
         // If you have a function to fetch data via AJAX, call it here
-        fetchDataBasedOnMetadataId(metadataId);
+        fetchDataBasedOnmetadataID(metadataID);
     }
 // Update the change event for the metadata group selector
 // Update the change event for the metadata group selector
-$('#metadataIdSelector').on('change', function () {
-    const selectedMetadataId = $(this).val();
+$('#metadataIDSelector').on('change', function () {
+    const selectedmetadataID = $(this).val();
 
-    if (selectedMetadataId === '0') {
+    if (selectedmetadataID === '0') {
         // Load default headers for "Select Metadata Group" option
         loadDefaultHeaders();
     } else {
@@ -281,7 +281,7 @@ $('#metadataIdSelector').on('change', function () {
         $.ajax({
             type: 'GET',
             url: './users/fetch_data.php',
-            data: { metadataId: selectedMetadataId },
+            data: { metadataID: selectedmetadataID },
             dataType: 'json',
             success: function (response) {
                 // Update table headers with new column names from the response
@@ -327,7 +327,7 @@ function loadDefaultHeaders() {
     $.ajax({
         type: 'GET',
         url: './users/fetch_data.php',
-        data: { metadataId: 0 }, // Assuming 0 represents the default option
+        data: { metadataID: 0 }, // Assuming 0 represents the default option
         dataType: 'json',
         success: function (response) {
             // Update table headers with the fetched column names
@@ -341,7 +341,7 @@ function loadDefaultHeaders() {
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
     var studentId = $('#currentStudentId').val();
-    var selectedMetadataId = $('#metadataIdSelector').val(); // Get the selected metadata_id
+    var selectedmetadataID = $('#metadataIDSelector').val(); // Get the selected metadata_id
 
     $.ajax({
         url: './users/fetch_data.php',
@@ -349,15 +349,15 @@ function fetchMetadataCategories() {
         data: { 
             action: 'fetchMetadataCategories',
             student_id: studentId,
-            metadata_id: selectedMetadataId, // Pass the selected metadata_id
+            metadata_id: selectedmetadataID, // Pass the selected metadata_id
         },
         dataType: 'json',
         success: function (response) {
             if (response) {
                 console.log(response);
-                $('#metadataIdSelector').empty();
+                $('#metadataIDSelector').empty();
                 $.each(response, function (index, item) {
-                    $('#metadataIdSelector').append('<option value="' + item.metadata_id + '">' + item.category_name + '</option>');
+                    $('#metadataIDSelector').append('<option value="' + item.metadata_id + '">' + item.category_name + '</option>');
                 });
             }
         },
@@ -368,14 +368,14 @@ function fetchMetadataCategories() {
 updateTableHeaders();
 fetchMetadata()
 
-function fetchMetadata(metadataId) {
+function fetchMetadata(metadataID) {
     var studentId = $('#currentStudentId').val();
     $.ajax({
         url: './users/fetch_data.php',
         type: 'GET',
         data: {
             action: 'fetchMetadata',
-            metadata_id: metadataId, // Include metadataId as a query parameter
+            metadata_id: metadataID, // Include metadataID as a query parameter
             student_id: studentId
         },
         dataType: 'json',

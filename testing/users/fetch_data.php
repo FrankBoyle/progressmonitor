@@ -31,8 +31,8 @@ if (isset($_GET['student_id'])) {
 // You can create a function to fetch student IDs by SchoolID, e.g., fetchStudentIdsBySchool
 $studentIds = fetchStudentIdsBySchool($connection, $schoolID);
 
-// Similarly, you can create a function to fetch metadata IDs by SchoolID, e.g., fetchMetadataIdsBySchool
-$metadataIds = fetchMetadataIdsBySchool($connection, $schoolID);
+// Similarly, you can create a function to fetch metadata IDs by SchoolID, e.g., fetchmetadataIDsBySchool
+$metadataIDs = fetchmetadataIDsBySchool($connection, $schoolID);
 // Initialize empty arrays and variables
 
 $columnHeaders = [
@@ -53,7 +53,7 @@ $displayedColumns = [];
 $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
-$defaultMetadataID = 1; // Default value in case of any issues
+$defaultmetadataID = 1; // Default value in case of any issues
 
 // Initialize $metadataID to null to check later if it was set
 $metadataID = null;
@@ -79,9 +79,9 @@ if (isset($_GET['metadata_id'])) {
 
 // After determining the $metadataID, we proceed to fetch the associated data.
 
-// Fetch column names based on $metadataID. You need to implement the function fetchColumnNamesByMetadataID.
+// Fetch column names based on $metadataID. You need to implement the function fetchColumnNamesBymetadataID.
 // It should return the column names related to the passed metadataID.
-$columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
+$columnNames = fetchColumnNamesBymetadataID($connection, $metadataID);
 
 if ($columnNames === false) {
     // Handle error when fetching column names (e.g., no column names found for the metadataID)
@@ -116,8 +116,8 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 if ($metadataID !== null) {
     // Fetch data specific to this metadata_id
-    $performanceData = fetchPerformanceDataByMetadataId($connection, $metadataID);
-    $displayedColumns = fetchDisplayedColumnsByMetadataId($connection, $metadataID); // if you have such a function
+    $performanceData = fetchPerformanceDataBymetadataID($connection, $metadataID);
+    $displayedColumns = fetchDisplayedColumnsBymetadataID($connection, $metadataID); // if you have such a function
     // other necessary data fetching...
 }
 

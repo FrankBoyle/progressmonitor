@@ -14,7 +14,7 @@ $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
 // Define a default metadata ID (you can change this as needed)
-$defaultMetadataID = 1;
+$defaultmetadataID = 1;
 
 // Handle form submission for adding new student
 if (isset($_POST['add_new_student'])) {
@@ -46,7 +46,7 @@ $students = fetchStudentsByTeacher($connection, $teacherId);
     <?php foreach ($students as $student): ?>
         <?php
         // Dynamically generate the link with metadata_id as a query parameter
-        $studentLink = 'view_student_data.php?student_id=' . $student['student_id'] . '&metadata_id=' . $defaultMetadataID;
+        $studentLink = 'view_student_data.php?student_id=' . $student['student_id'] . '&metadata_id=' . $defaultmetadataID;
         ?>
         <a href="<?= $studentLink ?>"><?= $student['name'] ?></a><br>
     <?php endforeach; ?>
@@ -56,7 +56,7 @@ $students = fetchStudentsByTeacher($connection, $teacherId);
 
 <script>
     // JavaScript to handle changing the link when the user selects a different metadata_id
-    $('#metadataIdSelector').on('change', function () {
+    $('#metadataIDSelector').on('change', function () {
         var selectedLink = $(this).val();
         window.location.href = selectedLink; // Redirect to the selected link
     });

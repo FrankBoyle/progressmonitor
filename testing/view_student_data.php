@@ -61,7 +61,7 @@ foreach ($performanceData as $record) {
 <input type="text" id="startDateFilter">
 
 <label>Select Metadata Group to Display: </label>
-<select id="metadataIdSelector">
+<select id="metadataIDSelector">
     
     <?php foreach ($metadataEntries as $entry): ?>
         <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
