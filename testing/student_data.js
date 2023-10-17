@@ -271,14 +271,15 @@ function updateTableHeaders() {
 }
 // Handle metadata group selection change
 
+// Update the change event for the metadata group selector
 $('#metadataIdSelector').on('change', function () {
     var selectedMetadataId = $(this).val();
 
     // Make an AJAX request to fetch column names based on the selected metadata group.
     $.ajax({
         type: 'GET',
-        url: './users/fetch_data.php', 
-        data: { metadataId: selectedMetadataId },
+        url: './users/fetch_data.php',
+        data: { metadataId: selectedMetadataId }, // Pass the selected metadata_id
         dataType: 'json',
         success: function (response) {
             // Update table headers with new column names from the response.
@@ -290,6 +291,7 @@ $('#metadataIdSelector').on('change', function () {
     });
 });
 
+// Modify the updateTableHeaders function to handle the new column names
 function updateTableHeaders(newColumnHeaders) {
     var table = $('table'); // Adjust this selector based on your HTML structure.
 
@@ -314,6 +316,7 @@ function updateTableHeaders(newColumnHeaders) {
     thead.append(headerRow);
     table.append(thead);
 }
+
 
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {

@@ -76,6 +76,23 @@ if (isset($_GET['metadata_id'])) {
         exit(); // Stop the script because the metadata_id is crucial for the next steps.
     }
 }
+// Add code to fetch column names based on the selected metadata_id
+if (isset($_GET['metadataId'])) {
+    $metadataID = $_GET['metadataId'];
+
+    // Fetch column names based on $metadataID (You need to implement this function)
+    $columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
+
+    if ($columnNames !== false) {
+        // Return the column names as JSON
+        echo json_encode(['columnHeaders' => $columnNames]);
+        exit;
+    }
+}
+
+// Handle errors or default response
+echo json_encode(['columnHeaders' => []]); // You can customize the error response
+exit;
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
