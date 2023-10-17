@@ -14,7 +14,7 @@ $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
 // Define a default metadata ID (you can change this as needed)
-$defaultmetadataID = 1;
+//$defaultmetadataID = 1;
 
 // Handle form submission for adding new student
 if (isset($_POST['add_new_student'])) {
@@ -54,13 +54,6 @@ $students = fetchStudentsByTeacher($connection, $teacherId);
     No students found for this teacher.
 <?php endif; ?>
 
-<script>
-    // JavaScript to handle changing the link when the user selects a different metadata_id
-    $('#metadataIDSelector').on('change', function () {
-        var selectedLink = $(this).val();
-        window.location.href = selectedLink; // Redirect to the selected link
-    });
-</script>
 </body>
 </html>
 
