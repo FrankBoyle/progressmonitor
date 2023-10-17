@@ -1,7 +1,7 @@
 <?php
 session_start ();
-require_once 'db.php';
-require_once 'functions.php';
+include ('db.php');
+include ('functions.php');
 
 // Error Reporting
 ini_set('display_errors', 1);
