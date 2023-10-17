@@ -557,7 +557,7 @@ function getCurrentDate() {
     }
     datePickerActive = false;
 }
-
+                
                 });
                 cell.html(input);
                 input.focus();
@@ -565,6 +565,8 @@ function getCurrentDate() {
                 cell.html(input);
                 input.focus();
             }
+        });
+    }
 
             input.blur(function() {
                 if (datePickerActive) {
@@ -817,4 +819,5 @@ table.rows.add(response.performanceData).draw();
         //fetchMetadataCategories();
 
 
+});
 });
