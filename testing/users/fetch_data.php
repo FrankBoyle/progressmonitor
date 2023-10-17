@@ -84,8 +84,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 $defaultMetadataID = $row['min_metadata_id'] ?? 1;
 
 // Fetch performance data and score names based on the metadata
-$performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($schoolID);
+$performanceData = fetchPerformanceData($connection, $studentId);
+$scoreNames = fetchScoreNames($connection, $schoolID);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
