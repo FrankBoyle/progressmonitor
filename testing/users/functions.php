@@ -113,29 +113,26 @@ function addNewStudent($connection, $studentName, $teacherId) {
 
 // Function to fetch column names based on metadataId
 function fetchColumnNamesByMetadataID($connection, $metadataID) {
-    $stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ?");
+    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataID]);
     
-    $columnNames = [];
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $columnNames[] = $row['category_name'];
-    }
+    $columnNames = [
+        'score1' => $row['score1_name'],
+        'score2' => $row['score2_name'],
+        'score3' => $row['score3_name'],
+        'score4' => $row['score4_name'],
+        'score5' => $row['score5_name'],
+        'score6' => $row['score6_name'],
+        'score7' => $row['score7_name'],
+        'score8' => $row['score8_name'],
+        'score9' => $row['score9_name'],
+        'score10' => $row['score10_name'],
+    ];
     
     return $columnNames;
 }
 
-function fetchColumnNamesByMetadataID($connection, $metadataID) {
-    $stmt = $connection->prepare("SELECT column_name FROM MetadataColumns WHERE metadata_id = ?");
-    $stmt->execute([$metadataID]);
-    
-    $columnNames = [];
-    
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $columnNames[] = $row['column_name'];
-    }
-    
-    return $columnNames;
-}
 
 ?>
