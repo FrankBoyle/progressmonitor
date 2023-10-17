@@ -130,6 +130,19 @@ foreach ($performanceData as $record) {
     // You can add more logic here if needed
 }
 
+if (isset($_GET['metadata_id'])) {
+    $metadataID = $_GET['metadata_id'];
+    
+    // Fetch data based on the provided metadata_id
+    $data = fetchPerformanceDataBymetadataID($connection, $metadataID);
+
+    // Return the data as JSON
+    echo json_encode($data);
+} else {
+    // You can handle the error case here
+    echo json_encode(['error' => 'No metadata_id provided']);
+}
+
 // Fetch metadata entries from the Metadata table for the specified SchoolID
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
 $stmt->execute([$schoolID]);

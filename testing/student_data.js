@@ -264,10 +264,26 @@ $(document).ready(function() {
     // Check if metadataID is set in the URL, and if so, load the data.
     var urlParams = new URLSearchParams(window.location.search);
     var metadataID = urlParams.get('metadata_id');
+    
     if (metadataID) {
-        // If you have a function to fetch data via AJAX, call it here
-        fetchPerformanceDataBymetadataID($connection, $metadataID);
-        }
+        // Make an AJAX request
+        $.ajax({
+            url: 'get_performance_data.php', // the path to your PHP script
+            type: 'GET',
+            data: { metadata_id: metadataID },
+            dataType: 'json',
+            success: function(data) {
+                // This function is called if your AJAX request succeeds
+                console.log(data);  // 'data' contains whatever your PHP script echoed
+                
+                // Here you can handle your data, update the DOM, etc.
+            },
+            error: function(request, textStatus, errorThrown) {
+                // Called if there's an error with the AJAX request
+                console.error('AJAX Error: ' + textStatus);
+            }
+        });
+    }
 // Update the change event for the metadata group selector
 // Update the change event for the metadata group selector
 $('#metadataIDSelector').on('change', function () {
