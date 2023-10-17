@@ -665,6 +665,7 @@ function getCurrentDate() {
                     input.blur();
                 }
             });
+        });
     
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
@@ -819,5 +820,5 @@ table.rows.add(response.performanceData).draw();
         //fetchMetadataCategories();
 
 
-});
+
 });
