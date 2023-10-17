@@ -1,5 +1,7 @@
 <?php
 // functions.php
+require_once 'db.php';
+require_once 'fetch_data.php';
 // Function to fetch performance data for a student
 function fetchPerformanceData($connection, $studentId) {
     // No need for 'global $connection;' because it's now a parameter
