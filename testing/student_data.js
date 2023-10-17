@@ -621,32 +621,39 @@ function getCurrentDate() {
                     type: 'POST',
                     url: targetUrl,
                     data: postData,
+                    dataType: 'json', // Ensure the response is treated as JSON
                     success: function(response) {
-                        if (performanceId === 'new') {
-                            const newRow = $('tr[data-performance-id="new"]');
-                            newRow.attr('data-performance-id', response.performance_id);
-                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
-                        }
-    
-    /* New code for updating score8 starts here
-                        if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
-                            const row = cell.closest('tr');
-                            const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
-                            const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
-                            const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
-                            const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
-                            const average = (score1 + score2 + score3 + score4) / 4;
-                            row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
-                            // Update the score8 value in the database
-                            updateScoreInDatabase(row, 'score8', average.toFixed(2));
-                            
+                        // Check if the response contains 'success' property
+                        if (response && response.success) {
+                            if (performanceId === 'new') {
+                                const newRow = $('tr[data-performance-id="new"]');
+                                newRow.attr('data-performance-id', response.performance_id);
+                                newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+                            }
+                
+                            // New code for updating score8 starts here
+                            if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
+                                const row = cell.closest('tr');
+                                const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
+                                const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
+                                const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
+                                const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
+                                const average = (score1 + score2 + score3 + score4) / 4;
+                                row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
+                                // Update the score8 value in the database
+                                updateScoreInDatabase(row, 'score8', average.toFixed(2));
+                            }
+                        } else {
+                            // Handle errors here, e.g., show a notification to the user
+                            console.error('Error in AJAX response:', response.error);
                         }
                     },
-                    error: function() {
-                        // Handle any error here, e.g., show a notification to the user*/
-                        //alert("There was an error updating the data.");
+                    error: function(xhr, status, error) {
+                        // Handle AJAX errors here
+                        console.error('AJAX Error:', error);
                     }
                 });
+                
             });
 
             // Pressing Enter to save changes
