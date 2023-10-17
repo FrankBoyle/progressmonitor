@@ -63,8 +63,13 @@ if (isset($_GET['metadata_id'])) {
     }
 }
 
-//echo "schoolID: $schoolID";
-//echo "metadataID: $metadataID";
+$responseData = array(
+    'schoolID' => $schoolID,
+    'metadataID' => $metadataID
+);
+
+// Convert the array to JSON and echo it as the response
+echo json_encode($responseData);
 
 //Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
