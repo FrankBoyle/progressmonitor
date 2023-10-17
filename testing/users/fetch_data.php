@@ -116,6 +116,13 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     exit;
 }
 
+if ($metadataId !== null) {
+    // Fetch data specific to this metadata_id
+    $performanceData = fetchPerformanceDataByMetadataId($connection, $metadataId);
+    $displayedColumns = fetchDisplayedColumnsByMetadataId($connection, $metadataId); // if you have such a function
+    // other necessary data fetching...
+}
+
 // Fetch performance data and score names based on the metadata
 $performanceData = fetchPerformanceData($connection, $studentId);
 $scoreNames = fetchScoreNames($connection, $schoolID);
