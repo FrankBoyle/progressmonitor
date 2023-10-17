@@ -113,7 +113,7 @@ function addNewStudent($connection, $studentName, $teacherId) {
 
 // Function to fetch column names based on metadataId
 function fetchColumnNamesByMetadataID($connection, $metadataID) {
-    $stmt = $connection->prepare("SELECT column_name FROM YourTable WHERE metadata_id = ?");
+    $stmt = $connection->prepare("SELECT column_name FROM Metadata WHERE metadata_id = ?");
     $stmt->execute([$metadataID]);
     
     $columnNames = [];
