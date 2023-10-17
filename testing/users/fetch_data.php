@@ -46,10 +46,10 @@ if (isset($_GET['metadata_id'])) {
     // $metadataId = 'default_value'; 
 }
 
-$schoolID = fetchSchoolIdForStudent($connection, $studentId);
+//$schoolID = fetchSchoolIdForStudent($connection, $studentId);
 
-echo "schoolID: $schoolID<br>";
-echo "metadataID: $metadataID<br>";
+//echo "schoolID: $schoolID<br>";
+//echo "metadataID: $metadataID<br>";
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
