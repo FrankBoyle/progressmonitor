@@ -21,6 +21,13 @@ if (isset($_SESSION['SchoolID'])) {
     exit(); // Stop the script, or handle this situation differently as per your requirements.
 }
 
+// Checking and setting the $studentId
+if (isset($_GET['student_id'])) {
+    $studentId = $_GET['student_id'];
+} else {
+    $studentId = null; // or set a default value appropriate for your context
+}
+
 // You can create a function to fetch student IDs by SchoolID, e.g., fetchStudentIdsBySchool
 $studentIds = fetchStudentIdsBySchool($connection, $schoolID); 
 
@@ -46,10 +53,8 @@ if (isset($_GET['metadata_id'])) {
     // $metadataId = 'default_value'; 
 }
 
-//$schoolID = fetchSchoolIdForStudent($connection, $studentId);
-
-//echo "schoolID: $schoolID<br>";
-//echo "metadataID: $metadataID<br>";
+echo "schoolID: $schoolID<br>";
+echo "metadataID: $metadataID<br>";
 
 // Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
