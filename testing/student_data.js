@@ -1,24 +1,24 @@
 
 var benchmark = null;
 
-$(document).ready(function() {
+jQuery(document).ready(function() {
     initializeChart();
 
-    benchmark = parseFloat($("#benchmarkValue").val());
+    benchmark = parseFloat(jQuery("#benchmarkValue").val());
     if (isNaN(benchmark)) {
         benchmark = null;  // Default benchmark value if the input is not provided
     }
 
-    $("#scoreSelector").change(function() {
-        var selectedScore = $(this).val();
+    jQuery("#scoreSelector").change(function() {
+        var selectedScore = jQuery(this).val();
         updateChart(selectedScore);
     });
 
-    $("#updateBenchmark").click(function() {
-        var value = parseFloat($("#benchmarkValue").val());
+    jQuery("#updateBenchmark").click(function() {
+        var value = parseFloat(jQuery("#benchmarkValue").val());
         if (!isNaN(value)) {
             benchmark = value;
-            var selectedScore = $("#scoreSelector").val();
+            var selectedScore = jQuery("#scoreSelector").val();
             updateChart(selectedScore);
         } else {
             alert('Please enter a valid benchmark value.');
@@ -37,9 +37,9 @@ function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
 
-    $('tr[data-performance-id]').each(function() {
-        var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
-        var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
+    jQuery('tr[data-performance-id]').each(function() {
+        var weekStartDate = jQuery(this).find('td[data-field-name="score_date"]').text();
+        var scoreValue = jQuery(this).find(`td[data-field-name="jQuery{scoreField}"]`).text();
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
@@ -258,26 +258,26 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 let columnHeaders = []; // Initialize as an empty array
 
-$(document).ready(function() {
+jQuery(document).ready(function() {
 // Listen for changes in the metadata dropdown
 
 function updateTableHeaders() {
     // Clear existing headers
-    $('#dataTable thead tr th:not(:first-child)').remove();
+    jQuery('#dataTable thead tr th:not(:first-child)').remove();
 
     // Add new headers based on columnHeaders data
-    $.each(columnHeaders, function (key, name) {
-        $('#dataTable thead tr').append('<th>' + (name || '') + '</th>');
+    jQuery.each(columnHeaders, function (key, name) {
+        jQuery('#dataTable thead tr').append('<th>' + (name || '') + '</th>');
     });
 }
 // Handle metadata group selection change
 
 // Update the change event for the metadata group selector
-$('#metadataIdSelector').on('change', function () {
-    var selectedMetadataId = $(this).val();
+jQuery('#metadataIdSelector').on('change', function () {
+    var selectedMetadataId = jQuery(this).val();
 
     // Make an AJAX request to fetch column names based on the selected metadata group.
-    $.ajax({
+    jQuery.ajax({
         type: 'GET',
         url: './users/fetch_data.php',
         data: { metadataId: selectedMetadataId }, // Pass the selected metadata_id
@@ -294,25 +294,25 @@ $('#metadataIdSelector').on('change', function () {
 
 // Modify the updateTableHeaders function to handle the new column names
 function updateTableHeaders(newColumnHeaders) {
-    var table = $('table'); // Adjust this selector based on your HTML structure.
+    var table = jQuery('table'); // Adjust this selector based on your HTML structure.
 
     // Remove existing table headers.
     table.find('thead').remove();
 
     // Generate new table headers based on newColumnHeaders.
-    var thead = $('<thead>');
-    var headerRow = $('<tr>');
+    var thead = jQuery('<thead>');
+    var headerRow = jQuery('<tr>');
 
     // Always include the "Date" column.
-    headerRow.append($('<th>Date</th>'));
+    headerRow.append(jQuery('<th>Date</th>'));
 
     // Add new columns based on newColumnHeaders.
-    $.each(newColumnHeaders, function (index, columnName) {
-        headerRow.append($('<th>' + columnName + '</th>'));
+    jQuery.each(newColumnHeaders, function (index, columnName) {
+        headerRow.append(jQuery('<th>' + columnName + '</th>'));
     });
 
     // Add the "Action" column.
-    headerRow.append($('<th>Action</th>'));
+    headerRow.append(jQuery('<th>Action</th>'));
 
     thead.append(headerRow);
     table.append(thead);
@@ -321,10 +321,10 @@ function updateTableHeaders(newColumnHeaders) {
 
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
-    var studentId = $('#currentStudentId').val();
-    var selectedMetadataId = $('#metadataIdSelector').val(); // Get the selected metadata_id
+    var studentId = jQuery('#currentStudentId').val();
+    var selectedMetadataId = jQuery('#metadataIdSelector').val(); // Get the selected metadata_id
 
-    $.ajax({
+    jQuery.ajax({
         url: './users/fetch_data.php',
         type: 'GET',
         data: { 
@@ -336,9 +336,9 @@ function fetchMetadataCategories() {
         success: function (response) {
             if (response) {
                 console.log(response);
-                $('#metadataIdSelector').empty();
-                $.each(response, function (index, item) {
-                    $('#metadataIdSelector').append('<option value="' + item.metadata_id + '">' + item.category_name + '</option>');
+                jQuery('#metadataIdSelector').empty();
+                jQuery.each(response, function (index, item) {
+                    jQuery('#metadataIdSelector').append('<option value="' + item.metadata_id + '">' + item.category_name + '</option>');
                 });
             }
         },
@@ -350,8 +350,8 @@ updateTableHeaders();
 fetchMetadata()
 
 function fetchMetadata(metadataId) {
-    var studentId = $('#currentStudentId').val();
-    $.ajax({
+    var studentId = jQuery('#currentStudentId').val();
+    jQuery.ajax({
         url: './users/fetch_data.php',
         type: 'GET',
         data: {
@@ -374,7 +374,7 @@ function fetchMetadata(metadataId) {
                 }
 
                 // Handle performance data
-                $.each(performanceData, function (index, item) {
+                jQuery.each(performanceData, function (index, item) {
                     // Check and handle null values in performance data fields
                     for (var key in item) {
                         if (item[key] === null) {
@@ -393,11 +393,11 @@ function fetchMetadata(metadataId) {
 
 function getCurrentDate() {
         const currentDate = new Date();
-        return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+        return `jQuery{(currentDate.getMonth() + 1).toString().padStart(2, '0')}/jQuery{currentDate.getDate().toString().padStart(2, '0')}/jQuery{currentDate.getFullYear()}`;
     }
 
     // Constants & Variables
-    const CURRENT_STUDENT_ID = $('#currentStudentId').val();
+    const CURRENT_STUDENT_ID = jQuery('#currentStudentId').val();
 
     // Utility Functions
     function isValidDate(d) {
@@ -407,18 +407,18 @@ function getCurrentDate() {
     function convertToDatabaseDate(dateString) {
         if (!dateString || dateString === "New Entry") return dateString;
         const [month, day, year] = dateString.split('/');
-        return `${year}-${month}-${day}`;
+        return `jQuery{year}-jQuery{month}-jQuery{day}`;
     }
 
     function convertToDisplayDate(databaseString) {
         if (!databaseString || databaseString === "New Entry") return databaseString;
         const [year, month, day] = databaseString.split('-');
-        return `${month}/${day}/${year}`;
+        return `jQuery{month}/jQuery{day}/jQuery{year}`;
     }
 
     async function ajaxCall(type, url, data) {
         try {
-            const response = await $.ajax({
+            const response = await jQuery.ajax({
                 type: type,
                 url: url,
                 data: data,
@@ -435,7 +435,7 @@ function getCurrentDate() {
     async function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
-        const studentId = $("#currentStudentId").val();
+        const studentId = jQuery("#currentStudentId").val();
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
@@ -462,16 +462,16 @@ function getCurrentDate() {
 
     //let dateAscending = true; // to keep track of current order
 
-    $('#toggleDateOrder').on('click', function() {
-        const table = $('table').DataTable();
+    jQuery('#toggleDateOrder').on('click', function() {
+        const table = jQuery('table').DataTable();
         dateAscending = !dateAscending; // flip the state
 
         table.order([0, dateAscending ? 'asc' : 'desc']).draw();
     });
 
-    $(document).on('click', '.deleteRow', function() {
-        const row = $(this);  // Capture the button element for later use
-        const performanceId = $(this).data('performance-id');
+    jQuery(document).on('click', '.deleteRow', function() {
+        const row = jQuery(this);  // Capture the button element for later use
+        const performanceId = jQuery(this).data('performance-id');
     
         // Confirm before delete
         if (!confirm('Are you sure you want to delete this row?')) {
@@ -479,7 +479,7 @@ function getCurrentDate() {
         }
     
         // Send a request to delete the data from the server
-        $.post('delete_performance.php', {
+        jQuery.post('delete_performance.php', {
             performance_id: performanceId
         }, function(response) {
             // Handle the response, e.g., check if the deletion was successful
@@ -494,7 +494,7 @@ function getCurrentDate() {
 
     function updateScoreInDatabase(row, metadataFieldName, newValue) {
         const performanceId = row.data('performance-id');
-        const studentId = $("#currentStudentId").val();
+        const studentId = jQuery("#currentStudentId").val();
         const score_date = row.find('td[data-field-name="score_date"]').text();
         
         // Assuming that metadataFieldName would be something like "score1_name" and we'd need to update "score1"
@@ -519,9 +519,9 @@ function getCurrentDate() {
     function isDateDuplicate(dateString, currentPerformanceId = null) {
     //console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
-    $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = $(this).text();
-        const performanceId = $(this).closest('tr').data('performance-id');
+    jQuery('table').find('td[data-field-name="score_date"]').each(function() {
+        const cellDate = jQuery(this).text();
+        const performanceId = jQuery(this).closest('tr').data('performance-id');
         if (cellDate === dateString && performanceId !== currentPerformanceId) {
             isDuplicate = true;
             return false; // Break out of the .each loop
@@ -531,10 +531,10 @@ function getCurrentDate() {
 }
 
     function attachEditableHandler() {
-        $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
-            const cell = $(this);
+        jQuery('table').on('click', '.editable:not([data-field-name="score8"])', function() {
+            const cell = jQuery(this);
             const originalValue = cell.text();
-            const input = $('<input type="text">');
+            const input = jQuery('<input type="text">');
             input.val(originalValue);
 
             let datePickerActive = false;
@@ -598,8 +598,8 @@ function getCurrentDate() {
             
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-                const studentId = $('#currentStudentId').val();
-                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+                const studentId = jQuery('#currentStudentId').val();
+                const weekStartDate = convertToDatabaseDate(jQuery('#currentWeekStartDate').val());
             
                 let postData = {
                     performance_id: performanceId,
@@ -610,16 +610,16 @@ function getCurrentDate() {
                 };
             
                 if (performanceId === 'new') {
-                    const row = $(this).closest('tr');
+                    const row = jQuery(this).closest('tr');
                     let scores = {};
                     for (let i = 1; i <= 10; i++) {
-                        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+                        const scoreValue = row.find(`td[data-field-name="scorejQuery{i}"]`).text();
                         scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
                     }
                     postData.scores = scores;
                 }
             
-                $.ajax({
+                jQuery.ajax({
                     type: 'POST',
                     url: targetUrl,
                     data: postData,
@@ -628,7 +628,7 @@ function getCurrentDate() {
                         // Check if the response contains 'success' property
                         if (response && response.success) {
                             if (performanceId === 'new') {
-                                const newRow = $('tr[data-performance-id="new"]');
+                                const newRow = jQuery('tr[data-performance-id="new"]');
                                 newRow.attr('data-performance-id', response.performance_id);
                                 newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                             }
@@ -668,9 +668,9 @@ function getCurrentDate() {
         });
     }
 
-$('#addDataRow').off('click').click(function() {
+jQuery('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
-    if ($('tr[data-performance-id="new"]').length) {
+    if (jQuery('tr[data-performance-id="new"]').length) {
         alert("Please save the existing new entry before adding another one.");
         return;
     }
@@ -680,15 +680,15 @@ if (isDateDuplicate(currentDate)) {
     //alert("An entry for this date already exists. Please choose a different date.");
     return;
 }
-        const newRow = $("<tr data-performance-id='new'>");
-        newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
+        const newRow = jQuery("<tr data-performance-id='new'>");
+        newRow.append(`<td class="editable" data-field-name="score_date">jQuery{currentDate}</td>`);
         
         for (let i = 1; i <= 10; i++) {
-            newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+            newRow.append(`<td class="editable" data-field-name="scorejQuery{i}"></td>`);
         }
         
         newRow.append('<td><button class="saveRow">Save</button></td>');
-        $("table").append(newRow);
+        jQuery("table").append(newRow);
 
         newRow.find('td[data-field-name="score_date"]').click().blur();
         attachEditableHandler();
@@ -696,12 +696,12 @@ if (isDateDuplicate(currentDate)) {
         dateCell.click();
     });
 
-    $(document).on('click', '.saveRow', async function() {
-        const row = $(this).closest('tr');
+    jQuery(document).on('click', '.saveRow', async function() {
+        const row = jQuery(this).closest('tr');
         const performanceId = row.data('performance-id');
     
         // Disable the save button to prevent multiple clicks
-        $(this).prop('disabled', true);
+        jQuery(this).prop('disabled', true);
     
         // If it's not a new entry, simply return and do nothing.
         if (performanceId !== 'new') {
@@ -711,8 +711,8 @@ if (isDateDuplicate(currentDate)) {
     
         let scores = {};
         for (let i = 1; i <= 10; i++) {
-            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-            scores[`score${i}`] = scoreValue ? scoreValue : null; // Send null if score is empty
+            const scoreValue = row.find(`td[data-field-name="scorejQuery{i}"]`).text();
+            scores[`scorejQuery{i}`] = scoreValue ? scoreValue : null; // Send null if score is empty
         }
     
         const postData = {
@@ -729,7 +729,7 @@ if (isDateDuplicate(currentDate)) {
         const response = await ajaxCall('POST', 'insert_performance.php', postData);
         if (response && response.performance_id) {
             // Update the table with the newly inserted row
-            const newRow = $('tr[data-performance-id="new"]');
+            const newRow = jQuery('tr[data-performance-id="new"]');
             newRow.attr('data-performance-id', response.performance_id);
             newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
             // If you have default scores or other fields returned from the server, update them here too
@@ -755,48 +755,48 @@ if (isDateDuplicate(currentDate)) {
     
 
         // Initialize the datepicker
-        $("#startDateFilter").datepicker({
+        jQuery("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',
             onSelect: function() {
                 //console.log("Table rows before draw: " + table.rows().count());
-                //console.log("Date selected: " + $(this).val());
+                //console.log("Date selected: " + jQuery(this).val());
                 table.draw();
                 //console.log("Table rows after draw: " + table.rows().count());
             }
         });
 
 // Custom filter for DataTables
-$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-    let selectedDate = $("#startDateFilter").datepicker("getDate");
+jQuery.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+    let selectedDate = jQuery("#startDateFilter").datepicker("getDate");
     if (!selectedDate) {
         return true; // if no date selected, show all rows
     }
 
-    let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
+    let rowDate = jQuery.datepicker.parseDate("mm/dd/yy", data[0]);
 
     // Convert both dates to time for a safer comparison
     let rowDateTime = rowDate.getTime();
     let selectedDateTime = selectedDate.getTime();
 
-    //console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDateTime >= selectedDateTime}`);
+    //console.log(`Comparing rowDate jQuery{rowDate} to selectedDate jQuery{selectedDate}. Result: jQuery{rowDateTime >= selectedDateTime}`);
     return rowDateTime >= selectedDateTime;
 });
 
-        $(document).on('keypress', '.saveRow', function(e) {
+        jQuery(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
             }
         });
 
         // Initialization code
-        $('#currentWeekStartDate').val(getCurrentDate());
+        jQuery('#currentWeekStartDate').val(getCurrentDate());
         attachEditableHandler();
 
-        $.fn.dataTable.ext.type.detect.unshift(function(value) {
-            return value && value.match(/^(\d{1,2}\/\d{1,2}\/\d{4})$/) ? 'date-us' : null;
+        jQuery.fn.dataTable.ext.type.detect.unshift(function(value) {
+            return value && value.match(/^(\d{1,2}\/\d{1,2}\/\d{4})jQuery/) ? 'date-us' : null;
         });
 
-        $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
+        jQuery.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
             var date = data.split('/');
             return (date[2] + date[0] + date[1]) * 1;
         };
@@ -805,7 +805,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
 let columns;
 
 // Perform an AJAX request to retrieve the data
-$.ajax({
+jQuery.ajax({
     type: 'GET', // Adjust the type as needed
     url: './users/fetch_data.php',
     dataType: 'json', // Adjust the data type as needed
@@ -818,7 +818,7 @@ $.ajax({
             ];
         
             // Now you can use the 'columns' array as intended
-            const table = $('table').DataTable({
+            const table = jQuery('table').DataTable({
                 "order": [[0, "asc"]],
                 "lengthChange": false,
                 "paging": true,
