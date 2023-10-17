@@ -316,7 +316,7 @@ $('#metadataIdSelector').on('change', function() {
     });
 });
 
-// Function to fetch metadata categories and update the dropdown
+/* Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
     var studentId = $('#currentStudentId').val();
     var selectedMetadataId = $('#metadataIdSelector').val(); // Get the selected metadata_id
@@ -341,6 +341,7 @@ function fetchMetadataCategories() {
         },
     });
 }
+*/
 
 // Initial table header update and metadata group fetch
 updateTableHeaders();
