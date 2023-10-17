@@ -41,7 +41,7 @@ $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 
-If 'metadata_id' is present, use it.
+//If 'metadata_id' is present, use it.
 if (isset($_GET['metadata_id'])) {
     $metadataID = $_GET['metadata_id'];
 } else {
