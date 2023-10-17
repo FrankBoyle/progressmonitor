@@ -89,8 +89,6 @@ if ($columnNames === false) {
     exit();
 }
 
-
-
 // Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
 $stmt->execute([$schoolID, $metadataID]);
@@ -118,8 +116,8 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 if ($metadataID !== null) {
     // Fetch data specific to this metadata_id
-    $performanceData = fetchPerformanceDataByMetadataID($connection, $metadataID);
-    $displayedColumns = fetchDisplayedColumnsByMetadataID($connection, $metadataID); // if you have such a function
+    $performanceData = fetchPerformanceDataByMetadataId($connection, $metadataID);
+    $displayedColumns = fetchDisplayedColumnsByMetadataId($connection, $metadataID); // if you have such a function
     // other necessary data fetching...
 }
 
