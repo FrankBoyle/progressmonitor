@@ -663,9 +663,7 @@ function getCurrentDate() {
                     input.blur();
                 }
             });
-        });
-    }
-
+    
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
     if ($('tr[data-performance-id="new"]').length) {
@@ -819,4 +817,4 @@ table.rows.add(response.performanceData).draw();
         //fetchMetadataCategories();
 
 
-    });
+});
