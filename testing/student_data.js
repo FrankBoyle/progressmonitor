@@ -628,7 +628,7 @@ function getCurrentDate() {
                             newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                         }
     
-    // New code for updating score8 starts here
+    /* New code for updating score8 starts here
                         if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
                             const row = cell.closest('tr');
                             const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
@@ -639,10 +639,11 @@ function getCurrentDate() {
                             row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
                             // Update the score8 value in the database
                             updateScoreInDatabase(row, 'score8', average.toFixed(2));
+                            
                         }
                     },
                     error: function() {
-                        // Handle any error here, e.g., show a notification to the user
+                        // Handle any error here, e.g., show a notification to the user*/
                         //alert("There was an error updating the data.");
                     }
                 });
