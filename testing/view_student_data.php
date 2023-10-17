@@ -1,24 +1,6 @@
 <?php 
 include('./users/fetch_data.php'); 
 // Initialize empty arrays and variables
-$columnHeaders = [
-    'score1_name',
-    'score2_name',
-    'score3_name',
-    'score4_name',
-    'score5_name',
-    'score6_name',
-    'score7_name',
-    'score8_name',
-    'score9_name',
-    'score10_name'
-];
-
-$performanceData = [];
-$scoreNames = [];
-$chartDates = [];
-$chartScores = [];
-
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());

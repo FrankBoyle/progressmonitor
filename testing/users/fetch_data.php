@@ -34,6 +34,20 @@ $studentIds = fetchStudentIdsBySchool($connection, $schoolID);
 // Similarly, you can create a function to fetch metadata IDs by SchoolID, e.g., fetchMetadataIdsBySchool
 $metadataIds = fetchMetadataIdsBySchool($connection, $schoolID); 
 // Initialize empty arrays and variables
+
+$columnHeaders = [
+    'score1_name',
+    'score2_name',
+    'score3_name',
+    'score4_name',
+    'score5_name',
+    'score6_name',
+    'score7_name',
+    'score8_name',
+    'score9_name',
+    'score10_name'
+];
+
 $metadataEntries = [];
 $displayedColumns = [];
 $performanceData = [];
@@ -95,6 +109,16 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     echo "Metadata entry not found.";
     exit;
 }
+
+// Create an associative array representing the response data
+$responseData = [
+    'columnHeaders' => array_values($displayedColumns), // Get values (column names) from the associative array
+    'performanceData' => $performanceData, // Replace with your actual data
+];
+
+// Send the response as JSON
+header('Content-Type: application/json');
+echo json_encode($responseData);
 
 // Query to find the lowest metadata_id for the specified SchoolID
 $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
