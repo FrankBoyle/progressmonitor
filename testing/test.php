@@ -31,7 +31,8 @@ $students = fetchStudentsByTeacher($connection, $teacherId);
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Your Page Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Student List</title>
 </head>
 <body>
     <!-- Add New Student Form -->
