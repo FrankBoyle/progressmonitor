@@ -1,10 +1,4 @@
-// Put jQuery into no-conflict mode
-jQuery.noConflict();
 
-// Now you can use jQuery using the 'jQuery' variable
-jQuery(document).ready(function($) {
-    // Your jQuery code here, using the '$' variable
-});
 
 var benchmark = null;
 
