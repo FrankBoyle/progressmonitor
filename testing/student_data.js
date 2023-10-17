@@ -262,17 +262,6 @@ let columnHeaders = []; // Initialize as an empty array
 $(document).ready(function() {
 // Listen for changes in the metadata dropdown
 
-function updateTableHeaders() {
-    // Clear existing headers
-    $('#dataTable thead tr th:not(:first-child)').remove();
-
-    // Add new headers based on columnHeaders data
-    $.each(columnHeaders, function (key, name) {
-        $('#dataTable thead tr').append('<th>' + (name || '') + '</th>');
-    });
-}
-// Handle metadata group selection change
-
 // Update the change event for the metadata group selector
 $('#metadataIdSelector').on('change', function () {
     var selectedMetadataId = $(this).val();
@@ -319,7 +308,23 @@ function updateTableHeaders(newColumnHeaders) {
     table.append(thead);
 }
 
-
+// Function to fetch and load default headers for the "Select Metadata Group" option
+function loadDefaultHeaders() {
+    // Make an initial AJAX request to fetch headers for the default option
+    $.ajax({
+        type: 'GET',
+        url: './users/fetch_data.php',
+        data: { metadataId: 0 }, // Assuming 0 represents the default option
+        dataType: 'json',
+        success: function (response) {
+            // Update table headers with the fetched column names
+            updateTableHeaders(response.columnHeaders);
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    });
+}
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
     var studentId = $('#currentStudentId').val();
