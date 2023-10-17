@@ -77,14 +77,6 @@ if (isset($_GET['metadata_id'])) {
     }
 }
 
-$responseData = array(
-    'schoolID' => $schoolID,
-    'metadataID' => $metadataID
-);
-
-// Convert the array to JSON and echo it as the response
-echo json_encode($responseData);
-
 //Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
 $stmt->execute([$schoolID, $metadataID]);
@@ -111,14 +103,17 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Create an associative array representing the response data
-$responseData = [
-    'columnHeaders' => array_values($displayedColumns), // Get values (column names) from the associative array
-    'performanceData' => $performanceData, // Replace with your actual data
-];
+$responseData = array(
+    'schoolID' => $schoolID,
+    'metadataID' => $metadataID,
+    'columnHeaders' => array_values($displayedColumns),
+    'performanceData' => $performanceData // Replace with your actual data
+);
 
-// Send the response as JSON
+// Send the combined response as a single JSON object
 header('Content-Type: application/json');
 echo json_encode($responseData);
+
 
 // Query to find the lowest metadata_id for the specified SchoolID
 $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
