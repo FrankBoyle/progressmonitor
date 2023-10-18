@@ -277,15 +277,6 @@ $('#metadataIdSelector').on('change', function() {
     }
 });
 
-// Attach an event listener to the dropdown
-$('#metadataIdSelector').on('change', function() {
-    // Get the selected metadataId
-    const selectedMetadataId = $(this).val();
-
-    // Call the updateChartHeaders function with the selectedMetadataId
-    updateChartHeaders(selectedMetadataId);
-});
-
 function fetchColumnHeaders(metadataId) {
     // Send an AJAX request to fetch the JSON data
     $.ajax({
@@ -327,12 +318,6 @@ function fetchColumnHeaders(metadataId) {
         return `${url.split('?')[0]}?${urlParams.toString()}`;
     }
     
-    // Call the updateUrlParameter function to update a specific parameter
-const updatedUrl = updateUrlParameter(window.location.href, 'metadata_id', 'new_value');
-
-// Update the window.location with the new URL
-window.location.href = updatedUrl;
-
     function initializeDatePicker() {
         $("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',
