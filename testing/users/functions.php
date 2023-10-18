@@ -1,11 +1,12 @@
 <?php
-include('db.php');
-include('fetch_data.php');
+// functions.php
+require_once 'db.php';
+require_once 'fetch_data.php';
 // Function to fetch performance data for a student
-function fetchPerformanceData($connection, $studentid) {
+function fetchPerformanceData($connection, $student_id) {
     // No need for 'global $connection;' because it's now a parameter
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
-    $stmt->execute([$studentid]);
+    $stmt->execute([$student_id]);
     return $stmt->fetchAll();
 }
 
@@ -19,7 +20,7 @@ function fetchMetadataCategoriesFromDatabase($connection, $school_id) {
 
 function fetchStudentIdsBySchool($connection, $school_id) {
     // This array will hold the student IDs
-    $studentids = [];
+    $student_ids = [];
     try {
         // Prepare your query: select student IDs from your students table where the school_id matches
         $stmt = $connection->prepare("SELECT student_id FROM Students WHERE school_id = :school_id");
@@ -27,20 +28,20 @@ function fetchStudentIdsBySchool($connection, $school_id) {
         $stmt->execute(['school_id' => $school_id]);
         // Fetch all the student IDs
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $studentids[] = $row['student_id'];  // Adjust 'student_id' if your column name is different
+            $student_ids[] = $row['student_id'];  // Adjust 'student_id' if your column name is different
         }
     } catch (PDOException $e) {
         // You might want to handle errors, log them, or rethrow them, depending on your error strategy
         throw $e;
     }
-    return $studentids;
+    return $student_ids;
 }
 
 // Function to fetch the school_id for a student
-function fetchSchoolIdForStudent($connection, $studentid) {
+function fetchSchoolIdForStudent($connection, $student_id) {
     // Adjusted to use parameter
     $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
-    $stmt->execute([$studentid]);
+    $stmt->execute([$student_id]);
     $result = $stmt->fetch();
     return $result ? $result['school_id'] : null;
 }
