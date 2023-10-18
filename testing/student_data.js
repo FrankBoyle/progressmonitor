@@ -488,7 +488,7 @@ function fetchColumnHeaders(metadataId) {
         headerRow.append($('<th>Date</th>'));
     
         // Extract columnNames from columnHeaders
-        const columnNames = Object.values(columnHeaders);
+        //const columnNames = Object.values(columnHeaders);
     
         // Debugging: Log columnNames to console
         console.log('columnNames:', columnNames);
