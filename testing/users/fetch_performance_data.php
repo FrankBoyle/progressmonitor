@@ -1,7 +1,10 @@
 <?php
 session_start();
 include('db.php');
-include('functions.php');
+include('fetch_data.php');
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 // Check if 'school_id' is set in the session before using it.
 if (isset($_SESSION['school_id'])) {
@@ -31,3 +34,4 @@ $performanceData = fetchPerformanceData($connection, $student_id, $metadataID);
 
 // Return the data as JSON
 echo json_encode(['performanceData' => $performanceData]);
+?>
