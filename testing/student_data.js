@@ -303,7 +303,7 @@ $(document).ready(function () {
                     // Handle the error as needed, e.g., display an error message to the user
                 } else {
                     // Handle the successful response here
-                    var metadataId = response.metadataId;
+                    metadataId = response.metadataId;
                     var displayedColumns = response.displayedColumns;
                     // Process and use the data as needed
                 }
