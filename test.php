@@ -17,10 +17,6 @@ include './users/fetch_data.php';
         <input type="submit" name="add_new_student" value="Add New Student">
     </form>
 
-    <?php if ($message): ?>
-        <p><?= $message ?></p>
-    <?php endif; ?>
-
     <?php if (!empty($students)): ?>
         <h2>Students:</h2>
         <?php foreach ($students as $student): ?>
