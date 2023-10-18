@@ -392,73 +392,62 @@ $(document).ready(function () {
     }     
      
     function updateTable(columnHeaders, performanceData) {
+        // Debugging: Log data to console
+        console.log('performanceData:', performanceData);
+        console.log('columnHeaders:', columnHeaders);
+    
         // Update table headers with new column names
         const table = $('table');
         table.find('thead').remove();
-        
+    
         // Generate new table headers based on columnHeaders
         const thead = $('<thead>');
         const headerRow = $('<tr>');
         headerRow.append($('<th>Date</th>'));
     
-        if (Array.isArray(columnHeaders)) {
-            // Handle the case where columnHeaders is an array
-            columnHeaders.forEach(function (columnName) {
-                headerRow.append($('<th>' + columnName + '</th>'));
-            });
-        } else if (typeof columnHeaders === 'object') {
-            // Handle the case where columnHeaders is an object
-            for (const key in columnHeaders) {
-                if (columnHeaders.hasOwnProperty(key)) {
-                    headerRow.append($('<th>' + columnHeaders[key] + '</th>'));
-                }
-            }
-        } else {
-            // Handle other cases or set a default behavior
-        }
+        // Convert columnHeaders object to an array of column names
+        const columnNames = Object.values(columnHeaders);
+    
+        // Debugging: Log columnNames to console
+        console.log('columnNames:', columnNames);
+    
+        $.each(columnNames, function (index, columnName) {
+            headerRow.append($('<th>' + columnName + '</th>'));
+        });
     
         headerRow.append($('<th>Action</th>'));
         thead.append(headerRow);
         table.append(thead);
     
-        // Generate DataTable column definitions dynamically
-        const columns = [
-            { "type": "date-us" }, // Assuming the first column is a date
-        ];
-    
-        if (Array.isArray(columnHeaders)) {
-            // Handle the case where columnHeaders is an array
-            columnHeaders.forEach(function (header) {
-                columns.push({ title: header });
-            });
-        } else if (typeof columnHeaders === 'object') {
-            // Handle the case where columnHeaders is an object
-            for (const key in columnHeaders) {
-                if (columnHeaders.hasOwnProperty(key)) {
-                    columns.push({ title: columnHeaders[key] });
-                }
-            }
-        } else {
-            // Handle other cases or set a default behavior
-        }
-    
-        columns.push({ "orderable": false }); // Action column
-    
-        // Initialize DataTable with dynamic column definitions
+        // Use DataTables API to populate the table with performanceData
         const dataTable = table.DataTable({
             "order": [[0, "asc"]],
             "lengthChange": false,
             "paging": true,
             "searching": true,
             "info": false,
-            "columns": columns
+            "columns": [
+                { "type": "date-us" },
+                ...columnNames.map(header => ({ title: header })),
+                { "orderable": false }
+            ]
         });
     
-        // Add data to DataTable
-        dataTable.clear().rows.add(performanceData).draw();
-    }
+        // Check for the existence of performanceData before updating
+        if (performanceData && performanceData.length > 0) {
+            // Clear existing data
+            dataTable.clear();
     
+            // Add new data
+            dataTable.rows.add(performanceData);
     
+            // Redraw the table
+            dataTable.draw();
+        } else {
+            // Display a message when there's no data
+            table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
+        }
+    }     
 
     function toggleDateOrder() {
         const table = $('table').DataTable();
