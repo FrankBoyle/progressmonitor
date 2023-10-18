@@ -401,9 +401,21 @@ $(document).ready(function () {
         const headerRow = $('<tr>');
         headerRow.append($('<th>Date</th>'));
     
-        $.each(columnHeaders, function (index, columnName) {
-            headerRow.append($('<th>' + columnName + '</th>'));
-        });
+        if (Array.isArray(columnHeaders)) {
+            // Handle the case where columnHeaders is an array
+            columnHeaders.forEach(function (columnName) {
+                headerRow.append($('<th>' + columnName + '</th>'));
+            });
+        } else if (typeof columnHeaders === 'object') {
+            // Handle the case where columnHeaders is an object
+            for (const key in columnHeaders) {
+                if (columnHeaders.hasOwnProperty(key)) {
+                    headerRow.append($('<th>' + columnHeaders[key] + '</th>'));
+                }
+            }
+        } else {
+            // Handle other cases or set a default behavior
+        }
     
         headerRow.append($('<th>Action</th>'));
         thead.append(headerRow);
@@ -414,9 +426,21 @@ $(document).ready(function () {
             { "type": "date-us" }, // Assuming the first column is a date
         ];
     
-        columnHeaders.forEach(function (header) {
-            columns.push({ title: header });
-        });
+        if (Array.isArray(columnHeaders)) {
+            // Handle the case where columnHeaders is an array
+            columnHeaders.forEach(function (header) {
+                columns.push({ title: header });
+            });
+        } else if (typeof columnHeaders === 'object') {
+            // Handle the case where columnHeaders is an object
+            for (const key in columnHeaders) {
+                if (columnHeaders.hasOwnProperty(key)) {
+                    columns.push({ title: columnHeaders[key] });
+                }
+            }
+        } else {
+            // Handle other cases or set a default behavior
+        }
     
         columns.push({ "orderable": false }); // Action column
     
@@ -433,6 +457,7 @@ $(document).ready(function () {
         // Add data to DataTable
         dataTable.clear().rows.add(performanceData).draw();
     }
+    
     
 
     function toggleDateOrder() {
