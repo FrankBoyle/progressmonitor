@@ -345,7 +345,7 @@ $(document).ready(function () {
             type: 'GET',
             data: {
                 student_id: CURRENT_STUDENT_ID,
-                metadata_id: JSON.stringify(metadataId)
+                metadata_id: metadataId // No need for JSON.stringify
             },
             dataType: 'json',
             success: function (data) {
@@ -357,6 +357,7 @@ $(document).ready(function () {
             }
         });
     }
+    
 
     function fetchTableData(metadataId) {
         const data = {
