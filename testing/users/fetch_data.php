@@ -53,12 +53,7 @@ $defaultMetadataID = 1; // Default value in case of any issues
 $metadataID = null;
 $columnNames = [];
 
-// Check if there are score names available
-if (!$scoreNames) {
-    // Handle the case where no score names are available
-    echo "No score names found.";
-    exit;
-}
+
 // Check if there is performance data for the specified student
 if (!$performanceData) {
     // Handle the case where no performance data is available
