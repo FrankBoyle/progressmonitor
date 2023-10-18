@@ -345,7 +345,7 @@ $(document).ready(function () {
             type: 'GET',
             data: {
                 student_id: CURRENT_STUDENT_ID,
-                metadata_id: JSON.stringify(metadataID)
+                metadata_id: JSON.stringify(metadataId)
             },
             dataType: 'json',
             success: function (data) {
@@ -814,7 +814,7 @@ $.ajax({
     type: 'GET',
     data: {
         student_id: student_id,// Embed PHP variable
-        metadata_id: json_encode($metadataID) // Embed PHP variable
+        metadata_id: json_encode($metadataId) // Embed PHP variable
     },
     dataType: 'json',
     success: function (data) {
