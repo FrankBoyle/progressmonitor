@@ -338,15 +338,16 @@ $(document).ready(function () {
                 } else {
                     console.error('Invalid or empty response:', response);
                 }
+                // Log the response text
+                console.log('Response Text:', xhr.responseText);
             },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', error);
-                console.log('XHR Object:', xhr);
-                console.log('Status:', status);
+                // Log the response text in case of an error
+                console.log('Error Response Text:', xhr.responseText);
             }
         });
-    }
-    
+    }   
 
     function updateTable(columnHeaders, performanceData) {
         // Update table headers with new column names
