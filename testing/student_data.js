@@ -291,6 +291,12 @@ $(document).ready(function () {
         attachEditableHandler();
     }
 
+    function updateUrlParameter(url, paramKey, paramValue) {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set(paramKey, paramValue);
+        return `${url.split('?')[0]}?${urlParams.toString()}`;
+    }
+    
     function initializeDatePicker() {
         $("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',
@@ -317,6 +323,43 @@ $(document).ready(function () {
         });
     }
     
+    function updateChartHeaders(selectedMetadataId) {
+        // Make an AJAX request to your server to fetch the updated chart headers
+        $.ajax({
+            url: './users/fetch_data.php', // Replace with the actual URL to fetch chart headers
+            type: 'GET',
+            data: { metadataId: selectedMetadataId }, // Send the selected metadata_id as a parameter
+            dataType: 'json', // Assuming the response will be in JSON format
+            success: function(response) {
+                // Assuming response.data contains the updated chart headers as an array
+                const updatedChartHeaders = response.data;
+                
+                // Update the chart headers in your HTML
+                const chartTable = $('#chartTable'); // Replace with the actual ID or selector of your chart table
+                
+                // Clear existing headers
+                chartTable.find('thead').empty();
+                
+                // Generate new headers based on updatedChartHeaders
+                const thead = $('<thead>');
+                const headerRow = $('<tr>');
+                headerRow.append($('<th>Date</th>'));
+                
+                // Iterate through updatedChartHeaders and add them as table headers
+                updatedChartHeaders.forEach(function(columnName) {
+                    headerRow.append($('<th>' + columnName + '</th>'));
+                });
+                
+                headerRow.append($('<th>Action</th>'));
+                thead.append(headerRow);
+                chartTable.append(thead);
+            },
+            error: function(error) {
+                // Handle any errors that occur during the AJAX request
+                console.error('Error fetching updated chart headers:', error);
+            }
+        });
+    }
     
     function handleMetadataChange() {
         const selectedMetadataId = $(this).val();
