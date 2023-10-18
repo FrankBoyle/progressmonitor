@@ -18,15 +18,15 @@ if (isset($_SESSION['school_id'])) {
     exit(); 
 }
 
-// Checking and setting the $student_id
+// Checking and setting the $studentid
 if (isset($_GET['student_id'])) {
-    $student_id = $_GET['student_id'];
+    $studentid = $_GET['student_id'];
 } else {
-    $student_id = null; // or set a default value appropriate for your context
+    $studentid = null; // or set a default value appropriate for your context
 }
 
 // You can create a function to fetch student IDs by school_id, e.g., fetchStudentIdsBySchool
-$student_ids = fetchStudentIdsBySchool($connection, $school_id);
+$studentids = fetchStudentIdsBySchool($connection, $school_id);
 
 // Similarly, you can create a function to fetch metadata IDs by school_id, e.g., fetchMetadataIdsBySchool
 $metadataIds = fetchMetadataIdsBySchool($connection, $school_id);
@@ -164,7 +164,7 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Fetch performance data and score names based on the metadata
-$performanceData = fetchPerformanceData($connection, $student_id);
+$performanceData = fetchPerformanceData($connection, $studentid);
 $scoreNames = fetchScoreNames($connection, $school_id);
 
 // Preparing the data for the chart
