@@ -54,13 +54,6 @@ $metadataID = null;
 $columnNames = [];
 
 
-// Check if there is performance data for the specified student
-if (!$performanceData) {
-    // Handle the case where no performance data is available
-    echo "No performance data found for the specified student.";
-    exit;
-}
-
 try {
     // Attempt to fetch performance data
     $performanceData = fetchPerformanceData($connection, $studentId);
