@@ -143,6 +143,6 @@ $stmt->execute([$school_id]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
-echo json_encode($responseData);
-exit();
+//echo json_encode($responseData);
+
 ?>
