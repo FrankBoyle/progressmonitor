@@ -323,7 +323,7 @@ $(document).ready(function () {
 
     function fetchTableData(metadataId) {
         const data = {
-            action: 'fetchMetadataByID($connection, $metadata_id',
+            action: 'fetchPerformanceData', // Assuming you want to fetch performance data
             student_id: CURRENT_STUDENT_ID,
             metadata_id: metadataId,
         };
@@ -340,8 +340,6 @@ $(document).ready(function () {
                 } else {
                     console.error('Invalid or empty response:', response);
                 }
-                // Log the response text
-                console.log('Response Text:', xhr.responseText);
             },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', error);
@@ -349,7 +347,8 @@ $(document).ready(function () {
                 console.log('Error Response Text:', xhr.responseText);
             }
         });
-    }   
+    }
+     
 
     function updateTable(columnHeaders, performanceData) {
         // Update table headers with new column names
