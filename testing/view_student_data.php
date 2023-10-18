@@ -51,6 +51,7 @@ foreach ($performanceData as $record) {
 </head>
 <body>
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 
 <a href="test.php" class="btn btn-primary">Student List</a>
 
