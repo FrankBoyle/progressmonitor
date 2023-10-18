@@ -343,7 +343,7 @@ $(document).ready(function () {
 // Check the URL in fetchPerformanceData function:
 function fetchPerformanceData() {
     $.ajax({
-        url: 'fetch_performance_data.php', // Check if this URL is correct
+        url: './users/fetch_performance_data.php', // Check if this URL is correct
         type: 'GET',
         data: {
             student_id: CURRENT_STUDENT_ID,
