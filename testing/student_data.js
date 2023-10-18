@@ -336,7 +336,9 @@ function fetchColumnHeaders(metadataId) {
                 const columnHeaders = jsonData.displayedColumns;
     
                 // Now you can use the 'columnHeaders' object as needed
-                updateTable(columnNames, performanceData);            },
+                // Typically, you would update the table headers and content here
+                updateTable(columnHeaders, performanceData);
+            },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', status, error);
             }
