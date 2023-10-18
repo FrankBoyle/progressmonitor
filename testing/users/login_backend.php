@@ -28,7 +28,7 @@
                 // Fetching additional information now that the user is verified
                 $accountId = $result['id'];
                 
-                $teacherQuery = $connection->prepare("SELECT teacher_id, SchoolID FROM Teachers WHERE account_id = :accountId");
+                $teacherQuery = $connection->prepare("SELECT teacher_id, school_id FROM Teachers WHERE account_id = :accountId");
                 $teacherQuery->bindParam("accountId", $accountId, PDO::PARAM_INT);
                 $teacherQuery->execute();
                 
@@ -37,8 +37,8 @@
                 if ($teacherResult) {
                     $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
 
-                    // Assuming 'SchoolID' is the correct column name for the school identifier
-                    $_SESSION['SchoolID'] = $teacherResult['SchoolID']; // Store SchoolID in the session
+                    // Assuming 'school_id' is the correct column name for the school identifier
+                    $_SESSION['school_id'] = $teacherResult['school_id']; // Store school_id in the session
                 } else {
                     echo '<p class="error">No teacher ID associated with this account.</p>';
                     exit(); 

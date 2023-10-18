@@ -15,23 +15,23 @@ function fetchPerformanceData($studentId) {
 
 function fetchMetadataCategories($schoolID) {
     global $connection;
-    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
     $stmt->execute([$schoolID]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
+    $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch();
-    return $result ? $result['SchoolID'] : null;
+    return $result ? $result['school_id'] : null;
 }
 
 function fetchScoreNames($schoolID) {
     global $connection;
     $scoreNames = [];
-    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE SchoolID = ?");
+    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE school_id = ?");
     $stmt->execute([$schoolID]);
     while ($row = $stmt->fetch()) {
         $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
@@ -41,7 +41,7 @@ function fetchScoreNames($schoolID) {
 
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
@@ -49,24 +49,24 @@ function fetchStudentsByTeacher($teacherId) {
 function addNewStudent($studentName, $teacherId) {
     global $connection;
 
-    // Fetch the SchoolID of the current teacher
-    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    // Fetch the school_id of the current teacher
+    $stmt = $connection->prepare("SELECT school_id FROM Teachers WHERE teacher_id = ?");
     $stmt->execute([$teacherId]);
     $teacherInfo = $stmt->fetch();
-    $teacherSchoolID = $teacherInfo['SchoolID'];
+    $teacherschool_id = $teacherInfo['school_id'];
 
-    // Check if the student with the same name and SchoolID already exists
-    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
-    $stmt->execute([$studentName, $teacherSchoolID]);
+    // Check if the student with the same name and school_id already exists
+    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND school_id = ?");
+    $stmt->execute([$studentName, $teacherschool_id]);
     $duplicateStudent = $stmt->fetch();
 
     if ($duplicateStudent) {
         return "Student with the same name already exists.";
     } 
 
-    // Insert the new student with the same SchoolID
-    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
-    $stmt->execute([$studentName, $teacherSchoolID]);
+    // Insert the new student with the same school_id
+    $stmt = $connection->prepare("INSERT INTO Students (name, school_id) VALUES (?, ?)");
+    $stmt->execute([$studentName, $teacherschool_id]);
     return "New student added successfully.";
 }
 
@@ -103,10 +103,10 @@ if (!isset($_GET['student_id'])) {
 }
 
 $studentId = $_GET['student_id'];
-$schoolID = fetchSchoolIdForStudent($studentId);  // Fetch SchoolID
+$schoolID = fetchSchoolIdForStudent($studentId);  // Fetch school_id
 
 if (!$schoolID) {
-    return;  // If there's no SchoolID, exit early
+    return;  // If there's no school_id, exit early
 }
 
 // Fetch performance data and score names
@@ -121,13 +121,13 @@ foreach ($performanceData as $record) {
 
 // Handling the data POST from the dropdown functionality
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
-    $schoolIDIndex = $_POST['SchoolIDIndex'];
+    $schoolIDIndex = $_POST['school_idIndex'];
     $originalName = $_POST['ScoreColumn'];
     $customName = $_POST['CustomName'];
     $scoreGroup = $_POST['ScoreGroup'];
 
     // Inserting into the SchoolScoreNames table
-    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (SchoolIDIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
+    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (school_idIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
     $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
     
     // Respond with the ID of the inserted row

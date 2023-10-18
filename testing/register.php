@@ -901,9 +901,9 @@
     </div>
 </div>
 
-<!-- Here's the new SchoolID input field -->
+<!-- Here's the new school_id input field -->
 <div class="input-group mb-3">
-    <input type="text" class="form-control" name="SchoolID" id="SchoolID" placeholder="School ID">
+    <input type="text" class="form-control" name="school_id" id="school_id" placeholder="School ID">
     <div class="input-group-append">
         <div class="input-group-text">
             <span class="fas fa-school"></span>

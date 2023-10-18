@@ -8,16 +8,16 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Check if 'SchoolID' is set in the session before using it.
-if (isset($_SESSION['SchoolID'])) {
+// Check if 'school_id' is set in the session before using it.
+if (isset($_SESSION['school_id'])) {
     // It's important to use the same case as you used when you set the session variable.
-    // 'SchoolID' is different from 'schoolID' or 'schoolId'.
-    $schoolID = $_SESSION['SchoolID'];
+    // 'school_id' is different from 'schoolID' or 'schoolId'.
+    $schoolID = $_SESSION['school_id'];
 } else {
-    // Handle the case where 'SchoolID' is not set in the session.
+    // Handle the case where 'school_id' is not set in the session.
     // Depending on your application's logic, this might involve redirecting the user,
     // showing an error message, or setting a default value for testing.
-    echo "Error: SchoolID is not set in the session.";
+    echo "Error: school_id is not set in the session.";
     exit(); // Stop the script, or handle this situation differently as per your requirements.
 }
 
@@ -28,10 +28,10 @@ if (isset($_GET['student_id'])) {
     $studentId = null; // or set a default value appropriate for your context
 }
 
-// You can create a function to fetch student IDs by SchoolID, e.g., fetchStudentIdsBySchool
+// You can create a function to fetch student IDs by school_id, e.g., fetchStudentIdsBySchool
 $studentIds = fetchStudentIdsBySchool($connection, $schoolID);
 
-// Similarly, you can create a function to fetch metadata IDs by SchoolID, e.g., fetchMetadataIdsBySchool
+// Similarly, you can create a function to fetch metadata IDs by school_id, e.g., fetchMetadataIdsBySchool
 $metadataIds = fetchMetadataIdsBySchool($connection, $schoolID);
 // Initialize empty arrays and variables
 
@@ -59,7 +59,7 @@ $metadataID = null;
 // Initialize $metadataID to null to check later if it was set
 
 try {
-    $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE SchoolID = ?");
+    $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE school_id = ?");
     $stmt->execute([$schoolID]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -94,8 +94,8 @@ if (isset($_GET['metadataId'])) {
 
 
 
-// Fetch metadata entries from the Metadata table for the specified SchoolID and metadata_id
-$stmt = $connection->prepare("SELECT * FROM Metadata WHERE SchoolID = ? AND metadata_id = ?");
+// Fetch metadata entries from the Metadata table for the specified school_id and metadata_id
+$stmt = $connection->prepare("SELECT * FROM Metadata WHERE school_id = ? AND metadata_id = ?");
 $stmt->execute([$schoolID, $metadataID]);
 
 if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -114,7 +114,7 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         //'score_date' => 'Date', // You can customize this label
     ];
 } else {
-    // Handle the case where no metadata entry is found for the specified SchoolID and metadata_id
+    // Handle the case where no metadata entry is found for the specified school_id and metadata_id
     echo "Metadata entry not found.";
     exit;
 }
@@ -129,8 +129,8 @@ foreach ($performanceData as $record) {
     // You can add more logic here if needed
 }
 
-// Fetch metadata entries from the Metadata table for the specified SchoolID
-$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+// Fetch metadata entries from the Metadata table for the specified school_id
+$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
 $stmt->execute([$schoolID]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;

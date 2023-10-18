@@ -13,7 +13,7 @@ function fetchPerformanceData($connection, $studentId) {
 // Function to fetch metadata categories for a school
 function fetchMetadataCategoriesFromDatabase($connection, $schoolID) {
     // Removed the global variable
-    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE SchoolID = ?");
+    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
     $stmt->execute([$schoolID]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -22,9 +22,9 @@ function fetchStudentIdsBySchool($connection, $schoolID) {
     // This array will hold the student IDs
     $studentIds = [];
     try {
-        // Prepare your query: select student IDs from your students table where the SchoolID matches
-        $stmt = $connection->prepare("SELECT student_id FROM Students WHERE SchoolID = :schoolID");
-        // Execute the query with the provided SchoolID
+        // Prepare your query: select student IDs from your students table where the school_id matches
+        $stmt = $connection->prepare("SELECT student_id FROM Students WHERE school_id = :schoolID");
+        // Execute the query with the provided school_id
         $stmt->execute(['schoolID' => $schoolID]);
         // Fetch all the student IDs
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -37,22 +37,22 @@ function fetchStudentIdsBySchool($connection, $schoolID) {
     return $studentIds;
 }
 
-// Function to fetch the SchoolID for a student
+// Function to fetch the school_id for a student
 function fetchSchoolIdForStudent($connection, $studentId) {
     // Adjusted to use parameter
-    $stmt = $connection->prepare("SELECT SchoolID FROM Students WHERE student_id = ?");
+    $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch();
-    return $result ? $result['SchoolID'] : null;
+    return $result ? $result['school_id'] : null;
 }
 
 function fetchMetadataIdsBySchool($connection, $schoolID) {
     // This array will hold the metadata IDs
     $metadataIds = [];
     try {
-        // Prepare your query: select metadata IDs from your metadata table where the SchoolID matches
-        $stmt = $connection->prepare("SELECT metadata_id FROM Metadata WHERE SchoolID = :schoolID");
-        // Execute the query with the provided SchoolID
+        // Prepare your query: select metadata IDs from your metadata table where the school_id matches
+        $stmt = $connection->prepare("SELECT metadata_id FROM Metadata WHERE school_id = :schoolID");
+        // Execute the query with the provided school_id
         $stmt->execute(['schoolID' => $schoolID]);
         // Fetch all the metadata IDs
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -69,7 +69,7 @@ function fetchMetadataIdsBySchool($connection, $schoolID) {
 function fetchScoreNames($connection, $schoolID) {
     // Code refined to use the $connection parameter
     $scoreNames = [];
-    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE SchoolID = ?");
+    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE school_id = ?");
     $stmt->execute([$schoolID]);
     if ($row = $stmt->fetch()) {
         for ($i = 1; $i <= 10; $i++) {
@@ -83,7 +83,7 @@ function fetchScoreNames($connection, $schoolID) {
 // Function to fetch students by teacher
 function fetchStudentsByTeacher($connection, $teacherId) {
     // Dependency on $connection removed from the global scope
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.SchoolID = t.SchoolID WHERE t.teacher_id = ?");
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
@@ -91,14 +91,14 @@ function fetchStudentsByTeacher($connection, $teacherId) {
 // Function to add a new student
 function addNewStudent($connection, $studentName, $teacherId) {
     // Replaced global with function parameter
-    $stmt = $connection->prepare("SELECT SchoolID FROM Teachers WHERE teacher_id = ?");
+    $stmt = $connection->prepare("SELECT school_id FROM Teachers WHERE teacher_id = ?");
     $stmt->execute([$teacherId]);
     $teacherInfo = $stmt->fetch();
-    $teacherSchoolID = $teacherInfo['SchoolID'];
+    $teacherschool_id = $teacherInfo['school_id'];
 
     // Check for duplicates
-    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND SchoolID = ?");
-    $stmt->execute([$studentName, $teacherSchoolID]);
+    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND school_id = ?");
+    $stmt->execute([$studentName, $teacherschool_id]);
     $duplicateStudent = $stmt->fetch();
 
     if ($duplicateStudent) {
@@ -106,8 +106,8 @@ function addNewStudent($connection, $studentName, $teacherId) {
     } 
 
     // Insert the new student
-    $stmt = $connection->prepare("INSERT INTO Students (name, SchoolID) VALUES (?, ?)");
-    $stmt->execute([$studentName, $teacherSchoolID]);
+    $stmt = $connection->prepare("INSERT INTO Students (name, school_id) VALUES (?, ?)");
+    $stmt->execute([$studentName, $teacherschool_id]);
     return "New student added successfully.";
 }
 

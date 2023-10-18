@@ -5,7 +5,7 @@
     if (isset($_POST['register'])) {
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
-        $SchoolID = $_POST['SchoolID'];
+        $school_id = $_POST['school_id'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
@@ -17,10 +17,10 @@
             echo '<p class="error">The email address is already registered!</p>';
         }
         if ($query->rowCount() == 0) {
-          $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password,SchoolID) VALUES (:fname,:lname,:email,:password_hash,:SchoolID)");
+          $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password,school_id) VALUES (:fname,:lname,:email,:password_hash,:school_id)");
           $query->bindParam("fname", $fname, PDO::PARAM_STR);
             $query->bindParam("lname", $lname, PDO::PARAM_STR);
-            $query->bindParam("SchoolID", $SchoolID, PDO::PARAM_INT);  // Assuming SchoolID is an integer
+            $query->bindParam("school_id", $school_id, PDO::PARAM_INT);  // Assuming school_id is an integer
             $query->bindParam("email", $email, PDO::PARAM_STR);
             $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
             $result = $query->execute();
@@ -934,9 +934,9 @@
     </div>
 </div>
 
-<!-- Here's the new SchoolID input field -->
+<!-- Here's the new school_id input field -->
 <div class="input-group mb-3">
-    <input type="text" class="form-control" name="SchoolID" id="SchoolID" placeholder="School ID">
+    <input type="text" class="form-control" name="school_id" id="school_id" placeholder="School ID">
     <div class="input-group-append">
         <div class="input-group-text">
             <span class="fas fa-school"></span>

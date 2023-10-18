@@ -13,10 +13,10 @@ if (!isset($_GET['student_id'])) {
 }
 
 $studentId = $_GET['student_id'];
-$schoolID = fetchSchoolIdForStudent($connection, $studentId);  // Fetch SchoolID
+$schoolID = fetchSchoolIdForStudent($connection, $studentId);  // Fetch school_id
 
 if (!$schoolID) {
-    return;  // If there's no SchoolID, exit early
+    return;  // If there's no school_id, exit early
 }
 
 // Fetch performance data and score names
