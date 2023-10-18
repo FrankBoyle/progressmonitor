@@ -390,6 +390,7 @@ function fetchColumnHeaders(metadataId) {
     }
     
     
+    
     function handleMetadataChange() {
         const selectedMetadataId = $(this).val();
         if (selectedMetadataId === '0') {
