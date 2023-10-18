@@ -301,7 +301,7 @@ $(document).ready(function () {
             url: './users/fetch_data.php',
             method: 'GET',
             data: {
-                student_id: student_id, // Pass your student ID here
+                student_id: CURRENT_STUDENT_ID, // Pass your student ID here
                 action: 'fetchDefaultMetadataId'
             },
             dataType: 'json',
