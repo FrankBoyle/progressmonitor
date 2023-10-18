@@ -348,11 +348,20 @@ $(document).ready(function () {
                 console.log('HTTP Status Code:', xhr.status);
                 console.log('Status Text:', xhr.statusText);
     
-                // Log the response text in case of an error
-                console.log('Error Response Text:', xhr.responseText);
+                // Check if the response text is empty or not valid JSON
+                if (xhr.responseText) {
+                    try {
+                        const jsonResponse = JSON.parse(xhr.responseText);
+                        console.log('Parsed JSON Response:', jsonResponse);
+                    } catch (e) {
+                        console.error('Failed to parse JSON:', e);
+                    }
+                } else {
+                    console.error('Empty Response Text');
+                }
             }
         });
-    }
+    }    
      
     function updateTable(columnHeaders, performanceData) {
         // Update table headers with new column names
