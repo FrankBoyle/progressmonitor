@@ -144,6 +144,7 @@ try {
 
 
 
+
 // Fetch metadata entries from the Metadata table for the specified school_id and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE school_id = ? AND metadata_id = ?");
 $stmt->execute([$school_id, $metadataID]);
