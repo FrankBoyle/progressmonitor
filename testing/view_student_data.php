@@ -48,7 +48,7 @@ foreach ($metadataEntries as $metadataEntry) {
     $categoryName = $metadataEntry['category_name'];
 
     // Generate a link to the table for this metadata entry
-    echo "<a href='view_stduent_data.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
+    echo "<a href='view_student_data.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
 }
 ?>
 
