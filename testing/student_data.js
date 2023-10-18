@@ -536,7 +536,7 @@ function fetchColumnHeaders(metadataId) {
 const table = $('#myDataTable');
 
 // Extract columnNames from columnHeaders
-const columnNames = Object.values(columnHeaders);
+//const columnNames = Object.values(columnHeaders);
 
 // Check if DataTables is already initialized for the table
 if (!$.fn.DataTable.isDataTable('#myDataTable')) {
