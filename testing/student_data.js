@@ -448,6 +448,8 @@ $(document).ready(function () {
         // Debugging: Log data to console
         console.log('performanceData:', performanceData);
         console.log('columnHeaders:', columnHeaders);
+        console.log(columnHeaders);
+
     
         // Update table headers with new column names
         const table = $('table');
