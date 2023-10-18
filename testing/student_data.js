@@ -788,11 +788,11 @@ function attachEditableHandler() {
 }
 // Make an AJAX request to fetch performance data based on school_id, student_id, and metadata_id
 $.ajax({
-    url: 'fetch_performance_data.php', // Create a PHP script to handle the data fetching
+    url: 'fetch_performance_data.php', // Replace with your PHP script URL
     type: 'GET',
     data: {
-        student_id: <?php echo json_encode($student_id); ?>, // Echo PHP variable
-        metadata_id: <?php echo json_encode($metadataID); ?> // Echo PHP variable
+        student_id: student_id,// Embed PHP variable
+        metadata_id: json_encode($metadataID) // Embed PHP variable
     },
     dataType: 'json',
     success: function (data) {
@@ -838,5 +838,6 @@ $.ajax({
         console.error('Error:', status, error);
     }
 });
+
 
 });
