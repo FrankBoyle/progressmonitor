@@ -265,6 +265,17 @@ $(document).ready(function () {
 
     // Event listeners
     $('#metadataIdSelector').on('change', handleMetadataChange);
+    $('#metadataIdSelector').on('change', function() {
+        const selectedMetadataId = $(this).val();
+        
+        // Update the URL with the selected metadata_id
+        const currentUrl = window.location.href;
+        const updatedUrl = updateUrlParameter(currentUrl, 'metadata_id', selectedMetadataId);
+        window.location.href = updatedUrl;
+        
+        // Update the chart headers based on the selected metadata_id
+        updateChartHeaders(selectedMetadataId);
+    });
     $('#toggleDateOrder').on('click', toggleDateOrder);
     $('#addDataRow').on('click', addNewDataRow);
     $(document).on('click', '.deleteRow', deleteDataRow);
