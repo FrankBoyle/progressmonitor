@@ -53,7 +53,7 @@ $defaultMetadataID = 1; // Default value in case of any issues
 $metadataID = null;
 $columnNames = [];
 
-
+/*
 try {
     // Attempt to fetch performance data
     $performanceData = fetchPerformanceData($connection, $student_id);
@@ -78,6 +78,7 @@ if (!$columnNames) {
     $columnNames = []; // Set a default value or handle the error
     echo "Failed to fetch column names.";
 }
+*/
 
 // Initialize $metadataID to null to check later if it was set
 
