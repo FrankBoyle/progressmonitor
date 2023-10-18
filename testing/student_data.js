@@ -263,7 +263,7 @@ $(document).ready(function () {
     // Initialize the page
     initializePage();
     // Fetch performance data and update the table
-
+    $('#your-table-id').DataTable();
     $('#toggleDateOrder').on('click', toggleDateOrder);
     $('#addDataRow').on('click', addNewDataRow);
     $(document).on('click', '.deleteRow', deleteDataRow);
@@ -283,26 +283,6 @@ $(document).ready(function () {
         $("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',
             onSelect: filterTableByDate
-        });
-    }
-
-    function fetchColumnHeaders(metadataId) {
-        // Send an AJAX request to fetch the JSON data
-        $.ajax({
-            url: './users/fetch_data.php', // Replace with the actual URL to your JSON data
-            type: 'GET',
-            dataType: 'json',
-            success: function (jsonData) {
-                // Use the displayedColumns object directly
-                const columnHeaders = jsonData.displayedColumns;
-    
-                // Now you can use the 'columnHeaders' object as needed
-                // Typically, you would update the table headers and content here
-                updateTable(columnHeaders, performanceData);
-            },
-            error: function (xhr, status, error) {
-                console.error('AJAX Error:', status, error);
-            }
         });
     }
 
@@ -361,108 +341,6 @@ function fetchPerformanceData() {
 }
     
 
-    function fetchTableData(metadataId) {
-        const data = {
-            action: 'fetchPerformanceData',
-            student_id: CURRENT_STUDENT_ID,
-            metadata_id: metadataId,
-        };
-    
-        $.ajax({
-            type: 'GET',
-            url: './users/fetch_data.php',
-            data: data,
-            dataType: 'json',
-            success: function (response) {
-                console.log('Response:', response);
-                
-                if (!response || $.isEmptyObject(response)) {
-                    console.error('Empty or invalid response from the server.');
-                    return;
-                }
-    
-                if (response && response.columnHeaders && response.performanceData) {
-                    updateTable(response.columnHeaders, response.performanceData);
-                } else {
-                    console.error('Invalid response:', response);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('AJAX Error:', error);
-                
-                // Log the HTTP status code and status text
-                console.log('HTTP Status Code:', xhr.status);
-                console.log('Status Text:', xhr.statusText);
-    
-                // Check if the response text is available
-                if (xhr.responseText) {
-                    console.log('Response Text:', xhr.responseText);
-                } else {
-                    console.error('Empty Response Text');
-                }
-            }
-        });
-    }     
-     
-    function updateTable(columnHeaders, performanceData) {
-        // Debugging: Log data to console
-        console.log('performanceData:', performanceData);
-        console.log('columnHeaders:', columnHeaders);
-    
-        // Update table headers with new column names
-        const table = $('table');
-        table.find('thead').remove();
-    
-        // Generate new table headers based on columnHeaders
-        const thead = $('<thead>');
-        const headerRow = $('<tr>');
-        headerRow.append($('<th>Date</th>'));
-    
-        // Extract columnNames from columnHeaders
-        //const columnNames = Object.values(columnHeaders);
-    
-        // Debugging: Log columnNames to console
-        console.log('columnNames:', columnNames);
-    
-        $.each(columnNames, function (index, columnName) {
-            headerRow.append($('<th>' + columnName + '</th>'));
-        });
-    
-        headerRow.append($('<th>Action</th>'));
-        thead.append(headerRow);
-        table.append(thead);
-    
-        // Use DataTables API to populate the table with performanceData
-        const dataTable = table.DataTable({
-            "order": [[0, "asc"]],
-            "lengthChange": false,
-            "paging": true,
-            "searching": true,
-            "info": false,
-            "columns": [
-                { "type": "date-us" },
-                ...columnNames.map(header => ({ title: header })),
-                { "orderable": false }
-            ]
-        });
-    
-        // Check for the existence of performanceData before updating
-        if (performanceData && performanceData.length > 0) {
-            // Clear existing data
-            dataTable.clear();
-    
-            // Add new data
-            dataTable.rows.add(performanceData);
-    
-            // Redraw the table
-            dataTable.draw();
-        } else {
-            // Display a message when there's no data
-            table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
-        }
-    }
-    
-
 // Assuming you have a table element with the ID "myDataTable" in your HTML
 const table = $('#myDataTable');
 
@@ -517,9 +395,6 @@ if (!$.fn.DataTable.isDataTable('#myDataTable')) {
         table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
     }
 }
-
-
-
 
     function toggleDateOrder() {
         const table = $('table').DataTable();
