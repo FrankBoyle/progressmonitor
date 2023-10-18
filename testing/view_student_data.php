@@ -71,7 +71,7 @@ foreach ($performanceData as $record) {
 </select>
 
 
-<table border="1">
+<table id="myDataTable" border="1">
 <thead>
     <tr>
         <th>Date</th>
