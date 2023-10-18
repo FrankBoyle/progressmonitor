@@ -259,43 +259,8 @@ function calculateTrendline(data) {
 $(document).ready(function () {
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
     let dateAscending = true;
-
     // Initialize the page
     initializePage();
-
-    // Event listeners
-    $('#metadataIdSelector').on('change', handleMetadataChange);
-// Attach an event listener to the dropdown element
-$('#metadataIdSelector').on('change', function() {
-    const selectedMetadataId = $(this).val();
-    
-    if (selectedMetadataId === '0') {
-        // Handle the case when '0' is selected (if needed)
-    } else {
-        // Call fetchColumnHeaders with the selected metadataId
-        fetchColumnHeaders(selectedMetadataId);
-    }
-});
-
-function fetchColumnHeaders(metadataId) {
-    // Send an AJAX request to fetch the JSON data
-    $.ajax({
-        url: './users/fetch_data.php', // Replace with the actual URL to your JSON data
-        type: 'GET',
-        dataType: 'json',
-        success: function (jsonData) {
-            // Use the displayedColumns object directly
-            const columnHeaders = jsonData.displayedColumns;
-
-            // Now you can use the 'columnHeaders' object as needed
-            // Typically, you would update the table headers and content here
-            updateTable(columnHeaders, performanceData);
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error:', status, error);
-        }
-    });
-}
 
     $('#toggleDateOrder').on('click', toggleDateOrder);
     $('#addDataRow').on('click', addNewDataRow);
@@ -312,12 +277,6 @@ function fetchColumnHeaders(metadataId) {
         attachEditableHandler();
     }
 
-    function updateUrlParameter(url, paramKey, paramValue) {
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set(paramKey, paramValue);
-        return `${url.split('?')[0]}?${urlParams.toString()}`;
-    }
-    
     function initializeDatePicker() {
         $("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',
@@ -343,59 +302,6 @@ function fetchColumnHeaders(metadataId) {
                 console.error('AJAX Error:', status, error);
             }
         });
-    }
-    
-    function updateChartHeaders(selectedMetadataId) {
-        // Make an AJAX request to your server to fetch the updated chart headers
-        $.ajax({
-            url: './users/fetch_data.php', // Replace with the actual URL to fetch chart headers
-            type: 'GET',
-            data: { metadataId: selectedMetadataId }, // Send the selected metadata_id as a parameter
-            dataType: 'json', // Assuming the response will be in JSON format
-            success: function(response) {
-                // Extract columnHeaders from the response
-                const columnHeaders = response.columnHeaders;
-    
-                // Assuming response.data contains the updated chart headers as an array
-                const updatedChartHeaders = response.data;
-    
-                // Update the chart headers in your HTML
-                const chartTable = $('#chartTable'); // Replace with the actual ID or selector of your chart table
-    
-                // Clear existing headers
-                chartTable.find('thead').empty();
-    
-                // Generate new headers based on updatedChartHeaders
-                const thead = $('<thead>');
-                const headerRow = $('<tr>');
-                headerRow.append($('<th>Date</th>'));
-    
-                // Iterate through updatedChartHeaders and add them as table headers
-                updatedChartHeaders.forEach(function(columnName) {
-                    headerRow.append($('<th>' + columnName + '</th>'));
-                });
-    
-                headerRow.append($('<th>Action</th>'));
-                thead.append(headerRow);
-                chartTable.append(thead);
-    
-                // After updating the chart headers, call the function to update the table
-                updateTable(columnHeaders, performanceData);
-            },
-            error: function(error) {
-                // Handle any errors that occur during the AJAX request
-                console.error('Error fetching updated chart headers:', error);
-            }
-        });
-    } 
-    
-    function handleMetadataChange() {
-        const selectedMetadataId = $(this).val();
-        if (selectedMetadataId === '0') {
-            fetchDefaultHeaders();
-        } else {
-            fetchColumnHeaders(selectedMetadataId);
-        }
     }
 
     function fetchDefaultHeaders() {
@@ -880,4 +786,57 @@ function attachEditableHandler() {
         });
     });
 }
+// Make an AJAX request to fetch performance data based on school_id, student_id, and metadata_id
+$.ajax({
+    url: 'fetch_performance_data.php', // Create a PHP script to handle the data fetching
+    type: 'GET',
+    data: {
+        student_id: <?php echo json_encode($student_id); ?>, // Echo PHP variable
+        metadata_id: <?php echo json_encode($metadataID); ?> // Echo PHP variable
+    },
+    dataType: 'json',
+    success: function (data) {
+        // Process the data and dynamically generate the table
+        const performanceData = data.performanceData; // Assuming your data has this structure
+
+        // Create an HTML table structure
+        let tableHTML = '<table>';
+        tableHTML += '<thead>';
+        tableHTML += '<tr>';
+        tableHTML += '<th>Date</th>';
+
+        // Dynamically generate table headers based on the data structure
+        for (const columnName in performanceData[0]) {
+            tableHTML += `<th>${columnName}</th>`;
+        }
+
+        tableHTML += '</tr>';
+        tableHTML += '</thead>';
+        tableHTML += '<tbody>';
+
+        // Populate the table with data
+        for (const record of performanceData) {
+            tableHTML += '<tr>';
+            tableHTML += `<td>${record.score_date}</td>`;
+
+            // Dynamically generate table cells for scores based on the data structure
+            for (const columnName in record) {
+                tableHTML += `<td>${record[columnName]}</td>`;
+            }
+
+            tableHTML += '</tr>';
+        }
+
+        tableHTML += '</tbody>';
+        tableHTML += '</table>';
+
+        // Update the #performanceTable div with the generated table
+        $('#performanceTable').html(tableHTML);
+    },
+    error: function (xhr, status, error) {
+        // Handle errors if necessary
+        console.error('Error:', status, error);
+    }
+});
+
 });
