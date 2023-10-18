@@ -336,11 +336,11 @@ $(document).ready(function () {
             success: function (response) {
                 console.log('Response:', response);
                 
-                if (!response) {
-                    console.error('Empty response from the server.');
-                    return; // Exit the function if the response is empty
+                if (!response || $.isEmptyObject(response)) {
+                    console.error('Empty or invalid response from the server.');
+                    return;
                 }
-                
+    
                 if (response && response.columnHeaders && response.performanceData) {
                     updateTable(response.columnHeaders, response.performanceData);
                 } else {
@@ -356,12 +356,7 @@ $(document).ready(function () {
     
                 // Check if the response text is available
                 if (xhr.responseText) {
-                    try {
-                        const jsonResponse = JSON.parse(xhr.responseText);
-                        console.log('Parsed JSON Response:', jsonResponse);
-                    } catch (e) {
-                        console.error('Failed to parse JSON:', e);
-                    }
+                    console.log('Response Text:', xhr.responseText);
                 } else {
                     console.error('Empty Response Text');
                 }
