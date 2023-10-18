@@ -12,15 +12,15 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$studentId = $_GET['student_id'];
-$school_id = fetchSchoolIdForStudent($connection, $studentId);  // Fetch school_id
+$student_id = $_GET['student_id'];
+$school_id = fetchSchoolIdForStudent($connection, $student_id);  // Fetch school_id
 
 if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
 
 // Fetch performance data and score names
-$performanceData = fetchPerformanceData($connection, $studentId);
+$performanceData = fetchPerformanceData($connection, $student_id);
 $scoreNames = fetchScoreNames($connection, $school_id);
 // Define and initialize $currentWeekStartDate
 $currentWeekStartDate = date('Y-m-d'); // or any other default date you prefer
@@ -52,7 +52,7 @@ foreach ($performanceData as $record) {
 </style>
 </head>
 <body>
-<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($student_id); ?>" />
 
 <a href="test.php" class="btn btn-primary">Student List</a>
 
