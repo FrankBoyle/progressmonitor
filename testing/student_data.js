@@ -300,32 +300,27 @@ $(document).ready(function () {
         $.ajax({
             type: 'GET',
             url: './users/fetch_data.php',
-            data: { action: 'fetchDefaultMetadataId' }, // Add an action to your PHP script
+            data: { action: 'fetchDefaultMetadataId' },
             dataType: 'json',
             success: function (response) {
                 console.log('Response:', response);
                 if (response && response.metadataId) {
-                    fetchTableData(response.metadataId); // Use the retrieved metadataId
+                    fetchTableData(response.metadataId);
                 } else {
                     console.error('Invalid or empty response:', response);
                 }
             },
             error: function (xhr, status, error) {
-                // Log the error with additional information
                 console.error('AJAX Error:', error);
-                console.error('Status Code:', xhr.status);
-                console.error('Status Text:', xhr.statusText);
-                
-                // If the response is available, log it
+                console.log('HTTP Status Code:', xhr.status);
+                console.log('Status Text:', xhr.statusText);
                 if (xhr.responseText) {
-                    console.error('Response Text:', xhr.responseText);
+                    console.log('Response Text:', xhr.responseText);
                 }
             }
         });
-    }
+    }   
     
-    
-
     function fetchColumnHeaders(metadataId) {
         fetchTableData(metadataId);
     }
