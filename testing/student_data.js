@@ -316,8 +316,7 @@ $(document).ready(function () {
                 const columnHeaders = jsonData.displayedColumns;
     
                 // Now you can use the 'columnHeaders' object as needed
-                updateTable(columnHeaders); // Update your table with the column headers
-            },
+                updateTable(columnNames, performanceData);            },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', status, error);
             }
