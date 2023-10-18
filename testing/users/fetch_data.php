@@ -61,7 +61,7 @@ try {
     if (empty($performanceData)) {
         // Handle the case where no performance data is found
         echo "No performance data found for the specified student.";
-        exit;
+
     }
     
     // Rest of your code for processing and returning data
