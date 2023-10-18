@@ -326,7 +326,7 @@ $(document).ready(function () {
             student_id: CURRENT_STUDENT_ID,
             metadata_id: metadataId,
         };
-
+    
         $.ajax({
             type: 'GET',
             url: './users/fetch_data.php',
@@ -341,9 +341,12 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', error);
+                console.log('XHR Object:', xhr);
+                console.log('Status:', status);
             }
         });
     }
+    
 
     function updateTable(columnHeaders, performanceData) {
         // Update table headers with new column names
