@@ -168,26 +168,34 @@ function addNewStudent($connection, $studentName, $teacherId) {
 
 // Function to fetch column names based on metadataId
 function fetchColumnNamesByMetadataID($connection, $metadataID) {
-    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
-    $stmt->execute([$metadataID]);
-    
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    $columnNames = [
-        'score1' => $row['score1_name'],
-        'score2' => $row['score2_name'],
-        'score3' => $row['score3_name'],
-        'score4' => $row['score4_name'],
-        'score5' => $row['score5_name'],
-        'score6' => $row['score6_name'],
-        'score7' => $row['score7_name'],
-        'score8' => $row['score8_name'],
-        'score9' => $row['score9_name'],
-        'score10' => $row['score10_name'],
-    ];
-    
-    return $columnNames;
+    try {
+        // Prepare the SQL query
+        $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE metadata_id = ?");
+        // Execute the query with the provided metadataID
+        $stmt->execute([$metadataID]);
+        // Fetch the row
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Check if the row was found
+        if (!$row) {
+            return []; // Return an empty array if metadata_id doesn't exist
+        }
+        // Create an associative array with column names
+        $columnNames = [
+            'score1' => $row['score1_name'],
+            'score2' => $row['score2_name'],
+            'score3' => $row['score3_name'],
+            'score4' => $row['score4_name'],
+            'score5' => $row['score5_name'],
+            'score6' => $row['score6_name'],
+            'score7' => $row['score7_name'],
+            'score8' => $row['score8_name'],
+            'score9' => $row['score9_name'],
+            'score10' => $row['score10_name'],
+        ];
+        return $columnNames;
+    } catch (PDOException $e) {
+        // Handle exceptions as needed (e.g., log or rethrow)
+        return []; // Return an empty array in case of an error
+    }
 }
-
-
 ?>
