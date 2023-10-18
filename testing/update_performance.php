@@ -11,7 +11,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     $performanceId = $_POST['performance_id'];
     $fieldName = $_POST['field_name'];
     $newValue = $_POST['new_value'];
-    $student_id = $_POST['student_id'] ?? null;
+    $studentId = $_POST['student_id'] ?? null;
 
     // If the field being updated is one of the score fields and the value is empty, set it to NULL.
     if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'])) {
@@ -23,7 +23,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     // Validate and sanitize the date input (assuming it's for the 'score_date' field)
     if ($fieldName === 'score_date') {
         $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ? AND performance_id != ?");
-        $checkStmt->execute([$student_id, $newValue, $performanceId]); // Ensure to grab the $student_id in this script too.
+        $checkStmt->execute([$studentId, $newValue, $performanceId]); // Ensure to grab the $studentId in this script too.
         $count = $checkStmt->fetchColumn();
     
         if ($count > 0) {
@@ -86,6 +86,7 @@ function sendResponse($response) {
     exit;
 }
 ?>
+
 
 
 

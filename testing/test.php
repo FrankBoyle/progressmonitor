@@ -1,9 +1,5 @@
 <?php
-include ('./users/fetch_data.php');
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+include './users/fetch_data.php';
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
@@ -11,9 +7,6 @@ if (!isset($_SESSION['teacher_id'])) {
 
 $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
-
-// Define a default metadata ID (you can change this as needed)
-$defaultmetadataID = $metadataID;
 
 // Handle form submission for adding new student
 if (isset($_POST['add_new_student'])) {
@@ -23,15 +16,14 @@ if (isset($_POST['add_new_student'])) {
     }
 }
 
-$students = fetchStudentsByTeacher($connection, $teacherId);
+$students = fetchStudentsByTeacher($teacherId);
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>Student List</title>
+    <title>Your Page Title</title>
 </head>
 <body>
     <!-- Add New Student Form -->
@@ -41,20 +33,20 @@ $students = fetchStudentsByTeacher($connection, $teacherId);
         <input type="submit" name="add_new_student" value="Add New Student">
     </form>
 
-    <?php if (!empty($students)): ?>
-    <h2>Students:</h2>
-    <?php foreach ($students as $student): ?>
-        <?php
-        // Dynamically generate the link with metadata_id as a query parameter
-        $studentLink = 'view_student_data.php?student_id=' . $student['student_id'] . '&metadata_id=' . $defaultmetadataID;
-        ?>
-        <a href="<?= $studentLink ?>"><?= $student['name'] ?></a><br>
-    <?php endforeach; ?>
-<?php else: ?>
-    No students found for this teacher.
-<?php endif; ?>
+    <?php if ($message): ?>
+        <p><?= $message ?></p>
+    <?php endif; ?>
 
+    <?php if (!empty($students)): ?>
+        <h2>Students:</h2>
+        <?php foreach ($students as $student): ?>
+            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>'><?= $student['name'] ?></a><br>
+        <?php endforeach; ?>
+    <?php else: ?>
+        No students found for this teacher.
+    <?php endif; ?>
 </body>
 </html>
+
 
 
