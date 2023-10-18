@@ -289,7 +289,7 @@ $(document).ready(function () {
 
     function fetchColumnHeaders(metadataId) {
         // Use the displayedColumns object directly
-        const columnHeaders = displayedColumns;
+        const columnHeaders = jsonData.displayedColumns;
     
         // Now you can use the 'columnHeaders' object as needed
         updateTable(columnHeaders); // Update your table with the column headers
