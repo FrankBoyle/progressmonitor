@@ -56,7 +56,7 @@ $columnNames = [];
 
 try {
     // Attempt to fetch performance data
-    $performanceData = fetchPerformanceData($connection, $studentId);
+    $performanceData = fetchPerformanceData($connection, $student_id);
     
     if (empty($performanceData)) {
         // Handle the case where no performance data is found
