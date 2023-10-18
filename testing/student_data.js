@@ -317,8 +317,10 @@ $(document).ready(function () {
             data: data,
             dataType: 'json',
             success: function (response) {
-                if (response) {
+                if (response && response.columnHeaders && response.performanceData) {
                     updateTable(response.columnHeaders, response.performanceData);
+                } else {
+                    console.error('Invalid or empty response:', response);
                 }
             },
             error: function (xhr, status, error) {
