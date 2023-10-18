@@ -260,7 +260,7 @@ $(document).ready(function () {
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
     var metadataId; // Declare metadataId in the outer scope
     var performanceData; // Define the performanceData variable
-    const columnNames = Object.values(columnHeaders);
+    var columnNames;
 
     let dateAscending = true;
     // Initialize the page
