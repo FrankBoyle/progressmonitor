@@ -43,12 +43,6 @@ $columnHeaders = [
     'score9_name',
     'score10_name'
 ];
-// Check if there is performance data for the specified student
-if (!$performanceData) {
-    // Handle the case where no performance data is available
-    echo "No performance data found for the specified student.";
-    exit;
-}
 
 // Check if there are score names available
 if (!$scoreNames) {
@@ -59,12 +53,37 @@ if (!$scoreNames) {
 
 $metadataEntries = [];
 $displayedColumns = [];
-$performanceData = [];
+$performanceData = []; // Initialize as an empty array
 $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 $metadataID = null;
 $columnNames = [];
+
+// Check if there is performance data for the specified student
+if (!$performanceData) {
+    // Handle the case where no performance data is available
+    echo "No performance data found for the specified student.";
+    exit;
+}
+
+try {
+    // Attempt to fetch performance data
+    $performanceData = fetchPerformanceData($connection, $studentId);
+    
+    if (empty($performanceData)) {
+        // Handle the case where no performance data is found
+        echo "No performance data found for the specified student.";
+        exit;
+    }
+    
+    // Rest of your code for processing and returning data
+    // ...
+} catch (Exception $e) {
+    // Handle exceptions
+    http_response_code(500); // Set HTTP status code to 500 Internal Server Error
+    echo json_encode(['error' => 'An error occurred: ' . $e->getMessage()]);
+}
 
 // Add more specific error messages
 if (!$columnNames) {
