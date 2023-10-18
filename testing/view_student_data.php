@@ -32,14 +32,6 @@ include('./users/fetch_data.php');
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
-<label>Select Metadata Group to Display: </label>
-<select id="metadataIdSelector">
-    
-    <?php foreach ($metadataEntries as $entry): ?>
-        <option value="<?php echo $entry['metadata_id']; ?>"><?php echo $entry['category_name']; ?></option>
-    <?php endforeach; ?>
-</select>
-
 <!-- Add the generated links here -->
 <?php
 // Output the links to tables for each metadata entry
