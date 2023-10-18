@@ -22,6 +22,8 @@ if (!$school_id) {
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($connection, $studentId);
 $scoreNames = fetchScoreNames($connection, $school_id);
+// Define and initialize $currentWeekStartDate
+$currentWeekStartDate = date('Y-m-d'); // or any other default date you prefer
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
