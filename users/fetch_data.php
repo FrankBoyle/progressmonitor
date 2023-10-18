@@ -142,6 +142,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
 
+// Checking and setting the $student_id
+if (isset($_GET['student_id'])) {
+    $student_id = $_GET['student_id'];
+} else {
+    $student_id = null; // or set a default value appropriate for your context
+}
+
 // Output the links to tables for each metadata entry
 foreach ($metadataEntries as $metadataEntry) {
     $metadataId = $metadataEntry['metadata_id'];
