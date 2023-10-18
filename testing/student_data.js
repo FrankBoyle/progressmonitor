@@ -272,8 +272,8 @@ $('#metadataIdSelector').on('change', function() {
     if (selectedMetadataId === '0') {
         // Handle the case when '0' is selected (if needed)
     } else {
-        // Call fetchColumnHeaders with the selected metadataId
-        fetchColumnHeaders(selectedMetadataId);
+        // Call fetchdisplayedColumns with the selected metadataId
+        fetchdisplayedColumns(selectedMetadataId);
     }
 });
 
@@ -286,7 +286,7 @@ $('#metadataIdSelector').on('change', function() {
     updateChartHeaders(selectedMetadataId);
 });
 
-function fetchColumnHeaders(metadataId) {
+function fetchdisplayedColumns(metadataId) {
     // Send an AJAX request to fetch the JSON data
     $.ajax({
         url: './users/fetch_data.php', // Replace with the actual URL to your JSON data
@@ -294,11 +294,11 @@ function fetchColumnHeaders(metadataId) {
         dataType: 'json',
         success: function (jsonData) {
             // Use the displayedColumns object directly
-            const columnHeaders = jsonData.displayedColumns;
+            const displayedColumns = jsonData.displayedColumns;
 
-            // Now you can use the 'columnHeaders' object as needed
+            // Now you can use the 'displayedColumns' object as needed
             // Typically, you would update the table headers and content here
-            updateTable(columnHeaders, performanceData);
+            updateTable(displayedColumns, performanceData);
         },
         error: function (xhr, status, error) {
             console.error('AJAX Error:', status, error);
@@ -340,7 +340,7 @@ window.location.href = updatedUrl;
         });
     }
 
-    function fetchColumnHeaders(metadataId) {
+    function fetchdisplayedColumns(metadataId) {
         // Send an AJAX request to fetch the JSON data
         $.ajax({
             url: './users/fetch_data.php', // Replace with the actual URL to your JSON data
@@ -348,11 +348,11 @@ window.location.href = updatedUrl;
             dataType: 'json',
             success: function (jsonData) {
                 // Use the displayedColumns object directly
-                const columnHeaders = jsonData.displayedColumns;
+                const displayedColumns = jsonData.displayedColumns;
     
-                // Now you can use the 'columnHeaders' object as needed
+                // Now you can use the 'displayedColumns' object as needed
                 // Typically, you would update the table headers and content here
-                updateTable(columnHeaders, performanceData);
+                updateTable(displayedColumns, performanceData);
             },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', status, error);
@@ -403,7 +403,7 @@ window.location.href = updatedUrl;
         if (selectedMetadataId === '0') {
             fetchDefaultHeaders();
         } else {
-            fetchColumnHeaders(selectedMetadataId);
+            fetchdisplayedColumns(selectedMetadataId);
         }
     }
 
@@ -459,8 +459,8 @@ window.location.href = updatedUrl;
                     return;
                 }
     
-                if (response && response.columnHeaders && response.performanceData) {
-                    updateTable(response.columnHeaders, response.performanceData);
+                if (response && response.displayedColumns && response.performanceData) {
+                    updateTable(response.displayedColumns, response.performanceData);
                 } else {
                     console.error('Invalid response:', response);
                 }
@@ -482,24 +482,24 @@ window.location.href = updatedUrl;
         });
     }     
      
-    function updateTable(columnHeaders, performanceData) {
+    function updateTable(displayedColumns, performanceData) {
         // Debugging: Log data to console
         console.log('performanceData:', performanceData);
-        console.log('columnHeaders:', columnHeaders);
-        console.log(columnHeaders);
+        console.log('displayedColumns:', displayedColumns);
+        console.log(displayedColumns);
 
     
         // Update table headers with new column names
         const table = $('table');
         table.find('thead').remove();
     
-        // Generate new table headers based on columnHeaders
+        // Generate new table headers based on displayedColumns
         const thead = $('<thead>');
         const headerRow = $('<tr>');
         headerRow.append($('<th>Date</th>'));
     
-        // Convert columnHeaders object to an array of column names
-        const columnNames = Object.values(columnHeaders);
+        // Convert displayedColumns object to an array of column names
+        const columnNames = Object.values(displayedColumns);
     
         // Debugging: Log columnNames to console
         console.log('columnNames:', columnNames);
@@ -545,8 +545,8 @@ window.location.href = updatedUrl;
 // Assuming you have a table element with the ID "myDataTable" in your HTML
 const table = $('#myDataTable');
 
-// Extract columnNames from columnHeaders
-const columnNames = Object.values(columnHeaders);
+// Extract columnNames from displayedColumns
+const columnNames = Object.values(displayedColumns);
 
 // Check if DataTables is already initialized for the table
 if (!$.fn.DataTable.isDataTable('#myDataTable')) {
