@@ -392,22 +392,23 @@ $(document).ready(function () {
     }     
      
     function updateTable(columnHeaders, performanceData) {
-        // Update table headers with new column names
+        // Remove existing table headers
         const table = $('table');
         table.find('thead').remove();
-        // Generate new table headers based on columnHeaders
+    
+        // Create new table headers based on columnHeaders
         const thead = $('<thead>');
         const headerRow = $('<tr>');
         headerRow.append($('<th>Date</th>'));
-
+    
         $.each(columnHeaders, function (index, columnName) {
             headerRow.append($('<th>' + columnName + '</th>'));
         });
-
+    
         headerRow.append($('<th>Action</th>'));
         thead.append(headerRow);
         table.append(thead);
-
+    
         // Use DataTables to populate the table with performanceData
         const dataTable = table.DataTable({
             "order": [[0, "asc"]],
@@ -423,6 +424,7 @@ $(document).ready(function () {
         });
         dataTable.clear().rows.add(performanceData).draw();
     }
+    
 
     function toggleDateOrder() {
         const table = $('table').DataTable();
