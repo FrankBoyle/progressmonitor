@@ -2,33 +2,12 @@
 // functions.php
 include('db.php');
 include('fetch_data.php');
-
 // Function to fetch performance data for a student
 function fetchPerformanceData($connection, $student_id) {
-    try {
-        // Prepare and execute the SQL query
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
-        $stmt->execute([$student_id]);
-
-        // Check for errors and handle them if necessary
-        if ($stmt->errorCode() !== '00000') {
-            $errorInfo = $stmt->errorInfo();
-            throw new Exception("Database error: " . $errorInfo[2]);
-        }
-
-        // Fetch and return the results
-        return $stmt->fetchAll();
-    } catch (PDOException $e) {
-        // Handle PDO exceptions (database-related errors)
-        // You can log or echo the error message as needed
-        echo "Database error: " . $e->getMessage();
-        return []; // Return an empty array to indicate no data or handle it differently
-    } catch (Exception $e) {
-        // Handle other exceptions
-        // You can log or echo the error message as needed
-        echo "Error: " . $e->getMessage();
-        return []; // Return an empty array or handle it differently
-    }
+    // No need for 'global $connection;' because it's now a parameter
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
+    $stmt->execute([$student_id]);
+    return $stmt->fetchAll();
 }
 
 // Function to fetch metadata categories for a school
