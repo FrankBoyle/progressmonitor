@@ -1,5 +1,3 @@
-
-
 var benchmark = null;
 
 $(document).ready(function() {
@@ -52,31 +50,16 @@ function getChartData(scoreField) {
         }
     });
 
-    // Helper function to parse date and validate it
-    const parseDate = (dateString) => {
-        // Parse the date according to your date format, for example, "MM/DD/YYYY"
-        const [month, day, year] = dateString.split("/"); // adjust this split according to your date format
-        const date = new Date(year, month - 1, day);
-
-        if (isNaN(date)) {
-            return Number.MAX_VALUE; // use max value for invalid dates to be sorted at the end
-        } else {
-            return date.getTime(); // Convert to timestamp for sorting
-        }
-    };
-
-    // Improved sorting logic
+    // Sorting logic starts here
     const sortedChartData = chartData.sort((a, b) => {
-        return parseDate(a.x) - parseDate(b.x);
+        return new Date(a.x) - new Date(b.x);
     });
-
     const sortedCategories = xCategories.sort((a, b) => {
-        return parseDate(a) - parseDate(b);
+        return new Date(a) - new Date(b);
     });
 
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
-
 
 function updateChart(scoreField) {
     var {chartData, xCategories} = getChartData(scoreField);
@@ -272,7 +255,6 @@ function calculateTrendline(data) {
 }
 
 ////////////////////////////////////////////////
-let columnHeaders = []; // Initialize as an empty array
 
 $(document).ready(function() {
 // Listen for changes in the metadata dropdown
