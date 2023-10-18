@@ -288,8 +288,8 @@ $(document).ready(function () {
     }
 
     function fetchColumnHeaders(metadataId) {
-        // Assuming you have a global 'displayedColumns' object with the column headers
-        const columnHeaders = displayedColumns; // Use the displayedColumns object
+        // Use the displayedColumns object directly
+        const columnHeaders = displayedColumns;
     
         // Now you can use the 'columnHeaders' object as needed
         updateTable(columnHeaders); // Update your table with the column headers
