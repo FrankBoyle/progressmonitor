@@ -260,7 +260,6 @@ $(document).ready(function() {
 // Listen for changes in the metadata dropdown
 
 // Update the change event for the metadata group selector
-// Update the change event for the metadata group selector
 $('#metadataIdSelector').on('change', function () {
     const selectedMetadataId = $(this).val();
 
@@ -329,6 +328,8 @@ function loadDefaultHeaders() {
         }
     });
 }
+
+/*
 // Function to fetch metadata categories and update the dropdown
 function fetchMetadataCategories() {
     var studentId = $('#currentStudentId').val();
@@ -354,6 +355,7 @@ function fetchMetadataCategories() {
         },
     });
 }
+*/
 
 // Initial table header update and metadata group fetch
 updateTableHeaders();
