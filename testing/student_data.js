@@ -262,7 +262,6 @@ $(document).ready(function () {
     // Initialize the page
     initializePage();
     // Fetch performance data and update the table
-    fetchPerformanceData();
 
     $('#toggleDateOrder').on('click', toggleDateOrder);
     $('#addDataRow').on('click', addNewDataRow);
@@ -338,7 +337,8 @@ $(document).ready(function () {
         });
     }   
    
-    
+    fetchPerformanceData();
+
     function fetchPerformanceData() {
         $.ajax({
             url: 'fetch_performance_data.php',
