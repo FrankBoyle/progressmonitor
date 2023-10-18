@@ -303,6 +303,7 @@ $(document).ready(function () {
             data: { action: 'fetchDefaultMetadataId' }, // Add an action to your PHP script
             dataType: 'json',
             success: function (response) {
+                console.log('Response:', response);
                 if (response && response.metadataId) {
                     fetchTableData(response.metadataId); // Use the retrieved metadataId
                 } else {
@@ -333,6 +334,7 @@ $(document).ready(function () {
             data: data,
             dataType: 'json',
             success: function (response) {
+                console.log('Response:', response);
                 if (response && response.columnHeaders && response.performanceData) {
                     updateTable(response.columnHeaders, response.performanceData);
                 } else {
@@ -471,6 +473,7 @@ function saveDataRow(row) {
         data: postData,
         dataType: 'json',
         success: function (response) {
+            console.log('Response:', response);
             if (response && response.performance_id) {
                 // Update the table with the newly inserted row
                 row.attr('data-performance-id', response.performance_id);
@@ -631,6 +634,7 @@ function attachEditableHandler() {
                 success: function (response) {
                     // Check if the response contains 'success' property
                     if (response && response.success) {
+                        console.log('Response:', response);
                         if (performanceId === 'new') {
                             const newRow = $('tr[data-performance-id="new"]');
                             newRow.attr('data-performance-id', response.performance_id);

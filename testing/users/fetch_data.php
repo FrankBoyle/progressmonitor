@@ -10,15 +10,12 @@ error_reporting(E_ALL);
 
 // Check if 'school_id' is set in the session before using it.
 if (isset($_SESSION['school_id'])) {
-    // It's important to use the same case as you used when you set the session variable.
     // 'school_id' is different from 'school_id' or 'schoolId'.
     $school_id = $_SESSION['school_id'];
 } else {
     // Handle the case where 'school_id' is not set in the session.
-    // Depending on your application's logic, this might involve redirecting the user,
-    // showing an error message, or setting a default value for testing.
     echo "Error: school_id is not set in the session.";
-    exit(); // Stop the script, or handle this situation differently as per your requirements.
+    exit(); 
 }
 
 // Checking and setting the $studentId
@@ -33,7 +30,6 @@ $studentIds = fetchStudentIdsBySchool($connection, $school_id);
 
 // Similarly, you can create a function to fetch metadata IDs by school_id, e.g., fetchMetadataIdsBySchool
 $metadataIds = fetchMetadataIdsBySchool($connection, $school_id);
-// Initialize empty arrays and variables
 
 $columnHeaders = [
     'score1_name',
@@ -78,9 +74,10 @@ try {
     exit();
 }
 
-// Check if the action is "fetchDefaultMetadataId" and return the default metadata ID
-if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
-    try {
+
+try {
+    // Check if the action is "fetchDefaultMetadataId" and return the default metadata ID
+    if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
         $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE school_id = ?");
         $stmt->execute([$school_id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -91,31 +88,32 @@ if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
         } else {
             echo json_encode(['metadataId' => null]); // Return null for no records found
         }
-    } catch (PDOException $e) {
-        // Handle PDO-specific exceptions
-        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
-    } catch (Exception $e) {
-        // Handle general exceptions
-        echo json_encode(['error' => 'Error: ' . $e->getMessage()]);
+
+        exit(); // Make sure to exit to prevent further output
     }
 
-    exit(); // Make sure to exit to prevent further output
-}
+    // Add code to fetch column names based on the selected metadata_id
+    if (isset($_GET['metadataId'])) {
+        $metadataID = $_GET['metadataId'];
 
+        // Fetch column names based on $metadataID (You need to implement this function)
+        $columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
 
-// Add code to fetch column names based on the selected metadata_id
-if (isset($_GET['metadataId'])) {
-    $metadataID = $_GET['metadataId'];
-
-    // Fetch column names based on $metadataID (You need to implement this function)
-    $columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
-
-    if ($columnNames !== false) {
-        // Return the column names as JSON
-        echo json_encode(['columnHeaders' => $columnNames]);
-        exit;
+        if ($columnNames !== false) {
+            // Return the column names as JSON
+            echo json_encode(['columnHeaders' => $columnNames]);
+            exit;
+        }
     }
+
+    // If everything is successful, return the response as JSON
+    echo json_encode(['columnHeaders' => $columnNames, 'performanceData' => $performanceData]);
+} catch (Exception $e) {
+    // Handle exceptions and send an error response
+    http_response_code(500); // Set HTTP status code to 500 Internal Server Error
+    echo json_encode(['error' => 'An error occurred: ' . $e->getMessage()]);
 }
+
 
 
 
