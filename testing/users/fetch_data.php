@@ -43,6 +43,19 @@ $columnHeaders = [
     'score9_name',
     'score10_name'
 ];
+// Check if there is performance data for the specified student
+if (!$performanceData) {
+    // Handle the case where no performance data is available
+    echo "No performance data found for the specified student.";
+    exit;
+}
+
+// Check if there are score names available
+if (!$scoreNames) {
+    // Handle the case where no score names are available
+    echo "No score names found.";
+    exit;
+}
 
 $metadataEntries = [];
 $displayedColumns = [];
@@ -52,6 +65,13 @@ $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 $metadataID = null;
 $columnNames = [];
+
+// Add more specific error messages
+if (!$columnNames) {
+    // Handle the case where fetching column names fails
+    $columnNames = []; // Set a default value or handle the error
+    echo "Failed to fetch column names.";
+}
 
 // Initialize $metadataID to null to check later if it was set
 
