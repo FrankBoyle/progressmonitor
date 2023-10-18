@@ -471,8 +471,6 @@ function fetchColumnHeaders(metadataId) {
         // Debugging: Log data to console
         console.log('performanceData:', performanceData);
         console.log('columnHeaders:', columnHeaders);
-        console.log(columnHeaders);
-
     
         // Update table headers with new column names
         const table = $('table');
@@ -483,8 +481,8 @@ function fetchColumnHeaders(metadataId) {
         const headerRow = $('<tr>');
         headerRow.append($('<th>Date</th>'));
     
-        // Convert columnHeaders object to an array of column names
-        const columnNames = response.columnHeaders;
+        // Extract columnNames from columnHeaders
+        const columnNames = Object.values(columnHeaders);
     
         // Debugging: Log columnNames to console
         console.log('columnNames:', columnNames);
@@ -525,7 +523,8 @@ function fetchColumnHeaders(metadataId) {
             // Display a message when there's no data
             table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
         }
-    }     
+    }
+    
 
 // Assuming you have a table element with the ID "myDataTable" in your HTML
 const table = $('#myDataTable');
