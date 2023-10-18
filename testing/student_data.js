@@ -288,12 +288,24 @@ $(document).ready(function () {
     }
 
     function fetchColumnHeaders(metadataId) {
-        // Use the displayedColumns object directly
-        const columnHeaders = jsonData.displayedColumns;
+        // Send an AJAX request to fetch the JSON data
+        $.ajax({
+            url: 'path/to/your/json/data', // Replace with the actual URL to your JSON data
+            type: 'GET',
+            dataType: 'json',
+            success: function (jsonData) {
+                // Use the displayedColumns object directly
+                const columnHeaders = jsonData.displayedColumns;
     
-        // Now you can use the 'columnHeaders' object as needed
-        updateTable(columnHeaders); // Update your table with the column headers
+                // Now you can use the 'columnHeaders' object as needed
+                updateTable(columnHeaders); // Update your table with the column headers
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+            }
+        });
     }
+    
     
     function handleMetadataChange() {
         const selectedMetadataId = $(this).val();
