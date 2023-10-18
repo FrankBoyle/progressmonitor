@@ -51,6 +51,7 @@ $scoreNames = [];
 $chartDates = [];
 $defaultMetadataID = 1; // Default value in case of any issues
 $metadataID = null;
+$columnNames = [];
 
 // Initialize $metadataID to null to check later if it was set
 
@@ -99,10 +100,10 @@ try {
         // Fetch column names based on $metadataID (You need to implement this function)
         $columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
 
-        if ($columnNames !== false) {
-            // Return the column names as JSON
-            echo json_encode(['columnHeaders' => $columnNames]);
-            exit;
+        if ($columnNames === false) {
+            // Handle the case where fetching column names fails
+            // You might want to set a default value or handle the error differently
+            $columnNames = []; // Set a default value or handle the error
         }
     }
 
