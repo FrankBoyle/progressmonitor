@@ -506,7 +506,7 @@ $(document).ready(function () {
 // Assuming you have a table element with the ID "myDataTable" in your HTML
 const table = $('#myDataTable');
 
-// Check if DataTables is already initialized for the table
+// Initialize DataTable only if it's not already initialized
 if (!$.fn.DataTable.isDataTable('#myDataTable')) {
     const dataTable = table.DataTable({
         "order": [[0, "asc"]],
@@ -554,6 +554,7 @@ if (!$.fn.DataTable.isDataTable('#myDataTable')) {
         table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
     }
 }
+
 
     function toggleDateOrder() {
         const table = $('table').DataTable();
