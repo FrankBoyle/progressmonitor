@@ -80,18 +80,26 @@ function fetchMetadataIdsBySchool($connection, $school_id) {
 
 // Function to fetch score names for a school
 function fetchScoreNames($connection, $school_id) {
-    // Code refined to use the $connection parameter
     $scoreNames = [];
-    $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE school_id = ?");
-    $stmt->execute([$school_id]);
-    if ($row = $stmt->fetch()) {
-        for ($i = 1; $i <= 10; $i++) {
-            $scoreName = $row["score{$i}_name"];
-            $scoreNames["score{$i}"] = $scoreName;
+
+    try {
+        $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE school_id = ?");
+        $stmt->execute([$school_id]);
+
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            for ($i = 1; $i <= 10; $i++) {
+                $scoreName = $row["score{$i}_name"];
+                $scoreNames["score{$i}"] = $scoreName;
+            }
         }
+    } catch (PDOException $e) {
+        // Handle PDO exceptions
+        return false;
     }
+
     return $scoreNames;
 }
+
 
 // Function to fetch students by teacher
 function fetchStudentsByTeacher($connection, $teacherId) {
