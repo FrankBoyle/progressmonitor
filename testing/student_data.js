@@ -259,6 +259,8 @@ function calculateTrendline(data) {
 $(document).ready(function () {
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
     var metadataId; // Declare metadataId in the outer scope
+    var performanceData; // Define the performanceData variable
+
     let dateAscending = true;
     // Initialize the page
     initializePage();
@@ -331,7 +333,7 @@ function fetchPerformanceData() {
         },
         dataType: 'json',
         success: function (data) {
-            // Process and update the table with performance data
+            performanceData = data.performanceData; // Initialize performanceData here
             $('#myDataTable').DataTable().clear().rows.add(data.performanceData).draw(); // Update DataTable
         },
         error: function (xhr, status, error) {
