@@ -323,7 +323,7 @@ $(document).ready(function () {
 
     function fetchTableData(metadataId) {
         const data = {
-            action: 'fetchMetadata',
+            action: 'fetchMetadataByID($connection, $metadata_id',
             student_id: CURRENT_STUDENT_ID,
             metadata_id: metadataId,
         };

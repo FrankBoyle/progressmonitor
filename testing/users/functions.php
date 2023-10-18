@@ -78,6 +78,22 @@ function fetchMetadataIdsBySchool($connection, $school_id) {
     return $metadataIds;
 }
 
+function fetchMetadataById($connection, $metadata_id) {
+    try {
+        // Prepare your query: select metadata by metadata_id
+        $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = :metadata_id");
+        // Execute the query with the provided metadata_id
+        $stmt->execute(['metadata_id' => $metadata_id]);
+        // Fetch the metadata
+        $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $metadata;
+    } catch (PDOException $e) {
+        // Handle errors as per your error handling strategy
+        throw $e;
+    }
+}
+
 // Function to fetch score names for a school
 function fetchScoreNames($connection, $school_id) {
     $scoreNames = [];
