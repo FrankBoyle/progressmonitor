@@ -22,7 +22,7 @@ include('./users/fetch_data.php');
 </style>
 </head>
 <body>
-<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentid); ?>" />
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($student_id); ?>" />
 
 <a href="test.php" class="btn btn-primary">Student List</a>
 

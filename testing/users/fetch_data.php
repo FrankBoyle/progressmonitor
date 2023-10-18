@@ -146,5 +146,5 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
 echo json_encode($responseData);
-
+exit();
 ?>
