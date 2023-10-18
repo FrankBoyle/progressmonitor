@@ -1,35 +1,5 @@
 <?php 
 include('./users/fetch_data.php'); 
-// Initialize empty arrays and variables
-// Check if the action is set to 'fetchGroups' and handle it
-if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
-    echo json_encode(fetchGroupNames());
-    exit;
-}
-
-// If student_id is not set, exit early
-if (!isset($_GET['student_id'])) {
-    return;
-}
-
-$studentid = $_GET['student_id'];
-$school_id = fetchSchoolIdForStudent($connection, $studentid);  // Fetch school_id
-
-if (!$school_id) {
-    return;  // If there's no school_id, exit early
-}
-
-// Fetch performance data and score names
-$performanceData = fetchPerformanceData($connection, $studentid);
-$scoreNames = fetchScoreNames($connection, $school_id);
-// Define and initialize $currentWeekStartDate
-$currentWeekStartDate = date('Y-m-d'); // or any other default date you prefer
-
-// Preparing the data for the chart
-foreach ($performanceData as $record) {
-    $chartDates[] = $record['score_date'];
-    // You can add more logic here if needed
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
