@@ -78,6 +78,24 @@ function fetchMetadataIdsBySchool($connection, $school_id) {
     return $metadataIds;
 }
 
+// Define a function to fetch the default metadata ID
+function fetchDefaultMetadataId($connection, $school_id) {
+    try {
+        $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE school_id = ?");
+        $stmt->execute([$school_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row && $row['min_metadata_id'] !== null) {
+            return $row['min_metadata_id'];
+        } else {
+            return null;
+        }
+    } catch (PDOException $e) {
+        // Handle exceptions here, e.g., log the error
+        return null; // Return null in case of an error
+    }
+}
+
 function fetchMetadataById($connection, $metadata_id) {
     try {
         // Prepare your query: select metadata by metadata_id

@@ -101,49 +101,12 @@ try {
     exit();
 }
 
-
-try {
-    // Check if the action is "fetchDefaultMetadataId" and return the default metadata ID
-    if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
-        $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE school_id = ?");
-        $stmt->execute([$school_id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($row && $row['min_metadata_id'] !== null) {
-            $metadataId = $row['min_metadata_id'];
-            echo json_encode(['metadataId' => $metadataId]);
-        } else {
-            echo json_encode(['metadataId' => null]); // Return null for no records found
-        }
-
-        exit(); // Make sure to exit to prevent further output
-    }
-
-    // Add code to fetch column names based on the selected metadata_id
-    if (isset($_GET['metadataId'])) {
-        $metadataID = $_GET['metadataId'];
-
-        // Fetch column names based on $metadataID (You need to implement this function)
-        $columnNames = fetchColumnNamesByMetadataID($connection, $metadataID);
-
-        if ($columnNames === false) {
-            // Handle the case where fetching column names fails
-            // You might want to set a default value or handle the error differently
-            $columnNames = []; // Set a default value or handle the error
-        }
-    }
-
-    // If everything is successful, return the response as JSON
-    echo json_encode(['columnHeaders' => $columnNames, 'performanceData' => $performanceData]);
-} catch (Exception $e) {
-    // Handle exceptions and send an error response
-    http_response_code(500); // Set HTTP status code to 500 Internal Server Error
-    echo json_encode(['error' => 'An error occurred: ' . $e->getMessage()]);
+// Check if the action is "fetchDefaultMetadataId" and return the default metadata ID
+if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
+    $defaultMetadataId = fetchDefaultMetadataId($connection, $school_id);
+    echo json_encode(['metadataId' => $defaultMetadataId]);
+    exit(); // Make sure to exit to prevent further output
 }
-
-
-
-
 
 // Fetch metadata entries from the Metadata table for the specified school_id and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE school_id = ? AND metadata_id = ?");
