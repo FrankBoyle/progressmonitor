@@ -297,8 +297,24 @@ $(document).ready(function () {
     }
 
     function fetchDefaultHeaders() {
-        fetchTableData(0);
+        $.ajax({
+            type: 'GET',
+            url: './users/fetch_data.php',
+            data: { action: 'fetchDefaultMetadataId' }, // Add an action to your PHP script
+            dataType: 'json',
+            success: function (response) {
+                if (response && response.metadataId) {
+                    fetchTableData(response.metadataId); // Use the retrieved metadataId
+                } else {
+                    console.error('Invalid or empty response:', response);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', error);
+            }
+        });
     }
+    
 
     function fetchColumnHeaders(metadataId) {
         fetchTableData(metadataId);

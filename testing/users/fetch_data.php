@@ -78,6 +78,31 @@ try {
     exit();
 }
 
+// Check if the action is "fetchDefaultMetadataId" and return the default metadata ID
+if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
+    try {
+        $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE school_id = ?");
+        $stmt->execute([$school_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row && $row['min_metadata_id'] !== null) {
+            $metadataId = $row['min_metadata_id'];
+            echo json_encode(['metadataId' => $metadataId]);
+        } else {
+            echo json_encode(['metadataId' => null]); // Return null for no records found
+        }
+    } catch (PDOException $e) {
+        // Handle PDO-specific exceptions
+        echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
+    } catch (Exception $e) {
+        // Handle general exceptions
+        echo json_encode(['error' => 'Error: ' . $e->getMessage()]);
+    }
+
+    exit(); // Make sure to exit to prevent further output
+}
+
+
 // Add code to fetch column names based on the selected metadata_id
 if (isset($_GET['metadataId'])) {
     $metadataID = $_GET['metadataId'];
