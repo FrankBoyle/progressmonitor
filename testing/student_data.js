@@ -261,6 +261,8 @@ $(document).ready(function () {
     let dateAscending = true;
     // Initialize the page
     initializePage();
+    // Fetch performance data and update the table
+    fetchPerformanceData();
 
     $('#toggleDateOrder').on('click', toggleDateOrder);
     $('#addDataRow').on('click', addNewDataRow);
@@ -335,7 +337,32 @@ $(document).ready(function () {
             }
         });
     }   
+   
     
+    function fetchPerformanceData() {
+        $.ajax({
+            url: 'fetch_performance_data.php',
+            type: 'GET',
+            data: {
+                student_id: CURRENT_STUDENT_ID,
+                metadata_id: JSON.stringify(metadataID)
+            },
+            dataType: 'json',
+            success: function (data) {
+                // Process and update the table with performance data
+                updateDataTable(data.performanceData);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', status, error);
+            }
+        });
+    }
+
+    function updateDataTable(performanceData) {
+        // Your DataTable initialization and update code here...
+    }
+});
+
     function fetchTableData(metadataId) {
         const data = {
             action: 'fetchPerformanceData',
@@ -838,6 +865,4 @@ $.ajax({
         console.error('Error:', status, error);
     }
 });
-
-
 });
