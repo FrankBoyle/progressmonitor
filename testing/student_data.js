@@ -321,13 +321,9 @@ $(document).ready(function () {
         });
     }   
     
-    function fetchColumnHeaders(metadataId) {
-        fetchTableData(metadataId);
-    }
-
     function fetchTableData(metadataId) {
         const data = {
-            action: 'fetchPerformanceData', // Assuming you want to fetch performance data
+            action: 'fetchPerformanceData',
             student_id: CURRENT_STUDENT_ID,
             metadata_id: metadataId,
         };
@@ -347,13 +343,17 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', error);
+                
+                // Log the HTTP status code and status text
+                console.log('HTTP Status Code:', xhr.status);
+                console.log('Status Text:', xhr.statusText);
+    
                 // Log the response text in case of an error
                 console.log('Error Response Text:', xhr.responseText);
             }
         });
     }
      
-
     function updateTable(columnHeaders, performanceData) {
         // Update table headers with new column names
         const table = $('table');
