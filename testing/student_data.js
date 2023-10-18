@@ -290,7 +290,7 @@ $(document).ready(function () {
     function fetchColumnHeaders(metadataId) {
         // Send an AJAX request to fetch the JSON data
         $.ajax({
-            url: 'path/to/your/json/data', // Replace with the actual URL to your JSON data
+            url: './users/fetch_data.php', // Replace with the actual URL to your JSON data
             type: 'GET',
             dataType: 'json',
             success: function (jsonData) {
