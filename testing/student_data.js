@@ -743,4 +743,9 @@ $.ajax({
         alert('An error occurred while fetching data.');
     }
 });
+console.log(performanceData);
+console.log(columnNames);
+console.log(columnHeaders);
+console.log(columnHeaders);
+console.log(metadataId);
 });
