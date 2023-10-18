@@ -335,8 +335,9 @@ function fetchPerformanceData() {
             $('#myDataTable').DataTable().clear().rows.add(data.performanceData).draw(); // Update DataTable
         },
         error: function (xhr, status, error) {
-            console.error('Error:', status, error);
-        }
+            console.error('AJAX Error:', error);
+            alert('An error occurred while fetching data.');
+        }        
     });
 }
     
@@ -440,6 +441,9 @@ function deleteDataRow(row) {
     $.post('delete_performance.php', {
         performance_id: performanceId
     }, function (response) {
+        if (!confirm('Are you sure you want to delete this row?')) {
+            return;
+        }
         // Handle the response, e.g., check if the deletion was successful
         if (response.success) {
             // Remove the corresponding row from the table
@@ -492,7 +496,7 @@ function saveDataRow(row) {
                 row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
                 // If you have default scores or other fields returned from the server, update them here too
 
-                // Clear the input fields and enable the save button for future entries
+                // Clear the input fields and enable the save button
                 row.find('td.editable').text('');
                 row.find('.saveRow').prop('disabled', false);
 
@@ -508,10 +512,8 @@ function saveDataRow(row) {
             }
         },
         error: function (xhr, status, error) {
-            // Handle AJAX errors here
             console.error('AJAX Error:', error);
-            alert("There was an error saving the data.");
-            row.find('.saveRow').prop('disabled', false);
+            alert('An error occurred while fetching data.');
         }
     });
 }
@@ -671,8 +673,8 @@ function attachEditableHandler() {
                     }
                 },
                 error: function (xhr, status, error) {
-                    // Handle AJAX errors here
                     console.error('AJAX Error:', error);
+                    alert('An error occurred while fetching data.');
                 }
             });
         });
@@ -734,8 +736,8 @@ $.ajax({
         $('#performanceTable').html(tableHTML);
     },
     error: function (xhr, status, error) {
-        // Handle errors if necessary
-        console.error('Error:', status, error);
+        console.error('AJAX Error:', error);
+        alert('An error occurred while fetching data.');
     }
 });
 });
