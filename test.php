@@ -1,6 +1,5 @@
 <?php
 include './users/fetch_data.php';
-session_start();
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
