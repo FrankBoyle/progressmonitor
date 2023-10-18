@@ -258,7 +258,6 @@ function calculateTrendline(data) {
 
 $(document).ready(function () {
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
-    const columnNames = Object.values(columnHeaders);
     let dateAscending = true;
 
     // Initialize the page
@@ -519,7 +518,7 @@ if (!$.fn.DataTable.isDataTable('#myDataTable')) {
         "info": false,
         "columns": [
             { "type": "date-us" },
-            ...columnNames.map(header => ({ title: header })),
+            ...columnNames.map(header => ({ "title": header })),
             { "orderable": false }
         ]
     });
@@ -557,6 +556,7 @@ if (!$.fn.DataTable.isDataTable('#myDataTable')) {
         table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
     }
 }
+
 
 
 
