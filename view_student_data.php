@@ -31,14 +31,16 @@
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
-<label>Select Metadata Group to Display: </label>
-<select id="metadataIdSelector">
-    <?php foreach ($metadataEntries as $entry): ?>
-        <option value="<?php echo htmlspecialchars($entry['metadata_id']); ?>">
-            <?php echo htmlspecialchars($entry['category_name']); ?>
-        </option>
-    <?php endforeach; ?>
-</select>
+<!-- Add the generated links here -->
+<?php
+// Output the links to tables for each metadata entry
+foreach ($metadataEntries as $metadataEntry) {
+    $metadataId = $metadataEntry['metadata_id'];
+    $categoryName = $metadataEntry['category_name'];
+    // Generate a link to the table for this metadata entry
+    echo "<a href='view_student_data.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
+}
+?>
 
 <table border="1">
     <thead>

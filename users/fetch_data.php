@@ -134,5 +134,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     echo json_encode(['id' => $connection->lastInsertId()]);
     exit;
 }
+
+// Fetch metadata entries from the Metadata table for the specified school_id
+$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
+$stmt->execute([$school_id]);
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $metadataEntries[] = $row;
+}
+
+// Output the links to tables for each metadata entry
+foreach ($metadataEntries as $metadataEntry) {
+    $metadataId = $metadataEntry['metadata_id'];
+    $categoryName = $metadataEntry['category_name'];
+    // Generate a link to the table for this metadata entry
+}
 ?>
 
