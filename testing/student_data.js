@@ -379,7 +379,7 @@ function fetchColumnHeaders(metadataId) {
                 thead.append(headerRow);
                 chartTable.append(thead);
     
-                // Now, update the data table with the new column headers and data
+                // After updating the chart headers, call the function to update the table
                 updateTable(columnHeaders, performanceData);
             },
             error: function(error) {
@@ -387,9 +387,7 @@ function fetchColumnHeaders(metadataId) {
                 console.error('Error fetching updated chart headers:', error);
             }
         });
-    }
-    
-    
+    } 
     
     function handleMetadataChange() {
         const selectedMetadataId = $(this).val();
