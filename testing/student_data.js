@@ -340,24 +340,25 @@ $(document).ready(function () {
    
     fetchPerformanceData();
 
-    function fetchPerformanceData() {
-        $.ajax({
-            url: 'fetch_performance_data.php',
-            type: 'GET',
-            data: {
-                student_id: CURRENT_STUDENT_ID,
-                metadata_id: metadataId // No need for JSON.stringify
-            },
-            dataType: 'json',
-            success: function (data) {
-                // Process and update the table with performance data
-                updateDataTable(data.performanceData);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', status, error);
-            }
-        });
-    }
+// Check the URL in fetchPerformanceData function:
+function fetchPerformanceData() {
+    $.ajax({
+        url: 'fetch_performance_data.php', // Check if this URL is correct
+        type: 'GET',
+        data: {
+            student_id: CURRENT_STUDENT_ID,
+            metadata_id: JSON.stringify(metadataId)
+        },
+        dataType: 'json',
+        success: function (data) {
+            // Process and update the table with performance data
+            $('#myDataTable').DataTable().clear().rows.add(data.performanceData).draw(); // Update DataTable
+        },
+        error: function (xhr, status, error) {
+            console.error('Error:', status, error);
+        }
+    });
+}
     
 
     function fetchTableData(metadataId) {
