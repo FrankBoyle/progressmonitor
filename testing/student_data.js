@@ -635,7 +635,7 @@ function getCurrentDate() {
                     type: 'POST',
                     url: targetUrl,
                     data: postData,
-                    dataType: 'json', // Ensure the response is treated as JSON
+                    //dataType: 'json', // Ensure the response is treated as JSON
                     success: function(response) {
                         // Check if the response contains 'success' property
                         if (response && response.success) {
