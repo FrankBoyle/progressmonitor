@@ -44,7 +44,6 @@ foreach ($metadataEntries as $metadataEntry) {
 }
 ?>
 
-
 <table id="myDataTable" border="1">
 <thead>
     <tr>
