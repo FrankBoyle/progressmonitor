@@ -263,7 +263,7 @@ $(document).ready(function () {
     // Initialize the page
     initializePage();
     // Fetch performance data and update the table
-    $('#your-table-id').DataTable();
+    $('#myDataTable').DataTable();
     $('#toggleDateOrder').on('click', toggleDateOrder);
     $('#addDataRow').on('click', addNewDataRow);
     $(document).on('click', '.deleteRow', deleteDataRow);
