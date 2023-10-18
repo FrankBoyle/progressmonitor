@@ -265,17 +265,38 @@ $(document).ready(function () {
 
     // Event listeners
     $('#metadataIdSelector').on('change', handleMetadataChange);
-    $('#metadataIdSelector').on('change', function() {
-        const selectedMetadataId = $(this).val();
-        
-        // Update the URL with the selected metadata_id
-        const currentUrl = window.location.href;
-        const updatedUrl = updateUrlParameter(currentUrl, 'metadata_id', selectedMetadataId);
-        window.location.href = updatedUrl;
-        
-        // Update the chart headers based on the selected metadata_id
-        updateChartHeaders(selectedMetadataId);
+// Attach an event listener to the dropdown element
+$('#metadataIdSelector').on('change', function() {
+    const selectedMetadataId = $(this).val();
+    
+    if (selectedMetadataId === '0') {
+        // Handle the case when '0' is selected (if needed)
+    } else {
+        // Call fetchColumnHeaders with the selected metadataId
+        fetchColumnHeaders(selectedMetadataId);
+    }
+});
+
+function fetchColumnHeaders(metadataId) {
+    // Send an AJAX request to fetch the JSON data
+    $.ajax({
+        url: './users/fetch_data.php', // Replace with the actual URL to your JSON data
+        type: 'GET',
+        dataType: 'json',
+        success: function (jsonData) {
+            // Use the displayedColumns object directly
+            const columnHeaders = jsonData.displayedColumns;
+
+            // Now you can use the 'columnHeaders' object as needed
+            // Typically, you would update the table headers and content here
+            updateTable(columnHeaders, performanceData);
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', status, error);
+        }
     });
+}
+
     $('#toggleDateOrder').on('click', toggleDateOrder);
     $('#addDataRow').on('click', addNewDataRow);
     $(document).on('click', '.deleteRow', deleteDataRow);
