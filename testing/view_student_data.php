@@ -13,15 +13,15 @@ if (!isset($_GET['student_id'])) {
 }
 
 $studentId = $_GET['student_id'];
-$schoolID = fetchSchoolIdForStudent($connection, $studentId);  // Fetch school_id
+$school_id = fetchSchoolIdForStudent($connection, $studentId);  // Fetch school_id
 
-if (!$schoolID) {
+if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
 
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($connection, $studentId);
-$scoreNames = fetchScoreNames($connection, $schoolID);
+$scoreNames = fetchScoreNames($connection, $school_id);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {

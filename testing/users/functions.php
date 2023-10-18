@@ -11,21 +11,21 @@ function fetchPerformanceData($connection, $studentId) {
 }
 
 // Function to fetch metadata categories for a school
-function fetchMetadataCategoriesFromDatabase($connection, $schoolID) {
+function fetchMetadataCategoriesFromDatabase($connection, $school_id) {
     // Removed the global variable
     $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
-    $stmt->execute([$schoolID]);
+    $stmt->execute([$school_id]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function fetchStudentIdsBySchool($connection, $schoolID) {
+function fetchStudentIdsBySchool($connection, $school_id) {
     // This array will hold the student IDs
     $studentIds = [];
     try {
         // Prepare your query: select student IDs from your students table where the school_id matches
-        $stmt = $connection->prepare("SELECT student_id FROM Students WHERE school_id = :schoolID");
+        $stmt = $connection->prepare("SELECT student_id FROM Students WHERE school_id = :school_id");
         // Execute the query with the provided school_id
-        $stmt->execute(['schoolID' => $schoolID]);
+        $stmt->execute(['school_id' => $school_id]);
         // Fetch all the student IDs
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $studentIds[] = $row['student_id'];  // Adjust 'student_id' if your column name is different
@@ -46,14 +46,14 @@ function fetchSchoolIdForStudent($connection, $studentId) {
     return $result ? $result['school_id'] : null;
 }
 
-function fetchMetadataIdsBySchool($connection, $schoolID) {
+function fetchMetadataIdsBySchool($connection, $school_id) {
     // This array will hold the metadata IDs
     $metadataIds = [];
     try {
         // Prepare your query: select metadata IDs from your metadata table where the school_id matches
-        $stmt = $connection->prepare("SELECT metadata_id FROM Metadata WHERE school_id = :schoolID");
+        $stmt = $connection->prepare("SELECT metadata_id FROM Metadata WHERE school_id = :school_id");
         // Execute the query with the provided school_id
-        $stmt->execute(['schoolID' => $schoolID]);
+        $stmt->execute(['school_id' => $school_id]);
         // Fetch all the metadata IDs
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $metadataIds[] = $row['metadata_id'];  // Adjust 'metadata_id' if your column name is different
@@ -66,11 +66,11 @@ function fetchMetadataIdsBySchool($connection, $schoolID) {
 }
 
 // Function to fetch score names for a school
-function fetchScoreNames($connection, $schoolID) {
+function fetchScoreNames($connection, $school_id) {
     // Code refined to use the $connection parameter
     $scoreNames = [];
     $stmt = $connection->prepare("SELECT score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE school_id = ?");
-    $stmt->execute([$schoolID]);
+    $stmt->execute([$school_id]);
     if ($row = $stmt->fetch()) {
         for ($i = 1; $i <= 10; $i++) {
             $scoreName = $row["score{$i}_name"];

@@ -13,10 +13,10 @@ function fetchPerformanceData($studentId) {
     return $stmt->fetchAll();
 }
 
-function fetchMetadataCategories($schoolID) {
+function fetchMetadataCategories($school_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
-    $stmt->execute([$schoolID]);
+    $stmt->execute([$school_id]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -28,11 +28,11 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['school_id'] : null;
 }
 
-function fetchScoreNames($schoolID) {
+function fetchScoreNames($school_id) {
     global $connection;
     $scoreNames = [];
     $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE school_id = ?");
-    $stmt->execute([$schoolID]);
+    $stmt->execute([$school_id]);
     while ($row = $stmt->fetch()) {
         $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
     }
@@ -103,15 +103,15 @@ if (!isset($_GET['student_id'])) {
 }
 
 $studentId = $_GET['student_id'];
-$schoolID = fetchSchoolIdForStudent($studentId);  // Fetch school_id
+$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
 
-if (!$schoolID) {
+if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
 
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($schoolID);
+$scoreNames = fetchScoreNames($school_id);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
@@ -121,14 +121,14 @@ foreach ($performanceData as $record) {
 
 // Handling the data POST from the dropdown functionality
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
-    $schoolIDIndex = $_POST['school_idIndex'];
+    $school_idIndex = $_POST['school_idIndex'];
     $originalName = $_POST['ScoreColumn'];
     $customName = $_POST['CustomName'];
     $scoreGroup = $_POST['ScoreGroup'];
 
     // Inserting into the SchoolScoreNames table
     $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (school_idIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$schoolIDIndex, $originalName, $customName, $scoreGroup]);
+    $stmt->execute([$school_idIndex, $originalName, $customName, $scoreGroup]);
     
     // Respond with the ID of the inserted row
     echo json_encode(['id' => $connection->lastInsertId()]);

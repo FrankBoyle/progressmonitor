@@ -11,8 +11,8 @@ error_reporting(E_ALL);
 // Check if 'school_id' is set in the session before using it.
 if (isset($_SESSION['school_id'])) {
     // It's important to use the same case as you used when you set the session variable.
-    // 'school_id' is different from 'schoolID' or 'schoolId'.
-    $schoolID = $_SESSION['school_id'];
+    // 'school_id' is different from 'school_id' or 'schoolId'.
+    $school_id = $_SESSION['school_id'];
 } else {
     // Handle the case where 'school_id' is not set in the session.
     // Depending on your application's logic, this might involve redirecting the user,
@@ -29,10 +29,10 @@ if (isset($_GET['student_id'])) {
 }
 
 // You can create a function to fetch student IDs by school_id, e.g., fetchStudentIdsBySchool
-$studentIds = fetchStudentIdsBySchool($connection, $schoolID);
+$studentIds = fetchStudentIdsBySchool($connection, $school_id);
 
 // Similarly, you can create a function to fetch metadata IDs by school_id, e.g., fetchMetadataIdsBySchool
-$metadataIds = fetchMetadataIdsBySchool($connection, $schoolID);
+$metadataIds = fetchMetadataIdsBySchool($connection, $school_id);
 // Initialize empty arrays and variables
 
 $columnHeaders = [
@@ -60,7 +60,7 @@ $metadataID = null;
 
 try {
     $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE school_id = ?");
-    $stmt->execute([$schoolID]);
+    $stmt->execute([$school_id]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row && $row['min_metadata_id'] !== null) {
@@ -96,7 +96,7 @@ if (isset($_GET['metadataId'])) {
 
 // Fetch metadata entries from the Metadata table for the specified school_id and metadata_id
 $stmt = $connection->prepare("SELECT * FROM Metadata WHERE school_id = ? AND metadata_id = ?");
-$stmt->execute([$schoolID, $metadataID]);
+$stmt->execute([$school_id, $metadataID]);
 
 if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     // Populate the $displayedColumns array with column names from the metadata entry
@@ -121,7 +121,7 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 // Fetch performance data and score names based on the metadata
 $performanceData = fetchPerformanceData($connection, $studentId);
-$scoreNames = fetchScoreNames($connection, $schoolID);
+$scoreNames = fetchScoreNames($connection, $school_id);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
@@ -131,7 +131,7 @@ foreach ($performanceData as $record) {
 
 // Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
-$stmt->execute([$schoolID]);
+$stmt->execute([$school_id]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
