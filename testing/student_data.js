@@ -337,6 +337,8 @@ $(document).ready(function () {
         });
     }   
    
+    var metadataId = response.metadataId;
+
     fetchPerformanceData();
 
     function fetchPerformanceData() {
