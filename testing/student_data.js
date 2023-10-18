@@ -353,28 +353,34 @@ function fetchColumnHeaders(metadataId) {
             data: { metadataId: selectedMetadataId }, // Send the selected metadata_id as a parameter
             dataType: 'json', // Assuming the response will be in JSON format
             success: function(response) {
+                // Extract columnHeaders from the response
+                const columnHeaders = response.columnHeaders;
+    
                 // Assuming response.data contains the updated chart headers as an array
                 const updatedChartHeaders = response.data;
-                
+    
                 // Update the chart headers in your HTML
                 const chartTable = $('#chartTable'); // Replace with the actual ID or selector of your chart table
-                
+    
                 // Clear existing headers
                 chartTable.find('thead').empty();
-                
+    
                 // Generate new headers based on updatedChartHeaders
                 const thead = $('<thead>');
                 const headerRow = $('<tr>');
                 headerRow.append($('<th>Date</th>'));
-                
+    
                 // Iterate through updatedChartHeaders and add them as table headers
                 updatedChartHeaders.forEach(function(columnName) {
                     headerRow.append($('<th>' + columnName + '</th>'));
                 });
-                
+    
                 headerRow.append($('<th>Action</th>'));
                 thead.append(headerRow);
                 chartTable.append(thead);
+    
+                // Now, update the data table with the new column headers and data
+                updateTable(columnHeaders, performanceData);
             },
             error: function(error) {
                 // Handle any errors that occur during the AJAX request
@@ -382,6 +388,7 @@ function fetchColumnHeaders(metadataId) {
             }
         });
     }
+    
     
     function handleMetadataChange() {
         const selectedMetadataId = $(this).val();
