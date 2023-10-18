@@ -68,6 +68,22 @@ try {
     exit();
 }
 
+// Fetch metadata entries from the Metadata table for the specified school_id
+$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
+$stmt->execute([$school_id]);
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $metadataEntries[] = $row;
+}
+
+// Output the links to tables for each metadata entry
+foreach ($metadataEntries as $metadataEntry) {
+    $metadataId = $metadataEntry['metadata_id'];
+    $categoryName = $metadataEntry['category_name'];
+
+    // Generate a link to the table for this metadata entry
+    echo "<a href='table.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
+}
+
 if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
     $defaultMetadataId = fetchDefaultMetadataId($connection, $school_id);
     echo json_encode(['metadataId' => $defaultMetadataId]);
