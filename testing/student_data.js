@@ -258,6 +258,7 @@ function calculateTrendline(data) {
 
 $(document).ready(function () {
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
+    const columnNames = Object.values(columnHeaders);
     let dateAscending = true;
 
     // Initialize the page
