@@ -25,12 +25,8 @@ if (isset($_GET['student_id'])) {
     $student_id = null; // or set a default value appropriate for your context
 }
 
-// You can create a function to fetch student IDs by school_id, e.g., fetchStudentIdsBySchool
 $student_ids = fetchStudentIdsBySchool($connection, $school_id);
-
-// Similarly, you can create a function to fetch metadata IDs by school_id, e.g., fetchMetadataIdsBySchool
 $metadataIds = fetchMetadataIdsBySchool($connection, $school_id);
-
 $columnHeaders = [
     'score1_name',
     'score2_name',
@@ -53,35 +49,6 @@ $defaultMetadataID = 1; // Default value in case of any issues
 $metadataID = null;
 $columnNames = [];
 
-/*
-try {
-    // Attempt to fetch performance data
-    $performanceData = fetchPerformanceData($connection, $student_id);
-    
-    if (empty($performanceData)) {
-        // Handle the case where no performance data is found
-        echo "No performance data found for the specified student.";
-
-    }
-    
-    // Rest of your code for processing and returning data
-    // ...
-} catch (Exception $e) {
-    // Handle exceptions
-    http_response_code(500); // Set HTTP status code to 500 Internal Server Error
-    echo json_encode(['error' => 'An error occurred: ' . $e->getMessage()]);
-}
-
-// Add more specific error messages
-if (!$columnNames) {
-    // Handle the case where fetching column names fails
-    $columnNames = []; // Set a default value or handle the error
-    echo "Failed to fetch column names.";
-}
-*/
-
-// Initialize $metadataID to null to check later if it was set
-
 try {
     $stmt = $connection->prepare("SELECT MIN(metadata_id) AS min_metadata_id FROM Metadata WHERE school_id = ?");
     $stmt->execute([$school_id]);
@@ -90,15 +57,20 @@ try {
     if ($row && $row['min_metadata_id'] !== null) {
         $metadataID = $row['min_metadata_id'];
     } else {
-        throw new Exception("No metadata records found for the specified school.");
+        echo json_encode(['error' => 'No metadata records found for the specified school']);
+        exit();
     }
 } catch (PDOException $e) {
-    // Catch and handle any PDO-specific exceptions
-    echo "Database error: " . $e->getMessage();
+    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     exit();
 } catch (Exception $e) {
-    // Catch and handle general exceptions
-    echo "Error: " . $e->getMessage();
+    echo json_encode(['error' => 'Error: ' . $e->getMessage()]);
+    exit();
+}
+
+if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
+    $defaultMetadataId = fetchDefaultMetadataId($connection, $school_id);
+    echo json_encode(['metadataId' => $defaultMetadataId]);
     exit();
 }
 
