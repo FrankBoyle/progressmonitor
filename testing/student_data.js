@@ -449,57 +449,57 @@ $(document).ready(function () {
         }
     }     
 
+// Assuming you have a table element with the ID "myDataTable" in your HTML
 const table = $('#myDataTable');
 
-    // Initialize DataTable only if it's not already initialized
-    if (!$.fn.DataTable.isDataTable('#myDataTable')) {
-        const dataTable = table.DataTable({
-            "order": [[0, "asc"]],
-            "lengthChange": false,
-            "paging": true,
-            "searching": true,
-            "info": false,
-            "columns": [
-                { "type": "date-us" },
-                ...columnNames.map(header => ({ title: header })),
-                { "orderable": false }
-            ]
-        });
+// Check if DataTables is already initialized for the table
+if (!$.fn.DataTable.isDataTable('#myDataTable')) {
+    const dataTable = table.DataTable({
+        "order": [[0, "asc"]],
+        "lengthChange": false,
+        "paging": true,
+        "searching": true,
+        "info": false,
+        "columns": [
+            { "type": "date-us" },
+            ...columnNames.map(header => ({ title: header })),
+            { "orderable": false }
+        ]
+    });
 
-        // Check for the existence of performanceData before updating
-        if (performanceData && performanceData.length > 0) {
-            // Clear existing data
-            dataTable.clear();
+    // Check for the existence of performanceData before updating
+    if (performanceData && performanceData.length > 0) {
+        // Clear existing data
+        dataTable.clear();
 
-            // Add new data
-            dataTable.rows.add(performanceData);
+        // Add new data
+        dataTable.rows.add(performanceData);
 
-            // Redraw the table
-            dataTable.draw();
-        } else {
-            // Display a message when there's no data
-            table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
-        }
+        // Redraw the table
+        dataTable.draw();
     } else {
-        // DataTables is already initialized, so update the data
-        const dataTable = table.DataTable();
-
-        // Check for the existence of performanceData before updating
-        if (performanceData && performanceData.length > 0) {
-            // Clear existing data
-            dataTable.clear();
-
-            // Add new data
-            dataTable.rows.add(performanceData);
-
-            // Redraw the table
-            dataTable.draw();
-        } else {
-            // Display a message when there's no data
-            table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
-        }
+        // Display a message when there's no data
+        table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
     }
+} else {
+    // DataTables is already initialized, so update the data
+    const dataTable = table.DataTable();
+    
+    // Check for the existence of performanceData before updating
+    if (performanceData && performanceData.length > 0) {
+        // Clear existing data
+        dataTable.clear();
 
+        // Add new data
+        dataTable.rows.add(performanceData);
+
+        // Redraw the table
+        dataTable.draw();
+    } else {
+        // Display a message when there's no data
+        table.append('<tbody><tr><td colspan="' + (columnNames.length + 2) + '">No data available</td></tr></tbody>');
+    }
+}
 
     function toggleDateOrder() {
         const table = $('table').DataTable();
