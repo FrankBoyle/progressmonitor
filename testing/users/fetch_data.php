@@ -79,9 +79,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 foreach ($metadataEntries as $metadataEntry) {
     $metadataId = $metadataEntry['metadata_id'];
     $categoryName = $metadataEntry['category_name'];
-
     // Generate a link to the table for this metadata entry
-    echo "<a href='table.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
 }
 
 if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
