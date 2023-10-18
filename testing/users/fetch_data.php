@@ -75,13 +75,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
 
-// Output the links to tables for each metadata entry
-foreach ($metadataEntries as $metadataEntry) {
-    $metadataId = $metadataEntry['metadata_id'];
-    $categoryName = $metadataEntry['category_name'];
-    // Generate a link to the table for this metadata entry
-}
-
 if (isset($_GET['action']) && $_GET['action'] === 'fetchDefaultMetadataId') {
     $defaultMetadataId = fetchDefaultMetadataId($connection, $school_id);
     echo json_encode(['metadataId' => $defaultMetadataId]);
