@@ -34,13 +34,16 @@ include('./users/fetch_data.php');
 
 <!-- Add the generated links here -->
 <?php
-// Output the links to tables for each metadata entry
-foreach ($metadataEntries as $metadataEntry) {
-    $metadataId = $metadataEntry['metadata_id'];
-    $categoryName = $metadataEntry['category_name'];
+if (!empty($metadataEntries)) {
+    foreach ($metadataEntries as $metadataEntry) {
+        $metadataId = $metadataEntry['metadata_id'];
+        $categoryName = $metadataEntry['category_name'];
 
-    // Generate a link to the table for this metadata entry
-    echo "<a href='view_student_data.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
+        // Generate a link to the table for this metadata entry
+        echo "<a href='view_student_data.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
+    }
+} else {
+    echo "No metadata entries found.";
 }
 ?>
 
