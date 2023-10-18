@@ -358,11 +358,6 @@ $(document).ready(function () {
         });
     }
 
-    function updateDataTable(performanceData) {
-        // Your DataTable initialization and update code here...
-    }
-});
-
     function fetchTableData(metadataId) {
         const data = {
             action: 'fetchPerformanceData',
