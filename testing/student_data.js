@@ -335,10 +335,16 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 console.log('Response:', response);
+                
+                if (!response) {
+                    console.error('Empty response from the server.');
+                    return; // Exit the function if the response is empty
+                }
+                
                 if (response && response.columnHeaders && response.performanceData) {
                     updateTable(response.columnHeaders, response.performanceData);
                 } else {
-                    console.error('Invalid or empty response:', response);
+                    console.error('Invalid response:', response);
                 }
             },
             error: function (xhr, status, error) {
@@ -348,7 +354,7 @@ $(document).ready(function () {
                 console.log('HTTP Status Code:', xhr.status);
                 console.log('Status Text:', xhr.statusText);
     
-                // Check if the response text is empty or not valid JSON
+                // Check if the response text is available
                 if (xhr.responseText) {
                     try {
                         const jsonResponse = JSON.parse(xhr.responseText);
@@ -361,7 +367,7 @@ $(document).ready(function () {
                 }
             }
         });
-    }    
+    }     
      
     function updateTable(columnHeaders, performanceData) {
         // Update table headers with new column names
