@@ -258,6 +258,7 @@ function calculateTrendline(data) {
 
 $(document).ready(function () {
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
+    var metadataId; // Declare metadataId in the outer scope
     let dateAscending = true;
     // Initialize the page
     initializePage();
@@ -337,8 +338,6 @@ $(document).ready(function () {
         });
     }   
    
-    var metadataId = response.metadataId;
-
     fetchPerformanceData();
 
     function fetchPerformanceData() {
