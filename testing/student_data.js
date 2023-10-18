@@ -691,6 +691,11 @@ function attachEditableHandler() {
         });
     });
 }
+console.log(performanceData);
+console.log(columnNames);
+console.log(columnHeaders);
+console.log(columnHeaders);
+console.log(metadataId);
 // Make an AJAX request to fetch performance data based on school_id, student_id, and metadata_id
 $.ajax({
     url: 'fetch_performance_data.php', // Replace with your PHP script URL
@@ -742,10 +747,7 @@ $.ajax({
         console.error('AJAX Error:', error);
         alert('An error occurred while fetching data.');
     }
+
 });
-console.log(performanceData);
-console.log(columnNames);
-console.log(columnHeaders);
-console.log(columnHeaders);
-console.log(metadataId);
+
 });
