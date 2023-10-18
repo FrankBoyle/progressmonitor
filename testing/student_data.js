@@ -392,40 +392,48 @@ $(document).ready(function () {
     }     
      
     function updateTable(columnHeaders, performanceData) {
-        // Remove existing table headers
+        // Update table headers with new column names
         const table = $('table');
         table.find('thead').remove();
+        
+        // Generate new table headers based on columnHeaders
+        const thead = $('<thead>');
+        const headerRow = $('<tr>');
+        headerRow.append($('<th>Date</th>'));
     
-        // Create new table headers based on columnHeaders if it's an array
-        if (Array.isArray(columnHeaders)) {
-            const thead = $('<thead>');
-            const headerRow = $('<tr>');
-            headerRow.append($('<th>Date</th>'));
+        $.each(columnHeaders, function (index, columnName) {
+            headerRow.append($('<th>' + columnName + '</th>'));
+        });
     
-            $.each(columnHeaders, function (index, columnName) {
-                headerRow.append($('<th>' + columnName + '</th>'));
-            });
+        headerRow.append($('<th>Action</th>'));
+        thead.append(headerRow);
+        table.append(thead);
     
-            headerRow.append($('<th>Action</th>'));
-            thead.append(headerRow);
-            table.append(thead);
-        }
+        // Generate DataTable column definitions dynamically
+        const columns = [
+            { "type": "date-us" }, // Assuming the first column is a date
+        ];
     
-        // Use DataTables to populate the table with performanceData
+        columnHeaders.forEach(function (header) {
+            columns.push({ title: header });
+        });
+    
+        columns.push({ "orderable": false }); // Action column
+    
+        // Initialize DataTable with dynamic column definitions
         const dataTable = table.DataTable({
             "order": [[0, "asc"]],
             "lengthChange": false,
             "paging": true,
             "searching": true,
             "info": false,
-            "columns": [
-                { "type": "date-us" },
-                ...(Array.isArray(columnHeaders) ? columnHeaders.map(header => ({ title: header })) : []),
-                { "orderable": false }
-            ]
+            "columns": columns
         });
+    
+        // Add data to DataTable
         dataTable.clear().rows.add(performanceData).draw();
-    }   
+    }
+    
 
     function toggleDateOrder() {
         const table = $('table').DataTable();
