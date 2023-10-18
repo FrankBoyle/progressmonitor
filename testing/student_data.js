@@ -298,25 +298,32 @@ $(document).ready(function () {
 
     function fetchDefaultHeaders() {
         $.ajax({
-            type: 'GET',
             url: './users/fetch_data.php',
-            data: { action: 'fetchDefaultMetadataId' },
+            method: 'GET',
+            data: {
+                student_id: studentId, // Pass your student ID here
+                action: 'fetchDefaultMetadataId'
+            },
             dataType: 'json',
             success: function (response) {
                 console.log('Response:', response);
-                if (response && response.metadataId) {
-                    fetchTableData(response.metadataId);
+                // Check for errors in the response
+                if (response.hasOwnProperty('error')) {
+                    console.error('Server Error:', response.error);
+                    // Handle the error as needed, e.g., display an error message to the user
                 } else {
-                    console.error('Invalid or empty response:', response);
+                    // Handle the successful response here
+                    var metadataId = response.metadataId;
+                    var displayedColumns = response.displayedColumns;
+                    // Process and use the data as needed
                 }
             },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', error);
                 console.log('HTTP Status Code:', xhr.status);
                 console.log('Status Text:', xhr.statusText);
-                if (xhr.responseText) {
-                    console.log('Response Text:', xhr.responseText);
-                }
+                console.log('Response Text:', xhr.responseText);
+                // Handle the AJAX error as needed
             }
         });
     }   

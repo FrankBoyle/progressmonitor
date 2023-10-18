@@ -102,8 +102,8 @@ if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     ];
 } else {
     // Handle the case where no metadata entry is found for the specified school_id and metadata_id
-    echo "Metadata entry not found.";
-    exit;
+    echo json_encode(['error' => 'Metadata entry not found']);
+    exit();
 }
 
 // Fetch performance data and score names based on the metadata
@@ -116,10 +116,18 @@ foreach ($performanceData as $record) {
     // You can add more logic here if needed
 }
 
+$responseData = [
+    'metadataId' => $metadataID,
+    'displayedColumns' => $displayedColumns,
+    // Add other data you want to send to the client
+];
+
 // Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
 $stmt->execute([$school_id]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
+echo json_encode($responseData);
+
 ?>
