@@ -548,7 +548,7 @@ if (!$.fn.DataTable.isDataTable('#myDataTable')) {
         "info": false,
         "columns": [
             { "type": "date-us" },
-            ...columnNames.map(header => ({ "title": header })),
+            //...columnNames.map(header => ({ "title": header })),
             { "orderable": false }
         ]
     });
