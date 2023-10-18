@@ -119,6 +119,7 @@ foreach ($performanceData as $record) {
 $responseData = [
     'metadataId' => $metadataID,
     'displayedColumns' => $displayedColumns,
+    'columnHeaders' => $columnHeaders, // Add the columnHeaders here
     // Add other data you want to send to the client
 ];
 
