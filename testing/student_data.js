@@ -396,18 +396,20 @@ $(document).ready(function () {
         const table = $('table');
         table.find('thead').remove();
     
-        // Create new table headers based on columnHeaders
-        const thead = $('<thead>');
-        const headerRow = $('<tr>');
-        headerRow.append($('<th>Date</th>'));
+        // Create new table headers based on columnHeaders if it's an array
+        if (Array.isArray(columnHeaders)) {
+            const thead = $('<thead>');
+            const headerRow = $('<tr>');
+            headerRow.append($('<th>Date</th>'));
     
-        $.each(columnHeaders, function (index, columnName) {
-            headerRow.append($('<th>' + columnName + '</th>'));
-        });
+            $.each(columnHeaders, function (index, columnName) {
+                headerRow.append($('<th>' + columnName + '</th>'));
+            });
     
-        headerRow.append($('<th>Action</th>'));
-        thead.append(headerRow);
-        table.append(thead);
+            headerRow.append($('<th>Action</th>'));
+            thead.append(headerRow);
+            table.append(thead);
+        }
     
         // Use DataTables to populate the table with performanceData
         const dataTable = table.DataTable({
@@ -418,13 +420,12 @@ $(document).ready(function () {
             "info": false,
             "columns": [
                 { "type": "date-us" },
-                ...columnHeaders.map(header => ({ title: header })),
+                ...(Array.isArray(columnHeaders) ? columnHeaders.map(header => ({ title: header })) : []),
                 { "orderable": false }
             ]
         });
         dataTable.clear().rows.add(performanceData).draw();
-    }
-    
+    }   
 
     function toggleDateOrder() {
         const table = $('table').DataTable();
