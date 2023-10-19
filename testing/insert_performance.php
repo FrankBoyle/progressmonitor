@@ -39,10 +39,6 @@ if (empty($_POST['scores'])) {
     exit;
 }
 
-$studentId = $_POST['student_id'];
-$weekStartDate = $_POST['score_date'];
-$scores = $_POST['scores'];
-
 foreach ($scores as $key => $score) {
     if ($score === '' || !isset($score)) {
         $scores[$key] = NULL;
@@ -50,14 +46,18 @@ foreach ($scores as $key => $score) {
 }
 
 // Check for duplicate date entry
-$checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ?");
+$checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ? AND metadata_id = ?");
 $checkStmt->execute([$studentId, $weekStartDate]);
 
 if ($checkStmt->fetchColumn() > 0) {
     handleError("Duplicate date not allowed!");
     exit;
 }
-
+$studentId = $_POST['student_id'];
+$metadataId = $_POST['metadata_id']; // Get metadata_id from POST
+$schoolId = $_POST['school_id']; // Get school_id from POST
+$weekStartDate = $_POST['score_date'];
+$scores = $_POST['scores'];
 $metadataId = isset($_POST['metadata_id']) ? $_POST['metadata_id'] : null;
 $schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
 
@@ -78,12 +78,6 @@ if ($stmt->execute([$studentId, $metadataId, $schoolId, $weekStartDate, $scores[
     handleError("Failed to insert data: " . implode(" | ", $stmt->errorInfo()));
 }
     
-    $studentId = $_POST['student_id'];
-    $metadataId = $_POST['metadata_id']; // Get metadata_id from POST
-    $schoolId = $_POST['school_id']; // Get school_id from POST
-    $weekStartDate = $_POST['score_date'];
-    $scores = $_POST['scores'];
-
     // Insert metadata_id and school_id into the new performance record
     $stmt = $connection->prepare("UPDATE Performance SET metadata_id = ?, school_id = ? WHERE performance_id = ?");
     if ($metadataStmt->execute([$metadataId, $schoolId, $newPerformanceId])) {
