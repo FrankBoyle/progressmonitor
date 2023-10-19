@@ -1,6 +1,5 @@
 <?php
 // Include the database connection script
-include('./users/db.php');
 include('./users/fetch_data.php');
 
 header('Content-Type: application/json');
