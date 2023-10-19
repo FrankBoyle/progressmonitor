@@ -66,7 +66,7 @@ echo "metadataId: " . $metadataId . "<br>";
 echo "schoolId: " . $schoolId . "<br>";
 $stmt = $connection->prepare("INSERT INTO Performance (student_id, metadata_id, school_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-if ($stmt->execute([$studentId, $metadataId['metadata_id'], $schoolId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
+if ($stmt->execute([$studentId, $metadataId, $schoolId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
     // Successful insertion
     $newPerformanceId = $connection->lastInsertId();
     $responseData = [
