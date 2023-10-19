@@ -377,6 +377,49 @@ $(document).ready(function() {
         }, 'json');
     });
 
+    function getParameterByName(name) {
+        const url = window.location.href;
+        name = name.replace(/[[]]/g, "\\$&");
+        const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+        const results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    
+    $('#addDataRow').off('click').click(function() {
+        // Check for an existing "new" row
+        if ($('tr[data-performance-id="new"]').length) {
+            alert("Please save the existing new entry before adding another one.");
+            return;
+        }
+    
+        const currentDate = getCurrentDate();
+        if (isDateDuplicate(currentDate)) {
+            //alert("An entry for this date already exists. Please choose a different date.");
+            return;
+        }
+    
+        // Get the current metadata_id from the URL parameter
+        const metadata_id = getParameterByName('metadata_id');
+    
+        const newRow = $("<tr data-performance-id='new'>");
+        newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
+        
+        for (let i = 1; i <= 10; i++) {
+            newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+        }
+        
+        newRow.append('<td><button class="saveRow">Save</button></td>');
+        $("table").append(newRow);
+    
+        newRow.find('td[data-field-name="score_date"]').click().blur();
+        attachEditableHandler();
+        const dateCell = newRow.find('td[data-field-name="score_date"]');
+        dateCell.click();
+    });
+    
+
     function updateScoreInDatabase(row, metadataFieldName, newValue) {
         const performanceId = row.data('performance-id');
         const studentId = CURRENT_STUDENT_ID;
