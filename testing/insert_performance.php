@@ -69,9 +69,9 @@ if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['scor
         'scores' => $scores,
     ];
     
-    // Your code to fetch the metadata_id and school_id based on your logic
-    $metadataId = ...; // Fetch or set the metadata_id as needed
-    $schoolId = ...;   // Fetch or set the school_id as needed
+    $studentId = $_POST['student_id'];
+    $weekStartDate = $_POST['score_date'];
+    $scores = $_POST['scores'];
 
     // Insert metadata_id and school_id into the new performance record
     $metadataStmt = $connection->prepare("UPDATE Performance SET metadata_id = ?, school_id = ? WHERE performance_id = ?");

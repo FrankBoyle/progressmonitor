@@ -30,6 +30,8 @@ $metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 </head>
 <body>
 
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
