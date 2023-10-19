@@ -38,7 +38,7 @@ echo '</pre>';
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <?php
     echo "school_id: " . htmlspecialchars($school_id) . "<br>";
-    echo "metadataId: " . htmlspecialchars($metadataId) . "<br>";
+    echo "metadataId: " . htmlspecialchars($metadata_id) . "<br>";
 ?>
 <a href="test.php" class="btn btn-primary">Student List</a>
 
