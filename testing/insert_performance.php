@@ -59,7 +59,7 @@ $studentId = $_POST['student_id'];
 $schoolId = $_POST['school_id']; // Get school_id from POST
 $weekStartDate = $_POST['score_date'];
 $scores = $_POST['scores'];
-$metadataId = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
+$metadataId = isset($_GET['metadata_id']) ? $_GET['metadata_id'];
 //$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
 
 echo "metadataId: " . $metadataId . "<br>";
