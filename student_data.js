@@ -115,8 +115,6 @@ function updateChart(scoreField) {
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
 
-
-
 function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
@@ -303,10 +301,13 @@ $(document).ready(function() {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
+        const formattedDate = convertToDatabaseDate(newDate); // Format the date consistently
+
         const postData = {
+            
             performance_id: performanceId,
             field_name: fieldName,
-            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+            new_value: formattedDate, // Use the formatted date for the AJAX call
             student_id: studentId
 
         };
