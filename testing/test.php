@@ -40,7 +40,11 @@ $students = fetchStudentsByTeacher($teacherId);
     <?php if (!empty($students)): ?>
         <h2>Students:</h2>
         <?php foreach ($students as $student): ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>'><?= $student['name'] ?></a><br>
+            <?php
+                // Fetch the smallest metadata_id for the student's school_id
+                $metadataId = getSmallestMetadataId($student['school_id']);
+            ?>
+            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= $student['name'] ?></a><br>
         <?php endforeach; ?>
     <?php else: ?>
         No students found for this teacher.
