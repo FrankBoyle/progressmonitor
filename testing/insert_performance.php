@@ -83,9 +83,9 @@ if ($stmt->execute([$studentId, $metadataId, $schoolId, $weekStartDate, $scores[
     
     // Insert metadata_id and school_id into the new performance record
     $stmt = $connection->prepare("UPDATE Performance SET metadata_id = ?, school_id = ? WHERE performance_id = ?");
-    if ($metadataStmt->execute([$metadataId, $schoolId, $newPerformanceId])) {
+    if ($stmt->execute([$metadataId, $schoolId, $newPerformanceId])) {
         echo json_encode($responseData);
     } else {
-        handleError("Failed to update metadata_id and school_id: " . implode(" | ", $metadataStmt->errorInfo()));
+        handleError("Failed to update metadata_id and school_id: " . implode(" | ", $stmt->errorInfo()));
 }
 ?>
