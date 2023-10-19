@@ -1,7 +1,7 @@
 <?php
 // Include the database connection script
-include('./users/db.php');
-include('./users/fetch_data.php');
+include_once('./users/db.php');
+include_once('./users/fetch_data.php');
 header('Content-Type: application/json');
 
 file_put_contents('post_data_debug.txt', print_r($_POST, true));
