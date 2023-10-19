@@ -511,18 +511,17 @@ $(document).ready(function() {
                 });
             });
             
-            
-
-            // Pressing Enter to save changes
-            input.off('keypress').keypress(function(e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-                    input.blur();
-                }
-            });
+        
         });
     }
 
+
+    $(document).on('keypress', '.saveRow', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+        }
+    });
+    
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
     if ($('tr[data-performance-id="new"]').length) {
