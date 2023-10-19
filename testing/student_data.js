@@ -483,8 +483,7 @@ $(document).ready(function() {
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
                 const school_id = $('#schoolIdInput').val();
                 const metadata_id = $('#metadataIdInput').val();
-                
-                
+                          
 
                 let postData = {
                     performance_id: performanceId,
@@ -580,7 +579,7 @@ if (isDateDuplicate(currentDate)) {
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
         const metadata_id = $('#metadataIdInput').val();
-        
+
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
     
