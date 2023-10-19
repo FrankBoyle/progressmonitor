@@ -491,8 +491,8 @@ $(document).ready(function() {
                     new_value: newValue,
                     student_id: studentId,
                     score_date: weekStartDate,
-                    metadata_id: metadata_id,
-                    school_id: school_id,
+                    //metadata_id: metadata_id,
+                    //school_id: school_id,
                 };
 
                 if (performanceId === 'new') {
@@ -599,8 +599,8 @@ if (isDateDuplicate(currentDate)) {
             student_id: CURRENT_STUDENT_ID,
             score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
             scores: scores, // Include the scores object in postData
-            metadata_id: metadata_id,
-            school_id: school_id,
+            //metadata_id: metadata_id,
+            //school_id: school_id,
         };
     
         if (isDateDuplicate(postData.score_date)) {
