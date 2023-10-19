@@ -481,8 +481,8 @@ $(document).ready(function() {
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
-                var metadata_id = $(this).find('td[data-field-name="metadata_id"]').text();
-                var school_id = $(this).find('td[data-field-name="school_id"]').text();
+                var metadata_id = $(this).find('td[data-field-name="metadata_id"]').val();
+                var school_id = $(this).find('td[data-field-name="school_id"]').val();
 
                 let postData = {
                     performance_id: performanceId,
