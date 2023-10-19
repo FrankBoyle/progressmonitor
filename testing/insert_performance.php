@@ -53,6 +53,7 @@ if ($checkStmt->fetchColumn() > 0) {
     handleError("Duplicate date not allowed!");
     exit;
 }
+
 $studentId = $_POST['student_id'];
 $metadataId = $_POST['metadata_id']; // Get metadata_id from POST
 $schoolId = $_POST['school_id']; // Get school_id from POST
@@ -84,8 +85,7 @@ if ($stmt->execute([$studentId, $metadataId, $schoolId, $weekStartDate, $scores[
         echo json_encode($responseData);
     } else {
         handleError("Failed to update metadata_id and school_id: " . implode(" | ", $metadataStmt->errorInfo()));
-    }
-} else {
+    } else {
     handleError("Failed to insert data: " . implode(" | ", $stmt->errorInfo()));
 }
 ?>
