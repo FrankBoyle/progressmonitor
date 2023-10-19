@@ -59,12 +59,9 @@ $studentId = $_POST['student_id'];
 $schoolId = $_POST['school_id']; // Get school_id from POST
 $weekStartDate = $_POST['score_date'];
 $scores = $_POST['scores'];
-$metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
+$metadata_id = isset($_POST['metadata_id']);
 //$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
 // Retrieve metadataId from URL parameters
-
-echo "metadataId: " . $metadata_id . "<br>";
-echo "schoolId: " . $schoolId . "<br>";
 
 $stmt = $connection->prepare("INSERT INTO Performance (student_id, metadata_id, school_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
