@@ -39,8 +39,6 @@ function getChartData(scoreField) {
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
-        var metadata_id = $(this).find('td[data-field-name="metadata_id"]').text();
-        var school_id = $(this).find('td[data-field-name="school_id"]').text();
 
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
@@ -483,6 +481,8 @@ $(document).ready(function() {
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+                var metadata_id = $(this).find('td[data-field-name="metadata_id"]').text();
+                var school_id = $(this).find('td[data-field-name="school_id"]').text();
 
                 let postData = {
                     performance_id: performanceId,
