@@ -692,5 +692,19 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
             var date = data.split('/');
             return (date[2] + date[0] + date[1]) * 1;
+
+            let table = $('table').DataTable({
+                "order": [[0, "asc"]],
+                "lengthChange": false,
+                //"searching": false,
+                "paging": false,
+                "info": false,
+                "columns": [
+                    { "type": "date-us" },
+                    null, null, null, null, null, null, null, null, null, null, null
+                ]
+            });
         };
+
+        
 });
