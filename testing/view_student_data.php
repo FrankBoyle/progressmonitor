@@ -1,5 +1,5 @@
 <?php
-include './users/fetch_data.php';
+include ('./users/fetch_data.php');
 
 $metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 ?>
@@ -26,7 +26,6 @@ $metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 </head>
 <body>
 
-<?php include('./users/fetch_data.php'); ?>
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>
