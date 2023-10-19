@@ -1,6 +1,7 @@
 <?php
 // Include the database connection script
 include('./users/db.php');
+include('./users/fetch_data.php');
 header('Content-Type: application/json');
 
 file_put_contents('post_data_debug.txt', print_r($_POST, true));
@@ -25,12 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Check if the request method is POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    handleError("Invalid request method.");
-    exit;
-}
-
 if (empty($_POST['student_id'])) {
     handleError("student_id is missing.");
     exit;
@@ -43,7 +38,6 @@ if (empty($_POST['scores'])) {
     handleError("scores are missing.");
     exit;
 }
-
 
 $studentId = $_POST['student_id'];
 $weekStartDate = $_POST['score_date'];
@@ -74,10 +68,19 @@ if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['scor
         'score_date' => $weekStartDate,
         'scores' => $scores,
     ];
-    echo json_encode($responseData);
+    
+    // Your code to fetch the metadata_id and school_id based on your logic
+    $metadataId = ...; // Fetch or set the metadata_id as needed
+    $schoolId = ...;   // Fetch or set the school_id as needed
+
+    // Insert metadata_id and school_id into the new performance record
+    $metadataStmt = $connection->prepare("UPDATE Performance SET metadata_id = ?, school_id = ? WHERE performance_id = ?");
+    if ($metadataStmt->execute([$metadataId, $schoolId, $newPerformanceId])) {
+        echo json_encode($responseData);
+    } else {
+        handleError("Failed to update metadata_id and school_id: " . implode(" | ", $metadataStmt->errorInfo()));
+    }
 } else {
     handleError("Failed to insert data: " . implode(" | ", $stmt->errorInfo()));
 }
-
 ?>
-

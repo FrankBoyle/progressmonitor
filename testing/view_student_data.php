@@ -1,3 +1,9 @@
+<?php
+include './users/fetch_data.php';
+
+$metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
