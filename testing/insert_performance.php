@@ -55,7 +55,7 @@ if ($checkStmt->fetchColumn() > 0) {
 }
 
 $studentId = $_POST['student_id'];
-$metadataId = $_POST['metadata_id']; // Get metadata_id from POST
+$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 $schoolId = $_POST['school_id']; // Get school_id from POST
 $weekStartDate = $_POST['score_date'];
 $scores = $_POST['scores'];
