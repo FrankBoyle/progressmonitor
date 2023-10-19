@@ -58,9 +58,13 @@ if ($checkStmt->fetchColumn() > 0) {
     exit;
 }
 
-$stmt = $connection->prepare("INSERT INTO Performance (student_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$metadataId = isset($_POST['metadata_id']) ? $_POST['metadata_id'] : null;
+$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
 
-if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
+$stmt = $connection->prepare("INSERT INTO Performance (student_id, metadata_id, school_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+if ($stmt->execute([$studentId, $metadataId, $schoolId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
+    // Successful insertion
     $newPerformanceId = $connection->lastInsertId();
     $responseData = [
         'success' => true,
@@ -68,13 +72,20 @@ if ($stmt->execute([$studentId, $weekStartDate, $scores['score1'], $scores['scor
         'score_date' => $weekStartDate,
         'scores' => $scores,
     ];
+    echo json_encode($responseData);
+} else {
+    // Error during insertion
+    handleError("Failed to insert data: " . implode(" | ", $stmt->errorInfo()));
+}
     
     $studentId = $_POST['student_id'];
+    $metadataId = $_POST['metadata_id']; // Get metadata_id from POST
+    $schoolId = $_POST['school_id']; // Get school_id from POST
     $weekStartDate = $_POST['score_date'];
     $scores = $_POST['scores'];
 
     // Insert metadata_id and school_id into the new performance record
-    $metadataStmt = $connection->prepare("UPDATE Performance SET metadata_id = ?, school_id = ? WHERE performance_id = ?");
+    $stmt = $connection->prepare("UPDATE Performance SET metadata_id = ?, school_id = ? WHERE performance_id = ?");
     if ($metadataStmt->execute([$metadataId, $schoolId, $newPerformanceId])) {
         echo json_encode($responseData);
     } else {

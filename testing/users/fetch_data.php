@@ -177,6 +177,5 @@ foreach ($metadataEntries as $metadataEntry) {
 $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
 $stmt->execute([$studentId, $metadataId]);
 
-
 ?>
 
