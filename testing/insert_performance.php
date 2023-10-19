@@ -85,7 +85,5 @@ if ($stmt->execute([$studentId, $metadataId, $schoolId, $weekStartDate, $scores[
         echo json_encode($responseData);
     } else {
         handleError("Failed to update metadata_id and school_id: " . implode(" | ", $metadataStmt->errorInfo()));
-    } else {
-    handleError("Failed to insert data: " . implode(" | ", $stmt->errorInfo()));
 }
 ?>
