@@ -29,7 +29,8 @@ error_reporting(E_ALL);
 </style>
 </head>
 <body>
-
+<input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
+<input type="hidden" id="metadataIdInput" name="metadata_id" value="<?php echo htmlspecialchars($metadataId); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <a href="test.php" class="btn btn-primary">Student List</a>

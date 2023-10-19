@@ -39,6 +39,9 @@ function getChartData(scoreField) {
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
+        var metadata_id = $(this).find('td[data-field-name="metadata_id"]').text();
+        var school_id = $(this).find('td[data-field-name="school_id"]').text();
+
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
@@ -486,7 +489,9 @@ $(document).ready(function() {
                     field_name: fieldName,
                     new_value: newValue,
                     student_id: studentId,
-                    score_date: weekStartDate
+                    score_date: weekStartDate,
+                    metadata_id: metadata_id,
+                    school_id: school_id,
                 };
 
                 if (performanceId === 'new') {
@@ -590,7 +595,9 @@ if (isDateDuplicate(currentDate)) {
         const postData = {
             student_id: CURRENT_STUDENT_ID,
             score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
-            scores: scores // Include the scores object in postData
+            scores: scores, // Include the scores object in postData
+            metadata_id: metadata_id,
+            school_id: school_id,
         };
     
         if (isDateDuplicate(postData.score_date)) {
