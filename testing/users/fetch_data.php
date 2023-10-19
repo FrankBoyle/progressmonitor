@@ -85,7 +85,26 @@ function fetchGroupNames() {
     return $groups;
 }
 
+// Function to get the smallest metadata_id for a given school_id
+function getSmallestMetadataId($schoolId) {
+    global $db; // Access the database connection
 
+    // Prepare and execute a query to fetch the smallest metadata_id
+    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
+    $statement = $db->prepare($query);
+    $statement->bindParam(':schoolId', $schoolId, PDO::PARAM_INT);
+    $statement->execute();
+
+    // Fetch the result
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+
+    // Check if a result was found
+    if ($result && isset($result['smallest_metadata_id'])) {
+        return $result['smallest_metadata_id'];
+    } else {
+        return null; // No matching records found
+    }
+}
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
