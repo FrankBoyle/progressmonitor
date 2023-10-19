@@ -320,7 +320,9 @@ $(document).ready(function() {
             performance_id: performanceId,
             field_name: fieldName,
             new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
-            student_id: studentId
+            student_id: studentId,
+            metadata_id: metadata_id,
+            school_id: school_id
 
         };
         console.log(postData);
@@ -386,6 +388,7 @@ $(document).ready(function() {
             new_value: newValue,
             student_id: studentId,
             score_date: score_date
+            
         };
     
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
