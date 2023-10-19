@@ -38,15 +38,6 @@ if (empty($_POST['scores'])) {
     handleError("scores are missing.");
     exit;
 }
-if (empty($_POST['school_id'])) {
-    handleError("school id is missing.");
-    exit;
-}
-// Check if it's null or empty and handle it accordingly
-if (empty($metadataId)) {
-    handleError("metadata_id is missing in the URL.");
-    exit;
-}
 
 foreach ($scores as $key => $score) {
     if ($score === '' || !isset($score)) {
