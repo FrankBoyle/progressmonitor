@@ -18,6 +18,10 @@ function handleError($errorMessage, $missingData = []) {
     exit;
 }
 
+echo '<pre>';
+print_r($_GET);
+echo '</pre>';
+
 $responseData = [];
 
 // Check if the request method is POST
