@@ -455,9 +455,12 @@ $(document).ready(function() {
                         cell.html(originalValue);
                         return;
                     }
-                    // Save the new value for the database but display the original mm/dd/yyyy format to the user
-                    cell.html(newValue);  // The selected value from datepicker is already in mm/dd/yyyy format, so just display it
-                    newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
+
+                    // Format the date consistently as 'yyyy-mm-dd'
+                    const formattedDate = `${parts[2]}-${parts[0]}-${parts[1]}`;
+                    cell.html(newValue);  // Update the cell with the formatted date
+                    newValue = formattedDate;  // Use the formatted date for the AJAX call
+                    saveEditedDate(cell, newValue); // Save the edited datey-mm-dd format for database use
                 } else {
                     cell.html(newValue);
                 }
