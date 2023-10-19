@@ -1,13 +1,3 @@
-<?php
-include ('./users/fetch_data.php');
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-//$metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,14 +19,10 @@ error_reporting(E_ALL);
 </style>
 </head>
 <body>
-<input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
-<input type="hidden" id="metadataIdInput" name="metadata_id" value="<?php echo htmlspecialchars($metadataId); ?>">
+
+<?php include('./users/fetch_data.php'); ?>
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
-<?php
-    echo "school_id: " . htmlspecialchars($school_id) . "<br>";
-    echo "metadataId: " . htmlspecialchars($metadataId) . "<br>";
-?>
 <a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
@@ -46,16 +32,20 @@ error_reporting(E_ALL);
 <input type="text" id="startDateFilter">
 
 <!-- Add the generated links here -->
-<?php foreach ($metadataEntries as $metadataEntry): ?>
-    <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
-        <?php echo $metadataEntry['category_name']; ?>
-    </a><br>
-<?php endforeach; ?>
+<?php
+// Output the links to tables for each metadata entry
+foreach ($metadataEntries as $metadataEntry) {
+    $metadataId = $metadataEntry['metadata_id'];
+    $categoryName = $metadataEntry['category_name'];
+    // Generate a link to the table for this metadata entry
+    echo "<a href='view_student_data.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
+}
+?>
 
 <table border="1">
     <thead>
         <tr>
-            <th>Date</th>
+            <th>Week Start Date</th>
             <?php foreach ($scoreNames as $key => $name): ?>
                 <th><?php echo $name; ?></th>
             <?php endforeach; ?>
