@@ -33,6 +33,10 @@ error_reporting(E_ALL);
 <input type="hidden" id="metadataIdInput" name="metadata_id" value="<?php echo htmlspecialchars($metadataId); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
+<?php
+    echo "school_id: " . htmlspecialchars($school_id) . "<br>";
+    echo "metadataId: " . htmlspecialchars($metadataId) . "<br>";
+?>
 <a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
