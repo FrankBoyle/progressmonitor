@@ -578,7 +578,9 @@ if (isDateDuplicate(currentDate)) {
     $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
-    
+        const school_id = $('#schoolIdInput').val();
+        const metadata_id = $('#metadataIdInput').val();
+        
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
     
