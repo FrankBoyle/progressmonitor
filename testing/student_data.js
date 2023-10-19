@@ -485,7 +485,8 @@ $(document).ready(function() {
                 const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
                 const school_id = $('#schoolIdInput').val();
-                const metadata_id = $('#metadataIdInput').val();
+                const urlParams = new URLSearchParams(window.location.search);
+                const metadata_id = urlParams.get('metadata_id');
                           
 
                 let postData = {
@@ -581,7 +582,8 @@ if (isDateDuplicate(currentDate)) {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
-        const metadata_id = $('#metadataIdInput').val();
+        const urlParams = new URLSearchParams(window.location.search);
+        const metadata_id = urlParams.get('metadata_id');
 
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
