@@ -38,6 +38,15 @@ if (empty($_POST['scores'])) {
     handleError("scores are missing.");
     exit;
 }
+if (empty($_POST['school_id'])) {
+    handleError("school id is missing.");
+    exit;
+}
+// Check if it's null or empty and handle it accordingly
+if (empty($metadataId)) {
+    handleError("metadata_id is missing in the URL.");
+    exit;
+}
 
 foreach ($scores as $key => $score) {
     if ($score === '' || !isset($score)) {
@@ -55,11 +64,11 @@ if ($checkStmt->fetchColumn() > 0) {
 }
 
 $studentId = $_POST['student_id'];
-$metadataId = $_POST['metadata_id']; // Get metadata_id from POST
+//$metadataId = $_POST['metadata_id']; // Get metadata_id from POST
 $schoolId = $_POST['school_id']; // Get school_id from POST
 $weekStartDate = $_POST['score_date'];
 $scores = $_POST['scores'];
-//$metadataId = isset($_POST['metadata_id']) ? $_POST['metadata_id'] : null;
+$metadataId = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 //$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
 
 echo "metadataId: " . $metadataId . "<br>";
