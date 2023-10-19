@@ -616,9 +616,9 @@ if (isDateDuplicate(currentDate)) {
         } else {
             // Handle the error response appropriately
             if (response && response.error) {
-                alert("Error: " + response.error);
+                //alert("Error: " + response.error);
             } else {
-                alert("There was an error saving the data.");
+                //alert("There was an error saving the data.");
             }
         }
         location.reload();
