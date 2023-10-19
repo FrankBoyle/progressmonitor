@@ -6,6 +6,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 //$metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
+echo '<pre>';
+print_r($_GET);
+echo '</pre>';
 ?>
 
 <!DOCTYPE html>
