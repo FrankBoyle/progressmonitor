@@ -1,5 +1,10 @@
 <?php
+include ('./users/db.php');
 include ('./users/fetch_data.php');
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 $metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 ?>
@@ -37,15 +42,11 @@ $metadata_id = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 <input type="text" id="startDateFilter">
 
 <!-- Add the generated links here -->
-<?php
-// Output the links to tables for each metadata entry
-foreach ($metadataEntries as $metadataEntry) {
-    $metadataId = $metadataEntry['metadata_id'];
-    $categoryName = $metadataEntry['category_name'];
-    // Generate a link to the table for this metadata entry
-    echo "<a href='view_student_data.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
-}
-?>
+<?php foreach ($metadataEntries as $metadataEntry): ?>
+    <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
+        <?php echo $metadataEntry['category_name']; ?>
+    </a><br>
+<?php endforeach; ?>
 
 <table border="1">
     <thead>
