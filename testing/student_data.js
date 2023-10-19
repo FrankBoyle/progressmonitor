@@ -292,12 +292,24 @@ $(document).ready(function() {
                 dataType: 'json',  // Expecting server to return JSON
                 cache: false,      // Don't cache results (especially important for POST requests)
             });
+    
+            // Debugging: Log the response
+            console.log('Response:', response);
+    
             return response;
         } catch (error) {
             console.error('Error during AJAX call:', error);
-            return error.responseJSON;  // Return the parsed JSON error message
+    
+            // Debugging: Log the error response (if available)
+            if (error.responseJSON) {
+                console.error('Error response:', error.responseJSON);
+                return error.responseJSON;  // Return the parsed JSON error message
+            } else {
+                return { error: 'Unknown error occurred.' };  // Provide a generic error message
+            }
         }   
     }
+    
 
     async function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
