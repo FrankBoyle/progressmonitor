@@ -587,11 +587,14 @@ if (isDateDuplicate(currentDate)) {
         dateCell.click();
     });
 
+    console.log(metadata_id);
+
     $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
-        console.log(metadata_id);
+        const urlParams = new URLSearchParams(window.location.search);
+        const metadata_id = urlParams.get('metadata_id');
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
     
