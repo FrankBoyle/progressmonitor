@@ -497,6 +497,7 @@ $(document).ready(function() {
                     metadata_id: metadata_id,
                     school_id: school_id,
                 };
+                console.log('metadata_id:', metadataId);
 
                 if (performanceId === 'new') {
                     const row = $(this).closest('tr');
