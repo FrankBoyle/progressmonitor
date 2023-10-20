@@ -29,16 +29,43 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['school_id'] : null;
 }
 
-function fetchScoreNames($school_id) {
+function fetchScoreNames($school_id, $metadata_id) {
     global $connection;
     $scoreNames = [];
-    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE school_id = ?");
-    $stmt->execute([$school_id]);
-    while ($row = $stmt->fetch()) {
-        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
+
+    // Fetch column names based on school_id and metadata_id
+    $stmt = $connection->prepare("
+        SELECT 
+            score1_name, score2_name, score3_name, score4_name, 
+            score5_name, score6_name, score7_name, score8_name, 
+            score9_name, score10_name
+        FROM 
+            Metadata
+        WHERE 
+            school_id = ? AND metadata_id = ?
+    ");
+
+    $stmt->execute([$school_id, $metadata_id]);
+
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // Populate the scoreNames array with column names
+        $scoreNames = [
+            'score1' => $row['score1_name'],
+            'score2' => $row['score2_name'],
+            'score3' => $row['score3_name'],
+            'score4' => $row['score4_name'],
+            'score5' => $row['score5_name'],
+            'score6' => $row['score6_name'],
+            'score7' => $row['score7_name'],
+            'score8' => $row['score8_name'],
+            'score9' => $row['score9_name'],
+            'score10' => $row['score10_name'],
+        ];
     }
+
     return $scoreNames;
 }
+
 
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
