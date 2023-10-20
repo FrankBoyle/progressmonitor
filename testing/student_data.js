@@ -317,13 +317,15 @@ $(document).ready(function() {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
+        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
         const school_id = $('#schoolIdInput').val();
         const metadata_id = $('metadataIdInput').val();
-        
+
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
             new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+            score_date: weekStartDate,
             student_id: studentId,
             metadata_id: metadata_id,
             school_id: school_id
@@ -486,7 +488,10 @@ $(document).ready(function() {
                 //const performanceId = cell.closest('tr').data('performance-id');
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-                const studentId = $('#currentStudentId').val();                   
+                const studentId = $('#currentStudentId').val();
+                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+                const school_id = $('#schoolIdInput').val();
+                const metadata_id = $('#metadataIdInput').val();                 
 
                 let postData = {
                     performance_id: performanceId,
@@ -674,6 +679,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         });
 
         // Initialization code
+        $('#currentWeekStartDate').val(getCurrentDate());
         attachEditableHandler();
 
         $.fn.dataTable.ext.type.detect.unshift(function(value) {

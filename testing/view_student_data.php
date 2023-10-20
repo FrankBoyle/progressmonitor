@@ -42,6 +42,7 @@ echo '</pre>';
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="metadataIdInput" name="metadata_id" value="<?php echo htmlspecialchars($metadata_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
