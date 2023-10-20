@@ -156,7 +156,7 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$studentId = $_POST['student_id'];
+$studentId = $_GET['student_id'];
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 $schoolId = $_POST['school_id']; // Get school_id from POST
 
