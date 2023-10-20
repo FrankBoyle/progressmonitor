@@ -67,12 +67,22 @@ foreach ($scores as $key => $score) {
 }
 
 // Check for duplicate date entry
-$checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ? AND metadata_id = ?");
-$checkStmt->execute([$studentId, $weekStartDate, $metadata_id]);
+$checkStmt = $connection->prepare(
+    "SELECT COUNT(*) FROM Performance 
+     WHERE student_id = ? AND score_date = ? AND metadata_id = ?"
+);
 
-if ($checkStmt->fetchColumn() > 0) {
-    handleError("Duplicate date not allowed!");
-    exit;
+// Execute the prepared statement with the variables. Ensure these variables are already set with the appropriate values.
+$checkStmt->execute([$studentId, $scoreDate, $metadata_id]); // Make sure $scoreDate is in the correct format as it appears in your database
+
+// fetchColumn() fetches the next row from a result set. In this case, it's the count of records that match the criteria.
+$duplicateCount = $checkStmt->fetchColumn();
+
+// If duplicateCount is greater than 0, that means a record exists that matches all the criteria, which is considered a duplicate for your purposes.
+if ($duplicateCount > 0) {
+    // Call your error handler function to handle this specific type of error. Make sure handleError is implemented in a way that properly conveys the error to the client or user.
+    handleError("Duplicate date entry is not allowed. A record with this date and metadata already exists for the selected student.");
+    exit; // Terminate the script here, so no further processing happens.
 }
 
 $studentId = $_POST['student_id'];
