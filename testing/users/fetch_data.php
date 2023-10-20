@@ -10,7 +10,6 @@ include('db.php');
 // Example of initializing variables with default values
 $teacherId = null;
 $studentId = null;
-$school_id = null;
 
 // Rest of your code...
 
