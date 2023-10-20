@@ -68,7 +68,7 @@ foreach ($scores as $key => $score) {
 
 // Check for duplicate date entry
 $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ? AND metadata_id = ?");
-$checkStmt->execute([$studentId, $weekStartDate]);
+$checkStmt->execute([$studentId, $weekStartDate, $metadata_id]);
 
 if ($checkStmt->fetchColumn() > 0) {
     handleError("Duplicate date not allowed!");
