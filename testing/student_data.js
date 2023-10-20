@@ -587,7 +587,6 @@ if (isDateDuplicate(currentDate)) {
         dateCell.click();
     });
 
-    console.log(metadata_id);
 
     $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
@@ -595,6 +594,8 @@ if (isDateDuplicate(currentDate)) {
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');
+        console.log(metadata_id);
+
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
     
@@ -646,7 +647,7 @@ if (isDateDuplicate(currentDate)) {
                 //alert("There was an error saving the data.");
             }
         }
-        location.reload();
+        //location.reload();
  
     });
     
