@@ -553,7 +553,7 @@ $(document).ready(function() {
             });
         });
     }
-
+    console.log(metadata_id);
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
     if ($('tr[data-performance-id="new"]').length) {
