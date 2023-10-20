@@ -146,7 +146,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
 $students = fetchStudentsByTeacher($teacherId);
 
 if (isset($_POST['metadata_id'])) {
-    $metadata_id = $_POST['metadata_id']; // Assign a value if it's set
+    $metadata_id = $_GET['metadata_id']; // Assign a value if it's set
 } else {
     // Handle the case where metadata_id is not set
 }
