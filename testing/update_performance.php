@@ -53,9 +53,6 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     handleError("Invalid data provided.");
 }
 
-/**
- * Function to update the Performance data.
- */
 function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
     // List of allowed field names to ensure security
     $allowedFields = ['score_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];

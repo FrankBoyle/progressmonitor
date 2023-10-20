@@ -20,7 +20,16 @@ function handleError($errorMessage, $missingData = []) {
     echo json_encode(['success' => false, 'error' => $errorMessage, 'missing_data' => $missingData]);
     exit;
 }
-
+$score1 = isset($_POST['score1']) ? $_POST['score1'] : null;
+$score2 = isset($_POST['score2']) ? $_POST['score2'] : null;
+$score3 = isset($_POST['score3']) ? $_POST['score3'] : null;
+$score4 = isset($_POST['score4']) ? $_POST['score4'] : null;
+$score5 = isset($_POST['score5']) ? $_POST['score5'] : null;
+$score6 = isset($_POST['score6']) ? $_POST['score6'] : null;
+$score7 = isset($_POST['score7']) ? $_POST['score7'] : null;
+$score8 = isset($_POST['score8']) ? $_POST['score8'] : null;
+$score9 = isset($_POST['score9']) ? $_POST['score9'] : null;
+$score10 = isset($_POST['score10']) ? $_POST['score10'] : null;
 $responseData = [];
 
 // Check if the request method is POST
