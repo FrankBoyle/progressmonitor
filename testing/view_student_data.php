@@ -81,8 +81,6 @@ error_reporting(E_ALL);
     </tr>
 </thead>
 
-
-
     <?php if (empty($performanceData)): ?>
         <tr>
             <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>

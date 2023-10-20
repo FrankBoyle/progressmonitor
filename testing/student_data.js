@@ -412,19 +412,30 @@ $(document).ready(function() {
     }
     
 
-    function isDateDuplicate(dateString, currentPerformanceId = null) {
-    //console.log("Checking for duplicate of:", dateString);
-    let isDuplicate = false;
-    $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = $(this).text();
-        const performanceId = $(this).closest('tr').data('performance-id');
-        if (cellDate === dateString && performanceId !== currentPerformanceId) {
-            isDuplicate = true;
-            return false; // Break out of the .each loop
-        }
-    });
-    return isDuplicate;
-}
+    function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
+        //console.log("Checking for duplicate of:", dateString);
+        let isDuplicate = false;
+    
+        $('table').find('td[data-field-name="score_date"]').each(function() {
+            const cellDate = $(this).text();
+            const $currentRow = $(this).closest('tr');
+            const performanceId = $currentRow.data('performance-id');
+            const studentId = $currentRow.data('student-id'); // Retrieve the student_id
+            const metadataId = $currentRow.data('metadata-id'); // Retrieve the metadata_id
+    
+            // Check if date, student_id, and metadata_id are the same, but not the same performance entry
+            if (cellDate === dateString 
+                && performanceId !== currentPerformanceId 
+                && studentId === currentStudentId 
+                && metadataId === currentMetadataId) {
+                isDuplicate = true;
+                return false; // Break out of the .each loop
+            }
+        });
+    
+        return isDuplicate;
+    }
+    
 
     function attachEditableHandler() {
         $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
