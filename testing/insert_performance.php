@@ -42,12 +42,29 @@ if (empty($_POST['scores'])) {
     exit;
 }
 
+// Check if these variables are set before using them
+if (isset($_POST['scores'])) {
+    $scores = $_POST['scores'];
+} else {
+    $scores = array(); // or set it to an empty array or handle it as needed
+}
+
+if (isset($_POST['student_id'])) {
+    $studentId = $_POST['student_id'];
+} else {
+    // Handle the case where student_id is not set
+}
+
+if (isset($_POST['score_date'])) {
+    $weekStartDate = $_POST['score_date'];
+} else {
+
 foreach ($scores as $key => $score) {
     if ($score === '' || !isset($score)) {
         $scores[$key] = NULL;
     }
 }
-
+}
 // Check for duplicate date entry
 $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ?");
 $checkStmt->execute([$studentId, $weekStartDate]);
