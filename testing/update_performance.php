@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('./users/db.php');  // Include the database connection
+include('./users/db.php');  
 header('Content-Type: application/json');
 
 // Main logic
@@ -33,7 +33,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
         ");
         // Check if metadata_id is not null before executing
         if($metadata_id !== null) {
-            $checkStmt->execute([$studentId, $newValue, $metadata_id, $performanceId]);  // this line uses the $metadata_id
+            $checkStmt->execute([$studentId, $newValue, $metadata_id, $performanceId]);  
         } else {
             handleError("Metadata ID is missing!");  // You can handle this error accordingly
             return;
