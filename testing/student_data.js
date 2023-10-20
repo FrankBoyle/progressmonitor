@@ -327,7 +327,6 @@ $(document).ready(function() {
         const studentId = CURRENT_STUDENT_ID;
         const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
         const school_id = $('#schoolIdInput').val();
-        const metadata_id = $('metadataIdInput').val();
 
         const postData = {
             performance_id: performanceId,
@@ -499,7 +498,6 @@ $(document).ready(function() {
                 const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
                 const school_id = $('#schoolIdInput').val();
-                const metadata_id = $('#metadataIdInput').val();                 
 
                 let postData = {
                     performance_id: performanceId,
@@ -561,7 +559,6 @@ $(document).ready(function() {
             });
         });
     }
-    console.log(metadata_id);
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
     if ($('tr[data-performance-id="new"]').length) {
@@ -594,7 +591,6 @@ if (isDateDuplicate(currentDate)) {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
-        const metadata_id = $('#metadataIdInput').val();
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
     
@@ -646,7 +642,7 @@ if (isDateDuplicate(currentDate)) {
                 //alert("There was an error saving the data.");
             }
         }
-        //location.reload();
+        location.reload();
  
     });
     

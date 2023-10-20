@@ -26,9 +26,9 @@ echo '</pre>';
     <script src="student_data.js"></script>
     
     <script>
-    var schoolId = <?php echo json_encode($school_id); ?>;
-    var metadataId = <?php echo json_encode($metadata_id); ?>;
-    var studentId = <?php echo json_encode($studentId); ?>;
+    // Get the metadata_id from the URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadata_id = urlParams.get('metadata_id');
     </script>
 
 <style>
@@ -40,7 +40,6 @@ echo '</pre>';
 <body>
 <a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
-<input type="hidden" id="metadataIdInput" name="metadata_id" value="<?php echo htmlspecialchars($metadata_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 
