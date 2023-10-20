@@ -207,6 +207,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
 $stmt->execute([$school_id]);
 
+$metadataEntries = fetchMetadataCategories($school_id); // Use your database function to fetch the data
+
 // Check if the query was successful and fetch the results into $metadataEntries
 if ($stmt->rowCount() > 0) {
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -215,7 +217,6 @@ if ($stmt->rowCount() > 0) {
 }
 
 $studentId = !empty($_GET['student_id']) ? $_GET['student_id'] : null;
-$metadata_id = !empty($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 
 // Output the links to tables for each metadata entry
 foreach ($metadataEntries as $metadataEntry) {
