@@ -14,13 +14,6 @@ function fetchPerformanceData($studentId, $metadata_id) {
     return $stmt->fetchAll();
 }
 
-$studentId = $_POST['student_id'];
-//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
-$schoolId = $_POST['school_id']; // Get school_id from POST
-$weekStartDate = $_POST['score_date'];
-//$scores = $_POST['scores'];
-$metadata_id = $_POST['metadata_id'];
-
 function fetchMetadataCategories($school_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
@@ -149,7 +142,11 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
-
+$studentId = $_GET['student_id'];
+//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
+$schoolId = $_POST['school_id']; // Get school_id from POST
+//$scores = $_POST['scores'];
+$metadata_id = $_GET['metadata_id'];
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
