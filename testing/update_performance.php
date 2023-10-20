@@ -20,16 +20,26 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
         }
     }
 
-    // Validate and sanitize the date input (assuming it's for the 'score_date' field)
-    if ($fieldName === 'score_date') {
-        $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ? AND performance_id != ?");
-        $checkStmt->execute([$studentId, $newValue, $performanceId]); // Ensure to grab the $studentId in this script too.
-        $count = $checkStmt->fetchColumn();
-    
-        if ($count > 0) {
-            handleError("Duplicate date not allowed!");
-            return;
-        }
+// Validate and sanitize the date input (assuming it's for the 'score_date' field)
+if ($fieldName === 'score_date') {
+    // Update the SQL query to include 'metadata_id' in the duplicate check.
+    $checkStmt = $connection->prepare("
+        SELECT COUNT(*) 
+        FROM Performance 
+        WHERE 
+            student_id = ? AND 
+            score_date = ? AND 
+            metadata_id = ? AND  // New condition here
+            performance_id != ?
+    ");
+    // Make sure to include $metadataId in the execute parameters.
+    $checkStmt->execute([$studentId, $newValue, $metadataId, $performanceId]);
+    $count = $checkStmt->fetchColumn();
+
+    if ($count > 0) {
+        handleError("Duplicate date not allowed for the same metadata!");
+        return;
+    }
         
         // Inside the `if ($fieldName === 'score_date') { ... }` block:
         $newDate = date_create_from_format('Y-m-d', $newValue);
