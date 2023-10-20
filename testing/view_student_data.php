@@ -61,21 +61,20 @@ error_reporting(E_ALL);
     <tr>
         <th>Date</th>
         <?php 
-        // Add these lines to debug:
-        echo '<pre>';
-        print_r($scoreNames);
-        echo '</pre>';
-        // End of debugging lines
-
-        foreach ($scoreNames as $key => $name):
-            ?>
-            <th><?php echo htmlspecialchars($name); ?></th> <!-- Added htmlspecialchars for safe output -->
-            <?php 
-        endforeach; 
+        // Check if the 'Behavior' key exists in the array.
+        if (isset($scoreNames['Behavior']) && is_array($scoreNames['Behavior'])) {
+            // Iterate through each item in the 'Behavior' array.
+            foreach ($scoreNames['Behavior'] as $behaviorScore) {
+                echo "<th>" . htmlspecialchars($behaviorScore) . "</th>";
+            }
+        } else {
+            // Handle other cases if needed.
+        }
         ?>
         <th>Action</th>
     </tr>
 </thead>
+
 
     <?php if (empty($performanceData)): ?>
         <tr>
