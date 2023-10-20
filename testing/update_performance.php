@@ -13,7 +13,6 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     $newValue = $_POST['new_value'];
     $studentId = $_POST['student_id'] ?? null;
     $metadata_id = $_POST['metadata_id'];
-    // If the field being updated is one of the score fields and the value is empty, set it to NULL.
     if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'])) {
         if ($newValue === '' || !isset($newValue)) {
             $newValue = NULL;
@@ -30,7 +29,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
                 metadata_id = ? AND  // Here you correctly added the new condition
                 performance_id != ?
         ");
-        // Check if metadata_id is not null before executing
+
         if($metadata_id !== null) {
             $checkStmt->execute([$studentId, $newValue, $metadata_id, $performanceId]);  
         } else {
@@ -38,7 +37,6 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
             return;
         }
         
-        // Inside the `if ($fieldName === 'score_date') { ... }` block:
         $newDate = date_create_from_format('Y-m-d', $newValue);
         if (!$newDate) {
             handleError("Invalid date format received. Expected 'Y-m-d' format but received: " . $newValue);
@@ -53,7 +51,6 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
 }
 
 function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
-    // List of allowed field names to ensure security
     $allowedFields = ['score_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
 
     if (!in_array($fieldName, $allowedFields)) {
@@ -75,16 +72,11 @@ function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
     }
 }
 
-/**
- * Function to handle errors.
- */
 function handleError($errorMessage) {
     sendResponse(["success" => false, "error" => $errorMessage]);
 }
 
-/**
- * Function to send a JSON response.
- */
+
 function sendResponse($response) {
     echo json_encode($response);
     exit;
