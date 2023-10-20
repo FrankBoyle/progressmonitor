@@ -20,6 +20,15 @@ function handleError($errorMessage, $missingData = []) {
     echo json_encode(['success' => false, 'error' => $errorMessage, 'missing_data' => $missingData]);
     exit;
 }
+
+$studentId = $_POST['student_id'];
+//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
+$schoolId = $_POST['school_id']; 
+$weekStartDate = $_POST['score_date'];
+$scores = $_POST['scores'];
+$metadata_id = $_POST['metadata_id'];
+//$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
+// Retrieve metadataId from URL parameters
 $score1 = isset($_POST['score1']) ? $_POST['score1'] : null;
 $score2 = isset($_POST['score2']) ? $_POST['score2'] : null;
 $score3 = isset($_POST['score3']) ? $_POST['score3'] : null;
@@ -93,15 +102,6 @@ if ($duplicateCount > 0) {
     handleError("Duplicate date entry is not allowed. A record with this date and metadata already exists for the selected student.");
     exit; // Terminate the script here, so no further processing happens.
 }
-
-$studentId = $_POST['student_id'];
-//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
-$schoolId = $_POST['school_id']; // Get school_id from POST
-$weekStartDate = $_POST['score_date'];
-$scores = $_POST['scores'];
-$metadata_id = $_POST['metadata_id'];
-//$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
-// Retrieve metadataId from URL parameters
 
 $stmt = $connection->prepare("INSERT INTO Performance (student_id, metadata_id, school_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
