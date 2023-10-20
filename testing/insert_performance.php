@@ -82,7 +82,5 @@ if ($stmt->execute([$studentId, $metadata_id, $schoolId, $weekStartDate, $scores
     // Error during insertion
     handleError("Failed to insert data: " . implode(" | ", $stmt->errorInfo()));
 }
-    
-    // Insert metadata_id and school_id into the new performance record
 
 ?>

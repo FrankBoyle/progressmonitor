@@ -608,8 +608,14 @@ if (isDateDuplicate(currentDate)) {
         let scores = {};
         for (let i = 1; i <= 10; i++) {
             const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-            scores[`score${i}`] = scoreValue ? scoreValue : null; // Send null if score is empty
+            if (scoreValue.trim() === '') {
+                scores[`score${i}`] = null; // Send null if score is empty or only contains whitespace
+            } else {
+                // Handle non-empty score values, e.g., validate or parse them if necessary
+                scores[`score${i}`] = scoreValue;
+            }
         }
+        
     
         const postData = {
             student_id: CURRENT_STUDENT_ID,
