@@ -12,7 +12,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     $fieldName = $_POST['field_name'];
     $newValue = $_POST['new_value'];
     $studentId = $_POST['student_id'] ?? null;
-    $metadata_id = $_GET['metadata_id'];
+    $metadata_id = $_POST['metadata_id'];
     // If the field being updated is one of the score fields and the value is empty, set it to NULL.
     if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'])) {
         if ($newValue === '' || !isset($newValue)) {
