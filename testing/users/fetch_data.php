@@ -7,6 +7,13 @@ error_reporting(E_ALL);
 
 include('db.php');
 
+// Example of initializing variables with default values
+$teacherId = null;
+$studentId = null;
+$school_id = null;
+
+// Rest of your code...
+
 function fetchPerformanceData($studentId) {
     global $connection;
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
