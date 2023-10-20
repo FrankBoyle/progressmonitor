@@ -184,7 +184,7 @@ if (isset($_POST['add_new_student'])) {
 $students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId, $metadata_id);
-$scoreNames = fetchScoreNames($school_id);
+$scoreNames = fetchScoreNames($school_id, $metadata_id);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
