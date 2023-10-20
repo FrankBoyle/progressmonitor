@@ -175,7 +175,6 @@ if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
 
-$teacherId = null; // Initialize $teacherId
 if (isset($_SESSION['teacher_id'])) {
     $teacherId = $_SESSION['teacher_id']; // Assign a value to $teacherId
 }
