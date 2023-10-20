@@ -10,7 +10,7 @@ include('db.php');
 function fetchPerformanceData($studentId, $metadata_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
-    $stmt->execute([$studentId]);
+    $stmt->execute([$studentId, $metadata_id]);
     return $stmt->fetchAll();
 }
 
