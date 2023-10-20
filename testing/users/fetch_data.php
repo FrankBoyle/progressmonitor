@@ -143,6 +143,7 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
+$metadataEntries = [];
 
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
@@ -216,11 +217,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     exit;
 }
 
-// Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
 $stmt->execute([$school_id]);
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $metadataEntries[] = $row;
+
+// Check if the query was successful and fetch the results into $metadataEntries
+if ($stmt->rowCount() > 0) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $metadataEntries[] = $row;
+    }
 }
 
 // Checking and setting the $student_id
