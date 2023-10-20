@@ -57,15 +57,25 @@ error_reporting(E_ALL);
 <?php endforeach; ?>
 
 <table border="1">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <?php foreach ($scoreNames as $key => $name): ?>
-                <th><?php echo $name; ?></th>
-            <?php endforeach; ?>
-            <th>Action</th>
-        </tr>
-    </thead>
+<thead>
+    <tr>
+        <th>Date</th>
+        <?php 
+        // Add these lines to debug:
+        echo '<pre>';
+        print_r($scoreNames);
+        echo '</pre>';
+        // End of debugging lines
+
+        foreach ($scoreNames as $key => $name):
+            ?>
+            <th><?php echo htmlspecialchars($name); ?></th> <!-- Added htmlspecialchars for safe output -->
+            <?php 
+        endforeach; 
+        ?>
+        <th>Action</th>
+    </tr>
+</thead>
 
     <?php if (empty($performanceData)): ?>
         <tr>
