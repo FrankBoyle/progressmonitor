@@ -156,8 +156,9 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$studentId = $_GET['student_id'];
-$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
+$studentId = $_POST['student_id'];
+//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
+$schoolId = $_POST['school_id']; // Get school_id from POST
 
 if (!$school_id) {
     return;  // If there's no school_id, exit early
