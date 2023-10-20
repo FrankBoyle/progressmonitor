@@ -490,7 +490,6 @@ $(document).ready(function() {
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
-                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
                 const school_id = $('#schoolIdInput').val();
                 const urlParams = new URLSearchParams(window.location.search);
                 const metadata_id = urlParams.get('metadata_id');
