@@ -167,9 +167,9 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$studentId = $_POST['student_id']; // Initialize $studentId
+$studentId = $_GET['student_id']; // Initialize $studentId
 //$metadata_id = $_POST['metadata_id']; // Initialize $metadata_id
-$schoolId = $_POST['school_id']; // Initialize $schoolId
+$schoolId = $_SESSION['school_id']; // Initialize $schoolId
 
 if (!$school_id) {
     return;  // If there's no school_id, exit early
