@@ -258,8 +258,7 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
-    const school_id = $('#schoolIdInput').val();
-    const metadata_id = $('metadataIdInput').val();
+
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -318,25 +317,18 @@ $(document).ready(function() {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
-        try {
-            // Fetch metadata_id asynchronously, if needed
-            const metadata_id = await fetchMetadataId(); // Replace with your actual async operation
-    
-            // Now you can use metadata_id
-            const postData = {
-                performance_id: performanceId,
-                field_name: fieldName,
-                new_value: convertToDatabaseDate(newDate),
-                student_id: studentId,
-                metadata_id: metadata_id, // metadata_id is defined here
-                school_id: school_id
-            };
-    
-            // Rest of your code here...
-        } catch (error) {
-            console.error('Error fetching metadata_id:', error);
-        }
+        const school_id = $('#schoolIdInput').val();
+        const metadata_id = $('metadataIdInput').val();
+        
+        const postData = {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+            student_id: studentId,
+            metadata_id: metadata_id,
+            school_id: school_id
 
+        };
         console.log(postData);
         //console.log("studentID:", student_id);
 
