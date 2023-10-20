@@ -153,12 +153,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
 
 $students = fetchStudentsByTeacher($teacherId);
 
-if (isset($_GET['metadata_id'])) {
-    $metadata_id = $_GET['metadata_id']; // Assign a value if it's set
-} else {
-    // Handle the case where metadata_id is not set
-}
-
 // Fetch performance data and score names using the modified function
 $performanceData = fetchPerformanceData($studentId);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);
@@ -227,12 +221,8 @@ if ($stmt->rowCount() > 0) {
     }
 }
 
-// Checking and setting the $student_id
-if (isset($_GET['student_id'])) {
-    $student_id = $_GET['student_id'];
-} else {
-    $student_id = null; // or set a default value appropriate for your context
-}
+$studentId = !empty($_GET['student_id']) ? $_GET['student_id'] : null;
+$metadata_id = !empty($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 
 // Output the links to tables for each metadata entry
 foreach ($metadataEntries as $metadataEntry) {
