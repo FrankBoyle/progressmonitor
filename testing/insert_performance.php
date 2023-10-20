@@ -65,6 +65,7 @@ foreach ($scores as $key => $score) {
     }
 }
 }
+
 // Check for duplicate date entry
 $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ?");
 $checkStmt->execute([$studentId, $weekStartDate]);
@@ -78,7 +79,7 @@ $studentId = $_POST['student_id'];
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 $schoolId = $_POST['school_id']; // Get school_id from POST
 $weekStartDate = $_POST['score_date'];
-$scores = $_POST['scores'];
+//$scores = $_POST['scores'];
 $metadata_id = $_POST['metadata_id'];
 //$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
 // Retrieve metadataId from URL parameters
