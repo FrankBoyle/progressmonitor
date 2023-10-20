@@ -145,8 +145,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
 
 $students = fetchStudentsByTeacher($teacherId);
 
-// Determine the metadata_id based on your application's logic
-$metadata_id = $_POST['metadata_id'];
+if (isset($_POST['metadata_id'])) {
+    $metadata_id = $_POST['metadata_id']; // Assign a value if it's set
+} else {
+    // Handle the case where metadata_id is not set
+}
+
 // Fetch performance data and score names using the modified function
 $performanceData = fetchPerformanceData($studentId);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);
@@ -156,20 +160,19 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$studentId = $_GET['student_id'];
-//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
-$schoolId = $_POST['school_id']; // Get school_id from POST
+$studentId = $_POST['student_id']; // Initialize $studentId
+//$metadata_id = $_POST['metadata_id']; // Initialize $metadata_id
+$schoolId = $_POST['school_id']; // Initialize $schoolId
 
 if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
 
-
-if (!isset($_SESSION['teacher_id'])) {
-    die("Teacher ID not set in session");
+$teacherId = null; // Initialize $teacherId
+if (isset($_SESSION['teacher_id'])) {
+    $teacherId = $_SESSION['teacher_id']; // Assign a value to $teacherId
 }
 
-$teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
 // Handle form submission for adding new student
