@@ -61,19 +61,26 @@ error_reporting(E_ALL);
     <tr>
         <th>Date</th>
         <?php 
-        // Check if the 'Behavior' key exists in the array.
-        if (isset($scoreNames['Behavior']) && is_array($scoreNames['Behavior'])) {
-            // Iterate through each item in the 'Behavior' array.
-            foreach ($scoreNames['Behavior'] as $behaviorScore) {
-                echo "<th>" . htmlspecialchars($behaviorScore) . "</th>";
+        // Iterate through all key-value pairs in $scoreNames.
+        foreach ($scoreNames as $category => $values) {
+            // Check if the current category's values are an array (assuming you only want arrays).
+            if (is_array($values)) {
+                // Iterate through each item in the current category's array.
+                foreach ($values as $score) {
+                    // Print the score as a table header. Apply any necessary formatting or escaping here.
+                    echo "<th>" . htmlspecialchars($score) . "</th>";
+                }
+            } else {
+                // If it's not an array, it might be a standalone category name. You can decide how to handle these cases.
+                // For example, you might want to print it as a header, too.
+                echo "<th>" . htmlspecialchars($values) . "</th>";
             }
-        } else {
-            // Handle other cases if needed.
         }
         ?>
         <th>Action</th>
     </tr>
 </thead>
+
 
 
     <?php if (empty($performanceData)): ?>
