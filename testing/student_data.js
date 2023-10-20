@@ -258,11 +258,8 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
-    // Retrieve school_id from the hidden input field
     const school_id = $('#schoolIdInput').val();
-    // Retrieve metadata_id from the URL query parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const metadata_id = urlParams.get('metadata_id');
+    const metadata_id = $('metadataIdInput').val();
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -489,9 +486,7 @@ $(document).ready(function() {
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
                 const school_id = $('#schoolIdInput').val();
-                const urlParams = new URLSearchParams(window.location.search);
-                const metadata_id = urlParams.get('metadata_id');
-                          
+                const metadata_id = $('metadataIdInput').val();                        
 
                 let postData = {
                     performance_id: performanceId,
@@ -586,8 +581,7 @@ if (isDateDuplicate(currentDate)) {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
-        const urlParams = new URLSearchParams(window.location.search);
-        const metadata_id = urlParams.get('metadata_id');
+        const metadata_id = $('metadataIdInput').val();
 
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
