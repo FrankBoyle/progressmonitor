@@ -421,13 +421,13 @@ $(document).ready(function() {
             const $currentRow = $(this).closest('tr');
             const performanceId = $currentRow.data('performance-id');
             const studentId = $currentRow.data('student-id'); // Retrieve the student_id
-            const metadataId = $currentRow.data('metadata-id'); // Retrieve the metadata_id
-    
+            const urlParams = new URLSearchParams(window.location.search);
+            const metadata_id = urlParams.get('metadata_id');    
             // Check if date, student_id, and metadata_id are the same, but not the same performance entry
             if (cellDate === dateString 
                 && performanceId !== currentPerformanceId 
                 && studentId === currentStudentId 
-                && metadataId === currentMetadataId) {
+                && metadata_id === currentMetadataId) {
                 isDuplicate = true;
                 return false; // Break out of the .each loop
             }
