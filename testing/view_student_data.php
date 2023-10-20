@@ -24,12 +24,13 @@ echo '</pre>';
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="student_data.js"></script>
-<script>
+    
+    <script>
     var schoolId = <?php echo json_encode($school_id); ?>;
     var metadataId = <?php echo json_encode($metadata_id); ?>;
     var studentId = <?php echo json_encode($studentId); ?>;
     var currentWeekStartDate = <?php echo json_encode($currentWeekStartDate); ?>;
-</script>
+    </script>
 
 <style>
     .dataTables_filter {
