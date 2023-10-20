@@ -260,7 +260,6 @@ function calculateTrendline(data) {
 $(document).ready(function() {
     // Retrieve school_id from the hidden input field
     const school_id = $('#schoolIdInput').val();
-    const currentWeekStartDate = convertToDatabaseDate($('td[data-field-name="score_date"]').first().text());
     // Retrieve metadata_id from the URL query parameters
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
@@ -681,7 +680,6 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         });
 
         // Initialization code
-        $('#currentWeekStartDate').val(getCurrentDate());
         attachEditableHandler();
 
         $.fn.dataTable.ext.type.detect.unshift(function(value) {
