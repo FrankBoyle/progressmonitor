@@ -85,7 +85,25 @@ function fetchGroupNames() {
     return $groups;
 }
 
+function getSmallestMetadataId($schoolId) {
+    global $connection;
 
+    // Prepare and execute a query to fetch the smallest metadata_id
+    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
+    $stmt = $connection->prepare($query);
+    $stmt->bindParam(':schoolId', $schoolId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // Fetch the result
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Check if a result was found
+    if ($result && isset($result['smallest_metadata_id'])) {
+        return $result['smallest_metadata_id'];
+    } else {
+        return null; // No matching records found
+    }
+}
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
@@ -169,9 +187,13 @@ if (isset($_GET['student_id'])) {
 
 // Output the links to tables for each metadata entry
 foreach ($metadataEntries as $metadataEntry) {
-    $metadataId = $metadataEntry['metadata_id'];
+    $metadata_id = $metadataEntry['metadata_id'];
     $categoryName = $metadataEntry['category_name'];
     // Generate a link to the table for this metadata entry
 }
+
+$stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
+$stmt->execute([$studentId, $metadata_id]);
+
 ?>
 

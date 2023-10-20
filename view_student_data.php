@@ -1,3 +1,16 @@
+<?php
+include ('./users/fetch_data.php');
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+//$metadata_id = !empty($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
+//echo '<pre>';
+//print_r($_GET);
+//echo '</pre>';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +24,12 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="student_data.js"></script>
+    
+    <script>
+    // Get the metadata_id from the URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadata_id = urlParams.get('metadata_id');
+    </script>
 
 <style>
     .dataTables_filter {
@@ -19,11 +38,10 @@
 </style>
 </head>
 <body>
-
-<?php include('./users/fetch_data.php'); ?>
+<a href="test.php" class="btn btn-primary">Student List</a>
+<input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
-<a href="test.php" class="btn btn-primary">Student List</a>
 
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
@@ -32,20 +50,16 @@
 <input type="text" id="startDateFilter">
 
 <!-- Add the generated links here -->
-<?php
-// Output the links to tables for each metadata entry
-foreach ($metadataEntries as $metadataEntry) {
-    $metadataId = $metadataEntry['metadata_id'];
-    $categoryName = $metadataEntry['category_name'];
-    // Generate a link to the table for this metadata entry
-    echo "<a href='view_student_data.php?student_id=$student_id&metadata_id=$metadataId'>$categoryName</a><br>";
-}
-?>
+<?php foreach ($metadataEntries as $metadataEntry): ?>
+    <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
+        <?php echo $metadataEntry['category_name']; ?>
+    </a><br>
+<?php endforeach; ?>
 
 <table border="1">
     <thead>
         <tr>
-            <th>Week Start Date</th>
+            <th>Date</th>
             <?php foreach ($scoreNames as $key => $name): ?>
                 <th><?php echo $name; ?></th>
             <?php endforeach; ?>
