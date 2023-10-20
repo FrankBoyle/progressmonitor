@@ -143,6 +143,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     exit;
 }
 
+$students = fetchStudentsByTeacher($teacherId);
+
+// Determine the metadata_id based on your application's logic
+$metadata_id = $_POST['metadata_id'];
+// Fetch performance data and score names using the modified function
+$performanceData = fetchPerformanceData($studentId);
+$scoreNames = fetchScoreNames($school_id, $metadata_id);
+
 // If student_id is not set, exit early
 if (!isset($_GET['student_id'])) {
     return;
@@ -174,7 +182,7 @@ if (isset($_POST['add_new_student'])) {
 $students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($school_id);
+$scoreNames = fetchScoreNames($school_id, $metadata_id);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
