@@ -21,14 +21,14 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
 
     if ($fieldName === 'score_date') {
         $checkStmt = $connection->prepare("
-            SELECT COUNT(*) 
-            FROM Performance 
-            WHERE 
-                student_id = ? AND 
-                score_date = ? AND 
-                metadata_id = ? AND  // Here you correctly added the new condition
-                performance_id != ?
-        ");
+        SELECT COUNT(*) 
+        FROM Performance 
+        WHERE 
+            student_id = ? AND 
+            score_date = ? AND 
+            metadata_id = ? AND 
+            performance_id != ?
+    ");
 
         if($metadata_id !== null) {
             $checkStmt->execute([$studentId, $newValue, $metadata_id, $performanceId]);  
