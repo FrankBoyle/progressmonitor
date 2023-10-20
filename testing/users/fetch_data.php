@@ -144,7 +144,7 @@ $chartDates = [];
 $chartScores = [];
 $studentId = $_GET['student_id'];
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
-$schoolId = $_POST['school_id']; // Get school_id from POST
+//$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
 $metadata_id = $_GET['metadata_id'];
 // Check if the action is set to 'fetchGroups' and handle it
