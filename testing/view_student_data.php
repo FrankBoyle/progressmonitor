@@ -117,26 +117,30 @@ echo '</pre>';
 ?>
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
-    <?php foreach ($scoreNames as $key => $name): ?>
-        <option value="<?php echo htmlspecialchars($key); ?>">
-            <?php 
-                // Check if $name is an array, and if so, handle it accordingly
-                if (is_array($name)) {
-                    // Option 1: Print a specific element of the array. (Change the index if needed)
-                    echo htmlspecialchars($name[0]);  // if you are sure that index 0 exists
-
-                    // - OR -
-
-                    // Option 2: Convert the array to a string
-                    // echo htmlspecialchars(implode(", ", $name)); // This will join array elements with a comma
-                } else {
-                    // If $name is not an array, print it as it is
-                    echo htmlspecialchars($name);
-                }
+    <?php 
+    // Assuming there might be more than one category like 'Writing Rubric' in the future,
+    // we're going through each. If there's only one, you can remove this outer foreach.
+    foreach ($scoreNames as $category => $scores) { 
+        // Check if the scores are indeed in an array, which they should be according to your structure.
+        if (is_array($scores)) { 
+            // Now, we can loop through the score names in the inner array.
+            foreach ($scores as $index => $scoreName) { ?>
+                <option value="<?php echo htmlspecialchars($category . '_' . $index); ?>"> <!-- Creating a composite value to maintain uniqueness -->
+                    <?php echo htmlspecialchars($scoreName); ?>
+                </option>
+            <?php }
+        } else {
+            // This part of the code handles the possibility that some entries in $scoreNames are not arrays.
+            // This is for future-proofing or in case your data structure has some variations.
             ?>
-        </option>
-    <?php endforeach; ?>
+            <option value="<?php echo htmlspecialchars($category); ?>">
+                <?php echo htmlspecialchars($scores); ?> <!-- Assuming $scores is a string in this case -->
+            </option>
+            <?php
+        }
+    } ?>
 </select>
+
 
 
 
