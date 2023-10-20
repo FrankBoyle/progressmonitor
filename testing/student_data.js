@@ -591,6 +591,7 @@ if (isDateDuplicate(currentDate)) {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
+        console.log(metadata_id);
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
     
@@ -642,7 +643,7 @@ if (isDateDuplicate(currentDate)) {
                 //alert("There was an error saving the data.");
             }
         }
-        //location.reload();
+        location.reload();
  
     });
     
