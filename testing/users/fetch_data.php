@@ -29,43 +29,16 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['school_id'] : null;
 }
 
-function fetchScoreNames($school_id, $metadata_id) {
+function fetchScoreNames($school_id) {
     global $connection;
     $scoreNames = [];
-
-    // Fetch column names based on school_id and metadata_id
-    $stmt = $connection->prepare("
-        SELECT 
-            score1_name, score2_name, score3_name, score4_name, 
-            score5_name, score6_name, score7_name, score8_name, 
-            score9_name, score10_name
-        FROM 
-            Metadata
-        WHERE 
-            school_id = ? AND metadata_id = ?
-    ");
-
-    $stmt->execute([$school_id, $metadata_id]);
-
-    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // Populate the scoreNames array with column names
-        $scoreNames = [
-            'score1' => $row['score1_name'],
-            'score2' => $row['score2_name'],
-            'score3' => $row['score3_name'],
-            'score4' => $row['score4_name'],
-            'score5' => $row['score5_name'],
-            'score6' => $row['score6_name'],
-            'score7' => $row['score7_name'],
-            'score8' => $row['score8_name'],
-            'score9' => $row['score9_name'],
-            'score10' => $row['score10_name'],
-        ];
+    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE school_id = ?");
+    $stmt->execute([$school_id]);
+    while ($row = $stmt->fetch()) {
+        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
     }
-
     return $scoreNames;
 }
-
 
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
@@ -136,7 +109,6 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
-$metadataEntries = [];
 
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
@@ -144,29 +116,24 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     exit;
 }
 
-$students = fetchStudentsByTeacher($teacherId);
-
-// Fetch performance data and score names using the modified function
-$performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($school_id, $metadata_id);
-
 // If student_id is not set, exit early
 if (!isset($_GET['student_id'])) {
     return;
 }
 
-$studentId = $_GET['student_id']; // Initialize $studentId
-//$metadata_id = $_POST['metadata_id']; // Initialize $metadata_id
-$schoolId = $_SESSION['school_id']; // Initialize $schoolId
+$studentId = $_GET['student_id'];
+$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
 
 if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
 
-if (isset($_SESSION['teacher_id'])) {
-    $teacherId = $_SESSION['teacher_id']; // Assign a value to $teacherId
+
+if (!isset($_SESSION['teacher_id'])) {
+    die("Teacher ID not set in session");
 }
 
+$teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
 // Handle form submission for adding new student
@@ -180,7 +147,7 @@ if (isset($_POST['add_new_student'])) {
 $students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($school_id, $metadata_id);
+$scoreNames = fetchScoreNames($school_id);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
@@ -204,19 +171,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     exit;
 }
 
+// Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
 $stmt->execute([$school_id]);
-
-$metadataEntries = fetchMetadataCategories($school_id); // Use your database function to fetch the data
-
-// Check if the query was successful and fetch the results into $metadataEntries
-if ($stmt->rowCount() > 0) {
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $metadataEntries[] = $row;
-    }
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $metadataEntries[] = $row;
 }
 
-$studentId = !empty($_GET['student_id']) ? $_GET['student_id'] : null;
+// Checking and setting the $student_id
+if (isset($_GET['student_id'])) {
+    $student_id = $_GET['student_id'];
+} else {
+    $student_id = null; // or set a default value appropriate for your context
+}
 
 // Output the links to tables for each metadata entry
 foreach ($metadataEntries as $metadataEntry) {
