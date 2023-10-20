@@ -114,9 +114,26 @@ error_reporting(E_ALL);
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
     <?php foreach ($scoreNames as $key => $name): ?>
-        <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($name); ?></option>
+        <option value="<?php echo htmlspecialchars($key); ?>">
+            <?php 
+                // Check if $name is an array, and if so, handle it accordingly
+                if (is_array($name)) {
+                    // Option 1: Print a specific element of the array. (Change the index if needed)
+                    echo htmlspecialchars($name[0]);  // if you are sure that index 0 exists
+
+                    // - OR -
+
+                    // Option 2: Convert the array to a string
+                    // echo htmlspecialchars(implode(", ", $name)); // This will join array elements with a comma
+                } else {
+                    // If $name is not an array, print it as it is
+                    echo htmlspecialchars($name);
+                }
+            ?>
+        </option>
     <?php endforeach; ?>
 </select>
+
 
 
 <label>Enter Benchmark Value: </label>
