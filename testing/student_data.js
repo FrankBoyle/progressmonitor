@@ -484,9 +484,7 @@ $(document).ready(function() {
                 //const performanceId = cell.closest('tr').data('performance-id');
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-                const studentId = $('#currentStudentId').val();
-                const school_id = $('#schoolIdInput').val();
-                const metadata_id = $('metadataIdInput').val();                        
+                const studentId = $('#currentStudentId').val();                   
 
                 let postData = {
                     performance_id: performanceId,
