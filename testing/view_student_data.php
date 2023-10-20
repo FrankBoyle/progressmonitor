@@ -113,7 +113,10 @@ error_reporting(E_ALL);
 
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
-    <?php foreach ($scoreNames as $key => $name): ?>
+    <?php foreach ($scoreNames as $key => $name): echo '<pre>';
+print_r($scoreNames);
+echo '</pre>';
+?>
         <option value="<?php echo htmlspecialchars($key); ?>">
             <?php 
                 // Check if $name is an array, and if so, handle it accordingly
