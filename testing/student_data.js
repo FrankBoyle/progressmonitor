@@ -713,7 +713,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             "info": false,
             "columns": [
                 { "type": "date-us" },
-                null, null, null, null, null, null, null, null, null, null
+                null, null, null, null, null, null, null, null, null, null,
             ]
         });
 });
