@@ -258,6 +258,12 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
+    // Retrieve school_id from the hidden input field
+    const school_id = $('#schoolIdInput').val();
+
+    // Retrieve metadata_id from the URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadata_id = urlParams.get('metadata_id');
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -316,9 +322,6 @@ $(document).ready(function() {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
-        const school_id = $('#schoolIdInput').val();
-        const urlParams = new URLSearchParams(window.location.search);
-        const metadata_id = urlParams.get('metadata_id');
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,

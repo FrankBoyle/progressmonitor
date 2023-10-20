@@ -24,6 +24,12 @@ echo '</pre>';
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="student_data.js"></script>
+<script>
+    var schoolId = <?php echo json_encode($school_id); ?>;
+    var metadataId = <?php echo json_encode($metadata_id); ?>;
+    var studentId = <?php echo json_encode($studentId); ?>;
+    var currentWeekStartDate = <?php echo json_encode($currentWeekStartDate); ?>;
+</script>
 
 <style>
     .dataTables_filter {
@@ -32,15 +38,11 @@ echo '</pre>';
 </style>
 </head>
 <body>
+<a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="metadataIdInput" name="metadata_id" value="<?php echo htmlspecialchars($metadata_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
-<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
-<?php
-    echo "school_id: " . htmlspecialchars($school_id) . "<br>";
-    echo "metadataId: " . htmlspecialchars($metadata_id) . "<br>";
-?>
-<a href="test.php" class="btn btn-primary">Student List</a>
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>">
 
 <h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
