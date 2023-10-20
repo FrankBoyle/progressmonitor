@@ -258,7 +258,15 @@ function calculateTrendline(data) {
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
+    // Retrieve the metadata_id from the URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadata_id = urlParams.get('metadata_id');
 
+    // Set the retrieved metadata_id as the value of the input field
+    $('#metadataIdInput').val(metadata_id);
+
+    // Now the input field should have the correct metadata_id value
+    console.log(metadata_id);
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -587,7 +595,6 @@ if (isDateDuplicate(currentDate)) {
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
         const metadata_id = $('#metadataIdInput').val();
-console.log(metadata_id);
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
     
