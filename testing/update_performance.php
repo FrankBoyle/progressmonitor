@@ -32,8 +32,8 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
                 performance_id != ?
         ");
         // Check if metadata_id is not null before executing
-        if($metadataId !== null) {
-            $checkStmt->execute([$studentId, $newValue, $metadataId, $performanceId]);  // this line uses the $metadataId
+        if($metadata_id !== null) {
+            $checkStmt->execute([$studentId, $newValue, $metadata_id, $performanceId]);  // this line uses the $metadata_id
         } else {
             handleError("Metadata ID is missing!");  // You can handle this error accordingly
             return;
