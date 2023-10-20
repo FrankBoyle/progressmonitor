@@ -21,7 +21,6 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     }
 
     if ($fieldName === 'score_date') {
-        // Your prepared statement looks good, but ensure all variables used are correct and initialized.
         $checkStmt = $connection->prepare("
             SELECT COUNT(*) 
             FROM Performance 
@@ -35,7 +34,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
         if($metadata_id !== null) {
             $checkStmt->execute([$studentId, $newValue, $metadata_id, $performanceId]);  
         } else {
-            handleError("Metadata ID is missing!");  // You can handle this error accordingly
+            handleError("Metadata ID is missing!");  
             return;
         }
         
