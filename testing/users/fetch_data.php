@@ -146,10 +146,6 @@ function getSmallestMetadataId($schoolId) {
     }
 }
 
-// Ensure studentId is provided, else we can't proceed
-if (!isset($_POST['student_id'])) {
-    die("Student ID not provided");
-}
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
@@ -161,6 +157,11 @@ $school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
 if (!$school_id) {
     die("No school found for this student");  // If there's no school_id, exit early
 }
+// Ensure studentId is provided, else we can't proceed
+if (!isset($_POST['student_id'])) {
+    die("Student ID not provided");
+}
+
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 //$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
