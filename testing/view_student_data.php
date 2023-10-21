@@ -118,16 +118,37 @@ echo '</pre>';
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
     <?php
-    // Loop through each row and output an option element
-    foreach ($scoreNames as $row) {
-        // You may need additional logic here if your data structure is more complex
-        for ($i = 1; $i <= 10; $i++) { // Assuming there are 10 scores (score1_name, score2_name, ...)
-            $scoreName = $row["score{$i}_name"];
-            if ($scoreName) { // Check if the score name exists and is not empty
-                echo "<option value=\"{$row['metadata_id']}\">{$scoreName}</option>";
+// Start the select element. Ensure it's outside of any PHP code.
+echo '<select id="scoreSelector">';
+
+// Check if $scoreNames is not empty and is an array
+if (!empty($scoreNames) && is_array($scoreNames)) {
+    // Loop through the $scoreNames array.
+    foreach ($scoreNames as $key => $value) {
+        // Check if the value is itself an array, indicating a set of scores.
+        if (is_array($value)) {
+            // If it's an array, loop through each 'score' key.
+            foreach ($value as $scoreKey => $scoreName) {
+                // Avoid adding options with empty values.
+                if (!empty($scoreName)) {
+                    // Create an option for each score. Escape the value to avoid breaking the HTML with special characters.
+                    echo '<option value="' . htmlspecialchars($scoreKey) . '">' . htmlspecialchars($scoreName) . '</option>';
+                }
+            }
+        } else {
+            // If it's not an array, it's possibly a standalone score name. Add it directly.
+            // Again, avoid adding options with empty values.
+            if (!empty($value)) {
+                // The key is used as the value for the option, and the score name as the display text.
+                echo '<option value="' . htmlspecialchars($key) . '">' . htmlspecialchars($value) . '</option>';
             }
         }
     }
+}
+
+// End the select element.
+echo '</select>';
+
     ?>
 </select>
 <div id="chart"></div>  <!-- Div to display the chart -->
