@@ -23,15 +23,7 @@ function getSchoolIdByTeacher($teacherId) {
     $stmt->execute([$teacherId]); // with PDO, you pass parameters in execute()
 
     $result = $stmt->fetch(PDO::FETCH_ASSOC); // fetch() for a single result, fetchAll() for multiple rows.
-
-    if ($result !== false) {
-        return $result['school_id'];
-    } else {
-        return null; // or handle this appropriately
-    }
 }
-
-
 
 function fetchPerformanceData($studentId, $metadata_id) {
     global $connection;
