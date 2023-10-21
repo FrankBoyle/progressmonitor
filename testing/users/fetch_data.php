@@ -144,7 +144,7 @@ $chartDates = [];
 $chartScores = [];
 $studentId = $_GET['student_id'];
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
-//$schoolId = $_POST['school_id']; // Get school_id from POST
+$schoolId = $_SESSION['school_id'];
 //$scores = $_POST['scores'];
 $metadata_id = $_GET['metadata_id'];
 $scoreCategory = $_GET['scoreCategory'];
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 
 // Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
-$stmt->execute([$school_id]);
+$stmt->execute([$metadata_id. $schoolId]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
