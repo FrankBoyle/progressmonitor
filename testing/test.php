@@ -41,14 +41,26 @@ $students = fetchStudentsByTeacher($teacherId);
         <h2>Students:</h2>
         <?php foreach ($students as $student): ?>
             <?php
-                // Fetch the smallest metadata_id for the student's school_id
-                $metadataId = getSmallestMetadataId($student['school_id']);
+                // Check if 'school_id' is set for the student before attempting to fetch metadata
+                if (isset($student['school_id'])) {
+                    // Fetch the smallest metadata_id for the student's school_id
+                    $metadataId = getSmallestMetadataId($student['school_id']);
+                    
+                    // Check if a valid metadataId was returned before using it
+                    if ($metadataId) {
+                        echo "<a href='view_student_data.php?student_id=" . htmlspecialchars($student['student_id']) . "&metadata_id=" . htmlspecialchars($metadataId) . "'>" . htmlspecialchars($student['name']) . "</a><br>";
+                    } else {
+                        echo "No metadata found for " . htmlspecialchars($student['name']) . "<br>";
+                    }
+                } else {
+                    echo "No school information available for " . htmlspecialchars($student['name']) . "<br>";
+                }
             ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= $student['name'] ?></a><br>
         <?php endforeach; ?>
     <?php else: ?>
         No students found for this teacher.
     <?php endif; ?>
+
 </body>
 </html>
 
