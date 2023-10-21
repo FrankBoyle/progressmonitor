@@ -203,12 +203,12 @@ if (!isset($_SESSION['school_id']) || !isset($_GET['metadata_id'])) {
 }
 
 // Extract school_id and metadata_id from the GET request
-$schoolId = $_GET['school_id'];
-$metadataId = $_GET['metadata_id'];
+$student_id = $_SESSION['school_id'];
+$metadata_id = $_GET['metadata_id'];
 
 // Query the Metadata table to get the category_name associated with metadata_id
 $stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ? AND school_id = ?");
-$stmt->execute([$metadataId, $schoolId]);
+$stmt->execute([$metadata_id, $student_id]);
 $categoryRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$categoryRow) {
@@ -221,7 +221,7 @@ $categoryName = $categoryRow['category_name'];
 
 // Query the Performance table to get performance data for the specified school_id and metadata_id
 $stmt = $connection->prepare("SELECT score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 FROM Performance WHERE student_id = ? AND metadata_id = ?");
-$stmt->execute([$studentId, $metadataId]);
+$stmt->execute([$studentId, $metadata_id]);
 $performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Create an associative array to include both category_name and performance data
