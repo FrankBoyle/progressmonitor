@@ -140,9 +140,9 @@ function getSmallestMetadataId($school_id) {
     global $connection;
 
     // Prepare and execute a query to fetch the smallest metadata_id
-    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
+    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :school_id";
     $stmt = $connection->prepare($query);
-    $stmt->bindParam(':schoolId', $school_id, PDO::PARAM_INT);
+    $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
     $stmt->execute();
 
     // Fetch the result
