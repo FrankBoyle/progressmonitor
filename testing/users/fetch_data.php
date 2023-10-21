@@ -161,6 +161,7 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
+$metadataEntries = [];
 $metadata_id = $_GET['metadata_id'];
 $studentId = $_GET['student_id'];
 $school_id = getSchoolIdByTeacher($teacherId); // Get the school ID through the teacher's ID
