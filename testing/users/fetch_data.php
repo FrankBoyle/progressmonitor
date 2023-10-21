@@ -142,7 +142,7 @@ function getSmallestMetadataId($schoolId) {
     // Prepare and execute a query to fetch the smallest metadata_id
     $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
     $stmt = $connection->prepare($query);
-    $stmt->bindParam(':schoolId', $schoolId, PDO::PARAM_INT);
+    $stmt->bindParam(':schoolId', $school_id, PDO::PARAM_INT);
     $stmt->execute();
 
     // Fetch the result
@@ -163,8 +163,8 @@ $chartDates = [];
 $chartScores = [];
 $metadata_id = $_GET['metadata_id'];
 $studentId = $_GET['student_id'];
-$schoolId = getSchoolIdByTeacher($teacherId); // Get the school ID through the teacher's ID
-echo($schoolId);
+$school_id = getSchoolIdByTeacher($teacherId); // Get the school ID through the teacher's ID
+echo($school_id);
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 //$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
