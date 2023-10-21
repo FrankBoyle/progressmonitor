@@ -243,9 +243,10 @@ function fetchAndUpdateChartData(selectedScore) {
             scoreCategory: selectedScore // or whatever your actual query parameter should be
         },
         success: function(response) {
+            console.log('Server response:', response);
             // Assuming 'response' is the new dataset you want to display
             var newChartData = response; // or perhaps response.data, depending on your API's response structure
-
+            console.log(newChartData);
             // Update your chart with the new data
             window.chart.updateSeries([{
                 data: newChartData
