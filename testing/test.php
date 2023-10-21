@@ -44,7 +44,7 @@ echo($defaultMetadataId);
         <?php foreach ($students as $student): ?>
             <?php
                 // Fetch the smallest metadata_id for the student's school_id
-                $metadataId = getSmallestMetadataId($school_id);
+                $defaultMetadataId = getSmallestMetadataId($school_id);
             ?>
             <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= $student['name'] ?></a><br>
         <?php endforeach; ?>
