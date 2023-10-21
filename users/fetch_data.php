@@ -158,7 +158,6 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$studentId = $_GET['student_id'];
 $school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
 
 if (!$school_id) {
