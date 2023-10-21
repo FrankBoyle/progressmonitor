@@ -113,7 +113,6 @@ error_reporting(E_ALL);
 echo '<pre>';
 print_r($scoreNames);
 print_r($metadataEntries);
-
 echo '</pre>';
 ?>
 
