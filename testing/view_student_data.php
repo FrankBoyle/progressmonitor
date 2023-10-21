@@ -119,8 +119,6 @@ echo '</pre>';
 <select id="scoreSelector">
     <?php
 // Start the select element. Ensure it's outside of any PHP code.
-echo '<select id="scoreSelector">';
-
 // Check if $scoreNames is not empty and is an array
 if (!empty($scoreNames) && is_array($scoreNames)) {
     // Loop through the $scoreNames array.
@@ -147,8 +145,6 @@ if (!empty($scoreNames) && is_array($scoreNames)) {
 }
 
 // End the select element.
-echo '</select>';
-
     ?>
 </select>
 <div id="chart"></div>  <!-- Div to display the chart -->
