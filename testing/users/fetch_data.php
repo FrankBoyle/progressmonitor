@@ -7,6 +7,24 @@ error_reporting(E_ALL);
 
 include('db.php');
 
+// Check if the teacher is logged in
+if (!isset($_SESSION['teacher_id'])) {
+    die("Teacher ID not set in session");
+}
+
+$teacherId = $_SESSION['teacher_id'];
+$message = "";  // Initialize an empty message variable
+
+function getSchoolIdByTeacher($teacherId) {
+    global $connection; // use the global $connection object
+
+    $query = "SELECT school_id FROM Teachers WHERE teacher_id = ? LIMIT 1";
+    $stmt = $connection->prepare($query);
+    $stmt->execute([$teacherId]); // with PDO, you pass parameters in execute()
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC); // fetch() for a single result, fetchAll() for multiple rows.
+}
+
 function fetchPerformanceData($studentId, $metadata_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
@@ -118,13 +136,13 @@ function fetchGroupNames() {
     return $groups;
 }
 
-function getSmallestMetadataId($schoolId) {
+function getSmallestMetadataId($school_id) {
     global $connection;
 
     // Prepare and execute a query to fetch the smallest metadata_id
     $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
     $stmt = $connection->prepare($query);
-    $stmt->bindParam(':schoolId', $schoolId, PDO::PARAM_INT);
+    $stmt->bindParam(':schoolId', $school_id, PDO::PARAM_INT);
     $stmt->execute();
 
     // Fetch the result
@@ -137,48 +155,31 @@ function getSmallestMetadataId($schoolId) {
         return null; // No matching records found
     }
 }
+
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
+$metadata_id = $_GET['metadata_id'];
 $studentId = $_GET['student_id'];
+$school_id = getSchoolIdByTeacher($teacherId); // Get the school ID through the teacher's ID
+echo($school_id);
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 //$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
-$metadata_id = $_GET['metadata_id'];
+
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
     exit;
 }
 
-// If student_id is not set, exit early
-if (!isset($_GET['student_id'])) {
-    return;
-}
-
-$studentId = $_GET['student_id'];
-$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
-
-if (!$school_id) {
-    return;  // If there's no school_id, exit early
-}
-
-
-if (!isset($_SESSION['teacher_id'])) {
-    die("Teacher ID not set in session");
-}
-
-$teacherId = $_SESSION['teacher_id'];
-$message = "";  // Initialize an empty message variable
-
-// Handle form submission for adding new student
-if (isset($_POST['add_new_student'])) {
+// Handle the form submission for adding a new student, if applicable
+if (isset($_POST['add_new_student']) && !empty($_POST['new_student_name'])) {
     $newStudentName = $_POST['new_student_name'];
-    if (!empty($newStudentName)) {
-        $message = addNewStudent($newStudentName, $teacherId);
-    }
+    $message = addNewStudent($newStudentName, $teacherId);
+    // Consider redirecting or providing output after this action.
 }
 
 $students = fetchStudentsByTeacher($teacherId);
@@ -206,6 +207,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
     // Respond with the ID of the inserted row
     echo json_encode(['id' => $connection->lastInsertId()]);
     exit;
+}
+
+// Fetch metadata entries from the Metadata table for the specified school_id
+$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
+if (!$stmt) {
+    echo "\nPDO::errorInfo():\n";
+    print_r($connection->errorInfo());
 }
 
 // Fetch metadata entries from the Metadata table for the specified school_id
