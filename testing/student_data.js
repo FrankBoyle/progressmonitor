@@ -258,7 +258,11 @@ function fetchAndUpdateChartData(selectedScore) {
                 console.error('Expected an array for chart data, but received:', newChartData);
                 return; // Skip the chart update for this incorrect data
             }
-        
+        // Right before calling the updateSeries method, ensure that 'chart' exists
+if (!window.chart || typeof window.chart.updateSeries !== 'function') {
+    console.error("The chart object is not initialized or doesn't have the updateSeries method.");
+    return;
+}
             // If everything is okay, then update the chart series
             window.chart.updateSeries([{
                 data: newChartData
