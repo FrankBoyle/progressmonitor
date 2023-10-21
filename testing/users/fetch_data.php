@@ -137,22 +137,23 @@ function fetchGroupNames() {
 }
 
 function getSmallestMetadataId($school_id) {
-    global $connection; // if you're using global variables for database connection
+    global $connection;
 
-    try {
-        $stmt = $connection->prepare("SELECT MIN(metadata_id) as smallest_id FROM Metadata WHERE school_id = :school_id");
-        $stmt->execute(['school_id' => $school_id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Prepare and execute a query to fetch the smallest metadata_id
+    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
+    $stmt = $connection->prepare($query);
+    $stmt->bindParam(':schoolId', $school_id, PDO::PARAM_INT);
+    $stmt->execute();
 
-        if ($result && isset($result['smallest_id'])) {
-            return $result['smallest_id']; // directly return the ID
-        }
-    } catch (PDOException $e) {
-        // handle exception
-        error_log('Database exception: ' . $e->getMessage());
+    // Fetch the result
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Check if a result was found
+    if ($result && isset($result['smallest_metadata_id'])) {
+        return $result['smallest_metadata_id'];
+    } else {
+        return null; // No matching records found
     }
-    
-    return null; // important to return null to indicate that no valid ID was found
 }
 
 // Initialize empty arrays and variables
