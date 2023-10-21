@@ -9,8 +9,13 @@ $(document).ready(function() {
     }
 
     $("#scoreSelector").change(function() {
+        console.log("Dropdown value changed.");  // This should appear in the browser console when you change the selection.
         var selectedScore = $(this).val();
         updateChart(selectedScore);
+        getNewChartData(selectedValue).then(newChartData => {
+            window.chart.updateSeries([{
+                data: newChartData  // newChartData is the new series data you retrieved
+            }]);
     });
 
     $("#updateBenchmark").click(function() {
@@ -26,7 +31,7 @@ $(document).ready(function() {
 
     updateChart('score1');  // Default
 });
-
+});
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
     window.chart.render();
@@ -64,6 +69,7 @@ function getChartData(scoreField) {
 }
 
 function updateChart(scoreField) {
+    console.log("Updating chart with:", scoreField);  // Check if the function is called with the right parameter.
     var {chartData, xCategories} = getChartData(scoreField);
 
     // Calculate trendline
@@ -409,6 +415,26 @@ $(document).ready(function() {
             if (response && !response.success) {
                 console.error('Error updating the score in the database.');
             }
+        });
+    }
+    
+    function getNewChartData(selectedValue) {
+        return new Promise((resolve, reject) => {
+            // For instance, an AJAX request to get new data based on 'selectedValue'
+            $.ajax({
+                url: './users/fetch_data.php',
+                type: 'GET',
+                data: {
+                    score: selectedValue  // or however your backend needs the request structured
+                },
+                success: function(response) {
+                    // The response should be the new data you want to display on the chart
+                    resolve(response.data);  // assuming the data is in a property called 'data'
+                },
+                error: function(error) {
+                    reject(error);
+                }
+            });
         });
     }
     
