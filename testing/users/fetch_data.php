@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
 $stmt->execute([$metadata_id. $school_id]);
 // Check if school_id and metadata_id are provided in the GET request
-if (!isset($_GET['school_id']) || !isset($_GET['metadata_id'])) {
+if (!isset($_SESSION['school_id']) || !isset($_GET['metadata_id'])) {
     echo json_encode(['error' => 'school_id and metadata_id are required']);
     exit;
 }
