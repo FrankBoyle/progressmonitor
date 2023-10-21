@@ -16,27 +16,21 @@ $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
 function getSchoolIdByTeacher($teacherId) {
-    global $connection;
-    $query = "SELECT school_id FROM Teachers WHERE teacher_id = ? LIMIT 1"; // Assuming your table structure
+    global $connection; // use the global $connection object
 
-    if ($stmt = $connection->prepare($query)) {
-        $stmt->bind_param("i", $teacherId); // Bind the $teacherId parameter to the query
-        $stmt->execute(); // Execute the query
+    $query = "SELECT school_id FROM Teachers WHERE teacher_id = ? LIMIT 1";
+    $stmt = $connection->prepare($query);
+    $stmt->execute([$teacherId]); // with PDO, you pass parameters in execute()
 
-        $result = $stmt->get_result(); // Get the result of the query
-        if ($result->num_rows > 0) {
-            // If a result is found, fetch the school_id
-            $row = $result->fetch_assoc();
-            return $row['school_id'];
-        } else {
-            // Handle case where no associated school is found
-            return null;
-        }
+    $result = $stmt->fetch(PDO::FETCH_ASSOC); // fetch() for a single result, fetchAll() for multiple rows.
+
+    if ($result !== false) {
+        return $result['school_id'];
     } else {
-        // Handle SQL preparation error
-        return null;
+        return null; // or handle this appropriately
     }
 }
+
 
 
 function fetchPerformanceData($studentId, $metadata_id) {
