@@ -151,7 +151,6 @@ if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
 
-
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
@@ -197,23 +196,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 // Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
 $stmt->execute([$metadata_id. $school_id]);
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $metadataEntries[] = $row;
+// Check if school_id and metadata_id are provided in the GET request
+if (!isset($_GET['school_id']) || !isset($_GET['metadata_id'])) {
+    echo json_encode(['error' => 'school_id and metadata_id are required']);
+    exit;
 }
 
-// Checking and setting the $student_id
-if (isset($_GET['student_id'])) {
-    $student_id = $_GET['student_id'];
-} else {
-    $student_id = null; // or set a default value appropriate for your context
+// Extract school_id and metadata_id from the GET request
+$schoolId = $_GET['school_id'];
+$metadataId = $_GET['metadata_id'];
+
+// Query the Metadata table to get the category_name associated with metadata_id
+$stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ? AND school_id = ?");
+$stmt->execute([$metadataId, $schoolId]);
+$categoryRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$categoryRow) {
+    echo json_encode(['error' => 'Metadata not found']);
+    exit;
 }
 
-// Output the links to tables for each metadata entry
-foreach ($metadataEntries as $metadataEntry) {
-    $metadata_id = $metadataEntry['metadata_id'];
-    $categoryName = $metadataEntry['category_name'];
-    // Generate a link to the table for this metadata entry
-}
+// Extract the category_name
+$categoryName = $categoryRow['category_name'];
+
+// Query the Performance table to get performance data for the specified school_id and metadata_id
+$stmt = $connection->prepare("SELECT score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 FROM Performance WHERE student_id = ? AND metadata_id = ?");
+$stmt->execute([$studentId, $metadataId]);
+$performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Create an associative array to include both category_name and performance data
+$responseData = [
+    'category_name' => $categoryName,
+    'performance_data' => $performanceData
+];
+
+// Return the combined data as JSON
+echo json_encode($responseData);
+
 
 $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
 $stmt->execute([$student_id, $metadata_id]);
