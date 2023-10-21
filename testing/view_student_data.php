@@ -122,7 +122,7 @@ echo '<select id="scoreSelector">';
 // Assuming $scoreNames contains your 'Behavior' array
 foreach ($scoreNames['Behavior'] as $key => $value) {
     // Create a unique value for each option like "Behavior_score1", "Behavior_score2", etc.
-    echo '<option value="Behavior_score' . ($key + 1) . '">' . $value . '</option>';
+    echo '<option value="score' . ($key + 1) . '">' . $value . '</option>';
 }
 
 echo '</select>';
