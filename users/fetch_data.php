@@ -158,7 +158,7 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
+$school_id = $_SESSION['school_id'];  // Fetch school_id
 
 if (!$school_id) {
     return;  // If there's no school_id, exit early
