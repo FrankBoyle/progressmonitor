@@ -34,7 +34,9 @@ echo($defaultMetadataId);
         <input type="text" id="new_student_name" name="new_student_name">
         <input type="submit" name="add_new_student" value="Add New Student">
     </form>
-
+<?php
+echo($defaultMetadataId);
+?>
     <?php if ($message): ?>
         <p><?= $message ?></p>
     <?php endif; ?>
