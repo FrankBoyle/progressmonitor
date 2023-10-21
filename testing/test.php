@@ -17,8 +17,6 @@ if (isset($_POST['add_new_student'])) {
 }
 
 $students = fetchStudentsByTeacher($teacherId);
-$defaultMetadataId = getSmallestMetadataId($school_id);
-echo($defaultMetadataId);
 ?>
 
 <!DOCTYPE html>
@@ -46,9 +44,9 @@ echo($defaultMetadataId);
         <?php foreach ($students as $student): ?>
             <?php
                 // Fetch the smallest metadata_id for the student's school_id
-                $metadataId = getSmallestMetadataId($student['school_id']);
+                $metadataId = getSmallestMetadataId($school_id);
             ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadata_id ?>'><?= $student['name'] ?></a><br>
+            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= $student['name'] ?></a><br>
         <?php endforeach; ?>
     <?php else: ?>
         No students found for this teacher.
