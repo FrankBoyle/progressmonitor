@@ -39,7 +39,8 @@ function getChartData(scoreField) {
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
-
+        console.log(weekStartDate);
+        console.log(scoreValue);
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
