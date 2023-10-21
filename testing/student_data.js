@@ -1,7 +1,7 @@
 //var benchmark = null;
 
 $(document).ready(function() {
-    console.log("Document is ready");  // Check if this message appears in the console.
+    //console.log("Document is ready");  // Check if this message appears in the console.
 
     initializeChart();
 
@@ -243,10 +243,23 @@ function fetchAndUpdateChartData(selectedScore) {
             scoreCategory: selectedScore // or whatever your actual query parameter should be
         },
         success: function(response) {
-            // Assuming 'response' is the new dataset you want to display
-            var newChartData = response; // or perhaps response.data, depending on your API's response structure
-
-            // Update your chart with the new data
+            // Check if the response needs to be parsed from JSON to an object/array
+            var newChartData;
+            try {
+                newChartData = JSON.parse(response); // Use this if the response is a JSON string
+            } catch (e) {
+                console.error("Error parsing response JSON:", e);
+                // If it's not JSON, it might already be an object/array due to jQuery's intelligent guess
+                newChartData = response; 
+            }
+        
+            // Check if the parsed data is indeed an array and not something else
+            if (!Array.isArray(newChartData)) {
+                console.error('Expected an array for chart data, but received:', newChartData);
+                return; // Skip the chart update for this incorrect data
+            }
+        
+            // If everything is okay, then update the chart series
             window.chart.updateSeries([{
                 data: newChartData
             }]);
