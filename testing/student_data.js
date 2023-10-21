@@ -15,6 +15,11 @@ $(document).ready(function() {
         var selectedScore = $(this).val();
         fetchAndUpdateChartData(selectedScore);
     });
+    
+    $(document).on('change', '#scoreSelector', function() {
+        // Your code to handle the change event
+        console.log('Value Changed');
+    });
 
     $("#updateBenchmark").click(function() {
         var value = parseFloat($("#benchmarkValue").val());
