@@ -13,6 +13,7 @@ $(document).ready(function() {
     $("#scoreSelector").change(function() {
         console.log("Handler for .change() called.");
         var selectedScore = $(this).val();
+        console.log("Selected value: " + selectedValue);
         fetchAndUpdateChartData(selectedScore);
     });
 
