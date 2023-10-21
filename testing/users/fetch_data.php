@@ -136,7 +136,7 @@ function fetchGroupNames() {
     return $groups;
 }
 
-function getSmallestMetadataId($schoolId) {
+function getSmallestMetadataId($school_id) {
     global $connection;
 
     // Prepare and execute a query to fetch the smallest metadata_id
