@@ -161,7 +161,6 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
-$metadataEntries = [];
 $metadata_id = $_GET['metadata_id'];
 $studentId = $_GET['student_id'];
 $school_id = getSchoolIdByTeacher($teacherId); // Get the school ID through the teacher's ID
@@ -217,24 +216,25 @@ if (!$stmt) {
     print_r($connection->errorInfo());
 }
 
-// After executing the query, you can print out the results to check them
+// Fetch metadata entries from the Metadata table for the specified school_id
+$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
 $stmt->execute([$school_id]);
-$metadataEntries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $metadataEntries[] = $row;
+}
 
-// Print out the results
-echo "Metadata Entries: ";
-print_r($metadataEntries);
-
-if (!$metadataEntries) {
-    // Check for no data
-    echo 'No metadata entries found for the provided school ID.';
+// Checking and setting the $student_id
+if (isset($_GET['student_id'])) {
+    $student_id = $_GET['student_id'];
 } else {
-    // Process your $metadataEntries array as needed
-    foreach ($metadataEntries as $metadataEntry) {
-        $metadata_id = $metadataEntry['metadata_id'];
-        $categoryName = $metadataEntry['category_name'];
-        // Your processing here: Generate a link or output information
-    }
+    $student_id = null; // or set a default value appropriate for your context
+}
+
+// Output the links to tables for each metadata entry
+foreach ($metadataEntries as $metadataEntry) {
+    $metadata_id = $metadataEntry['metadata_id'];
+    $categoryName = $metadataEntry['category_name'];
+    // Generate a link to the table for this metadata entry
 }
 
 $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
