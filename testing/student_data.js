@@ -123,8 +123,6 @@ function updateChart(scoreField) {
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
 
-
-
 function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
@@ -153,7 +151,6 @@ function getChartOptions(dataSeries, xCategories) {
                 opacity: 0.5      // Increased the opacity to make it darker
             }
         },
-
 
         dataLabels: {
             enabled: true,
@@ -260,7 +257,7 @@ function calculateTrendline(data) {
     return function (x) {
         return slope * x + intercept;
     };
-}
+};
 
 ////////////////////////////////////////////////
 
