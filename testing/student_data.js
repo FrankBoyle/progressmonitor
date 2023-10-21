@@ -1,4 +1,4 @@
-var benchmark = null;
+//var benchmark = null;
 
 $(document).ready(function() {
     console.log("Document is ready");  // Check if this message appears in the console.
@@ -15,7 +15,7 @@ $(document).ready(function() {
         var selectedScore = $(this).val();
         fetchAndUpdateChartData(selectedScore);
     });
-    
+
     $(document).on('change', '#scoreSelector', function() {
         // Your code to handle the change event
         console.log('Value Changed');
