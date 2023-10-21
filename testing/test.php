@@ -44,7 +44,7 @@ $students = fetchStudentsByTeacher($teacherId);
                 // Check if 'school_id' is set for the student before attempting to fetch metadata
                 if (isset($student['school_id'])) {
                     // Fetch the smallest metadata_id for the student's school_id
-                    $metadataId = getSmallestMetadataId($student['school_id']);
+                    $metadata_id = getSmallestMetadataId($student['school_id']);
                     
                     // Check if a valid metadataId was returned before using it
                     if ($metadata_id) {
