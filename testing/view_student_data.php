@@ -22,7 +22,7 @@ error_reporting(E_ALL);
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
     <script src="student_data.js"></script>
     <script>
     // Get the metadata_id from the URL parameter
@@ -114,6 +114,7 @@ echo '<pre>';
 print_r($scoreNames);
 echo '</pre>';
 ?>
+<div id="chart"></div>  <!-- Div to display the chart -->
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
     <?php
@@ -137,7 +138,7 @@ echo '</pre>';
 <input type="text" id="benchmarkValue">
 <button id="updateBenchmark">Update Benchmark</button>
 
-<div id="chart"></div>  <!-- Div to display the chart -->
+
 
 
 </body>
