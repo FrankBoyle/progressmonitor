@@ -43,7 +43,7 @@ $defaultMetadataId = getSmallestMetadataId($schoolId);
     <h2>Students:</h2>
     <?php foreach ($students as $student): ?>
         <!-- Use the default metadata ID for generating the link -->
-        <a href='view_student_data.php?student_id=<?= htmlspecialchars($student['student_id']) ?>&metadata_id=<?= htmlspecialchars($defaultMetadataId) ?>'>
+        <a href='view_student_data.php?student_id=<?= htmlspecialchars($student['student_id']) ?>&metadata_id=<?= $defaultMetadataId ?>'>
             <?= htmlspecialchars($student['name']) ?>
         </a><br>
     <?php endforeach; ?>
