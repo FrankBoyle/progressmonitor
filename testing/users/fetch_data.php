@@ -212,8 +212,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 
 // Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
+if (!$stmt) {
+    echo "\nPDO::errorInfo():\n";
+    print_r($connection->errorInfo());
+}
+
+// After executing the query, you can print out the results to check them
 $stmt->execute([$school_id]);
 $metadataEntries = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Print out the results
+echo "Metadata Entries: ";
+print_r($metadataEntries);
 
 if (!$metadataEntries) {
     // Check for no data
