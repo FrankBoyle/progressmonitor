@@ -17,7 +17,7 @@ if (isset($_POST['add_new_student'])) {
 }
 
 $students = fetchStudentsByTeacher($teacherId);
-$defaultMetadataId = getSmallestMetadataId($schoolId);
+$defaultMetadataId = getSmallestMetadataId($school_id);
 
 ?>
 
