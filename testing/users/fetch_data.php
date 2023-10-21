@@ -118,13 +118,13 @@ function fetchGroupNames() {
     return $groups;
 }
 
-function getSmallestMetadataId($schoolId) {
+function getSmallestMetadataId($school_id) {
     global $connection;
 
     // Prepare and execute a query to fetch the smallest metadata_id
     $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
     $stmt = $connection->prepare($query);
-    $stmt->bindParam(':schoolId', $schoolId, PDO::PARAM_INT);
+    $stmt->bindParam(':schoolId', $school_id, PDO::PARAM_INT);
     $stmt->execute();
 
     // Fetch the result
@@ -144,10 +144,10 @@ $chartDates = [];
 $chartScores = [];
 $studentId = $_GET['student_id'];
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
-$schoolId = $_SESSION['school_id'];
+$school_id = $_SESSION['school_id'];
 //$scores = $_POST['scores'];
 $metadata_id = $_GET['metadata_id'];
-$scoreCategory = $_GET['scoreCategory'];
+//$scoreCategory = $_GET['scoreCategory'];
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
@@ -159,7 +159,6 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$studentId = $_GET['student_id'];
 $school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
 
 if (!$school_id) {
@@ -211,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 
 // Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
-$stmt->execute([$metadata_id. $schoolId]);
+$stmt->execute([$metadata_id. $school_id]);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $metadataEntries[] = $row;
 }
