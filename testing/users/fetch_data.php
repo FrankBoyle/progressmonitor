@@ -16,7 +16,7 @@ $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
 function getSchoolIdByTeacher($teacherId) {
-    // Prepare a statement to select school_id from the teachers table (or whichever table holds this info)
+    global $connection;
     $query = "SELECT school_id FROM Teachers WHERE teacher_id = ? LIMIT 1"; // Assuming your table structure
 
     if ($stmt = $connection->prepare($query)) {
