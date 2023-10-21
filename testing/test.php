@@ -17,6 +17,8 @@ if (isset($_POST['add_new_student'])) {
 }
 
 $students = fetchStudentsByTeacher($teacherId);
+$defaultMetadataId = getSmallestMetadataId($schoolId);
+
 ?>
 
 <!DOCTYPE html>
@@ -38,28 +40,16 @@ $students = fetchStudentsByTeacher($teacherId);
     <?php endif; ?>
 
     <?php if (!empty($students)): ?>
-        <h2>Students:</h2>
-        <?php foreach ($students as $student): ?>
-            <?php
-                // Check if 'school_id' is set for the student before attempting to fetch metadata
-                if (isset($student['school_id'])) {
-                    // Fetch the smallest metadata_id for the student's school_id
-                    $metadata_id = getSmallestMetadataId($student['school_id']);
-                    
-                    // Check if a valid metadataId was returned before using it
-                    if ($metadata_id) {
-                        echo "<a href='view_student_data.php?student_id=" . htmlspecialchars($student['student_id']) . "&metadata_id=" . htmlspecialchars($metadata_id) . "'>" . htmlspecialchars($student['name']) . "</a><br>";
-                    } else {
-                        echo "No metadata found for " . htmlspecialchars($student['name']) . "<br>";
-                    }
-                } else {
-                    echo "No school information available for " . htmlspecialchars($student['name']) . "<br>";
-                }
-            ?>
-        <?php endforeach; ?>
-    <?php else: ?>
-        No students found for this teacher.
-    <?php endif; ?>
+    <h2>Students:</h2>
+    <?php foreach ($students as $student): ?>
+        <!-- Use the default metadata ID for generating the link -->
+        <a href='view_student_data.php?student_id=<?= htmlspecialchars($student['student_id']) ?>&metadata_id=<?= htmlspecialchars($defaultMetadataId) ?>'>
+            <?= htmlspecialchars($student['name']) ?>
+        </a><br>
+    <?php endforeach; ?>
+<?php else: ?>
+    No students found for this teacher.
+<?php endif; ?>
 
 </body>
 </html>
