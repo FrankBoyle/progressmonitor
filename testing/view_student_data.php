@@ -117,24 +117,16 @@ echo '</pre>';
 ?>
 <label>Select Score to Display: </label>
 <?php
-// Loop through the main array (each category)
-foreach ($scoreNames as $categoryName => $items) {
-    echo $categoryName . '<br>'; // Print the category name (optional)
-    
-    // Start a new select element for this category
-    echo '<select id="' . htmlspecialchars($categoryName) . '">';
+echo '<select id="scoreSelector">';
 
-    // Loop through the items of the current category
-    foreach ($items as $key => $value) {
-        // Create option for each item in the current category
-        echo '<option value="score' . ($key + 1) . '">' . htmlspecialchars($value) . '</option>';
-    }
-
-    // End the select element
-    echo '</select><br>';
+// Assuming $scoreNames contains your 'Behavior' array
+foreach ($scoreNames['metadata_id'] as $key => $value) {
+    // Create a unique value for each option like "Behavior_score1", "Behavior_score2", etc.
+    echo '<option value="score' . ($key + 1) . '">' . $value . '</option>';
 }
-?>
 
+echo '</select>';
+?>
 
 
 
