@@ -7,10 +7,10 @@ error_reporting(E_ALL);
 
 include('db.php');
 
-function fetchPerformanceData($student_id, $metadata_id) {
+function fetchPerformanceData($studentId, $metadata_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
-    $stmt->execute([$student_id, $metadata_id]);
+    $stmt->execute([$studentId, $metadata_id]);
     return $stmt->fetchAll();
 }
 
@@ -21,10 +21,10 @@ function fetchMetadataCategories($school_id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function fetchSchoolIdForStudent($student_id) {
+function fetchSchoolIdForStudent($studentId) {
     global $connection;
     $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
-    $stmt->execute([$student_id]);
+    $stmt->execute([$studentId]);
     $result = $stmt->fetch();
     return $result ? $result['school_id'] : null;
 }
@@ -104,13 +104,27 @@ function addNewStudent($studentName, $teacherId) {
     return "New student added successfully.";
 }
 
-function getSmallestMetadataId($school_id) {
+function fetchGroupNames() {
+    global $connection;
+    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
+    $stmt->execute();
+    $stmt->bindColumn(1, $groupName);
+    
+    $groups = [];
+    while ($stmt->fetch(PDO::FETCH_BOUND)) {
+        $groups[] = $groupName;
+    }
+    
+    return $groups;
+}
+
+function getSmallestMetadataId($schoolId) {
     global $connection;
 
     // Prepare and execute a query to fetch the smallest metadata_id
-    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :school_id";
+    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
     $stmt = $connection->prepare($query);
-    $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
+    $stmt->bindParam(':schoolId', $schoolId, PDO::PARAM_INT);
     $stmt->execute();
 
     // Fetch the result
@@ -128,12 +142,11 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
-$student_id = $_GET['student_id'];
+$studentId = $_GET['student_id'];
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
-$school_id = $_SESSION['school_id'];
+//$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
 $metadata_id = $_GET['metadata_id'];
-//$scoreCategory = $_GET['scoreCategory'];
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
@@ -145,11 +158,13 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$school_id = fetchSchoolIdForStudent($student_id);  // Fetch school_id
+$studentId = $_GET['student_id'];
+$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
 
 if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
+
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
@@ -168,7 +183,7 @@ if (isset($_POST['add_new_student'])) {
 
 $students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
-$performanceData = fetchPerformanceData($student_id, $metadata_id);
+$performanceData = fetchPerformanceData($studentId, $metadata_id);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);
 
 // Preparing the data for the chart
@@ -195,46 +210,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
 
 // Fetch metadata entries from the Metadata table for the specified school_id
 $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
-$stmt->execute([$metadata_id. $school_id]);
-// Check if school_id and metadata_id are provided in the GET request
-if (!isset($_SESSION['school_id']) || !isset($_GET['metadata_id'])) {
-    echo json_encode(['error' => 'school_id and metadata_id are required']);
-    exit;
+$stmt->execute([$school_id]);
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $metadataEntries[] = $row;
 }
 
-// Extract school_id and metadata_id from the GET request
-$student_id = $_SESSION['school_id'];
-$metadata_id = $_GET['metadata_id'];
-
-// Query the Metadata table to get the category_name associated with metadata_id
-$stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ? AND school_id = ?");
-$stmt->execute([$metadata_id, $student_id]);
-$categoryNameResult = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$categoryNameResult) {
-    // Handle the case where metadata_id or school_id doesn't exist
-    $response = [
-        'error' => 'Metadata not found'
-    ];
-    echo json_encode($response);
-    exit;
+// Checking and setting the $student_id
+if (isset($_GET['student_id'])) {
+    $student_id = $_GET['student_id'];
+} else {
+    $student_id = null; // or set a default value appropriate for your context
 }
 
-// Extract the category_name
-$categoryName = $categoryNameResult['category_name'];
+// Output the links to tables for each metadata entry
+foreach ($metadataEntries as $metadataEntry) {
+    $metadata_id = $metadataEntry['metadata_id'];
+    $categoryName = $metadataEntry['category_name'];
+    // Generate a link to the table for this metadata entry
+}
 
-// Query the Performance table to get performance data for the specified school_id and metadata_id
-$stmt = $connection->prepare("SELECT score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
-$stmt->execute([$student_id, $metadata_id]);
-$performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
+$stmt->execute([$studentId, $metadata_id]);
 
-// Create an associative array to include both category_name and performance data
-$responseData = [
-    'category_name' => $categoryName,
-    'performance_data' => $performanceData
-];
-
-// Return the combined data as JSON
-echo json_encode($responseData);
 ?>
 

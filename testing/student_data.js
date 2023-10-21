@@ -1,8 +1,6 @@
-//var benchmark = null;
+var benchmark = null;
 
 $(document).ready(function() {
-    //console.log("Document is ready");  // Check if this message appears in the console.
-
     initializeChart();
 
     benchmark = parseFloat($("#benchmarkValue").val());
@@ -11,15 +9,8 @@ $(document).ready(function() {
     }
 
     $("#scoreSelector").change(function() {
-        console.log("Handler for .change() called.");
         var selectedScore = $(this).val();
-        console.log("Selected score: " + selectedScore);
-        fetchAndUpdateChartData(selectedScore);
-    });
-
-    $(document).on('change', '#scoreSelector', function() {
-        // Your code to handle the change event
-        console.log('Value Changed');
+        updateChart(selectedScore);
     });
 
     $("#updateBenchmark").click(function() {
@@ -48,8 +39,7 @@ function getChartData(scoreField) {
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
-        console.log(weekStartDate);
-        console.log(scoreValue);
+
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
@@ -73,7 +63,6 @@ function getChartData(scoreField) {
 }
 
 function updateChart(scoreField) {
-    console.log("Updating chart with:", scoreField);  // Check if the function is called with the right parameter.
     var {chartData, xCategories} = getChartData(scoreField);
 
     // Calculate trendline
@@ -127,6 +116,8 @@ function updateChart(scoreField) {
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
 
+
+
 function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
@@ -155,6 +146,7 @@ function getChartOptions(dataSeries, xCategories) {
                 opacity: 0.5      // Increased the opacity to make it darker
             }
         },
+
 
         dataLabels: {
             enabled: true,
@@ -235,45 +227,6 @@ function getChartOptions(dataSeries, xCategories) {
     };
 }
 
-function fetchAndUpdateChartData(selectedScore) {
-    $.ajax({
-        url: './users/fetch_data.php', // replace with your endpoint
-        method: 'GET',
-        data: {
-            scoreCategory: selectedScore // or whatever your actual query parameter should be
-        },
-        success: function(response) {
-            // Check if the response needs to be parsed from JSON to an object/array
-            var newChartData;
-            try {
-                newChartData = JSON.parse(response); // Use this if the response is a JSON string
-            } catch (e) {
-                console.error("Error parsing response JSON:", e);
-                // If it's not JSON, it might already be an object/array due to jQuery's intelligent guess
-                newChartData = response; 
-            }
-        
-            // Check if the parsed data is indeed an array and not something else
-            if (!Array.isArray(newChartData)) {
-                console.error('Expected an array for chart data, but received:', newChartData);
-                return; // Skip the chart update for this incorrect data
-            }
-        // Right before calling the updateSeries method, ensure that 'chart' exists
-if (!window.chart || typeof window.chart.updateSeries !== 'function') {
-    console.error("The chart object is not initialized or doesn't have the updateSeries method.");
-    return;
-}
-            // If everything is okay, then update the chart series
-            window.chart.updateSeries([{
-                data: newChartData
-            }]);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Data fetch error: ', textStatus, errorThrown);
-        }
-    });
-}
-
 function calculateTrendline(data) {
     var sumX = 0;
     var sumY = 0;
@@ -300,7 +253,7 @@ function calculateTrendline(data) {
     return function (x) {
         return slope * x + intercept;
     };
-};
+}
 
 ////////////////////////////////////////////////
 
@@ -456,7 +409,8 @@ $(document).ready(function() {
                 console.error('Error updating the score in the database.');
             }
         });
-    }    
+    }
+    
 
     function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
         //console.log("Checking for duplicate of:", dateString);
