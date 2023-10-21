@@ -47,8 +47,8 @@ $students = fetchStudentsByTeacher($teacherId);
                     $metadataId = getSmallestMetadataId($student['school_id']);
                     
                     // Check if a valid metadataId was returned before using it
-                    if ($metadataId) {
-                        echo "<a href='view_student_data.php?student_id=" . htmlspecialchars($student['student_id']) . "&metadata_id=" . htmlspecialchars($metadataId) . "'>" . htmlspecialchars($student['name']) . "</a><br>";
+                    if ($metadata_id) {
+                        echo "<a href='view_student_data.php?student_id=" . htmlspecialchars($student['student_id']) . "&metadata_id=" . htmlspecialchars($metadata_id) . "'>" . htmlspecialchars($student['name']) . "</a><br>";
                     } else {
                         echo "No metadata found for " . htmlspecialchars($student['name']) . "<br>";
                     }
