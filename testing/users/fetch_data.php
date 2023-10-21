@@ -15,6 +15,30 @@ if (!isset($_SESSION['teacher_id'])) {
 $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
+function getSchoolIdByTeacher($teacherId) {
+    // Prepare a statement to select school_id from the teachers table (or whichever table holds this info)
+    $query = "SELECT school_id FROM Teachers WHERE teacher_id = ? LIMIT 1"; // Assuming your table structure
+
+    if ($stmt = $mysqli->prepare($query)) {
+        $stmt->bind_param("i", $teacherId); // Bind the $teacherId parameter to the query
+        $stmt->execute(); // Execute the query
+
+        $result = $stmt->get_result(); // Get the result of the query
+        if ($result->num_rows > 0) {
+            // If a result is found, fetch the school_id
+            $row = $result->fetch_assoc();
+            return $row['school_id'];
+        } else {
+            // Handle case where no associated school is found
+            return null;
+        }
+    } else {
+        // Handle SQL preparation error
+        return null;
+    }
+}
+
+
 function fetchPerformanceData($studentId, $metadata_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
@@ -153,15 +177,14 @@ $chartDates = [];
 $chartScores = [];
 $metadata_id = $_GET['metadata_id'];
 $studentId = $_GET['student_id'];
-$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
-if (!$school_id) {
-    die("No school found for this student");  // If there's no school_id, exit early
+$schoolId = getSchoolIdByTeacher($teacherId); // Get the school ID through the teacher's ID
+if (!is_null($schoolId)) {
+    // If a school_id was successfully retrieved, fetch students
+    $students = fetchStudentsBySchoolId($schoolId); // This assumes you have a function like this
+} else {
+    // Handle scenarios where no school_id is found for a teacher
+    // This could involve setting an error message, or providing alternate instructions
 }
-// Ensure studentId is provided, else we can't proceed
-if (!isset($_GET['student_id'])) {
-    die("Student ID not provided");
-}
-
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 //$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
