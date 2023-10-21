@@ -158,14 +158,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
 if (!isset($_GET['student_id'])) {
     return;
 }
-
-$studentId = $_GET['student_id'];
-$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
-
 if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
-
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
