@@ -114,7 +114,7 @@ echo '<pre>';
 print_r($scoreNames);
 echo '</pre>';
 ?>
-<div id="chart"></div>  <!-- Div to display the chart -->
+
 <label>Select Score to Display: </label>
 <select id="scoreSelector">
     <?php
@@ -130,7 +130,7 @@ echo '</pre>';
     }
     ?>
 </select>
-
+<div id="chart"></div>  <!-- Div to display the chart -->
 
 
 
