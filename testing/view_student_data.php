@@ -124,7 +124,7 @@ echo '</pre>';
                 foreach ($scoreNames as $category => $scores) {
                     foreach ($scores as $index => $scoreName) {
                         // Creating the option element
-                        echo '<option value="' . htmlspecialchars($category . '_score' . ($index + 1)) . '">';
+                        echo '<option value="' . htmlspecialchars('score' . ($index + 1)) . '">';
                         echo htmlspecialchars($scoreName);
                         echo '</option>';
                     }
