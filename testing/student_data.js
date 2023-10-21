@@ -11,11 +11,7 @@ $(document).ready(function() {
     $("#scoreSelector").change(function() {
         console.log("Dropdown value changed.");  // This should appear in the browser console when you change the selection.
         var selectedScore = $(this).val();
-        updateChart(selectedScore);
-        getNewChartData(selectedValue).then(newChartData => {
-            window.chart.updateSeries([{
-                data: newChartData  // newChartData is the new series data you retrieved
-            }]);
+        fetchAndUpdateChartData(selectedScore);
     });
 
     $("#updateBenchmark").click(function() {
@@ -31,7 +27,7 @@ $(document).ready(function() {
 
     updateChart('score1');  // Default
 });
-});
+
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
     window.chart.render();
@@ -231,23 +227,25 @@ function getChartOptions(dataSeries, xCategories) {
     };
 }
 
-function getNewChartData(selectedValue) {
-    return new Promise((resolve, reject) => {
-        // For instance, an AJAX request to get new data based on 'selectedValue'
-        $.ajax({
-            url: './users/fetch_data.php',
-            type: 'GET',
-            data: {
-                score: selectedValue  // or however your backend needs the request structured
-            },
-            success: function(response) {
-                // The response should be the new data you want to display on the chart
-                resolve(response.data);  // assuming the data is in a property called 'data'
-            },
-            error: function(error) {
-                reject(error);
-            }
-        });
+function fetchAndUpdateChartData(selectedScore) {
+    $.ajax({
+        url: './users/fetch_data.php', // replace with your endpoint
+        method: 'GET',
+        data: {
+            scoreCategory: selectedScore // or whatever your actual query parameter should be
+        },
+        success: function(response) {
+            // Assuming 'response' is the new dataset you want to display
+            var newChartData = response; // or perhaps response.data, depending on your API's response structure
+
+            // Update your chart with the new data
+            window.chart.updateSeries([{
+                data: newChartData
+            }]);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Data fetch error: ', textStatus, errorThrown);
+        }
     });
 }
 
