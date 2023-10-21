@@ -231,6 +231,26 @@ function getChartOptions(dataSeries, xCategories) {
     };
 }
 
+function getNewChartData(selectedValue) {
+    return new Promise((resolve, reject) => {
+        // For instance, an AJAX request to get new data based on 'selectedValue'
+        $.ajax({
+            url: './users/fetch_data.php',
+            type: 'GET',
+            data: {
+                score: selectedValue  // or however your backend needs the request structured
+            },
+            success: function(response) {
+                // The response should be the new data you want to display on the chart
+                resolve(response.data);  // assuming the data is in a property called 'data'
+            },
+            error: function(error) {
+                reject(error);
+            }
+        });
+    });
+}
+
 function calculateTrendline(data) {
     var sumX = 0;
     var sumY = 0;
@@ -413,28 +433,7 @@ $(document).ready(function() {
                 console.error('Error updating the score in the database.');
             }
         });
-    }
-    
-    function getNewChartData(selectedValue) {
-        return new Promise((resolve, reject) => {
-            // For instance, an AJAX request to get new data based on 'selectedValue'
-            $.ajax({
-                url: './users/fetch_data.php',
-                type: 'GET',
-                data: {
-                    score: selectedValue  // or however your backend needs the request structured
-                },
-                success: function(response) {
-                    // The response should be the new data you want to display on the chart
-                    resolve(response.data);  // assuming the data is in a property called 'data'
-                },
-                error: function(error) {
-                    reject(error);
-                }
-            });
-        });
-    }
-    
+    }    
 
     function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
         //console.log("Checking for duplicate of:", dateString);
