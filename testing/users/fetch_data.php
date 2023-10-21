@@ -226,12 +226,6 @@ if (!$metadataEntries) {
         // Your processing here: Generate a link or output information
     }
 }
-// Output the links to tables for each metadata entry
-foreach ($metadataEntries as $metadataEntry) {
-    $metadata_id = $metadataEntry['metadata_id'];
-    $categoryName = $metadataEntry['category_name'];
-    // Generate a link to the table for this metadata entry
-}
 
 $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
 $stmt->execute([$studentId, $metadata_id]);

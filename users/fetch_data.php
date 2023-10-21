@@ -187,7 +187,7 @@ if (isset($_GET['student_id'])) {
 
 // Output the links to tables for each metadata entry
 foreach ($metadataEntries as $metadataEntry) {
-    $metadataId = $metadataEntry['metadata_id'];
+    $metadata_id = $metadataEntry['metadata_id'];
     $categoryName = $metadataEntry['category_name'];
     // Generate a link to the table for this metadata entry
 }
