@@ -172,6 +172,7 @@ $chartScores = [];
 $metadata_id = $_GET['metadata_id'];
 $studentId = $_GET['student_id'];
 $schoolId = getSchoolIdByTeacher($teacherId); // Get the school ID through the teacher's ID
+echo($schoolId);
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 //$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
