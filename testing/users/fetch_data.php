@@ -172,13 +172,6 @@ $chartScores = [];
 $metadata_id = $_GET['metadata_id'];
 $studentId = $_GET['student_id'];
 $schoolId = getSchoolIdByTeacher($teacherId); // Get the school ID through the teacher's ID
-if (!is_null($schoolId)) {
-    // If a school_id was successfully retrieved, fetch students
-    $students = fetchStudentsBySchoolId($schoolId); // This assumes you have a function like this
-} else {
-    // Handle scenarios where no school_id is found for a teacher
-    // This could involve setting an error message, or providing alternate instructions
-}
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 //$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
