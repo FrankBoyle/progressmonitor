@@ -209,18 +209,22 @@ $metadata_id = $_GET['metadata_id'];
 // Query the Metadata table to get the category_name associated with metadata_id
 $stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ? AND school_id = ?");
 $stmt->execute([$metadata_id, $student_id]);
-$categoryRow = $stmt->fetch(PDO::FETCH_ASSOC);
+$categoryNameResult = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$categoryRow) {
-    echo json_encode(['error' => 'Metadata not found']);
+if (!$categoryNameResult) {
+    // Handle the case where metadata_id or school_id doesn't exist
+    $response = [
+        'error' => 'Metadata not found'
+    ];
+    echo json_encode($response);
     exit;
 }
 
 // Extract the category_name
-$categoryName = $categoryRow['category_name'];
+$categoryName = $categoryNameResult['category_name'];
 
 // Query the Performance table to get performance data for the specified school_id and metadata_id
-$stmt = $connection->prepare("SELECT score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 FROM Performance WHERE student_id = ? AND metadata_id = ?");
+$stmt = $connection->prepare("SELECT score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
 $stmt->execute([$student_id, $metadata_id]);
 $performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -232,10 +236,5 @@ $responseData = [
 
 // Return the combined data as JSON
 echo json_encode($responseData);
-
-
-$stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
-$stmt->execute([$student_id, $metadata_id]);
-
 ?>
 
