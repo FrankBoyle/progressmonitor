@@ -147,6 +147,7 @@ $studentId = $_GET['student_id'];
 //$schoolId = $_POST['school_id']; // Get school_id from POST
 //$scores = $_POST['scores'];
 $metadata_id = $_GET['metadata_id'];
+$scoreCategory = $_GET['scoreCategory'];
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
