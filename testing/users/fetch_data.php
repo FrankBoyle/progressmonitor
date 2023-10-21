@@ -19,7 +19,7 @@ function getSchoolIdByTeacher($teacherId) {
     // Prepare a statement to select school_id from the teachers table (or whichever table holds this info)
     $query = "SELECT school_id FROM Teachers WHERE teacher_id = ? LIMIT 1"; // Assuming your table structure
 
-    if ($stmt = $mysqli->prepare($query)) {
+    if ($stmt = $connection->prepare($query)) {
         $stmt->bind_param("i", $teacherId); // Bind the $teacherId parameter to the query
         $stmt->execute(); // Execute the query
 
