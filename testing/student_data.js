@@ -1,6 +1,8 @@
 var benchmark = null;
 
 $(document).ready(function() {
+    console.log("Document is ready");  // Check if this message appears in the console.
+
     initializeChart();
 
     benchmark = parseFloat($("#benchmarkValue").val());
@@ -9,7 +11,7 @@ $(document).ready(function() {
     }
 
     $("#scoreSelector").change(function() {
-        console.log("Dropdown value changed.");  // This should appear in the browser console when you change the selection.
+        console.log("Handler for .change() called.");
         var selectedScore = $(this).val();
         fetchAndUpdateChartData(selectedScore);
     });
