@@ -7,10 +7,10 @@ error_reporting(E_ALL);
 
 include('db.php');
 
-function fetchPerformanceData($studentId, $metadata_id) {
+function fetchPerformanceData($student_id, $metadata_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
-    $stmt->execute([$studentId, $metadata_id]);
+    $stmt->execute([$student_id, $metadata_id]);
     return $stmt->fetchAll();
 }
 
@@ -21,10 +21,10 @@ function fetchMetadataCategories($school_id) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function fetchSchoolIdForStudent($studentId) {
+function fetchSchoolIdForStudent($student_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
-    $stmt->execute([$studentId]);
+    $stmt->execute([$student_id]);
     $result = $stmt->fetch();
     return $result ? $result['school_id'] : null;
 }
@@ -104,27 +104,13 @@ function addNewStudent($studentName, $teacherId) {
     return "New student added successfully.";
 }
 
-function fetchGroupNames() {
-    global $connection;
-    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
-    $stmt->execute();
-    $stmt->bindColumn(1, $groupName);
-    
-    $groups = [];
-    while ($stmt->fetch(PDO::FETCH_BOUND)) {
-        $groups[] = $groupName;
-    }
-    
-    return $groups;
-}
-
 function getSmallestMetadataId($school_id) {
     global $connection;
 
     // Prepare and execute a query to fetch the smallest metadata_id
-    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
+    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :school_id";
     $stmt = $connection->prepare($query);
-    $stmt->bindParam(':schoolId', $school_id, PDO::PARAM_INT);
+    $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
     $stmt->execute();
 
     // Fetch the result
@@ -142,7 +128,7 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
-$studentId = $_GET['student_id'];
+$student_id = $_GET['student_id'];
 //$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
 $school_id = $_SESSION['school_id'];
 //$scores = $_POST['scores'];
@@ -159,7 +145,7 @@ if (!isset($_GET['student_id'])) {
     return;
 }
 
-$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
+$school_id = fetchSchoolIdForStudent($student_id);  // Fetch school_id
 
 if (!$school_id) {
     return;  // If there's no school_id, exit early
@@ -183,7 +169,7 @@ if (isset($_POST['add_new_student'])) {
 
 $students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
-$performanceData = fetchPerformanceData($studentId, $metadata_id);
+$performanceData = fetchPerformanceData($student_id, $metadata_id);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);
 
 // Preparing the data for the chart
@@ -230,7 +216,7 @@ foreach ($metadataEntries as $metadataEntry) {
 }
 
 $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
-$stmt->execute([$studentId, $metadata_id]);
+$stmt->execute([$student_id, $metadata_id]);
 
 ?>
 
