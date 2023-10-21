@@ -221,7 +221,7 @@ $categoryName = $categoryRow['category_name'];
 
 // Query the Performance table to get performance data for the specified school_id and metadata_id
 $stmt = $connection->prepare("SELECT score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10 FROM Performance WHERE student_id = ? AND metadata_id = ?");
-$stmt->execute([$studentId, $metadata_id]);
+$stmt->execute([$student_id, $metadata_id]);
 $performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Create an associative array to include both category_name and performance data
