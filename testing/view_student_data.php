@@ -116,17 +116,25 @@ print_r($scoreNames);
 echo '</pre>';
 ?>
 <label>Select Score to Display: </label>
-<?php
-echo '<select id="scoreSelector">';
-
-// Assuming $scoreNames contains your 'Behavior' array
-foreach ($scoreNames['metadata_id'] as $key => $value) {
-    // Create a unique value for each option like "Behavior_score1", "Behavior_score2", etc.
-    echo '<option value="score' . ($key + 1) . '">' . $value . '</option>';
-}
-
-echo '</select>';
-?>
+<select id="scoreSelector" name="scoreSelector"> <!-- Added 'name' attribute for form submission -->
+            <?php
+            // Check if there are categories and scores
+            if (!empty($scoreNames)) {
+                // Loop through each category and its scores
+                foreach ($scoreNames as $category => $scores) {
+                    foreach ($scores as $index => $scoreName) {
+                        // Creating the option element
+                        echo '<option value="' . htmlspecialchars($category . '_score' . ($index + 1)) . '">';
+                        echo htmlspecialchars($scoreName);
+                        echo '</option>';
+                    }
+                }
+            } else {
+                // In case there are no scores, an option to reflect that
+                echo '<option value="">No scores available</option>';
+            }
+            ?>
+        </select>
 
 
 
