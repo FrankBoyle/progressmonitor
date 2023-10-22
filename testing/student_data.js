@@ -88,7 +88,8 @@ function getChartData(scoreField) {
 
 function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
-    console.log(xCategories);
+    console.log("selectedColumns:", selectedColumns); // Log selectedColumns
+
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
         selectedColumns = [selectedColumns]; // Ensure it's an array
@@ -96,8 +97,11 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     selectedColumns.forEach(function(selectedColumn) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
+        console.log("chartData:", chartData); // Log chartData
+        console.log("columnCategories:", columnCategories); // Log columnCategories
         // Merge unique xCategories from all selected columns
         xCategories = [...new Set([...xCategories, ...columnCategories])];
+        console.log("xCategories:", xCategories); // Log xCategories
 
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
@@ -138,6 +142,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 y: benchmark
             };
         }).reverse();
+        console.log("benchmarkData:", benchmarkData); // Log benchmarkData
 
         seriesData.push({
             name: 'Benchmark',
