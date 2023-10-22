@@ -85,6 +85,7 @@ function getChartData(scoreField) {
 }
 
 function updateChart(scoreField, selectedColumns) {
+    var xCategories = []; // Initialize xCategories here
     var seriesData = [];
     
     selectedColumns.forEach(function (selectedColumn) {
