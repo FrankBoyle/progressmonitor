@@ -96,8 +96,10 @@ function updateChart(selectedColumns, selectedChartType) {
     }
 
     selectedColumns.forEach(function(selectedColumn) {
-        var { chartData, xCategories } = getChartData(selectedColumn);
-
+        var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
+        // Merge unique xCategories from all selected columns
+        xCategories = [...new Set([...xCategories, ...columnCategories])];
+        
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
         var trendlineData = chartData.map((item, index) => {
