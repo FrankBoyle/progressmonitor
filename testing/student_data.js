@@ -32,6 +32,16 @@ $(document).ready(function() {
         updateChart(selectedScore);
     });
 
+    // Handle radio button clicks for selecting columns
+$("input[name='selectedColumns[]']").change(function() {
+    var selectedColumns = []; // Initialize an array to store selected columns
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val()); // Add the selected columns to the array
+    });
+    var selectedScore = $("#scoreSelector").val();
+    updateChart(selectedScore, selectedColumns); // Update the chart with selected columns
+});
+
     updateChart('score1');  // Default
 });
 
