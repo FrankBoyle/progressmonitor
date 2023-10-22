@@ -161,22 +161,19 @@ if (isset($_GET['metadata_id'])) {
 <div>
     <label>Select Columns to Display:</label>
     <?php
-    // Loop through each score and create radio buttons
+    // Loop through each score and create checkboxes
     foreach ($scoreNames as $category => $scores) {
         foreach ($scores as $index => $scoreName) {
             $scoreColumnName = 'score' . ($index + 1);
             echo '<label>';
-            echo '<input type="radio" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '">';
+            echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '">';
             echo htmlspecialchars($scoreName);
             echo '</label>';
         }
     }
-    // Add a "Clear Selection" radio button
-    echo '<label>';
-    echo '<input type="radio" name="selectedColumns[]" value="clear"> Clear Selection';
-    echo '</label>';
     ?>
 </div>
+
 
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">

@@ -84,49 +84,59 @@ function getChartData(scoreField) {
 }
 
 
-function updateChart(scoreField, selectedColumns) {
-    var xCategories = []; // Initialize xCategories here
+function updateChart(scoreFields) {
     var seriesData = [];
     
-    selectedColumns.forEach(function (selectedColumn) {
-        var { chartData, xCategories } = getChartData(selectedColumn);
+    scoreFields.forEach(function(scoreField) {
+        var { chartData, xCategories } = getChartData(scoreField);
 
-        // Calculate trendline for each selected column
+        // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
-        var trendlineData = chartData.map(function (item, index) {
+        var trendlineData = chartData.map((item, index) => {
             return {
                 x: item.x,
-                y: trendlineFunction(index),
+                y: trendlineFunction(index)
             };
         });
 
-        seriesData.push({
-            name: selectedColumn,
-            data: chartData,
-            connectNulls: true,
-            dataLabels: {
-                enabled: true, // Enable data labels for the selected column series
+        seriesData.push(
+            {
+                name: 'Selected Score ' + scoreField,
+                data: chartData,
+                connectNulls: true,
+                dataLabels: {
+                    enabled: true // Enable data labels for the Selected Score series
+                },
+                stroke: {
+                    width: 7
+                }
             },
-            stroke: {
-                width: 1.5, // Set the stroke width for the selected column series
-            },
-        });
+            {
+                name: 'Trendline ' + scoreField,
+                data: trendlineData,
+                connectNulls: true,
+                dataLabels: {
+                    enabled: false // Disable data labels for the Trendline series
+                }
+            }
+        );
     });
 
     if (benchmark !== null) {
-        var benchmarkData = xCategories.map(function (date) {
+        var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
-                y: benchmark,
+                y: benchmark
             };
         }).reverse();
+
         seriesData.push({
             name: 'Benchmark',
             data: benchmarkData,
             connectNulls: true,
             dataLabels: {
-                enabled: false, // Disable data labels for the Benchmark series
-            },
+                enabled: false // Disable data labels for the Benchmark series
+            }
         });
     }
 
