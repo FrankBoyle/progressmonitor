@@ -116,30 +116,25 @@ print_r($scoreNames);
 echo '</pre>';
 ?>
 <label>Select Score to Display: </label>
-<select id="scoreSelector">
-    <?php 
-    // Assuming there might be more than one category like 'Writing Rubric' in the future,
-    // we're going through each. If there's only one, you can remove this outer foreach.
-    foreach ($scoreNames as $category => $scores) { 
-        // Check if the scores are indeed in an array, which they should be according to your structure.
-        if (is_array($scores)) { 
-            // Now, we can loop through the score names in the inner array.
-            foreach ($scores as $index => $scoreName) { ?>
-                <option value="<?php echo htmlspecialchars($category . '_' . $index); ?>"> <!-- Creating a composite value to maintain uniqueness -->
-                    <?php echo htmlspecialchars($scoreName); ?>
-                </option>
-            <?php }
-        } else {
-            // This part of the code handles the possibility that some entries in $scoreNames are not arrays.
-            // This is for future-proofing or in case your data structure has some variations.
-            ?>
-            <option value="<?php echo htmlspecialchars($category); ?>">
-                <?php echo htmlspecialchars($scores); ?> <!-- Assuming $scores is a string in this case -->
-            </option>
+<select id="scoreSelector" name="scoreSelector"> <!-- Added 'name' attribute for form submission -->
             <?php
-        }
-    } ?>
-</select>
+            // Check if there are categories and scores
+            if (!empty($scoreNames)) {
+                // Loop through each category and its scores
+                foreach ($scoreNames as $category => $scores) {
+                    foreach ($scores as $index => $scoreName) {
+                        // Creating the option element
+                        echo '<option value="' . htmlspecialchars('score' . ($index + 1)) . '">';
+                        echo htmlspecialchars($scoreName);
+                        echo '</option>';
+                    }
+                }
+            } else {
+                // In case there are no scores, an option to reflect that
+                echo '<option value="">No scores available</option>';
+            }
+            ?>
+        </select>
 
 
 
