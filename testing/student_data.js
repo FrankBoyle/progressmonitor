@@ -39,10 +39,10 @@ $("input[name='selectedColumns[]']").click(function() {
         selectedColumns.push($(this).val());
     });
     var selectedScore = $("#scoreSelector").val();
-    updateChart(selectedScore, selectedColumns);
+    updateChart(selectedScore);
 });
 
-    //updateChart('score1');  // Default
+    updateChart('score1');  // Default
 });
 
 
