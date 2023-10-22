@@ -136,11 +136,7 @@ if (isset($_GET['metadata_id'])) {
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-<?php
-echo '<pre>';
-print_r($scoreNames);
-echo '</pre>';
-?>
+
 <label>Select Score to Display: </label>
 <select id="scoreSelector" name="scoreSelector"> <!-- Added 'name' attribute for form submission -->
             <?php
