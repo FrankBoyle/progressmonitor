@@ -36,27 +36,8 @@ $(document).ready(function() {
     });
 
     updateChart('score1');  // Default
-
-
-
-    $("#scoreSelector").change(function() {
-        var selectedScore = $(this).val();
-        updateChart(selectedScore);
-    });
-
-    $("#updateBenchmark").click(function() {
-        var value = parseFloat($("#benchmarkValue").val());
-        if (!isNaN(value)) {
-            benchmark = value;
-            var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore);
-        } else {
-            alert('Please enter a valid benchmark value.');
-        }
-    });
-
-    updateChart('score1');  // Default
 });
+
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
