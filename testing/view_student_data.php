@@ -41,7 +41,7 @@ error_reporting(E_ALL);
 </head>
 <body>
 <h1>Student Overview</h1>
-<p>Name: <?php echo htmlspecialchars($student_name); ?></p>
+<p>Name: <?php echo $studentName; ?></p>
 <p>Category: <?php echo $metadataEntry['category_name']; ?></p>
 
 <a href="test.php" class="btn btn-primary">Student List</a>
