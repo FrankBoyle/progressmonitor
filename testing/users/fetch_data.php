@@ -171,6 +171,7 @@ if (!isset($_SESSION['teacher_id'])) {
 }
 
 $teacherId = $_SESSION['teacher_id'];
+$studentName = ""; // Initialize to empty, in case it's not set for some reason
 $message = "";  // Initialize an empty message variable
 
 // Handle form submission for adding new student
@@ -178,6 +179,13 @@ if (isset($_POST['add_new_student'])) {
     $newStudentName = $_POST['new_student_name'];
     if (!empty($newStudentName)) {
         $message = addNewStudent($newStudentName, $teacherId);
+    }
+}
+
+foreach ($students as $student) {
+    if ($student['student_id'] == $studentId) { // If the IDs match
+        $studentName = $student['name']; // Get the student name
+        break;
     }
 }
 
