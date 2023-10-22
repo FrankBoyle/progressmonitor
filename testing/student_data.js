@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
-        updateChart(selectedScore);
+        updateChart(selectedScore, selectedColumns, xCategories);
     });
 
     $("#updateBenchmark").click(function() {
@@ -19,7 +19,7 @@ $(document).ready(function() {
         if (!isNaN(value)) {
             benchmark = value;
             var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore);
+            updateChart(selectedScore, selectedColumns, xCategories);
         } else {
             alert('Please enter a valid benchmark value.');
         }
@@ -29,17 +29,17 @@ $(document).ready(function() {
     $("input[name='chartType']").change(function() {
         selectedChartType = $(this).val();
         var selectedScore = $("#scoreSelector").val();
-        updateChart(selectedScore);
+        updateChart(selectedScore, selectedColumns, xCategories);
     });
 
 // Handle checkbox clicks
 $("input[name='selectedColumns[]']").click(function() {
-    var selectedColumns = []; // Create an array to store selected columns
+    var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val()); // Add the selected columns to the array
+        selectedColumns.push($(this).val());
     });
     var selectedScore = $("#scoreSelector").val();
-    updateChart(selectedScore, selectedColumns); // Pass the array of selected columns
+    updateChart(selectedScore, selectedColumns, xCategories); // Pass xCategories as well
 });
 
     //updateChart('score1');  // Default
@@ -81,7 +81,7 @@ function getChartData(scoreField) {
 }
 
 
-function updateChart(scoreField, scoreFields) {
+function updateChart(scoreField, scoreFields, xCategories) {
     var seriesData = [];
     
     if (!Array.isArray(scoreFields)) {
