@@ -32,19 +32,18 @@ $("input[name='selectedColumns[]']").click(function() {
         selectedColumns.push($(this).val());
     });
     var selectedScore = $("#scoreSelector").val();
-    updateChart(selectedScore, selectedColumns, xCategories); // Pass the selected columns as an array
+    updateChart(selectedScore, selectedColumns, xCategories);
 });
 
 // Handle radio button clicks for chart type
 $("input[name='chartType']").change(function() {
+    var selectedChartType = $(this).val();
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
     });
-    var selectedChartType = $(this).val();
     updateChart(selectedColumns, selectedChartType);
 });
-
 
     updateChart('score1');  // Default
 });
@@ -88,14 +87,14 @@ function getChartData(scoreField) {
 }
 
 
-function updateChart(selectedColumns, selectedChartType, xCategories) {
+function updateChart(selectedColumns, selectedChartType) {
     var seriesData = [];
     
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
         selectedColumns = [selectedColumns]; // Ensure it's an array
     }
-    
+
     selectedColumns.forEach(function(selectedColumn) {
         var { chartData, xCategories } = getChartData(selectedColumn);
 
