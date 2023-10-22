@@ -61,7 +61,7 @@ function getChartData(scoreField) {
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
-        var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
+        var scoreValue = $(this).find('td[data-field-name="' + scoreField + '"]').text();
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
@@ -71,19 +71,22 @@ function getChartData(scoreField) {
 
             xCategories.push(weekStartDate);
         }
+    });
 
-    // Sorting logic starts here
+    // Sorting logic should be outside the loop
     const sortedChartData = chartData.sort((a, b) => {
         return new Date(a.x) - new Date(b.x);
     });
+
     const sortedCategories = xCategories.sort((a, b) => {
         return new Date(a) - new Date(b);
     });
+
     xCategories = sortedCategories;
 
     return { chartData: sortedChartData, xCategories: sortedCategories };
-});
 }
+
 
 function updateChart(selectedColumns, selectedChartType) {
     var seriesData = [];
