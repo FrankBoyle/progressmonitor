@@ -29,23 +29,26 @@ $(document).ready(function() {
         }
     });
 
-    // Handle checkbox clicks
-    $("input[name='selectedColumns[]']").click(function() {
-        selectedColumns = []; // Reset selectedColumns
-        $("input[name='selectedColumns[]']:checked").each(function() {
-            selectedColumns.push($(this).val());
-        });
-        var selectedScore = $("#scoreSelector").val();
-        updateChart(selectedScore, selectedColumns);
+// Handle checkbox clicks
+$("input[name='selectedColumns[]']").click(function() {
+    var selectedColumns = [];
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
     });
+    var selectedChartType = $("input[name='chartType']:checked").val();
+    updateChart(selectedColumns, selectedChartType);
+});
 
-    // Handle radio button clicks for chart type
-    $("input[name='chartType']").change(function() {
-        var selectedChartType = $(this).val();
-        updateChart(selectedColumns, selectedChartType);
+// Handle radio button clicks for chart type
+$("input[name='chartType']").change(function() {
+    var selectedColumns = [];
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
     });
+    var selectedChartType = $(this).val();
+    updateChart(selectedColumns, selectedChartType);
+});
 
-    updateChart('score1', selectedColumns);  // Default
 });
 
 function initializeChart() {
