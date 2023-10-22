@@ -25,22 +25,26 @@ $(document).ready(function() {
         }
     });
 
-    // Handle radio button clicks for chart type
-    $("input[name='chartType']").change(function() {
-        selectedChartType = $(this).val();
-        var selectedScore = $("#scoreSelector").val();
-        updateChart(selectedScore, selectedColumns, xCategories);
-    });
-
 // Handle checkbox clicks
-$("input[name='selectedColumns[]']").click(function() {
+$("input[name='selectedColumns[]']").change(function() {
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
     });
-    var selectedScore = $("#scoreSelector").val();
-    updateChart(selectedScore);
+    var selectedChartType = $("input[name='chartType']:checked").val();
+    updateChart(selectedColumns, selectedChartType);
 });
+
+// Handle radio button clicks for chart type
+$("input[name='chartType']").change(function() {
+    var selectedColumns = [];
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
+    });
+    var selectedChartType = $(this).val();
+    updateChart(selectedColumns, selectedChartType);
+});
+
 
     updateChart('score1');  // Default
 });
@@ -81,14 +85,10 @@ function getChartData(scoreField) {
 });
 }
 
-function updateChart(scoreField, scoreFields, xCategories) {
+function updateChart(selectedColumns, selectedChartType) {
     var seriesData = [];
     
-    if (!Array.isArray(scoreFields)) {
-        scoreFields = [scoreFields]; // Ensure it's an array
-    }
-
-    scoreFields.forEach(function(selectedColumn) {
+    selectedColumns.forEach(function(selectedColumn) {
         var { chartData, xCategories } = getChartData(selectedColumn);
 
         // Calculate trendline
@@ -141,9 +141,8 @@ function updateChart(scoreField, scoreFields, xCategories) {
         });
     }
 
-    window.chart.updateOptions(getChartOptions(seriesData, xCategories));
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
 }
-
 
 //console.log(selectedChartType);
 
