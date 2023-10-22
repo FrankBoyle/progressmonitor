@@ -39,7 +39,7 @@ $("input[name='selectedColumns[]']").click(function() {
         selectedColumns.push($(this).val()); // Add the selected columns to the array
     });
     var selectedScore = $("#scoreSelector").val();
-    updateChart(selectedScore, selectedColumns); // Pass the array of selected columns
+    updateChart(selectedScore); // Pass the array of selected columns
 });
 
 
