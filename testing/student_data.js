@@ -67,11 +67,6 @@ function getChartData(scoreField) {
 
             xCategories.push(weekStartDate);
         }
-        xCategories = sortedCategories;
-
-        return { chartData: sortedChartData, xCategories: sortedCategories };
-
-    });
 
     // Sorting logic starts here
     const sortedChartData = chartData.sort((a, b) => {
@@ -80,7 +75,7 @@ function getChartData(scoreField) {
     const sortedCategories = xCategories.sort((a, b) => {
         return new Date(a) - new Date(b);
     });
-
+    xCategories = sortedCategories;
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
