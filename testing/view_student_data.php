@@ -16,6 +16,21 @@ foreach ($students as $student) {
         break;
     }
 }
+
+if (isset($_GET['metadata_id'])) {
+    $selectedMetadataId = $_GET['metadata_id'];
+
+    // Now fetch the corresponding category name based on this metadata_id
+    foreach ($metadataEntries as $metadataEntry) {
+        if ($metadataEntry['metadata_id'] == $selectedMetadataId) {
+            $selectedCategoryName = $metadataEntry['category_name'];
+            break; // We found our category, no need to continue the loop
+        }
+    }
+} else {
+    // Optional: Handle cases where no metadata_id is specified, if needed
+    // $selectedCategoryName = "Default Category or message"; // for example
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +62,7 @@ foreach ($students as $student) {
 <body>
 <h1>Student Overview</h1>
 <p>Name: <?php echo $studentName; ?></p>
-<p>Category: <?php echo $metadataEntry['category_name']; ?></p>
+<p>Category: <?php echo $selectedMetadataId; ?></p>
 
 <a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
