@@ -84,45 +84,39 @@ function getChartData(scoreField) {
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
-function updateChart(scoreField) {
-    var {chartData, xCategories} = getChartData(scoreField);
+function updateChart(scoreField, selectedColumns) {
+    var seriesData = [];
+    
+    selectedColumns.forEach(function (selectedColumn) {
+        var { chartData, xCategories } = getChartData(selectedColumn);
 
-    // Calculate trendline
-    var trendlineFunction = calculateTrendline(chartData);
-    var trendlineData = chartData.map((item, index) => {
-        return {
-            x: item.x,
-            y: trendlineFunction(index)
-        };
-    });
+        // Calculate trendline for each selected column
+        var trendlineFunction = calculateTrendline(chartData);
+        var trendlineData = chartData.map(function (item, index) {
+            return {
+                x: item.x,
+                y: trendlineFunction(index),
+            };
+        });
 
-    var seriesData = [
-        {
-            name: 'Trendline',
-            data: trendlineData,
-            connectNulls: true,
-            dataLabels: {
-                enabled: false // Disable data labels for the Trendline series
-            }
-        },
-        {
-            name: 'Selected Score',
+        seriesData.push({
+            name: selectedColumn,
             data: chartData,
             connectNulls: true,
             dataLabels: {
-                enabled: true // Enable data labels for the Selected Score series
+                enabled: true, // Enable data labels for the selected column series
             },
             stroke: {
-                width: 7
-            }
-        }
-    ];
+                width: 1.5, // Set the stroke width for the selected column series
+            },
+        });
+    });
 
     if (benchmark !== null) {
-        var benchmarkData = xCategories.map(date => {
+        var benchmarkData = xCategories.map(function (date) {
             return {
                 x: date,
-                y: benchmark
+                y: benchmark,
             };
         }).reverse();
         seriesData.push({
@@ -130,8 +124,8 @@ function updateChart(scoreField) {
             data: benchmarkData,
             connectNulls: true,
             dataLabels: {
-                enabled: false // Disable data labels for the Benchmark series
-            }
+                enabled: false, // Disable data labels for the Benchmark series
+            },
         });
     }
 
