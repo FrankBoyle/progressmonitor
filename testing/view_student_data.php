@@ -171,6 +171,10 @@ if (isset($_GET['metadata_id'])) {
             echo '</label>';
         }
     }
+    // Add a "Clear Selection" radio button
+    echo '<label>';
+    echo '<input type="radio" name="selectedColumns[]" value="clear"> Clear Selection';
+    echo '</label>';
     ?>
 </div>
 
