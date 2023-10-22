@@ -46,8 +46,12 @@ $("input[name='chartType']").change(function() {
         selectedColumns.push($(this).val());
     });
     var selectedChartType = $(this).val();
+    console.log("Selected Chart Type:", selectedChartType); // Log the selected chart type
+
+    // Call the updateChart function with the selected columns and chart type
     updateChart(selectedColumns, selectedChartType);
 });
+
 
 });
 
