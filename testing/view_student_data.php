@@ -158,6 +158,7 @@ if (isset($_GET['metadata_id'])) {
     ?>
 </select>
 
+<!-- HTML -->
 <div>
     <label>Select Columns to Display:</label>
     <?php
@@ -173,7 +174,6 @@ if (isset($_GET['metadata_id'])) {
     }
     ?>
 </div>
-
 
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
