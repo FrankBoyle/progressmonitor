@@ -1,4 +1,5 @@
-var benchmark = null;
+// Keep track of selected columns
+var selectedColumns = [];
 
 $(document).ready(function() {
     initializeChart();
@@ -7,6 +8,36 @@ $(document).ready(function() {
     if (isNaN(benchmark)) {
         benchmark = null;  // Default benchmark value if the input is not provided
     }
+
+    $("#scoreSelector").change(function() {
+        var selectedScore = $(this).val();
+        updateChart(selectedScore, selectedColumns);
+    });
+
+    $("#updateBenchmark").click(function() {
+        var value = parseFloat($("#benchmarkValue").val());
+        if (!isNaN(value)) {
+            benchmark = value;
+            var selectedScore = $("#scoreSelector").val();
+            updateChart(selectedScore, selectedColumns);
+        } else {
+            alert('Please enter a valid benchmark value.');
+        }
+    });
+
+    // Handle radio button clicks
+    $("input[name='selectedColumns[]']").click(function() {
+        selectedColumns = []; // Clear the previous selections
+        $("input[name='selectedColumns[]']:checked").each(function() {
+            selectedColumns.push($(this).val()); // Add the selected columns to the array
+        });
+        var selectedScore = $("#scoreSelector").val();
+        updateChart(selectedScore, selectedColumns);
+    });
+
+    updateChart('score1');  // Default
+
+
 
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
