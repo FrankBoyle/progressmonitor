@@ -32,18 +32,16 @@ $(document).ready(function() {
         updateChart(selectedScore);
     });
 
-// Handle radio button clicks for selecting columns
-$("input[name='selectedColumns[]']").change(function() {
-    var selectedColumns = []; // Initialize an array to store selected columns
-    $("input[name='selectedColumns[]']").each(function() {
-        if ($(this).is(":checked")) {
-            selectedColumns.push($(this).val()); // Add the selected columns to the array
-        }
+// Handle checkbox clicks
+$("input[name='selectedColumns[]']").click(function() {
+    var selectedColumns = []; // Create an array to store selected columns
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val()); // Add the selected columns to the array
     });
-    console.log("Selected Columns: ", selectedColumns); // Debugging output
     var selectedScore = $("#scoreSelector").val();
-    updateChart(selectedScore, selectedColumns); // Update the chart with selected columns
+    updateChart(selectedScore, selectedColumns); // Pass the array of selected columns
 });
+
 
     //updateChart('score1');  // Default
 });
