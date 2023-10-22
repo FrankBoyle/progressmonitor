@@ -137,11 +137,11 @@ function updateChart(scoreField) {
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
 
-console.log(selectedChartType);
+//console.log(selectedChartType);
 
 function getChartOptions(dataSeries, xCategories) {
     var chartType = selectedChartType; // Get the selected chart type
-    console.log(selectedChartType);
+    //console.log(selectedChartType);
     return {
         series: dataSeries,
         chart: {
