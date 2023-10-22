@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
-        updateChart(selectedScore, selectedColumns, xCategories);
+        updateChart(selectedScore);
     });
 
     $("#updateBenchmark").click(function() {
@@ -19,20 +19,20 @@ $(document).ready(function() {
         if (!isNaN(value)) {
             benchmark = value;
             var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore, selectedColumns, xCategories);
+            updateChart(selectedScore);
         } else {
             alert('Please enter a valid benchmark value.');
         }
     });
 
 // Handle checkbox clicks
-$("input[name='selectedColumns[]']").change(function() {
+$("input[name='selectedColumns[]']").click(function() {
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
     });
-    var selectedChartType = $("input[name='chartType']:checked").val();
-    updateChart(selectedColumns, selectedChartType);
+    var selectedScore = $("#scoreSelector").val();
+    updateChart(selectedScore, selectedColumns, xCategories); // Pass the selected columns as an array
 });
 
 // Handle radio button clicks for chart type
@@ -88,8 +88,13 @@ function getChartData(scoreField) {
 }
 
 
-function updateChart(selectedColumns, selectedChartType) {
+function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
+    
+    // Check if selectedColumns is an array
+    if (!Array.isArray(selectedColumns)) {
+        selectedColumns = [selectedColumns]; // Ensure it's an array
+    }
     
     selectedColumns.forEach(function(selectedColumn) {
         var { chartData, xCategories } = getChartData(selectedColumn);
