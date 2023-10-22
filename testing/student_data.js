@@ -1,5 +1,6 @@
 var benchmark = null;
 var selectedChartType = 'line'; // Default chart type
+var xCategories = [];
 
 $(document).ready(function() {
     initializeChart();
