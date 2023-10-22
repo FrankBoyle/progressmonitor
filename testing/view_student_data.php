@@ -62,7 +62,7 @@ if (isset($_GET['metadata_id'])) {
 <body>
 <h1>Student Overview</h1>
 <p>Name: <?php echo $studentName; ?></p>
-<p>Category: <?php echo $selectedMetadataId; ?></p>
+<p>Category: <?php echo $selectedCategoryName; ?></p>
 
 <a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
