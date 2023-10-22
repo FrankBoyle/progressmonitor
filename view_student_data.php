@@ -9,6 +9,28 @@ error_reporting(E_ALL);
 //echo '<pre>';
 //print_r($_GET);
 //echo '</pre>';
+
+foreach ($students as $student) {
+    if ($student['student_id'] == $studentId) { // If the IDs match
+        $studentName = $student['name']; // Get the student name
+        break;
+    }
+}
+
+if (isset($_GET['metadata_id'])) {
+    $selectedMetadataId = $_GET['metadata_id'];
+
+    // Now fetch the corresponding category name based on this metadata_id
+    foreach ($metadataEntries as $metadataEntry) {
+        if ($metadataEntry['metadata_id'] == $selectedMetadataId) {
+            $selectedCategoryName = $metadataEntry['category_name'];
+            break; // We found our category, no need to continue the loop
+        }
+    }
+} else {
+    // Optional: Handle cases where no metadata_id is specified, if needed
+    // $selectedCategoryName = "Default Category or message"; // for example
+}
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +60,10 @@ error_reporting(E_ALL);
 </style>
 </head>
 <body>
+<h1>Student Overview</h1>
+<p>Name: <?php echo $studentName; ?></p>
+<p>Category: <?php echo $selectedCategoryName; ?></p>
+
 <a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
@@ -57,15 +83,29 @@ error_reporting(E_ALL);
 <?php endforeach; ?>
 
 <table border="1">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <?php foreach ($scoreNames as $key => $name): ?>
-                <th><?php echo $name; ?></th>
-            <?php endforeach; ?>
-            <th>Action</th>
-        </tr>
-    </thead>
+<thead>
+    <tr>
+        <th>Date</th>
+        <?php 
+        // Iterate through all key-value pairs in $scoreNames.
+        foreach ($scoreNames as $category => $values) {
+            // Check if the current category's values are an array (assuming you only want arrays).
+            if (is_array($values)) {
+                // Iterate through each item in the current category's array.
+                foreach ($values as $score) {
+                    // Print the score as a table header. Apply any necessary formatting or escaping here.
+                    echo "<th>" . htmlspecialchars($score) . "</th>";
+                }
+            } else {
+                // If it's not an array, it might be a standalone category name. You can decide how to handle these cases.
+                // For example, you might want to print it as a header, too.
+                echo "<th>" . htmlspecialchars($values) . "</th>";
+            }
+        }
+        ?>
+        <th>Action</th>
+    </tr>
+</thead>
 
     <?php if (empty($performanceData)): ?>
         <tr>
@@ -98,11 +138,27 @@ error_reporting(E_ALL);
 </table>
 
 <label>Select Score to Display: </label>
-<select id="scoreSelector">
-    <?php foreach ($scoreNames as $key => $name): ?>
-        <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($name); ?></option>
-    <?php endforeach; ?>
-</select>
+<select id="scoreSelector" name="scoreSelector"> <!-- Added 'name' attribute for form submission -->
+            <?php
+            // Check if there are categories and scores
+            if (!empty($scoreNames)) {
+                // Loop through each category and its scores
+                foreach ($scoreNames as $category => $scores) {
+                    foreach ($scores as $index => $scoreName) {
+                        // Creating the option element
+                        echo '<option value="' . htmlspecialchars('score' . ($index + 1)) . '">';
+                        echo htmlspecialchars($scoreName);
+                        echo '</option>';
+                    }
+                }
+            } else {
+                // In case there are no scores, an option to reflect that
+                echo '<option value="">No scores available</option>';
+            }
+            ?>
+        </select>
+
+
 
 
 <label>Enter Benchmark Value: </label>

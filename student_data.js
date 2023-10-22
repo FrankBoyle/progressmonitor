@@ -412,22 +412,34 @@ $(document).ready(function() {
     }
     
 
-    function isDateDuplicate(dateString, currentPerformanceId = null) {
-    //console.log("Checking for duplicate of:", dateString);
-    let isDuplicate = false;
-    $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = $(this).text();
-        const performanceId = $(this).closest('tr').data('performance-id');
-        if (cellDate === dateString && performanceId !== currentPerformanceId) {
-            isDuplicate = true;
-            return false; // Break out of the .each loop
-        }
-    });
-    return isDuplicate;
-}
+    function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
+        //console.log("Checking for duplicate of:", dateString);
+        let isDuplicate = false;
+    
+        $('table').find('td[data-field-name="score_date"]').each(function() {
+            const cellDate = $(this).text();
+            const $currentRow = $(this).closest('tr');
+            const performanceId = $currentRow.data('performance-id');
+            const studentId = $currentRow.data('student-id'); // Retrieve the student_id
+            const urlParams = new URLSearchParams(window.location.search);
+            const metadata_id = urlParams.get('metadata_id');    
+            // Check if date, student_id, and metadata_id are the same, but not the same performance entry
+            if (cellDate === dateString 
+                && performanceId !== currentPerformanceId 
+                && studentId === currentStudentId 
+                && metadata_id === currentMetadataId) {
+                isDuplicate = true;
+                return false; // Break out of the .each loop
+            }
+        });
+    
+        return isDuplicate;
+    }
+    
 
     function attachEditableHandler() {
-        $('table').on('click', '.editable:not([data-field-name="score8"])', function() {
+        //$('table').on('click', '.editable:not([data-field-name="score8"])', function() {
+        $('table').on('click', '.editable', function() {
             const cell = $(this);
             const originalValue = cell.text();
             const input = $('<input type="text">');
@@ -530,7 +542,7 @@ $(document).ready(function() {
                             newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                         }
     
-    // New code for updating score8 starts here
+                        /* New code for updating score8 starts here
                         if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
                             const row = cell.closest('tr');
                             const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
@@ -542,6 +554,7 @@ $(document).ready(function() {
                             // Update the score8 value in the database
                             updateScoreInDatabase(row, 'score8', average.toFixed(2));
                         }
+                        */
                     },
                     error: function() {
                         // Handle any error here, e.g., show a notification to the user

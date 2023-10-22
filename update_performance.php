@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('./users/db.php');  // Include the database connection
+include('./users/db.php');  
 header('Content-Type: application/json');
 
 // Main logic
@@ -12,26 +12,31 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     $fieldName = $_POST['field_name'];
     $newValue = $_POST['new_value'];
     $studentId = $_POST['student_id'] ?? null;
-
-    // If the field being updated is one of the score fields and the value is empty, set it to NULL.
+    $metadata_id = $_POST['metadata_id'];
     if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'])) {
         if ($newValue === '' || !isset($newValue)) {
             $newValue = NULL;
         }
     }
 
-    // Validate and sanitize the date input (assuming it's for the 'score_date' field)
     if ($fieldName === 'score_date') {
-        $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ? AND performance_id != ?");
-        $checkStmt->execute([$studentId, $newValue, $performanceId]); // Ensure to grab the $studentId in this script too.
-        $count = $checkStmt->fetchColumn();
-    
-        if ($count > 0) {
-            handleError("Duplicate date not allowed!");
+        $checkStmt = $connection->prepare("
+        SELECT COUNT(*) 
+        FROM Performance 
+        WHERE 
+            student_id = ? AND 
+            score_date = ? AND 
+            metadata_id = ? AND 
+            performance_id != ?
+    ");
+
+        if($metadata_id !== null) {
+            $checkStmt->execute([$studentId, $newValue, $metadata_id, $performanceId]);  
+        } else {
+            handleError("Metadata ID is missing!");  
             return;
         }
         
-        // Inside the `if ($fieldName === 'score_date') { ... }` block:
         $newDate = date_create_from_format('Y-m-d', $newValue);
         if (!$newDate) {
             handleError("Invalid date format received. Expected 'Y-m-d' format but received: " . $newValue);
@@ -45,11 +50,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
     handleError("Invalid data provided.");
 }
 
-/**
- * Function to update the Performance data.
- */
 function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
-    // List of allowed field names to ensure security
     $allowedFields = ['score_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
 
     if (!in_array($fieldName, $allowedFields)) {
@@ -71,16 +72,11 @@ function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
     }
 }
 
-/**
- * Function to handle errors.
- */
 function handleError($errorMessage) {
     sendResponse(["success" => false, "error" => $errorMessage]);
 }
 
-/**
- * Function to send a JSON response.
- */
+
 function sendResponse($response) {
     echo json_encode($response);
     exit;

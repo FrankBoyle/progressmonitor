@@ -21,6 +21,25 @@ function handleError($errorMessage, $missingData = []) {
     exit;
 }
 
+$studentId = $_POST['student_id'];
+//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
+$schoolId = $_POST['school_id']; 
+$weekStartDate = $_POST['score_date'];
+$scoreDate = $_POST['score_date'];
+$scores = $_POST['scores'];
+$metadata_id = $_POST['metadata_id'];
+//$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
+// Retrieve metadataId from URL parameters
+$score1 = isset($_POST['score1']) ? $_POST['score1'] : null;
+$score2 = isset($_POST['score2']) ? $_POST['score2'] : null;
+$score3 = isset($_POST['score3']) ? $_POST['score3'] : null;
+$score4 = isset($_POST['score4']) ? $_POST['score4'] : null;
+$score5 = isset($_POST['score5']) ? $_POST['score5'] : null;
+$score6 = isset($_POST['score6']) ? $_POST['score6'] : null;
+$score7 = isset($_POST['score7']) ? $_POST['score7'] : null;
+$score8 = isset($_POST['score8']) ? $_POST['score8'] : null;
+$score9 = isset($_POST['score9']) ? $_POST['score9'] : null;
+$score10 = isset($_POST['score10']) ? $_POST['score10'] : null;
 $responseData = [];
 
 // Check if the request method is POST
@@ -67,22 +86,23 @@ foreach ($scores as $key => $score) {
 }
 
 // Check for duplicate date entry
-$checkStmt = $connection->prepare("SELECT COUNT(*) FROM Performance WHERE student_id = ? AND score_date = ?");
-$checkStmt->execute([$studentId, $weekStartDate]);
+$checkStmt = $connection->prepare(
+    "SELECT COUNT(*) FROM Performance 
+     WHERE student_id = ? AND score_date = ? AND metadata_id = ?"
+);
 
-if ($checkStmt->fetchColumn() > 0) {
-    handleError("Duplicate date not allowed!");
-    exit;
+// Execute the prepared statement with the variables. Ensure these variables are already set with the appropriate values.
+$checkStmt->execute([$studentId, $scoreDate, $metadata_id]); // Make sure $scoreDate is in the correct format as it appears in your database
+
+// fetchColumn() fetches the next row from a result set. In this case, it's the count of records that match the criteria.
+$duplicateCount = $checkStmt->fetchColumn();
+
+// If duplicateCount is greater than 0, that means a record exists that matches all the criteria, which is considered a duplicate for your purposes.
+if ($duplicateCount > 0) {
+    // Call your error handler function to handle this specific type of error. Make sure handleError is implemented in a way that properly conveys the error to the client or user.
+    handleError("Duplicate date entry is not allowed. A record with this date and metadata already exists for the selected student.");
+    exit; // Terminate the script here, so no further processing happens.
 }
-
-$studentId = $_POST['student_id'];
-//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
-$schoolId = $_POST['school_id']; // Get school_id from POST
-$weekStartDate = $_POST['score_date'];
-//$scores = $_POST['scores'];
-$metadata_id = $_POST['metadata_id'];
-//$schoolId = isset($_POST['school_id']) ? $_POST['school_id'] : null;
-// Retrieve metadataId from URL parameters
 
 $stmt = $connection->prepare("INSERT INTO Performance (student_id, metadata_id, school_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 

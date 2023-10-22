@@ -7,10 +7,10 @@ error_reporting(E_ALL);
 
 include('db.php');
 
-function fetchPerformanceData($studentId) {
+function fetchPerformanceData($studentId, $metadata_id) {
     global $connection;
-    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");
-    $stmt->execute([$studentId]);
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
+    $stmt->execute([$studentId, $metadata_id]);
     return $stmt->fetchAll();
 }
 
@@ -29,14 +29,47 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['school_id'] : null;
 }
 
-function fetchScoreNames($school_id) {
+function fetchScoreNames($school_id, $metadata_id) {
     global $connection;
     $scoreNames = [];
-    $stmt = $connection->prepare("SELECT ScoreColumn, CustomName FROM SchoolScoreNames WHERE school_id = ?");
-    $stmt->execute([$school_id]);
-    while ($row = $stmt->fetch()) {
-        $scoreNames[$row['ScoreColumn']] = $row['CustomName'];
+
+    // Prepare the SQL statement. Make sure the names of the columns match exactly what's in your table.
+    $stmt = $connection->prepare(
+        "SELECT 
+            category_name, 
+            score1_name, 
+            score2_name, 
+            score3_name, 
+            score4_name, 
+            score5_name, 
+            score6_name, 
+            score7_name, 
+            score8_name, 
+            score9_name, 
+            score10_name 
+        FROM Metadata 
+        WHERE school_id = ? AND metadata_id = ?"
+    );
+
+    // Bind parameters to the SQL statement and execute it, passing the school ID and metadata ID.
+    $stmt->execute([$school_id, $metadata_id]);
+
+    // Fetch the result row from the query. Since we're expecting potentially multiple rows, we'll iterate.
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // If there's a category name, use it as a key. Otherwise, you might want a default or a numerical index.
+        $category = $row['category_name'] ?? 'default_category';
+
+        // For each score column, check if it's non-empty and then add it to the array.
+        // Here we're compiling all the scores into one flat array per category. If the category changes per row,
+        // this structure might need to be adjusted depending on your requirements.
+        for ($i = 1; $i <= 10; $i++) {
+            $scoreColumnName = 'score' . $i . '_name';
+            if (!empty($row[$scoreColumnName])) {
+                $scoreNames[$category][] = $row[$scoreColumnName];
+            }
+        }
     }
+
     return $scoreNames;
 }
 
@@ -109,7 +142,11 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
-
+$studentId = $_GET['student_id'];
+//$metadata_id = $_POST['metadata_id']; // Get metadata_id from POST
+//$schoolId = $_POST['school_id']; // Get school_id from POST
+//$scores = $_POST['scores'];
+$metadata_id = $_GET['metadata_id'];
 // Check if the action is set to 'fetchGroups' and handle it
 if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
     echo json_encode(fetchGroupNames());
@@ -146,8 +183,8 @@ if (isset($_POST['add_new_student'])) {
 
 $students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
-$performanceData = fetchPerformanceData($studentId);
-$scoreNames = fetchScoreNames($school_id);
+$performanceData = fetchPerformanceData($studentId, $metadata_id);
+$scoreNames = fetchScoreNames($school_id, $metadata_id);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
