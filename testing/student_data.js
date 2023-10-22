@@ -88,7 +88,6 @@ function getChartData(scoreField) {
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
-
 function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
     console.log("selectedColumns:", selectedColumns); // Log selectedColumns
@@ -168,9 +167,9 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     // Update chart options with the selected chart type
     var chartOptions = getChartOptions(seriesData, xCategories, chartType);
+    console.log("chartOptions:", chartOptions); // Log chartOptions
     window.chart.updateOptions(chartOptions);
 }
-
 
 //console.log(selectedChartType);
 
