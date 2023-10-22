@@ -35,11 +35,12 @@ $(document).ready(function() {
 // Handle radio button clicks for selecting columns
 $("input[name='selectedColumns[]']").change(function() {
     var selectedColumns = []; // Initialize an array to store selected columns
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        if ($(this).val() !== "clear") {
+    $("input[name='selectedColumns[]']").each(function() {
+        if ($(this).is(":checked")) {
             selectedColumns.push($(this).val()); // Add the selected columns to the array
         }
     });
+    console.log("Selected Columns: ", selectedColumns); // Debugging output
     var selectedScore = $("#scoreSelector").val();
     updateChart(selectedScore, selectedColumns); // Update the chart with selected columns
 });
