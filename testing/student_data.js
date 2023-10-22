@@ -76,9 +76,10 @@ function getChartData(scoreField) {
         return new Date(a) - new Date(b);
     });
     xCategories = sortedCategories;
-    return { chartData: sortedChartData, xCategories: sortedCategories };
-}
 
+    return { chartData: sortedChartData, xCategories: sortedCategories };
+});
+}
 
 function updateChart(scoreField, scoreFields, xCategories) {
     var seriesData = [];
