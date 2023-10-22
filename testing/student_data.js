@@ -62,7 +62,6 @@ function getChartData(scoreField) {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
 
-
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
                 x: weekStartDate,  // Directly use the date string
@@ -83,6 +82,7 @@ function getChartData(scoreField) {
 
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
+
 
 function updateChart(scoreField, selectedColumns) {
     var xCategories = []; // Initialize xCategories here

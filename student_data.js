@@ -116,8 +116,6 @@ function updateChart(scoreField) {
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
 
-
-
 function getChartOptions(dataSeries, xCategories) {
     return {
         series: dataSeries,
