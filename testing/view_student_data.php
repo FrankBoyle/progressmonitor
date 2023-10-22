@@ -9,23 +9,7 @@ error_reporting(E_ALL);
 //echo '<pre>';
 //print_r($_GET);
 //echo '</pre>';
-$student_id = $_GET['student_id']; // or another method to get the student's ID
-$sql = "SELECT name FROM Students WHERE student_id = ?"; // assuming your student table has a 'name' column
-$stmt = $connection->prepare($sql);
-$stmt->bind_param("i", $student_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$student = $result->fetch_assoc();
-$student_name = $student['name'];
 
-$metadata_id = $_GET['metadata_id']; // or another method to get the metadata ID
-$sql = "SELECT category_name FROM Metadata WHERE metadata_id = ?"; // adjust based on your actual table structure
-$stmt = $connection->prepare($sql);
-$stmt->bind_param("i", $metadata_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$metadata = $result->fetch_assoc();
-$category_name = $metadata['category_name'];
 
 ?>
 
