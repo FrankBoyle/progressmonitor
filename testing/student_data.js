@@ -42,7 +42,7 @@ $("input[name='selectedColumns[]']").change(function() {
     updateChart(selectedScore, selectedColumns); // Update the chart with selected columns
 });
 
-    updateChart('score1');  // Default
+    //updateChart('score1');  // Default
 });
 
 
