@@ -10,7 +10,12 @@ error_reporting(E_ALL);
 //print_r($_GET);
 //echo '</pre>';
 
-
+foreach ($students as $student) {
+    if ($student['student_id'] == $studentId) { // If the IDs match
+        $studentName = $student['name']; // Get the student name
+        break;
+    }
+}
 ?>
 
 <!DOCTYPE html>
