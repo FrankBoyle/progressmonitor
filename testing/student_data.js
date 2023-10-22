@@ -158,8 +158,19 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         });
     }
 
-    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
+    // Determine the chart type based on selectedChartType
+    var chartType;
+    if (selectedChartType === 'line') {
+        chartType = 'line';
+    } else if (selectedChartType === 'bar') {
+        chartType = 'bar';
+    }
+
+    // Update chart options with the selected chart type
+    var chartOptions = getChartOptions(seriesData, xCategories, chartType);
+    window.chart.updateOptions(chartOptions);
 }
+
 
 //console.log(selectedChartType);
 
