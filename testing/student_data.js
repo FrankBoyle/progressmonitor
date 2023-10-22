@@ -94,6 +94,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     if (!Array.isArray(selectedColumns)) {
         selectedColumns = [selectedColumns]; // Ensure it's an array
     }
+    xCategories = [];
 
     selectedColumns.forEach(function(selectedColumn) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
