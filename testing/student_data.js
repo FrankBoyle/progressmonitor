@@ -1,5 +1,6 @@
 var benchmark = null;
 var selectedChartType = 'line'; // Default chart type
+var xCategories = [];
 
 $(document).ready(function() {
     initializeChart();
@@ -39,7 +40,7 @@ $("input[name='selectedColumns[]']").click(function() {
         selectedColumns.push($(this).val());
     });
     var selectedScore = $("#scoreSelector").val();
-    updateChart(selectedScore, selectedColumns, xCategories); // Pass xCategories as well
+    updateChart(selectedScore, selectedColumns);
 });
 
     //updateChart('score1');  // Default
@@ -53,7 +54,7 @@ function initializeChart() {
 
 function getChartData(scoreField) {
     var chartData = [];
-    var xCategories = [];
+    xCategories = sortedCategories;
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
@@ -67,6 +68,8 @@ function getChartData(scoreField) {
 
             xCategories.push(weekStartDate);
         }
+        return { chartData: sortedChartData, xCategories: sortedCategories };
+
     });
 
     // Sorting logic starts here
