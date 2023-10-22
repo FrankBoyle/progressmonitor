@@ -81,11 +81,15 @@ function getChartData(scoreField) {
 }
 
 
-function updateChart(scoreFields) {
+function updateChart(scoreField, scoreFields) {
     var seriesData = [];
     
-    scoreFields.forEach(function(scoreField) {
-        var { chartData, xCategories } = getChartData(scoreField);
+    if (!Array.isArray(scoreFields)) {
+        scoreFields = [scoreFields]; // Ensure it's an array
+    }
+
+    scoreFields.forEach(function(selectedColumn) {
+        var { chartData, xCategories } = getChartData(selectedColumn);
 
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
@@ -98,7 +102,7 @@ function updateChart(scoreFields) {
 
         seriesData.push(
             {
-                name: 'Selected Score ' + scoreField,
+                name: 'Selected Score ' + selectedColumn,
                 data: chartData,
                 connectNulls: true,
                 dataLabels: {
@@ -109,7 +113,7 @@ function updateChart(scoreFields) {
                 }
             },
             {
-                name: 'Trendline ' + scoreField,
+                name: 'Trendline ' + selectedColumn,
                 data: trendlineData,
                 connectNulls: true,
                 dataLabels: {
@@ -139,6 +143,7 @@ function updateChart(scoreFields) {
 
     window.chart.updateOptions(getChartOptions(seriesData, xCategories));
 }
+
 
 //console.log(selectedChartType);
 
