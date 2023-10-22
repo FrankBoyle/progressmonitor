@@ -38,6 +38,9 @@ error_reporting(E_ALL);
 </style>
 </head>
 <body>
+<h1>Student Overview</h1>
+<p>Name: <?php echo htmlspecialchars($student_name); ?></p>
+<p>Category: <?php echo htmlspecialchars($category_name); ?></p>
 <a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
