@@ -23,7 +23,7 @@ function fetchMetadataCategories($school_id) {
 
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT school_id AND FROM Students WHERE student_id = ?");
+    $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch();
     return $result ? $result['school_id'] : null;
