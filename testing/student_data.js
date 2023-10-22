@@ -1,5 +1,5 @@
-// Keep track of selected columns
-var selectedColumns = [];
+var benchmark = null;
+var selectedChartType = 'line'; // Default chart type
 
 $(document).ready(function() {
     initializeChart();
@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
-        updateChart(selectedScore, selectedColumns);
+        updateChart(selectedScore);
     });
 
     $("#updateBenchmark").click(function() {
@@ -19,20 +19,17 @@ $(document).ready(function() {
         if (!isNaN(value)) {
             benchmark = value;
             var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore, selectedColumns);
+            updateChart(selectedScore);
         } else {
             alert('Please enter a valid benchmark value.');
         }
     });
 
-    // Handle radio button clicks
-    $("input[name='selectedColumns[]']").click(function() {
-        selectedColumns = []; // Clear the previous selections
-        $("input[name='selectedColumns[]']:checked").each(function() {
-            selectedColumns.push($(this).val()); // Add the selected columns to the array
-        });
+    // Handle radio button clicks for chart type
+    $("input[name='chartType']").change(function() {
+        selectedChartType = $(this).val();
         var selectedScore = $("#scoreSelector").val();
-        updateChart(selectedScore, selectedColumns);
+        updateChart(selectedScore);
     });
 
     updateChart('score1');  // Default
@@ -131,10 +128,12 @@ function updateChart(scoreField) {
 
 
 function getChartOptions(dataSeries, xCategories) {
+    var chartType = selectedChartType; // Get the selected chart type
+
     return {
         series: dataSeries,
         chart: {
-            type: 'line',
+            type: chartType,
             stacked: false,
             width: 600,
             zoom: {
