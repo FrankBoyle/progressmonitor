@@ -54,7 +54,6 @@ function initializeChart() {
 
 function getChartData(scoreField) {
     var chartData = [];
-    xCategories = sortedCategories;
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
@@ -68,6 +67,8 @@ function getChartData(scoreField) {
 
             xCategories.push(weekStartDate);
         }
+        xCategories = sortedCategories;
+
         return { chartData: sortedChartData, xCategories: sortedCategories };
 
     });
