@@ -85,7 +85,7 @@ function getChartData(scoreField) {
 }
 
 
-function updateChart(selectedColumns, selectedChartType) {
+function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
     
     // Check if selectedColumns is an array
