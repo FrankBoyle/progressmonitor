@@ -9,9 +9,12 @@ $(document).ready(function() {
         benchmark = null;  // Default benchmark value if the input is not provided
     }
 
+    // Initialize selectedColumns as an empty array
+    var selectedColumns = [];
+
     $("#scoreSelector").change(function() {
         var selectedScore = $(this).val();
-        updateChart(selectedScore);
+        updateChart(selectedScore, selectedColumns);
     });
 
     $("#updateBenchmark").click(function() {
@@ -19,35 +22,30 @@ $(document).ready(function() {
         if (!isNaN(value)) {
             benchmark = value;
             var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore);
+            updateChart(selectedScore, selectedColumns);
         } else {
             alert('Please enter a valid benchmark value.');
         }
     });
 
-// Handle checkbox clicks
-$("input[name='selectedColumns[]']").click(function() {
-    var selectedColumns = [];
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
+    // Handle checkbox clicks
+    $("input[name='selectedColumns[]']").click(function() {
+        selectedColumns = []; // Reset selectedColumns
+        $("input[name='selectedColumns[]']:checked").each(function() {
+            selectedColumns.push($(this).val());
+        });
+        var selectedScore = $("#scoreSelector").val();
+        updateChart(selectedScore, selectedColumns);
     });
-    var selectedScore = $("#scoreSelector").val();
-    updateChart(selectedScore, selectedColumns, xCategories);
-});
 
-// Handle radio button clicks for chart type
-$("input[name='chartType']").change(function() {
-    var selectedChartType = $(this).val();
-    var selectedColumns = [];
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
+    // Handle radio button clicks for chart type
+    $("input[name='chartType']").change(function() {
+        var selectedChartType = $(this).val();
+        updateChart(selectedColumns, selectedChartType);
     });
-    updateChart(selectedColumns, selectedChartType);
-});
 
-    updateChart('score1');  // Default
+    updateChart('score1', selectedColumns);  // Default
 });
-
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
@@ -99,7 +97,7 @@ function updateChart(selectedColumns, selectedChartType) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
         // Merge unique xCategories from all selected columns
         xCategories = [...new Set([...xCategories, ...columnCategories])];
-        
+
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
         var trendlineData = chartData.map((item, index) => {
