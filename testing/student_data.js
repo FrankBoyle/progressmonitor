@@ -164,26 +164,20 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             }  
         });
 
-        if (benchmark !== null) { // Only proceed if benchmark has a meaningful value
+        if (benchmark !== null && !isNaN(benchmark)) {  // Check if benchmark is a valid number
+            console.log(benchmark);
             var benchmarkData = xCategories.map(date => {
-                return {
-                    x: date,
-                    y: benchmark
-                };
+                return [date, benchmark];  // Returning as an array [x, y]
             });
     
-            // Here, we're ensuring the benchmark series is always of type 'line'.
-            var benchmarkSeries = {
+            seriesData.push({
                 name: 'Benchmark',
-                type: 'line',  // This ensures the benchmark is always a line.
+                type: 'line',  // Explicitly set type to line for benchmark regardless of the chart type
                 data: benchmarkData,
-                // ... any additional styling or configuration for the line
-            };
-    
-            // Now, we add the benchmark series to the chart data.
-            seriesData.push(benchmarkSeries);
+                // ... [Other properties as needed]
+            });
         } else {
-            console.log("No benchmark value available.");
+            console.log("No benchmark value available or invalid benchmark.");
         }
     
         // When updating the chart, we're now including the benchmark series.
