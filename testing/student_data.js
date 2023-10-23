@@ -29,7 +29,7 @@ $(document).ready(function() {
         // Example: selectedColumns could be populated based on checkboxes that the user has selected
 
         // Now call the function to draw your chart with the new settings
-        drawChart(selectedColumns, selectedChartType, benchmarkValue);
+        updateChart(selectedColumns, selectedChartType, benchmarkValue);
     }); 
 
 // Handle checkbox clicks
