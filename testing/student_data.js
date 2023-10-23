@@ -4,7 +4,16 @@ var xCategories = [];
 
 $(document).ready(function() {
     initializeChart();
+    let checkboxes = $("#scoreSelector"); // replace with your actual checkbox class or selector
+    
+    if(checkboxes.length > 0) {
+        // Check the first checkbox
+        checkboxes[0].checked = true;
 
+        // Trigger whatever event you have that initializes the chart based on checkbox selection
+        // This might be a 'change' event or something custom to your application.
+        $(checkboxes[0]).change();
+    }
     benchmark = parseFloat($("#benchmarkValue").val());
     if (isNaN(benchmark)) {
         benchmark = null;  // Default benchmark value if the input is not provided
