@@ -99,6 +99,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     // Define colors for scores and their trendlines
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
     var scoreNamesMap = getScoreNamesMap();
+    var actualScoreName = '';
 
     if (!xCategories || !Array.isArray(xCategories)) {
         xCategories = [];  // Make sure xCategories is an array
@@ -110,7 +111,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     selectedColumns.forEach(function(selectedColumn, index) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
-        var actualScoreName = scoreNamesMap[selectedColumn];
+        actualScoreName = scoreNamesMap[selectedColumn];
 
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
@@ -173,10 +174,10 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     
 
     // Pass seriesData to getChartOptions
-    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
 }
 
-function getChartOptions(dataSeries, xCategories, selectedChartType) {
+function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
     //console.log(selectedChartType);
     var chartType = selectedChartType; // Get the selected chart type
     //console.log(chartType);
@@ -246,7 +247,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
 
         markers: {
             size: dataSeries.map(series => {
-                if (series.name === actualScoreName) {
+                if (series.name === 'actualScoreName') {
                     return 5;  // or whatever size you want for the "Selected Score" series
                 } else {
                     return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
