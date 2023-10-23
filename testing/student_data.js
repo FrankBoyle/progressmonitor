@@ -110,7 +110,10 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     selectedColumns.forEach(function(selectedColumn, index) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
-        var actualScoreName = scoreNamesMap[selectedColumn];
+        var actualScoreName;
+        if (selectedColumns.length > 0) {
+            actualScoreName = scoreNamesMap[selectedColumns[0]];
+        }
 
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
