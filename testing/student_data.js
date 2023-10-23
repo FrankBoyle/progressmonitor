@@ -141,7 +141,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         );
     });
 
-    if (typeof benchmark !== 'undefined' && benchmark !== null) {
+    if (typeof benchmark !== 'number') {
+        console.error('Unexpected benchmark value:', benchmark);
         var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
