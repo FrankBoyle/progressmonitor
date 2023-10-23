@@ -246,7 +246,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
 
         markers: {
             size: dataSeries.map(series => {
-                if (series.name === actualScoreName) {
+                if (series.name === 'actualScoreName') {
                     return 5;  // or whatever size you want for the "Selected Score" series
                 } else {
                     return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
