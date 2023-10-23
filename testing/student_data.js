@@ -94,21 +94,17 @@ function getChartData(scoreField) {
 
 function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
-    //console.log("selectedColumns:", selectedColumns); // Log selectedColumns
 
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
         selectedColumns = [selectedColumns]; // Ensure it's an array
     }
-    xCategories = [];
 
-    selectedColumns.forEach(function(selectedColumn) {
+    selectedColumns.forEach(function(selectedColumn, index) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
-        //console.log("chartData:", chartData); // Log chartData
-        //console.log("columnCategories:", columnCategories); // Log columnCategories
-        // Merge unique xCategories from all selected columns
-        xCategories = [...new Set([...xCategories, ...columnCategories])];
-        //console.log("xCategories:", xCategories); // Log xCategories
+
+        // Assign colors to data series and trendlines based on index
+        var color = getColorByIndex(index);
 
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
@@ -128,7 +124,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                     enabled: true // Enable data labels for the Selected Score series
                 },
                 stroke: {
-                    width: 7
+                    width: 7,
+                    colors: [color] // Assign the same color to the data series
                 }
             },
             {
@@ -137,6 +134,10 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 connectNulls: true,
                 dataLabels: {
                     enabled: false // Disable data labels for the Trendline series
+                },
+                stroke: {
+                    width: 7,
+                    colors: [color] // Assign the same color to the trendline series
                 }
             }
         );
@@ -149,7 +150,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 y: benchmark
             };
         }).reverse();
-        //console.log("benchmarkData:", benchmarkData); // Log benchmarkData
 
         seriesData.push({
             name: 'Benchmark',
@@ -157,23 +157,17 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             connectNulls: true,
             dataLabels: {
                 enabled: false // Disable data labels for the Benchmark series
+            },
+            stroke: {
+                width: 7,
+                colors: ['#FF0000'] // Assign a different color to the Benchmark series
             }
         });
     }
 
-    // Determine the chart type based on selectedChartType
-    var chartType;
-    if (selectedChartType === 'line') {
-        chartType = 'line';
-    } else if (selectedChartType === 'bar') {
-        chartType = 'bar';
-    }
-
-    // Update chart options with the selected chart type
-    var chartOptions = getChartOptions(seriesData, xCategories, chartType);
-    //console.log("chartOptions:", chartOptions); // Log chartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
 }
+
 
 
 
