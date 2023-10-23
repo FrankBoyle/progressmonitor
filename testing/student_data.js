@@ -138,7 +138,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                     enabled: false // Disable data labels for the Trendline series
                 },
                 stroke: {
-                    width: 7,
+                    width: 3,
                     colors: [trendlineColor] // Assign the same color to the trendline series
                 }
             }
