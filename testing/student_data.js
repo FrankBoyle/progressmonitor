@@ -168,8 +168,11 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
 }
 
-
-
+// Define a function to get colors by index
+function getColorByIndex(index) {
+    const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
+    return colors[index % colors.length]; // Use modulo to cycle through colors if there are more series than colors
+}
 
 function getChartOptions(dataSeries, xCategories, selectedChartType) {
     //console.log(selectedChartType);
