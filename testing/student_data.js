@@ -107,7 +107,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
-        var trendlineColor = colors[(index + 1) % colors.length]; // Use a different color for the trendline
 
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
@@ -128,7 +127,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 },
                 stroke: {
                     width: 7,
-                    colors: [scoreColor] // Assign the color to the data series
+                    colors: [scoreColor] // Assign the same color to the data series and trendline
                 }
             },
             {
@@ -140,7 +139,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 },
                 stroke: {
                     width: 3,
-                    colors: [trendlineColor] // Assign a different color to the trendline series
+                    colors: [scoreColor] // Assign the same color to the data series and trendline
                 }
             }
         );
@@ -171,6 +170,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     // Pass seriesData to getChartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
 }
+
 
 function getChartOptions(dataSeries, xCategories, selectedChartType) {
     //console.log(selectedChartType);
