@@ -126,7 +126,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                     enabled: true // Enable data labels for the Selected Score series
                 },
                 stroke: {
-                    width: 7
+                    width: 7,
+                    colors: [scoreColor] // Assign the same color to the data series
                 }
             },
             {
@@ -137,7 +138,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                     enabled: false // Disable data labels for the Trendline series
                 },
                 stroke: {
-                    width: 3
+                    width: 3,
+                    colors: [trendlineColor] // Assign the same color to the trendline series
                 }
             }
         );
@@ -157,12 +159,18 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             connectNulls: true,
             dataLabels: {
                 enabled: false // Disable data labels for the Benchmark series
+            },
+            stroke: {
+                width: 7,
+                colors: ['#FF0000'] // Assign a different color to the Benchmark series
             }
         });
     }
 
-    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, colors));
+    // Pass seriesData to getChartOptions
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
 }
+
 
 
 // Define a function to get colors by index
