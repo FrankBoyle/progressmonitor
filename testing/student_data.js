@@ -177,10 +177,10 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
 
 
-function getChartOptions(dataSeries, xCategories) {
-    console.log(selectedChartType);
+function getChartOptions(dataSeries, xCategories, selectedChartType) {
+    //console.log(selectedChartType);
     var chartType = selectedChartType; // Get the selected chart type
-    console.log(chartType);
+    //console.log(chartType);
 
     return {
         series: dataSeries,
