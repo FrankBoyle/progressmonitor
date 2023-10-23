@@ -237,9 +237,9 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
             curve: 'smooth',
             width: dataSeries.map(series => {  // Set width based on series name
             if (series.name.startsWith('Trendline')) {
-                return 2;  // or whatever dash length you prefer
+                return 1;  // or whatever dash length you prefer
             } else {
-                return 5;  // solid line for others
+                return 3;  // solid line for others
             }
         }),
         },
