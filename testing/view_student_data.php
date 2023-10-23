@@ -138,9 +138,15 @@ if (isset($_GET['metadata_id'])) {
 </table>
 
 <div>
+    <label>Show Trendlines:</label>
+    <input type="checkbox" id="toggleTrendlines" checked> <!-- Checked by default -->
+</div>
+
+<!-- Existing checkboxes for column selection -->
+<div>
     <label>Select Columns to Display:</label>
+    <!-- Existing PHP code to generate checkboxes -->
     <?php
-    // Loop through each score and create checkboxes
     foreach ($scoreNames as $category => $scores) {
         foreach ($scores as $index => $scoreName) {
             $scoreColumnName = 'score' . ($index + 1);
