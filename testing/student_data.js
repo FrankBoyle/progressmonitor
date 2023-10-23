@@ -24,7 +24,7 @@ $(document).ready(function() {
     $("#scoreSelector").change(function() {
         let selectedScore = $(this).val();
         // assuming updateChart needs the current score selection and benchmark
-        updateChart(selectedScore, benchmark); 
+        updateChart(selectedScore, xCategories); 
     });
 
     // Update benchmark value
@@ -114,7 +114,7 @@ function getChartData(scoreField) {
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
-function updateChart(selectedColumns, selectedChartType, xCategories) {
+function updateChart(selectedScore, selectedColumns, selectedChartType, xCategories) {
     console.log('xCategories at update start:', xCategories);
 
     var seriesData = [];
