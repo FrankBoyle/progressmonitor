@@ -175,6 +175,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
     //console.log(selectedChartType);
     var chartType = selectedChartType; // Get the selected chart type
     //console.log(chartType);
+    const colors = dataSeries.map(series => series.stroke.colors[0]);
 
     return {
         series: dataSeries,
@@ -182,6 +183,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
             type: chartType,
             stacked: false,
             width: 600,
+            colors: colors,
             zoom: {
                 type: 'x',
                 enabled: true,   // Ensure zooming is enabled
