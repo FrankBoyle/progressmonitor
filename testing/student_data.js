@@ -94,7 +94,7 @@ function getChartData(scoreField) {
 
 function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
-    console.log("selectedColumns:", selectedColumns); // Log selectedColumns
+    //console.log("selectedColumns:", selectedColumns); // Log selectedColumns
 
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
@@ -104,11 +104,11 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     selectedColumns.forEach(function(selectedColumn) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
-        console.log("chartData:", chartData); // Log chartData
-        console.log("columnCategories:", columnCategories); // Log columnCategories
+        //console.log("chartData:", chartData); // Log chartData
+        //console.log("columnCategories:", columnCategories); // Log columnCategories
         // Merge unique xCategories from all selected columns
         xCategories = [...new Set([...xCategories, ...columnCategories])];
-        console.log("xCategories:", xCategories); // Log xCategories
+        //console.log("xCategories:", xCategories); // Log xCategories
 
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
@@ -149,7 +149,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 y: benchmark
             };
         }).reverse();
-        console.log("benchmarkData:", benchmarkData); // Log benchmarkData
+        //console.log("benchmarkData:", benchmarkData); // Log benchmarkData
 
         seriesData.push({
             name: 'Benchmark',
@@ -171,7 +171,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     // Update chart options with the selected chart type
     var chartOptions = getChartOptions(seriesData, xCategories, chartType);
-    console.log("chartOptions:", chartOptions); // Log chartOptions
+    //console.log("chartOptions:", chartOptions); // Log chartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
 }
 
@@ -327,7 +327,7 @@ $(document).ready(function() {
     $('#metadataIdInput').val(metadata_id);
 
     // Now the input field should have the correct metadata_id value
-    console.log(metadata_id);
+    //console.log(metadata_id);
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -365,7 +365,7 @@ $(document).ready(function() {
             });
     
             // Debugging: Log the response
-            console.log('Response:', response);
+            //console.log('Response:', response);
     
             return response;
         } catch (error) {
@@ -399,12 +399,12 @@ $(document).ready(function() {
             school_id: school_id
 
         };
-        console.log(postData);
+        //console.log(postData);
         //console.log("studentID:", student_id);
 
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
-            console.log(response); // <-- This is the debug line. 
+            //console.log(response); // <-- This is the debug line. 
         
             if (response && response.error && response.error === 'Duplicate date not allowed!') {
                 alert("Duplicate date not allowed!");
