@@ -32,7 +32,8 @@ $(document).ready(function() {
         var value = parseFloat($("#benchmarkValue").val());
         if (!isNaN(value)) {
             benchmark = value;
-    
+            console.log("Benchmark updated:", benchmark); // Debug: check the updated value.
+
             // Retrieve the currently selected columns and chart type within this scope
             var selectedColumns = [];
             $("input[name='selectedColumns[]']:checked").each(function() {
