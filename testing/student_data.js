@@ -375,6 +375,8 @@ function getScoreNamesMap() {
     });
     return scoreNamesMap;
 }
+handleChartUpdate();
+
 });
 
 ////////////////////////////////////////////////
