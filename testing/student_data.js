@@ -18,19 +18,18 @@ $(document).ready(function() {
         updateChart(selectedScore, selectedColumns);
     });
 
-    // Event listener for the "Update Benchmark" button
-    $('#updateBenchmark').click(function() {
-        // Get the values from the input field and the radio buttons
-        var benchmarkValue = parseFloat($('#benchmarkValue').val());
-        //var selectedChartType = $("input[name='chartType']:checked").val();
-
-        // Get other necessary data for the drawChart function
-        var selectedColumns = []; // You need to populate this based on your application's requirements
-        // Example: selectedColumns could be populated based on checkboxes that the user has selected
-
-        // Now call the function to draw your chart with the new settings
-        updateChart(selectedColumns, benchmarkValue);
-    }); 
+    $("#updateBenchmark").click(function() {
+        var value = parseFloat($("#benchmarkValue").val());
+        if (!isNaN(value)) {
+            benchmark = value;
+            var selectedScore = $("#scoreSelector").val();
+            // Retrieve or ensure xCategories is updated before this step
+            // xCategories = ...;  // some logic to get the current xCategories, if needed
+            updateChart(selectedColumns, selectedChartType, xCategories);  // pass xCategories here
+        } else {
+            alert('Please enter a valid benchmark value.');
+        }
+    });    
 
 // Handle checkbox clicks
 $("input[name='selectedColumns[]']").click(function() {
@@ -55,19 +54,8 @@ $("input[name='chartType']").change(function() {
     updateChart(selectedColumns, selectedChartType);
 });
 
-$("#toggleTrendlines").change(function() {
-    // When the trendline checkbox changes state, update the chart accordingly.
-    var selectedColumns = [];
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
-    });
 
-    var selectedChartType = $("input[name='chartType']:checked").val();
-    
-    // Call your update function here to redraw the chart based on checkbox status.
-    updateChart(selectedColumns, selectedChartType, xCategories); // Make sure xCategories is appropriately retrieved or maintained before this step
 });
-
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
@@ -112,7 +100,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
     var scoreNamesMap = getScoreNamesMap();
     var actualScoreName = '';
-    var showTrendlines = $("#toggleTrendlines").is(':checked'); // Check if the trendlines should be displayed
 
     if (!xCategories || !Array.isArray(xCategories)) {
         xCategories = [];  // Make sure xCategories is an array
@@ -129,6 +116,15 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
 
+        // Calculate trendline
+        var trendlineFunction = calculateTrendline(chartData);
+        var trendlineData = chartData.map((item, index) => {
+            return {
+                x: item.x,
+                y: trendlineFunction(index)
+            };
+        });
+
         seriesData.push(
             {
                 name: actualScoreName,
@@ -138,51 +134,48 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 dataLabels: {
                     enabled: true // Enable data labels for the Selected Score series
                 },
-            })
-                    // Calculate trendline and add to seriesData only if showTrendlines is true
-        if (showTrendlines) {
-            var trendlineFunction = calculateTrendline(chartData);
-            var trendlineData = chartData.map((item, index) => {
-                return {
-                    x: item.x,
-                    y: trendlineFunction(index) // calculate y based on trendline function
-                };
-            });
-            seriesData.push(
-                {
-                    name: 'Trendline ' + actualScoreName,
-                    data: trendlineData,
-                    color: scoreColor,  // Set color property here for the series
-                    stroke: {
-                        dashArray: 3, // This makes the line dashed; the number controls the dash length
-                    },
-                    connectNulls: true,
-                    dataLabels: {
-                        enabled: false // Disable data labels for the Trendline series
-                    }
-                });  
-            }  
-        });
+            },
+            {
+                name: 'Trendline ' + actualScoreName,
+                data: trendlineData,
+                color: scoreColor,  // Set color property here for the series
+                stroke: {
+                    dashArray: 3, // This makes the line dashed; the number controls the dash length
+                },
+                connectNulls: true,
+                dataLabels: {
+                    enabled: false // Disable data labels for the Trendline series
+                },
+            }
+        );
+    });
 
-        if (benchmark !== null && !isNaN(benchmark)) {  // Check if benchmark is a valid number
-            console.log(benchmark);
-            var benchmarkData = xCategories.map(date => {
-                return [date, benchmark];  // Returning as an array [x, y]
-            });
+    if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
+        console.log(benchmark);
+        var benchmarkData = xCategories.map(date => {
+            return {
+                x: date,
+                y: benchmark
+            };
+        }).reverse();  // Based on your code, you might or might not need to reverse the array
     
-            seriesData.push({
-                name: 'Benchmark',
-                type: 'line',  // Explicitly set type to line for benchmark regardless of the chart type
-                data: benchmarkData,
-                // ... [Other properties as needed]
-            });
-        } else {
-            console.log("No benchmark value available or invalid benchmark.");
-        }
-    
-        // When updating the chart, we're now including the benchmark series.
-        window.chart.updateSeries(seriesData, true);
+        seriesData.push({
+            name: 'Benchmark',
+            data: benchmarkData,
+            connectNulls: true,
+            dataLabels: {
+                enabled: false // Disable data labels for the Benchmark series
+            },
+        });
+    } else {
+        // Log for debugging purposes, or handle the lack of a benchmark value appropriately
+        console.log("No benchmark value available.");
     }
+    
+
+    // Pass seriesData to getChartOptions
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
+}
 
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
     //console.log(selectedChartType);
@@ -203,9 +196,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     return {
         series: dataSeries,
         chart: {
-            type: selectedChartType,
-            stacked: false,
-            defaultSeriesType: selectedChartType, // normal chart type
+            type: chartType,
             stacked: false,
             width: 600,
             colors: colors,
@@ -346,23 +337,6 @@ function calculateTrendline(data) {
     };
 }
 
-async function handleChartUpdate() {
-    try {
-        // Assuming updateChart returns the series data after doing its operations
-        const newSeriesData = await updateChart(selectedColumns, selectedChartType);
-
-        // Check and ensure newSeriesData is valid
-        if (newSeriesData && Array.isArray(newSeriesData) /* additional validations here if needed */) {
-            window.chart.updateSeries(newSeriesData, true);
-        } else {
-            throw new Error("Invalid series data");
-        }
-    } catch (error) {
-        console.error("An error occurred while updating the chart: ", error);
-        // Handle the error (e.g., show an error message to the user)
-    }
-}
-
 function getScoreNamesMap() {
     var scoreNamesMap = {};
     // Assume each checkbox is immediately contained within a label element as per your HTML
@@ -375,9 +349,6 @@ function getScoreNamesMap() {
     });
     return scoreNamesMap;
 }
-handleChartUpdate();
-
-});
 
 ////////////////////////////////////////////////
 
