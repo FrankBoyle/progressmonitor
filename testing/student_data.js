@@ -19,23 +19,17 @@ $(document).ready(function() {
     });
 
     $("#updateBenchmark").click(function() {
-        console.log("Update benchmark clicked"); // Check if the event triggers
-    
         var value = parseFloat($("#benchmarkValue").val());
-        console.log("Parsed value:", value); // Check the parsed value
-    
         if (!isNaN(value)) {
             benchmark = value;
-            console.log("Updated benchmark:", benchmark); // Verify the updated value
-    
             var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore, selectedColumns);
+            // Retrieve or ensure xCategories is updated before this step
+            // xCategories = ...;  // some logic to get the current xCategories, if needed
+            updateChart(selectedColumns, selectedChartType, xCategories);  // pass xCategories here
         } else {
-            console.log("Invalid benchmark value entered."); // Debug line for invalid input
             alert('Please enter a valid benchmark value.');
         }
-    });
-    
+    });    
 
 // Handle checkbox clicks
 $("input[name='selectedColumns[]']").click(function() {
