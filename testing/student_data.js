@@ -138,6 +138,9 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 name: 'Trendline ' + actualScoreName,
                 data: trendlineData,
                 color: scoreColor,  // Set color property here for the series
+                stroke: {
+                    dashArray: 3, // This makes the line dashed; the number controls the dash length
+                },
                 connectNulls: true,
                 dataLabels: {
                     enabled: false // Disable data labels for the Trendline series
@@ -230,8 +233,15 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
         },
         
         stroke: {
+            show: true,
             curve: 'smooth',
-            width: dataSeries.map(series => series.name === actualScoreName ? 3 : 1.5)  // Set width based on series name
+            width: dataSeries.map(series => {  // Set width based on series name
+            if (series.name.startsWith('Trendline')) {
+                return 5;  // or whatever dash length you prefer
+            } else {
+                return 0;  // solid line for others
+            }
+        }),
         },
 
         markers: {
