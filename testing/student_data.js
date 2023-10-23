@@ -18,18 +18,19 @@ $(document).ready(function() {
         updateChart(selectedScore, selectedColumns);
     });
 
-    $("#updateBenchmark").click(function() {
-        var value = parseFloat($("#benchmarkValue").val());
-        if (!isNaN(value)) {
-            benchmark = value;
-            var selectedScore = $("#scoreSelector").val();
-            // Retrieve or ensure xCategories is updated before this step
-            // xCategories = ...;  // some logic to get the current xCategories, if needed
-            updateChart(selectedColumns, selectedChartType, xCategories);  // pass xCategories here
-        } else {
-            alert('Please enter a valid benchmark value.');
-        }
-    });    
+    // Event listener for the "Update Benchmark" button
+    $('#updateBenchmark').click(function() {
+        // Get the values from the input field and the radio buttons
+        var benchmarkValue = parseFloat($('#benchmarkValue').val());
+        var selectedChartType = $("input[name='chartType']:checked").val();
+
+        // Get other necessary data for the drawChart function
+        var selectedColumns = []; // You need to populate this based on your application's requirements
+        // Example: selectedColumns could be populated based on checkboxes that the user has selected
+
+        // Now call the function to draw your chart with the new settings
+        drawChart(selectedColumns, selectedChartType, benchmarkValue);
+    }); 
 
 // Handle checkbox clicks
 $("input[name='selectedColumns[]']").click(function() {
