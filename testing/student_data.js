@@ -121,6 +121,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             {
                 name: 'Selected Score ' + selectedColumn,
                 data: chartData,
+                color: scoreColor,  // Set color property here for the series
                 connectNulls: true,
                 dataLabels: {
                     enabled: true // Enable data labels for the Selected Score series
@@ -129,6 +130,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             {
                 name: 'Trendline ' + selectedColumn,
                 data: trendlineData,
+                color: scoreColor,  // Set color property here for the series
                 connectNulls: true,
                 dataLabels: {
                     enabled: false // Disable data labels for the Trendline series
@@ -178,7 +180,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
     } else {
         colors = ['#000000']; // default color array if dataSeries is invalid
     }
-    
+
     return {
         series: dataSeries,
         chart: {
