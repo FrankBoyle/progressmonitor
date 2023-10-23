@@ -162,10 +162,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             dataLabels: {
                 enabled: false // Disable data labels for the Benchmark series
             },
-            stroke: {
-                width: 7,
-                colors: ['#FF0000'] // Assign a different color to the Benchmark series
-            }
         });
     } else {
         // Log for debugging purposes, or handle the lack of a benchmark value appropriately
@@ -225,7 +221,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
 
         dataLabels: {
             enabled: true,
-            enabledOnSeries: [0],  // enable only on the first series
+            enabledOnSeries: [0,2,4,6,8,10],  // enable only on the first series
             offsetY: -10,
             style: {
                 fontSize: '12px',
@@ -235,7 +231,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
         
         stroke: {
             curve: 'smooth',
-            width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1.5)  // Set width based on series name
+            width: dataSeries.map(series => series.name === actualScoreName ? 3 : 1.5)  // Set width based on series name
         },
 
         markers: {
