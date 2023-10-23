@@ -44,7 +44,7 @@ $(document).ready(function() {
             var selectedChartType = $("input[name='chartType']:checked").val();
     
             // Now, 'selectedColumns' is defined, and you can use it in your update function
-            updateChart(selectedColumns, selectedChartType, benchmark); // pass necessary arguments
+            updateChart(selectedColumns, selectedChartType, xCategories); // pass necessary arguments
         } else {
             alert('Please enter a valid benchmark value.');
         }
@@ -58,7 +58,7 @@ $(document).ready(function() {
         });
         let selectedChartType = $("input[name='chartType']:checked").val();
         // Call updateChart with necessary parameters whenever checkboxes change
-        updateChart(selectedColumns, selectedChartType, benchmark); // update the chart with the current selection
+        updateChart(selectedColumns, selectedChartType, xCategories); // update the chart with the current selection
     });
 
     // Handle chart type changes (radio buttons)
@@ -70,7 +70,7 @@ $(document).ready(function() {
             selectedColumns.push($(this).val());
         });
         // Update the chart based on the new chart type
-        updateChart(selectedColumns, selectedChartType, benchmark);
+        updateChart(selectedColumns, selectedChartType, xCategories);
     });
 });
 
@@ -132,7 +132,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     }
 
     selectedColumns.forEach(function(selectedColumn, index) {
-        var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
+        var chartDataResult = getChartData(selectedScore); // This is an example; your actual call might differ.
+        xCategories = chartDataResult.xCategories; // This line is crucial.
         actualScoreName = scoreNamesMap[selectedColumn];
 
         // Assign colors to data series and trendlines based on index
