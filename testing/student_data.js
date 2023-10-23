@@ -115,6 +115,8 @@ function getChartData(scoreField) {
 }
 
 function updateChart(selectedColumns, selectedChartType, xCategories) {
+    console.log('xCategories at update start:', xCategories);
+
     var seriesData = [];
     // Define colors for scores and their trendlines
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
@@ -174,6 +176,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         console.log("Benchmark value:", benchmark); // Debugging line
     
         // Make sure we have a valid set of xCategories for mapping.
+        console.log('xCategories before error check:', xCategories);
+
         if (!xCategories || xCategories.length === 0) {
             console.error("xCategories is empty or not valid.");
         } else {
