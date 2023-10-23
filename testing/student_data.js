@@ -94,6 +94,8 @@ function getChartData(scoreField) {
 
 function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
+    // Define colors for scores and their trendlines
+    const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
 
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
@@ -104,7 +106,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
 
         // Assign colors to data series and trendlines based on index
-        var color = getColorByIndex(index);
+        var scoreColor = colors[index % colors.length];
+        var trendlineColor = scoreColor;
 
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
@@ -117,7 +120,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
         seriesData.push(
             {
-                name: 'Selected Score ' + selectedColumn,
+                name: selectedColumn,
                 data: chartData,
                 connectNulls: true,
                 dataLabels: {
@@ -220,12 +223,12 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
         
         stroke: {
             curve: 'smooth',
-            width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1.5)  // Set width based on series name
+            width: dataSeries.map(series => series.name === selectedColumn ? 3 : 1.5)  // Set width based on series name
         },
 
         markers: {
             size: dataSeries.map(series => {
-                if (series.name === 'Selected Score') {
+                if (series.name === selectedColumn) {
                     return 5;  // or whatever size you want for the "Selected Score" series
                 } else {
                     return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
