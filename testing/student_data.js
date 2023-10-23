@@ -54,7 +54,18 @@ $("input[name='chartType']").change(function() {
     updateChart(selectedColumns, selectedChartType);
 });
 
+$("#toggleTrendlines").change(function() {
+    // When the trendline checkbox changes state, update the chart accordingly.
+    var selectedColumns = [];
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
+    });
 
+    var selectedChartType = $("input[name='chartType']:checked").val();
+    
+    // Call your update function here to redraw the chart based on checkbox status.
+    updateChart(selectedColumns, selectedChartType, xCategories); // Make sure xCategories is appropriately retrieved or maintained before this step
+});
 });
 
 function initializeChart() {
@@ -100,6 +111,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
     var scoreNamesMap = getScoreNamesMap();
     var actualScoreName = '';
+    var showTrendlines = $("#toggleTrendlines").is(':checked'); // Check if the trendlines should be displayed
 
     if (!xCategories || !Array.isArray(xCategories)) {
         xCategories = [];  // Make sure xCategories is an array
@@ -116,15 +128,16 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
 
-        // Calculate trendline
-        var trendlineFunction = calculateTrendline(chartData);
-        var trendlineData = chartData.map((item, index) => {
-            return {
-                x: item.x,
-                y: trendlineFunction(index)
-            };
-        });
-
+        // Calculate trendline and add to seriesData only if showTrendlines is true
+        if (showTrendlines) {
+            var trendlineFunction = calculateTrendline(chartData);
+            var trendlineData = chartData.map((item, index) => {
+                return {
+                    x: item.x,
+                    y: trendlineFunction(index) // calculate y based on trendline function
+                };
+            });
+            
         seriesData.push(
             {
                 name: actualScoreName,
