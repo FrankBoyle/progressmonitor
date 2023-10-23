@@ -67,15 +67,10 @@ $("input[name='chartType']").change(function() {
 });
 
 function initializeChart() {
-    var series = getChartData(); // your method that builds the series data
-    var options = getChartOptions(); // your method that builds the chart options
-    // Check if series and options are valid (not null or empty)
-    if(series && options) {
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-    } else {
-        console.error("Chart data or options are missing!");
-    }
+    
+    window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
+    window.chart.render();
+
 }
 
 function getChartData(scoreField) {
