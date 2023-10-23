@@ -128,16 +128,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
 
-        // Calculate trendline and add to seriesData only if showTrendlines is true
-        if (showTrendlines) {
-            var trendlineFunction = calculateTrendline(chartData);
-            var trendlineData = chartData.map((item, index) => {
-                return {
-                    x: item.x,
-                    y: trendlineFunction(index) // calculate y based on trendline function
-                };
-            });
-            
         seriesData.push(
             {
                 name: actualScoreName,
@@ -147,21 +137,31 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 dataLabels: {
                     enabled: true // Enable data labels for the Selected Score series
                 },
-            },
-            {
-                name: 'Trendline ' + actualScoreName,
-                data: trendlineData,
-                color: scoreColor,  // Set color property here for the series
-                stroke: {
-                    dashArray: 3, // This makes the line dashed; the number controls the dash length
-                },
-                connectNulls: true,
-                dataLabels: {
-                    enabled: false // Disable data labels for the Trendline series
-                },
-            }
-        );
-    });
+            })
+                    // Calculate trendline and add to seriesData only if showTrendlines is true
+        if (showTrendlines) {
+            var trendlineFunction = calculateTrendline(chartData);
+            var trendlineData = chartData.map((item, index) => {
+                return {
+                    x: item.x,
+                    y: trendlineFunction(index) // calculate y based on trendline function
+                };
+            });
+            seriesData.push(
+                {
+                    name: 'Trendline ' + actualScoreName,
+                    data: trendlineData,
+                    color: scoreColor,  // Set color property here for the series
+                    stroke: {
+                        dashArray: 3, // This makes the line dashed; the number controls the dash length
+                    },
+                    connectNulls: true,
+                    dataLabels: {
+                        enabled: false // Disable data labels for the Trendline series
+                    }
+                });  
+            }  
+        });
 
     if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
         console.log(benchmark);
@@ -188,7 +188,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     // Pass seriesData to getChartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
-}
+};
 
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
     //console.log(selectedChartType);
