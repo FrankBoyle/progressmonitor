@@ -22,14 +22,14 @@ $(document).ready(function() {
     $('#updateBenchmark').click(function() {
         // Get the values from the input field and the radio buttons
         var benchmarkValue = parseFloat($('#benchmarkValue').val());
-        var selectedChartType = $("input[name='chartType']:checked").val();
+        //var selectedChartType = $("input[name='chartType']:checked").val();
 
         // Get other necessary data for the drawChart function
         var selectedColumns = []; // You need to populate this based on your application's requirements
         // Example: selectedColumns could be populated based on checkboxes that the user has selected
 
         // Now call the function to draw your chart with the new settings
-        updateChart(selectedColumns, selectedChartType, benchmarkValue);
+        updateChart(selectedColumns, benchmarkValue);
     }); 
 
 // Handle checkbox clicks
