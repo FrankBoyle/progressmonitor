@@ -170,26 +170,30 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         );
     });
 
-    if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
-        console.log(benchmark);
-        var benchmarkData = xCategories.map(date => {
-            return {
-                x: date,
-                y: benchmark
-            };
-        }).reverse();  // Based on your code, you might or might not need to reverse the array
+    if (benchmark !== null) {
+        console.log("Benchmark value:", benchmark); // Debugging line
     
-        seriesData.push({
-            name: 'Benchmark',
-            data: benchmarkData,
-            connectNulls: true,
-            dataLabels: {
-                enabled: false // Disable data labels for the Benchmark series
-            },
-        });
+        // Make sure we have a valid set of xCategories for mapping.
+        if (!xCategories || xCategories.length === 0) {
+            console.error("xCategories is empty or not valid.");
+        } else {
+            // Create a data series for the benchmark that spans all categories/dates
+            var benchmarkData = xCategories.map(date => {
+                return {
+                    x: date,
+                    y: benchmark
+                };
+            });
+    
+            seriesData.push({
+                name: 'Benchmark',
+                data: benchmarkData,
+                type: 'line', // Ensure this is set as your chart might require a specific series type
+                // ... any other necessary properties for your benchmark line, like color, dash style, etc.
+            });
+        }
     } else {
-        // Log for debugging purposes, or handle the lack of a benchmark value appropriately
-        console.log("No benchmark value available.");
+        console.log("No benchmark value available."); // Debugging line
     }
     
 
