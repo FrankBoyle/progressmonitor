@@ -167,8 +167,18 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
     //console.log(selectedChartType);
     var chartType = selectedChartType; // Get the selected chart type
     //console.log(chartType);
-    const colors = dataSeries.map(series => series.stroke.colors[0]);
-
+    let colors;
+    if (dataSeries && dataSeries.length > 0) {
+        colors = dataSeries.map(series => {
+            if (series.stroke && series.stroke.colors && series.stroke.colors[0]) {
+                return series.stroke.colors[0];
+            }
+            return '#000000'; // default color if no color is defined for a series
+        });
+    } else {
+        colors = ['#000000']; // default color array if dataSeries is invalid
+    }
+    
     return {
         series: dataSeries,
         chart: {
