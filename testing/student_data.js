@@ -164,32 +164,31 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             }  
         });
 
-    if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
-        console.log(benchmark);
-        var benchmarkData = xCategories.map(date => {
-            return {
-                x: date,
-                y: benchmark
+        if (benchmark !== null) { // Only proceed if benchmark has a meaningful value
+            var benchmarkData = xCategories.map(date => {
+                return {
+                    x: date,
+                    y: benchmark
+                };
+            });
+    
+            // Here, we're ensuring the benchmark series is always of type 'line'.
+            var benchmarkSeries = {
+                name: 'Benchmark',
+                type: 'line',  // This ensures the benchmark is always a line.
+                data: benchmarkData,
+                // ... any additional styling or configuration for the line
             };
-        }).reverse();  // Based on your code, you might or might not need to reverse the array
     
-        seriesData.push({
-            name: 'Benchmark',
-            data: benchmarkData,
-            connectNulls: true,
-            dataLabels: {
-                enabled: false // Disable data labels for the Benchmark series
-            },
-        });
-    } else {
-        // Log for debugging purposes, or handle the lack of a benchmark value appropriately
-        console.log("No benchmark value available.");
+            // Now, we add the benchmark series to the chart data.
+            seriesData.push(benchmarkSeries);
+        } else {
+            console.log("No benchmark value available.");
+        }
+    
+        // When updating the chart, we're now including the benchmark series.
+        window.chart.updateSeries(seriesData, true);
     }
-    
-
-    // Pass seriesData to getChartOptions
-    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
-};
 
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
     //console.log(selectedChartType);
