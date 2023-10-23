@@ -106,6 +106,9 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
     var scoreNamesMap = getScoreNamesMap();
 
+    if (!xCategories || !Array.isArray(xCategories)) {
+        xCategories = [];  // Make sure xCategories is an array
+    }
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
         selectedColumns = [selectedColumns]; // Ensure it's an array
