@@ -173,9 +173,10 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     var chartOptions = getChartOptions(seriesData, xCategories, chartType);
     //console.log("chartOptions:", chartOptions); // Log chartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
+    console.log(selectedChartType);
 }
 
-console.log(selectedChartType);
+
 
 function getChartOptions(dataSeries, xCategories) {
     var chartType = selectedChartType; // Get the selected chart type
