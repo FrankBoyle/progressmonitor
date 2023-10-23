@@ -128,7 +128,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 },
                 stroke: {
                     width: 7,
-                    colors: [color] // Assign the same color to the data series
+                    colors: [scoreColor] // Assign the same color to the data series
                 }
             },
             {
@@ -140,7 +140,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 },
                 stroke: {
                     width: 7,
-                    colors: [color] // Assign the same color to the trendline series
+                    colors: [trendlineColor] // Assign the same color to the trendline series
                 }
             }
         );
