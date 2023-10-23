@@ -125,10 +125,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 dataLabels: {
                     enabled: true // Enable data labels for the Selected Score series
                 },
-                stroke: {
-                    width: 7,
-                    colors: [scoreColor] // Assign the same color to the data series and trendline
-                }
             },
             {
                 name: 'Trendline ' + selectedColumn,
@@ -137,15 +133,11 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 dataLabels: {
                     enabled: false // Disable data labels for the Trendline series
                 },
-                stroke: {
-                    width: 3,
-                    colors: [scoreColor] // Assign the same color to the data series and trendline
-                }
             }
         );
     });
 
-    if (benchmark !== null) {
+    if (typeof benchmark !== 'undefined' && benchmark !== null) {
         var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
@@ -170,7 +162,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     // Pass seriesData to getChartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
 }
-
 
 function getChartOptions(dataSeries, xCategories, selectedChartType) {
     //console.log(selectedChartType);
