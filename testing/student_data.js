@@ -29,10 +29,21 @@ $(document).ready(function() {
 
     // Update benchmark value
     $("#updateBenchmark").click(function() {
-        let value = parseFloat(benchmarkInput.val());
+        var value = parseFloat($("#benchmarkValue").val());
         if (!isNaN(value)) {
             benchmark = value;
-            updateChart(selectedColumns, selectedChartType); // assuming updateChart needs these parameters
+    
+            // Retrieve the currently selected columns and chart type within this scope
+            var selectedColumns = [];
+            $("input[name='selectedColumns[]']:checked").each(function() {
+                selectedColumns.push($(this).val());
+            });
+            
+            // Also, determine the currently selected chart type
+            var selectedChartType = $("input[name='chartType']:checked").val();
+    
+            // Now, 'selectedColumns' is defined, and you can use it in your update function
+            updateChart(selectedColumns, selectedChartType); // pass necessary arguments
         } else {
             alert('Please enter a valid benchmark value.');
         }
