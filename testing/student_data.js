@@ -141,15 +141,14 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         );
     });
 
-    if (typeof benchmark !== 'number') {
-        console.error('Unexpected benchmark value:', benchmark);
+    if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
         var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
                 y: benchmark
             };
-        }).reverse();
-
+        }).reverse();  // Based on your code, you might or might not need to reverse the array
+    
         seriesData.push({
             name: 'Benchmark',
             data: benchmarkData,
@@ -162,7 +161,11 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 colors: ['#FF0000'] // Assign a different color to the Benchmark series
             }
         });
+    } else {
+        // Log for debugging purposes, or handle the lack of a benchmark value appropriately
+        console.log("No benchmark value available.");
     }
+    
 
     // Pass seriesData to getChartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
