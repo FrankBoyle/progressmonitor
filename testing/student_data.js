@@ -209,7 +209,9 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     return {
         series: dataSeries,
         chart: {
-            type: chartType,
+            type: selectedChartType,
+            stacked: false,
+            defaultSeriesType: selectedChartType, // normal chart type
             stacked: false,
             width: 600,
             colors: colors,
