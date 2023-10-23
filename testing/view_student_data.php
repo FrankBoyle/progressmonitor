@@ -137,28 +137,6 @@ if (isset($_GET['metadata_id'])) {
     <?php endif; ?>
 </table>
 
-<label>Select Score to Display:</label>
-<select id="scoreSelector">
-    <?php
-    // Check if there are categories and scores
-    if (!empty($scoreNames)) {
-        // Loop through each category and its scores
-        foreach ($scoreNames as $category => $scores) {
-            foreach ($scores as $index => $scoreName) {
-                // Creating the option element
-                echo '<option value="' . htmlspecialchars('score' . ($index + 1)) . '">';
-                echo htmlspecialchars($scoreName);
-                echo '</option>';
-            }
-        }
-    } else {
-        // In case there are no scores, an option to reflect that
-        echo '<option value="">No scores available</option>';
-    }
-    ?>
-</select>
-
-<!-- HTML -->
 <div>
     <label>Select Columns to Display:</label>
     <?php

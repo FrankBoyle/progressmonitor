@@ -96,6 +96,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
     // Define colors for scores and their trendlines
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
+    var scoreNamesMap = getScoreNamesMap();
 
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
@@ -104,6 +105,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     selectedColumns.forEach(function(selectedColumn, index) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
+        var actualScoreName = scoreNamesMap[selectedColumn];
 
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
@@ -119,7 +121,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
         seriesData.push(
             {
-                name: 'Selected Score ' + selectedColumn,
+                name: actualScoreName,
                 data: chartData,
                 color: scoreColor,  // Set color property here for the series
                 connectNulls: true,
@@ -128,7 +130,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 },
             },
             {
-                name: 'Trendline ' + selectedColumn,
+                name: 'Trendline ' + actualScoreName,
                 data: trendlineData,
                 color: scoreColor,  // Set color property here for the series
                 connectNulls: true,
@@ -316,6 +318,19 @@ function calculateTrendline(data) {
     return function (x) {
         return slope * x + intercept;
     };
+}
+
+function getScoreNamesMap() {
+    var scoreNamesMap = {};
+    // Assume each checkbox is immediately contained within a label element as per your HTML
+    $('input[name="selectedColumns[]"]').each(function() {
+        var $checkbox = $(this);
+        // The parent label's text is the score name
+        var scoreName = $checkbox.parent().text().trim();
+        var checkboxValue = $checkbox.val();
+        scoreNamesMap[checkboxValue] = scoreName;
+    });
+    return scoreNamesMap;
 }
 
 ////////////////////////////////////////////////
