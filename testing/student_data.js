@@ -173,7 +173,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     
 
     // Pass seriesData to getChartOptions
-    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
 }
 
 function getChartOptions(dataSeries, xCategories, selectedChartType) {
