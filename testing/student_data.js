@@ -3,83 +3,63 @@ var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 
 $(document).ready(function() {
-    // Assuming 'initializeChart' is a function that creates your chart with default or initial settings.
     initializeChart();
 
-    // Automatic selection of the first checkbox upon loading
-    let checkboxes = $("input[name='selectedColumns[]']"); // correct selector for your checkboxes
-    if (checkboxes.length > 0) {
-        checkboxes[0].checked = true;
-        checkboxes.trigger('change'); // assuming 'change' is the event that the chart listens to
-    }
-
-    // Parse the benchmark value
-    let benchmarkInput = $("#benchmarkValue");
-    benchmark = parseFloat(benchmarkInput.val());
+    benchmark = parseFloat($("#benchmarkValue").val());
     if (isNaN(benchmark)) {
-        benchmark = null;  // handle non-numeric input
+        benchmark = null;  // Default benchmark value if the input is not provided
     }
 
-    // Handle changes in score selection
+    // Initialize selectedColumns as an empty array
+    var selectedColumns = [];
+
     $("#scoreSelector").change(function() {
-        let selectedScore = $(this).val();
-        // assuming updateChart needs the current score selection and benchmark
-        updateChart(selectedScore, xCategories); 
+        var selectedScore = $(this).val();
+        updateChart(selectedScore, selectedColumns);
     });
 
-    // Update benchmark value
     $("#updateBenchmark").click(function() {
         var value = parseFloat($("#benchmarkValue").val());
         if (!isNaN(value)) {
             benchmark = value;
-            console.log("Benchmark updated:", benchmark); // Debug: check the updated value.
-
-            // Retrieve the currently selected columns and chart type within this scope
-            var selectedColumns = [];
-            $("input[name='selectedColumns[]']:checked").each(function() {
-                selectedColumns.push($(this).val());
-            });
-            
-            // Also, determine the currently selected chart type
-            var selectedChartType = $("input[name='chartType']:checked").val();
-    
-            // Now, 'selectedColumns' is defined, and you can use it in your update function
-            updateChart(selectedColumns, selectedChartType, xCategories); // pass necessary arguments
+            var selectedScore = $("#scoreSelector").val();
+            // Retrieve or ensure xCategories is updated before this step
+            // xCategories = ...;  // some logic to get the current xCategories, if needed
+            updateChart(selectedColumns, selectedChartType, xCategories);  // pass xCategories here
         } else {
             alert('Please enter a valid benchmark value.');
         }
-    });
+    });    
 
-    // Handle checkbox changes for selected columns
-    $("input[name='selectedColumns[]']").change(function() {
-        let selectedColumns = [];
-        $("input[name='selectedColumns[]']:checked").each(function() {
-            selectedColumns.push($(this).val());
-        });
-        let selectedChartType = $("input[name='chartType']:checked").val();
-        // Call updateChart with necessary parameters whenever checkboxes change
-        updateChart(selectedColumns, selectedChartType, xCategories); // update the chart with the current selection
+// Handle checkbox clicks
+$("input[name='selectedColumns[]']").click(function() {
+    var selectedColumns = [];
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
     });
+    var selectedChartType = $("input[name='chartType']:checked").val();
+    updateChart(selectedColumns, selectedChartType);
+});
 
-    // Handle chart type changes (radio buttons)
-    $("input[name='chartType']").change(function() {
-        let selectedChartType = $(this).val();
-        // Retrieve all selected columns again since it may have changed
-        let selectedColumns = [];
-        $("input[name='selectedColumns[]']:checked").each(function() {
-            selectedColumns.push($(this).val());
-        });
-        // Update the chart based on the new chart type
-        updateChart(selectedColumns, selectedChartType, xCategories);
+// Handle radio button clicks for chart type
+$("input[name='chartType']").change(function() {
+    var selectedColumns = [];
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
     });
+    var selectedChartType = $(this).val();
+    console.log("Selected Chart Type:", selectedChartType); // Log the selected chart type
+
+    // Call the updateChart function with the selected columns and chart type
+    updateChart(selectedColumns, selectedChartType);
 });
 
 
+});
+
 function initializeChart() {
-    
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
     window.chart.render();
-
 }
 
 function getChartData(scoreField) {
@@ -88,13 +68,12 @@ function getChartData(scoreField) {
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
-        var scoreValueText = $(this).find('td[data-field-name="' + scoreField + '"]').text();
-        var scoreValue = parseFloat(scoreValueText);
+        var scoreValue = $(this).find('td[data-field-name="' + scoreField + '"]').text();
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
                 x: weekStartDate,  // Directly use the date string
-                y: scoreValue
+                y: parseFloat(scoreValue)
             });
 
             xCategories.push(weekStartDate);
@@ -109,17 +88,13 @@ function getChartData(scoreField) {
     const sortedCategories = xCategories.sort((a, b) => {
         return new Date(a) - new Date(b);
     });
-    // If your data needs to be sorted, do it here before returning
-    chartData.sort((a, b) => new Date(a.x) - new Date(b.x));
-    xCategories.sort((a, b) => new Date(a) - new Date(b));
+
     xCategories = sortedCategories;
 
-    return { chartData, xCategories };
+    return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
-function updateChart(selectedScore, selectedColumns, selectedChartType, xCategories) {
-    console.log('xCategories at update start:', xCategories);
-
+function updateChart(selectedColumns, selectedChartType, xCategories) {
     var seriesData = [];
     // Define colors for scores and their trendlines
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
@@ -135,15 +110,14 @@ function updateChart(selectedScore, selectedColumns, selectedChartType, xCategor
     }
 
     selectedColumns.forEach(function(selectedColumn, index) {
-        var chartDataResult = getChartData(selectedScore); // This is an example; your actual call might differ.
-        xCategories = chartDataResult.xCategories; // This line is crucial.
+        var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
         actualScoreName = scoreNamesMap[selectedColumn];
 
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
 
         // Calculate trendline
-        var trendlineFunction = calculateTrendline(chartDataResult.chartData); // Assuming chartDataResult.chartData is your data array
+        var trendlineFunction = calculateTrendline(chartData);
         var trendlineData = chartData.map((item, index) => {
             return {
                 x: item.x,
@@ -176,32 +150,26 @@ function updateChart(selectedScore, selectedColumns, selectedChartType, xCategor
         );
     });
 
-    if (benchmark !== null) {
-        console.log("Benchmark value:", benchmark); // Debugging line
+    if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
+        console.log(benchmark);
+        var benchmarkData = xCategories.map(date => {
+            return {
+                x: date,
+                y: benchmark
+            };
+        }).reverse();  // Based on your code, you might or might not need to reverse the array
     
-        // Make sure we have a valid set of xCategories for mapping.
-        console.log('xCategories before error check:', xCategories);
-
-        if (!xCategories || xCategories.length === 0) {
-            console.error("xCategories is empty or not valid.");
-        } else {
-            // Create a data series for the benchmark that spans all categories/dates
-            var benchmarkData = xCategories.map(date => {
-                return {
-                    x: date,
-                    y: benchmark
-                };
-            });
-    
-            seriesData.push({
-                name: 'Benchmark',
-                data: benchmarkData,
-                type: 'line', // Ensure this is set as your chart might require a specific series type
-                // ... any other necessary properties for your benchmark line, like color, dash style, etc.
-            });
-        }
+        seriesData.push({
+            name: 'Benchmark',
+            data: benchmarkData,
+            connectNulls: true,
+            dataLabels: {
+                enabled: false // Disable data labels for the Benchmark series
+            },
+        });
     } else {
-        console.log("No benchmark value available."); // Debugging line
+        // Log for debugging purposes, or handle the lack of a benchmark value appropriately
+        console.log("No benchmark value available.");
     }
     
 
@@ -342,32 +310,32 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 }
 
 function calculateTrendline(data) {
-    var n = data.length;
-    var sum_x = 0;
-    var sum_y = 0;
-    var sum_xy = 0;
-    var sum_xx = 0;
+    var sumX = 0;
+    var sumY = 0;
+    var sumXY = 0;
+    var sumXX = 0;
     var count = 0;
 
-    // Calculate the sums needed for the linear regression formula
-    data.forEach(function(d) {
-        sum_x += new Date(d.x).getTime();
-        sum_y += d.y;
-        sum_xy += (new Date(d.x).getTime() * d.y);
-        sum_xx += (new Date(d.x).getTime() * new Date(d.x).getTime());
-        count++;
+    data.forEach(function (point, index) {
+        var x = index; // Use index as the x value
+        var y = point.y;
+
+        if (y !== null) {
+            sumX += x;
+            sumY += y;
+            sumXY += x * y;
+            sumXX += x * x;
+            count++;
+        }
     });
 
-    // Calculate the trendline's slope and y-intercept
-    var m = (count*sum_xy - sum_x*sum_y) / (count*sum_xx - sum_x*sum_x);
-    var b = (sum_y/count) - (m*sum_x)/count;
+    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / count;
 
-    // We now return a function that represents the line equation
-    return function(x) {
-        return m*x + b;
-    }
+    return function (x) {
+        return slope * x + intercept;
+    };
 }
-
 
 function getScoreNamesMap() {
     var scoreNamesMap = {};
