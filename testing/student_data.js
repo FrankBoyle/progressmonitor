@@ -179,11 +179,11 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
 function getChartOptions(dataSeries, xCategories) {
     var chartType = selectedChartType; // Get the selected chart type
-    console.log(selectedChartType);
+
     return {
         series: dataSeries,
         chart: {
-            type: chartType,
+            type: selectedChartType,
             stacked: false,
             width: 600,
             zoom: {
