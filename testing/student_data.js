@@ -107,7 +107,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
-        var trendlineColor = scoreColor;
+        var trendlineColor = colors[(index + 1) % colors.length]; // Use a different color for the trendline
+
         // Calculate trendline
         var trendlineFunction = calculateTrendline(chartData);
         var trendlineData = chartData.map((item, index) => {
@@ -127,7 +128,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 },
                 stroke: {
                     width: 7,
-                    colors: [scoreColor] // Assign the same color to the data series
+                    colors: [scoreColor] // Assign the color to the data series
                 }
             },
             {
@@ -139,7 +140,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 },
                 stroke: {
                     width: 3,
-                    colors: [trendlineColor] // Assign the same color to the trendline series
+                    colors: [trendlineColor] // Assign a different color to the trendline series
                 }
             }
         );
@@ -169,14 +170,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
 
     // Pass seriesData to getChartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
-}
-
-
-
-// Define a function to get colors by index
-function getColorByIndex(index) {
-    const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
-    return colors[index % colors.length]; // Use modulo to cycle through colors if there are more series than colors
 }
 
 function getChartOptions(dataSeries, xCategories, selectedChartType) {
