@@ -44,7 +44,7 @@ $(document).ready(function() {
             var selectedChartType = $("input[name='chartType']:checked").val();
     
             // Now, 'selectedColumns' is defined, and you can use it in your update function
-            updateChart(selectedColumns, selectedChartType); // pass necessary arguments
+            updateChart(selectedColumns, selectedChartType, benchmark); // pass necessary arguments
         } else {
             alert('Please enter a valid benchmark value.');
         }
