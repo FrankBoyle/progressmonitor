@@ -162,7 +162,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             },
             stroke: {
                 width: 7,
-                colors: ['#FF0000'] // Assign a different color to the Benchmark series
+                //colors: ['#FF0000'] // Assign a different color to the Benchmark series
             }
         });
     }
@@ -201,7 +201,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
             },   
             dropShadow: {
                 enabled: true,
-                color: '#000',
+                //color: '#000',
                 top: 15,          // Adjusted the vertical offset a bit
                 left: 5,          // Adjusted the horizontal offset a bit
                 blur: 7,         // Increased the blur to make it more spread out
@@ -285,7 +285,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType) {
                 }
             }
         },
-        colors: ['#2196F3', '#FF5722', '#000000']
+        //colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
 
