@@ -15,7 +15,7 @@ $(document).ready(function() {
 
     // Parse the benchmark value
     let benchmarkInput = $("#benchmarkValue");
-    let benchmark = parseFloat(benchmarkInput.val());
+    benchmark = parseFloat(benchmarkInput.val());
     if (isNaN(benchmark)) {
         benchmark = null;  // handle non-numeric input
     }
