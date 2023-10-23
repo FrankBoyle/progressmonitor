@@ -143,7 +143,7 @@ function updateChart(selectedScore, selectedColumns, selectedChartType, xCategor
         var scoreColor = colors[index % colors.length];
 
         // Calculate trendline
-        var trendlineFunction = calculateTrendline(chartData);
+        var trendlineFunction = calculateTrendline(chartDataResult.chartData); // Assuming chartDataResult.chartData is your data array
         var trendlineData = chartData.map((item, index) => {
             return {
                 x: item.x,
@@ -342,32 +342,32 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 }
 
 function calculateTrendline(data) {
-    var sumX = 0;
-    var sumY = 0;
-    var sumXY = 0;
-    var sumXX = 0;
+    var n = data.length;
+    var sum_x = 0;
+    var sum_y = 0;
+    var sum_xy = 0;
+    var sum_xx = 0;
     var count = 0;
 
-    data.forEach(function (point, index) {
-        var x = index; // Use index as the x value
-        var y = point.y;
-
-        if (y !== null) {
-            sumX += x;
-            sumY += y;
-            sumXY += x * y;
-            sumXX += x * x;
-            count++;
-        }
+    // Calculate the sums needed for the linear regression formula
+    data.forEach(function(d) {
+        sum_x += new Date(d.x).getTime();
+        sum_y += d.y;
+        sum_xy += (new Date(d.x).getTime() * d.y);
+        sum_xx += (new Date(d.x).getTime() * new Date(d.x).getTime());
+        count++;
     });
 
-    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
-    var intercept = (sumY - slope * sumX) / count;
+    // Calculate the trendline's slope and y-intercept
+    var m = (count*sum_xy - sum_x*sum_y) / (count*sum_xx - sum_x*sum_x);
+    var b = (sum_y/count) - (m*sum_x)/count;
 
-    return function (x) {
-        return slope * x + intercept;
-    };
+    // We now return a function that represents the line equation
+    return function(x) {
+        return m*x + b;
+    }
 }
+
 
 function getScoreNamesMap() {
     var scoreNamesMap = {};
