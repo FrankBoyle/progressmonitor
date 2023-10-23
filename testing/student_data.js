@@ -142,6 +142,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     });
 
     if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
+        console.log(benchmark);
         var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
