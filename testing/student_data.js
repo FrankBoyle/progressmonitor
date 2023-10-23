@@ -67,7 +67,7 @@ $("#toggleTrendlines").change(function() {
     // Call your update function here to redraw the chart based on checkbox status.
     updateChart(selectedColumns, selectedChartType, xCategories); // Make sure xCategories is appropriately retrieved or maintained before this step
 });
-});
+
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
@@ -346,6 +346,23 @@ function calculateTrendline(data) {
     };
 }
 
+async function handleChartUpdate() {
+    try {
+        // Assuming updateChart returns the series data after doing its operations
+        const newSeriesData = await updateChart(selectedColumns, selectedChartType);
+
+        // Check and ensure newSeriesData is valid
+        if (newSeriesData && Array.isArray(newSeriesData) /* additional validations here if needed */) {
+            window.chart.updateSeries(newSeriesData, true);
+        } else {
+            throw new Error("Invalid series data");
+        }
+    } catch (error) {
+        console.error("An error occurred while updating the chart: ", error);
+        // Handle the error (e.g., show an error message to the user)
+    }
+}
+
 function getScoreNamesMap() {
     var scoreNamesMap = {};
     // Assume each checkbox is immediately contained within a label element as per your HTML
@@ -358,6 +375,7 @@ function getScoreNamesMap() {
     });
     return scoreNamesMap;
 }
+});
 
 ////////////////////////////////////////////////
 
