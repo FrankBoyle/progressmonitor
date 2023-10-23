@@ -3,68 +3,65 @@ var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 
 $(document).ready(function() {
+    // Assuming 'initializeChart' is a function that creates your chart with default or initial settings.
     initializeChart();
-    let checkboxes = $("#scoreSelector"); // replace with your actual checkbox class or selector
-    
-    if(checkboxes.length > 0) {
-        // Check the first checkbox
+
+    // Automatic selection of the first checkbox upon loading
+    let checkboxes = $("input[name='selectedColumns[]']"); // correct selector for your checkboxes
+    if (checkboxes.length > 0) {
         checkboxes[0].checked = true;
-
-        // Trigger whatever event you have that initializes the chart based on checkbox selection
-        // This might be a 'change' event or something custom to your application.
-        $(checkboxes[0]).change();
+        checkboxes.trigger('change'); // assuming 'change' is the event that the chart listens to
     }
-    benchmark = parseFloat($("#benchmarkValue").val());
+
+    // Parse the benchmark value
+    let benchmarkInput = $("#benchmarkValue");
+    let benchmark = parseFloat(benchmarkInput.val());
     if (isNaN(benchmark)) {
-        benchmark = null;  // Default benchmark value if the input is not provided
+        benchmark = null;  // handle non-numeric input
     }
 
-    // Initialize selectedColumns as an empty array
-    var selectedColumns = [];
-
+    // Handle changes in score selection
     $("#scoreSelector").change(function() {
-        var selectedScore = $(this).val();
-        updateChart(selectedScore, selectedColumns);
+        let selectedScore = $(this).val();
+        // assuming updateChart needs the current score selection and benchmark
+        updateChart(selectedScore, benchmark); 
     });
 
+    // Update benchmark value
     $("#updateBenchmark").click(function() {
-        var value = parseFloat($("#benchmarkValue").val());
+        let value = parseFloat(benchmarkInput.val());
         if (!isNaN(value)) {
             benchmark = value;
-            var selectedScore = $("#scoreSelector").val();
-            // Retrieve or ensure xCategories is updated before this step
-            // xCategories = ...;  // some logic to get the current xCategories, if needed
-            updateChart(selectedColumns, selectedChartType, xCategories);  // pass xCategories here
+            updateChart(selectedColumns, selectedChartType); // assuming updateChart needs these parameters
         } else {
             alert('Please enter a valid benchmark value.');
         }
-    });    
-
-// Handle checkbox clicks
-$("input[name='selectedColumns[]']").click(function() {
-    var selectedColumns = [];
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
     });
-    var selectedChartType = $("input[name='chartType']:checked").val();
-    updateChart(selectedColumns, selectedChartType);
-});
 
-// Handle radio button clicks for chart type
-$("input[name='chartType']").change(function() {
-    var selectedColumns = [];
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
+    // Handle checkbox changes for selected columns
+    $("input[name='selectedColumns[]']").change(function() {
+        let selectedColumns = [];
+        $("input[name='selectedColumns[]']:checked").each(function() {
+            selectedColumns.push($(this).val());
+        });
+        let selectedChartType = $("input[name='chartType']:checked").val();
+        // Call updateChart with necessary parameters whenever checkboxes change
+        updateChart(selectedColumns, selectedChartType, benchmark); // update the chart with the current selection
     });
-    var selectedChartType = $(this).val();
-    console.log("Selected Chart Type:", selectedChartType); // Log the selected chart type
 
-    // Call the updateChart function with the selected columns and chart type
-    updateChart(selectedColumns, selectedChartType);
+    // Handle chart type changes (radio buttons)
+    $("input[name='chartType']").change(function() {
+        let selectedChartType = $(this).val();
+        // Retrieve all selected columns again since it may have changed
+        let selectedColumns = [];
+        $("input[name='selectedColumns[]']:checked").each(function() {
+            selectedColumns.push($(this).val());
+        });
+        // Update the chart based on the new chart type
+        updateChart(selectedColumns, selectedChartType, benchmark);
+    });
 });
 
-
-});
 
 function initializeChart() {
     
