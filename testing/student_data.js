@@ -215,6 +215,8 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         chart: {
             type: chartType,
             stacked: false,
+            offsetX: 20,  // Adjust this value to increase space on the left
+            offsetY: 20,  // Adjust this value to increase space on the top
             width: 1000,
             colors: colors,
             zoom: {
