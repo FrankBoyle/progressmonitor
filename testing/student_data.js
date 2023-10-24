@@ -33,7 +33,7 @@ $(document).ready(function() {
     });
     
 // Handle checkbox clicks
-$("input[name='selectedColumns[]']").click(function() {
+    $("input[name='selectedColumns[]']").click(updateChartWithCurrentSelections);
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
@@ -70,6 +70,17 @@ $("#toggleTrendlines").change(function() {
 updateChart('score1');  // Default
 
 });
+
+function updateChartWithCurrentSelections() {
+    var selectedColumns = [];
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
+    });
+
+    var selectedChartType = $("input[name='chartType']:checked").val();
+    
+    updateChart(selectedColumns, selectedChartType, xCategories, benchmark); // Update chart with current selections
+}
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
