@@ -245,7 +245,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             curve: 'smooth',
             width: dataSeries.map(series => {
                 // Check if 'name' exists before calling 'startsWith'
-                if (series.name && series.name.startsWith('Trendline')) {
+                if (series.name && series.name.startsWith('Trendline ')) {
                     return 1;  // or whatever dash length you prefer
                 } else {
                     return 3;  // solid line for others
