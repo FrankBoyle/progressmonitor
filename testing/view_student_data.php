@@ -45,6 +45,7 @@ if (isset($_GET['metadata_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="student_data.js"></script>
     
     <script>
@@ -177,8 +178,132 @@ if (isset($_GET['metadata_id'])) {
 
 <!-- Radio buttons to select chart type -->
 
+<div id="chart-container">
+        <canvas id="myChart"></canvas>
+    </div>
+    <script>
+        var chart;
+        var xCategories = [];
+        var benchmark = null;
 
+        // Sample data (you should replace this with your actual data)
+        var chartData = {
+            labels: [], // x-axis labels
+            datasets: [] // Data series
+        };
 
+        // Initialize the chart
+        initializeChart();
 
+        // Update the chart when the "Update Benchmark" button is clicked
+        document.getElementById('updateBenchmark').addEventListener('click', function () {
+            var newBenchmarkValue = parseFloat(document.getElementById('benchmarkValue').value.trim());
+
+            if (isNaN(newBenchmarkValue)) {
+                alert("Invalid benchmark value. Please enter a number.");
+            } else {
+                benchmark = newBenchmarkValue;
+                updateChart();
+            }
+        });
+
+        // Function to initialize the chart
+        function initializeChart() {
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            chart = new Chart(ctx, {
+                type: 'line', // Default chart type
+                data: chartData,
+                options: getChartOptions()
+            });
+
+            // Initialize the chart with the current selections
+            updateChart();
+        }
+
+        // Function to update the chart
+        function updateChart() {
+            // Update the chart data and options here based on your selectedColumns and benchmark values
+            // Sample code to update chart data:
+            chartData.labels = xCategories;
+            
+            // Sample selected columns
+            var selectedColumns = ['Series 1', 'Series 2'];
+
+            updateChartData(selectedColumns);
+
+            // Sample code to update chart options:
+            chart.options = getChartOptions();
+
+            // Update the chart
+            chart.update();
+        }
+
+        // Function to update the chart data based on selected columns
+        function updateChartData(selectedColumns) {
+            var updatedDataSets = [];
+
+            selectedColumns.forEach(function (selectedColumn, index) {
+                var chartDataSet = {
+                    label: selectedColumn,
+                    data: [], // Fill this array with your data values
+                    borderColor: getRandomColor(),
+                    fill: false
+                };
+
+                // Sample data values (replace with your data)
+                if (selectedColumn === 'Series 1') {
+                    chartDataSet.data = [1, 2, 3, 4, 5];
+                } else if (selectedColumn === 'Series 2') {
+                    chartDataSet.data = [5, 4, 3, 2, 1];
+                }
+
+                updatedDataSets.push(chartDataSet);
+            });
+
+            chartData.datasets = updatedDataSets;
+        }
+
+        // Function to generate random colors (you can modify this)
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Function to get chart options
+        function getChartOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: xCategories,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+                // Add more chart options as needed
+            };
+        }
+    </script>
 </body>
 </html>
