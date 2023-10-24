@@ -215,7 +215,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         chart: {
             type: chartType,
             stacked: false,
-            width: 600,
+            width: 1000,
             colors: colors,
             zoom: {
                 type: 'x',
