@@ -25,7 +25,7 @@ $(document).ready(function() {
             alert("Invalid benchmark value.");
             benchmark = null;  // Reset to default if the input is invalid
         }
-        updateChart(selectedScore, selectedColumns); // 'selectedScore' and 'selectedColumns' need to be defined or fetched
+        updateChart(selectedColumns); // 'selectedScore' and 'selectedColumns' need to be defined or fetched
     }); 
     
 // Handle checkbox clicks
