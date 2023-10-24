@@ -161,14 +161,14 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         });
 
     if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
-        console.log(benchmarkData);
         var benchmarkData = xCategories.map(date => {
             console.log(date);
             return {
                 x: date,
                 y: benchmark
             };
-        }).reverse();  // Based on your code, you might or might not need to reverse the array
+        })//.reverse();  // Based on your code, you might or might not need to reverse the array
+        console.log(benchmarkData);
 
         seriesData.push({
             name: 'Benchmark',
