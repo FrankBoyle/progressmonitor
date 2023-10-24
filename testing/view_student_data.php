@@ -174,7 +174,7 @@ if (isset($_GET['metadata_id'])) {
         Bar Chart
     </label>
 </div>
-<div id="chart"></div> <!-- Div to display the chart -->
+<canvas id="chart"></canvas> <!-- Canvas element for the chart -->
 
 <!-- Radio buttons to select chart type -->
 
