@@ -215,8 +215,6 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         chart: {
             type: chartType,
             stacked: false,
-            offsetX: 20,  // Adjust this value to increase space on the left
-            offsetY: 20,  // Adjust this value to increase space on the top
             width: 1000,
             colors: colors,
             zoom: {
@@ -295,7 +293,11 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             },
             title: {
                 text: 'Date'
-            }
+            },
+                        // Add the following properties to adjust the x-axis range
+                        min: xCategories[0], // Set the minimum value to the first category
+                        max: xCategories[xCategories.length - 1], // Set the maximum value to the last category
+                    },
         },
 
 
