@@ -159,7 +159,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 });  
             }  
         });
-
+console.log(xCategories);
     if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
         console.log(xCategories);
 
@@ -170,7 +170,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 x: date,
                 y: benchmark
             };
-        })//.reverse();  // Based on your code, you might or might not need to reverse the array
+        }).reverse();  // Based on your code, you might or might not need to reverse the array
         console.log(benchmarkData);
 
         seriesData.push({
