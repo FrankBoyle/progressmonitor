@@ -209,6 +209,10 @@ if (isset($_GET['metadata_id'])) {
 
         // Function to initialize the chart
         function initializeChart() {
+            if (chart) {
+                chart.destroy(); // Destroy the existing chart if it exists
+            }
+
             var ctx = document.getElementById('myChart').getContext('2d');
 
             chart = new Chart(ctx, {
