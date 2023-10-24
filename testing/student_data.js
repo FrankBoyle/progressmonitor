@@ -196,12 +196,12 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     
             // Check if it's the specific series you want to label.
             // Please adjust "YourTargetSeriesName" to match your actual series name or condition.
-            if (seriesName === 'actualScoreName') {
-                return val; // Returning the value to be displayed as the label for the line series points.
-            }
+            //if (seriesName === 'actualScoreName') {
+            //    return val; // Returning the value to be displayed as the label for the line series points.
+            //}
     
             // If not the series we're interested in, don't show a label.
-            return "";
+            //return "";
         },
         offsetY: -10, // You can adjust this value as needed.
         style: {
