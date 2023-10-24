@@ -109,9 +109,9 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     var actualScoreName = '';
     var showTrendlines = $("#toggleTrendlines").is(':checked'); // Check if the trendlines should be displayed
 
-    //if (!xCategories || !Array.isArray(xCategories)) {
-        //xCategories = [];  // Make sure xCategories is an array
-    //}
+    if (!xCategories || !Array.isArray(xCategories)) {
+        xCategories = [];  // Make sure xCategories is an array
+    }
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
         selectedColumns = [selectedColumns]; // Ensure it's an array
