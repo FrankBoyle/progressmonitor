@@ -186,35 +186,18 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     }
 
     var dataLabelsSettings = {
-        enabled: true, // Globally enabling labels, to be selectively displayed.
-        formatter: function (val, opts) {
-            // This function decides when and where to display a label.
-    
-            // Information about the data point and series.
-            var seriesIndex = opts.seriesIndex;
-            var seriesName = opts.w.globals.seriesNames[seriesIndex]; // Getting the series name.
-    
-            // Check if it's the specific series you want to label.
-            // Please adjust "YourTargetSeriesName" to match your actual series name or condition.
-            //if (seriesName === 'actualScoreName') {
-            //    return val; // Returning the value to be displayed as the label for the line series points.
-            //}
-    
-            // If not the series we're interested in, don't show a label.
-            //return "";
-        },
-        offsetY: -10, // You can adjust this value as needed.
+        enabled: true, // Enable data labels globally.
+        // ... any other global settings for your labels.
+        offsetY: -10,
         style: {
             fontSize: '12px',
             colors: ['#333']
         }
+        // You do NOT specify enabledOnSeries here.
     };
     
-    if (chartType === 'line') {
-        dataLabelsSettings.enabled = true;
-        dataLabelsSettings.enabledOnSeries = [0, 2, 4, 6, 8, 10]; // Or specify the exact series indexes of line charts.
-    }
-    
+enabledOnSeries = [0, 2, 4, 6, 8, 10]; // Or specify the exact series indexes of line charts.
+        
     return {
         series: dataSeries,
         chart: {
