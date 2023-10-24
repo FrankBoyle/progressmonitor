@@ -136,7 +136,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
             data: chartData.y,
             backgroundColor: 'rgba(0, 0, 0, 0)', // Background color (change as needed)
             borderColor: scoreColor, // Border color based on index
-            borderWidth: 5, // Border width (change as needed)
+            borderWidth: 2, // Border width (change as needed)
             fill: false, // Don't fill the area under the line
         };
 
@@ -157,7 +157,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                 data: trendlineData,
                 backgroundColor: 'rgba(0, 0, 0, 0)', // Background color for trendline
                 borderColor: scoreColor, // Border color for trendline
-                borderWidth: 5, // Border width for trendline
+                borderWidth: 2, // Border width for trendline
                 borderDash: [3], // This makes the line dashed
                 fill: false, // Don't fill the area under the trendline
             };
@@ -180,7 +180,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
             data: benchmarkData,
             backgroundColor: 'rgba(0, 0, 0, 0)', // Background color for benchmark
             borderColor: '#000', // Border color for benchmark
-            borderWidth: 5, // Border width for benchmark
+            borderWidth: 2, // Border width for benchmark
             fill: false, // Don't fill the area under the benchmark
         };
 
@@ -238,7 +238,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                     data: series.data || [],
                     backgroundColor: 'rgba(0, 0, 0, 0)',
                     borderColor: colors[index] || 'rgb(0, 0, 0)',
-                    borderWidth: 5,
+                    borderWidth: 2,
                     fill: false,
                     borderDash: series.borderDash || [],
                     pointRadius: series.pointRadius || 0,
