@@ -5,13 +5,6 @@ var xCategories = [];
 $(document).ready(function() {
     initializeChart();
 
-    // Parse the initial benchmark value
-    var benchmarkValue = $("#benchmarkValue").val();
-    benchmark = parseFloat(benchmarkValue);
-    if (isNaN(benchmark)) {
-        benchmark = null;  // Resetting to a default value if input is invalid
-    }
-
     // Instead of using .click() we're using the more verbose .on('click' ...) which is more explicit
     $(document).on('click', '#updateBenchmark', function() {
         console.log("Update benchmark button clicked"); // This should log when you click the button
@@ -19,7 +12,7 @@ $(document).ready(function() {
         var newBenchmarkValue = $("#benchmarkValue").val().trim();
         console.log("Benchmark value entered:", newBenchmarkValue); // This should log the value you entered
 
-        var benchmark = parseFloat(newBenchmarkValue);
+        benchmark = parseFloat(newBenchmarkValue);
 
         if (isNaN(benchmark)) {
             console.log("Invalid number entered"); // This will confirm if your input was not a number
