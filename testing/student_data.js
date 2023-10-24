@@ -19,44 +19,22 @@ $(document).ready(function() {
 
     // Event listener for the "Update Benchmark" button
     $("#updateBenchmark").click(function() {
-        // Logging the value to check if it's being correctly retrieved
-        var value = parseFloat($("#benchmarkValue").val());
-        console.log("Benchmark Value:", value);
-    
-        // Checking if 'value' is valid
-        if (!isNaN(value)) {
-            benchmark = value;
-    
-            // Logging to check if 'benchmark' is set correctly
-            console.log("Set Benchmark:", benchmark);
-    
-            var selectedScore = $("#scoreSelector").val();
-    
-            // Logging to verify 'selectedScore' value
-            console.log("Selected Score:", selectedScore);
-    
-            try {
-                // Assume 'updateChart' is a function that triggers the chart update.
-                updateChart(selectedScore)
-                    .then(() => {
-                        console.log("Chart update successful.");
-                    })
-                    .catch(error => {
-                        // Logging the error if the promise fails
-                        console.error("Error during chart update:", error);
-                    });
-            } catch (error) {
-                // Catching and logging any immediate errors in the try block
-                console.error("Error encountered during update attempt:", error);
-            }
-        } else {
-            console.error("Invalid benchmark value input.");
-            alert('Please enter a valid benchmark value.');
-        }
-    });
-    
-    
+        let benchmarkValue = $("#benchmarkInput").val();  // Getting the input value directly
+        console.log("Benchmark Value:", benchmarkValue);
 
+        if (!benchmarkValue) {
+            alert("Please input a benchmark value before updating.");
+            return;
+        }
+
+        try {
+            // Assuming updateChart is your method to redraw or update the chart with new settings
+            updateChart(benchmarkValue);
+        } catch (error) {
+            console.error("Error encountered during update attempt:", error);
+        }
+    });  
+    
 // Handle checkbox clicks
 $("input[name='selectedColumns[]']").click(function() {
     var selectedColumns = [];
