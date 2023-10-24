@@ -241,6 +241,16 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 
         dataLabels: dataLabelsSettings,
         
+        plotOptions: {
+            bar: {
+                columnWidth: '80%', // Adjust the width of the bars (e.g., '80%')
+                horizontal: false, // Ensure bars are vertical
+                dataLabels: {
+                    position: 'bottom' // Adjust data label position as needed
+                }
+            }
+        },
+
         stroke: {
             show: true,
             curve: 'smooth',
@@ -294,9 +304,6 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             title: {
                 text: 'Date'
             },
-            // Add the following properties to adjust the x-axis range
-            min: xCategories[0], // Set the minimum value to the first category
-            max: xCategories[xCategories.length - 1], // Set the maximum value to the last category
         },        
 
         yaxis: {
