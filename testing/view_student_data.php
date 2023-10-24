@@ -161,7 +161,7 @@ if (isset($_GET['metadata_id'])) {
 
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
-<button id="updateBenchmark">Update Benchmark</button>
+<button type ="button" id="updateBenchmark">Update Benchmark</button>
 <div>
     <label>Select Chart Type:</label>
     <label>
