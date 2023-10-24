@@ -238,10 +238,6 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 left: 5,          // Adjusted the horizontal offset a bit
                 blur: 7,         // Increased the blur to make it more spread out
                 opacity: 0.5      // Increased the opacity to make it darker
-            },
-            margin: {
-                left: 20,
-                right: 20
             }
         },
 
