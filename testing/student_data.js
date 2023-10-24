@@ -23,11 +23,20 @@ $(document).ready(function() {
         if (!isNaN(value)) {
             benchmark = value;
             var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore);
+    
+            // Try-catch block for handling promise errors
+            try {
+                // Assuming updateChart is the correct method you use to reflect changes
+                updateChart(selectedScore)
+                    .catch(e => console.error("Error updating chart:", e));
+            } catch (error) {
+                console.error("Error encountered:", error);
+            }
         } else {
             alert('Please enter a valid benchmark value.');
         }
     });
+    
 
 // Handle checkbox clicks
 $("input[name='selectedColumns[]']").click(function() {
