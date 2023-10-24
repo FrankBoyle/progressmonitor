@@ -18,7 +18,7 @@ $(document).ready(function() {
         // Get the values from the input field and the radio buttons
         var benchmarkValue = parseFloat($('#benchmarkValue').val());
         var selectedChartType = $("input[name='chartType']:checked").val();
-
+        console.log(benchmarkValue);
         // Get other necessary data for the drawChart function
         var selectedColumns = []; // You need to populate this based on your application's requirements
         // Example: selectedColumns could be populated based on checkboxes that the user has selected
