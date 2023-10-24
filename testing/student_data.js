@@ -13,20 +13,20 @@ $(document).ready(function() {
     }
 
     // Instead of using .click() we're using the more verbose .on('click' ...) which is more explicit
-    $("#updateBenchmark").on('click', function() {
-        // Retrieve the value from the input, making sure the ID used here matches the one in your HTML
-        var newBenchmarkValue = $("#benchmarkValue").val().trim();
+    $(document).on('click', '#updateBenchmark', function() {
+        console.log("Update benchmark button clicked"); // This should log when you click the button
 
-        // Parse the input value to a float, which will be used as the new benchmark
+        var newBenchmarkValue = $("#benchmarkValue").val().trim();
+        console.log("Benchmark value entered:", newBenchmarkValue); // This should log the value you entered
+
         var benchmark = parseFloat(newBenchmarkValue);
 
-        // Validate if the parsing was successful and the value is a number
         if (isNaN(benchmark)) {
-            // Show alert if the value is not a valid number
+            console.log("Invalid number entered"); // This will confirm if your input was not a number
             alert("Invalid benchmark value. Please enter a number.");
         } else {
-            // If the value is a valid number, proceed with updating the chart
-            updateChartWithCurrentSelections(); // assuming this function is defined elsewhere and updates the chart
+            console.log("Valid number entered, updating chart."); // This confirms that the number was valid and the function should be executed
+            updateChartWithCurrentSelections(); // Make sure this function is defined and works correctly
         }
     });
 
