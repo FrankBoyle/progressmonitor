@@ -1,31 +1,57 @@
 var benchmark = null;
+var selectedChartType = 'line'; // Default chart type
+var xCategories = [];
 
 $(document).ready(function() {
     initializeChart();
 
-    benchmark = parseFloat($("#benchmarkValue").val());
-    if (isNaN(benchmark)) {
-        benchmark = null;  // Default benchmark value if the input is not provided
-    }
+    // Instead of using .click() we're using the more verbose .on('click' ...) which is more explicit
+    $(document).on('click', '#updateBenchmark', function() {
+        console.log("Update benchmark button clicked"); // This should log when you click the button
 
-    $("#scoreSelector").change(function() {
-        var selectedScore = $(this).val();
-        updateChart(selectedScore);
-    });
+        var newBenchmarkValue = $("#benchmarkValue").val().trim();
+        console.log("Benchmark value entered:", newBenchmarkValue); // This should log the value you entered
 
-    $("#updateBenchmark").click(function() {
-        var value = parseFloat($("#benchmarkValue").val());
-        if (!isNaN(value)) {
-            benchmark = value;
-            var selectedScore = $("#scoreSelector").val();
-            updateChart(selectedScore);
+        benchmark = parseFloat(newBenchmarkValue);
+
+        if (isNaN(benchmark)) {
+            console.log("Invalid number entered"); // This will confirm if your input was not a number
+            alert("Invalid benchmark value. Please enter a number.");
         } else {
-            alert('Please enter a valid benchmark value.');
+            console.log("Valid number entered, updating chart."); // This confirms that the number was valid and the function should be executed
+            updateChartWithCurrentSelections(benchmark); // Make sure this function is defined and works correctly
         }
     });
 
-    updateChart('score1');  // Default
+    // For checkboxes, instead of .click(), we use .on('click', ...) and provide the callback function
+    $("input[name='selectedColumns[]']").on('click', function() {
+        updateChartWithCurrentSelections();
+    });
+
+    // Explicit event handling for radio buttons
+    $("input[name='chartType']").on('change', function() {
+        updateChartWithCurrentSelections();
+    });
+
+    // Explicit event handling for toggle switch
+    $("#toggleTrendlines").on('change', function() {
+        updateChartWithCurrentSelections();
+    });
+
+    // Initialize the chart with the current selections
+    updateChartWithCurrentSelections();
 });
+
+function updateChartWithCurrentSelections() {
+    var selectedColumns = [];
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
+    });
+
+    var selectedChartType = $("input[name='chartType']:checked").val();
+    
+    updateChart(selectedColumns, selectedChartType, xCategories, benchmark); // Update chart with current selections
+}
 
 function initializeChart() {
     window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
@@ -34,12 +60,11 @@ function initializeChart() {
 
 function getChartData(scoreField) {
     var chartData = [];
-    var xCategories = [];
+    xCategories = [];
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
-        var scoreValue = $(this).find(`td[data-field-name="${scoreField}"]`).text();
-
+        var scoreValue = $(this).find('td[data-field-name="' + scoreField + '"]').text();
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
             chartData.push({
@@ -51,78 +76,147 @@ function getChartData(scoreField) {
         }
     });
 
-    // Sorting logic starts here
+    // Sorting logic should be outside the loop
     const sortedChartData = chartData.sort((a, b) => {
         return new Date(a.x) - new Date(b.x);
     });
+
     const sortedCategories = xCategories.sort((a, b) => {
         return new Date(a) - new Date(b);
     });
 
+    xCategories = sortedCategories;
+
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
-function updateChart(scoreField) {
-    var {chartData, xCategories} = getChartData(scoreField);
+function updateChart(selectedColumns, selectedChartType, xCategories, benchmark) {
+    var seriesData = [];
+    // Define colors for scores and their trendlines
+    const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
+    var scoreNamesMap = getScoreNamesMap();
+    var actualScoreName = '';
+    var showTrendlines = $("#toggleTrendlines").is(':checked'); // Check if the trendlines should be displayed
 
-    // Calculate trendline
-    var trendlineFunction = calculateTrendline(chartData);
-    var trendlineData = chartData.map((item, index) => {
-        return {
-            x: item.x,
-            y: trendlineFunction(index)
-        };
-    });
-
-    var seriesData = [
-        {
-            name: 'Trendline',
-            data: trendlineData,
-            connectNulls: true,
-            dataLabels: {
-                enabled: false // Disable data labels for the Trendline series
-            }
-        },
-        {
-            name: 'Selected Score',
-            data: chartData,
-            connectNulls: true,
-            dataLabels: {
-                enabled: true // Enable data labels for the Selected Score series
-            },
-            stroke: {
-                width: 7
-            }
-        }
-    ];
-
-    if (benchmark !== null) {
-        var benchmarkData = xCategories.map(date => {
-            return {
-                x: date,
-                y: benchmark
-            };
-        }).reverse();
-        seriesData.push({
-            name: 'Benchmark',
-            data: benchmarkData,
-            connectNulls: true,
-            dataLabels: {
-                enabled: false // Disable data labels for the Benchmark series
-            }
-        });
+    if (!xCategories || !Array.isArray(xCategories)) {
+        xCategories = [];  // Make sure xCategories is an array
+    }
+    // Check if selectedColumns is an array
+    if (!Array.isArray(selectedColumns)) {
+        selectedColumns = [selectedColumns]; // Ensure it's an array
     }
 
-    window.chart.updateOptions(getChartOptions(seriesData, xCategories));
-}
+    selectedColumns.forEach(function(selectedColumn, index) {
+        var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
+        actualScoreName = scoreNamesMap[selectedColumn];
 
-function getChartOptions(dataSeries, xCategories) {
+        // Assign colors to data series and trendlines based on index
+        var scoreColor = colors[index % colors.length];
+
+        seriesData.push(
+            {
+                name: actualScoreName,
+                data: chartData,
+                color: scoreColor,  // Set color property here for the series
+                connectNulls: true,
+                dataLabels: {
+                    enabled: true // Enable data labels for the Selected Score series
+                },
+            })
+                    // Calculate trendline and add to seriesData only if showTrendlines is true
+        if (showTrendlines) {
+            var trendlineFunction = calculateTrendline(chartData);
+            var trendlineData = chartData.map((item, index) => {
+                return {
+                    x: item.x,
+                    y: trendlineFunction(index) // calculate y based on trendline function
+                };
+            });
+            seriesData.push(
+                {
+                    name: 'Trendline ' + actualScoreName,
+                    data: trendlineData,
+                    color: scoreColor,  // Set color property here for the series
+                    stroke: {
+                        dashArray: 3, // This makes the line dashed; the number controls the dash length
+                    },
+                    connectNulls: true,
+                    dataLabels: {
+                        enabled: false // Disable data labels for the Trendline series
+                    }
+                });  
+            }  
+        });
+
+        if (benchmark !== null) {
+            var benchmarkData = xCategories.map(date => {
+                return {
+                    x: date,
+                    y: benchmark
+                };
+            }).reverse();
+            seriesData.push({
+                name: 'Benchmark',
+                data: benchmarkData,
+                connectNulls: true,
+                dataLabels: {
+                    enabled: false // Disable data labels for the Benchmark series
+                }
+            });
+        }
+    
+    // Pass seriesData to getChartOptions
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
+};
+
+function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
+    //console.log(selectedChartType);
+    var chartType = selectedChartType; // Get the selected chart type
+    //console.log(chartType);
+    let colors;
+    if (dataSeries && dataSeries.length > 0) {
+        colors = dataSeries.map(series => {
+            if (series.stroke && series.stroke.colors && series.stroke.colors[0]) {
+                return series.stroke.colors[0];
+            }
+            return '#000000'; // default color if no color is defined for a series
+        });
+    } else {
+        colors = ['#000000']; // default color array if dataSeries is invalid
+    }
+
+    var dataLabelsSettings = {
+        enabled: true,
+        enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
+        formatter: function (val, opts) {
+            var seriesIndex = opts.seriesIndex;
+            var seriesName = opts.w.config.series[seriesIndex].name; // Get the name of the series.
+            var isTrendlineOrBenchmark = seriesName.startsWith('Trendline ') || seriesName === 'Benchmark';
+
+            if (isTrendlineOrBenchmark) {
+                return ""; // Don't show labels for trendline or benchmark.
+            }
+
+            return val;
+        },
+        offsetY: -10,
+        style: {
+            fontSize: '12px',
+            colors: ['#333']
+        }
+    };
+
+    if (chartType === 'bar') {
+        dataLabelsSettings.enabled = false;
+    }
+            
     return {
         series: dataSeries,
         chart: {
-            type: 'line',
+            type: chartType,
             stacked: false,
             width: 600,
+            colors: colors,
             zoom: {
                 type: 'x',
                 enabled: true,   // Ensure zooming is enabled
@@ -145,25 +239,24 @@ function getChartOptions(dataSeries, xCategories) {
             }
         },
 
-
-        dataLabels: {
-            enabled: true,
-            enabledOnSeries: [1],  // enable only on the first series
-            offsetY: -10,
-            style: {
-                fontSize: '12px',
-                colors: ['#333']
-            }
-        },
+        dataLabels: dataLabelsSettings,
         
         stroke: {
+            show: true,
             curve: 'smooth',
-            width: dataSeries.map(series => series.name === 'Selected Score' ? 3 : 1.5)  // Set width based on series name
+            width: dataSeries.map(series => {
+                // Check if 'name' exists before calling 'startsWith'
+                if (series.name && series.name.startsWith('Trendline ')) {
+                    return 1;  // or whatever dash length you prefer
+                } else {
+                    return 3;  // solid line for others
+                }
+            }),
         },
 
         markers: {
             size: dataSeries.map(series => {
-                if (series.name === 'Selected Score') {
+                if (series.name === 'actualScoreName') {
                     return 5;  // or whatever size you want for the "Selected Score" series
                 } else {
                     return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
@@ -221,7 +314,7 @@ function getChartOptions(dataSeries, xCategories) {
                 }
             }
         },
-        colors: ['#2196F3', '#FF5722', '#000000']
+        //colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
 
@@ -253,6 +346,19 @@ function calculateTrendline(data) {
     };
 }
 
+function getScoreNamesMap() {
+    var scoreNamesMap = {};
+    // Assume each checkbox is immediately contained within a label element as per your HTML
+    $('input[name="selectedColumns[]"]').each(function() {
+        var $checkbox = $(this);
+        // The parent label's text is the score name
+        var scoreName = $checkbox.parent().text().trim();
+        var checkboxValue = $checkbox.val();
+        scoreNamesMap[checkboxValue] = scoreName;
+    });
+    return scoreNamesMap;
+}
+
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
@@ -264,7 +370,7 @@ $(document).ready(function() {
     $('#metadataIdInput').val(metadata_id);
 
     // Now the input field should have the correct metadata_id value
-    console.log(metadata_id);
+    //console.log(metadata_id);
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -302,7 +408,7 @@ $(document).ready(function() {
             });
     
             // Debugging: Log the response
-            console.log('Response:', response);
+            //console.log('Response:', response);
     
             return response;
         } catch (error) {
@@ -336,12 +442,12 @@ $(document).ready(function() {
             school_id: school_id
 
         };
-        console.log(postData);
+        //console.log(postData);
         //console.log("studentID:", student_id);
 
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
-            console.log(response); // <-- This is the debug line. 
+            //console.log(response); // <-- This is the debug line. 
         
             if (response && response.error && response.error === 'Duplicate date not allowed!') {
                 alert("Duplicate date not allowed!");

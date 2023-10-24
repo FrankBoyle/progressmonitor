@@ -137,35 +137,47 @@ if (isset($_GET['metadata_id'])) {
     <?php endif; ?>
 </table>
 
-<label>Select Score to Display: </label>
-<select id="scoreSelector" name="scoreSelector"> <!-- Added 'name' attribute for form submission -->
-            <?php
-            // Check if there are categories and scores
-            if (!empty($scoreNames)) {
-                // Loop through each category and its scores
-                foreach ($scoreNames as $category => $scores) {
-                    foreach ($scores as $index => $scoreName) {
-                        // Creating the option element
-                        echo '<option value="' . htmlspecialchars('score' . ($index + 1)) . '">';
-                        echo htmlspecialchars($scoreName);
-                        echo '</option>';
-                    }
-                }
-            } else {
-                // In case there are no scores, an option to reflect that
-                echo '<option value="">No scores available</option>';
-            }
-            ?>
-        </select>
+<div>
+    <label>Show Trendlines:</label>
+    <input type="checkbox" id="toggleTrendlines" checked> <!-- Checked by default -->
+</div>
 
+<!-- Existing checkboxes for column selection -->
+<div>
+    <label>Select Columns to Display:</label>
+    <!-- Existing PHP code to generate checkboxes -->
+    <?php
+    foreach ($scoreNames as $category => $scores) {
+        foreach ($scores as $index => $scoreName) {
+            $scoreColumnName = 'score' . ($index + 1);
+            echo '<label>';
+            echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '">';
+            echo htmlspecialchars($scoreName);
+            echo '</label>';
+        }
+    }
+    ?>
+</div>
 
-
-
-<label>Enter Benchmark Value: </label>
+<label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
-<button id="updateBenchmark">Update Benchmark</button>
+<button type ="button" id="updateBenchmark">Update Benchmark</button>
+<div>
+    <label>Select Chart Type:</label>
+    <label>
+        <input type="radio" name="chartType" value="line" checked>
+        Line Chart
+    </label>
+    <label>
+        <input type="radio" name="chartType" value="bar">
+        Bar Chart
+    </label>
+</div>
+<div id="chart"></div> <!-- Div to display the chart -->
 
-<div id="chart"></div>  <!-- Div to display the chart -->
+<!-- Radio buttons to select chart type -->
+
+
 
 
 </body>
