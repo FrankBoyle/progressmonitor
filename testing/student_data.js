@@ -110,9 +110,9 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     var actualScoreName = '';
     var showTrendlines = $("#toggleTrendlines").is(':checked'); // Check if the trendlines should be displayed
 
-    if (!xCategories || !Array.isArray(xCategories)) {
-        xCategories = [];  // Make sure xCategories is an array
-    }
+    //if (!xCategories || !Array.isArray(xCategories)) {
+        //xCategories = [];  // Make sure xCategories is an array
+    //}
     // Check if selectedColumns is an array
     if (!Array.isArray(selectedColumns)) {
         selectedColumns = [selectedColumns]; // Ensure it's an array
@@ -159,7 +159,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 });  
             }  
         });
-console.log(xCategories);
+
     if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
         console.log(xCategories);
 
@@ -186,7 +186,6 @@ console.log(xCategories);
         console.log("No benchmark value available.");
     }
     
-
     // Pass seriesData to getChartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
 };
