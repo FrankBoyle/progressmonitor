@@ -185,6 +185,38 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         colors = ['#000000']; // default color array if dataSeries is invalid
     }
 
+    var dataLabelsSettings = {
+        enabled: false, // Default: don't show labels.
+        formatter: function (val, opts) {
+            // This function will be responsible for deciding when to display a label.
+            var seriesIndex = opts.seriesIndex;
+            var dataPointIndex = opts.dataPointIndex;
+            var series = opts.w.globals.series[seriesIndex];
+
+            // For line charts, we want to identify min/max and only label those.
+            if (chartType === 'line') {
+                var minValue = Math.min(...series);
+                var maxValue = Math.max(...series);
+
+                // Only show the label if it's a min or max value within its series.
+                if (val === minValue || val === maxValue) {
+                    return val;
+                }
+
+                // Hide other labels by returning an empty string.
+                return "";
+            }
+
+            // For other chart types or series, we don't want to show labels.
+            return "";
+        },
+        offsetY: -10, // or any suitable value
+        style: {
+            fontSize: '12px',
+            colors: ['#333']
+        }
+    };
+
     return {
         series: dataSeries,
         chart: {
@@ -214,16 +246,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             }
         },
 
-
-        dataLabels: {
-            enabled: true,
-            enabledOnSeries: [0,2,4,6,8,10],  // enable only on the first series
-            offsetY: -10,
-            style: {
-                fontSize: '12px',
-                colors: ['#333']
-            }
-        },
+        dataLabels: dataLabelsSettings,
         
         stroke: {
             show: true,
