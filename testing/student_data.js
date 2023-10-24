@@ -14,15 +14,20 @@ $(document).ready(function() {
 
     // Instead of using .click() we're using the more verbose .on('click' ...) which is more explicit
     $("#updateBenchmark").on('click', function() {
-        var newBenchmarkValue = $("#benchmarkInput").val();
+        // Retrieve the value, with trimming to remove any accidental white space
+        var newBenchmarkValue = $("#benchmarkInput").val().trim(); // Adjust this ID if your input element's ID is different
+    
+        // Parsing it as a floating-point number
         benchmark = parseFloat(newBenchmarkValue);
-
+    
+        // Check if the input is a number after parsing
         if (isNaN(benchmark)) {
+            // If not a number, show an alert
             alert("Invalid benchmark value. Please enter a number.");
-            return;
+        } else {
+            // If a number, proceed to update the chart with this new benchmark value
+            updateChartWithCurrentSelections(); // Redraw the chart with the new benchmark
         }
-
-        updateChartWithCurrentSelections(); // Redraw the chart with the new benchmark
     });
 
     // For checkboxes, instead of .click(), we use .on('click', ...) and provide the callback function
