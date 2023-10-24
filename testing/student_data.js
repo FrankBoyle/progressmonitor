@@ -111,7 +111,7 @@ function getChartData(scoreField) {
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
-function updateChart(selectedColumns, selectedChartType, xCategories) {
+function updateChart(selectedColumns, selectedChartType, xCategories, benchmark) {
     var seriesData = [];
     // Define colors for scores and their trendlines
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
