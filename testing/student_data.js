@@ -164,7 +164,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
-                y: benchmark
+                y: benchmarkValue
             };
         }).reverse();  // Based on your code, you might or might not need to reverse the array
     
