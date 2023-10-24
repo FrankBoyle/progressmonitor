@@ -16,15 +16,15 @@ $(document).ready(function() {
     // Event listener for the "Update Benchmark" button
     $('#updateBenchmark').click(function() {
         // Get the values from the input field and the radio buttons
-        var benchmarkValue = parseFloat($('#benchmarkValue').val());
+        var benchmark = parseFloat($('#benchmarkValue').val());
         var selectedChartType = $("input[name='chartType']:checked").val();
-        console.log(benchmarkValue);
+        console.log(benchmark);
         // Get other necessary data for the drawChart function
         var selectedColumns = []; // You need to populate this based on your application's requirements
         // Example: selectedColumns could be populated based on checkboxes that the user has selected
 
         // Now call the function to draw your chart with the new settings
-        updateChart(selectedColumns, selectedChartType, benchmarkValue);
+        updateChart(selectedColumns, selectedChartType, benchmark);
     }); 
 
 // Handle checkbox clicks
@@ -164,7 +164,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
         var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
-                y: benchmarkValue
+                y: benchmark
             };
         }).reverse();  // Based on your code, you might or might not need to reverse the array
     
