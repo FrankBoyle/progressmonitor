@@ -5,70 +5,43 @@ var xCategories = [];
 $(document).ready(function() {
     initializeChart();
 
-    benchmark = parseFloat($("#benchmarkValue").val());
+    // Parse the initial benchmark value
+    var benchmarkValue = $("#benchmarkValue").val();
+    benchmark = parseFloat(benchmarkValue);
     if (isNaN(benchmark)) {
-        benchmark = null;  // Default benchmark value if the input is not provided
+        benchmark = null;  // Resetting to a default value if input is invalid
     }
 
-    // Initialize selectedColumns as an empty array
-    var selectedColumns = [];
+    // Instead of using .click() we're using the more verbose .on('click' ...) which is more explicit
+    $("#updateBenchmark").on('click', function() {
+        var newBenchmarkValue = $("#benchmarkInput").val();
+        benchmark = parseFloat(newBenchmarkValue);
 
-    // Event listener for the "Update Benchmark" button
-    $("#updateBenchmark").click(function() {
-        let benchmarkValue = $("#benchmarkInput").val();  // Getting the input value directly
-
-        if (!benchmarkValue) {
-            alert("Please input a benchmark value before updating.");
-            return;
-        }
-
-        benchmark = parseFloat(benchmarkValue);
         if (isNaN(benchmark)) {
             alert("Invalid benchmark value. Please enter a number.");
             return;
         }
 
-        // Assuming updateChart is your method to redraw or update the chart with new settings
+        updateChartWithCurrentSelections(); // Redraw the chart with the new benchmark
+    });
+
+    // For checkboxes, instead of .click(), we use .on('click', ...) and provide the callback function
+    $("input[name='selectedColumns[]']").on('click', function() {
         updateChartWithCurrentSelections();
     });
-    
-// Handle checkbox clicks
-$("input[name='selectedColumns[]']").click(function() {
-    var selectedColumns = [];
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
-    });
-    var selectedChartType = $("input[name='chartType']:checked").val();
-    updateChart(selectedColumns, selectedChartType);
-});
 
-// Handle radio button clicks for chart type
-$("input[name='chartType']").change(function() {
-    var selectedColumns = [];
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
-    });
-    var selectedChartType = $(this).val();
-    console.log("Selected Chart Type:", selectedChartType); // Log the selected chart type
-
-    // Call the updateChart function with the selected columns and chart type
-    updateChart(selectedColumns, selectedChartType);
-});
-
-$("#toggleTrendlines").change(function() {
-    // When the trendline checkbox changes state, update the chart accordingly.
-    var selectedColumns = [];
-    $("input[name='selectedColumns[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
+    // Explicit event handling for radio buttons
+    $("input[name='chartType']").on('change', function() {
+        updateChartWithCurrentSelections();
     });
 
-    var selectedChartType = $("input[name='chartType']:checked").val();
-    
-    // Call your update function here to redraw the chart based on checkbox status.
-    updateChart(selectedColumns, selectedChartType, xCategories); // Make sure xCategories is appropriately retrieved or maintained before this step
-});
-updateChart('score1');  // Default
+    // Explicit event handling for toggle switch
+    $("#toggleTrendlines").on('change', function() {
+        updateChartWithCurrentSelections();
+    });
 
+    // Initialize the chart with the current selections
+    updateChartWithCurrentSelections();
 });
 
 function updateChartWithCurrentSelections() {
