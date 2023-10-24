@@ -193,7 +193,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             var dataPointIndex = opts.dataPointIndex;
             var series = opts.w.globals.series[seriesIndex];
 
-            // For line charts, we want to identify min/max and only label those.
+            /* For line charts, we want to identify min/max and only label those.
             if (chartType === 'line') {
                 var minValue = Math.min(...series);
                 var maxValue = Math.max(...series);
@@ -206,7 +206,8 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 // Hide other labels by returning an empty string.
                 return "";
             }
-
+            */
+           
             // For other chart types or series, we don't want to show labels.
             return "";
         },
@@ -221,7 +222,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         dataLabelsSettings.enabled = true;
         dataLabelsSettings.enabledOnSeries = [0, 2, 4, 6, 8, 10]; // Or specify the exact series indexes of line charts.
     }
-    
+
     return {
         series: dataSeries,
         chart: {
