@@ -2,14 +2,14 @@ var benchmark = null;
 var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 
-document.addEventListener("DOMContentLoaded", function () {
+$(document).ready(function() {
     initializeChart();
 
-    // Update the chart when the "Update Benchmark" button is clicked
-    document.querySelector('#updateBenchmark').addEventListener('click', function () {
+    // Instead of using .click() we're using the more verbose .on('click' ...) which is more explicit
+    $(document).on('click', '#updateBenchmark', function() {
         console.log("Update benchmark button clicked"); // This should log when you click the button
 
-        var newBenchmarkValue = document.querySelector("#benchmarkValue").value.trim();
+        var newBenchmarkValue = $("#benchmarkValue").val().trim();
         console.log("Benchmark value entered:", newBenchmarkValue); // This should log the value you entered
 
         benchmark = parseFloat(newBenchmarkValue);
@@ -23,25 +23,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // For checkboxes, update the chart when a checkbox is clicked
-    var checkboxes = document.querySelectorAll("input[name='selectedColumns[]']");
-    checkboxes.forEach(function (checkbox) {
-        checkbox.addEventListener('click', function () {
-            updateChartWithCurrentSelections();
-        });
+    // For checkboxes, instead of .click(), we use .on('click', ...) and provide the callback function
+    $("input[name='selectedColumns[]']").on('click', function() {
+        updateChartWithCurrentSelections();
     });
 
     // Explicit event handling for radio buttons
-    var radioButtons = document.querySelectorAll("input[name='chartType']");
-    radioButtons.forEach(function (radio) {
-        radio.addEventListener('change', function () {
-            updateChartWithCurrentSelections();
-        });
+    $("input[name='chartType']").on('change', function() {
+        updateChartWithCurrentSelections();
     });
 
-    // Explicit event handling for the toggle switch
-    var toggleSwitch = document.querySelector("#toggleTrendlines");
-    toggleSwitch.addEventListener('change', function () {
+    // Explicit event handling for toggle switch
+    $("#toggleTrendlines").on('change', function() {
         updateChartWithCurrentSelections();
     });
 
@@ -49,66 +42,56 @@ document.addEventListener("DOMContentLoaded", function () {
     updateChartWithCurrentSelections();
 });
 
-var chart; // Chart.js chart instance
-var chartData = {
-    labels: [], // xCategories
-    datasets: [] // Data for different columns
-};
-
-// Function to update the chart data based on selected columns
 function updateChartWithCurrentSelections() {
     var selectedColumns = [];
-    var checkboxes = document.querySelectorAll("input[name='selectedColumns[]']:checked");
-
-    checkboxes.forEach(function (checkbox) {
-        selectedColumns.push(checkbox.value);
+    $("input[name='selectedColumns[]']:checked").each(function() {
+        selectedColumns.push($(this).val());
     });
 
-    var selectedChartType = document.querySelector("input[name='chartType']:checked").value;
-
-    // Update chart with current selections
-    updateChart(selectedColumns, selectedChartType);
+    var selectedChartType = $("input[name='chartType']:checked").val();
+    
+    updateChart(selectedColumns, selectedChartType, xCategories, benchmark); // Update chart with current selections
 }
 
-// Function to initialize the Chart.js chart
 function initializeChart() {
-    var ctx = document.getElementById('chart').getContext('2d');
-
-    // Initialize the Chart.js chart
-    chart = new Chart(ctx, {
-        type: 'line', // Default chart type
-        data: chartData, // Initial data
-        options: {
-            // Configure chart options as needed
-        }
-    });
+    window.chart = new ApexCharts(document.querySelector("#chart"), getChartOptions([], []));
+    window.chart.render();
 }
 
 function getChartData(scoreField) {
-    var chartData = {
-        x: [],
-        y: []
-    };
+    var chartData = [];
+    xCategories = [];
 
-    // Replace this section with your actual data source iteration logic
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
         var scoreValue = $(this).find('td[data-field-name="' + scoreField + '"]').text();
 
         if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
-            chartData.x.push(weekStartDate); // Push x value
-            chartData.y.push(parseFloat(scoreValue)); // Push y value
+            chartData.push({
+                x: weekStartDate,  // Directly use the date string
+                y: parseFloat(scoreValue)
+            });
+
+            xCategories.push(weekStartDate);
         }
     });
 
-    return chartData;
+    // Sorting logic should be outside the loop
+    const sortedChartData = chartData.sort((a, b) => {
+        return new Date(a.x) - new Date(b.x);
+    });
+
+    const sortedCategories = xCategories.sort((a, b) => {
+        return new Date(a) - new Date(b);
+    });
+
+    xCategories = sortedCategories;
+
+    return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
-// Function to update the Chart.js chart
 function updateChart(selectedColumns, selectedChartType, xCategories, benchmark) {
-    // Clear existing datasets
-    chart.data.datasets = [];
-
+    var seriesData = [];
     // Define colors for scores and their trendlines
     const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
     var scoreNamesMap = getScoreNamesMap();
@@ -124,173 +107,223 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
     }
 
     selectedColumns.forEach(function(selectedColumn, index) {
-        var chartData = getChartData(selectedColumn);
-
+        var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
         actualScoreName = scoreNamesMap[selectedColumn];
 
         // Assign colors to data series and trendlines based on index
         var scoreColor = colors[index % colors.length];
 
-        var dataset = {
-            label: actualScoreName,
-            data: chartData.y,
-            backgroundColor: 'rgba(0, 0, 0, 0)', // Background color (change as needed)
-            borderColor: scoreColor, // Border color based on index
-            borderWidth: 1, // Border width (change as needed)
-            fill: false, // Don't fill the area under the line
-        };
-
-        chart.data.datasets.push(dataset);
-
-        // Calculate trendline and add to dataset only if showTrendlines is true
+        seriesData.push(
+            {
+                name: actualScoreName,
+                data: chartData,
+                color: scoreColor,  // Set color property here for the series
+                connectNulls: true,
+                dataLabels: {
+                    enabled: true // Enable data labels for the Selected Score series
+                },
+            })
+                    // Calculate trendline and add to seriesData only if showTrendlines is true
         if (showTrendlines) {
-            var trendlineFunction = calculateTrendline(chartData.y);
-            var trendlineData = chartData.x.map((item, index) => {
+            var trendlineFunction = calculateTrendline(chartData);
+            var trendlineData = chartData.map((item, index) => {
                 return {
-                    x: item,
+                    x: item.x,
                     y: trendlineFunction(index) // calculate y based on trendline function
                 };
             });
+            seriesData.push(
+                {
+                    name: 'Trendline ' + actualScoreName,
+                    data: trendlineData,
+                    color: scoreColor,  // Set color property here for the series
+                    stroke: {
+                        dashArray: 3, // This makes the line dashed; the number controls the dash length
+                    },
+                    connectNulls: true,
+                    dataLabels: {
+                        enabled: false // Disable data labels for the Trendline series
+                    }
+                });  
+            }  
+        });
 
-            var trendlineDataset = {
-                label: 'Trendline ' + actualScoreName,
-                data: trendlineData,
-                backgroundColor: 'rgba(0, 0, 0, 0)', // Background color for trendline
-                borderColor: scoreColor, // Border color for trendline
-                borderWidth: 1, // Border width for trendline
-                borderDash: [3], // This makes the line dashed
-                fill: false, // Don't fill the area under the trendline
-            };
-
-            chart.data.datasets.push(trendlineDataset);
+        if (benchmark !== null) {
+            var benchmarkData = xCategories.map(date => {
+                return {
+                    x: date,
+                    y: benchmark
+                };
+            }).reverse();
+            seriesData.push({
+                name: 'Benchmark',
+                data: benchmarkData,
+                connectNulls: true,
+                dataLabels: {
+                    enabled: false // Disable data labels for the Benchmark series
+                }
+            });
         }
-    });
-
-    // Add Benchmark dataset if benchmark is not null
-    if (benchmark !== null) {
-        var benchmarkData = xCategories.map(date => {
-            return {
-                x: date,
-                y: benchmark
-            };
-        }).reverse();
-
-        var benchmarkDataset = {
-            label: 'Benchmark',
-            data: benchmarkData,
-            backgroundColor: 'rgba(0, 0, 0, 0)', // Background color for benchmark
-            borderColor: '#000', // Border color for benchmark
-            borderWidth: 1, // Border width for benchmark
-            fill: false, // Don't fill the area under the benchmark
-        };
-
-        chart.data.datasets.push(benchmarkDataset);
-    }
-
-    // Update chart type
-    chart.config.type = selectedChartType;
-
-    // Update the chart
-    chart.update();
-}
-
-// Function to get chart options
-function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
-    var chartType = selectedChartType;
     
-    // Define colors for series
-    var colors = dataSeries.map(function(series, index) {
-        return series.borderColor || 'rgba(0, 0, 0, 0)';
-    });
+    // Pass seriesData to getChartOptions
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
+};
+
+function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
+    //console.log(selectedChartType);
+    var chartType = selectedChartType; // Get the selected chart type
+    //console.log(chartType);
+    let colors;
+    if (dataSeries && dataSeries.length > 0) {
+        colors = dataSeries.map(series => {
+            if (series.stroke && series.stroke.colors && series.stroke.colors[0]) {
+                return series.stroke.colors[0];
+            }
+            return '#000000'; // default color if no color is defined for a series
+        });
+    } else {
+        colors = ['#000000']; // default color array if dataSeries is invalid
+    }
 
     var dataLabelsSettings = {
         enabled: true,
-        color: '#333',
-        font: {
-            size: 12
-        },
-        formatter: function(value, context) {
-            var seriesName = context.dataset.label;
+        enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
+        formatter: function (val, opts) {
+            var seriesIndex = opts.seriesIndex;
+            var seriesName = opts.w.config.series[seriesIndex].name; // Get the name of the series.
             var isTrendlineOrBenchmark = seriesName.startsWith('Trendline ') || seriesName === 'Benchmark';
 
             if (isTrendlineOrBenchmark) {
-                return "";
+                return ""; // Don't show labels for trendline or benchmark.
             }
 
-            return value;
+            return val;
         },
-        anchor: 'end',
-        align: 'end',
-        offset: -10
+        offsetY: -10,
+        style: {
+            fontSize: '12px',
+            colors: ['#333']
+        }
     };
 
     if (chartType === 'bar') {
         dataLabelsSettings.enabled = false;
     }
-
+            
     return {
-        type: chartType,
-        data: {
-            labels: xCategories,
-            datasets: dataSeries.map(function(series, index) {
-                return {
-                    label: series.label || '',
-                    data: series.data || [],
-                    backgroundColor: 'rgba(0, 0, 0, 0)',
-                    borderColor: colors[index] || 'rgb(0, 0, 0)',
-                    borderWidth: 1,
-                    fill: false,
-                    borderDash: series.borderDash || [],
-                    pointRadius: series.pointRadius || 0,
-                    pointHoverRadius: series.pointHoverRadius || 0
-                };
-            })
+        series: dataSeries,
+        chart: {
+            type: chartType,
+            stacked: false,
+            width: 1000,
+            colors: colors,
+            zoom: {
+                type: 'x',
+                enabled: true,   // Ensure zooming is enabled
+                autoScaleYaxis: true  // This will auto-scale the Y-axis when zooming in
+            },
+            toolbar: {
+                autoSelected: 'zoom' 
+            },
+            pan: {
+                enabled: true,  // Enable panning
+                mode: 'x',      // Enable horizontal panning
+            },   
+            dropShadow: {
+                enabled: true,
+                color: '#000',
+                top: 15,          // Adjusted the vertical offset a bit
+                left: 5,          // Adjusted the horizontal offset a bit
+                blur: 7,         // Increased the blur to make it more spread out
+                opacity: 0.5      // Increased the opacity to make it darker
+            }
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    type: 'category',
-                    labels: xCategories,
-                    title: {
-                        display: true,
-                        text: 'Date'
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Value'
-                    },
-                    ticks: {
-                        beginAtZero: true,
-                        callback: function(value) {
-                            return value.toFixed(0);
-                        }
-                    }
-                }
-            },
-            plugins: {
-                zoom: {
-                    zoom: {
-                        enabled: true,
-                        mode: 'x',
-                        speed: 0.05
-                    }
-                },
-                legend: {
-                    display: true,
-                    position: 'top'
-                },
-                datalabels: dataLabelsSettings
-            },
-            elements: {
-                line: {
-                    tension: 0 // Use straight lines
+
+        dataLabels: dataLabelsSettings,
+        
+        plotOptions: {
+            bar: {
+                columnWidth: '80%', // Adjust the width of the bars (e.g., '80%')
+                horizontal: false, // Ensure bars are vertical
+                dataLabels: {
+                    position: 'bottom' // Adjust data label position as needed
                 }
             }
-        }
+        },
+
+        stroke: {
+            show: true,
+            curve: 'smooth',
+            width: dataSeries.map(series => {
+                // Check if 'name' exists before calling 'startsWith'
+                if (series.name && series.name.startsWith('Trendline ')) {
+                    return 1;  // or whatever dash length you prefer
+                } else {
+                    return 3;  // solid line for others
+                }
+            }),
+        },
+
+        markers: {
+            size: dataSeries.map(series => {
+                if (series.name === 'actualScoreName') {
+                    return 5;  // or whatever size you want for the "Selected Score" series
+                } else {
+                    return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
+                }
+            }),
+            colors: undefined,
+            strokeColors: '#fff',
+            strokeWidth: 1.7,
+            strokeOpacity: 1,
+            strokeDashArray: 0,
+            fillOpacity: 1,
+            discrete: [],
+            shape: "circle",
+            radius: 2,
+            offsetX: 0,
+            offsetY: 0,
+            onClick: undefined,
+            onDblClick: undefined,
+            showNullDataPoints: true,
+            hover: {
+                size: undefined,
+                sizeOffset: 1.5
+            }
+        },
+
+        xaxis: {
+                type: 'category', 
+                categories: xCategories,
+            labels: {
+                hideOverlappingLabels: false,
+                formatter: function(value) {
+                    return value;  // Simply return the value since we're not working with timestamps anymore
+                }
+            },
+            title: {
+                text: 'Date'
+            },
+        },        
+
+        yaxis: {
+            title: {
+                text: 'Value'
+            },
+            labels: {
+                formatter: function(value) {
+                    return value.toFixed(0);
+                }
+            }
+        },
+        grid: {
+            xaxis: {
+                lines: {
+                    show: true
+                }
+            }
+        },
+        //colors: ['#2196F3', '#FF5722', '#000000']
     };
 }
 
