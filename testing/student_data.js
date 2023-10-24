@@ -13,8 +13,6 @@ $(document).ready(function() {
     }
 
     // Instead of using .click() we're using the more verbose .on('click' ...) which is more explicit
-$(document).ready(function() {
-    // Handle the click event of the 'Update Benchmark' button
     $("#updateBenchmark").on('click', function() {
         // Retrieve the value from the input, making sure the ID used here matches the one in your HTML
         var newBenchmarkValue = $("#benchmarkValue").val().trim();
