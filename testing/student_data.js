@@ -187,7 +187,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 
     var dataLabelsSettings = {
         enabled: true,
-        enabledOnSeries = [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
+        enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
         formatter: function (val, opts) {
             var seriesIndex = opts.seriesIndex;
             var seriesName = opts.w.config.series[seriesIndex].name; // Get the name of the series.
