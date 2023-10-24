@@ -186,14 +186,27 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     }
 
     var dataLabelsSettings = {
-        enabled: true, // Enable data labels globally.
-        // ... any other global settings for your labels.
+        enabled: true,
+        formatter: function (val, opts) {
+            var seriesIndex = opts.seriesIndex;
+            var seriesName = opts.w.config.series[seriesIndex].name; // Get the name of the series.
+    
+            // Define the conditions under which you want to show labels.
+            // For instance, we check the series name here. Replace 'LineSeriesName1', 'LineSeriesName2', etc.
+            // with your actual line series names and 'TrendlineName' and 'BenchmarkName' with your actual trendline
+            // and benchmark series names.
+            if (seriesName === 'TrendlineName' || seriesName === 'Benchmark') {
+                return "";  // Don't show labels for trendline or benchmark.
+            }
+    
+            // If the series is one of your line graphs, show the label.
+            return val;
+        },
         offsetY: -10,
         style: {
             fontSize: '12px',
             colors: ['#333']
         }
-        // You do NOT specify enabledOnSeries here.
     };
     
 enabledOnSeries = [0, 2, 4, 6, 8, 10]; // Or specify the exact series indexes of line charts.
