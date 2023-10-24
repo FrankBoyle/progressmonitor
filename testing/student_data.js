@@ -13,20 +13,24 @@ $(document).ready(function() {
     // Initialize selectedColumns as an empty array
     var selectedColumns = [];
 
-    $("#scoreSelector").change(function() {
-        var selectedScore = $(this).val();
-        updateChart(selectedScore, selectedColumns);
-    });
-
     // Event listener for the "Update Benchmark" button
     $("#updateBenchmark").click(function() {
-        benchmark = parseFloat($("#benchmarkValue").val());
-        if (isNaN(benchmark)) {
-            alert("Invalid benchmark value.");
-            benchmark = null;  // Reset to default if the input is invalid
+        let benchmarkValue = $("#benchmarkInput").val();  // Getting the input value directly
+
+        if (!benchmarkValue) {
+            alert("Please input a benchmark value before updating.");
+            return;
         }
-        updateChart(selectedColumns); // 'selectedScore' and 'selectedColumns' need to be defined or fetched
-    }); 
+
+        benchmark = parseFloat(benchmarkValue);
+        if (isNaN(benchmark)) {
+            alert("Invalid benchmark value. Please enter a number.");
+            return;
+        }
+
+        // Assuming updateChart is your method to redraw or update the chart with new settings
+        updateChartWithCurrentSelections();
+    });
     
 // Handle checkbox clicks
 $("input[name='selectedColumns[]']").click(function() {
