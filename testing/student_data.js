@@ -162,11 +162,9 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
     if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
         console.log(xCategories);
 
-        console.log(date);
-
-        var benchmarkData = xCategories.map(date => {
+        var benchmarkData = xCategories.map(function(currentDate) {
             return {
-                x: date,
+                x: currentDate,
                 y: benchmark
             };
         }).reverse();  // Based on your code, you might or might not need to reverse the array
