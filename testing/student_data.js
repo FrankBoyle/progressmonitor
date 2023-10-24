@@ -186,37 +186,30 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     }
 
     var dataLabelsSettings = {
-        enabled: false, // Default: don't show labels.
+        enabled: true, // Globally enabling labels, to be selectively displayed.
         formatter: function (val, opts) {
-            // This function will be responsible for deciding when to display a label.
+            // This function decides when and where to display a label.
+    
+            // Information about the data point and series.
             var seriesIndex = opts.seriesIndex;
-            var dataPointIndex = opts.dataPointIndex;
-            var series = opts.w.globals.series[seriesIndex];
-
-            // For line charts, we want to identify min/max and only label those.
-            if (chartType === 'line') {
-                var minValue = Math.min(...series);
-                var maxValue = Math.max(...series);
-
-                // Only show the label if it's a min or max value within its series.
-                //if (val === minValue || val === maxValue) {
-                    //return val;
-                //}
-
-                // Hide other labels by returning an empty string.
-                return "";
+            var seriesName = opts.w.globals.seriesNames[seriesIndex]; // Getting the series name.
+    
+            // Check if it's the specific series you want to label.
+            // Please adjust "YourTargetSeriesName" to match your actual series name or condition.
+            if (seriesName === 'actualScoreName') {
+                return val; // Returning the value to be displayed as the label for the line series points.
             }
-
-            // For other chart types or series, we don't want to show labels.
+    
+            // If not the series we're interested in, don't show a label.
             return "";
         },
-        offsetY: -10, // or any suitable value
+        offsetY: -10, // You can adjust this value as needed.
         style: {
             fontSize: '12px',
             colors: ['#333']
         }
     };
-
+    
     if (chartType === 'line') {
         dataLabelsSettings.enabled = true;
         dataLabelsSettings.enabledOnSeries = [0, 2, 4, 6, 8, 10]; // Or specify the exact series indexes of line charts.
