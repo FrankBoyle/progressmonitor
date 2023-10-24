@@ -18,19 +18,16 @@ $(document).ready(function() {
     });
 
     // Event listener for the "Update Benchmark" button
-    $('#updateBenchmark').click(function() {
-        event.preventDefault();  // Prevents the default action (form submission, in some cases)
-        // Get the values from the input field and the radio buttons
-        benchmark = parseFloat($('#benchmarkValue').val());
-        var selectedChartType = $("input[name='chartType']:checked").val();
-        console.log(benchmark);
-        // Get other necessary data for the drawChart function
-        var selectedColumns = []; // You need to populate this based on your application's requirements
-        // Example: selectedColumns could be populated based on checkboxes that the user has selected
-
-        // Now call the function to draw your chart with the new settings
-        updateChart(selectedColumns, selectedChartType, xCategories); // Make sure xCategories is appropriately retrieved or maintained before this step
-    }); 
+    $("#updateBenchmark").click(function() {
+        var value = parseFloat($("#benchmarkValue").val());
+        if (!isNaN(value)) {
+            benchmark = value;
+            var selectedScore = $("#scoreSelector").val();
+            updateChart(selectedScore);
+        } else {
+            alert('Please enter a valid benchmark value.');
+        }
+    });
 
 // Handle checkbox clicks
 $("input[name='selectedColumns[]']").click(function() {
@@ -67,6 +64,8 @@ $("#toggleTrendlines").change(function() {
     // Call your update function here to redraw the chart based on checkbox status.
     updateChart(selectedColumns, selectedChartType, xCategories); // Make sure xCategories is appropriately retrieved or maintained before this step
 });
+updateChart('score1');  // Default
+
 });
 
 function initializeChart() {
@@ -164,29 +163,22 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
             }  
         });
 
-    if (benchmark !== null) {  // only proceed if benchmark has a meaningful value
-        console.log(xCategories);
-
-        var benchmarkData = xCategories.map(function(date) {
-            return {
-                x: date,
-                y: benchmark
-            };
-        }).reverse();  // Based on your code, you might or might not need to reverse the array
-        console.log(benchmarkData);
-
-        seriesData.push({
-            name: 'Benchmark',
-            data: benchmarkData,
-            connectNulls: true,
-            dataLabels: {
-                enabled: false // Disable data labels for the Benchmark series
-            },
-        });
-    } else {
-        // Log for debugging purposes, or handle the lack of a benchmark value appropriately
-        console.log("No benchmark value available.");
-    }
+        if (benchmark !== null) {
+            var benchmarkData = xCategories.map(date => {
+                return {
+                    x: date,
+                    y: benchmark
+                };
+            }).reverse();
+            seriesData.push({
+                name: 'Benchmark',
+                data: benchmarkData,
+                connectNulls: true,
+                dataLabels: {
+                    enabled: false // Disable data labels for the Benchmark series
+                }
+            });
+        }
     
     // Pass seriesData to getChartOptions
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
