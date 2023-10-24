@@ -1,5 +1,6 @@
 var benchmark = null;
 var selectedChartType = 'line'; // Default chart type
+var xCategories = [];
 
 $(document).ready(function() {
     initializeChart();
@@ -71,7 +72,6 @@ function initializeChart() {
 
 function getChartData(scoreField) {
     var chartData = [];
-    var xCategories = [];
 
     $('tr[data-performance-id]').each(function() {
         var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
