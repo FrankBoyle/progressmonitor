@@ -168,7 +168,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories) {
                 y: benchmark
             };
         }).reverse();  // Based on your code, you might or might not need to reverse the array
-    
+        console.log(benchmarkData);
+
         seriesData.push({
             name: 'Benchmark',
             data: benchmarkData,
