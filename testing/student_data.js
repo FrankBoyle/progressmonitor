@@ -33,7 +33,7 @@ $(document).ready(function() {
     });
     
 // Handle checkbox clicks
-    $("input[name='selectedColumns[]']").click(updateChartWithCurrentSelections);
+$("input[name='selectedColumns[]']").click(function() {
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
