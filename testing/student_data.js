@@ -205,6 +205,10 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             colors: ['#333']
         }
     };
+
+    if (chartType === 'bar') {
+        dataLabelsSettings.enabled = false;
+    }
             
     return {
         series: dataSeries,
