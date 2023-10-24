@@ -15,8 +15,9 @@ $(document).ready(function() {
 
     // Event listener for the "Update Benchmark" button
     $('#updateBenchmark').click(function() {
+        event.preventDefault();  // Prevents the default action (form submission, in some cases)
         // Get the values from the input field and the radio buttons
-        var benchmark = parseFloat($('#benchmarkValue').val());
+        benchmark = parseFloat($('#benchmarkValue').val());
         var selectedChartType = $("input[name='chartType']:checked").val();
         console.log(benchmark);
         // Get other necessary data for the drawChart function
