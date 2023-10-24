@@ -243,13 +243,14 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         stroke: {
             show: true,
             curve: 'smooth',
-            width: dataSeries.map(series => {  // Set width based on series name
-            if (series.name.startsWith('Trendline')) {
-                return 1;  // or whatever dash length you prefer
-            } else {
-                return 3;  // solid line for others
-            }
-        }),
+            width: dataSeries.map(series => {
+                // Check if 'name' exists before calling 'startsWith'
+                if (series.name && series.name.startsWith('Trendline')) {
+                    return 1;  // or whatever dash length you prefer
+                } else {
+                    return 3;  // solid line for others
+                }
+            }),
         },
 
         markers: {
