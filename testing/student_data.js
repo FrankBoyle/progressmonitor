@@ -5,11 +5,6 @@ var xCategories = [];
 $(document).ready(function() {
     initializeChart();
 
-    benchmark = parseFloat($("#benchmarkValue").val());
-    if (isNaN(benchmark)) {
-        benchmark = null;  // Default benchmark value if the input is not provided
-    }
-
     // Initialize selectedColumns as an empty array
     var selectedColumns = [];
 
