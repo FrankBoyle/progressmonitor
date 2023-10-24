@@ -217,6 +217,11 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         }
     };
 
+    if (chartType === 'line') {
+        dataLabelsSettings.enabled = true;
+        dataLabelsSettings.enabledOnSeries = [0, 2, 4, 6, 8, 10]; // Or specify the exact series indexes of line charts.
+    }
+    
     return {
         series: dataSeries,
         chart: {
