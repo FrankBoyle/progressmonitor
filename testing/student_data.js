@@ -4,6 +4,7 @@ var xCategories = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     initializeChart();
+    updateChartWithCurrentSelections();
 
     // Update the chart when the "Update Benchmark" button is clicked
     document.querySelector('#updateBenchmark').addEventListener('click', function () {
