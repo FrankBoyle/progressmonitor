@@ -179,7 +179,7 @@ if (isset($_GET['metadata_id'])) {
 <!-- Radio buttons to select chart type -->
 
 <div id="chart-container">
-        <canvas id="myChart"></canvas>
+        <canvas id="Chart"></canvas>
     </div>
 
 </body>
