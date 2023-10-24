@@ -26,7 +26,7 @@ $(document).ready(function() {
             alert("Invalid benchmark value. Please enter a number.");
         } else {
             console.log("Valid number entered, updating chart."); // This confirms that the number was valid and the function should be executed
-            updateChartWithCurrentSelections(); // Make sure this function is defined and works correctly
+            updateChartWithCurrentSelections(benchmarkValue); // Make sure this function is defined and works correctly
         }
     });
 
