@@ -261,15 +261,21 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         var dataLabelsSettings = {
             enabled: true,
             formatter: function (val, opts) {
-                // First, we check if the current series is the 'Benchmark'. If so, we always hide its data labels.
-                if (opts.w.config.series[opts.seriesIndex].name === 'Benchmark') {
-                    return ''; // Return an empty string to hide data labels for 'Benchmark'.
+                var seriesName = opts.w.config.series[opts.seriesIndex].name;
+
+                // Hide data labels for 'Benchmark' and 'Trendline'.
+                if (seriesName === 'Benchmark' || seriesName.startsWith('Trendline')) {
+                    return '';
                 }
 
-                if (opts.w.config.series[opts.seriesIndex].name === 'Trendline ') {
-                    return ''; // Return an empty string to hide data labels for 'Benchmark'.
+                // For bar charts, we want to show data labels differently.
+                if (isBarChart) {
+                    // You need to calculate the total for the stack, then compare it with the current value.
+                    var totalForStack = stackTotals[opts.dataPointIndex];
+                    if (val === totalForStack) {
+                        return val.toFixed(0); // Show data label for total stack value.
+                    } 
                 }
-
                 // Logic for data labels in the bar chart.
                 if (chartType === 'bar') {
                     // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
