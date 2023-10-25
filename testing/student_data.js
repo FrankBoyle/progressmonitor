@@ -262,17 +262,14 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             enabled: true,
             formatter: function (val, opts) {
                 // First, we check if the current series is the 'Benchmark'. If so, we always hide its data labels.
-                var isTrendline = opts.w.config.series[opts.seriesIndex].type === 'line'; // This assumes 'line' is unique to your trendline
-
-                if (isTrendline) {
-                    // Don't display labels for the trendline
-                    return '';
-                }
-
                 if (opts.w.config.series[opts.seriesIndex].name === 'Benchmark') {
                     return ''; // Return an empty string to hide data labels for 'Benchmark'.
                 }
-        
+
+                if (opts.w.config.series[opts.seriesIndex].name === 'Trendline ') {
+                    return ''; // Return an empty string to hide data labels for 'Benchmark'.
+                }
+
                 // Logic for data labels in the bar chart.
                 if (chartType === 'bar') {
                     // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
