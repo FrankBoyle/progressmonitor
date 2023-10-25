@@ -242,32 +242,25 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
         enabled: true,
         enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
         formatter: function (val, opts) {
-            // Extracting common properties from 'opts'.
-            
-            var seriesIndex = opts.seriesIndex;
-            var dataPointIndex = opts.dataPointIndex;
-            var seriesName = opts.w.config.series[seriesIndex].name; // Get the name of the series.
-
-            if (seriesIndex === (dataSeries.length - 1)) {
-                // This is the topmost element in the stack; return the total for the stack.
-                var total = stackTotals[dataPointIndex];
-                return total.toFixed(0);  // Or use whatever formatting you prefer.
+            // Check if it's a bar chart and we're dealing with individual bar segments.
+            if (chartType === 'bar' && opts.seriesIndex !== undefined) {
+                var seriesIndex = opts.seriesIndex;
+                var dataPointIndex = opts.dataPointIndex;
+    
+                // We calculate the total for the stack and compare it with the current value.
+                // The individual bar segments of a stack won't match the total stack value, allowing us to filter them out.
+                var stackTotal = stackTotals[dataPointIndex];
+    
+                // If the value matches the stack total, we display it. Otherwise, we return an empty string to hide it.
+                // We ensure that the total is displayed without decimal points.
+                return (val === stackTotal) ? stackTotal.toFixed(0) : "";
             }
-
-            // First, handle your special cases for trendline and benchmark.
-            var isTrendlineOrBenchmark = seriesName.startsWith('Trendline ') || seriesName === 'Benchmark';
-            if (isTrendlineOrBenchmark) {
-                return ""; // Don't show labels for trendline or benchmark.
-            }
-       
-            // If none of the special conditions above apply, just return the value.
+    
+            // For other chart types or elements, you might want to handle them differently, e.g., displaying the value as is.
+            // This part can be customized based on your specific needs for other elements in your charts.
             return val;
         },
-        offsetY: -10, // You might need to adjust this offset depending on your chart's visual requirements.
-        style: {
-            fontSize: '12px',
-            colors: ['#333']
-        }
+        // ... other data label settings ...
     };
 
     if (chartType === 'bar') {
