@@ -293,7 +293,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
         
         annotations: {
             position: 'top',
-            xaxis: stackTotals.map((total, i) => {
+            xaxis: isBarChart && isStacked ? stackTotals.map((total, i) => {
                 return {
                     x: xCategories[i], // Set the x-coordinate to match the bar's category
                     offsetY: -20 - i * 15, // Adjust the offsetY based on the index to stagger them
@@ -306,7 +306,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
                         text: Math.round(total).toString(), // Shows total as a whole number
                     },
                 };
-            }),
+            }) : [],
         },
         
 
