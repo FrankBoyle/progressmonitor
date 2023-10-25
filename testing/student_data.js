@@ -173,21 +173,8 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     //console.log(selectedChartType);
     var chartType = selectedChartType; // Get the selected chart type
     //console.log(chartType);
-    var isStacked = chartType !== 'bar';
+    var isStacked = chartType === 'bar';
     
-    // Calculating the total for each stacked bar
-    var stackTotals = [];
-    if (isStacked && dataSeries.length) {
-        var categoriesCount = xCategories.length;
-        for (var i = 0; i < categoriesCount; i++) {
-            var total = 0;
-            for (var j = 0; j < dataSeries.length; j++) {
-                total += dataSeries[j].data[i] || 0; // Summing the data for each series in the stack
-            }
-            stackTotals.push(total);
-        }
-    }
-
     let colors;
     if (dataSeries && dataSeries.length > 0) {
         colors = dataSeries.map(series => {
@@ -234,6 +221,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             colors: ['#333']
         }
     };
+
 
     if (chartType === 'bar') {
         dataLabelsSettings.enabled = false;
