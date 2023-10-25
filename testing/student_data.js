@@ -155,15 +155,10 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                     y: benchmark
                 };
             }).reverse();
-
+            
             seriesData.push({
                 name: 'Benchmark',
                 data: benchmarkData,
-                type: 'line',
-                color: '#000000', // color of the line (black)
-                stroke: {
-                    dashArray: [5,5] // Here, "5,5" indicates the pattern of dashes and gaps in pixels. Adjust as necessary.
-                },                          
                 connectNulls: true,
                 dataLabels: {
                     enabled: false // Disable data labels for the Benchmark series
