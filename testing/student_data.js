@@ -195,18 +195,12 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
     // 2. Create annotations for stack totals.
     var totalAnnotations = [];
     if (isBarChart && isStacked) {
-        var barWidth = 0.5; // Adjust the width based on your chart
-        var barOffset = barWidth / 2;
-
         for (let i = 0; i < stackTotals.length; i++) {
-            // Adjusting the x-value to the middle of the bar
-            var xValue = i + barOffset;
-
             // Using the stack total as the y-value
             var yValue = stackTotals[i];
 
             totalAnnotations.push({
-                x: xValue,
+                x: i,
                 y: yValue,
                 label: {
                     borderColor: '#775DD0',
@@ -220,7 +214,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             });
         }
     }
-    
+
     let colors;
     if (dataSeries && dataSeries.length > 0) {
         colors = dataSeries.map(series => {
