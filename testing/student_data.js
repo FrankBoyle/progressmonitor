@@ -187,6 +187,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 stackTotals[i] += series.data[i];
             }
         }
+        console.log(stackTotals);
     }
 
     // 2. Create annotations for stack totals.
