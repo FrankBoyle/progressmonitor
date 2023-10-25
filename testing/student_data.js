@@ -260,47 +260,36 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             opacity: 0.5
         };
 
-    var dataLabelsSettings = {
-        enabled: true,
-        formatter: function (val, opts) {
-            // Check if it's a bar chart and we're dealing with individual bar segments.
-            if (chartType === 'bar' && opts.seriesIndex !== undefined) {
-                var seriesIndex = opts.seriesIndex;
-                var dataPointIndex = opts.dataPointIndex;
-
-                // We calculate the total for the stack and compare it with the current value.
-                // The individual bar segments of a stack won't match the total stack value, allowing us to filter them out.
-                var stackTotal = stackTotals[dataPointIndex];
-
-                // If the value matches the stack total, we display it. Otherwise, we return an empty string to hide it.
-                // We ensure that the total is displayed without decimal points.
-                return val.toFixed(0); // Adjust decimal places as needed.
-            }
-
-            if (opts.w.config.series[opts.seriesIndex].name === 'Benchmark') {
-                return ''; // Return an empty string to hide data labels for 'Benchmark'.
-            }
-
-                    // Logic for other chart types (e.g., line chart).
-        if (chartType === 'line') {
-            // For the line chart, let's assume you want to hide the data label for the 'Benchmark' series.
-            // Customize the format as needed. Below is an example of showing the value as is.
-            return val; // Or return val.toFixed(0); if you want to format the number.
-        }
-
-            if (opts.seriesIndex !== undefined) {
-                var seriesName = opts.w.config.series[opts.seriesIndex].name;
-                if (seriesName === 'Benchmark') {
-                    return ""; // Return an empty string for the Benchmark series to hide its data labels
+        var dataLabelsSettings = {
+            enabled: true,
+            formatter: function (val, opts) {
+                // First, we check if the current series is the 'Benchmark'. If so, we always hide its data labels.
+                if (opts.w.config.series[opts.seriesIndex].name === 'Benchmark') {
+                    return ''; // Return an empty string to hide data labels for 'Benchmark'.
                 }
-            }
-
-            // For other chart types or elements, you might want to handle them differently, e.g., displaying the value as is.
-            // This part can be customized based on your specific needs for other elements in your charts.
-            return val;
-        },
-        // ... other data label settings ...
-    };
+        
+                // Logic for data labels in the bar chart.
+                if (chartType === 'bar') {
+                    // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
+        
+                    // Here, we decide to show the label as it's a regular series in the bar chart.
+                    // Format the label as you need. For instance, you might want to show it as a whole number.
+                    return val.toFixed(0); // Or simply 'val' if you don't want to alter the formatting.
+                }
+        
+                // Logic for other chart types, such as a line chart.
+                if (chartType === 'line') {
+                    // For non-Benchmark series in the line chart, you can define specific formatting or conditions.
+        
+                    // For instance, you might want to show the data label as is or format it.
+                    return val; // Or 'val.toFixed(0)' for whole numbers, or any other formatting as needed.
+                }
+        
+                // Default return, in case the chart type is neither a bar nor a line, or for future compatibility.
+                // Adjust the formatting as needed.
+                return val;
+            },
+        };
 
     if (chartType === 'bar') {
         dataLabelsSettings.enabled = true;
