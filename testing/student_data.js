@@ -187,6 +187,20 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         colors = ['#000000']; // default color array if dataSeries is invalid
     }
 
+    var isBarChart = selectedChartType === 'bar';
+
+    // Conditional drop shadow based on chart type
+    var dropShadowConfig = isBarChart ? 
+        { enabled: false } : 
+        {
+            enabled: true,
+            color: '#000',
+            top: 15,
+            left: 5,
+            blur: 7,
+            opacity: 0.5
+        };
+
     var dataLabelsSettings = {
         enabled: true,
         enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
@@ -232,14 +246,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 enabled: true,  // Enable panning
                 mode: 'x',      // Enable horizontal panning
             },   
-            dropShadow: {
-                enabled: true,
-                color: '#000',
-                top: 15,          // Adjusted the vertical offset a bit
-                left: 5,          // Adjusted the horizontal offset a bit
-                blur: 7,         // Increased the blur to make it more spread out
-                opacity: 0.5      // Increased the opacity to make it darker
-            }
+            dropShadow: dropShadowConfig
         },
 
         dataLabels: dataLabelsSettings,
