@@ -193,14 +193,12 @@ for (let series of dataSeries) {
 console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
 
     // 2. Create annotations for stack totals.
-    let totalAnnotations = [];
-    if (isStacked) {
-        stackTotals.forEach((total, i) => {
-            const yOffset = 5; // This offset raises the annotation slightly above the bar.
-            
+    var totalAnnotations = [];
+    if (isBarChart && isStacked) {
+        for (let i = 0; i < stackTotals.length; i++) {
             totalAnnotations.push({
-                x: xCategories[i],  // Using actual category name instead of index.
-                y: total + yOffset, // Adding offset.
+                x: i,  // category index
+                y: stackTotals[i],
                 label: {
                     borderColor: '#775DD0',
                     offsetY: 0,
@@ -208,10 +206,10 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
                         color: '#fff',
                         background: '#775DD0',
                     },
-                    text: total.toString(),
+                    text: stackTotals[i].toFixed(0), // We're converting the total to an integer (removing decimals)
                 }
             });
-        });
+        }
     }
     
     let colors;
