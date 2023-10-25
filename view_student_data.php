@@ -66,14 +66,17 @@ if (isset($_GET['metadata_id'])) {
 <h2>Student Overview</h2>
 <p>Name: <?php echo $studentName; ?></p>
 <p>Category: <?php echo $selectedCategoryName; ?></p>
-
+<div>
 <a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
+</div>
 
+<div>
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
+</div>
 
 <div>
 <!-- Add the generated links here -->
