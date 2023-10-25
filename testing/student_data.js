@@ -246,25 +246,27 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         
         plotOptions: {
             bar: {
-                columnWidth: '80%', // Adjust the width of the bars (e.g., '80%')
-                horizontal: false, // Ensure bars are vertical
+                // Only include the 'horizontal' property if the chart is a bar chart (stacked)
+                ...(isStacked ? { horizontal: false } : {}),
+                columnWidth: '80%',
                 dataLabels: {
-                    position: 'bottom' // Adjust data label position as needed
+                    position: 'bottom'
                 }
             }
         },
 
+        // Conditional logic for stroke width if it's a line chart to avoid visual issues on a bar chart
         stroke: {
             show: true,
             curve: 'smooth',
-            width: dataSeries.map(series => {
-                // Check if 'name' exists before calling 'startsWith'
+            width: chartType === 'line' ? dataSeries.map(series => {
+                // Existing condition for Trendline and other series
                 if (series.name && series.name.startsWith('Trendline ')) {
-                    return 1;  // or whatever dash length you prefer
+                    return 1;
                 } else {
-                    return 3;  // solid line for others
+                    return 3;
                 }
-            }),
+            }) : 0,  // If it's not a line chart, we generally set the stroke width to 0 for bar charts
         },
 
         markers: {
