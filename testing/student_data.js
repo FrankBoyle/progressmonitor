@@ -214,20 +214,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             if (isTrendlineOrBenchmark) {
                 return ""; // Don't show labels for trendline or benchmark.
             }
-    
-            // Next, if it's a stacked chart, you may want to display the total for the stack.
-            if (isStacked) {
-                // Check if it's the last series in the stack because the total should be displayed only once.
-                var isLastSeriesInStack = (seriesIndex === opts.w.config.series.length - 1);
-                if (isLastSeriesInStack) {
-                    // Display the total for the stack (already calculated before).
-                    return stackTotals[dataPointIndex] || "";  // Show total if available, else empty string.
-                } else {
-                    // If it's not the last series, don't display anything.
-                    return "";
-                }
-            }
-    
+       
             // If none of the special conditions above apply, just return the value.
             return val;
         },
