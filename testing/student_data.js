@@ -196,17 +196,22 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
     var totalAnnotations = [];
     if (isBarChart && isStacked) {
         for (let i = 0; i < stackTotals.length; i++) {
+            // Adjusting the x-value. Instead of just 'i', we try to position it in the middle of the bar.
+            // The '+ 0.5' is to adjust for the fact that bars are centered on their x-value.
+            let adjustedX = i + 0.5;
+    
             totalAnnotations.push({
-                x: i,  // category index
+                x: adjustedX,
                 y: stackTotals[i],
+                yAxisIndex: 0,  // ensures the annotation is linked to the first y-axis
                 label: {
                     borderColor: '#775DD0',
-                    offsetY: 0,
+                    offsetY: -20,  // you might need to adjust this value to best fit your chart
                     style: {
                         color: '#fff',
                         background: '#775DD0',
                     },
-                    text: stackTotals[i].toFixed(0), // We're converting the total to an integer (removing decimals)
+                    text: stackTotals[i].toFixed(0),  // rounding the total, removing the decimal part
                 }
             });
         }
@@ -286,7 +291,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             },   
             dropShadow: dropShadowConfig,
             annotations: {
-                points: totalAnnotations,
+                xaxis: totalAnnotations,
             },
         },
 
