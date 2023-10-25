@@ -246,16 +246,16 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             if (chartType === 'bar' && opts.seriesIndex !== undefined) {
                 var seriesIndex = opts.seriesIndex;
                 var dataPointIndex = opts.dataPointIndex;
-    
+
                 // We calculate the total for the stack and compare it with the current value.
                 // The individual bar segments of a stack won't match the total stack value, allowing us to filter them out.
                 var stackTotal = stackTotals[dataPointIndex];
-    
+
                 // If the value matches the stack total, we display it. Otherwise, we return an empty string to hide it.
                 // We ensure that the total is displayed without decimal points.
                 return (val === stackTotal) ? stackTotal.toFixed(0) : "";
             }
-    
+
             // For other chart types or elements, you might want to handle them differently, e.g., displaying the value as is.
             // This part can be customized based on your specific needs for other elements in your charts.
             return val;
@@ -264,7 +264,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
     };
 
     if (chartType === 'bar') {
-        dataLabelsSettings.enabled = true;
+        dataLabelsSettings.enabled = false;
         }
             
     return {
