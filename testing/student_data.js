@@ -277,6 +277,10 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 return val.toFixed(0); // Adjust decimal places as needed.
             }
 
+            if (opts.w.config.series[opts.seriesIndex].name === 'Benchmark') {
+                return ''; // Return an empty string to hide data labels for 'Benchmark'.
+            }
+
                     // Logic for other chart types (e.g., line chart).
         if (chartType === 'line') {
             // For the line chart, let's assume you want to hide the data label for the 'Benchmark' series.
