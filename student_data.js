@@ -1,4 +1,5 @@
 var benchmark = null;
+var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
 var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 
@@ -152,9 +153,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                 {
                     name: 'Trendline ' + actualScoreName,
                     data: trendlineData,
-                    type: selectedChartType === 'bar' ? 'line' : undefined, // Optional: Explicitly set 'line' for bar chart view
-                    isTrendline: true, // custom property to identify this series as a trendline
-                    show: selectedChartType !== 'bar',  // If chart type is bar, trendline will not be visible initially
                     color: scoreColor,  // Set color property here for the series
                     stroke: {
                         dashArray: 3, // This makes the line dashed; the number controls the dash length
@@ -260,47 +258,53 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             opacity: 0.5
         };
 
-    var dataLabelsSettings = {
-        enabled: true,
-        enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
-        formatter: function (val, opts) {
-            // Check if it's a bar chart and we're dealing with individual bar segments.
-            if (chartType === 'bar' && opts.seriesIndex !== undefined) {
-                var seriesIndex = opts.seriesIndex;
-                var dataPointIndex = opts.dataPointIndex;
-
-                // We calculate the total for the stack and compare it with the current value.
-                // The individual bar segments of a stack won't match the total stack value, allowing us to filter them out.
-                var stackTotal = stackTotals[dataPointIndex];
-
-                // If the value matches the stack total, we display it. Otherwise, we return an empty string to hide it.
-                // We ensure that the total is displayed without decimal points.
-                return (val === stackTotal) ? stackTotal.toFixed(0) : "";
-            }
-
-            if (opts.seriesIndex !== undefined) {
+        var dataLabelsSettings = {
+            enabled: true,
+            offsetY: -20,
+            formatter: function (val, opts) {
                 var seriesName = opts.w.config.series[opts.seriesIndex].name;
-                if (seriesName === 'Benchmark') {
-                    return ""; // Return an empty string for the Benchmark series to hide its data labels
-                }
-            }
 
-            // For other chart types or elements, you might want to handle them differently, e.g., displaying the value as is.
-            // This part can be customized based on your specific needs for other elements in your charts.
-            return val;
-        },
-        // ... other data label settings ...
-    };
+                // Hide data labels for 'Benchmark' and 'Trendline'.
+                if (seriesName === 'Benchmark' || seriesName.startsWith('Trendline')) {
+                    return '';
+                }
+
+                // For bar charts, we want to show data labels differently.
+                if (isBarChart) {
+                    // You need to calculate the total for the stack, then compare it with the current value.
+                    var totalForStack = stackTotals[opts.dataPointIndex];
+                    if (val === totalForStack) {
+                        return val.toFixed(0); // Show data label for total stack value.
+                    } 
+                    filteredSeriesForBar = dataSeries.filter(function(series) {
+                        return !series.name.startsWith('Trendline');
+                    });
+                }
+                // Logic for data labels in the bar chart.
+                if (chartType === 'bar') {        
+                    // Format the label as you need. For instance, you might want to show it as a whole number.
+                    return val.toFixed(0); // Or simply 'val' if you don't want to alter the formatting.
+                }
+        
+                // Logic for other chart types, such as a line chart.
+                if (chartType === 'line') {
+                    // For instance, you might want to show the data label as is or format it.
+                    return val; // Or 'val.toFixed(0)' for whole numbers, or any other formatting as needed.
+                }
+        
+                return val;
+            },
+        };
 
     if (chartType === 'bar') {
         dataLabelsSettings.enabled = true;
         }
             
     return {
-        series: dataSeries,
+        series: isBarChart ? filteredSeriesForBar : dataSeries, // 2. Conditional Series Assignment
         chart: {
             type: chartType,
-            stacked: isStacked,
+            stacked: isBarChart,
             width: 1000,
             colors: colors,
             zoom: {
