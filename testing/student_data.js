@@ -204,7 +204,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             y: annotationY,
             label: {
                 borderColor: '#775DD0',
-                offsetY: -20, // You can adjust this value as needed
+                offsetY: 20, // You can adjust this value as needed
                 style: {
                     color: '#fff',
                     background: '#775DD0',
