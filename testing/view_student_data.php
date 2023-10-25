@@ -37,7 +37,7 @@ if (isset($_GET['metadata_id'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Performance Data</title>
+    <title><?php echo $studentName; ?></title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -61,7 +61,9 @@ if (isset($_GET['metadata_id'])) {
 </style>
 </head>
 <body>
-<h1>Student Overview</h1>
+<h1>Student Performance Data</h1>
+
+<h2>Student Overview</h2>
 <p>Name: <?php echo $studentName; ?></p>
 <p>Category: <?php echo $selectedCategoryName; ?></p>
 
@@ -134,7 +136,6 @@ if (isset($_GET['metadata_id'])) {
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-<h1>Student Performance Data</h1>
 <button id="addDataRow">Add Data Row</button>
 <div>
     <label>Show Trendlines:</label>
