@@ -294,14 +294,14 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 
     if (chartType === 'bar') {
         // If it's a bar chart, we want to enable data labels for all series (since it's a stacked bar chart).
-        dataLabelsSettings.enabledOnSeries = Array.from(getchartOptions.series.keys()); // Enables all series by creating an array of series indexes.
+        dataLabelsSettings.enabledOnSeries = Array.from(getChartOptions.series.keys()); // Enables all series by creating an array of series indexes.
     } else {
         // For line charts (or other types), you might have specific logic about which series should have data labels.
         // For instance, if you want to exclude the trendline, you need to identify its index and exclude it from 'enabledOnSeries'.
-        var trendlineIndex = getchartOptions.series.findIndex(s => s.name === 'Benchmark'); // or whatever the name of your trendline series is.
+        var trendlineIndex = getChartOptions.series.findIndex(s => s.name === 'Benchmark'); // or whatever the name of your trendline series is.
         
         // Create an array of all series indexes except the trendline.
-        dataLabelsSettings.enabledOnSeries = getchartOptions.series
+        dataLabelsSettings.enabledOnSeries = getChartOptions.series
             .map((s, index) => index) // create an array of series indexes
             .filter(index => index !== trendlineIndex); // exclude the trendline index
     }
