@@ -208,13 +208,14 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 
     if (chartType === 'bar') {
         dataLabelsSettings.enabled = false;
+    
     }
             
     return {
         series: dataSeries,
         chart: {
             type: chartType,
-            stacked: false,
+            stacked: true,
             width: 1000,
             colors: colors,
             zoom: {
