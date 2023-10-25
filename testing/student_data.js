@@ -262,7 +262,6 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 
     var dataLabelsSettings = {
         enabled: true,
-        enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
         formatter: function (val, opts) {
             // Check if it's a bar chart and we're dealing with individual bar segments.
             if (chartType === 'bar' && opts.seriesIndex !== undefined) {
@@ -277,6 +276,18 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 // We ensure that the total is displayed without decimal points.
                 return val.toFixed(0); // Adjust decimal places as needed.
             }
+
+                    // Logic for other chart types (e.g., line chart).
+        if (chartType === 'line') {
+            // For the line chart, let's assume you want to hide the data label for the 'Benchmark' series.
+            if (opts.w.config.series[opts.seriesIndex].name === 'Benchmark') {
+                return ''; // Hide data label for 'Benchmark'.
+            }
+
+            // For other series, you might want to show the data label.
+            // Customize the format as needed. Below is an example of showing the value as is.
+            return val; // Or return val.toFixed(0); if you want to format the number.
+        }
 
             if (opts.seriesIndex !== undefined) {
                 var seriesName = opts.w.config.series[opts.seriesIndex].name;
@@ -293,18 +304,8 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     };
 
     if (chartType === 'bar') {
-        // If it's a bar chart, we want to enable data labels for all series (since it's a stacked bar chart).
-        dataLabelsSettings.enabledOnSeries = Array.from(getChartOptions.series.keys()); // Enables all series by creating an array of series indexes.
-    } else {
-        // For line charts (or other types), you might have specific logic about which series should have data labels.
-        // For instance, if you want to exclude the trendline, you need to identify its index and exclude it from 'enabledOnSeries'.
-        var trendlineIndex = getChartOptions.series.findIndex(s => s.name === 'Benchmark'); // or whatever the name of your trendline series is.
-        
-        // Create an array of all series indexes except the trendline.
-        dataLabelsSettings.enabledOnSeries = getChartOptions.series
-            .map((s, index) => index) // create an array of series indexes
-            .filter(index => index !== trendlineIndex); // exclude the trendline index
-    }
+        dataLabelsSettings.enabled = true;
+        }
             
     return {
         series: dataSeries,
