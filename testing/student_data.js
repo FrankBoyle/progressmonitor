@@ -169,7 +169,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
     window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, actualScoreName));
 };
 
-function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
+function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName, stackTotals) {
     //console.log(selectedChartType);
     var isBarChart = selectedChartType === 'bar';
     var chartType = selectedChartType; // Get the selected chart type
