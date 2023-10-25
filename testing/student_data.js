@@ -136,6 +136,8 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                 {
                     name: 'Trendline ' + actualScoreName,
                     data: trendlineData,
+                    type: selectedChartType === 'bar' ? 'line' : undefined, // Optional: Explicitly set 'line' for bar chart view
+                    show: selectedChartType !== 'bar',  // If chart type is bar, trendline will not be visible initially
                     color: scoreColor,  // Set color property here for the series
                     stroke: {
                         dashArray: 3, // This makes the line dashed; the number controls the dash length
