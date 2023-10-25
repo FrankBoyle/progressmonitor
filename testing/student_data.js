@@ -175,13 +175,14 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     var chartType = selectedChartType; // Get the selected chart type
     var isStacked = chartType === 'bar'; // This line seems to be repetitive since isBarChart already holds this information
     var stackTotals = new Array(xCategories.length).fill(0);
-// The summation part should look like this, assuming series.data contains numbers.
-dataSeries.forEach(function(series) {
-    series.data.forEach(function(dataPoint, index) {
-        stackTotals[index] += dataPoint.y || 0; // Add dataPoint.y to stack total (or 0 if undefined)
+   
+    // The summation part should look like this, assuming series.data contains numbers.
+    dataSeries.forEach(function(series) {
+        series.data.forEach(function(dataPoint, index) {
+            stackTotals[index] += dataPoint.y || 0; // Add dataPoint.y to stack total (or 0 if undefined)
+        });
     });
-});
-console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
+    console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
 
     // Create an array to store annotation objects
     var totalAnnotations = [];
@@ -254,6 +255,13 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
                 // If the value matches the stack total, we display it. Otherwise, we return an empty string to hide it.
                 // We ensure that the total is displayed without decimal points.
                 return (val === stackTotal) ? stackTotal.toFixed(0) : "";
+            }
+            
+            if (opts.seriesIndex !== undefined) {
+                var seriesName = opts.w.config.series[opts.seriesIndex].name;
+                if (seriesName === 'Benchmark') {
+                    return ""; // Return an empty string for the Benchmark series to hide its data labels
+                }
             }
 
             // For other chart types or elements, you might want to handle them differently, e.g., displaying the value as is.
