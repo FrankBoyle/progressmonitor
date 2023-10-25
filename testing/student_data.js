@@ -313,18 +313,6 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             }),
         },
 
-        plotOptions: {
-            bar: {
-                // Only include the 'horizontal' property if the chart is a bar chart (stacked)
-                ...(isStacked ? { horizontal: false } : {}),
-                columnWidth: '80%',
-                dataLabels: {
-                    enabled: false,
-                    position: 'bottom'
-                }
-            }
-        },
-
         // Conditional logic for stroke width if it's a line chart to avoid visual issues on a bar chart
         stroke: {
             show: true,
