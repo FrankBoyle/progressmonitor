@@ -70,9 +70,6 @@ if (isset($_GET['metadata_id'])) {
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 
-<h1>Student Performance Data</h1>
-<button id="addDataRow">Add Data Row</button>
-
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
 
@@ -137,7 +134,8 @@ if (isset($_GET['metadata_id'])) {
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-
+<h1>Student Performance Data</h1>
+<button id="addDataRow">Add Data Row</button>
 <div>
     <label>Show Trendlines:</label>
     <input type="checkbox" id="toggleTrendlines" checked> <!-- Checked by default -->
