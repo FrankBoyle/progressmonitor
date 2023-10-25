@@ -174,7 +174,35 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     var isBarChart = selectedChartType === 'bar';
     var chartType = selectedChartType; // Get the selected chart type
     var isStacked = chartType === 'bar'; // This line seems to be repetitive since isBarChart already holds this information
- 
+    let stackTotals = [];
+    if (isStacked) {
+        // Initialize totals
+        for (let i = 0; i < xCategories.length; i++) {
+            stackTotals[i] = 0;
+        }
+
+        // Sum up values for each category across all series
+        for (let series of dataSeries) {
+            for (let i = 0; i < series.data.length; i++) {
+                stackTotals[i] += series.data[i];
+            }
+        }
+    }
+
+    // 2. Create annotations for stack totals.
+    let totalAnnotations = [];
+    if (isStacked) {
+        for (let i = 0; i < stackTotals.length; i++) {
+            totalAnnotations.push({
+                x: i,  // Assuming categories are indexed from 0
+                y: stackTotals[i],
+                label: {
+                    text: stackTotals[i].toString(), // Convert total value to string for display
+                    // ...additional label styling as needed...
+                }
+            });
+        }
+    }
     
     let colors;
     if (dataSeries && dataSeries.length > 0) {
@@ -248,7 +276,10 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 enabled: true,  // Enable panning
                 mode: 'x',      // Enable horizontal panning
             },   
-            dropShadow: dropShadowConfig
+            dropShadow: dropShadowConfig,
+            annotations: {
+                points: totalAnnotations,
+            },
         },
 
         dataLabels: dataLabelsSettings,
