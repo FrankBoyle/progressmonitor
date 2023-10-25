@@ -238,31 +238,9 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         }
     };
 
-    if (isBarChart) {
-        dataLabelsSettings = {
-            ...dataLabelsSettings, // keeping the common settings
-            inside: false,  // set to 'true' if you want labels inside the bars
-            position: 'top',  // positioning the labels at the top of the bars
-            offsetY: 0,  // adjust as needed
-            style: {
-                fontSize: '12px',
-                colors: ['#333']
-            },
-            formatter: function (val, opts) {
-                // your existing formatter logic
-                return val;
-            }
-        };
-    }
-
     if (chartType === 'bar') {
         dataLabelsSettings.enabled = false;
-        Object.assign(dataLabelsSettings, {
-            inside: false,  // Example setting, adjust as needed.
-            position: 'top',  // Labels on top for bar charts.
-        });
-    
-}
+        }
             
     return {
         series: dataSeries,
