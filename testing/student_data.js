@@ -296,7 +296,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             xaxis: isBarChart && isStacked ? stackTotals.map((total, i) => {
                 return {
                     x: xCategories[i], // Set the x-coordinate to match the bar's category
-                    offsetY: 20, // Adjust the offsetY based on the index to stagger them
+                    offsetY: 0, // Adjust the offsetY based on the index to stagger them
                     label: {
                         borderColor: '#775DD0',
                         style: {
