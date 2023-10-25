@@ -275,7 +275,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 
                 // If the value matches the stack total, we display it. Otherwise, we return an empty string to hide it.
                 // We ensure that the total is displayed without decimal points.
-                return (val === stackTotal) ? stackTotal.toFixed(0) : "";
+                return val.toFixed(0); // Adjust decimal places as needed.
             }
 
             if (opts.seriesIndex !== undefined) {
