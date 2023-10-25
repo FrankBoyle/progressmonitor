@@ -174,22 +174,13 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     var isBarChart = selectedChartType === 'bar';
     var chartType = selectedChartType; // Get the selected chart type
     var isStacked = chartType === 'bar'; // This line seems to be repetitive since isBarChart already holds this information
-    let stackTotals = new Array(xCategories.length).fill(0);
+    var stackTotals = new Array(xCategories.length).fill(0);
 // The summation part should look like this, assuming series.data contains numbers.
-for (let series of dataSeries) {
-    for (let i = 0; i < series.data.length; i++) {
-        // Make sure we are adding numbers. If data points can be non-numeric, 
-        // a type check and conversion might be necessary.
-        let value = series.data[i];
-        if (typeof value === 'number') { // Check to ensure 'value' is indeed a number
-            stackTotals[i] += value;
-        } else if (typeof value === 'object' && value !== null && 'y' in value) {
-            // If 'value' is an object with a 'y' property, use that for the summation.
-            // This is under the assumption that your data might be in the format { y: 10, ...otherProps }
-            stackTotals[i] += value.y;
-        } // Implement other conditions if your data can have different formats.
-    }
-}
+dataSeries.forEach(function(series) {
+    series.data.forEach(function(dataPoint, index) {
+        stackTotals[index] += dataPoint.y || 0; // Add dataPoint.y to stack total (or 0 if undefined)
+    });
+});
 console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
 
     // Calculate stack totals for the annotations
