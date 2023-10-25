@@ -183,22 +183,28 @@ dataSeries.forEach(function(series) {
 });
 console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
 
-    // Calculate stack totals for the annotations
-    var totalAnnotations = stackTotals.map(function(total, i) {
-        return {
-            y: total,
-            offsetX: 0,
-            offsetY: 0,
+    // Create an array to store annotation objects
+    var totalAnnotations = [];
+
+    // Iterate through the categories and stack totals
+    for (var i = 0; i < xCategories.length; i++) {
+        var xValue = xCategories[i];
+        var stackTotal = stackTotals[i];
+
+        totalAnnotations.push({
+            x: xValue, // Set the x-coordinate to match the bar's category
+            y: stackTotal,
             label: {
                 borderColor: '#775DD0',
+                offsetY: -20, // You can adjust this value as needed
                 style: {
                     color: '#fff',
                     background: '#775DD0',
                 },
-                text: Math.round(total).toString(), // Display total as a whole number
+                text: stackTotal.toFixed(0), // Display total as a whole number
             },
-        };
-    });
+        });
+    }
 
 
     let colors;
