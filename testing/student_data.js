@@ -160,6 +160,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                 name: 'Benchmark',
                 data: benchmarkData,
                 connectNulls: true,
+                color: '#000000', // Setting the line color to black.
                 dataLabels: {
                     enabled: false // Disable data labels for the Benchmark series
                 }
