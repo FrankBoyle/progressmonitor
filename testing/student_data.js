@@ -257,7 +257,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
     };
 
     if (chartType === 'bar') {
-        dataLabelsSettings.enabled = false;
+        dataLabelsSettings.enabled = true;
         }
             
     return {
