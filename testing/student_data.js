@@ -192,16 +192,23 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     // 2. Create annotations for stack totals.
     let totalAnnotations = [];
     if (isStacked) {
-        for (let i = 0; i < stackTotals.length; i++) {
+        stackTotals.forEach((total, i) => {
+            const yOffset = 5; // This offset raises the annotation slightly above the bar.
+            
             totalAnnotations.push({
-                x: i,  // Assuming categories are indexed from 0
-                y: stackTotals[i],
+                x: xCategories[i],  // Using actual category name instead of index.
+                y: total + yOffset, // Adding offset.
                 label: {
-                    text: stackTotals[i].toString(), // Convert total value to string for display
-                    // ...additional label styling as needed...
+                    borderColor: '#775DD0',
+                    offsetY: 0,
+                    style: {
+                        color: '#fff',
+                        background: '#775DD0',
+                    },
+                    text: total.toString(),
                 }
             });
-        }
+        });
     }
     
     let colors;
