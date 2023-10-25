@@ -37,7 +37,7 @@ if (isset($_GET['metadata_id'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Performance Data</title>
+    <title><?php echo $studentName; ?></title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -45,6 +45,7 @@ if (isset($_GET['metadata_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="student_data.js"></script>
     
     <script>
@@ -60,7 +61,9 @@ if (isset($_GET['metadata_id'])) {
 </style>
 </head>
 <body>
-<h1>Student Overview</h1>
+<h1>Student Performance Data</h1>
+
+<h2>Student Overview</h2>
 <p>Name: <?php echo $studentName; ?></p>
 <p>Category: <?php echo $selectedCategoryName; ?></p>
 
@@ -68,9 +71,6 @@ if (isset($_GET['metadata_id'])) {
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
-
-<h1>Student Performance Data</h1>
-<button id="addDataRow">Add Data Row</button>
 
 <label for="startDateFilter">Filter by Start Date:</label>
 <input type="text" id="startDateFilter">
@@ -136,7 +136,7 @@ if (isset($_GET['metadata_id'])) {
         <?php endforeach; ?>
     <?php endif; ?>
 </table>
-
+<button id="addDataRow">Add Data Row</button>
 <div>
     <label>Show Trendlines:</label>
     <input type="checkbox" id="toggleTrendlines" checked> <!-- Checked by default -->
@@ -174,11 +174,7 @@ if (isset($_GET['metadata_id'])) {
     </label>
 </div>
 <div id="chart"></div> <!-- Div to display the chart -->
-
 <!-- Radio buttons to select chart type -->
-
-
-
 
 </body>
 </html>
