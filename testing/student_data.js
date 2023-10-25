@@ -256,7 +256,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     }
 
     if (chartType === 'bar') {
-        dataLabelsSettings.enabled = false;
+        dataLabelsSettings.enabled = true;
     
     }
             
