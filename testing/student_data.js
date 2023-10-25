@@ -42,15 +42,15 @@ $(document).ready(function() {
     updateChartWithCurrentSelections();
 });
 
-function updateChartWithCurrentSelections() {
+function updateChartWithCurrentSelections(benchmark) {
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
     });
 
     var selectedChartType = $("input[name='chartType']:checked").val();
-    
-    updateChart(selectedColumns, selectedChartType, xCategories, benchmark); // Update chart with current selections
+
+    updateChart(selectedColumns, selectedChartType, xCategories, benchmark);
 }
 
 function initializeChart() {
@@ -192,28 +192,23 @@ for (let series of dataSeries) {
 }
 console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
 
-    // 2. Create annotations for stack totals.
-    var totalAnnotations = [];
-    if (isBarChart && isStacked) {
-        for (let i = 0; i < stackTotals.length; i++) {
-            // Using the stack total as the y-value
-            var yValue = stackTotals[i];
-
-            totalAnnotations.push({
-                x: xCategories[i], // Set the x-coordinate to match the bar's category
-                y: yValue,
-                label: {
-                    borderColor: '#775DD0',
-                    offsetY: -20, // You can adjust this value as needed
-                    style: {
-                        color: '#fff',
-                        background: '#775DD0',
-                    },
-                    text: yValue.toFixed(0), // Display total as a whole number
+    // Calculate stack totals for the annotations
+    var totalAnnotations = stackTotals.map(function(total, i) {
+        return {
+            y: total,
+            offsetX: 0,
+            offsetY: 0,
+            label: {
+                borderColor: '#775DD0',
+                style: {
+                    color: '#fff',
+                    background: '#775DD0',
                 },
-            });
-        }
-    }
+                text: Math.round(total).toString(), // Display total as a whole number
+            },
+        };
+    });
+
 
     let colors;
     if (dataSeries && dataSeries.length > 0) {
@@ -289,6 +284,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             },   
             dropShadow: dropShadowConfig,
             annotations: {
+                position: 'top',
                 xaxis: totalAnnotations,
             },
         },
