@@ -190,6 +190,7 @@ for (let series of dataSeries) {
         } // Implement other conditions if your data can have different formats.
     }
 }
+console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
 
     // 2. Create annotations for stack totals.
     let totalAnnotations = [];
