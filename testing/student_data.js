@@ -243,10 +243,15 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
         enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
         formatter: function (val, opts) {
             // Extracting common properties from 'opts'.
+            
             var seriesIndex = opts.seriesIndex;
             var dataPointIndex = opts.dataPointIndex;
             var seriesName = opts.w.config.series[seriesIndex].name; // Get the name of the series.
-    
+            var lastSeriesIndex = dataSeries.length - 1; 
+        if (opts.seriesIndex === lastSeriesIndex) {
+            var total = stackTotals[opts.dataPointIndex]; // Get the total for this stack
+            return total.toFixed(2); // Format it as needed
+        }
             // First, handle your special cases for trendline and benchmark.
             var isTrendlineOrBenchmark = seriesName.startsWith('Trendline ') || seriesName === 'Benchmark';
             if (isTrendlineOrBenchmark) {
@@ -264,7 +269,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
     };
 
     if (chartType === 'bar') {
-        dataLabelsSettings.enabled = false;
+        dataLabelsSettings.enabled = true;
         }
             
     return {
