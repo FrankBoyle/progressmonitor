@@ -301,7 +301,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         var trendlineIndex = chartOptions.series.findIndex(s => s.name === 'Benchmark'); // or whatever the name of your trendline series is.
         
         // Create an array of all series indexes except the trendline.
-        dataLabelsSettings.enabledOnSeries = chartOptions.series
+        dataLabelsSettings.enabledOnSeries = getchartOptions.series
             .map((s, index) => index) // create an array of series indexes
             .filter(index => index !== trendlineIndex); // exclude the trendline index
     }
