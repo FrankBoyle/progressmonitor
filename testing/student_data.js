@@ -171,9 +171,10 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
 
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName) {
     //console.log(selectedChartType);
+    var isBarChart = selectedChartType === 'bar';
     var chartType = selectedChartType; // Get the selected chart type
-    //console.log(chartType);
-    var isStacked = chartType === 'bar';
+    var isStacked = chartType === 'bar'; // This line seems to be repetitive since isBarChart already holds this information
+ 
     
     let colors;
     if (dataSeries && dataSeries.length > 0) {
@@ -186,25 +187,6 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     } else {
         colors = ['#000000']; // default color array if dataSeries is invalid
     }
-
-    if (isBarChart) {
-        dataLabelsSettings = {
-            ...dataLabelsSettings, // keeping the common settings
-            inside: false,  // set to 'true' if you want labels inside the bars
-            position: 'top',  // positioning the labels at the top of the bars
-            offsetY: 0,  // adjust as needed
-            style: {
-                fontSize: '12px',
-                colors: ['#333']
-            },
-            formatter: function (val, opts) {
-                // your existing formatter logic
-                return val;
-            }
-        };
-    }
-
-    var isBarChart = selectedChartType === 'bar';
 
     // Conditional drop shadow based on chart type
     var dropShadowConfig = isBarChart ? 
@@ -256,6 +238,22 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         }
     };
 
+    if (isBarChart) {
+        dataLabelsSettings = {
+            ...dataLabelsSettings, // keeping the common settings
+            inside: false,  // set to 'true' if you want labels inside the bars
+            position: 'top',  // positioning the labels at the top of the bars
+            offsetY: 0,  // adjust as needed
+            style: {
+                fontSize: '12px',
+                colors: ['#333']
+            },
+            formatter: function (val, opts) {
+                // your existing formatter logic
+                return val;
+            }
+        };
+    }
 
     if (chartType === 'bar') {
         dataLabelsSettings.enabled = false;
