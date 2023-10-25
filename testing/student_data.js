@@ -90,6 +90,22 @@ function getChartData(scoreField) {
     return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
+function onChartTypeChange(newType) {
+    if (newType === 'bar') {
+        // If the new chart is a bar chart, we want to hide the trendline.
+        chart.updateSeries([{
+            //... other series data
+            data: [] // setting data to an empty array effectively hides the series
+        }]);
+    } else {
+        // If the chart type is not 'bar', we want to ensure the trendline is visible.
+        // Here you'd reset the trendline data back to what it should be.
+        chart.updateSeries([{
+            //... original series data, including trendline data
+        }]);
+    }
+}
+
 function updateChart(selectedColumns, selectedChartType, xCategories, benchmark) {
     var seriesData = [];
     // Define colors for scores and their trendlines
@@ -137,6 +153,7 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                     name: 'Trendline ' + actualScoreName,
                     data: trendlineData,
                     type: selectedChartType === 'bar' ? 'line' : undefined, // Optional: Explicitly set 'line' for bar chart view
+                    isTrendline: true, // custom property to identify this series as a trendline
                     show: selectedChartType !== 'bar',  // If chart type is bar, trendline will not be visible initially
                     color: scoreColor,  // Set color property here for the series
                     stroke: {
