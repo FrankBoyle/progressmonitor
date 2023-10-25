@@ -155,9 +155,14 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                     y: benchmark
                 };
             }).reverse();
+
             seriesData.push({
                 name: 'Benchmark',
                 data: benchmarkData,
+                type: 'line',
+                color: '#000000', // color of the line (black)
+                dashStyle: 'Dash', // style of the dash (this is typically how you'd set a dashed line in charting libraries)
+                lineWidth: 1, // you can set the width of the line (optional)               
                 connectNulls: true,
                 dataLabels: {
                     enabled: false // Disable data labels for the Benchmark series
@@ -256,7 +261,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 // We ensure that the total is displayed without decimal points.
                 return (val === stackTotal) ? stackTotal.toFixed(0) : "";
             }
-            
+
             if (opts.seriesIndex !== undefined) {
                 var seriesName = opts.w.config.series[opts.seriesIndex].name;
                 if (seriesName === 'Benchmark') {
