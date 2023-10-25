@@ -293,22 +293,22 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
         
         annotations: {
             position: 'top',
-            yaxis: stackTotals.map((total, i) => {
+            xaxis: stackTotals.map((total, i) => {
                 return {
-                    y: total,
-                    offsetX: 0,
-                    offsetY: 0,
+                    x: xCategories[i], // Set the x-coordinate to match the bar's category
+                    offsetY: -20, // You can adjust this value as needed
                     label: {
                         borderColor: '#775DD0',
                         style: {
                             color: '#fff',
                             background: '#775DD0',
                         },
-                        text: Math.round(total).toString(), // Shows total as a whole number.
-                    }
+                        text: Math.round(total).toString(), // Shows total as a whole number
+                    },
                 };
             }),
         },
+        
 
         // Conditional logic for stroke width if it's a line chart to avoid visual issues on a bar chart
         stroke: {
