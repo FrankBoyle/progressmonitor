@@ -323,18 +323,20 @@ function calculateTrendline(data) {
     };
 }
 
+// Example code to populate scoreNamesMap (modify based on your HTML structure)
 function getScoreNamesMap() {
     var scoreNamesMap = {};
-    // Assume each checkbox is immediately contained within a label element as per your HTML
-    $('input[name="selectedColumns[]"]').each(function() {
-        var $checkbox = $(this);
-        // The parent label's text is the score name
-        var scoreName = $checkbox.parent().text().trim();
-        var checkboxValue = $checkbox.val();
-        scoreNamesMap[checkboxValue] = scoreName;
+    var checkboxes = document.querySelectorAll("input[name='selectedColumns[]']");
+
+    checkboxes.forEach(function (checkbox) {
+        var columnName = checkbox.value;
+        var label = checkbox.parentElement.textContent.trim();
+        scoreNamesMap[columnName] = label;
     });
+
     return scoreNamesMap;
 }
+
 
 ////////////////////////////////////////////////
 
