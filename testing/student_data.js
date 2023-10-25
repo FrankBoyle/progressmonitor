@@ -221,7 +221,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 var isLastSeriesInStack = (seriesIndex === opts.w.config.series.length - 1);
                 if (isLastSeriesInStack) {
                     // Display the total for the stack (already calculated before).
-                    return stackTotals[dataPointIndex];
+                    return stackTotals[dataPointIndex] || "";  // Show total if available, else empty string.
                 } else {
                     // If it's not the last series, don't display anything.
                     return "";
@@ -257,8 +257,12 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 
     if (chartType === 'bar') {
         dataLabelsSettings.enabled = true;
+        Object.assign(dataLabelsSettings, {
+            inside: false,  // Example setting, adjust as needed.
+            position: 'top',  // Labels on top for bar charts.
+        });
     
-    }
+}
             
     return {
         series: dataSeries,
