@@ -302,6 +302,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
                         style: {
                             color: '#fff',
                             background: '#775DD0',
+                            textAlign: 'center', // Center-align the text horizontally
                         },
                         text: Math.round(total).toString(), // Shows total as a whole number
                     },
