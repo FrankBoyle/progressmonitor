@@ -190,11 +190,13 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
     var chartWidth = 1000; // Set to your desired chart width
     var barWidth = chartWidth / xCategories.length;
 
-    // Iterate through the stack totals and position annotations manually
-    for (var i = 0; i < stackTotals.length; i++) {
-        var stackTotal = stackTotals[i];
+    // Iterate through the xCategories and calculate stack totals for each category
+    xCategories.forEach(function (category, index) {
+        var stackTotal = dataSeries.reduce(function (total, series) {
+            return total + (series.data[index].y || 0); // Add dataPoint.y to stack total (or 0 if undefined)
+        }, 0);
 
-        var annotationX = i * barWidth + barWidth / 2; // Center the annotation over the bar
+        var annotationX = index * barWidth + barWidth / 2; // Center the annotation over the bar
         var annotationY = stackTotal; // Use the stack total as the y-coordinate
 
         totalAnnotations.push({
@@ -210,8 +212,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
                 text: stackTotal.toFixed(0), // Display total as a whole number
             },
         });
-    }
-
+    });
 
     let colors;
     if (dataSeries && dataSeries.length > 0) {
