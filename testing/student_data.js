@@ -307,6 +307,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
                 ...(isStacked ? { horizontal: false } : {}),
                 columnWidth: '80%',
                 dataLabels: {
+                    enabled: false,
                     position: 'bottom'
                 }
             }
