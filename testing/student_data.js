@@ -200,7 +200,7 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             var yValue = stackTotals[i];
 
             totalAnnotations.push({
-                x: i,
+                x: xCategories[i], // Set the x-coordinate to match the bar's category
                 y: yValue,
                 label: {
                     borderColor: '#775DD0',
