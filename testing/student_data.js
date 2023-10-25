@@ -186,14 +186,20 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
     // Create an array to store annotation objects
     var totalAnnotations = [];
 
-    // Iterate through the categories and stack totals
-    for (var i = 0; i < xCategories.length; i++) {
-        var xValue = xCategories[i];
+    // Get the chart width and bar width (for positioning annotations)
+    var chartWidth = 1000; // Set to your desired chart width
+    var barWidth = chartWidth / xCategories.length;
+
+    // Iterate through the stack totals and position annotations manually
+    for (var i = 0; i < stackTotals.length; i++) {
         var stackTotal = stackTotals[i];
 
+        var annotationX = i * barWidth + barWidth / 2; // Center the annotation over the bar
+        var annotationY = stackTotal; // Use the stack total as the y-coordinate
+
         totalAnnotations.push({
-            x: xValue, // Set the x-coordinate to match the bar's category
-            y: stackTotal,
+            x: annotationX,
+            y: annotationY,
             label: {
                 borderColor: '#775DD0',
                 offsetY: -20, // You can adjust this value as needed
