@@ -187,6 +187,23 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         colors = ['#000000']; // default color array if dataSeries is invalid
     }
 
+    if (isBarChart) {
+        dataLabelsSettings = {
+            ...dataLabelsSettings, // keeping the common settings
+            inside: false,  // set to 'true' if you want labels inside the bars
+            position: 'top',  // positioning the labels at the top of the bars
+            offsetY: 0,  // adjust as needed
+            style: {
+                fontSize: '12px',
+                colors: ['#333']
+            },
+            formatter: function (val, opts) {
+                // your existing formatter logic
+                return val;
+            }
+        };
+    }
+
     var isBarChart = selectedChartType === 'bar';
 
     // Conditional drop shadow based on chart type
