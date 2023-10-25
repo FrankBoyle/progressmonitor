@@ -161,8 +161,9 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                 data: benchmarkData,
                 type: 'line',
                 color: '#000000', // color of the line (black)
-                dashStyle: 'Dash', // style of the dash (this is typically how you'd set a dashed line in charting libraries)
-                lineWidth: 1, // you can set the width of the line (optional)               
+                stroke: {
+                    dashArray: [5,5] // Here, "5,5" indicates the pattern of dashes and gaps in pixels. Adjust as necessary.
+                },                          
                 connectNulls: true,
                 dataLabels: {
                     enabled: false // Disable data labels for the Benchmark series
