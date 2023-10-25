@@ -247,18 +247,13 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
             var seriesIndex = opts.seriesIndex;
             var dataPointIndex = opts.dataPointIndex;
             var seriesName = opts.w.config.series[seriesIndex].name; // Get the name of the series.
-            var lastSeriesIndex = dataSeries.length - 1; 
 
             if (seriesIndex === (dataSeries.length - 1)) {
                 // This is the topmost element in the stack; return the total for the stack.
                 var total = stackTotals[dataPointIndex];
-                return total.toFixed(2);  // Or use whatever formatting you prefer.
+                return total.toFixed(0);  // Or use whatever formatting you prefer.
             }
-            
-        if (opts.seriesIndex === lastSeriesIndex) {
-            var total = stackTotals[opts.dataPointIndex]; // Get the total for this stack
-            return total.toFixed(2); // Format it as needed
-        }
+
             // First, handle your special cases for trendline and benchmark.
             var isTrendlineOrBenchmark = seriesName.startsWith('Trendline ') || seriesName === 'Benchmark';
             if (isTrendlineOrBenchmark) {
