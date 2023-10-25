@@ -173,8 +173,21 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     //console.log(selectedChartType);
     var chartType = selectedChartType; // Get the selected chart type
     //console.log(chartType);
-    var isStacked = chartType === 'bar';
+    var isStacked = chartType !== 'bar';
     
+    // Calculating the total for each stacked bar
+    var stackTotals = [];
+    if (isStacked && dataSeries.length) {
+        var categoriesCount = xCategories.length;
+        for (var i = 0; i < categoriesCount; i++) {
+            var total = 0;
+            for (var j = 0; j < dataSeries.length; j++) {
+                total += dataSeries[j].data[i] || 0; // Summing the data for each series in the stack
+            }
+            stackTotals.push(total);
+        }
+    }
+
     let colors;
     if (dataSeries && dataSeries.length > 0) {
         colors = dataSeries.map(series => {
@@ -205,17 +218,34 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         enabled: true,
         enabledOnSeries: [0, 2, 4, 6, 8, 10], // Or specify the exact series indexes of line charts.
         formatter: function (val, opts) {
+            // Extracting common properties from 'opts'.
             var seriesIndex = opts.seriesIndex;
+            var dataPointIndex = opts.dataPointIndex;
             var seriesName = opts.w.config.series[seriesIndex].name; // Get the name of the series.
+    
+            // First, handle your special cases for trendline and benchmark.
             var isTrendlineOrBenchmark = seriesName.startsWith('Trendline ') || seriesName === 'Benchmark';
-
             if (isTrendlineOrBenchmark) {
                 return ""; // Don't show labels for trendline or benchmark.
             }
-
+    
+            // Next, if it's a stacked chart, you may want to display the total for the stack.
+            if (isStacked) {
+                // Check if it's the last series in the stack because the total should be displayed only once.
+                var isLastSeriesInStack = (seriesIndex === opts.w.config.series.length - 1);
+                if (isLastSeriesInStack) {
+                    // Display the total for the stack (already calculated before).
+                    return stackTotals[dataPointIndex];
+                } else {
+                    // If it's not the last series, don't display anything.
+                    return "";
+                }
+            }
+    
+            // If none of the special conditions above apply, just return the value.
             return val;
         },
-        offsetY: -10,
+        offsetY: -10, // You might need to adjust this offset depending on your chart's visual requirements.
         style: {
             fontSize: '12px',
             colors: ['#333']
