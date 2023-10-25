@@ -287,13 +287,28 @@ console.log(stackTotals); // Now this should output correct totals like [10, 20,
                 mode: 'x',      // Enable horizontal panning
             },   
             dropShadow: dropShadowConfig,
-            annotations: {
-                position: 'top',
-                xaxis: totalAnnotations,
-            },
         },
 
         dataLabels: dataLabelsSettings,
+        
+        annotations: {
+            position: 'top',
+            yaxis: stackTotals.map((total, i) => {
+                return {
+                    y: total,
+                    offsetX: 0,
+                    offsetY: 0,
+                    label: {
+                        borderColor: '#775DD0',
+                        style: {
+                            color: '#fff',
+                            background: '#775DD0',
+                        },
+                        text: Math.round(total).toString(), // Shows total as a whole number.
+                    }
+                };
+            }),
+        },
 
         // Conditional logic for stroke width if it's a line chart to avoid visual issues on a bar chart
         stroke: {
