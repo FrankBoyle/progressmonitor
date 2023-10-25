@@ -260,6 +260,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
 
         var dataLabelsSettings = {
             enabled: true,
+            offsetY: -20,
             formatter: function (val, opts) {
                 var seriesName = opts.w.config.series[opts.seriesIndex].name;
 
@@ -280,16 +281,13 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                     });
                 }
                 // Logic for data labels in the bar chart.
-                if (chartType === 'bar') {
-                    // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
-        
+                if (chartType === 'bar') {        
                     // Format the label as you need. For instance, you might want to show it as a whole number.
                     return val.toFixed(0); // Or simply 'val' if you don't want to alter the formatting.
                 }
         
                 // Logic for other chart types, such as a line chart.
                 if (chartType === 'line') {
-        
                     // For instance, you might want to show the data label as is or format it.
                     return val; // Or 'val.toFixed(0)' for whole numbers, or any other formatting as needed.
                 }
