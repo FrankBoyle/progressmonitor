@@ -275,26 +275,25 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                     if (val === totalForStack) {
                         return val.toFixed(0); // Show data label for total stack value.
                     } 
+                    filteredSeriesForBar = dataSeries.filter(function(series) {
+                        return !series.name.startsWith('Trendline');
+                    });
                 }
                 // Logic for data labels in the bar chart.
                 if (chartType === 'bar') {
                     // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
         
-                    // Here, we decide to show the label as it's a regular series in the bar chart.
                     // Format the label as you need. For instance, you might want to show it as a whole number.
                     return val.toFixed(0); // Or simply 'val' if you don't want to alter the formatting.
                 }
         
                 // Logic for other chart types, such as a line chart.
                 if (chartType === 'line') {
-                    // For non-Benchmark series in the line chart, you can define specific formatting or conditions.
         
                     // For instance, you might want to show the data label as is or format it.
                     return val; // Or 'val.toFixed(0)' for whole numbers, or any other formatting as needed.
                 }
         
-                // Default return, in case the chart type is neither a bar nor a line, or for future compatibility.
-                // Adjust the formatting as needed.
                 return val;
             },
         };
@@ -304,10 +303,10 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         }
             
     return {
-        series: dataSeries,
+        series: isBarChart ? filteredSeriesForBar : dataSeries, // 2. Conditional Series Assignment
         chart: {
             type: chartType,
-            stacked: isStacked,
+            stacked: isBarChart,
             width: 1000,
             colors: colors,
             zoom: {
