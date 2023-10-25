@@ -1,4 +1,5 @@
 var benchmark = null;
+var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
 var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 
@@ -152,9 +153,6 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
                 {
                     name: 'Trendline ' + actualScoreName,
                     data: trendlineData,
-                    type: selectedChartType === 'bar' ? 'line' : undefined, // Optional: Explicitly set 'line' for bar chart view
-                    isTrendline: true, // custom property to identify this series as a trendline
-                    show: selectedChartType !== 'bar',  // If chart type is bar, trendline will not be visible initially
                     color: scoreColor,  // Set color property here for the series
                     stroke: {
                         dashArray: 3, // This makes the line dashed; the number controls the dash length
@@ -264,6 +262,13 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             enabled: true,
             formatter: function (val, opts) {
                 // First, we check if the current series is the 'Benchmark'. If so, we always hide its data labels.
+                var isTrendline = opts.w.config.series[opts.seriesIndex].type === 'line'; // This assumes 'line' is unique to your trendline
+
+                if (isTrendline) {
+                    // Don't display labels for the trendline
+                    return '';
+                }
+
                 if (opts.w.config.series[opts.seriesIndex].name === 'Benchmark') {
                     return ''; // Return an empty string to hide data labels for 'Benchmark'.
                 }
