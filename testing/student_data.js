@@ -256,7 +256,7 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
     }
 
     if (chartType === 'bar') {
-        dataLabelsSettings.enabled = true;
+        dataLabelsSettings.enabled = false;
         Object.assign(dataLabelsSettings, {
             inside: false,  // Example setting, adjust as needed.
             position: 'top',  // Labels on top for bar charts.
