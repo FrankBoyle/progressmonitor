@@ -96,7 +96,7 @@ function onChartTypeChange(newType) {
         // If the new chart is a bar chart, we want to hide the trendline.
         chart.updateSeries([{
             //... other series data
-            data: [] // setting data to an empty array effectively hides the series
+            //: [] // setting data to an empty array effectively hides the series
         }]);
     } else {
         // If the chart type is not 'bar', we want to ensure the trendline is visible.
@@ -267,7 +267,6 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 if (seriesName === 'Benchmark' || seriesName.startsWith('Trendline')) {
                     return '';
                 }
-
                 // For bar charts, we want to show data labels differently.
                 if (isBarChart) {
                     // You need to calculate the total for the stack, then compare it with the current value.
@@ -279,22 +278,13 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 // Logic for data labels in the bar chart.
                 if (chartType === 'bar') {
                     // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
-        
-                    // Here, we decide to show the label as it's a regular series in the bar chart.
-                    // Format the label as you need. For instance, you might want to show it as a whole number.
                     return val.toFixed(0); // Or simply 'val' if you don't want to alter the formatting.
                 }
         
                 // Logic for other chart types, such as a line chart.
                 if (chartType === 'line') {
-                    // For non-Benchmark series in the line chart, you can define specific formatting or conditions.
-        
-                    // For instance, you might want to show the data label as is or format it.
                     return val; // Or 'val.toFixed(0)' for whole numbers, or any other formatting as needed.
-                }
-        
-                // Default return, in case the chart type is neither a bar nor a line, or for future compatibility.
-                // Adjust the formatting as needed.
+                }     
                 return val;
             },
         };
