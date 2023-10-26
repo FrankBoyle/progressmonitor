@@ -639,79 +639,87 @@ $(document).ready(function() {
     
 
     function attachEditableHandler() {
-        //$('table').on('click', '.editable:not([data-field-name="score8"])', function() {
+        // Attach event handler to the table cells
         $('table').on('click', '.editable', function() {
+            // Current cell and its original value
             const cell = $(this);
             const originalValue = cell.text();
-            const input = $('<input type="text">');
-            input.val(originalValue);
-
+    
+            // Create an input element and set its initial value
+            const input = $('<input type="text">').val(originalValue);
+            cell.html(input);
+            input.focus();
+    
             let datePickerActive = false;
-
+    
+            // Check if the current cell is a date field
             if (cell.data('field-name') === 'score_date') {
+                // If it's a date field, attach a datepicker to the input element
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     beforeShow: function() {
                         datePickerActive = true;
                     },
                     onClose: function(selectedDate) {
-    if (isValidDate(new Date(selectedDate))) {
-        const currentPerformanceId = cell.closest('tr').data('performance-id');
-        if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-            //alert("This date already exists. Please choose a different date.");
-            cell.html(originalValue); // Revert to the original value
-            return;
-        }
-        cell.text(selectedDate);  // Set the selected date
-        cell.append(input.hide());  // Hide the input to show the cell text
-        saveEditedDate(cell, selectedDate); // Save the edited date
-    }
-    datePickerActive = false;
-}
-
+                        datePickerActive = false; // Datepicker is no longer active
+    
+                        // Validate the selected date
+                        if (!isValidDate(new Date(selectedDate))) {
+                            cell.html(originalValue);
+                            return;
+                        }
+    
+                        // Check for duplicate dates
+                        const currentPerformanceId = cell.closest('tr').data('performance-id');
+                        if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+                            cell.html(originalValue);
+                            return;
+                        }
+    
+                        // Set the new date and save it
+                        cell.text(selectedDate);
+                        saveEditedDate(cell, selectedDate);
+                    }
                 });
-                cell.html(input);
-                input.focus();
-            } else {
-                cell.html(input);
-                input.focus();
             }
-
+    
+            // Event handler for when the input loses focus
             input.blur(function() {
+                // If datepicker is active, don't do anything
                 if (datePickerActive) {
                     return;
                 }
-
-                let newValue = input.val();
-                cell.html(newValue);
-                const performanceId = cell.closest('tr').data('performance-id');
     
-                // Check if it's a new row. If so, just return and don't do any AJAX call. 
-                if (performanceId === 'new') {
-                    return;
-                }
-
+                // New value from input
+                let newValue = input.val().trim();
+    
+                // Validation for date fields
                 if (cell.data('field-name') === 'score_date') {
                     const parts = newValue.split('/');
-                    if (parts.length !== 3) {
+                    if (parts.length !== 3 || !isValidDate(new Date(newValue))) {
                         cell.html(originalValue);
                         return;
                     }
-                    // Save the new value for the database but display the original mm/dd/yyyy format to the user
-                    cell.html(newValue);  // The selected value from datepicker is already in mm/dd/yyyy format, so just display it
-                    newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
-                    saveEditedDate(cell, newValue); // Save the edited date
-                } else {
-                    cell.html(newValue);
+                    newValue = convertToDatabaseDate(newValue);
                 }
-
-                //const performanceId = cell.closest('tr').data('performance-id');
+    
+                // Update the cell with the new value
+                cell.html(newValue);
+    
+                // Check if it's a new row to avoid unnecessary AJAX call
+                const performanceId = cell.closest('tr').data('performance-id');
+                if (performanceId === 'new') {
+                    return; // Stop here for new rows
+                }
+    
+                // Prepare data for the server
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
-                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+                const weekStartDate = $('#currentWeekStartDate').val(); // Assuming this is already in the correct format
                 const school_id = $('#schoolIdInput').val();
-
+                const metadata_id = ''; // Replace with actual metadata_id or remove if not used
+    
                 let postData = {
                     performance_id: performanceId,
                     field_name: fieldName,
@@ -719,53 +727,40 @@ $(document).ready(function() {
                     student_id: studentId,
                     score_date: weekStartDate,
                     metadata_id: metadata_id,
-                    school_id: school_id,
+                    school_id: school_id
                 };
-
+    
+                // If it's a new performance, include scores
                 if (performanceId === 'new') {
-                    const row = $(this).closest('tr');
                     let scores = {};
                     for (let i = 1; i <= 10; i++) {
-                        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-                        scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
+                        const scoreValue = cell.closest('tr').find(`td[data-field-name="score${i}"]`).text();
+                        scores['score' + i] = scoreValue || null; // If there's no score, send null
                     }
                     postData.scores = scores;
                 }
-
+    
+                // Send the data to the server
                 $.ajax({
                     type: 'POST',
                     url: targetUrl,
                     data: postData,
                     success: function(response) {
+                        // Update the new row with the returned data, if applicable
                         if (performanceId === 'new') {
                             const newRow = $('tr[data-performance-id="new"]');
                             newRow.attr('data-performance-id', response.performance_id);
-                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+                            newRow.find('td[data-field-name="score_date"]').text(response.saved_date); // Assuming the date is returned in display format
                         }
-    
-                        /* New code for updating score8 starts here
-                        if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
-                            const row = cell.closest('tr');
-                            const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
-                            const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
-                            const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
-                            const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
-                            const average = (score1 + score2 + score3 + score4) / 4;
-                            row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
-                            // Update the score8 value in the database
-                            updateScoreInDatabase(row, 'score8', average.toFixed(2));
-                        }
-                        */
                     },
                     error: function() {
-                        // Handle any error here, e.g., show a notification to the user
-                        //alert("There was an error updating the data.");
+                        alert("There was an error updating the data."); // Or handle the error another way
                     }
                 });
             });
-
-            // Pressing Enter to save changes
-            input.off('keypress').keypress(function(e) {
+    
+            // Save changes when 'Enter' key is pressed
+            input.keypress(function(e) {
                 if (e.which === 13) {
                     e.preventDefault();
                     input.blur();
@@ -773,6 +768,7 @@ $(document).ready(function() {
             });
         });
     }
+
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
     if ($('tr[data-performance-id="new"]').length) {
