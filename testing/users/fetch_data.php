@@ -14,6 +14,13 @@ function fetchPerformanceData($studentId, $metadata_id) {
     return $stmt->fetchAll();
 }
 
+function fetchStudentsByTeacher($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    return $stmt->fetchAll();
+}
+
 function fetchMetadataCategories($school_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
