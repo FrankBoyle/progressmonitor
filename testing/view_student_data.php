@@ -68,7 +68,18 @@ if (isset($_GET['metadata_id'])) {
         text-align: center; /* align the text to the center */
         padding: 0; /* remove default padding */
     }
+    
+    .hidden-input {
+        border: none;
+        background: transparent;
+        width: 100%;
+        box-sizing: border-box; 
+        outline: none;  // Remove focus outline
+    }
 
+    td {
+        : hidden;
+    }
 </style>
 </head>
 <body>
