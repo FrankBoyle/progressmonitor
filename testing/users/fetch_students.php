@@ -42,6 +42,26 @@ if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
 
+function getSmallestMetadataId($schoolId) {
+    global $connection;
+
+    // Prepare and execute a query to fetch the smallest metadata_id
+    $query = "SELECT MIN(metadata_id) AS smallest_metadata_id FROM Metadata WHERE school_id = :schoolId";
+    $stmt = $connection->prepare($query);
+    $stmt->bindParam(':schoolId', $schoolId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    // Fetch the result
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Check if a result was found
+    if ($result && isset($result['smallest_metadata_id'])) {
+        return $result['smallest_metadata_id'];
+    } else {
+        return null; // No matching records found
+    }
+}
+
 $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
