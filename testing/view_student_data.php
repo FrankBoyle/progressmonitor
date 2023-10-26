@@ -10,10 +10,12 @@ error_reporting(E_ALL);
 //print_r($_GET);
 //echo '</pre>';
 
-
+foreach ($students as $student) {
     if ($student['student_id'] == $studentId) { // If the IDs match
         $studentName = $student['name']; // Get the student name
-    };
+        break;
+    }
+}
 
 if (isset($_GET['metadata_id'])) {
     $selectedMetadataId = $_GET['metadata_id'];

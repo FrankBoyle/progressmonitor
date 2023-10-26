@@ -128,6 +128,7 @@ if (!isset($_SESSION['teacher_id'])) {
 $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
+$students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId, $metadata_id);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);
