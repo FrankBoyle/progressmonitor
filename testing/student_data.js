@@ -752,31 +752,21 @@ $(document).ready(function() {
                     url: performanceId === 'new' ? 'insert_performance.php' : 'update_performance.php',
                     data: postData,
                     success: function(response) {
-                        console.log('Server Response:', response); // Log the server's response
+                        console.log('AJAX Success:', response);
                 
                         if (performanceId === 'new') {
                             const newRow = $('tr[data-performance-id="new"]');
-                            if (response && response.success) {
-                                newRow.attr('data-performance-id', response.performance_id);
-                                newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
-                                // Display a success message
-                                alert("Data saved successfully!");
-                            } else if (response && response.error) {
-                                // Display an alert with the error message
-                                alert(response.error);
-                                // Restore the original value if there was an error
-                                newRow.find('td[data-field-name="score_date"]').text(originalValue);
-                            } else {
-                                // Handle other response cases if needed
-                            }
+                            newRow.attr('data-performance-id', response.performance_id);
+                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('AJAX Error:', status, error); // Log AJAX error details
-                
-                        // Handle any other errors here, if necessary
+                        console.log('AJAX Error:', xhr, status, error);
+                        // Handle any error here, e.g., display an alert
+                        alert('An error occurred: ' + error);
                     },
-                });                
+                });
+                              
                 
             });
     
