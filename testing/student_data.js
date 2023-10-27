@@ -686,9 +686,9 @@ $(document).ready(function() {
                 if (datePickerActive) {
                     return;
                 }
-    
+            
                 let newValue = input.val();
-    
+            
                 if (performanceId === 'new') {
                     if (fieldName === 'score_date') {
                         const parts = newValue.split('/');
@@ -702,7 +702,14 @@ $(document).ready(function() {
                     }
                 } else {
                     if (fieldName === 'score_date') {
-                        if (isValidDate(new Date(newValue)) && !isDateDuplicate(newValue, performanceId)) {
+                        if (isValidDate(new Date(newValue))) {
+                            // Check for duplicate date
+                            if (isDateDuplicate(newValue, performanceId)) {
+                                alert("Duplicate date not allowed!");
+                                cell.html(originalValue);
+                                return;
+                            }
+            
                             saveEditedDate(cell, newValue);
                         } else {
                             cell.html(originalValue);
