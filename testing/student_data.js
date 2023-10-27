@@ -739,8 +739,9 @@ $('#addDataRow').off('click').click(function() {
     }
     
     const currentDate = getCurrentDate();
+
 if (isDateDuplicate(currentDate)) {
-    //alert("An entry for this date already exists. Please choose a different date.");
+    alert("An entry for this date already exists. Please choose a different date.");
     return;
 }
         const newRow = $("<tr data-performance-id='new'>");
