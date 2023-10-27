@@ -752,16 +752,16 @@ $(document).ready(function() {
                     url: performanceId === 'new' ? 'insert_performance.php' : 'update_performance.php',
                     data: postData,
                     success: function(response) {
-                        if (response.success) {
-                            // Success: Data was updated or inserted successfully
-                            if (performanceId === 'new') {
-                                const newRow = $('tr[data-performance-id="new"]');
-                                newRow.attr('data-performance-id', response.performance_id);
-                                newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
-                            }
+                        // Check if there was an error and if it's related to a duplicate date entry
+                        if (!response.success && response.error.includes("Duplicate date entry")) {
+                            // Notify the user about the duplicate
+                            alert("Error: Duplicate date entry is not allowed.");
+                        } else if (!response.success) {
+                            // Some other error occurred, alert it as well
+                            alert("Error: " + response.error);
                         } else {
-                            // Error: Display the error message to the user
-                            alert(response.error); // You can use other UI elements to display the error as well
+                            // Success: Data was updated or inserted successfully
+                            // ... (rest of your success logic)
                         }
                     },
                     error: function(xhr, status, error) {
@@ -770,8 +770,7 @@ $(document).ready(function() {
                         alert("An error occurred while processing your request.");
                     },
                 });
-                
-                              
+                       
                 
             });
     
