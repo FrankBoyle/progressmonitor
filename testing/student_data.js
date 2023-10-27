@@ -752,16 +752,26 @@ $(document).ready(function() {
                     url: performanceId === 'new' ? 'insert_performance.php' : 'update_performance.php',
                     data: postData,
                     success: function(response) {
-                        if (performanceId === 'new') {
-                            const newRow = $('tr[data-performance-id="new"]');
-                            newRow.attr('data-performance-id', response.performance_id);
-                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+                        if (response && response.success) {
+                            if (performanceId === 'new') {
+                                const newRow = $('tr[data-performance-id="new"]');
+                                newRow.attr('data-performance-id', response.performance_id);
+                                newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+                                // Optionally, display a success message
+                                alert("Data saved successfully!");
+                            }
+                        } else if (response && response.error) {
+                            // Display an alert with the error message
+                            alert(response.error);
+                        } else {
+                            // Handle other response cases if needed
                         }
                     },
                     error: function() {
-                        // Handle any error here
+                        // Handle any other errors here, if necessary
                     },
                 });
+                
             });
     
             input.off('keypress').keypress(function(e) {
