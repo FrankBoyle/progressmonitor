@@ -645,6 +645,17 @@ $(document).ready(function() {
             }
         });
     
+        // Check for duplicates in new rows
+        if (!isDuplicate && currentPerformanceId === 'new') {
+            $('tr[data-performance-id="new"]').each(function() {
+                const newDate = $(this).find('td[data-field-name="score_date"]').text();
+                if (newDate === dateString) {
+                    isDuplicate = true;
+                    return false; // Break out of the .each loop
+                }
+            });
+        }
+    
         return isDuplicate;
     }
     
