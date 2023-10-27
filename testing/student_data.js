@@ -752,19 +752,21 @@ $(document).ready(function() {
                     url: performanceId === 'new' ? 'insert_performance.php' : 'update_performance.php',
                     data: postData,
                     success: function(response) {
-                        if (response && response.success) {
-                            if (performanceId === 'new') {
-                                const newRow = $('tr[data-performance-id="new"]');
+                        if (performanceId === 'new') {
+                            const newRow = $('tr[data-performance-id="new"]');
+                            if (response && response.success) {
                                 newRow.attr('data-performance-id', response.performance_id);
                                 newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
-                                // Optionally, display a success message
+                                // Display a success message
                                 alert("Data saved successfully!");
+                            } else if (response && response.error) {
+                                // Display an alert with the error message
+                                alert(response.error);
+                                // Restore the original value if there was an error
+                                newRow.find('td[data-field-name="score_date"]').text(originalValue);
+                            } else {
+                                // Handle other response cases if needed
                             }
-                        } else if (response && response.error) {
-                            // Display an alert with the error message
-                            alert(response.error);
-                        } else {
-                            // Handle other response cases if needed
                         }
                     },
                     error: function() {
