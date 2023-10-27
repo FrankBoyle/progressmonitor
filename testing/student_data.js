@@ -669,7 +669,7 @@ $(document).ready(function() {
         return isDuplicate;
     }
     
-    let datePickerActive = false; // Declare datePickerActive at a higher scope
+    //let datePickerActive = false; // Declare datePickerActive at a higher scope
 
     function attachEditableHandler() {
         $('table').on('click', '.editable', function() {
