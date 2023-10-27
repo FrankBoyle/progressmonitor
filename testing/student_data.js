@@ -96,7 +96,7 @@ function onChartTypeChange(newType) {
         // If the new chart is a bar chart, we want to hide the trendline.
         chart.updateSeries([{
             //... other series data
-            data: [] // setting data to an empty array effectively hides the series
+            //: [] // setting data to an empty array effectively hides the series
         }]);
     } else {
         // If the chart type is not 'bar', we want to ensure the trendline is visible.
@@ -267,7 +267,6 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 if (seriesName === 'Benchmark' || seriesName.startsWith('Trendline')) {
                     return '';
                 }
-
                 // For bar charts, we want to show data labels differently.
                 if (isBarChart) {
                     // You need to calculate the total for the stack, then compare it with the current value.
@@ -279,22 +278,13 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 // Logic for data labels in the bar chart.
                 if (chartType === 'bar') {
                     // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
-        
-                    // Here, we decide to show the label as it's a regular series in the bar chart.
-                    // Format the label as you need. For instance, you might want to show it as a whole number.
                     return val.toFixed(0); // Or simply 'val' if you don't want to alter the formatting.
                 }
         
                 // Logic for other chart types, such as a line chart.
                 if (chartType === 'line') {
-                    // For non-Benchmark series in the line chart, you can define specific formatting or conditions.
-        
-                    // For instance, you might want to show the data label as is or format it.
                     return val; // Or 'val.toFixed(0)' for whole numbers, or any other formatting as needed.
-                }
-        
-                // Default return, in case the chart type is neither a bar nor a line, or for future compatibility.
-                // Adjust the formatting as needed.
+                }     
                 return val;
             },
         };
@@ -531,13 +521,14 @@ $(document).ready(function() {
         }   
     }
     
+
     async function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
         const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
         const school_id = $('#schoolIdInput').val();
-    
+
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
@@ -546,36 +537,25 @@ $(document).ready(function() {
             student_id: studentId,
             metadata_id: metadata_id,
             school_id: school_id
+
         };
-    
-        // Check for duplicate date
-        if (isDateDuplicate(postData.new_value, performanceId)) {
-            alert("Duplicate date not allowed!");
-            cell.html(cell.data('saved-date') || '');
-            return;
-        }
-    
-    // AJAX call to the server with the data.
-    ajaxCall('POST', 'update_performance.php', postData).then(response => {
-        if (response.success) {
-            // The server has returned a successful response.
-            cell.data('saved-date', response.saved_date);
-        } else if (response.error && response.error === "Duplicate date entry is not allowed. A record with this date and metadata already exists for the selected student.") {
-            // This is the duplicate date error message from the server.
-            alert("Duplicate date entry is not allowed!");
-            cell.html(cell.data('saved-date') || ''); // Revert the cell to the previous state.
-        } else {
-            // Handle other kinds of errors here.
-            console.error('An unexpected error occurred:', response.error);
-            // Optionally display a general error message to the user.
-        }
-    }).catch(error => {
-        // Handle network errors or issues with the request reaching the server.
-        console.error('A network error occurred:', error);
-        // Optionally display a network error message to the user.
-    });
+        //console.log(postData);
+        //console.log("studentID:", student_id);
+
+
+        ajaxCall('POST', 'update_performance.php', postData).then(response => {
+            //console.log(response); // <-- This is the debug line. 
+        
+            if (response && response.error && response.error === 'Duplicate date not allowed!') {
+                alert("Duplicate date not allowed!");
+                cell.html(cell.data('saved-date') || '');  
+            } else if (response && response.saved_date) {
+                cell.data('saved-date', response.saved_date);
+            } else {
+            }
+        });  
     }
-    
+
     //let dateAscending = true; // to keep track of current order
 
     $('#toggleDateOrder').on('click', function() {
@@ -632,7 +612,9 @@ $(document).ready(function() {
         });
     }
     
+
     function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
+        //console.log("Checking for duplicate of:", dateString);
         let isDuplicate = false;
     
         $('table').find('td[data-field-name="score_date"]').each(function() {
@@ -641,148 +623,144 @@ $(document).ready(function() {
             const performanceId = $currentRow.data('performance-id');
             const studentId = $currentRow.data('student-id'); // Retrieve the student_id
             const urlParams = new URLSearchParams(window.location.search);
-            const metadata_id = urlParams.get('metadata_id');
-    
+            const metadata_id = urlParams.get('metadata_id');    
             // Check if date, student_id, and metadata_id are the same, but not the same performance entry
-            if (
-                cellDate === dateString &&
-                performanceId !== currentPerformanceId &&
-                studentId === currentStudentId &&
-                metadata_id === currentMetadataId
-            ) {
+            if (cellDate === dateString 
+                && performanceId !== currentPerformanceId 
+                && studentId === currentStudentId 
+                && metadata_id === currentMetadataId) {
                 isDuplicate = true;
                 return false; // Break out of the .each loop
             }
         });
     
-        // Check for duplicates in new rows
-        if (!isDuplicate && currentPerformanceId === 'new') {
-            $('tr[data-performance-id="new"]').each(function() {
-                const newDate = $(this).find('td[data-field-name="score_date"]').text();
-                if (newDate === dateString) {
-                    isDuplicate = true;
-                    return false; // Break out of the .each loop
-                }
-            });
-        }
-    
         return isDuplicate;
     }
     
-    //let datePickerActive = false; // Declare datePickerActive at a higher scope
 
     function attachEditableHandler() {
+        // Attach event handler to the table cells
         $('table').on('click', '.editable', function() {
+            // Current cell and its original value
             const cell = $(this);
             const originalValue = cell.text();
-            const input = $('<input type="text">').val(originalValue);
-            const fieldName = cell.data('field-name');
-            const performanceId = cell.closest('tr').data('performance-id');
     
-            if (fieldName === 'score_date') {
+            // Create an input element and set its initial value
+            const input = $('<input type="text">').val(originalValue);
+            cell.html(input);
+            input.focus();
+    
+            let datePickerActive = false;
+    
+            // Check if the current cell is a date field
+            if (cell.data('field-name') === 'score_date') {
+                // If it's a date field, attach a datepicker to the input element
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     beforeShow: function() {
                         datePickerActive = true;
                     },
                     onClose: function(selectedDate) {
-                        if (isValidDate(new Date(selectedDate))) {
-                            if (isDateDuplicate(selectedDate, performanceId)) {
-                                cell.html(originalValue);
-                                return;
-                            }
-                            cell.text(selectedDate);
-                            cell.append(input.hide());
-                            saveEditedDate(cell, selectedDate);
-                        }
-                        datePickerActive = false;
-                    },
-                });
-            }
+                        datePickerActive = false; // Datepicker is no longer active
     
-            cell.html(input).find('input').focus();
-    
-            input.blur(function() {
-                if (datePickerActive) {
-                    return;
-                }
-            
-                let newValue = input.val();
-            
-                if (performanceId === 'new') {
-                    if (fieldName === 'score_date') {
-                        const parts = newValue.split('/');
-                        if (parts.length !== 3 || !isValidDate(new Date(newValue))) {
+                        // Validate the selected date
+                        if (!isValidDate(new Date(selectedDate))) {
                             cell.html(originalValue);
                             return;
                         }
-                        cell.html(newValue);
-                    } else {
-                        cell.html(newValue);
-                    }
-                } else {
-                    if (fieldName === 'score_date') {
-                        if (isValidDate(new Date(newValue))) {
-                            // Check for duplicate date
-                            if (isDateDuplicate(newValue, performanceId)) {
-                                alert("Duplicate date not allowed!");
-                                cell.html(originalValue);
-                                return;
-                            }
-            
-                            saveEditedDate(cell, newValue);
-                        } else {
+    
+                        // Check for duplicate dates
+                        const currentPerformanceId = cell.closest('tr').data('performance-id');
+                        if (isDateDuplicate(selectedDate, currentPerformanceId)) {
                             cell.html(originalValue);
+                            return;
                         }
-                    } else {
-                        cell.html(newValue);
+    
+                        // Set the new date and save it
+                        cell.text(selectedDate);
+                        saveEditedDate(cell, selectedDate);
                     }
+                });
+            }
+    
+            // Event handler for when the input loses focus
+            input.blur(function() {
+                // If datepicker is active, don't do anything
+                if (datePickerActive) {
+                    return;
                 }
     
-                const postData = {
+                // New value from input
+                let newValue = input.val().trim();
+    
+                // Validation for date fields
+                if (cell.data('field-name') === 'score_date') {
+                    const parts = newValue.split('/');
+                    if (parts.length !== 3 || !isValidDate(new Date(newValue))) {
+                        cell.html(originalValue);
+                        return;
+                    }
+                    newValue = convertToDatabaseDate(newValue);
+                }
+    
+                // Update the cell with the new value
+                cell.html(newValue);
+    
+                // Check if it's a new row to avoid unnecessary AJAX call
+                const performanceId = cell.closest('tr').data('performance-id');
+                if (performanceId === 'new') {
+                    return; // Stop here for new rows
+                }
+    
+                // Prepare data for the server
+                const fieldName = cell.data('field-name');
+                const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+                const studentId = $('#currentStudentId').val();
+                const weekStartDate = $('#currentWeekStartDate').val(); // Assuming this is already in the correct format
+                const school_id = $('#schoolIdInput').val();
+                const metadata_id = ''; // Replace with actual metadata_id or remove if not used
+    
+                let postData = {
                     performance_id: performanceId,
                     field_name: fieldName,
                     new_value: newValue,
-                    student_id: $('#currentStudentId').val(),
-                    score_date: convertToDatabaseDate($('#currentWeekStartDate').val()),
+                    student_id: studentId,
+                    score_date: weekStartDate,
                     metadata_id: metadata_id,
-                    school_id: $('#schoolIdInput').val(),
+                    school_id: school_id
                 };
     
+                // If it's a new performance, include scores
                 if (performanceId === 'new') {
-                    const row = cell.closest('tr');
                     let scores = {};
                     for (let i = 1; i <= 10; i++) {
-                        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-                        scores['score' + i] = scoreValue || null;
+                        const scoreValue = cell.closest('tr').find(`td[data-field-name="score${i}"]`).text();
+                        scores['score' + i] = scoreValue || null; // If there's no score, send null
                     }
                     postData.scores = scores;
                 }
     
+                // Send the data to the server
                 $.ajax({
                     type: 'POST',
-                    url: performanceId === 'new' ? 'insert_performance.php' : 'update_performance.php',
+                    url: targetUrl,
                     data: postData,
                     success: function(response) {
-                        // Check if the response indicates a failure
-                        if (!response.success) {
-                            // Show the error message to the user
-                            alert(response.error);
-                            cell.html(originalValue); // Reset the cell content to the original value since the update failed.
-                            return; // Ensure no further processing happens in this callback
+                        // Update the new row with the returned data, if applicable
+                        if (performanceId === 'new') {
+                            const newRow = $('tr[data-performance-id="new"]');
+                            newRow.attr('data-performance-id', response.performance_id);
+                            newRow.find('td[data-field-name="score_date"]').text(response.saved_date); // Assuming the date is returned in display format
                         }
                     },
-                    error: function(xhr, status, error) {
-                        // Handle any error here
-                        console.error("Error during AJAX call:", error);
-                        alert("An error occurred while processing your request.");
-                    },
+                    error: function() {
+                        alert("There was an error updating the data."); // Or handle the error another way
+                    }
                 });
-                       
-                
             });
     
-            input.off('keypress').keypress(function(e) {
+            // Save changes when 'Enter' key is pressed
+            input.keypress(function(e) {
                 if (e.which === 13) {
                     e.preventDefault();
                     input.blur();
@@ -791,18 +769,18 @@ $(document).ready(function() {
         });
     }
 
-    $('#addDataRow').off('click').click(function() {
-        // Check for an existing "new" row
-        if ($('tr[data-performance-id="new"]').length) {
-            alert("Please save the existing new entry before adding another one.");
-            return;
-        }
+$('#addDataRow').off('click').click(function() {
+    // Check for an existing "new" row
+    if ($('tr[data-performance-id="new"]').length) {
+        alert("Please save the existing new entry before adding another one.");
+        return;
+    }
     
-        const currentDate = getCurrentDate();
-        if (isDateDuplicate(currentDate)) {
-            alert("An entry for this date already exists. Please choose a different date.");
-            return;
-        }
+    const currentDate = getCurrentDate();
+if (isDateDuplicate(currentDate)) {
+    //alert("An entry for this date already exists. Please choose a different date.");
+    return;
+}
         const newRow = $("<tr data-performance-id='new'>");
         newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
         
@@ -826,13 +804,7 @@ $(document).ready(function() {
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');
-        const selectedDate = convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text());
-    
-        // Check for duplicate date
-        if (isDateDuplicate(selectedDate, performanceId, CURRENT_STUDENT_ID, metadata_id)) {
-            alert("An entry for this date already exists. Please choose a different date.");
-            return;
-        }
+        console.log(metadata_id);
 
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
