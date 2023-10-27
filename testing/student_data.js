@@ -622,7 +622,6 @@ $(document).ready(function() {
         });
     }
     
-
     function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
         let isDuplicate = false;
     
