@@ -752,6 +752,8 @@ $(document).ready(function() {
                     url: performanceId === 'new' ? 'insert_performance.php' : 'update_performance.php',
                     data: postData,
                     success: function(response) {
+                        console.log('Server Response:', response); // Log the server's response
+                
                         if (performanceId === 'new') {
                             const newRow = $('tr[data-performance-id="new"]');
                             if (response && response.success) {
@@ -769,10 +771,12 @@ $(document).ready(function() {
                             }
                         }
                     },
-                    error: function() {
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error); // Log AJAX error details
+                
                         // Handle any other errors here, if necessary
                     },
-                });
+                });                
                 
             });
     
@@ -885,7 +889,7 @@ $(document).ready(function() {
                 //alert("There was an error saving the data.");
             }
         }
-        location.reload();
+        //location.reload();
  
     });
     
