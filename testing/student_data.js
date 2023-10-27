@@ -555,13 +555,25 @@ $(document).ready(function() {
             return;
         }
     
-        ajaxCall('POST', 'update_performance.php', postData).then(response => {
-            if (response && response.saved_date) {
-                cell.data('saved-date', response.saved_date);
-            } else {
-                // Handle other response cases if needed
-            }
-        });
+    // AJAX call to the server with the data.
+    ajaxCall('POST', 'update_performance.php', postData).then(response => {
+        if (response.success) {
+            // The server has returned a successful response.
+            cell.data('saved-date', response.saved_date);
+        } else if (response.error && response.error === "Duplicate date entry is not allowed. A record with this date and metadata already exists for the selected student.") {
+            // This is the duplicate date error message from the server.
+            alert("Duplicate date entry is not allowed!");
+            cell.html(cell.data('saved-date') || ''); // Revert the cell to the previous state.
+        } else {
+            // Handle other kinds of errors here.
+            console.error('An unexpected error occurred:', response.error);
+            // Optionally display a general error message to the user.
+        }
+    }).catch(error => {
+        // Handle network errors or issues with the request reaching the server.
+        console.error('A network error occurred:', error);
+        // Optionally display a network error message to the user.
+    });
     }
     
     //let dateAscending = true; // to keep track of current order
