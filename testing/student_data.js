@@ -799,7 +799,7 @@ if (isDateDuplicate(currentDate)) {
         };
     
         if (isDateDuplicate(postData.score_date)) {
-           // alert("An entry for this date already exists. Please choose a different date.");
+            alert("An entry for this date already exists. Please choose a different date.");
             return;
         }
     
