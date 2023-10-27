@@ -531,7 +531,6 @@ $(document).ready(function() {
         }   
     }
     
-
     async function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
@@ -550,7 +549,7 @@ $(document).ready(function() {
         };
     
         // Check for duplicate date
-        if (isDateDuplicate(postData.new_value, performanceId, studentId, metadata_id)) {
+        if (isDateDuplicate(postData.new_value, performanceId)) {
             alert("Duplicate date not allowed!");
             cell.html(cell.data('saved-date') || '');
             return;
@@ -565,7 +564,6 @@ $(document).ready(function() {
         });
     }
     
-
     //let dateAscending = true; // to keep track of current order
 
     $('#toggleDateOrder').on('click', function() {
