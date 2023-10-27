@@ -752,20 +752,25 @@ $(document).ready(function() {
                     url: performanceId === 'new' ? 'insert_performance.php' : 'update_performance.php',
                     data: postData,
                     success: function(response) {
-                        console.log('AJAX Success:', response);
-                
-                        if (performanceId === 'new') {
-                            const newRow = $('tr[data-performance-id="new"]');
-                            newRow.attr('data-performance-id', response.performance_id);
-                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+                        if (response.success) {
+                            // Success: Data was updated or inserted successfully
+                            if (performanceId === 'new') {
+                                const newRow = $('tr[data-performance-id="new"]');
+                                newRow.attr('data-performance-id', response.performance_id);
+                                newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+                            }
+                        } else {
+                            // Error: Display the error message to the user
+                            alert(response.error); // You can use other UI elements to display the error as well
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.log('AJAX Error:', xhr, status, error);
-                        // Handle any error here, e.g., display an alert
-                        alert('An error occurred: ' + error);
+                        // Handle any error here
+                        console.error("Error during AJAX call:", error);
+                        alert("An error occurred while processing your request.");
                     },
                 });
+                
                               
                 
             });
