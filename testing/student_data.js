@@ -647,6 +647,7 @@ $(document).ready(function() {
         return isDuplicate;
     }
     
+    let datePickerActive = false; // Declare datePickerActive at a higher scope
 
     function attachEditableHandler() {
         $('table').on('click', '.editable', function() {
@@ -754,7 +755,7 @@ $(document).ready(function() {
             });
         });
     }
-    
+
 $('#addDataRow').off('click').click(function() {
     // Check for an existing "new" row
     if ($('tr[data-performance-id="new"]').length) {
