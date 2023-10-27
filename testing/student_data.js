@@ -752,16 +752,12 @@ $(document).ready(function() {
                     url: performanceId === 'new' ? 'insert_performance.php' : 'update_performance.php',
                     data: postData,
                     success: function(response) {
-                        // Check if there was an error and if it's related to a duplicate date entry
-                        if (!response.success && response.error.includes("Duplicate date entry")) {
-                            // Notify the user about the duplicate
-                            alert("Error: Duplicate date entry is not allowed.");
-                        } else if (!response.success) {
-                            // Some other error occurred, alert it as well
-                            alert("Error: " + response.error);
-                        } else {
-                            // Success: Data was updated or inserted successfully
-                            // ... (rest of your success logic)
+                        // Check if the response indicates a failure
+                        if (!response.success) {
+                            // Show the error message to the user
+                            alert(response.error);
+                            cell.html(originalValue); // Reset the cell content to the original value since the update failed.
+                            return; // Ensure no further processing happens in this callback
                         }
                     },
                     error: function(xhr, status, error) {
