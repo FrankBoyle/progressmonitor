@@ -538,7 +538,7 @@ $(document).ready(function() {
         const studentId = CURRENT_STUDENT_ID;
         const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
         const school_id = $('#schoolIdInput').val();
-
+    
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
@@ -547,24 +547,24 @@ $(document).ready(function() {
             student_id: studentId,
             metadata_id: metadata_id,
             school_id: school_id
-
         };
-        //console.log(postData);
-        //console.log("studentID:", student_id);
-
-
+    
+        // Check for duplicate date
+        if (isDateDuplicate(postData.new_value, performanceId, studentId, metadata_id)) {
+            alert("Duplicate date not allowed!");
+            cell.html(cell.data('saved-date') || '');
+            return;
+        }
+    
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
-            //console.log(response); // <-- This is the debug line. 
-        
-            if (response && response.error && response.error === 'Duplicate date not allowed!') {
-                alert("Duplicate date not allowed!");
-                cell.html(cell.data('saved-date') || '');  
-            } else if (response && response.saved_date) {
+            if (response && response.saved_date) {
                 cell.data('saved-date', response.saved_date);
             } else {
+                // Handle other response cases if needed
             }
-        });  
+        });
     }
+    
 
     //let dateAscending = true; // to keep track of current order
 
