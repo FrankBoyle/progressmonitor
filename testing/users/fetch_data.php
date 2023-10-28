@@ -14,6 +14,13 @@ function fetchPerformanceData($studentId, $metadata_id) {
     return $stmt->fetchAll();
 }
 
+function fetchStudentsByTeacher($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    return $stmt->fetchAll();
+}
+
 function fetchMetadataCategories($school_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
@@ -128,6 +135,7 @@ if (!isset($_SESSION['teacher_id'])) {
 $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
+$students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId, $metadata_id);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);

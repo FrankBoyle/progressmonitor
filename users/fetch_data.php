@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('auth_session.php');
 // Error Reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -11,6 +11,13 @@ function fetchPerformanceData($studentId, $metadata_id) {
     global $connection;
     $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
     $stmt->execute([$studentId, $metadata_id]);
+    return $stmt->fetchAll();
+}
+
+function fetchStudentsByTeacher($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
+    $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
 
@@ -73,51 +80,6 @@ function fetchScoreNames($school_id, $metadata_id) {
     return $scoreNames;
 }
 
-function fetchStudentsByTeacher($teacherId) {
-    global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
-    $stmt->execute([$teacherId]);
-    return $stmt->fetchAll();
-}
-
-function addNewStudent($studentName, $teacherId) {
-    global $connection;
-
-    // Fetch the school_id of the current teacher
-    $stmt = $connection->prepare("SELECT school_id FROM Teachers WHERE teacher_id = ?");
-    $stmt->execute([$teacherId]);
-    $teacherInfo = $stmt->fetch();
-    $teacherschool_id = $teacherInfo['school_id'];
-
-    // Check if the student with the same name and school_id already exists
-    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND school_id = ?");
-    $stmt->execute([$studentName, $teacherschool_id]);
-    $duplicateStudent = $stmt->fetch();
-
-    if ($duplicateStudent) {
-        return "Student with the same name already exists.";
-    } 
-
-    // Insert the new student with the same school_id
-    $stmt = $connection->prepare("INSERT INTO Students (name, school_id) VALUES (?, ?)");
-    $stmt->execute([$studentName, $teacherschool_id]);
-    return "New student added successfully.";
-}
-
-function fetchGroupNames() {
-    global $connection;
-    $stmt = $connection->prepare("SELECT group_name FROM ScoreGroups");
-    $stmt->execute();
-    $stmt->bindColumn(1, $groupName);
-    
-    $groups = [];
-    while ($stmt->fetch(PDO::FETCH_BOUND)) {
-        $groups[] = $groupName;
-    }
-    
-    return $groups;
-}
-
 function getSmallestMetadataId($schoolId) {
     global $connection;
 
@@ -173,14 +135,6 @@ if (!isset($_SESSION['teacher_id'])) {
 $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
-// Handle form submission for adding new student
-if (isset($_POST['add_new_student'])) {
-    $newStudentName = $_POST['new_student_name'];
-    if (!empty($newStudentName)) {
-        $message = addNewStudent($newStudentName, $teacherId);
-    }
-}
-
 $students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId, $metadata_id);
@@ -190,22 +144,6 @@ $scoreNames = fetchScoreNames($school_id, $metadata_id);
 foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
     // You can add more logic here if needed
-}
-
-// Handling the data POST from the dropdown functionality
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ScoreGroup'])) {
-    $school_idIndex = $_POST['school_idIndex'];
-    $originalName = $_POST['ScoreColumn'];
-    $customName = $_POST['CustomName'];
-    $scoreGroup = $_POST['ScoreGroup'];
-
-    // Inserting into the SchoolScoreNames table
-    $stmt = $connection->prepare("INSERT INTO SchoolScoreNames (school_idIndex, ScoreColumn, CustomName, group_name) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$school_idIndex, $originalName, $customName, $scoreGroup]);
-    
-    // Respond with the ID of the inserted row
-    echo json_encode(['id' => $connection->lastInsertId()]);
-    exit;
 }
 
 // Fetch metadata entries from the Metadata table for the specified school_id
