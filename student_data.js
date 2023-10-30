@@ -809,8 +809,6 @@ if (isDateDuplicate(currentDate)) {
         attachEditableHandler();
         const dateCell = newRow.find('td[data-field-name="score_date"]');
         dateCell.click();
-    });
-
 
     $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
@@ -880,7 +878,7 @@ if (isDateDuplicate(currentDate)) {
         location.reload();
  
     });
-    
+});   
 
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
