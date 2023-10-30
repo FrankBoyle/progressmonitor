@@ -810,13 +810,14 @@ if (isDateDuplicate(currentDate)) {
         const dateCell = newRow.find('td[data-field-name="score_date"]');
         dateCell.click();
 
-    $(document).on('click', '.saveRow', async function() {
+    // Attach a click event handler to the "Save" button in the new row
+    newRow.find('.saveRow').click(function() {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');
-        console.log(metadata_id);
+        const selectedDate = convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text());
 
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
@@ -847,7 +848,7 @@ if (isDateDuplicate(currentDate)) {
             school_id: school_id,
         };
     
-        if (isDateDuplicate(postData.score_date)) {
+        if (isDateDuplicate(selectedDate, performanceId, CURRENT_STUDENT_ID, metadata_id)) {
            // alert("An entry for this date already exists. Please choose a different date.");
             return;
         }
@@ -855,18 +856,16 @@ if (isDateDuplicate(currentDate)) {
         const response = await ajaxCall('POST', 'insert_performance.php', postData);
         if (response && response.performance_id) {
             // Update the table with the newly inserted row
-            const newRow = $('tr[data-performance-id="new"]');
-            newRow.attr('data-performance-id', response.performance_id);
-            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
+            row.attr('data-performance-id', response.performance_id);
+            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
             // If you have default scores or other fields returned from the server, update them here too
-        
+
             // Clear the input fields and enable the save button for future entries
-            newRow.find('td.editable').text('');
-            newRow.find('.saveRow').prop('disabled', false);
-        
+            row.find('td.editable').text('');
+            row.find('.saveRow').prop('disabled', false);
+
             // Optionally, display a success message
             // alert("Data saved successfully!");
-        
         } else {
             // Handle the error response appropriately
             if (response && response.error) {
