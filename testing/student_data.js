@@ -817,7 +817,7 @@ $(document).ready(function() {
         attachEditableHandler();
         const dateCell = newRow.find('td[data-field-name="score_date"]');
         dateCell.click();
-    });
+  
 
 
     $(document).on('click', '.saveRow', async function() {
@@ -894,7 +894,7 @@ $(document).ready(function() {
         location.reload();
  
     });
-    
+});  
 
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
