@@ -861,7 +861,7 @@ if (isDateDuplicate(currentDate)) {
 
             // Clear the input fields and enable the save button for future entries
             //row.find('td.editable').text('');
-            row.find('.saveRow').prop('disabled', false);
+            //row.find('.saveRow').prop('disabled', false);
 
             // Optionally, display a success message
             // alert("Data saved successfully!");
