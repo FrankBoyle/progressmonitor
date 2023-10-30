@@ -830,7 +830,7 @@ if (isDateDuplicate(currentDate)) {
             let scores = {};
             for (let i = 1; i <= 10; i++) {
                 const scoreValue = row.find(`td[data-field-name="score${i}"] input`).val(); // Change to input
-                if (scoreValue.trim() === '') {
+                if (scoreValue && scoreValue.trim() === '') {
                     scores[`score${i}`] = null; // Send null if score is empty or only contains whitespace
                 } else {
                     // Handle non-empty score values, e.g., validate or parse them if necessary
