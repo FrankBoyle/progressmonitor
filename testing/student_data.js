@@ -878,7 +878,7 @@ $(document).ready(function() {
                     //alert("There was an error saving the data.");
                 }
             }
-            location.reload();
+            table.ajax.reload();
         });
     });
 
