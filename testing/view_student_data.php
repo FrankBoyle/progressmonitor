@@ -189,6 +189,10 @@ if (isset($_GET['metadata_id'])) {
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
 <button type ="button" id="updateBenchmark">Update Benchmark</button>
+
+<div id="chartBar"></div>
+<div id="chartLine"></div>
+
 <div>
     <label>Select Chart Type:</label>
     <label>
