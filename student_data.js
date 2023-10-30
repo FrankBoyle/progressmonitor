@@ -810,14 +810,13 @@ if (isDateDuplicate(currentDate)) {
         const dateCell = newRow.find('td[data-field-name="score_date"]');
         dateCell.click();
 
-    // Attach a click event handler to the "Save" button in the new row
-    newRow.find('.saveRow').click(function() {
+    $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');
-        const selectedDate = convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text());
+        console.log(metadata_id);
 
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
@@ -848,7 +847,7 @@ if (isDateDuplicate(currentDate)) {
             school_id: school_id,
         };
     
-        if (isDateDuplicate(selectedDate, performanceId, CURRENT_STUDENT_ID, metadata_id)) {
+        if (isDateDuplicate(postData.score_date)) {
            // alert("An entry for this date already exists. Please choose a different date.");
             return;
         }
