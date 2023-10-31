@@ -123,6 +123,11 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
     });
 
     if (benchmark !== null) {
+        // Ensure that xCategoriesBar is an array before using map
+        if (!Array.isArray(xCategoriesBar)) {
+            xCategoriesBar = [];
+        }
+
         var benchmarkData = xCategoriesBar.map(date => {
             return {
                 x: date,
@@ -144,11 +149,12 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
     var xCategories = chartType === 'bar' ? xCategoriesBar : xCategoriesLine;
 
     if (chartType === 'bar') {
-        window.barChart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkBar));
+        window.chartBar.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkBar));
     } else if (chartType === 'line') {
-        window.lineChart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkLine));
+        window.chartLine.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkLine));
     }
 }
+
 
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName, stackTotals) {
     var isBarChart = selectedChartType === 'bar';
