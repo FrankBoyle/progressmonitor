@@ -6,11 +6,11 @@ var xCategories = [];
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
     var dates = [];
+    dates = dates.map(date => date.trim());
     const scores = [];
 
     tableRows.forEach((row) => {
         const date = row.querySelector("td:first-child").textContent;
-        dates = dates.map(date => date.trim());
         dates.push(date);
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
