@@ -193,33 +193,6 @@ if (isset($_GET['metadata_id'])) {
 <div id="barChart"></div>
     <div id="lineChart"></div>
 
-    <script>
-        $(document).ready(function() {
-            var barChart = new ApexCharts(document.querySelector("#barChart"), {
-                series: [{
-                    name: 'Bar Series',
-                    type: 'bar',
-                    data: chartDataBar,
-                }],
-                chart: {
-                    type: 'bar',
-                },
-            });
-            barChart.render();
-
-            var lineChart = new ApexCharts(document.querySelector("#lineChart"), {
-                series: [{
-                    name: 'Line Series',
-                    type: 'line',
-                    data: chartDataLine,
-                }],
-                chart: {
-                    type: 'line',
-                },
-            });
-            lineChart.render();
-        });
-    </script>
 <div id="chart"></div> <!-- Div to display the chart -->
 <!-- Radio buttons to select chart type -->
 
