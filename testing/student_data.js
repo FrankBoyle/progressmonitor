@@ -9,102 +9,77 @@ var selectedChartTypeLine = 'line';
 var xCategoriesLine = [];
 
 $(document).ready(function() {
-    initializeChart('bar');
-    initializeChart('line');
+    initializeChart('bar', 'chartBar', 'selectedColumnsBar', 'toggleTrendlinesBar', 'benchmarkValueBar', benchmarkBar);
+    initializeChart('line', 'chartLine', 'selectedColumnsLine', 'toggleTrendlinesLine', 'benchmarkValueLine', benchmarkLine);
 
     $(document).on('click', '#updateBenchmarkBar', function() {
-        console.log("Update benchmark button clicked for bar chart");
-
-        var newBenchmarkValue = $("#benchmarkValueBar").val().trim();
-        console.log("Benchmark value entered for bar chart:", newBenchmarkValue);
-
-        benchmarkBar = parseFloat(newBenchmarkValue);
-
-        if (isNaN(benchmarkBar)) {
-            console.log("Invalid number entered for bar chart");
-            alert("Invalid benchmark value for bar chart. Please enter a number.");
-        } else {
-            console.log("Valid number entered for bar chart, updating chart.");
-            updateChartWithCurrentSelections('bar', benchmarkBar);
-        }
+        updateBenchmark('bar', 'benchmarkValueBar', benchmarkBar, xCategoriesBar);
     });
 
     $(document).on('click', '#updateBenchmarkLine', function() {
-        console.log("Update benchmark button clicked for line chart");
-
-        var newBenchmarkValue = $("#benchmarkValueLine").val().trim();
-        console.log("Benchmark value entered for line chart:", newBenchmarkValue);
-
-        benchmarkLine = parseFloat(newBenchmarkValue);
-
-        if (isNaN(benchmarkLine)) {
-            console.log("Invalid number entered for line chart");
-            alert("Invalid benchmark value for line chart. Please enter a number.");
-        } else {
-            console.log("Valid number entered for line chart, updating chart.");
-            updateChartWithCurrentSelections('line', benchmarkLine);
-        }
+        updateBenchmark('line', 'benchmarkValueLine', benchmarkLine, xCategoriesLine);
     });
 
     $("input[name='selectedColumnsBar[]']").on('click', function() {
-        updateChartWithCurrentSelections('bar');
+        updateChartWithCurrentSelections('bar', 'chartBar', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategoriesBar);
     });
 
     $("input[name='selectedColumnsLine[]']").on('click', function() {
-        updateChartWithCurrentSelections('line');
+        updateChartWithCurrentSelections('line', 'chartLine', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
     });
 
     $("input[name='chartTypeBar']").on('change', function() {
-        updateChartWithCurrentSelections('bar');
+        updateChartWithCurrentSelections('bar', 'chartBar', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategoriesBar);
     });
 
     $("input[name='chartTypeLine']").on('change', function() {
-        updateChartWithCurrentSelections('line');
+        updateChartWithCurrentSelections('line', 'chartLine', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
     });
 
     $("#toggleTrendlinesBar").on('change', function() {
-        updateChartWithCurrentSelections('bar');
+        updateChartWithCurrentSelections('bar', 'chartBar', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategoriesBar);
     });
 
     $("#toggleTrendlinesLine").on('change', function() {
-        updateChartWithCurrentSelections('line');
+        updateChartWithCurrentSelections('line', 'chartLine', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
     });
 
-    updateChartWithCurrentSelections('bar');
-    updateChartWithCurrentSelections('line');
+    updateChartWithCurrentSelections('bar', 'chartBar', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategoriesBar);
+    updateChartWithCurrentSelections('line', 'chartLine', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
 });
 
-function updateChartWithCurrentSelections(chartType, benchmark) {
+function updateChartWithCurrentSelections(chartType, chartId, selectedColumnsName, toggleTrendlinesName, benchmark, xCategories) {
     var selectedColumns = [];
-    $("input[name='selectedColumns" + chartType + "[]']:checked").each(function() {
+    $("input[name='" + selectedColumnsName + "[]']:checked").each(function() {
         selectedColumns.push($(this).val());
     });
 
     var selectedChartType = $("input[name='chartType" + chartType + "']:checked").val();
+    var toggleTrendlines = $("#" + toggleTrendlinesName).is(':checked');
 
-    updateChart(selectedColumns, selectedChartType, chartType, xCategoriesBar, xCategoriesLine, benchmark);
+    updateChart(selectedColumns, selectedChartType, chartType, chartId, benchmark, xCategories, toggleTrendlines);
 }
 
-function initializeChart(chartType) {
+function initializeChart(chartType, chartId, selectedColumnsName, toggleTrendlinesName, benchmark, xCategories) {
     var selectedColumns = [];
-    $("input[name='selectedColumns" + chartType + "[]']:checked").each(function() {
+    $("input[name='" + selectedColumnsName + "[]']:checked").each(function() {
         selectedColumns.push($(this).val());
     });
 
     var selectedChartType = $("input[name='chartType" + chartType + "']:checked").val();
 
-    var { chartData, xCategories } = getChartData(selectedColumns);
+    var { chartData, xCategories: chartCategories } = getChartData(selectedColumns);
 
     if (chartType === 'bar') {
-        window.chartBar = new ApexCharts(document.querySelector("#chartBar"), getChartOptions(chartData, xCategories, selectedChartType, benchmarkBar));
-        window.chartBar.render();
+        window[chartId] = new ApexCharts(document.querySelector("#" + chartId), getChartOptions(chartData, chartCategories, selectedChartType, benchmark));
+        window[chartId].render();
     } else if (chartType === 'line') {
-        window.chartLine = new ApexCharts(document.querySelector("#chartLine"), getChartOptions(chartData, xCategories, selectedChartType, benchmarkLine));
-        window.chartLine.render();
+        window[chartId] = new ApexCharts(document.querySelector("#" + chartId), getChartOptions(chartData, chartCategories, selectedChartType, benchmark));
+        window[chartId].render();
     }
 }
 
-function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesBar, xCategoriesLine, benchmark) {
+function updateChart(selectedColumns, selectedChartType, chartType, chartId, benchmark, xCategories, toggleTrendlines) {
     var seriesData = [];
 
     selectedColumns.forEach(function(selectedColumn, index) {
@@ -123,7 +98,7 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
             }
         });
 
-        if ($("#toggleTrendlines" + chartType).is(':checked')) {
+        if (toggleTrendlines) {
             var trendlineFunction = calculateTrendline(chartData);
             var trendlineData = chartData.map((item, index) => {
                 return {
@@ -148,7 +123,7 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
     });
 
     if (benchmark !== null) {
-        var benchmarkData = xCategoriesBar.map(date => {
+        var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
                 y: benchmark
@@ -166,11 +141,7 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
         });
     }
 
-    if (chartType === 'bar') {
-        window.chartBar.updateOptions(getChartOptions(seriesData, xCategoriesBar, selectedChartType, benchmarkBar));
-    } else if (chartType === 'line') {
-        window.chartLine.updateOptions(getChartOptions(seriesData, xCategoriesLine, selectedChartType, benchmarkLine));
-    }
+    window[chartId].updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmark));
 }
 
 function getChartData(scoreField) {
