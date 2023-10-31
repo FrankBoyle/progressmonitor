@@ -149,9 +149,9 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
     var xCategories = chartType === 'bar' ? xCategoriesBar : xCategoriesLine;
 
     if (chartType === 'bar') {
-        window.chartBar.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkBar));
+        window.barChart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkBar));
     } else if (chartType === 'line') {
-        window.chartLine.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkLine));
+        window.lineChart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkLine));
     }
 }
 
