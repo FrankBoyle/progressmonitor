@@ -16,8 +16,8 @@ var dataSeriesLine = [];
 var xCategoriesLine = [];
 
     // Add debugging lines here
-console.log("dataSeries:", dataSeries);
-console.log("xCategories:", xCategories);
+//console.log("dataSeries:", dataSeries);
+//console.log("xCategories:", xCategories);
 
 // Initialize the chart
     initializeChart('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', 'benchmarkValueBar', benchmarkBar);
