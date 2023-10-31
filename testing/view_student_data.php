@@ -150,7 +150,6 @@ if (isset($_GET['metadata_id'])) {
 <!-- Existing checkboxes for column selection -->
 <div id="columnSelector">
     <label>Select Columns to Display:</label>
-    <!-- Existing PHP code to generate checkboxes -->
     <?php
     foreach ($scoreNames as $category => $scores) {
         foreach ($scores as $index => $scoreName) {
