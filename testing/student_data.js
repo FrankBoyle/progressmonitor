@@ -45,34 +45,17 @@ let chart = null; // This makes the chart variable accessible throughout the scr
 
 document.addEventListener("DOMContentLoaded", function() {
     const { dates, scores } = extractDataFromTable();
-    
+
     console.log("Dates:", dates);
     console.log("Scores:", scores);
-    
+
     const headerRow = document.querySelector('#dataTable thead tr');
     let headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    
+
     console.log("Header Names:", headerNames);
-    
-    const options = {
-        series: [],
-        chart: {
-            height: 350,
-            type: 'line',
-            zoom: {
-                enabled: false
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth'
-        },
-        xaxis: {
-            categories: dates
-        },
-    };
+
+    // Get initial chart options using the dates extracted
+    const options = getChartOptions(dates);
 
     chart = new ApexCharts(document.querySelector("#chart"), options);
 
@@ -108,6 +91,31 @@ function getSeriesData(scores, headerNames) {
         });
     }
     return series;
+}
+
+function getChartOptions(dates) {
+    return {
+        series: [],
+        chart: {
+            height: 350,
+            type: 'line',
+            zoom: {
+                enabled: false
+            },
+            animations: {
+                enabled: false // Disabling animations to see if it helps with the delay
+            }
+        },
+        dataLabels: {
+            enabled: true // Enabling data labels
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        xaxis: {
+            categories: dates
+        }
+    };
 }
 
 ////////////////////////////////////////////////
