@@ -58,28 +58,6 @@ if (isset($_GET['metadata_id'])) {
     .dataTables_filter {
         display: none;
     }
-
-    /* Add to your style section or CSS file */
-    .editable-input {
-        width: 100%; /* make input take full width of the cell */
-        height: 100%; /* make input take full height of the cell */
-        border: none; /* remove the default input border */
-        background: transparent; /* make the input background match the cell */
-        text-align: center; /* align the text to the center */
-        padding: 0; /* remove default padding */
-    }
-    
-    .hidden-input {
-        border: none;
-        background: transparent;
-        width: 100%;
-        box-sizing: border-box; 
-        outline: none;  // Remove focus outline
-    }
-
-    td {
-        : hidden;
-    }
 </style>
 </head>
 <body>
@@ -189,9 +167,19 @@ if (isset($_GET['metadata_id'])) {
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
 <button type ="button" id="updateBenchmark">Update Benchmark</button>
-
-<div id="barChart"></div>
-<div id="lineChart"></div>
+<div>
+    <label>Select Chart Type:</label>
+    <label>
+        <input type="radio" name="chartType" value="line" checked>
+        Line Chart
+    </label>
+    <label>
+        <input type="radio" name="chartType" value="bar">
+        Bar Chart
+    </label>
+</div>
+<div id="chart"></div> <!-- Div to display the chart -->
+<!-- Radio buttons to select chart type -->
 
 </body>
 </html>
