@@ -25,16 +25,15 @@ function extractDataFromTable() {
     return { dates, scores };
 }
 
+let chart = null; // This makes the chart variable accessible throughout the script
+
 document.addEventListener("DOMContentLoaded", function() {
     const { dates, scores } = extractDataFromTable();
     const headers = Array.from(document.querySelectorAll("table tr:first-child th")).slice(1);
     let headerNames = headers.map(header => header.innerText.trim());
 
-    // Initialize the chart with all columns
-    let seriesData = getSeriesData(scores, headerNames);
-
     const options = {
-        series: seriesData,
+        series: [],
         chart: {
             height: 350,
             type: 'line',
@@ -53,8 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
         },
     };
 
-    const chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    chart = new ApexCharts(document.querySelector("#chart"), options);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", function() {
@@ -62,11 +60,17 @@ document.addEventListener("DOMContentLoaded", function() {
                                      .map(checkbox => checkbox.value);
         
         // Filter series data based on selected columns
-        seriesData = getSeriesData(scores, headerNames)
+        const newSeriesData = getSeriesData(scores, headerNames)
                      .filter(series => selectedColumns.includes(series.name.toLowerCase().replace(/\s+/g, '')));
         
-        // Update the chart
-        chart.updateOptions({ series: seriesData });
+        // Update or render the chart
+        if (chart === null || !chart.rendered) {
+            options.series = newSeriesData;
+            chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        } else {
+            chart.updateOptions({ series: newSeriesData });
+        }
     });
 });
 
@@ -81,7 +85,6 @@ function getSeriesData(scores, headerNames) {
     }
     return series;
 }
-
 
 ////////////////////////////////////////////////
 
