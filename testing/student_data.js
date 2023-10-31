@@ -141,10 +141,12 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
         });
     }
 
+    var xCategories = chartType === 'bar' ? xCategoriesBar : xCategoriesLine;
+
     if (chartType === 'bar') {
-        window.barChart.updateOptions(getChartOptions(seriesData, xCategoriesBar, selectedChartType, benchmarkBar));
+        window.barChart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkBar));
     } else if (chartType === 'line') {
-        window.lineChart.updateOptions(getChartOptions(seriesData, xCategoriesLine, selectedChartType, benchmarkLine));
+        window.lineChart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkLine));
     }
 }
 
