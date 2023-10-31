@@ -8,6 +8,8 @@ var benchmarkSeriesIndexLine = null;
 var selectedChartTypeLine = 'line';
 
 $(document).ready(function() {
+    initializeChart();
+
 //console.log("dataSeries:", dataSeries);
 //console.log("xCategories:", xCategories);
 
