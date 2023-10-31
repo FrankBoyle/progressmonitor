@@ -103,8 +103,7 @@ function getChartOptions(dates) {
                 enabled: false
             },
             animations: {
-                enabled: true,
-                speed: 800 // You can adjust this as needed
+                enabled: false,
             }            
         },
         dataLabels: {
