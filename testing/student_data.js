@@ -79,7 +79,7 @@ function initializeChart(chartType, chartId, selectedColumnsName, toggleTrendlin
     }
 }
 
-function updateChart(selectedColumns, selectedChartType, chartType, chartId, benchmark, xCategories, toggleTrendlines) {
+function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesBar, xCategoriesLine, benchmark) {
     var seriesData = [];
 
     selectedColumns.forEach(function(selectedColumn, index) {
@@ -98,7 +98,7 @@ function updateChart(selectedColumns, selectedChartType, chartType, chartId, ben
             }
         });
 
-        if (toggleTrendlines) {
+        if ($("#toggleTrendlines" + chartType).is(':checked')) {
             var trendlineFunction = calculateTrendline(chartData);
             var trendlineData = chartData.map((item, index) => {
                 return {
@@ -123,7 +123,7 @@ function updateChart(selectedColumns, selectedChartType, chartType, chartId, ben
     });
 
     if (benchmark !== null) {
-        var benchmarkData = xCategories.map(date => {
+        var benchmarkData = xCategoriesBar.map(date => {
             return {
                 x: date,
                 y: benchmark
@@ -141,8 +141,13 @@ function updateChart(selectedColumns, selectedChartType, chartType, chartId, ben
         });
     }
 
-    window[chartId].updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmark));
+    if (chartType === 'bar') {
+        window.chartBar.updateOptions(getChartOptions(seriesData, xCategoriesBar, selectedChartType, benchmarkBar));
+    } else if (chartType === 'line') {
+        window.chartLine.updateOptions(getChartOptions(seriesData, xCategoriesLine, selectedChartType, benchmarkLine));
+    }
 }
+
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName, stackTotals) {
     //console.log(selectedChartType);
     var isBarChart = selectedChartType === 'bar';
