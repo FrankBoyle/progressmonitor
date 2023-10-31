@@ -84,56 +84,88 @@ function initializeChart(chartType, chartId, selectedColumnsName, toggleTrendlin
     }
 }
 
-function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesBar, xCategoriesLine, benchmark) {
+function updateChart(selectedColumns, selectedChartType, xCategories, benchmark) {
     var seriesData = [];
+    const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B'];
+
+    if (!xCategories || !Array.isArray(xCategories)) {
+        xCategories = [];
+    }
+
+    if (!Array.isArray(selectedColumns)) {
+        selectedColumns = [selectedColumns];
+    }
 
     selectedColumns.forEach(function(selectedColumn, index) {
-        var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
-
-        var actualScoreName = scoreNamesMap[selectedColumn];
+        var chartData = [];
+        var scoreName = scoreNamesMap[selectedColumn];
         var scoreColor = colors[index % colors.length];
+        var actualScoreName = scoreName;
 
-        seriesData.push({
-            name: actualScoreName,
-            data: chartData,
-            color: scoreColor,
-            connectNulls: true,
-            dataLabels: {
-                enabled: true
+        $('tr[data-performance-id]').each(function() {
+            var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
+            var scoreValue = $(this).find('td[data-field-name="' + selectedColumn + '"]').text();
+
+            if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
+                chartData.push({
+                    x: weekStartDate,
+                    y: parseFloat(scoreValue)
+                });
+
+                xCategories.push(weekStartDate);
             }
         });
 
-        if ($("#toggleTrendlines" + chartType).is(':checked')) {
-            var trendlineFunction = calculateTrendline(chartData);
-            var trendlineData = chartData.map((item, index) => {
+        const sortedChartData = chartData.sort((a, b) => {
+            return new Date(a.x) - new Date(b.x);
+        });
+
+        const sortedCategories = xCategories.sort((a, b) => {
+            return new Date(a) - new Date(b);
+        });
+
+        xCategories = sortedCategories;
+
+        seriesData.push(
+            {
+                name: actualScoreName,
+                data: sortedChartData,
+                color: scoreColor,
+                connectNulls: true,
+                dataLabels: {
+                    enabled: true
+                },
+            }
+        );
+
+        if (showTrendlines) {
+            var trendlineFunction = calculateTrendline(sortedChartData);
+            var trendlineData = sortedChartData.map((item, index) => {
                 return {
                     x: item.x,
                     y: trendlineFunction(index)
                 };
             });
 
-            seriesData.push({
-                name: 'Trendline ' + actualScoreName,
-                data: trendlineData,
-                color: scoreColor,
-                stroke: {
-                    dashArray: 3
-                },
-                connectNulls: true,
-                dataLabels: {
-                    enabled: false
+            seriesData.push(
+                {
+                    name: 'Trendline ' + actualScoreName,
+                    data: trendlineData,
+                    color: scoreColor,
+                    stroke: {
+                        dashArray: 3,
+                    },
+                    connectNulls: true,
+                    dataLabels: {
+                        enabled: false
+                    }
                 }
-            });
+            );
         }
     });
 
     if (benchmark !== null) {
-        // Ensure that xCategoriesBar is an array before using map
-        if (!Array.isArray(xCategoriesBar)) {
-            xCategoriesBar = [];
-        }
-
-        var benchmarkData = xCategoriesBar.map(date => {
+        var benchmarkData = xCategories.map(date => {
             return {
                 x: date,
                 y: benchmark
@@ -151,14 +183,8 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
         });
     }
 
-    var xCategories = chartType === 'bar' ? xCategoriesBar : xCategoriesLine;
-
-    if (chartType === 'bar') {
-        window.barChart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkBar));
-    } else if (chartType === 'line') {
-        window.lineChart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmarkLine));
-    }
-}
+    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
+};
 
 
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName, stackTotals) {
