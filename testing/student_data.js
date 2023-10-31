@@ -9,6 +9,11 @@ var selectedChartTypeLine = 'line';
 var xCategoriesLine = [];
 
 $(document).ready(function() {
+    // Add debugging lines here
+console.log("dataSeries:", dataSeries);
+console.log("xCategories:", xCategories);
+
+// Initialize the chart
     initializeChart('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', 'benchmarkValueBar', benchmarkBar);
     initializeChart('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', 'benchmarkValueLine', benchmarkLine);    
 
