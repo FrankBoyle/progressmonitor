@@ -143,7 +143,242 @@ function updateChart(selectedColumns, selectedChartType, chartType, chartId, ben
 
     window[chartId].updateOptions(getChartOptions(seriesData, xCategories, selectedChartType, benchmark));
 }
+function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName, stackTotals) {
+    //console.log(selectedChartType);
+    var isBarChart = selectedChartType === 'bar';
+    var chartType = selectedChartType; // Get the selected chart type
+    var isStacked = chartType === 'bar'; // This line seems to be repetitive since isBarChart already holds this information
+    var stackTotals = new Array(xCategories.length).fill(0);
+   
+    // The summation part should look like this, assuming series.data contains numbers.
+    dataSeries.forEach(function(series) {
+        series.data.forEach(function(dataPoint, index) {
+            stackTotals[index] += dataPoint.y || 0; // Add dataPoint.y to stack total (or 0 if undefined)
+        });
+    });
+    console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
 
+    // Create an array to store annotation objects
+    var totalAnnotations = [];
+
+    // Get the chart width and bar width (for positioning annotations)
+    var chartWidth = 1000; // Set to your desired chart width
+    var barWidth = chartWidth / xCategories.length;
+
+    // Iterate through the xCategories and calculate stack totals for each category
+    xCategories.forEach(function (category, index) {
+        var stackTotal = dataSeries.reduce(function (total, series) {
+            return total + (series.data[index].y || 0); // Add dataPoint.y to stack total (or 0 if undefined)
+        }, 0);
+
+        var annotationX = index * barWidth + barWidth / 2; // Center the annotation over the bar
+        var annotationY = stackTotal; // Use the stack total as the y-coordinate
+
+        totalAnnotations.push({
+            x: annotationX,
+            y: annotationY,
+            label: {
+                borderColor: '#775DD0',
+                offsetY: 20, // You can adjust this value as needed
+                style: {
+                    color: '#fff',
+                    background: '#775DD0',
+                },
+                text: stackTotal.toFixed(0), // Display total as a whole number
+            },
+        });
+    });
+
+    let colors;
+    if (dataSeries && dataSeries.length > 0) {
+        colors = dataSeries.map(series => {
+            if (series.stroke && series.stroke.colors && series.stroke.colors[0]) {
+                return series.stroke.colors[0];
+            }
+            return '#000000'; // default color if no color is defined for a series
+        });
+    } else {
+        colors = ['#000000']; // default color array if dataSeries is invalid
+    }
+
+    // Conditional drop shadow based on chart type
+    var dropShadowConfig = isBarChart ? 
+        { enabled: false } : 
+        {
+            enabled: true,
+            color: '#000',
+            top: 15,
+            left: 5,
+            blur: 7,
+            opacity: 0.5
+        };
+
+        var dataLabelsSettings = {
+            enabled: true,
+            formatter: function (val, opts) {
+                var seriesName = opts.w.config.series[opts.seriesIndex].name;
+
+                // Hide data labels for 'Benchmark' and 'Trendline'.
+                if (seriesName === 'Benchmark' || seriesName.startsWith('Trendline')) {
+                    return '';
+                }
+
+                // For bar charts, we want to show data labels differently.
+                if (isBarChart) {
+                    // You need to calculate the total for the stack, then compare it with the current value.
+                    var totalForStack = stackTotals[opts.dataPointIndex];
+                    if (val === totalForStack) {
+                        return val.toFixed(0); // Show data label for total stack value.
+                    } 
+                }
+                // Logic for data labels in the bar chart.
+                if (chartType === 'bar') {
+                    // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
+        
+                    // Here, we decide to show the label as it's a regular series in the bar chart.
+                    // Format the label as you need. For instance, you might want to show it as a whole number.
+                    return val.toFixed(0); // Or simply 'val' if you don't want to alter the formatting.
+                }
+        
+                // Logic for other chart types, such as a line chart.
+                if (chartType === 'line') {
+                    // For non-Benchmark series in the line chart, you can define specific formatting or conditions.
+        
+                    // For instance, you might want to show the data label as is or format it.
+                    return val; // Or 'val.toFixed(0)' for whole numbers, or any other formatting as needed.
+                }
+        
+                // Default return, in case the chart type is neither a bar nor a line, or for future compatibility.
+                // Adjust the formatting as needed.
+                return val;
+            },
+        };
+
+    if (chartType === 'bar') {
+        dataLabelsSettings.enabled = true;
+        }
+            
+    return {
+        series: dataSeries,
+        chart: {
+            type: chartType,
+            stacked: isStacked,
+            width: 1000,
+            colors: colors,
+            zoom: {
+                type: 'x',
+                enabled: true,   // Ensure zooming is enabled
+                autoScaleYaxis: true  // This will auto-scale the Y-axis when zooming in
+            },
+            toolbar: {
+                autoSelected: 'zoom' 
+            },
+            pan: {
+                enabled: true,  // Enable panning
+                mode: 'x',      // Enable horizontal panning
+            },   
+            dropShadow: dropShadowConfig,
+        },
+
+        dataLabels: dataLabelsSettings,
+        
+        annotations: {
+            position: 'top',
+            xaxis: isBarChart && isStacked ? stackTotals.map((total, i) => {
+                return {
+                    x: xCategories[i], // Set the x-coordinate to match the bar's category
+                    offsetY: 0, // Adjust the offsetY based on the index to stagger them
+                    label: {
+                        borderColor: '#775DD0',
+                        style: {
+                            color: '#fff',
+                            background: '#775DD0',
+                            textAlign: 'center', // Center-align the text horizontally
+                        },
+                        text: Math.round(total).toString(), // Shows total as a whole number
+                        angle: 90, // Set the angle to 0 to make the text horizontal
+                    },
+                };
+            }) : [],
+        },
+        
+
+        // Conditional logic for stroke width if it's a line chart to avoid visual issues on a bar chart
+        stroke: {
+            show: true,
+            curve: 'smooth',
+            width: chartType === 'line' ? dataSeries.map(series => {
+                // Existing condition for Trendline and other series
+                if (series.name && series.name.startsWith('Trendline ')) {
+                    return 1;
+                } else {
+                    return 3;
+                }
+            }) : 0,  // If it's not a line chart, we generally set the stroke width to 0 for bar charts
+        },
+
+        markers: {
+            size: dataSeries.map(series => {
+                if (series.name === 'actualScoreName') {
+                    return 5;  // or whatever size you want for the "Selected Score" series
+                } else {
+                    return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
+                }
+            }),
+            colors: undefined,
+            strokeColors: '#fff',
+            strokeWidth: 1.7,
+            strokeOpacity: 1,
+            strokeDashArray: 0,
+            fillOpacity: 1,
+            discrete: [],
+            shape: "circle",
+            radius: 2,
+            offsetX: 0,
+            offsetY: 0,
+            onClick: undefined,
+            onDblClick: undefined,
+            showNullDataPoints: true,
+            hover: {
+                size: undefined,
+                sizeOffset: 1.5
+            }
+        },
+
+        xaxis: {
+                type: 'category', 
+                categories: xCategories,
+            labels: {
+                hideOverlappingLabels: false,
+                formatter: function(value) {
+                    return value;  // Simply return the value since we're not working with timestamps anymore
+                }
+            },
+            title: {
+                text: 'Date'
+            },
+        },        
+
+        yaxis: {
+            title: {
+                text: 'Value'
+            },
+            labels: {
+                formatter: function(value) {
+                    return value.toFixed(0);
+                }
+            }
+        },
+        grid: {
+            xaxis: {
+                lines: {
+                    show: true
+                }
+            }
+        },
+        //colors: ['#2196F3', '#FF5722', '#000000']
+    };
+}
 function getChartData(scoreField) {
     var chartData = [];
     var xCategories = [];
