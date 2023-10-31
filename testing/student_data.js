@@ -28,9 +28,12 @@ function extractDataFromTable() {
 document.addEventListener("DOMContentLoaded", function() {
     const { dates, scores } = extractDataFromTable();
 
-    // Fetch the column headers for scores
-    const headers = Array.from(document.querySelectorAll("table tr:first-child td")).slice(1); // Assuming first column is for dates
-    const headerNames = headers.map(header => header.innerText);
+    // Fetch the column names for scores
+    const headers = Array.from(document.querySelectorAll("table tr:first-child th")).slice(1); // Assuming the first column is for dates
+    if(!headers.length) { // If no th elements, fallback to td
+        headers = Array.from(document.querySelectorAll("table tr:first-child td")).slice(1);
+    }
+    const headerNames = headers.map(header => header.innerText.trim());
 
     // Convert scores array into series format for ApexCharts
     const seriesData = [];
