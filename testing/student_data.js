@@ -5,19 +5,22 @@ var xCategories = [];
 
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
-    var dates = [];
-    dates = dates.map(date => date.trim());
+    const dates = [];
     const scores = [];
 
     tableRows.forEach((row) => {
-        const date = row.querySelector("td:first-child").textContent;
-        dates.push(date);
+        const dateCell = row.querySelector("td:first-child");
+        if (dateCell) {
+            dates.push(dateCell.textContent.trim());
+        } else {
+            dates.push(""); // or some default date or error handling
+        }
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
         const rowScores = [];
 
         scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0'));
+            rowScores.push(parseInt(cell.textContent || '0', 10));
         });
 
         scores.push(rowScores);
@@ -26,6 +29,20 @@ function extractDataFromTable() {
     return { dates, scores };
 }
 
+function populateSeriesData(selectedColumns, headerMap, scores) {
+    const seriesData = [];
+    for (const col of selectedColumns) {
+      const headerName = headerMap[col];
+      const headerIndex = headerNames.indexOf(headerName);
+      if (headerIndex !== -1) {
+        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
+      }
+    }
+    return seriesData;
+  }
+  
+  const seriesDataToBeUsed = populateSeriesData(selectedColumns, headerMap, scores);
+  
 let chart = null; // This makes the chart variable accessible throughout the script
 
 document.addEventListener("DOMContentLoaded", function() {
