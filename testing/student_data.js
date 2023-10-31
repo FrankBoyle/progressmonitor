@@ -1,59 +1,49 @@
-var benchmarkBar = null;
-var benchmarkSeriesIndexBar = null;
-var selectedChartTypeBar = 'bar';
+var benchmark = null;
+var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
+var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 
-var benchmarkLine = null;
-var benchmarkSeriesIndexLine = null;
-var selectedChartTypeLine = 'line';
-
 $(document).ready(function() {
-    initializeChart();
+    initializeCharts();
 
-//console.log("dataSeries:", dataSeries);
-//console.log("xCategories:", xCategories);
+    // Instead of using .click() we're using the more verbose .on('click' ...) which is more explicit
+    $(document).on('click', '#updateBenchmark', function() {
+        console.log("Update benchmark button clicked"); // This should log when you click the button
 
-// Initialize the chart
-    initializeChart('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', 'benchmarkValueBar', benchmarkBar);
-    initializeChart('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', 'benchmarkValueLine', benchmarkLine);    
+        var newBenchmarkValue = $("#benchmarkValue").val().trim();
+        console.log("Benchmark value entered:", newBenchmarkValue); // This should log the value you entered
 
-    $(document).on('click', '#updateBenchmarkBar', function() {
-        updateBenchmark('bar', 'benchmarkValueBar', benchmarkBar, xCategories);
+        var benchmark = parseFloat(newBenchmarkValue);
+
+        if (isNaN(benchmark)) {
+            console.log("Invalid number entered"); // This will confirm if your input was not a number
+            alert("Invalid benchmark value. Please enter a number.");
+        } else {
+            console.log("Valid number entered, updating charts."); // This confirms that the number was valid and the function should be executed
+            updateChartsWithCurrentSelections(benchmark); // Make sure this function is defined and works correctly
+        }
     });
 
-    $(document).on('click', '#updateBenchmarkLine', function() {
-        updateBenchmark('line', 'benchmarkValueLine', benchmarkLine, xCategories);
+    // For checkboxes, instead of .click(), we use .on('click', ...) and provide the callback function
+    $("input[name='selectedColumns[]']").on('click', function() {
+        updateChartsWithCurrentSelections();
     });
 
-    $("input[name='selectedColumnsBar[]']").on('click', function() {
-        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
+    // Explicit event handling for radio buttons
+    $("input[name='chartType']").on('change', function() {
+        updateChartsWithCurrentSelections();
     });
 
-    $("input[name='selectedColumnsLine[]']").on('click', function() {
-        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
+    // Explicit event handling for toggle switch
+    $("#toggleTrendlines").on('change', function() {
+        updateChartsWithCurrentSelections();
     });
 
-    $("input[name='barChart']").on('change', function() {
-        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
-    });
-
-    $("input[name='lineChart']").on('change', function() {
-        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
-    });
-
-    $("#toggleTrendlinesBar").on('change', function() {
-        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
-    });
-
-    $("#toggleTrendlinesLine").on('change', function() {
-        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
-    });
-
-    updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
-    updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
+    // Initialize the charts with the current selections
+    updateChartsWithCurrentSelections();
 });
 
-function updateChartWithCurrentSelections(benchmark, xCategories) {
+function updateChartsWithCurrentSelections(benchmark) {
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
@@ -61,27 +51,102 @@ function updateChartWithCurrentSelections(benchmark, xCategories) {
 
     var selectedChartType = $("input[name='chartType']:checked").val();
 
-    // Initialize dataSeries as an empty array
-    var dataSeries = [];
+    updateChart(selectedColumns, selectedChartType, xCategories, benchmark, 'barChart');
+    updateChart(selectedColumns, selectedChartType, xCategories, benchmark, 'lineChart');
+}
+
+function initializeCharts() {
+    window.barChart = new ApexCharts(document.querySelector("#barChart"), getChartOptions([], []));
+    window.lineChart = new ApexCharts(document.querySelector("#lineChart"), getChartOptions([], []));
+
+    window.barChart.render();
+    window.lineChart.render();
+}
+
+function getChartData(scoreField, chartId) {
+    var chartData = [];
+    var xCategories = [];
+
+    $('tr[data-performance-id]').each(function() {
+        var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
+        var scoreValue = $(this).find('td[data-field-name="' + scoreField + '"]').text();
+
+        if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
+            chartData.push({
+                x: weekStartDate,  // Directly use the date string
+                y: parseFloat(scoreValue)
+            });
+
+            xCategories.push(weekStartDate);
+        }
+    });
+
+    // Sorting logic should be outside the loop
+    const sortedChartData = chartData.sort((a, b) => {
+        return new Date(a.x) - new Date(b.x);
+    });
+
+    const sortedCategories = xCategories.sort((a, b) => {
+        return new Date(a) - new Date(b);
+    });
+
+    xCategories = sortedCategories;
+
+    return { chartData: sortedChartData, xCategories: sortedCategories };
+}
+
+function onChartTypeChange(newType, chartId) {
+    var chart = window[chartId];
+
+    if (newType === 'bar') {
+        // If the new chart type is a bar chart, we want to hide the trendline.
+        chart.updateSeries([{
+            //... other series data
+            data: [] // setting data to an empty array effectively hides the series
+        }]);
+    } else {
+        // If the chart type is not 'bar', we want to ensure the trendline is visible.
+        // Here you'd reset the trendline data back to what it should be.
+        chart.updateSeries([{
+            //... original series data, including trendline data
+        }]);
+    }
+}
+
+function updateCharts(selectedColumns, selectedChartType, xCategories, benchmark) {
+    var barSeriesData = [];
+    var lineSeriesData = [];
+    // Define colors for scores and their trendlines
+    const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B']; // Add more colors as needed
+    var scoreNamesMap = getScoreNamesMap();
+    var showTrendlines = $("#toggleTrendlines").is(':checked'); // Check if the trendlines should be displayed
+
+    if (!xCategories || !Array.isArray(xCategories)) {
+        xCategories = [];  // Make sure xCategories is an array
+    }
+    // Check if selectedColumns is an array
+    if (!Array.isArray(selectedColumns)) {
+        selectedColumns = [selectedColumns]; // Ensure it's an array
+    }
 
     selectedColumns.forEach(function(selectedColumn, index) {
         var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
+        var actualScoreName = scoreNamesMap[selectedColumn];
 
-        // You can adjust the color and other properties as needed
-        var seriesOptions = {
-            name: selectedColumn,  // Use the column name as the series name
-            data: chartData,       // Use the fetched data
-            color: '#2196F3',     // Set the desired color
+        // Assign colors to data series and trendlines based on index
+        var scoreColor = colors[index % colors.length];
+
+        var seriesItem = {
+            name: actualScoreName,
+            data: chartData,
+            color: scoreColor,  // Set color property here for the series
             connectNulls: true,
             dataLabels: {
-                enabled: true      // Enable data labels as needed
+                enabled: true // Enable data labels for the Selected Score series
             },
         };
 
-        // Push the seriesOptions into the dataSeries array
-        dataSeries.push(seriesOptions);
-
-        // Optionally, calculate and add the trendline series if needed
+        // Calculate trendline and add to seriesData only if showTrendlines is true
         if (showTrendlines) {
             var trendlineFunction = calculateTrendline(chartData);
             var trendlineData = chartData.map((item, index) => {
@@ -91,130 +156,31 @@ function updateChartWithCurrentSelections(benchmark, xCategories) {
                 };
             });
 
-            // Adjust the trendline series options as necessary
-            var trendlineSeriesOptions = {
-                name: 'Trendline ' + selectedColumn,
+            seriesItem.trendline = {
+                name: 'Trendline ' + actualScoreName,
                 data: trendlineData,
-                color: '#FF5722',  // Set the desired color for trendline
+                color: scoreColor,  // Set color property here for the series
                 stroke: {
-                    dashArray: 3,   // Adjust line style if needed
+                    dashArray: 3, // This makes the line dashed; the number controls the dash length
                 },
                 connectNulls: true,
                 dataLabels: {
-                    enabled: false  // Disable data labels for trendline series if needed
+                    enabled: false // Disable data labels for the Trendline series
                 }
             };
+        }
 
-            // Push the trendlineSeriesOptions into the dataSeries array
-            dataSeries.push(trendlineSeriesOptions);
+        // Push the series data to the appropriate chart
+        if (selectedChartType === 'bar') {
+            barSeriesData.push(seriesItem);
+        } else if (selectedChartType === 'line') {
+            lineSeriesData.push(seriesItem);
         }
     });
 
-    // Now, you have populated dataSeries with the selected columns and their data
-
-    // Call updateChart with the dataSeries array
-    updateChart(dataSeries, selectedChartType, xCategories, benchmark);
-}
-
-
-function initializeChart(chartType, chartId, selectedColumnsName, toggleTrendlinesName, benchmark, xCategories) {
-    var selectedColumns = [];
-    $("input[name='" + selectedColumnsName + "[]']:checked").each(function() {
-        selectedColumns.push($(this).val());
-    });
-
-    var selectedChartType = $("input[name='chartType" + chartType + "']:checked").val();
-
-    var { chartData, xCategories: chartCategories } = getChartData(selectedColumns);
-
-    if (chartType === 'bar') {
-        window[chartId] = new ApexCharts(document.querySelector("#" + chartId), getChartOptions(chartData, chartCategories, selectedChartType, benchmark));
-        window[chartId].render();
-    } else if (chartType === 'line') {
-        window[chartId] = new ApexCharts(document.querySelector("#" + chartId), getChartOptions(chartData, chartCategories, selectedChartType, benchmark));
-        window[chartId].render();
-    }
-}
-
-function updateChart(selectedColumns, selectedChartType, xCategories, benchmark) {
-    var seriesData = [];
-    const colors = ['#2196F3', '#FF5722', '#4CAF50', '#FFC107', '#9C27B0', '#607D8B'];
-
-    if (!xCategories || !Array.isArray(xCategories)) {
-        xCategories = [];
-    }
-
-    if (!Array.isArray(selectedColumns)) {
-        selectedColumns = [selectedColumns];
-    }
-
-    selectedColumns.forEach(function(selectedColumn, index) {
-        var chartData = [];
-        var scoreName = scoreNamesMap[selectedColumn];
-        var scoreColor = colors[index % colors.length];
-        var actualScoreName = scoreName;
-
-        $('tr[data-performance-id]').each(function() {
-            var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
-            var scoreValue = $(this).find('td[data-field-name="' + selectedColumn + '"]').text();
-
-            if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
-                chartData.push({
-                    x: weekStartDate,
-                    y: parseFloat(scoreValue)
-                });
-
-                xCategories.push(weekStartDate);
-            }
-        });
-
-        const sortedChartData = chartData.sort((a, b) => {
-            return new Date(a.x) - new Date(b.x);
-        });
-
-        const sortedCategories = xCategories.sort((a, b) => {
-            return new Date(a) - new Date(b);
-        });
-
-        xCategories = sortedCategories;
-
-        seriesData.push(
-            {
-                name: actualScoreName,
-                data: sortedChartData,
-                color: scoreColor,
-                connectNulls: true,
-                dataLabels: {
-                    enabled: true
-                },
-            }
-        );
-
-        if (showTrendlines) {
-            var trendlineFunction = calculateTrendline(sortedChartData);
-            var trendlineData = sortedChartData.map((item, index) => {
-                return {
-                    x: item.x,
-                    y: trendlineFunction(index)
-                };
-            });
-
-            seriesData.push(
-                {
-                    name: 'Trendline ' + actualScoreName,
-                    data: trendlineData,
-                    color: scoreColor,
-                    stroke: {
-                        dashArray: 3,
-                    },
-                    connectNulls: true,
-                    dataLabels: {
-                        enabled: false
-                    }
-                }
-            );
-        }
-    });
+    // Update both charts with the series data
+    window.barChart.updateSeries(barSeriesData);
+    window.lineChart.updateSeries(lineSeriesData);
 
     if (benchmark !== null) {
         var benchmarkData = xCategories.map(date => {
@@ -224,52 +190,72 @@ function updateChart(selectedColumns, selectedChartType, xCategories, benchmark)
             };
         }).reverse();
 
-        seriesData.push({
+        var benchmarkSeries = {
             name: 'Benchmark',
             data: benchmarkData,
             connectNulls: true,
-            color: '#000000',
+            color: '#000000', // Setting the line color to black.
             dataLabels: {
-                enabled: false
+                enabled: false // Disable data labels for the Benchmark series
             }
-        });
+        };
+
+        // Update both charts with the benchmark series
+        window.barChart.updateSeries([benchmarkSeries]);
+        window.lineChart.updateSeries([benchmarkSeries]);
     }
 
-    window.chart.updateOptions(getChartOptions(seriesData, xCategories, selectedChartType));
-};
+    // Pass seriesData to getChartOptions
+    var barChartOptions = getChartOptions(barSeriesData, xCategories, selectedChartType, 'Bar Chart');
+    var lineChartOptions = getChartOptions(lineSeriesData, xCategories, selectedChartType, 'Line Chart');
 
+    // Update both charts with the new options
+    window.barChart.updateOptions(barChartOptions);
+    window.lineChart.updateOptions(lineChartOptions);
+}
 
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName, stackTotals) {
-    if (!xCategories) {
-        // Handle the case where xCategories is not defined (e.g., set a default value)
-        xCategories = [];
-    }
+    //console.log(selectedChartType);
     var isBarChart = selectedChartType === 'bar';
-    var isStacked = isBarChart;
+    var chartType = selectedChartType; // Get the selected chart type
+    var isStacked = chartType === 'bar'; // This line seems to be repetitive since isBarChart already holds this information
+    var stackTotals = new Array(xCategories.length).fill(0);
+   
+    // The summation part should look like this, assuming series.data contains numbers.
+    dataSeries.forEach(function(series) {
+        series.data.forEach(function(dataPoint, index) {
+            stackTotals[index] += dataPoint.y || 0; // Add dataPoint.y to stack total (or 0 if undefined)
+        });
+    });
+    console.log(stackTotals); // Now this should output correct totals like [10, 20, 30, ...]
+
+    // Create an array to store annotation objects
     var totalAnnotations = [];
-    
+
+    // Get the chart width and bar width (for positioning annotations)
     var chartWidth = 1000; // Set to your desired chart width
     var barWidth = chartWidth / xCategories.length;
-    
+
+    // Iterate through the xCategories and calculate stack totals for each category
     xCategories.forEach(function (category, index) {
         var stackTotal = dataSeries.reduce(function (total, series) {
-            return total + (series.data[index].y || 0);
+            return total + (series.data[index].y || 0); // Add dataPoint.y to stack total (or 0 if undefined)
         }, 0);
 
-        var annotationX = index * barWidth + barWidth / 2;
-        var annotationY = stackTotal;
+        var annotationX = index * barWidth + barWidth / 2; // Center the annotation over the bar
+        var annotationY = stackTotal; // Use the stack total as the y-coordinate
 
         totalAnnotations.push({
             x: annotationX,
             y: annotationY,
             label: {
                 borderColor: '#775DD0',
-                offsetY: 20,
+                offsetY: 20, // You can adjust this value as needed
                 style: {
                     color: '#fff',
                     background: '#775DD0',
                 },
-                text: stackTotal.toFixed(0),
+                text: stackTotal.toFixed(0), // Display total as a whole number
             },
         });
     });
@@ -280,12 +266,13 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             if (series.stroke && series.stroke.colors && series.stroke.colors[0]) {
                 return series.stroke.colors[0];
             }
-            return '#000000';
+            return '#000000'; // default color if no color is defined for a series
         });
     } else {
-        colors = ['#000000'];
+        colors = ['#000000']; // default color array if dataSeries is invalid
     }
 
+    // Conditional drop shadow based on chart type
     var dropShadowConfig = isBarChart ? 
         { enabled: false } : 
         {
@@ -297,52 +284,69 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             opacity: 0.5
         };
 
-    var dataLabelsSettings = {
-        enabled: true,
-        formatter: function (val, opts) {
-            var seriesName = opts.w.config.series[opts.seriesIndex].name;
+        var dataLabelsSettings = {
+            enabled: true,
+            formatter: function (val, opts) {
+                var seriesName = opts.w.config.series[opts.seriesIndex].name;
 
-            if (seriesName === 'Benchmark' || seriesName.startsWith('Trendline')) {
-                return '';
-            }
+                // Hide data labels for 'Benchmark' and 'Trendline'.
+                if (seriesName === 'Benchmark' || seriesName.startsWith('Trendline')) {
+                    return '';
+                }
 
-            if (isBarChart) {
-                var totalForStack = stackTotals[opts.dataPointIndex];
-                if (val === totalForStack) {
-                    return val.toFixed(0);
-                } 
-            }
+                // For bar charts, we want to show data labels differently.
+                if (isBarChart) {
+                    // You need to calculate the total for the stack, then compare it with the current value.
+                    var totalForStack = stackTotals[opts.dataPointIndex];
+                    if (val === totalForStack) {
+                        return val.toFixed(0); // Show data label for total stack value.
+                    } 
+                }
+                // Logic for data labels in the bar chart.
+                if (chartType === 'bar') {
+                    // If it's a bar chart, we want to show data labels on the bars (except for the 'Benchmark' series, handled above).
+        
+                    // Here, we decide to show the label as it's a regular series in the bar chart.
+                    // Format the label as you need. For instance, you might want to show it as a whole number.
+                    return val.toFixed(0); // Or simply 'val' if you don't want to alter the formatting.
+                }
+        
+                // Logic for other chart types, such as a line chart.
+                if (chartType === 'line') {
+                    // For non-Benchmark series in the line chart, you can define specific formatting or conditions.
+        
+                    // For instance, you might want to show the data label as is or format it.
+                    return val; // Or 'val.toFixed(0)' for whole numbers, or any other formatting as needed.
+                }
+        
+                // Default return, in case the chart type is neither a bar nor a line, or for future compatibility.
+                // Adjust the formatting as needed.
+                return val;
+            },
+        };
 
-            if (selectedChartType === 'bar') {
-                return val.toFixed(0);
-            }
-
-            return val;
-        },
-    };
-
-    if (selectedChartType === 'bar') {
+    if (chartType === 'bar') {
         dataLabelsSettings.enabled = true;
-    }
-    
+        }
+            
     return {
         series: dataSeries,
         chart: {
-            type: selectedChartType,
+            type: chartType,
             stacked: isStacked,
             width: 1000,
             colors: colors,
             zoom: {
                 type: 'x',
-                enabled: true,
-                autoScaleYaxis: true,
+                enabled: true,   // Ensure zooming is enabled
+                autoScaleYaxis: true  // This will auto-scale the Y-axis when zooming in
             },
             toolbar: {
-                autoSelected: 'zoom'
+                autoSelected: 'zoom' 
             },
             pan: {
-                enabled: true,
-                mode: 'x',
+                enabled: true,  // Enable panning
+                mode: 'x',      // Enable horizontal panning
             },   
             dropShadow: dropShadowConfig,
         },
@@ -353,40 +357,43 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
             position: 'top',
             xaxis: isBarChart && isStacked ? stackTotals.map((total, i) => {
                 return {
-                    x: xCategories[i],
-                    offsetY: 0,
+                    x: xCategories[i], // Set the x-coordinate to match the bar's category
+                    offsetY: 0, // Adjust the offsetY based on the index to stagger them
                     label: {
                         borderColor: '#775DD0',
                         style: {
                             color: '#fff',
                             background: '#775DD0',
-                            textAlign: 'center',
+                            textAlign: 'center', // Center-align the text horizontally
                         },
-                        text: Math.round(total).toString(),
-                        angle: 90,
+                        text: Math.round(total).toString(), // Shows total as a whole number
+                        angle: 90, // Set the angle to 0 to make the text horizontal
                     },
                 };
             }) : [],
         },
+        
 
+        // Conditional logic for stroke width if it's a line chart to avoid visual issues on a bar chart
         stroke: {
             show: true,
             curve: 'smooth',
-            width: selectedChartType === 'line' ? dataSeries.map(series => {
+            width: chartType === 'line' ? dataSeries.map(series => {
+                // Existing condition for Trendline and other series
                 if (series.name && series.name.startsWith('Trendline ')) {
                     return 1;
                 } else {
                     return 3;
                 }
-            }) : 0,
+            }) : 0,  // If it's not a line chart, we generally set the stroke width to 0 for bar charts
         },
 
         markers: {
             size: dataSeries.map(series => {
-                if (series.name === actualScoreName) {
-                    return 5;
+                if (series.name === 'actualScoreName') {
+                    return 5;  // or whatever size you want for the "Selected Score" series
                 } else {
-                    return 0;
+                    return 0;  // This will make markers invisible for "Trendline" and "Benchmark" series
                 }
             }),
             colors: undefined,
@@ -410,12 +417,12 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
         },
 
         xaxis: {
-            type: 'category',
-            categories: xCategories,
+                type: 'category', 
+                categories: xCategories,
             labels: {
                 hideOverlappingLabels: false,
                 formatter: function(value) {
-                    return value;
+                    return value;  // Simply return the value since we're not working with timestamps anymore
                 }
             },
             title: {
@@ -440,36 +447,8 @@ function getChartOptions(dataSeries, xCategories, selectedChartType, actualScore
                 }
             }
         },
+        //colors: ['#2196F3', '#FF5722', '#000000']
     };
-}
-
-function getChartData(scoreField) {
-    var chartData = [];
-    var xCategories = [];
-
-    $('tr[data-performance-id]').each(function() {
-        var weekStartDate = $(this).find('td[data-field-name="score_date"]').text();
-        var scoreValue = $(this).find('td[data-field-name="' + scoreField + '"]').text();
-
-        if (weekStartDate !== 'New Entry' && !isNaN(parseFloat(scoreValue))) {
-            chartData.push({
-                x: weekStartDate,
-                y: parseFloat(scoreValue)
-            });
-
-            xCategories.push(weekStartDate);
-        }
-    });
-
-    const sortedChartData = chartData.sort((a, b) => {
-        return new Date(a.x) - new Date(b.x);
-    });
-
-    const sortedCategories = xCategories.sort((a, b) => {
-        return new Date(a) - new Date(b);
-    });
-
-    return { chartData: sortedChartData, xCategories: sortedCategories };
 }
 
 function calculateTrendline(data) {
@@ -479,8 +458,8 @@ function calculateTrendline(data) {
     var sumXX = 0;
     var count = 0;
 
-    data.forEach(function(point, index) {
-        var x = index;
+    data.forEach(function (point, index) {
+        var x = index; // Use index as the x value
         var y = point.y;
 
         if (y !== null) {
@@ -495,24 +474,23 @@ function calculateTrendline(data) {
     var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
     var intercept = (sumY - slope * sumX) / count;
 
-    return function(x) {
+    return function (x) {
         return slope * x + intercept;
     };
 }
 
 function getScoreNamesMap() {
     var scoreNamesMap = {};
-
-    $('input[name="selectedColumnsBar[]"]').each(function() {
+    // Assume each checkbox is immediately contained within a label element as per your HTML
+    $('input[name="selectedColumns[]"]').each(function() {
         var $checkbox = $(this);
+        // The parent label's text is the score name
         var scoreName = $checkbox.parent().text().trim();
         var checkboxValue = $checkbox.val();
         scoreNamesMap[checkboxValue] = scoreName;
     });
-
     return scoreNamesMap;
 }
-
 
 ////////////////////////////////////////////////
 
