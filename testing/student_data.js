@@ -29,9 +29,13 @@ let chart = null; // This makes the chart variable accessible throughout the scr
 
 document.addEventListener("DOMContentLoaded", function() {
     const { dates, scores } = extractDataFromTable();
+    console.log("Dates:", dates);
+    console.log("Scores:", scores);
+    
     const headers = Array.from(document.querySelectorAll("table tr:first-child th")).slice(1);
     let headerNames = headers.map(header => header.innerText.trim());
-
+    console.log("Header Names:", headerNames);
+    
     const options = {
         series: [],
         chart: {
@@ -57,12 +61,14 @@ document.addEventListener("DOMContentLoaded", function() {
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-                                     .map(checkbox => checkbox.value);
-        
+            .map(checkbox => checkbox.value);
+        console.log("Selected Columns:", selectedColumns);
+
         // Filter series data based on selected columns
         const newSeriesData = getSeriesData(scores, headerNames)
-                     .filter(series => selectedColumns.includes(series.name.toLowerCase().replace(/\s+/g, '')));
-        
+            .filter(series => selectedColumns.includes(series.name.toLowerCase().replace(/\s+/g, '')));
+        console.log("Series Data to be Used:", newSeriesData);
+
         // Update or render the chart
         if (chart === null || !chart.rendered) {
             options.series = newSeriesData;
