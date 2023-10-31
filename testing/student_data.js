@@ -51,8 +51,8 @@ function updateChartsWithCurrentSelections(benchmark) {
 
     var selectedChartType = $("input[name='chartType']:checked").val();
 
-    updateChart(selectedColumns, selectedChartType, xCategories, benchmark, 'barChart');
-    updateChart(selectedColumns, selectedChartType, xCategories, benchmark, 'lineChart');
+    updateCharts(selectedColumns, selectedChartType, xCategories, benchmark, 'barChart');
+    updateCharts(selectedColumns, selectedChartType, xCategories, benchmark, 'lineChart');
 }
 
 function initializeCharts() {
