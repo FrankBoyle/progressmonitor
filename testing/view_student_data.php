@@ -46,7 +46,7 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="student_data.js"></script>
+    <script src="student_data.js"  defer></script>
     
     <script>
     // Get the metadata_id from the URL parameter
