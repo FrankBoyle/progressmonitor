@@ -1,21 +1,13 @@
 var benchmarkBar = null;
 var benchmarkSeriesIndexBar = null;
 var selectedChartTypeBar = 'bar';
-var xCategoriesBar = [];
+var xCategories = [];
 
 var benchmarkLine = null;
 var benchmarkSeriesIndexLine = null;
 var selectedChartTypeLine = 'line';
-var xCategoriesLine = [];
 
 $(document).ready(function() {
-var dataSeriesBar = [];
-var xCategoriesBar = [];
-
-var dataSeriesLine = [];
-var xCategoriesLine = [];
-
-    // Add debugging lines here
 //console.log("dataSeries:", dataSeries);
 //console.log("xCategories:", xCategories);
 
@@ -24,39 +16,39 @@ var xCategoriesLine = [];
     initializeChart('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', 'benchmarkValueLine', benchmarkLine);    
 
     $(document).on('click', '#updateBenchmarkBar', function() {
-        updateBenchmark('bar', 'benchmarkValueBar', benchmarkBar, xCategoriesBar);
+        updateBenchmark('bar', 'benchmarkValueBar', benchmarkBar, xCategories);
     });
 
     $(document).on('click', '#updateBenchmarkLine', function() {
-        updateBenchmark('line', 'benchmarkValueLine', benchmarkLine, xCategoriesLine);
+        updateBenchmark('line', 'benchmarkValueLine', benchmarkLine, xCategories);
     });
 
     $("input[name='selectedColumnsBar[]']").on('click', function() {
-        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategoriesBar);
+        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
     });
 
     $("input[name='selectedColumnsLine[]']").on('click', function() {
-        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
+        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
     });
 
     $("input[name='chartTypeBar']").on('change', function() {
-        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategoriesBar);
+        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
     });
 
     $("input[name='chartTypeLine']").on('change', function() {
-        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
+        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
     });
 
     $("#toggleTrendlinesBar").on('change', function() {
-        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategoriesBar);
+        updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
     });
 
     $("#toggleTrendlinesLine").on('change', function() {
-        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
+        updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
     });
 
-    updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategoriesBar);
-    updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
+    updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
+    updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
 });
 
 function updateChartWithCurrentSelections(benchmark, xCategories) {
