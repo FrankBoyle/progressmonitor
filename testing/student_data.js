@@ -27,23 +27,11 @@ function extractDataFromTable() {
 
 document.addEventListener("DOMContentLoaded", function() {
     const { dates, scores } = extractDataFromTable();
+    const headers = Array.from(document.querySelectorAll("table tr:first-child th")).slice(1);
+    let headerNames = headers.map(header => header.innerText.trim());
 
-    // Fetch the column names for scores
-    const headers = Array.from(document.querySelectorAll("table tr:first-child th")).slice(1); // Assuming the first column is for dates
-    if(!headers.length) { // If no th elements, fallback to td
-        headers = Array.from(document.querySelectorAll("table tr:first-child td")).slice(1);
-    }
-    const headerNames = headers.map(header => header.innerText.trim());
-
-    // Convert scores array into series format for ApexCharts
-    const seriesData = [];
-    for (let i = 0; i < 10; i++) {
-        const scoreData = scores.map(row => row[i]);
-        seriesData.push({
-            name: headerNames[i], // Using the retrieved headers as series names
-            data: scoreData
-        });
-    }
+    // Initialize the chart with all columns
+    let seriesData = getSeriesData(scores, headerNames);
 
     const options = {
         series: seriesData,
@@ -67,7 +55,33 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
+
+    // Listen for checkbox changes
+    document.getElementById("columnSelector").addEventListener("change", function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                                     .map(checkbox => checkbox.value);
+        
+        // Filter series data based on selected columns
+        seriesData = getSeriesData(scores, headerNames)
+                     .filter(series => selectedColumns.includes(series.name.toLowerCase().replace(/\s+/g, '')));
+        
+        // Update the chart
+        chart.updateOptions({ series: seriesData });
+    });
 });
+
+function getSeriesData(scores, headerNames) {
+    const series = [];
+    for (let i = 0; i < 10; i++) {
+        const scoreData = scores.map(row => row[i]);
+        series.push({
+            name: headerNames[i],
+            data: scoreData
+        });
+    }
+    return series;
+}
+
 
 ////////////////////////////////////////////////
 
