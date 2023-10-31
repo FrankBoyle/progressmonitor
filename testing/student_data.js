@@ -41,7 +41,6 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
   
-  const seriesDataToBeUsed = populateSeriesData(selectedColumns, headerMap, scores);
   
 let chart = null; // This makes the chart variable accessible throughout the script
 
@@ -83,12 +82,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
         console.log("Selected Columns:", selectedColumns);
-
-        // Filter series data based on selected columns
+    
         const newSeriesData = getSeriesData(scores, headerNames)
             .filter(series => selectedColumns.includes(series.name.toLowerCase().replace(/\s+/g, '')));
+    
         console.log("Series Data to be Used:", newSeriesData);
-
+    
         // Update or render the chart
         if (chart === null || !chart.rendered) {
             options.series = newSeriesData;
@@ -97,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             chart.updateOptions({ series: newSeriesData });
         }
-    });
+    });    
 });
 
 function getSeriesData(scores, headerNames) {
