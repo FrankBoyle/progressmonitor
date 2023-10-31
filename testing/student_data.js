@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
         } else {
-            chart.updateOptions({ series: newSeriesData });
+            chart.updateSeries(newSeriesData);
         }
     });    
 });
@@ -103,8 +103,9 @@ function getChartOptions(dates) {
                 enabled: false
             },
             animations: {
-                enabled: false // Disabling animations to see if it helps with the delay
-            }
+                enabled: true,
+                speed: 800 // You can adjust this as needed
+            }            
         },
         dataLabels: {
             enabled: true // Enabling data labels
