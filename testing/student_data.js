@@ -33,11 +33,11 @@ $(document).ready(function() {
         updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
     });
 
-    $("input[name='chartTypeBar']").on('change', function() {
+    $("input[name='barChart']").on('change', function() {
         updateChartWithCurrentSelections('bar', 'barChart', 'selectedColumnsBar', 'toggleTrendlinesBar', benchmarkBar, xCategories);
     });
 
-    $("input[name='chartTypeLine']").on('change', function() {
+    $("input[name='lineChart']").on('change', function() {
         updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategories);
     });
 
