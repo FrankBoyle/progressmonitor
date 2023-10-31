@@ -97,7 +97,7 @@ function getChartOptions(dates) {
     return {
         series: [],
         chart: {
-            height: 350,
+            width: 600,
             type: 'line',
             zoom: {
                 enabled: false
