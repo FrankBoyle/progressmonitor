@@ -13,7 +13,7 @@ $(document).ready(function() {
         var newBenchmarkValue = $("#benchmarkValue").val().trim();
         console.log("Benchmark value entered:", newBenchmarkValue); // This should log the value you entered
 
-        var benchmark = parseFloat(newBenchmarkValue);
+        benchmark = parseFloat(newBenchmarkValue);
 
         if (isNaN(benchmark)) {
             console.log("Invalid number entered"); // This will confirm if your input was not a number
@@ -43,7 +43,7 @@ $(document).ready(function() {
     updateChartsWithCurrentSelections();
 });
 
-function updateChartsWithCurrentSelections(benchmark) {
+function updateChartsWithCurrentSelections() {
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
