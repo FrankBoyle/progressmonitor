@@ -40,8 +40,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     }
     return seriesData;
   }
-  
-  
+ 
 let chart = null; // This makes the chart variable accessible throughout the script
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -101,10 +100,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function getSeriesData(scores, headerNames) {
     const series = [];
-    for (let i = 0; i < 10; i++) {
-        const scoreData = scores.map(row => row[i]);
+    for (let i = 1; i < headerNames.length - 1; i++) { // start from 1 because 0 is 'Date'
+        const scoreData = scores.map(row => row[i - 1]); // i-1 since our score columns are shifted by one due to the 'Date' column
         series.push({
-            name: headerNames[i],
+            name: `score${i}`,
             data: scoreData
         });
     }
