@@ -6,6 +6,7 @@ var xCategories = [];
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
+    dates = dates.map(date => date.trim());
     const scores = [];
 
     tableRows.forEach((row) => {
