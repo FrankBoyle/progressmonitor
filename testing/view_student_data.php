@@ -87,7 +87,7 @@ if (isset($_GET['metadata_id'])) {
 <?php endforeach; ?>
 </div>
 
-<table border="1">
+<table border="1" id="dataTable">
 <thead>
     <tr>
         <th>Date</th>
