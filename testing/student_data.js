@@ -9,6 +9,12 @@ var selectedChartTypeLine = 'line';
 var xCategoriesLine = [];
 
 $(document).ready(function() {
+var dataSeriesBar = [];
+var xCategoriesBar = [];
+
+var dataSeriesLine = [];
+var xCategoriesLine = [];
+
     // Add debugging lines here
 console.log("dataSeries:", dataSeries);
 console.log("xCategories:", xCategories);
