@@ -157,6 +157,10 @@ function updateChart(selectedColumns, selectedChartType, chartType, xCategoriesB
 
 
 function getChartOptions(dataSeries, xCategories, selectedChartType, actualScoreName, stackTotals) {
+    if (!xCategories) {
+        // Handle the case where xCategories is not defined (e.g., set a default value)
+        xCategories = [];
+    }
     var isBarChart = selectedChartType === 'bar';
     var isStacked = isBarChart;
     var totalAnnotations = [];
