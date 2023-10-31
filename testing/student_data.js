@@ -59,17 +59,69 @@ console.log("xCategories:", xCategories);
     updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
 });
 
-function updateChartWithCurrentSelections(chartType, chartId, selectedColumnsName, toggleTrendlinesName, benchmark, xCategories) {
+function updateChartWithCurrentSelections(benchmark) {
     var selectedColumns = [];
-    $("input[name='" + selectedColumnsName + "[]']:checked").each(function() {
+    $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
     });
 
-    var selectedChartType = $("input[name='chartType" + chartType + "']:checked").val();
-    var toggleTrendlines = $("#" + toggleTrendlinesName).is(':checked');
+    var selectedChartType = $("input[name='chartType']:checked").val();
 
-    updateChart(selectedColumns, selectedChartType, chartType, chartId, benchmark, xCategories, toggleTrendlines);
+    // Initialize dataSeries as an empty array
+    var dataSeries = [];
+
+    selectedColumns.forEach(function(selectedColumn, index) {
+        var { chartData, xCategories: columnCategories } = getChartData(selectedColumn);
+
+        // You can adjust the color and other properties as needed
+        var seriesOptions = {
+            name: selectedColumn,  // Use the column name as the series name
+            data: chartData,       // Use the fetched data
+            color: '#2196F3',     // Set the desired color
+            connectNulls: true,
+            dataLabels: {
+                enabled: true      // Enable data labels as needed
+            },
+        };
+
+        // Push the seriesOptions into the dataSeries array
+        dataSeries.push(seriesOptions);
+
+        // Optionally, calculate and add the trendline series if needed
+        if (showTrendlines) {
+            var trendlineFunction = calculateTrendline(chartData);
+            var trendlineData = chartData.map((item, index) => {
+                return {
+                    x: item.x,
+                    y: trendlineFunction(index) // calculate y based on trendline function
+                };
+            });
+
+            // Adjust the trendline series options as necessary
+            var trendlineSeriesOptions = {
+                name: 'Trendline ' + selectedColumn,
+                data: trendlineData,
+                color: '#FF5722',  // Set the desired color for trendline
+                stroke: {
+                    dashArray: 3,   // Adjust line style if needed
+                },
+                connectNulls: true,
+                dataLabels: {
+                    enabled: false  // Disable data labels for trendline series if needed
+                }
+            };
+
+            // Push the trendlineSeriesOptions into the dataSeries array
+            dataSeries.push(trendlineSeriesOptions);
+        }
+    });
+
+    // Now, you have populated dataSeries with the selected columns and their data
+
+    // Call updateChart with the dataSeries array
+    updateChart(dataSeries, selectedChartType, xCategories, benchmark);
 }
+
 
 function initializeChart(chartType, chartId, selectedColumnsName, toggleTrendlinesName, benchmark, xCategories) {
     var selectedColumns = [];
