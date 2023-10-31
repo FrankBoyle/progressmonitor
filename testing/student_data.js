@@ -82,9 +82,9 @@ document.addEventListener("DOMContentLoaded", function() {
             .map(checkbox => checkbox.value);
         console.log("Selected Columns:", selectedColumns);
     
+        // Filter series data based on selected columns
         const newSeriesData = getSeriesData(scores, headerNames)
-            .filter(series => selectedColumns.includes(series.name.toLowerCase().replace(/\s+/g, '')));
-    
+            .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
     
         // Update or render the chart
