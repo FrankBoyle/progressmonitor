@@ -59,7 +59,7 @@ var xCategoriesLine = [];
     updateChartWithCurrentSelections('line', 'lineChart', 'selectedColumnsLine', 'toggleTrendlinesLine', benchmarkLine, xCategoriesLine);
 });
 
-function updateChartWithCurrentSelections(benchmark) {
+function updateChartWithCurrentSelections(benchmark, xCategories) {
     var selectedColumns = [];
     $("input[name='selectedColumns[]']:checked").each(function() {
         selectedColumns.push($(this).val());
