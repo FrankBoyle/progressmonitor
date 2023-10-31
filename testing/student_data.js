@@ -29,11 +29,13 @@ let chart = null; // This makes the chart variable accessible throughout the scr
 
 document.addEventListener("DOMContentLoaded", function() {
     const { dates, scores } = extractDataFromTable();
+    
     console.log("Dates:", dates);
     console.log("Scores:", scores);
     
-    const headers = Array.from(document.querySelectorAll("table tr:first-child th")).slice(1);
-    let headerNames = headers.map(header => header.innerText.trim());
+    const headerRow = document.querySelector('#dataTable thead tr');
+    let headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
+    
     console.log("Header Names:", headerNames);
     
     const options = {
