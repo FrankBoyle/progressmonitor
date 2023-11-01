@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
     const { dates, scores } = extractDataFromTable();
-    const allSeries = etSeriesData(scores, headerNames);
+    const allSeries = getSeriesData(scores, headerNames);
     const options = getChartOptions(dates);
     options.series = allSeries;
     chart = new ApexCharts(document.querySelector("#chart"), options);
