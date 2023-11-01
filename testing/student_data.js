@@ -54,8 +54,8 @@ document.addEventListener("DOMContentLoaded", function() {
     chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 
-    // Hide all series initially
-    allSeries.forEach((s, index) => chart.hideSeries(s.name));
+// Hide all series initially
+allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
     //console.log("Dates:", dates);
     //console.log("Scores:", scores);
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("Selected Columns:", selectedColumns);
     
         // Filter series data based on selected columns
-        const newSeriesData = populateSeriesData(selectedColumns, headerNames, scores)
+        const newSeriesData = getSeriesData(scores, headerNames)
             .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
     
