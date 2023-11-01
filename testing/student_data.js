@@ -102,15 +102,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function getAllSeries(scores, headerNames) {
     const series = [];
+
+    // Start at index 1 and end at headerNames.length - 2 to skip the first and last headers
     for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
+        const scoreData = scores.map(row => row[i]);
         series.push({
-            name: headerNames[i],  // use the actual header name here
+            name: headerNames[i],  // This assigns the actual header name as the series name
             data: scoreData
         });
     }
+
     return series;
 }
+
 
 // The debounce function
 function debounce(func, wait) {
