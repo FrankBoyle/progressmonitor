@@ -134,12 +134,13 @@ function getChartOptions(dates) {
         dataLabels: {
             enabled: true, // Enabling data labels globally
             formatter: function (val, opts) {
-                // Check if series name ends with 'Trendline'
-                if (opts.seriesName.endsWith('Trendline')) {
+                // Check if series name is defined and ends with 'Trendline'
+                if (opts.seriesName && opts.seriesName.endsWith('Trendline')) {
                     return ''; // Returning an empty string hides the data label
                 }
                 return val; // For non-trendline series, return the actual value
             }
+            
         },
         stroke: {
             curve: 'smooth',
