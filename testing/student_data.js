@@ -83,25 +83,14 @@ newSeriesData.forEach(series => {
         }
     });
 });
-
-
     
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    
-        // Ensure the trendline series doesn't show data labels
-        finalSeriesData.forEach(series => {
-            if (series.name.endsWith(' Trendline')) {
-                series.dataLabels = { enabled: false };
-            }
-        });
-        
+          
         // Update the chart
         chart.updateSeries(finalSeriesData);
     
-    }, 250));
-    
-    
+    }, 250));    
 });
 
 function getAllSeries(scores, headerNames) {
@@ -118,7 +107,6 @@ function getAllSeries(scores, headerNames) {
     }
     return series;
 }
-
 
 // The debounce function
 function debounce(func, wait) {
