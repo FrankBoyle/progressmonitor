@@ -45,6 +45,14 @@ let chart = null; // This makes the chart variable accessible throughout the scr
 
 document.addEventListener("DOMContentLoaded", function() {
     const { dates, scores } = extractDataFromTable();
+    const allSeries = getAllSeries(scores, headerNames);
+    const options = getChartOptions(dates);
+    options.series = allSeries;
+    chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+// Hide all series initially
+allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
     //console.log("Dates:", dates);
     //console.log("Scores:", scores);
@@ -54,45 +62,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //console.log("Header Names:", headerNames);
 
-    // Get initial chart options using the dates extracted
-    const options = getChartOptions(dates);
-
     chart = new ApexCharts(document.querySelector("#chart"), options);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const chartContainer = document.querySelector("#chart");
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
-        console.log("Selected Columns:", selectedColumns);
     
-        const newSeriesData = getSeriesData(scores, headerNames)
-            .filter(series => selectedColumns.includes(series.name));
-        console.log("Series Data to be Used:", newSeriesData);
-    
-        // Lower opacity before updating
-        chartContainer.style.opacity = '0';
-    
-        if (chart === null || !chart.rendered) {
-            options.series = newSeriesData;
-            chart = new ApexCharts(chartContainer, options);
-            chart.render();
-        } else {
-            chart.updateSeries(newSeriesData);
-        }
-    
-        // Restore opacity after a short timeout
-        setTimeout(() => {
-            chartContainer.style.opacity = '1';
-        }, 50);
+        allSeries.forEach((series) => {
+            if (selectedColumns.includes(series.name)) {
+                chart.showSeries(series.name);
+            } else {
+                chart.hideSeries(series.name);
+            }
+        });
     }, 250));
+    
     
 });
 
-function getSeriesData(scores, headerNames) {
+function getAllSeries(scores, headerNames) {
     const series = [];
-    for (let i = 1; i < headerNames.length - 1; i++) { // start from 1 because 0 is 'Date'
-        const scoreData = scores.map(row => row[i - 1]); // i-1 since our score columns are shifted by one due to the 'Date' column
+    for (let i = 1; i < headerNames.length - 1; i++) {
+        const scoreData = scores.map(row => row[i - 1]);
         series.push({
             name: `score${i}`,
             data: scoreData
