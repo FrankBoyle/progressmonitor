@@ -52,6 +52,7 @@ if (isset($_GET['metadata_id'])) {
     // Get the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
+    var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
     </script>
 
 <style>
