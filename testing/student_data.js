@@ -149,10 +149,7 @@ function calculateTrendline(data) {
     var sumXX = 0;
     var count = 0;
 
-    data.forEach(function (point, index) {
-        var x = index; // Use index as the x value
-        var y = point.y;
-
+    data.forEach(function (y, x) { // Adjusting the loop here
         if (y !== null) {
             sumX += x;
             sumY += y;
@@ -165,10 +162,20 @@ function calculateTrendline(data) {
     var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
     var intercept = (sumY - slope * sumX) / count;
 
+    // Debugging print statements
+    console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
+    console.log("slope:", slope, "intercept:", intercept);
+
     return function (x) {
         return slope * x + intercept;
     };
 }
+
+function getTrendlineData(seriesData) {
+    const trendlineFunction = calculateTrendline(seriesData);
+    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
+}
+
 
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
