@@ -67,21 +67,18 @@ allSeries.forEach((s, index) => chart.hideSeries(s.name));
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
     
-        // Filter allSeries based on selected columns
-        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-    
-        // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-        const trendlineSeriesData = [];
-        newSeriesData.forEach(series => {
-            const trendlineData = getTrendlineData(series.data);
-            trendlineSeriesData.push({
-                name: series.name + ' Trendline',
-                data: trendlineData
-            });
-        });
-    
-        // Add trendline data to series
-        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+// Filter allSeries based on selected columns
+const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+
+// For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+const trendlineSeriesData = [];
+newSeriesData.forEach(series => {
+    const trendlineData = getTrendlineData(series.data);
+    trendlineSeriesData.push(trendlineData);
+});
+
+// Add trendline data to series
+const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
         
         // Update the chart
         chart.updateSeries(finalSeriesData);
