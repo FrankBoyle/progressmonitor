@@ -173,8 +173,15 @@ function calculateTrendline(data) {
 
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
-    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
+    return {
+        name: 'Trendline',
+        data: seriesData.map((point, index) => ({ x: index, y: trendlineFunction(index) })),
+        dataLabels: {
+            enabled: false
+        }
+    };
 }
+
 
 
 
