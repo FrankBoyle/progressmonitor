@@ -113,7 +113,7 @@ function getAllSeries(scores, headerNames) {
             dataLabels: {
                 enabled: true,  // Enable data labels
                 formatter: function(val) {
-                    return parseFloat(val).toFixed(2);  // Limit to two decimal places
+                    return parseFloat(val).toFixed(0);  // Limit to two decimal places
                 }
             }
         });
@@ -149,7 +149,7 @@ function getChartOptions(dates) {
         yaxis: {
             labels: {
                 formatter: function(val) {
-                    return parseFloat(val).toFixed(2);  // Limit to two decimal places for y-axis labels
+                    return parseFloat(val).toFixed(0);  // Limit to two decimal places for y-axis labels
                 }
             }
         },
