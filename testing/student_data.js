@@ -110,18 +110,13 @@ function getChartOptions(dates) {
     return {
         series: [],
         chart: {
-            width: 600,
+            width: 1000,
             type: 'line',
             zoom: {
-                enabled: false
+                enabled: true
             },
             animations: {
-                speed: 500, // Adjust the animation speed
-                easing: 'easeout', // Adjust the easing effect
-                dynamicAnimation: {
-                    enabled: true,
-                    speed: 350 // Adjust this value as well
-                }
+                enabled: false
             }
                        
         },
