@@ -113,12 +113,7 @@ function getAllSeries(scores, headerNames) {
         series.push({
             name: `score${i}`,
             data: scoreData,
-            dataLabels: {
-                enabled: true,  // Enable data labels for main data
-                formatter: function(val) {
-                    return parseFloat(val).toFixed(0);  // Format to 2 decimal places
-                }
-            }
+
         });
     }
     return series;
