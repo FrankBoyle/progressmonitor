@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
 });
 
-function getSeriesData(scores, headerNames) {
+function getAllSeries(scores, headerNames) {
     const series = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
@@ -109,7 +109,6 @@ function getSeriesData(scores, headerNames) {
     }
     return series;
 }
-
 
 // The debounce function
 function debounce(func, wait) {
