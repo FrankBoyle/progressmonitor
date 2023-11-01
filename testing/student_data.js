@@ -78,6 +78,15 @@ newSeriesData.forEach(series => {
     trendlineSeriesData.push({
         name: series.name + ' Trendline',
         data: trendlineData,
+        type: 'line',
+        dataLabels: {
+            enabled: false  // Disable data labels for trendlines
+        },
+        stroke: {
+            width: 1.5,
+            dashArray: [5, 5],  // Dashed line
+            colors: ['#FF0000']  // Red color for trendlines
+        }
     });
 });
     
