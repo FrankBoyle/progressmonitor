@@ -78,9 +78,6 @@ newSeriesData.forEach(series => {
     trendlineSeriesData.push({
         name: series.name + ' Trendline',
         data: trendlineData,
-        dataLabels: {
-            enabled: false  // Disable data labels for trendlines
-        }
     });
 });
     
@@ -100,9 +97,6 @@ function getAllSeries(scores, headerNames) {
         series.push({
             name: `score${i}`,
             data: scoreData,
-            dataLabels: {
-                enabled: true  // Enable data labels
-            }
         });
     }
     return series;
@@ -152,6 +146,12 @@ function getChartOptions(dates) {
         }
     };
 }
+
+const trendlineOptions = {
+    color: '#888',            // Grey color for trendlines
+    dashArray: 5,             // Makes the line dashed
+    width: 2                  // Line width
+};
 
 function calculateTrendline(data) {
     var sumX = 0;
