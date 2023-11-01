@@ -42,8 +42,11 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
   }
  
 let chart = null; // This makes the chart variable accessible throughout the script
+let headerNames;  // Declare it outside
 
 document.addEventListener("DOMContentLoaded", function() {
+    const headerRow = document.querySelector('#dataTable thead tr');
+    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
     const { dates, scores } = extractDataFromTable();
     const allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
@@ -56,9 +59,6 @@ allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
     //console.log("Dates:", dates);
     //console.log("Scores:", scores);
-
-    const headerRow = document.querySelector('#dataTable thead tr');
-    let headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
 
     //console.log("Header Names:", headerNames);
 
