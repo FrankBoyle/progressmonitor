@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
             options.series = newSeriesData;
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
-        }, 250);
+        }, 500);
     });    
 });
 
