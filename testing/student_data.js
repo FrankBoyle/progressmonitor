@@ -155,7 +155,7 @@ function getChartOptions(dates) {
             }
         },
         dataLabels: {
-            enabled: true,
+            enabled: false,
             allowOverlap: true
         },        
         yaxis: {
