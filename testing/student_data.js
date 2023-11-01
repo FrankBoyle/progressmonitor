@@ -111,15 +111,13 @@ function getAllSeries(scores, headerNames) {
             name: `score${i}`,
             data: scoreData,
             dataLabels: {
-                enabled: true,  // Enable data labels
-                formatter: function(val) {
-                    return parseFloat(val).toFixed(2);  // Limit to two decimal places
-                }
+                enabled: true  // Enable data labels
             }
         });
     }
     return series;
 }
+
 
 // The debounce function
 function debounce(func, wait) {
