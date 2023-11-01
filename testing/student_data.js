@@ -62,8 +62,6 @@ allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
     //console.log("Header Names:", headerNames);
 
-    chart = new ApexCharts(document.querySelector("#chart"), options);
-
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
