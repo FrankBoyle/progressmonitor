@@ -139,7 +139,11 @@ function getChartOptions(dates) {
             }
         },
         dataLabels: {
-            enabled: true // Enabling data labels globally. Series-specific data label configurations will override this.
+            enabled: true, // Enabling data labels globally.
+            formatter: function(val) {
+                // This will ensure numbers have only two decimal places
+                return parseFloat(val).toFixed(0);
+            }
         },
         stroke: {
             curve: 'smooth',
@@ -150,7 +154,6 @@ function getChartOptions(dates) {
         }
     };
 }
-
 
 function calculateTrendline(data) {
     var sumX = 0;
