@@ -61,25 +61,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const chartContainer = document.querySelector("#chart");
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
         console.log("Selected Columns:", selectedColumns);
     
-        // Filter series data based on selected columns
         const newSeriesData = getSeriesData(scores, headerNames)
             .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
     
+        // Lower opacity before updating
+        chartContainer.style.opacity = '0';
+    
         if (chart === null || !chart.rendered) {
             options.series = newSeriesData;
-            chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart = new ApexCharts(chartContainer, options);
             chart.render();
         } else {
-            chart.updateOptions({
-                series: newSeriesData
-            }, true, false);  // Redraw paths without animating
+            chart.updateSeries(newSeriesData);
         }
-    }, 250)); 
+    
+        // Restore opacity after a short timeout
+        setTimeout(() => {
+            chartContainer.style.opacity = '1';
+        }, 50);
+    }, 250));
+    
 });
 
 function getSeriesData(scores, headerNames) {
