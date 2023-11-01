@@ -44,6 +44,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
 
+
 document.addEventListener("DOMContentLoaded", function() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
@@ -63,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //console.log("Header Names:", headerNames);
 
     // Listen for checkbox changes
+    /*
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
@@ -99,7 +101,7 @@ newSeriesData.forEach(series => {
         chart.updateSeries(finalSeriesData);
     
     }, 250));
-    
+    */
     
 });
 
@@ -147,7 +149,7 @@ function getChartOptions(dates) {
         yaxis: {
             labels: {
                 formatter: function(val) {
-                    return parseFloat(val).toFixed(2);
+                    return parseFloat(val).toFixed(0);
                 }
             }
         },
