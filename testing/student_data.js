@@ -136,6 +136,36 @@ function debounce(func, wait) {
     };
 }
 
+var dataSeries = [
+    //... Your series data ...
+];
+
+// Create the data labels settings
+var dataLabelsSettings = {
+    enabled: true,
+    formatter: function(val, opts) {
+        var seriesName = opts.w.config.series[opts.seriesIndex].name;
+
+        // Hide data labels for 'Benchmark' and 'Trendline'.
+        if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) {
+            return null;  // Hide the label
+        }
+
+        // Format for bar charts
+        if (opts.w.config.chart.type === 'bar') {
+            return val.toFixed(0);
+        }
+
+        // Format for line charts
+        if (opts.w.config.chart.type === 'line') {
+            return val;
+        }
+
+        // Default return
+        return val;
+    }
+};
+
 function getChartOptions(dates) {
     return {
         series: [],
