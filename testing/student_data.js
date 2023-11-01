@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
     const { dates, scores } = extractDataFromTable();
-    const allSeries = getSeriesData(scores, headerNames);
+    const allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
     options.series = allSeries;
     chart = new ApexCharts(document.querySelector("#chart"), options);
@@ -68,13 +68,11 @@ document.addEventListener("DOMContentLoaded", function() {
             .map(checkbox => checkbox.value);
         console.log("Selected Columns:", selectedColumns);
     
-        // Get all series
-        const allSeriesData = getSeriesData(scores, headerNames);
-        
         // Filter series data based on selected columns
-        const newSeriesData = allSeriesData.filter(series => selectedColumns.includes(series.name));
+        const newSeriesData = populateSeriesData(selectedColumns, headerNames, scores)
+            .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
-     
+    
         // For each series, calculate its trendline and add it to newSeriesData
         const trendlineSeriesData = [];
         newSeriesData.forEach(series => {
@@ -111,6 +109,7 @@ function getSeriesData(scores, headerNames) {
     }
     return series;
 }
+
 
 // The debounce function
 function debounce(func, wait) {
