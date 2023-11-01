@@ -25,9 +25,12 @@ function extractDataFromTable() {
 
         scores.push(rowScores);
     });
-
+    console.log("Extracted Dates:", dates);
+    console.log("Extracted Scores:", scores);
     // Reversing the order of dates and scores.
     return { dates: dates.reverse(), scores: scores.reverse() };
+
+
 }
 
 function populateSeriesData(selectedColumns, headerMap, scores) {
@@ -113,7 +116,8 @@ function getAllSeries(scores, headerNames) {
             data: scoreData
         });
     }
-    
+    console.log("Generated Series:", series);
+
     return series;
 }
 
