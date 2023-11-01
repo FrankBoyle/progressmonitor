@@ -66,35 +66,37 @@ allSeries.forEach((s, index) => chart.hideSeries(s.name));
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
-        console.log("Selected Columns:", selectedColumns);
     
-        // Filter series data based on selected columns
-        const newSeriesData = getSeriesData(scores, headerNames)
-            .filter(series => selectedColumns.includes(series.name));
-        console.log("Series Data to be Used:", newSeriesData);
-    
-        // For each series, calculate its trendline and add it to newSeriesData
-        const trendlineSeriesData = [];
-        newSeriesData.forEach(series => {
-            const trendlineData = getTrendlineData(series.data.map(point => ({ x: point, y: point })));
-            trendlineSeriesData.push({
-                name: series.name + ' Trendline',
-                data: trendlineData
-            });
+        allSeries.forEach((series) => {
+            if (selectedColumns.includes(series.name)) {
+                chart.showSeries(series.name);
+            } else {
+                chart.hideSeries(series.name);
+            }
         });
+
+            // For each series, calculate its trendline and add it to the newSeriesData
+    const trendlineSeriesData = [];
+    newSeriesData.forEach(series => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
+            name: series.name + ' Trendline',
+            data: trendlineData
+        });
+    });
+
+    // Add trendline data to series
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
     
-        // Add trendline data to series
-        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-        
-        // Update or render the chart
-        if (chart === null || !chart.rendered) {
-            options.series = finalSeriesData;
-            chart = new ApexCharts(document.querySelector("#chart"), options);
-            chart.render();
-        } else {
-            chart.updateSeries(finalSeriesData);
-        }
-    }, 250));     
+    // Update or render the chart
+    if (chart === null || !chart.rendered) {
+        options.series = finalSeriesData;
+        chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    } else {
+        chart.updateSeries(finalSeriesData);
+    }
+}, 250));  
     
 });
 
