@@ -97,6 +97,9 @@ document.addEventListener("DOMContentLoaded", function() {
         // Update the chart
         chart.updateSeries(finalSeriesData);
         console.log(chart.w.config.series);
+        console.log("Main Series:", newSeriesData);
+        console.log("Trendline Series:", trendlineSeriesData);
+
 
     
     }, 250));    
