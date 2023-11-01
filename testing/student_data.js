@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function() {
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
         } else {
-            document.querySelector("#chart svg").innerHTML = '';
             chart.updateSeries(newSeriesData, true);
         }
     }, 250));  // Here's where the 250 millisecond delay is applied   
