@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 name: series.name + ' Trendline',
                 data: trendlineData,
                 dataLabels: {
-                    enabled: false // Ensure data labels are turned off for the trendline
+                    enabled: false  // Do not show data labels for trendline
                 }
             });
         });
@@ -107,7 +107,13 @@ function getAllSeries(scores, headerNames) {
         const scoreData = scores.map(row => row[i - 1]);
         series.push({
             name: `score${i}`,
-            data: scoreData
+            data: scoreData,
+            dataLabels: {
+                enabled: true,  // By default, show data labels
+                formatter: function(val) {
+                    return parseFloat(val).toFixed(0);  // Limit to two decimal places
+                }
+            }
         });
     }
     return series;
@@ -138,13 +144,6 @@ function getChartOptions(dates) {
                 enabled: false
             }
         },
-        dataLabels: {
-            enabled: true, // Enabling data labels globally.
-            formatter: function(val) {
-                // This will ensure numbers have only two decimal places
-                return parseFloat(val).toFixed(0);
-            }
-        },
         stroke: {
             curve: 'smooth',
             size: 2
@@ -154,6 +153,7 @@ function getChartOptions(dates) {
         }
     };
 }
+
 
 function calculateTrendline(data) {
     var sumX = 0;
