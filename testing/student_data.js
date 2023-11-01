@@ -78,13 +78,20 @@ document.addEventListener("DOMContentLoaded", function() {
                 name: series.name + ' Trendline',
                 data: trendlineData,
                 dataLabels: {
-                    enabled: false // Turn off data labels for the trendline
+                    enabled: false // Ensure data labels are turned off for the trendline
                 }
             });
         });
     
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    
+        // Ensure the trendline series doesn't show data labels
+        finalSeriesData.forEach(series => {
+            if (series.name.endsWith(' Trendline')) {
+                series.dataLabels = { enabled: false };
+            }
+        });
         
         // Update the chart
         chart.updateSeries(finalSeriesData);
