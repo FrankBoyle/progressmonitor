@@ -74,19 +74,20 @@ document.addEventListener("DOMContentLoaded", function() {
     
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
-        newSeriesData.forEach(series => {
-            const trendlineData = getTrendlineData(series.data);
-            trendlineSeriesData.push({
-                name: series.name + ' Trendline',
-                data: trendlineData,
-                type: 'line',
-                stroke: {
-                    width: 1.5,
-                    dashArray: [5, 5],  // Dashed line
-                    colors: ['#FF0000']  // Red color for trendlines
-                }
-            });
-        });     
+newSeriesData.forEach(series => {
+    const trendlineData = getTrendlineData(series.data);
+    trendlineSeriesData.push({
+        name: series.name + ' Trendline',
+        data: trendlineData,
+        type: 'line',
+        stroke: {
+            width: 1.5,
+            dashArray: [5, 5],
+            colors: [series.color] // To keep trendline color same as the series it corresponds to
+        }
+    });
+});
+   
         
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
@@ -105,9 +106,8 @@ function getAllSeries(scores, headerNames) {
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
         series.push({
-            name: `score${i}`,
-            data: scoreData,
-
+            name: headerNames[i],
+            data: scoreData
         });
     }
     return series;
