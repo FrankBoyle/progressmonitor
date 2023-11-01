@@ -79,13 +79,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 name: series.name + ' Trendline',
                 data: trendlineData,
                 type: 'line',
-                dataLabels: {
-                    enabled: false,  // Assuming you want them enabled for now
-                    formatter: function(val) {
-                        console.log("Formatting:", val);
-                        return val.toFixed(0);  // Restrict to two decimal places
-                    }
-                },
                 stroke: {
                     width: 1.5,
                     dashArray: [5, 5],  // Dashed line
