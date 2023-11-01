@@ -80,7 +80,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 data: trendlineData,
                 type: 'line',
                 dataLabels: {
-                    enabled: false  // Disable data labels for trendlines
+                    enabled: true,  // Assuming you want them enabled for now
+                    formatter: function(val) {
+                        return val.toFixed(2);  // Restrict to two decimal places
+                    }
                 },
                 stroke: {
                     width: 1.5,
@@ -88,9 +91,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     colors: ['#FF0000']  // Red color for trendlines
                 }
             });
-        });
+        });     
         
-    
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
         console.log("Final Series Data:", finalSeriesData);
