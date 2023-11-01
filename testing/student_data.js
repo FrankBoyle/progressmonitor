@@ -71,13 +71,13 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("Series Data to be Used:", newSeriesData);
     
         // Check if chart is already rendered
-        if (!chart) {
-            const options = getChartOptions(dates, newSeriesData); // Assuming you have this function from previous interactions
+        if (chart && chart.rendered) {
+            chart.updateSeries(newSeriesData);
+        } else {
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
-        } else {
-            chart.updateSeries(newSeriesData);
         }
+        
     });
        
 });
