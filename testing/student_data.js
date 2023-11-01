@@ -46,13 +46,13 @@ let chart = null; // This makes the chart variable accessible throughout the scr
 document.addEventListener("DOMContentLoaded", function() {
     const { dates, scores } = extractDataFromTable();
 
-    console.log("Dates:", dates);
-    console.log("Scores:", scores);
+    //console.log("Dates:", dates);
+    //console.log("Scores:", scores);
 
     const headerRow = document.querySelector('#dataTable thead tr');
     let headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
 
-    console.log("Header Names:", headerNames);
+    //console.log("Header Names:", headerNames);
 
     // Get initial chart options using the dates extracted
     const options = getChartOptions(dates);
@@ -63,12 +63,12 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
-        console.log("Selected Columns:", selectedColumns);
+        //console.log("Selected Columns:", selectedColumns);
     
         // Filter series data based on selected columns
         const newSeriesData = getSeriesData(scores, headerNames)
             .filter(series => selectedColumns.includes(series.name));
-        console.log("Series Data to be Used:", newSeriesData);
+        //console.log("Series Data to be Used:", newSeriesData);
     
         // Update or render the chart
         if (chart === null || !chart.rendered) {
