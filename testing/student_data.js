@@ -86,7 +86,7 @@ newSeriesData.forEach(series => {
     
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-          
+
         // Update the chart
         chart.updateSeries(finalSeriesData);
     
@@ -132,6 +132,9 @@ function getChartOptions(dates) {
             animations: {
                 enabled: false
             }
+        },
+        dataLabels: {
+            enabled: true
         },
         yaxis: {
             labels: {
