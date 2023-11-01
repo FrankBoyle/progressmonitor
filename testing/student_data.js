@@ -74,8 +74,29 @@ allSeries.forEach((s, index) => chart.hideSeries(s.name));
                 chart.hideSeries(series.name);
             }
         });
-    }, 250));
+
+            // For each series, calculate its trendline and add it to the newSeriesData
+    const trendlineSeriesData = [];
+    newSeriesData.forEach(series => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
+            name: series.name + ' Trendline',
+            data: trendlineData
+        });
+    });
+
+    // Add trendline data to series
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
     
+    // Update or render the chart
+    if (chart === null || !chart.rendered) {
+        options.series = finalSeriesData;
+        chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    } else {
+        chart.updateSeries(finalSeriesData);
+    }
+}, 250));  
     
 });
 
@@ -127,6 +148,39 @@ function getChartOptions(dates) {
             categories: dates
         }
     };
+}
+
+function calculateTrendline(data) {
+    var sumX = 0;
+    var sumY = 0;
+    var sumXY = 0;
+    var sumXX = 0;
+    var count = 0;
+
+    data.forEach(function (point, index) {
+        var x = index; // Use index as the x value
+        var y = point.y;
+
+        if (y !== null) {
+            sumX += x;
+            sumY += y;
+            sumXY += x * y;
+            sumXX += x * x;
+            count++;
+        }
+    });
+
+    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / count;
+
+    return function (x) {
+        return slope * x + intercept;
+    };
+}
+
+function getTrendlineData(seriesData) {
+    const trendlineFunction = calculateTrendline(seriesData);
+    return seriesData.map((point, index) => ({ x: index, y: trendlineFunction(index) }));
 }
 
 ////////////////////////////////////////////////
