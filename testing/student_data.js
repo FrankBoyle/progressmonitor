@@ -70,13 +70,15 @@ document.addEventListener("DOMContentLoaded", function() {
             .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
     
+        // Destroy existing chart and delay re-create
         if (chart && chart.rendered) {
-            chart.updateSeries(newSeriesData);
-        } else {
+            chart.destroy();
+        }        
+        setTimeout(() => {
+            options.series = newSeriesData;
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
-        }
-        
+        }, 500);
     });    
 });
 
