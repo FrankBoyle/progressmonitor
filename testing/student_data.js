@@ -70,15 +70,17 @@ document.addEventListener("DOMContentLoaded", function() {
             .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
     
-        // Update or render the chart
         if (chart === null || !chart.rendered) {
             options.series = newSeriesData;
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
         } else {
-            chart.updateSeries(newSeriesData);
+            chart.updateOptions({
+                series: newSeriesData
+            }, true, false);
         }
-    }, 250));  // Here's where the 250 millisecond delay is applied
+    }, 250));
+    
     
        
 });
