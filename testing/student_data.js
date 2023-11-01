@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .map(checkbox => checkbox.value);
         console.log("Selected Columns:", selectedColumns);
     
+        // Filter series data based on selected columns
         const newSeriesData = getSeriesData(scores, headerNames)
             .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
@@ -74,12 +75,11 @@ document.addEventListener("DOMContentLoaded", function() {
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
         } else {
-            // Directly manipulate the chart's series
-            chart.config.series = newSeriesData;
-            chart.render();
+            chart.updateOptions({
+                series: newSeriesData
+            }, true, false);  // Redraw paths without animating
         }
-    }, 250));
-    
+    }, 250)); 
 });
 
 function getSeriesData(scores, headerNames) {
