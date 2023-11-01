@@ -54,8 +54,8 @@ document.addEventListener("DOMContentLoaded", function() {
     chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 
-// Hide all series initially
-allSeries.forEach((s, index) => chart.hideSeries(s.name));
+    // Hide all series initially
+    allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
     //console.log("Dates:", dates);
     //console.log("Scores:", scores);
@@ -67,24 +67,24 @@ allSeries.forEach((s, index) => chart.hideSeries(s.name));
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
     
-// Filter allSeries based on selected columns
-const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-
-// For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-const trendlineSeriesData = [];
-newSeriesData.forEach(series => {
-    const trendlineData = getTrendlineData(series.data);
-    trendlineSeriesData.push({
-        name: series.name + ' Trendline',
-        data: trendlineData,
-        dataLabels: {
-            enabled: false
-        }
-    });
-});
-
-// Add trendline data to series
-const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+        // Filter allSeries based on selected columns
+        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+    
+        // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+        const trendlineSeriesData = [];
+        newSeriesData.forEach(series => {
+            const trendlineData = getTrendlineData(series.data);
+            trendlineSeriesData.push({
+                name: series.name + ' Trendline',
+                data: trendlineData,
+                dataLabels: {
+                    enabled: false // Turn off data labels for the trendline
+                }
+            });
+        });
+    
+        // Add trendline data to series
+        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
         
         // Update the chart
         chart.updateSeries(finalSeriesData);
