@@ -147,7 +147,7 @@ function getChartOptions(dates) {
         yaxis: {
             labels: {
                 formatter: function(val) {
-                    return parseFloat(val).toFixed(0);  // Limit to two decimal places for y-axis labels
+                    return parseFloat(val).toFixed(2);
                 }
             }
         },
@@ -160,9 +160,6 @@ function getChartOptions(dates) {
         }
     };
 }
-
-
-
 
 function calculateTrendline(data) {
     var sumX = 0;
