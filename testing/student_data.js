@@ -113,6 +113,7 @@ function getAllSeries(scores, headerNames) {
     }
     return series;
 }
+console.log(chart.w.config.series);
 
 // The debounce function
 function debounce(func, wait) {
