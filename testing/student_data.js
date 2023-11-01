@@ -80,7 +80,10 @@ newSeriesData.forEach(series => {
         data: trendlineData,
         type: 'line',
         dataLabels: {
-            enabled: false  // Disable data labels for trendlines
+            enabled: false,
+            formatter: function() {
+                return ''; // force it to return an empty string, effectively disabling data labels
+            }
         },
         stroke: {
             width: 1.5,
