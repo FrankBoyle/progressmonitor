@@ -93,9 +93,10 @@ document.addEventListener("DOMContentLoaded", function() {
     
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-
-        // Update the chart
+        console.log("Final Series Data:", finalSeriesData);
         chart.updateSeries(finalSeriesData);
+        
+        // Update the chart
         console.log(chart.w.config.series);
         console.log("Main Series:", newSeriesData);
         console.log("Trendline Series:", trendlineSeriesData);
@@ -151,7 +152,7 @@ function getChartOptions(dates) {
             }
         },
         dataLabels: {
-            enabled: true,  // Disable data labels globally
+            enabled: false,  // Disable data labels globally
             allowOverlap: false  // Ensure individual series can control their data labels
         },
         yaxis: {
