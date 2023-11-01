@@ -116,8 +116,14 @@ function getChartOptions(dates) {
                 enabled: false
             },
             animations: {
-                enabled: false,
-            }            
+                speed: 500, // Adjust the animation speed
+                easing: 'easeout', // Adjust the easing effect
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350 // Adjust this value as well
+                }
+            }
+                       
         },
         dataLabels: {
             enabled: true // Enabling data labels
