@@ -130,6 +130,11 @@ function getChartOptions(dates) {
     return {
         series: [],
         chart: {
+            events: {
+                updated: function(chartContext, config) {
+                    console.log('Chart updated!', config.globals.series);
+                }
+            },
             width: 1000,
             type: 'line',
             zoom: {
