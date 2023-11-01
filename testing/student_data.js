@@ -80,10 +80,7 @@ newSeriesData.forEach(series => {
         data: trendlineData,
         type: 'line',
         dataLabels: {
-            enabled: false,
-            formatter: function() {
-                return ''; // force it to return an empty string, effectively disabling data labels
-            }
+            enabled: false  // Disable data labels for trendlines
         },
         stroke: {
             width: 1.5,
@@ -111,6 +108,9 @@ function getAllSeries(scores, headerNames) {
         series.push({
             name: `score${i}`,
             data: scoreData,
+            dataLabels: {
+                enabled: true  // Enable data labels for main data
+            }
         });
     }
     return series;
