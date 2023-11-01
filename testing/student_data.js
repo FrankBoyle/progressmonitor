@@ -77,12 +77,9 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             chart.updateOptions({
                 series: newSeriesData
-            }, true, false);
+            }, true, false);  // Redraw paths without animating
         }
-    }, 250));
-    
-    
-       
+    }, 250)); 
 });
 
 function getSeriesData(scores, headerNames) {
