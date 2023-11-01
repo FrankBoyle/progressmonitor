@@ -70,16 +70,16 @@ document.addEventListener("DOMContentLoaded", function() {
             .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
     
-        // Destroy existing chart and delay re-create
-        if (chart && chart.rendered) {
-            chart.destroy();
-        }        
-        setTimeout(() => {
-            options.series = newSeriesData;
+        // Check if chart is already rendered
+        if (!chart) {
+            const options = getChartOptions(dates, newSeriesData); // Assuming you have this function from previous interactions
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
-        }, 500);
-    });    
+        } else {
+            chart.updateSeries(newSeriesData);
+        }
+    });
+       
 });
 
 function getSeriesData(scores, headerNames) {
