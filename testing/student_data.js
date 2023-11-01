@@ -26,7 +26,8 @@ function extractDataFromTable() {
         scores.push(rowScores);
     });
 
-    return { dates, scores };
+    // Reversing the order of dates and scores.
+    return { dates: dates.reverse(), scores: scores.reverse() };
 }
 
 function populateSeriesData(selectedColumns, headerMap, scores) {
