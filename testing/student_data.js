@@ -136,7 +136,7 @@ var dataLabelsSettings = {
 
         // Hide data labels for 'Benchmark' and 'Trendline'.
         if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) {
-            return null;  // Hide the label
+            return '';  // Return empty string to hide the label
         }
 
         // Format for bar charts
@@ -146,7 +146,7 @@ var dataLabelsSettings = {
 
         // Format for line charts
         if (opts.w.config.chart.type === 'line') {
-            return val;
+            return val;  // or val.toFixed(2) if you want two decimal places
         }
 
         // Default return
