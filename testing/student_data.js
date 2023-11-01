@@ -810,7 +810,7 @@ if (isDateDuplicate(currentDate)) {
         const dateCell = newRow.find('td[data-field-name="score_date"]');
         dateCell.click();
 
-        $('table').on('click', '.saveRow', async function() {
+    $(document).on('click', '.saveRow', async function() {
         const row = $(this).closest('tr');
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
@@ -873,8 +873,8 @@ if (isDateDuplicate(currentDate)) {
                 //alert("There was an error saving the data.");
             }
         }
-        //location.reload();
-        table.draw();
+        location.reload();
+ 
     });
 });   
 
