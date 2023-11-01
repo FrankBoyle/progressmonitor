@@ -25,12 +25,9 @@ function extractDataFromTable() {
 
         scores.push(rowScores);
     });
-    console.log("Extracted Dates:", dates);
-    console.log("Extracted Scores:", scores);
+
     // Reversing the order of dates and scores.
     return { dates: dates.reverse(), scores: scores.reverse() };
-
-
 }
 
 function populateSeriesData(selectedColumns, headerMap, scores) {
@@ -105,21 +102,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function getAllSeries(scores, headerNames) {
     const series = [];
+    let counter = 1; // Start counter for unique scoreColumnName
     
-    // Flatten the scoreNamesFromPHP for easier access
-    const flattenedScoreNames = [].concat.apply([], Object.values(scoreNamesFromPHP));
-
-    for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
-        series.push({
-            name: flattenedScoreNames[i - 1], // Use the name from the flattened array
-            data: scoreData
-        });
+    for (const categoryName in scoreNamesArray) {
+        for (const scoreName of scoreNamesArray[categoryName]) {
+            const scoreColumnName = 'score' + counter;
+            const scoreData = scores.map(row => row[counter - 1]);
+            series.push({
+                name: scoreColumnName, 
+                data: scoreData
+            });
+            counter++; // Increment counter for next scoreColumnName
+        }
     }
-    console.log("Generated Series:", series);
-
+    
     return series;
 }
+
 
 // The debounce function
 function debounce(func, wait) {
