@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
     chart = new ApexCharts(document.querySelector("#chart"), options);
 
     // Listen for checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", function() {
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
         console.log("Selected Columns:", selectedColumns);
@@ -70,16 +70,15 @@ document.addEventListener("DOMContentLoaded", function() {
             .filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
     
-        // Destroy existing chart and delay re-create
-        if (chart) {
-            chart.destroy();
-        }
-        setTimeout(() => {
+        // Update or render the chart
+        if (chart === null || !chart.rendered) {
             options.series = newSeriesData;
             chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
-        }, 50);
-    });
+        } else {
+            chart.updateSeries(newSeriesData);
+        }
+    }, 250));  // Here's where the 250 millisecond delay is applied
     
        
 });
