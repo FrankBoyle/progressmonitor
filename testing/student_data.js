@@ -105,8 +105,9 @@ function getAllSeries(scores, headerNames) {
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
         series.push({
-            name: headerNames[i],
-            data: scoreData
+            name: `headerNames{i}`,
+            data: scoreData,
+
         });
     }
     return series;
