@@ -177,10 +177,7 @@ function getTrendlineData(seriesData) {
 }
 
 
-function getTrendlineData(seriesData) {
-    const trendlineFunction = calculateTrendline(seriesData);
-    return seriesData.map((point, index) => ({ x: index, y: trendlineFunction(index) }));
-}
+
 
 ////////////////////////////////////////////////
 
