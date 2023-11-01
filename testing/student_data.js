@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 data: trendlineData,
                 type: 'line',
                 dataLabels: {
-                    enabled: true,  // Assuming you want them enabled for now
+                    enabled: false,  // Assuming you want them enabled for now
                     formatter: function(val) {
                         console.log("Formatting:", val);
                         return val.toFixed(0);  // Restrict to two decimal places
