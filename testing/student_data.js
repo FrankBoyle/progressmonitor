@@ -105,13 +105,13 @@ function getAllSeries(scores, headerNames) {
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
         series.push({
-            name: `score${i}`,
+            name: headerNames[i], // use the header name for the series name
             data: scoreData,
-
         });
     }
     return series;
 }
+
 
 // The debounce function
 function debounce(func, wait) {
