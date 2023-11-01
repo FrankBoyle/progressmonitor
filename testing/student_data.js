@@ -74,7 +74,13 @@ const newSeriesData = allSeries.filter(series => selectedColumns.includes(series
 const trendlineSeriesData = [];
 newSeriesData.forEach(series => {
     const trendlineData = getTrendlineData(series.data);
-    trendlineSeriesData.push(trendlineData);
+    trendlineSeriesData.push({
+        name: series.name + ' Trendline',
+        data: trendlineData,
+        dataLabels: {
+            enabled: false
+        }
+    });
 });
 
 // Add trendline data to series
