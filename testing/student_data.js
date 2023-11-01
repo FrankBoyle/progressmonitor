@@ -71,7 +71,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
     
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-// For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
 const trendlineSeriesData = [];
 newSeriesData.forEach(series => {
     const trendlineData = getTrendlineData(series.data);
@@ -83,6 +82,7 @@ newSeriesData.forEach(series => {
         }
     });
 });
+
 
     
         // Add trendline data to series
@@ -113,7 +113,7 @@ function getAllSeries(scores, headerNames) {
             dataLabels: {
                 enabled: true,  // Enable data labels
                 formatter: function(val) {
-                    return parseFloat(val).toFixed(0);  // Limit to two decimal places
+                    return parseFloat(val).toFixed(2);  // Limit to two decimal places
                 }
             }
         });
@@ -162,6 +162,7 @@ function getChartOptions(dates) {
         }
     };
 }
+
 
 
 
