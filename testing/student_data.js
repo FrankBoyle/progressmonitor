@@ -72,23 +72,24 @@ document.addEventListener("DOMContentLoaded", function() {
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
     
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-const trendlineSeriesData = [];
-newSeriesData.forEach(series => {
-    const trendlineData = getTrendlineData(series.data);
-    trendlineSeriesData.push({
-        name: series.name + ' Trendline',
-        data: trendlineData,
-        type: 'line',
-        dataLabels: {
-            enabled: false  // Disable data labels for trendlines
-        },
-        stroke: {
-            width: 1.5,
-            dashArray: [5, 5],  // Dashed line
-            colors: ['#FF0000']  // Red color for trendlines
-        }
-    });
-});
+        const trendlineSeriesData = [];
+        newSeriesData.forEach(series => {
+            const trendlineData = getTrendlineData(series.data);
+            trendlineSeriesData.push({
+                name: series.name + ' Trendline',
+                data: trendlineData,
+                type: 'line',
+                dataLabels: {
+                    enabled: false  // Disable data labels for trendlines
+                },
+                stroke: {
+                    width: 1.5,
+                    dashArray: [5, 5],  // Dashed line
+                    colors: ['#FF0000']  // Red color for trendlines
+                }
+            });
+        });
+        
     
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
