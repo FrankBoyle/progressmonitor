@@ -99,9 +99,6 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(chart.w.config.series);
         console.log("Main Series:", newSeriesData);
         console.log("Trendline Series:", trendlineSeriesData);
-
-
-    
     }, 250));    
 });
 
@@ -113,7 +110,10 @@ function getAllSeries(scores, headerNames) {
             name: `score${i}`,
             data: scoreData,
             dataLabels: {
-                enabled: true  // Enable data labels for main data
+                enabled: true,  // Enable data labels for main data
+                formatter: function(val) {
+                    return parseFloat(val).toFixed(0);  // Format to 2 decimal places
+                }
             }
         });
     }
