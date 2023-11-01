@@ -133,7 +133,8 @@ function getChartOptions(dates) {
             enabled: true // Enabling data labels
         },
         stroke: {
-            curve: 'smooth'
+            curve: 'smooth',
+            size: 2
         },
         xaxis: {
             categories: dates
