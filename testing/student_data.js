@@ -153,7 +153,6 @@ function getChartOptions(dates) {
         },
         dataLabels: {
             enabled: false,  // Disable data labels globally
-            allowOverlap: true  // Ensure individual series can control their data labels
         },
         yaxis: {
             labels: {
