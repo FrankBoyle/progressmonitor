@@ -68,11 +68,13 @@ document.addEventListener("DOMContentLoaded", function() {
             .map(checkbox => checkbox.value);
         console.log("Selected Columns:", selectedColumns);
     
+        // Get all series
+        const allSeriesData = getSeriesData(scores, headerNames);
+        
         // Filter series data based on selected columns
-        const newSeriesData = populateSeriesData(selectedColumns, headerNames, scores)
-            .filter(series => selectedColumns.includes(series.name));
+        const newSeriesData = allSeriesData.filter(series => selectedColumns.includes(series.name));
         console.log("Series Data to be Used:", newSeriesData);
-    
+     
         // For each series, calculate its trendline and add it to newSeriesData
         const trendlineSeriesData = [];
         newSeriesData.forEach(series => {
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
 });
 
-function getAllSeries(scores, headerNames) {
+function getSeriesData(scores, headerNames) {
     const series = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
