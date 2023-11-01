@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function() {
     //console.log("Header Names:", headerNames);
 
     // Listen for checkbox changes
-    /*
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
@@ -101,7 +100,7 @@ newSeriesData.forEach(series => {
         chart.updateSeries(finalSeriesData);
     
     }, 250));
-    */
+    
     
 });
 
