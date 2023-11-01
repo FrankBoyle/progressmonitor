@@ -102,16 +102,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function getAllSeries(scores, headerNames) {
     const series = [];
-    for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
-        series.push({
-            name: `score${i}`,
-            data: scoreData,
-
-        });
+    let counter = 1; // Start counter for unique scoreColumnName
+    
+    for (const categoryName in scoreNamesArray) {
+        for (const scoreName of scoreNamesArray[categoryName]) {
+            const scoreColumnName = 'score' + counter;
+            const scoreData = scores.map(row => row[counter - 1]);
+            series.push({
+                name: scoreColumnName, 
+                data: scoreData
+            });
+            counter++; // Increment counter for next scoreColumnName
+        }
     }
+    
     return series;
 }
+
 
 // The debounce function
 function debounce(func, wait) {
