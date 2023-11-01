@@ -77,8 +77,8 @@ document.addEventListener("DOMContentLoaded", function() {
             chart.render();
         } else {
             document.querySelector("#chart svg").innerHTML = '';
-            chart.updateSeries(newSeriesData);
-                    }
+            chart.updateSeries(newSeriesData, true);
+        }
     }, 250));  // Here's where the 250 millisecond delay is applied   
 });
 
