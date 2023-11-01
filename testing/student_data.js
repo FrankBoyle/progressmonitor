@@ -184,10 +184,7 @@ function getChartOptions(dates) {
                 enabled: false
             }
         },
-        dataLabels: {
-            enabled: false,
-            allowOverlap: true
-        },        
+        dataLabels: dataLabelsSettings,     
         yaxis: {
             labels: {
                 formatter: function(val) {
