@@ -71,17 +71,19 @@ document.addEventListener("DOMContentLoaded", function() {
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
     
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-        const trendlineSeriesData = [];
-        newSeriesData.forEach(series => {
-            const trendlineData = getTrendlineData(series.data);
-            trendlineSeriesData.push({
-                name: series.name + ' Trendline',
-                data: trendlineData,
-                dataLabels: {
-                    enabled: false  // Do not show data labels for trendline
-                }
-            });
-        });
+// For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+const trendlineSeriesData = [];
+newSeriesData.forEach(series => {
+    const trendlineData = getTrendlineData(series.data);
+    trendlineSeriesData.push({
+        name: series.name + ' Trendline',
+        data: trendlineData,
+        dataLabels: {
+            enabled: false  // Disable data labels for trendlines
+        }
+    });
+});
+
     
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
@@ -109,9 +111,9 @@ function getAllSeries(scores, headerNames) {
             name: `score${i}`,
             data: scoreData,
             dataLabels: {
-                enabled: true,  // By default, show data labels
+                enabled: true,  // Enable data labels
                 formatter: function(val) {
-                    return parseFloat(val).toFixed(0);  // Limit to two decimal places
+                    return parseFloat(val).toFixed(2);  // Limit to two decimal places
                 }
             }
         });
@@ -144,6 +146,13 @@ function getChartOptions(dates) {
                 enabled: false
             }
         },
+        yaxis: {
+            labels: {
+                formatter: function(val) {
+                    return parseFloat(val).toFixed(2);  // Limit to two decimal places for y-axis labels
+                }
+            }
+        },
         stroke: {
             curve: 'smooth',
             size: 2
@@ -153,6 +162,7 @@ function getChartOptions(dates) {
         }
     };
 }
+
 
 
 function calculateTrendline(data) {
