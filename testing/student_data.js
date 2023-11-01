@@ -102,14 +102,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function getAllSeries(scores, headerNames) {
     const series = [];
+    
+    // Start from the second column (index 1) up to the second to the last column (index - 1).
     for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
+        const scoreData = scores.map(row => row[i]);
         series.push({
-            name: `score${i}`,
-            data: scoreData,
-
+            name: headerNames[i],  // use the actual header name here
+            data: scoreData
         });
     }
+
     return series;
 }
 
