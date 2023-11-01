@@ -137,7 +137,9 @@ function getChartOptions(dates) {
             }
         },
         dataLabels: {
-            enabled: true
+            enabled: true,
+            allowOverlap: false  // Ensure individual series can control their data labels
+
         },
         yaxis: {
             labels: {
