@@ -98,6 +98,8 @@ newSeriesData.forEach(series => {
 
         // Update the chart
         chart.updateSeries(finalSeriesData);
+        console.log(chart.w.config.series);
+
     
     }, 250));    
 });
@@ -113,7 +115,6 @@ function getAllSeries(scores, headerNames) {
     }
     return series;
 }
-console.log(chart.w.config.series);
 
 // The debounce function
 function debounce(func, wait) {
