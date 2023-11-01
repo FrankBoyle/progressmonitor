@@ -45,13 +45,6 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
         $newValue = date_format($newDate, 'Y-m-d');
     }
 
-    $duplicateCount = $checkStmt->fetchColumn();
-
-    if ($duplicateCount > 0) {
-        handleError("Duplicate date entry is not allowed. A record with this date and metadata already exists for the selected student.");
-        return; // Terminate the script here to prevent further processing
-    }
-
     updatePerformance($connection, $performanceId, $fieldName, $newValue);  
 } else {
     handleError("Invalid data provided.");
@@ -89,6 +82,7 @@ function sendResponse($response) {
     exit;
 }
 ?>
+
 
 
 
