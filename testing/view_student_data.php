@@ -46,7 +46,7 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="student_data.js"></script>
+    <script src="student_data.js"  defer></script>
     
     <script>
     // Get the metadata_id from the URL parameter
@@ -58,6 +58,11 @@ if (isset($_GET['metadata_id'])) {
     .dataTables_filter {
         display: none;
     }
+    
+    #chart {
+    transition: opacity 0.3s;
+}
+
 </style>
 </head>
 <body>
@@ -87,7 +92,7 @@ if (isset($_GET['metadata_id'])) {
 <?php endforeach; ?>
 </div>
 
-<table border="1">
+<table border="1" id="dataTable">
 <thead>
     <tr>
         <th>Date</th>
@@ -148,9 +153,8 @@ if (isset($_GET['metadata_id'])) {
 </div>
 
 <!-- Existing checkboxes for column selection -->
-<div>
+<div id="columnSelector">
     <label>Select Columns to Display:</label>
-    <!-- Existing PHP code to generate checkboxes -->
     <?php
     foreach ($scoreNames as $category => $scores) {
         foreach ($scores as $index => $scoreName) {
@@ -167,17 +171,7 @@ if (isset($_GET['metadata_id'])) {
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
 <button type ="button" id="updateBenchmark">Update Benchmark</button>
-<div>
-    <label>Select Chart Type:</label>
-    <label>
-        <input type="radio" name="chartType" value="line" checked>
-        Line Chart
-    </label>
-    <label>
-        <input type="radio" name="chartType" value="bar">
-        Bar Chart
-    </label>
-</div>
+
 <div id="chart"></div> <!-- Div to display the chart -->
 <!-- Radio buttons to select chart type -->
 
