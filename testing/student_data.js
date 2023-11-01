@@ -82,7 +82,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 dataLabels: {
                     enabled: true,  // Assuming you want them enabled for now
                     formatter: function(val) {
-                        return val.toFixed(2);  // Restrict to two decimal places
+                        console.log("Formatting:", val);
+                        return val.toFixed(0);  // Restrict to two decimal places
                     }
                 },
                 stroke: {
