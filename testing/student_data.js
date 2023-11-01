@@ -100,6 +100,9 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(chart.w.config.series);
         console.log("Main Series:", newSeriesData);
         console.log("Trendline Series:", trendlineSeriesData);
+        chart.updateOptions(options);
+chart.redraw();
+
     }, 250));    
 });
 
