@@ -64,8 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
 
-    // Define a function to update the chart with new series data and trendlines
-    function updateChart(selectedColumns) {
+    const updateChart = function(selectedColumns) {
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
 
@@ -92,23 +91,13 @@ document.addEventListener("DOMContentLoaded", function() {
         // Update the chart with the new series data and updated names
         chart.updateSeries(finalSeriesData);
 
-        // Update series names in the legend
-        chart.updateOptions({
-            xaxis: {
-                categories: dates
-            },
-            yaxis: {
-                labels: {
-                    formatter: function(val) {
-                        return parseFloat(val).toFixed(0);
-                    }
-                }
-            },
-        });
-    }
+        // Update series names in the chart options
+        const updatedOptions = getChartOptions(dates, selectedColumns);
+        chart.updateOptions(updatedOptions);
+    };
 
     let allSeries = getAllSeries(scores, headerNames);
-    const options = getChartOptions(dates);
+    const options = getChartOptions(dates, headerNames); // Pass headerNames to the options function
     options.series = allSeries;
     let chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
