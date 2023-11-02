@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     colors: ['#FF0000']  // Red color for trendlines
                 }
             });
-        });     
+        });    
         
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
