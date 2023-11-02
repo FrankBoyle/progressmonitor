@@ -44,6 +44,18 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
 
+function getAllSeries(scores, headerNames) {
+    const series = [];
+    for (let i = 0; i < headerNames.length; i++) { // Change loop condition
+        const scoreData = scores.map(row => row[i]);
+        const columnName = headerNames[i];
+        series.push({
+            name: columnName,
+            data: scoreData,
+        });
+    }
+    return series;
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     const headerRow = document.querySelector('#dataTable thead tr');
@@ -56,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
     chart.render();
 
     // Hide all series initially
-    allSeries.forEach((series, index) => chart.hideSeries(series.name));
+    allSeries.forEach((s, index) => chart.hideSeries(series.name));
 
     //console.log("Dates:", dates);
     //console.log("Scores:", scores);
@@ -97,19 +109,6 @@ document.getElementById("columnSelector").addEventListener("change", debounce(fu
 }, 250));
    
 });
-
-function getAllSeries(scores, headerNames) {
-    const series = [];
-    for (let i = 0; i < headerNames.length; i++) { // Change loop condition
-        const scoreData = scores.map(row => row[i]);
-        const columnName = headerNames[i];
-        series.push({
-            name: columnName,
-            data: scoreData,
-        });
-    }
-    return series;
-}
 
 // The debounce function
 function debounce(func, wait) {
