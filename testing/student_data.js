@@ -57,6 +57,18 @@ function getAllSeries(scores, headerNames) {
     return series;
 }
 
+// Define a function to update the series names
+function updateSeriesNames(selectedColumns) {
+    // Update the series names based on selected columns
+    allSeries = allSeries.map((series, index) => {
+        const customColumnName = selectedColumns[index]; // Get custom column name from the checkbox
+        return {
+            ...series,
+            name: customColumnName,
+        };
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
@@ -135,20 +147,20 @@ allSeries = allSeries.map((series, index) => {
         });
     }
 
-    // Listen for checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.value);
+// Listen for checkbox changes
+document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
 
-        // Update the series names based on selected columns
-        updateSeriesNames(selectedColumns);
+    // Update the series names based on selected columns
+    updateSeriesNames(selectedColumns);
 
-        // Update the chart series with the updated names
-        chart.updateSeries(allSeries);
+    // Update the chart series with the updated names
+    chart.updateSeries(allSeries);
 
-        // Update the chart with new series data and trendlines
-        updateChart(selectedColumns);
-    }, 50));
+    // Update the chart with new series data and trendlines
+    updateChart(selectedColumns);
+}, 50));
 });
 
 // The debounce function
