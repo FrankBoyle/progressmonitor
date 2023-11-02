@@ -86,7 +86,7 @@ allSeries = allSeries.map((series, index) => {
     // Define a function to update the chart with new series data and trendlines
     function updateChart(selectedColumns) {
         // Filter allSeries based on selected columns
-        const newSeriesData = allSeries.filter(series => selectedColumns.includes(s.name));
+        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
 
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
@@ -133,7 +133,7 @@ allSeries = allSeries.map((series, index) => {
     chart.render();
 
     // Hide all series initially
-    allSeries.forEach((s, index) => chart.hideSeries(s.name));
+    allSeries.forEach((s, index) => chart.hideSeries(series.name));
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
