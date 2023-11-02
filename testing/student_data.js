@@ -64,40 +64,38 @@ document.addEventListener("DOMContentLoaded", function() {
     //console.log("Header Names:", headerNames);
 
     // Listen for checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.value);
-    
-        // Filter allSeries based on selected columns
-        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-        console.log(newSeriesData);
-    
-        // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-        const trendlineSeriesData = [];
-        newSeriesData.forEach(series => {
-            const trendlineData = getTrendlineData(series.data);
-            trendlineSeriesData.push({
-                name: series.name + ' Trendline',
-                data: trendlineData,
-                type: 'line',
-                stroke: {
-                    width: 1.5,
-                    dashArray: [5, 5],  // Dashed line
-                    colors: ['#FF0000']  // Red color for trendlines
-                }
-            });
-        });     
-        
-        // Add trendline data to series
-        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-        console.log("Final Series Data:", finalSeriesData);
-        chart.updateSeries(finalSeriesData);
-        
-        // Update the chart
-        console.log(chart.w.config.series);
-        console.log("Main Series:", newSeriesData);
-        console.log("Trendline Series:", trendlineSeriesData);
-    }, 250));    
+document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.value);
+
+    // Map selected column names to corresponding header names
+    const selectedHeaderNames = selectedColumns.map(col => headerNames[col]);
+
+    // Filter allSeries based on selected header names
+    const newSeriesData = allSeries.filter(series => selectedHeaderNames.includes(series.name));
+
+    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+    const trendlineSeriesData = [];
+    newSeriesData.forEach(series => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
+            name: series.name + ' Trendline',
+            data: trendlineData,
+            type: 'line',
+            stroke: {
+                width: 1.5,
+                dashArray: [5, 5],
+                colors: ['#FF0000']
+            }
+        });
+    });     
+
+    // Add trendline data to series
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    console.log("Final Series Data:", finalSeriesData);
+    chart.updateSeries(finalSeriesData);
+}, 250));
+   
 });
 
 function getAllSeries(scores, headerNames) {
