@@ -86,7 +86,7 @@ allSeries = allSeries.map((series, index) => {
     // Define a function to update the chart with new series data and trendlines
     function updateChart(selectedColumns) {
         // Filter allSeries based on selected columns
-        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+        const newSeriesData = allSeries.filter(series => selectedColumns.includes(s.name));
 
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
