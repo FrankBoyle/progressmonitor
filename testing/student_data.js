@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
     chart.render();
 
     // Hide all series initially
-    //allSeries.forEach((s, index) => chart.hideSeries(s.name));
+    allSeries.forEach((s, index) => chart.hideSeries(series.name));
 
     // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
