@@ -103,10 +103,10 @@ function getAllSeries(scores, headerNames) {
     const series = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
+        const columnName = headerNames[i]; // Use the header name as the series name.
         series.push({
-            name: `score${i}`,
+            name: columnName, // Set the series name to the column header.
             data: scoreData,
-
         });
     }
     return series;
