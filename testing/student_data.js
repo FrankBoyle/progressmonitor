@@ -44,34 +44,33 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
 
-document.addEventListener("DOMContentLoaded", function () {
+
+document.addEventListener("DOMContentLoaded", function() {
     const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    
+    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
     const { dates, scores } = extractDataFromTable();
     const allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
     options.series = allSeries;
     chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
+
     // Hide all series initially
     allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
-    // Add the change event listener after chart initialization
-    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
+    //console.log("Dates:", dates);
+    //console.log("Scores:", scores);
+
+    //console.log("Header Names:", headerNames);
+
+    // Listen for checkbox changes
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
-
+    
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-
-        // Create an array of series names to hide
-        const seriesToHide = allSeries.map(series => series.name)
-            .filter(name => !selectedColumns.includes(name) && name !== "Benchmark" && !name.includes("Trendline"));
-
-        // Hide the specified series
-        seriesToHide.forEach(seriesName => chart.hideSeries(seriesName));
-
+    
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
         newSeriesData.forEach(series => {
@@ -82,33 +81,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 type: 'line',
                 stroke: {
                     width: 1.5,
-                    dashArray: [5, 5],
-                    colors: ['#FF0000']
+                    dashArray: [5, 5],  // Dashed line
+                    colors: ['#FF0000']  // Red color for trendlines
                 }
             });
-        });
-
+        });     
+        
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
         console.log("Final Series Data:", finalSeriesData);
         chart.updateSeries(finalSeriesData);
-
-    }, 250));
+        
+        // Update the chart
+        console.log(chart.w.config.series);
+        console.log("Main Series:", newSeriesData);
+        console.log("Trendline Series:", trendlineSeriesData);
+    }, 250));    
 });
 
 function getAllSeries(scores, headerNames) {
     const series = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
-        const columnName = headerNames[i]; // Use the header name as the series name.
         series.push({
-            name: columnName, // Set the series name to the column header.
+            name: `score${i}`,
             data: scoreData,
+
         });
     }
     return series;
 }
-
 
 // The debounce function
 function debounce(func, wait) {
@@ -158,7 +160,7 @@ function getChartOptions(dates) {
         chart: {
             events: {
                 updated: function(chartContext, config) {
-                    //console.log('Chart updated!', config.globals.series);
+                    console.log('Chart updated!', config.globals.series);
                 }
             },
             width: 1000,
