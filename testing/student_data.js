@@ -7,6 +7,7 @@ $(function() {
     $("#accordion").accordion({
         collapsible: true,
         heightStyle: "content",
+        active: false, // Ensure all panels are closed initially
         activate: function(event, ui) {
             if (ui.newPanel.has('#chart').length) {
                 // Assuming 'chart' is the variable where your ApexChart instance is stored.
@@ -15,7 +16,6 @@ $(function() {
         }
     });
 });
-
 
 $("#accordion").on("accordionactivate", function(event, ui) {
     if (ui.newPanel.is(":contains('#chart')")) {
