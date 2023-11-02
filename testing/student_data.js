@@ -89,11 +89,25 @@ document.addEventListener("DOMContentLoaded", function() {
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
         console.log("Final Series Data:", finalSeriesData);
 
-        // Update the chart with the new series data
+        // Update the chart with the new series data and updated names
         chart.updateSeries(finalSeriesData);
+
+        // Update series names in the legend
+        chart.updateOptions({
+            xaxis: {
+                categories: dates
+            },
+            yaxis: {
+                labels: {
+                    formatter: function(val) {
+                        return parseFloat(val).toFixed(0);
+                    }
+                }
+            },
+        });
     }
 
-    var allSeries = getAllSeries(scores, headerNames);
+    let allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
     options.series = allSeries;
     let chart = new ApexCharts(document.querySelector("#chart"), options);
