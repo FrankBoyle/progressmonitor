@@ -620,7 +620,9 @@ if (isDateDuplicate(currentDate)) {
         newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
         
         for (let i = 1; i <= 10; i++) {
-            newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
+            newRow.append(`<td class="editable" data-field-name="score${i}">${scoreValue}</td>`);
+            
         }
         
         newRow.append('<td><button class="saveRow">Save</button></td>');
