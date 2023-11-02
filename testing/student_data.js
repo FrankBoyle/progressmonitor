@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
     chart.render();
 
     // Hide all series initially
-    allSeries.forEach((s, index) => chart.hideSeries(series.name));
+    allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
     //console.log("Dates:", dates);
     //console.log("Scores:", scores);
