@@ -6,9 +6,16 @@ var xCategories = [];
 $(function() {
     $("#accordion").accordion({
         collapsible: true,
-        heightStyle: "content"
+        heightStyle: "content",
+        activate: function(event, ui) {
+            if (ui.newPanel.has('#chart').length) {
+                // Assuming 'chart' is the variable where your ApexChart instance is stored.
+                chart.updateSeries(chart.w.globals.series);
+            }
+        }
     });
 });
+
 
 $("#accordion").on("accordionactivate", function(event, ui) {
     if (ui.newPanel.is(":contains('#chart')")) {

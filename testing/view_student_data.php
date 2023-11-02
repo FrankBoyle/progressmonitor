@@ -177,7 +177,7 @@ if (isset($_GET['metadata_id'])) {
 <button type ="button" id="updateBenchmark">Update Benchmark</button>
 
 <div id="accordion">
-    <h3>Graph</h3>
+    <h3>Line Graph</h3>
     <div>
         <div id="chart"></div> <!-- Div to display the chart -->
     </div>
