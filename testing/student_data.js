@@ -87,7 +87,14 @@ allSeries = allSeries.map((series, index) => {
     function updateChart(selectedColumns) {
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-
+        let allSeries = getAllSeries(scores, headerNames);
+        const options = getChartOptions(dates);
+        options.series = allSeries;
+        let chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    
+        // Hide all series initially
+        allSeries.forEach((s, index) => chart.hideSeries(s.name));
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
         newSeriesData.forEach(series => {
@@ -125,15 +132,6 @@ allSeries = allSeries.map((series, index) => {
             },
         });
     }
-
-    let allSeries = getAllSeries(scores, headerNames);
-    const options = getChartOptions(dates);
-    options.series = allSeries;
-    let chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
-
-    // Hide all series initially
-    allSeries.forEach((s, index) => chart.hideSeries(series.name));
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
