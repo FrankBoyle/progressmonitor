@@ -51,11 +51,12 @@ function getAllSeries(scores, headerNames) {
         series.push({
             name: `score${i}`,
             data: scoreData,
-
+            visible: false  // Hide the series by default
         });
     }
     return series;
 }
+
 
 // Define a function to update the series names
 function updateSeriesNames(selectedColumns) {
