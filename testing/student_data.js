@@ -58,29 +58,57 @@ function getAllSeries(scores, headerNames) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    let headerNames; // Declare headerNames here
+
     const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
+    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
+
+    // Define a function to update the chart with new series data and trendlines
+    function updateChart(selectedColumns) {
+        // Filter allSeries based on selected columns
+        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+
+        // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+        const trendlineSeriesData = [];
+        newSeriesData.forEach(series => {
+            const trendlineData = getTrendlineData(series.data);
+            trendlineSeriesData.push({
+                name: series.name + ' Trendline',
+                data: trendlineData,
+                type: 'line',
+                stroke: {
+                    width: 1.5,
+                    dashArray: [5, 5],  // Dashed line
+                    colors: ['#FF0000']  // Red color for trendlines
+                }
+            });
+        });
+
+        // Add trendline data to series
+        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+        console.log("Final Series Data:", finalSeriesData);
+
+        // Update the chart with the new series data
+        chart.updateSeries(finalSeriesData);
+    }
+
     const allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
     options.series = allSeries;
-    chart = new ApexCharts(document.querySelector("#chart"), options);
+    let chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 
     // Hide all series initially
     allSeries.forEach((s, index) => chart.hideSeries(s.name));
-    //console.log("Dates:", dates);
-    //console.log("Scores:", scores);
-
-    //console.log("Header Names:", headerNames);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
 
-                    // Update the series names based on selected columns
-        const updatedSeries = allSeries.map((series, index) => {
+        // Update the series names based on selected columns
+        allSeries = allSeries.map((series, index) => {
             if (selectedColumns.includes(headerNames[index + 1])) {
                 // Use the column name as the series name
                 return {
@@ -97,36 +125,11 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         // Update the chart series with the updated names
-        chart.updateSeries(updatedSeries);
-        // Filter allSeries based on selected columns
-        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-    
-        // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-        const trendlineSeriesData = [];
-        newSeriesData.forEach(series => {
-            const trendlineData = getTrendlineData(series.data);
-            trendlineSeriesData.push({
-                name: series.name + ' Trendline',
-                data: trendlineData,
-                type: 'line',
-                stroke: {
-                    width: 1.5,
-                    dashArray: [5, 5],  // Dashed line
-                    colors: ['#FF0000']  // Red color for trendlines
-                }
-            });
-        });     
-        
-        // Add trendline data to series
-        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-        console.log("Final Series Data:", finalSeriesData);
-        chart.updateSeries(finalSeriesData);
-        
-        // Update the chart
-        console.log(chart.w.config.series);
-        console.log("Main Series:", newSeriesData);
-        console.log("Trendline Series:", trendlineSeriesData);
-    }, 50));    
+        chart.updateSeries(allSeries);
+
+        // Update the chart with new series data and trendlines
+        updateChart(selectedColumns);
+    }, 50));
 });
 
 // The debounce function
