@@ -1,6 +1,6 @@
 var benchmark = null;
-var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
-var selectedChartType = 'line'; // Default chart type
+var benchmarkSeriesIndex = null;
+var selectedChartType = 'line';
 var xCategories = [];
 
 function extractDataFromTable() {
@@ -13,7 +13,7 @@ function extractDataFromTable() {
         if (dateCell) {
             dates.push(dateCell.textContent.trim());
         } else {
-            dates.push(""); // or some default date or error handling
+            dates.push("");
         }
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
@@ -32,21 +32,21 @@ function extractDataFromTable() {
 function populateSeriesData(selectedColumns, headerMap, scores) {
     const seriesData = [];
     for (const col of selectedColumns) {
-      const headerName = headerMap[col];
-      const headerIndex = headerNames.indexOf(headerName);
-      if (headerIndex !== -1) {
-        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
-      }
+        const headerName = headerMap[col];
+        const headerIndex = headerNames.indexOf(headerName);
+        if (headerIndex !== -1) {
+            seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
+        }
     }
     return seriesData;
-  }
- 
-let chart = null; // This makes the chart variable accessible throughout the script
-let headerNames;  // Declare it outside
+}
+
+let chart = null;
+let headerNames;
 
 function getAllSeries(scores, headerNames) {
     const series = [];
-    for (let i = 0; i < headerNames.length; i++) { // Change loop condition
+    for (let i = 0; i < headerNames.length; i++) {
         const scoreData = scores.map(row => row[i]);
         const columnName = headerNames[i];
         series.push({
@@ -57,9 +57,9 @@ function getAllSeries(scores, headerNames) {
     return series;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
+    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
     const allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
@@ -67,53 +67,40 @@ document.addEventListener("DOMContentLoaded", function() {
     chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 
-    // Hide all series initially
-allSeries.forEach((series, index) => chart.hideSeries(series.name));
+    allSeries.forEach((s) => chart.hideSeries(s.name));
 
-    //console.log("Dates:", dates);
-    //console.log("Scores:", scores);
+    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.value);
 
-    //console.log("Header Names:", headerNames);
+        const selectedHeaderNames = selectedColumns.map(col => headerNames[col]);
 
-    // Listen for checkbox changes
-document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.value);
+        const newSeriesData = allSeries.filter(series => selectedHeaderNames.includes(series.name));
 
-    // Map selected column names to corresponding header names
-    const selectedHeaderNames = selectedColumns.map(col => headerNames[col]);
-
-    // Filter allSeries based on selected header names
-    const newSeriesData = allSeries.filter(series => selectedHeaderNames.includes(series.name));
-
-    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    const trendlineSeriesData = [];
-    newSeriesData.forEach(series => {
-        const trendlineData = getTrendlineData(series.data);
-        trendlineSeriesData.push({
-            name: series.name + ' Trendline',
-            data: trendlineData,
-            type: 'line',
-            stroke: {
-                width: 1.5,
-                dashArray: [5, 5],
-                colors: ['#FF0000']
-            }
+        const trendlineSeriesData = [];
+        newSeriesData.forEach(series => {
+            const trendlineData = getTrendlineData(series.data);
+            trendlineSeriesData.push({
+                name: series.name + ' Trendline',
+                data: trendlineData,
+                type: 'line',
+                stroke: {
+                    width: 1.5,
+                    dashArray: [5, 5],
+                    colors: ['#FF0000'],
+                },
+            });
         });
-    });     
 
-    // Add trendline data to series
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    console.log("Final Series Data:", finalSeriesData);
-    chart.updateSeries(finalSeriesData);
-}, 250));
-   
+        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+        chart.updateSeries(finalSeriesData);
+    }, 250));
+
 });
 
-// The debounce function
 function debounce(func, wait) {
     let timeout;
-    return function() {
+    return function () {
         const context = this, args = arguments;
         clearTimeout(timeout);
         timeout = setTimeout(() => {
@@ -126,30 +113,25 @@ var dataSeries = [
     //... Your series data ...
 ];
 
-// Create the data labels settings
 var dataLabelsSettings = {
     enabled: true,
-    formatter: function(val, opts) {
+    formatter: function (val, opts) {
         var seriesName = opts.w.config.series[opts.seriesIndex].name;
 
-        // Hide data labels for 'Benchmark' and 'Trendline'.
         if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) {
-            return '';  // Return empty string to hide the label
+            return '';
         }
 
-        // Format for bar charts
         if (opts.w.config.chart.type === 'bar') {
             return val.toFixed(0);
         }
 
-        // Format for line charts
         if (opts.w.config.chart.type === 'line') {
-            return val;  // or val.toFixed(2) if you want two decimal places
+            return val;
         }
 
-        // Default return
         return val;
-    }
+    },
 };
 
 function getChartOptions(dates) {
@@ -157,41 +139,41 @@ function getChartOptions(dates) {
         series: [],
         chart: {
             events: {
-                updated: function(chartContext, config) {
+                updated: function (chartContext, config) {
                     console.log('Chart updated!', config.globals.series);
-                }
+                },
             },
             width: 1000,
             type: 'line',
             zoom: {
-                enabled: true
+                enabled: true,
             },
             animations: {
-                enabled: false
-            }
+                enabled: false,
+            },
         },
-        dataLabels: dataLabelsSettings,     
+        dataLabels: dataLabelsSettings,
         yaxis: {
             labels: {
-                formatter: function(val) {
+                formatter: function (val) {
                     return parseFloat(val).toFixed(0);
-                }
-            }
+                },
+            },
         },
         stroke: {
             curve: 'smooth',
-            size: 2
+            size: 2,
         },
         xaxis: {
-            categories: dates
-        }
+            categories: dates,
+        },
     };
 }
 
 const trendlineOptions = {
-    color: '#888',            // Grey color for trendlines
-    dashArray: 5,             // Makes the line dashed
-    width: 2                  // Line width
+    color: '#888',
+    dashArray: 5,
+    width: 2,
 };
 
 function calculateTrendline(data) {
@@ -201,7 +183,7 @@ function calculateTrendline(data) {
     var sumXX = 0;
     var count = 0;
 
-    data.forEach(function (y, x) { // Adjusting the loop here
+    data.forEach(function (y, x) {
         if (y !== null) {
             sumX += x;
             sumY += y;
@@ -214,10 +196,6 @@ function calculateTrendline(data) {
     var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
     var intercept = (sumY - slope * sumX) / count;
 
-    // Debugging print statements
-    console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
-    console.log("slope:", slope, "intercept:", intercept);
-
     return function (x) {
         return slope * x + intercept;
     };
@@ -225,7 +203,7 @@ function calculateTrendline(data) {
 
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
-    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
+    return seriesData.map((y, x) => trendlineFunction(x));
 }
 
 ////////////////////////////////////////////////
