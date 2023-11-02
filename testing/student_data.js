@@ -61,7 +61,14 @@ document.addEventListener("DOMContentLoaded", function() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
+    let allSeries = getAllSeries(scores, headerNames);
+    const options = getChartOptions(dates);
+    options.series = allSeries;
+    let chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
 
+    // Hide all series initially
+    allSeries.forEach((s, index) => chart.hideSeries(s.name));
     // Define a function to update the series names
     function updateSeriesNames(selectedColumns) {
 // Update the series names based on selected columns
@@ -87,14 +94,7 @@ allSeries = allSeries.map((series, index) => {
     function updateChart(selectedColumns) {
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-        let allSeries = getAllSeries(scores, headerNames);
-        const options = getChartOptions(dates);
-        options.series = allSeries;
-        let chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-    
-        // Hide all series initially
-        allSeries.forEach((s, index) => chart.hideSeries(s.name));
+
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
         newSeriesData.forEach(series => {
