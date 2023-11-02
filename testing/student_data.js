@@ -44,7 +44,6 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
 
-
 document.addEventListener("DOMContentLoaded", function () {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
@@ -58,26 +57,21 @@ document.addEventListener("DOMContentLoaded", function () {
     // Hide all series initially
     allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
-    //console.log("Dates:", dates);
-    //console.log("Scores:", scores);
-
-    //console.log("Header Names:", headerNames);
-
-    // Listen for checkbox changes
+    // Add the change event listener after chart initialization
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
-    
+
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-    
+
         // Create an array of series names to hide
         const seriesToHide = allSeries.map(series => series.name)
             .filter(name => !selectedColumns.includes(name) && name !== "Benchmark" && !name.includes("Trendline"));
-    
+
         // Hide the specified series
         seriesToHide.forEach(seriesName => chart.hideSeries(seriesName));
-    
+
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
         newSeriesData.forEach(series => {
@@ -93,14 +87,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
-    
+
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
         console.log("Final Series Data:", finalSeriesData);
         chart.updateSeries(finalSeriesData);
-    
+
     }, 250));
-       
 });
 
 function getAllSeries(scores, headerNames) {
