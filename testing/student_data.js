@@ -45,16 +45,16 @@ let chart = null; // This makes the chart variable accessible throughout the scr
 let headerNames;  // Declare it outside
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
+    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
+    
     const { dates, scores } = extractDataFromTable();
     const allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
     options.series = allSeries;
     chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
-
     // Hide all series initially
     allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
@@ -64,15 +64,15 @@ document.addEventListener("DOMContentLoaded", function() {
     //console.log("Header Names:", headerNames);
 
     // Listen for checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.value);
+          .map(checkbox => checkbox.value);
     
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
     
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-        const trendlineSeriesData = [];
+        const trendlineSeriesData = createTrendlineSeries(selectedColumns, allSeries);
         newSeriesData.forEach(series => {
             const trendlineData = getTrendlineData(series.data);
             trendlineSeriesData.push({
