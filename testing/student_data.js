@@ -161,7 +161,7 @@ function getChartOptions(dates) {
         chart: {
             events: {
                 updated: function(chartContext, config) {
-                    console.log('Chart updated!', config.globals.series);
+                    //console.log('Chart updated!', config.globals.series);
                 }
             },
             width: 1000,
