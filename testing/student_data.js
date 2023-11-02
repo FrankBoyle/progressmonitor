@@ -89,8 +89,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Define a function to update the chart with new series data and trendlines
     function updateChart(selectedColumns) {
-        // Filter allSeries based on selected columns
-        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+                // Update the visibility of each series based on selectedColumns
+                allSeries = allSeries.map(series => ({
+                    ...series,
+                    visible: selectedColumns.includes(series.name)
+                }));
+        
+                // Filter allSeries based on selected columns
+                const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
 
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
