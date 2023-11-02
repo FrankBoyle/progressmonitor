@@ -70,38 +70,20 @@ function updateSeriesNames(selectedColumns) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    let headerNames;
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
-    let allSeries = getAllSeries(scores, headerNames);
-    const options = getChartOptions(dates);
-    options.series = allSeries;
-    let chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
 
-    // Hide all series initially
-    allSeries.forEach((s, index) => chart.hideSeries(s.name));
-    // Define a function to update the series names
-    function updateSeriesNames(selectedColumns) {
-// Update the series names based on selected columns
-console.log(headerNames);
-console.log(selectedColumns);
-allSeries = allSeries.map((series, index) => {
-    if (selectedColumns.includes(headerNames[index + 1])) {
-        // Use the column name as the series name
-        return {
-            ...series,
-            name: headerNames[index + 1],
-        };
-    } else {
-        // Use a generic name
-        return {
-            ...series,
-            name: `score${index + 1}`,
-        };
-    }
-});
-
+    // Define a function to update all series names
+    function updateAllSeriesNames(customColumnNames) {
+        allSeries = allSeries.map((series, index) => {
+            const customColumnName = customColumnNames[index] || headerNames[index + 1];
+            return {
+                ...series,
+                name: customColumnName,
+            };
+        });
     }
 
     // Define a function to update the chart with new series data and trendlines
@@ -119,8 +101,8 @@ allSeries = allSeries.map((series, index) => {
                 type: 'line',
                 stroke: {
                     width: 1.5,
-                    dashArray: [5, 5],  // Dashed line
-                    colors: ['#FF0000']  // Red color for trendlines
+                    dashArray: [5, 5],
+                    colors: ['#FF0000']
                 }
             });
         });
@@ -147,21 +129,38 @@ allSeries = allSeries.map((series, index) => {
         });
     }
 
-// Listen for checkbox changes
-document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+    let allSeries = getAllSeries(scores, headerNames);
+    const options = getChartOptions(dates);
+    options.series = allSeries;
+    let chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+    // Hide all series initially
+    allSeries.forEach((s, index) => chart.hideSeries(s.name));
+
+    // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    // Update the series names based on selected columns
-    updateSeriesNames(selectedColumns);
+    // Update all series names with custom names
+    updateAllSeriesNames(selectedColumns);
 
-    // Update the chart series with the updated names
-    chart.updateSeries(allSeries);
+    // Listen for checkbox changes
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
 
-    // Update the chart with new series data and trendlines
-    updateChart(selectedColumns);
-}, 50));
+        // Update all series names with custom names
+        updateAllSeriesNames(selectedColumns);
+
+        // Update the chart series with the updated names
+        chart.updateSeries(allSeries);
+
+        // Update the chart with new series data and trendlines
+        updateChart(selectedColumns);
+    }, 50));
 });
+
 
 // The debounce function
 function debounce(func, wait) {
