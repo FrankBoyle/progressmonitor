@@ -93,60 +93,48 @@ if (isset($_GET['metadata_id'])) {
 <?php endforeach; ?>
 </div>
 
+<!-- Snippet of the modified code -->
 <table border="1" id="dataTable">
-<thead>
-    <tr>
-        <th>Date</th>
-        <?php 
-        // Iterate through all key-value pairs in $scoreNames.
-        foreach ($scoreNames as $category => $values) {
-            // Check if the current category's values are an array (assuming you only want arrays).
-            if (is_array($values)) {
-                // Iterate through each item in the current category's array.
-                foreach ($values as $score) {
-                    // Print the score as a table header. Apply any necessary formatting or escaping here.
-                    echo "<th>" . htmlspecialchars($score) . "</th>";
-                }
-            } else {
-                // If it's not an array, it might be a standalone category name. You can decide how to handle these cases.
-                // For example, you might want to print it as a header, too.
-                echo "<th>" . htmlspecialchars($values) . "</th>";
-            }
-        }
-        ?>
-        <th>Action</th>
-    </tr>
-</thead>
-
-    <?php if (empty($performanceData)): ?>
+    <thead>
         <tr>
-            <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-        </tr>
-    <?php else: ?>
-        <?php foreach ($performanceData as $data): ?>
-            <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="score_date">
-                    <?php
-                    if (isset($data['score_date'])) {
-                        echo date("m/d/Y", strtotime($data['score_date']));
+            <th>Date</th>
+            <?php 
+            foreach ($scoreNames as $category => $values) {
+                if (is_array($values)) {
+                    foreach ($values as $score) {
+                        echo "<th>" . htmlspecialchars($score) . "</th>";
                     }
-                    ?>
-                </td>
-                <!-- Add scores using loop -->
-                <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <td class="editable" data-field-name="score<?php echo $i; ?>">
-                        <?php
-                        if (isset($data['score'.$i])) {
-                            echo $data['score'.$i];
-                        }
-                        ?>
-                    </td>
-                <?php endfor; ?>
-                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
+                } else {
+                    echo "<th>" . htmlspecialchars($values) . "</th>";
+                }
+            }
+            ?>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (empty($performanceData)): ?>
+            <tr>
+                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
             </tr>
-        <?php endforeach; ?>
-    <?php endif; ?>
+        <?php else: ?>
+            <?php foreach ($performanceData as $data): ?>
+                <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                    <td class="editable" data-field-name="score_date">
+                        <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
+                    </td>
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <td class="editable" data-field-name="score<?php echo $i; ?>">
+                            <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
+                        </td>
+                    <?php endfor; ?>
+                    <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
 </table>
+
 <button id="addDataRow">Add Data Row</button>
 <div>
     <label>Show Trendlines:</label>
