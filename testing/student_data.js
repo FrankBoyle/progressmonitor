@@ -3,6 +3,13 @@ var benchmarkSeriesIndex = null; // It's null initially because the series index
 var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 
+$(function() {
+    $("#accordion").accordion({
+        collapsible: true,
+        heightStyle: "content"
+    });
+});
+
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
