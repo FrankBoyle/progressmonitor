@@ -66,10 +66,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-          .map(checkbox => checkbox.value);
+            .map(checkbox => checkbox.value);
     
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+    
+        // Create an array of series names to hide
+        const seriesToHide = allSeries.map(series => series.name)
+            .filter(name => !selectedColumns.includes(name) && name !== "Benchmark" && !name.includes("Trendline"));
+    
+        // Hide the specified series
+        seriesToHide.forEach(seriesName => chart.hideSeries(seriesName));
     
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
@@ -81,22 +88,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 type: 'line',
                 stroke: {
                     width: 1.5,
-                    dashArray: [5, 5],  // Dashed line
-                    colors: ['#FF0000']  // Red color for trendlines
+                    dashArray: [5, 5],
+                    colors: ['#FF0000']
                 }
             });
-        });    
-        
+        });
+    
         // Add trendline data to series
         const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
         console.log("Final Series Data:", finalSeriesData);
         chart.updateSeries(finalSeriesData);
-        
-        // Update the chart
-        console.log(chart.w.config.series);
-        console.log("Main Series:", newSeriesData);
-        console.log("Trendline Series:", trendlineSeriesData);
-    }, 250));    
+    
+    }, 250));
+       
 });
 
 function getAllSeries(scores, headerNames) {
