@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
         chart.updateSeries(finalSeriesData);
     }
 
-    const allSeries = getAllSeries(scores, headerNames);
+    var allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
     options.series = allSeries;
     let chart = new ApexCharts(document.querySelector("#chart"), options);
