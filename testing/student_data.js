@@ -2,6 +2,8 @@ var benchmark = null;
 var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
 var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
+let chart = null; // This makes the chart variable accessible throughout the script
+let headerNames;  // Declare it outside
 
 $(function() {
     $("#accordion").accordion({
@@ -10,8 +12,12 @@ $(function() {
         active: false, // Ensure all panels are closed initially
         activate: function(event, ui) {
             if (ui.newPanel.has('#chart').length) {
-                // Assuming 'chart' is the variable where your ApexChart instance is stored.
-                chart.updateSeries(chart.w.globals.series);
+                // Check if the chart is already initialized.
+                if (!chart) {
+                    initializeChart(); // Initialize the chart the first time.
+                } else {
+                    chart.updateSeries(chart.w.globals.series); // Refresh or update if needed.
+                }
             }
         }
     });
@@ -62,8 +68,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
  
-let chart = null; // This makes the chart variable accessible throughout the script
-let headerNames;  // Declare it outside
+
 
 function getAllSeries(scores, headerNames) {
     const series = [];
@@ -91,7 +96,7 @@ function updateSeriesNames(selectedColumns) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+function initializeChart() {
     let headerNames;
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
@@ -187,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Update the chart with new series data and trendlines
         updateChart(selectedColumns);
     }, 50));
-});
+};
 
 
 // The debounce function
