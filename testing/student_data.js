@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-        console.log(series.name);
+        console.log(newSeriesData);
     
         // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
         const trendlineSeriesData = [];
