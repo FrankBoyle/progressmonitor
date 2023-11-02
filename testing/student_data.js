@@ -44,6 +44,18 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
 
+function getAllSeries(scores, headerNames) {
+    const series = [];
+    for (let i = 1; i < headerNames.length - 1; i++) {
+        const scoreData = scores.map(row => row[i - 1]);
+        series.push({
+            name: `score${i}`,
+            data: scoreData,
+
+        });
+    }
+    return series;
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     const headerRow = document.querySelector('#dataTable thead tr');
@@ -98,19 +110,6 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log("Trendline Series:", trendlineSeriesData);
     }, 50));    
 });
-
-function getAllSeries(scores, headerNames) {
-    const series = [];
-    for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
-        series.push({
-            name: `score${i}`,
-            data: scoreData,
-
-        });
-    }
-    return series;
-}
 
 // The debounce function
 function debounce(func, wait) {
