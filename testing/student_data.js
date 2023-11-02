@@ -58,7 +58,6 @@ function getAllSeries(scores, headerNames) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    let headerNames; // Declare headerNames here
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
