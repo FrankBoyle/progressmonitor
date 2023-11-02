@@ -74,49 +74,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //console.log("Header Names:", headerNames);
 
-// ...
-
-// Listen for checkbox changes
-document.getElementById("columnSelector").addEventListener("change", function() {
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.value);
-
-    // Filter allSeries based on selected columns
-    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-
-    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    const trendlineSeriesData = [];
-    newSeriesData.forEach(series => {
-        const trendlineData = getTrendlineData(series.data);
-        trendlineSeriesData.push({
-            name: series.name + ' Trendline',
-            data: trendlineData,
-            type: 'line',
-            stroke: {
-                width: 1.5,
-                dashArray: [5, 5],  // Dashed line
-                colors: ['#FF0000']  // Red color for trendlines
-            }
-        });
-    });     
-
-    // Add trendline data to series
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    console.log("Final Series Data:", finalSeriesData);
+    // Listen for checkbox changes
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.value);
     
-    // Update the chart using chart.updateOptions
-    chart.updateOptions({
-        series: finalSeriesData
-    });
-
-    // You can also access series names and data as needed
-    newSeriesData.forEach(series => {
-        const seriesName = series.name;
-        const seriesData = series.data;
-        console.log(`Series Name: ${seriesName}`);
-        console.log(`Series Data: ${seriesData}`);
-    });
-});
+        // Filter allSeries based on selected columns
+        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+    
+        // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+        const trendlineSeriesData = [];
+        newSeriesData.forEach(series => {
+            const trendlineData = getTrendlineData(series.data);
+            trendlineSeriesData.push({
+                name: series.name + ' Trendline',
+                data: trendlineData,
+                type: 'line',
+                stroke: {
+                    width: 1.5,
+                    dashArray: [5, 5],  // Dashed line
+                    colors: ['#FF0000']  // Red color for trendlines
+                }
+            });
+        });     
+        
+        // Add trendline data to series
+        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+        console.log("Final Series Data:", finalSeriesData);
+        chart.updateSeries(finalSeriesData);
+        
+        // Update the chart
+        console.log(chart.w.config.series);
+        console.log("Main Series:", newSeriesData);
+        console.log("Trendline Series:", trendlineSeriesData);
+    }, 50));    
 });
 
 // The debounce function
