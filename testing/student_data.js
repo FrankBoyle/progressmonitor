@@ -78,7 +78,26 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.value);
-    
+
+                    // Update the series names based on selected columns
+        const updatedSeries = allSeries.map((series, index) => {
+            if (selectedColumns.includes(headerNames[index + 1])) {
+                // Use the column name as the series name
+                return {
+                    ...series,
+                    name: headerNames[index + 1],
+                };
+            } else {
+                // Use a generic name
+                return {
+                    ...series,
+                    name: `score${index + 1}`,
+                };
+            }
+        });
+
+        // Update the chart series with the updated names
+        chart.updateSeries(updatedSeries);
         // Filter allSeries based on selected columns
         const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
     
