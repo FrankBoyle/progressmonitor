@@ -63,55 +63,41 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //console.log("Header Names:", headerNames);
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const headerRow = document.querySelector('#dataTable thead tr');
-        headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());  // Initialize it inside
-        const { dates, scores } = extractDataFromTable();
-        const allSeries = getAllSeries(scores, headerNames);
-        const options = getChartOptions(dates);
-        options.series = allSeries;
-        chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+    // Listen for checkbox changes
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.value);
     
-        // Hide all series initially
-        allSeries.forEach((s, index) => chart.hideSeries(s.name));
+        // Filter allSeries based on selected columns
+        const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
     
-        // Listen for checkbox changes
-        document.getElementById("columnSelector").addEventListener("change", function() {
-            const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-                .map(checkbox => checkbox.value);
+        // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+        const trendlineSeriesData = [];
+        newSeriesData.forEach(series => {
+            const trendlineData = getTrendlineData(series.data);
+            trendlineSeriesData.push({
+                name: series.name + ' Trendline',
+                data: trendlineData,
+                type: 'line',
+                stroke: {
+                    width: 1.5,
+                    dashArray: [5, 5],  // Dashed line
+                    colors: ['#FF0000']  // Red color for trendlines
+                }
+            });
+        });     
         
-            // Filter allSeries based on selected columns
-            const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+        // Add trendline data to series
+        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+        console.log("Final Series Data:", finalSeriesData);
+        chart.updateSeries(finalSeriesData);
         
-            // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-            const trendlineSeriesData = [];
-            newSeriesData.forEach(series => {
-                const trendlineData = getTrendlineData(series.data);
-                trendlineSeriesData.push({
-                    name: series.name + ' Trendline',
-                    data: trendlineData,
-                    type: 'line',
-                    stroke: {
-                        width: 1.5,
-                        dashArray: [5, 5],  // Dashed line
-                        colors: ['#FF0000']  // Red color for trendlines
-                    }
-                });
-            });     
-            
-            // Add trendline data to series
-            const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-            console.log("Final Series Data:", finalSeriesData);
-            chart.updateSeries(finalSeriesData);
-            
-            // Update the chart
-            console.log(chart.w.config.series);
-            console.log("Main Series:", newSeriesData);
-            console.log("Trendline Series:", trendlineSeriesData);
-        }); 
-    });   
-    });    
+        // Update the chart
+        console.log(chart.w.config.series);
+        console.log("Main Series:", newSeriesData);
+        console.log("Trendline Series:", trendlineSeriesData);
+    }, 250));    
+});
 
 function getAllSeries(scores, headerNames) {
     const series = [];
@@ -124,6 +110,18 @@ function getAllSeries(scores, headerNames) {
         });
     }
     return series;
+}
+
+// The debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            func.apply(context, args);
+        }, wait);
+    };
 }
 
 var dataSeries = [
