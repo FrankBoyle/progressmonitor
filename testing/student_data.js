@@ -65,21 +65,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Define a function to update the series names
     function updateSeriesNames(selectedColumns) {
-        allSeries = allSeries.map((series, index) => {
-            if (selectedColumns.includes(headerNames[index + 1])) {
-                // Use the column name as the series name
-                return {
-                    ...series,
-                    name: headerNames[index + 1],
-                };
-            } else {
-                // Use a generic name
-                return {
-                    ...series,
-                    name: `score${index + 1}`,
-                };
-            }
-        });
+// Update the series names based on selected columns
+allSeries = allSeries.map((series, index) => {
+    if (selectedColumns.includes(headerNames[index + 1])) {
+        // Use the column name as the series name
+        return {
+            ...series,
+            name: headerNames[index + 1],
+        };
+    } else {
+        // Use a generic name
+        return {
+            ...series,
+            name: `score${index + 1}`,
+        };
+    }
+});
+
     }
 
     // Define a function to update the chart with new series data and trendlines
