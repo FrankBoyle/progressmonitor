@@ -103,15 +103,16 @@ function initializeChart() {
     const { dates, scores } = extractDataFromTable();
 
     // Define a function to update all series names
-    function updateAllSeriesNames(customColumnNames) {
-        allSeries = allSeries.map((series, index) => {
-            const customColumnName = customColumnNames[index] || headerNames[index + 1];
-            return {
-                ...series,
-                name: customColumnName,
-            };
-        });
-    }
+function updateAllSeriesNames(customColumnNames) {
+    allSeries = allSeries.map((series, index) => {
+        const customColumnName = customColumnNames[index] || headerNames[index + 1];
+        return {
+            ...series,
+            name: customColumnName,
+        };
+    });
+}
+
 
     // Define a function to update the chart with new series data and trendlines
     function updateChart(selectedColumns) {
