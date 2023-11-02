@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(chart.w.config.series);
         console.log("Main Series:", newSeriesData);
         console.log("Trendline Series:", trendlineSeriesData);
-    }, 250));    
+    }, 50));    
 });
 
 function getAllSeries(scores, headerNames) {
