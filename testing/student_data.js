@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function updateSeriesNames(selectedColumns) {
 // Update the series names based on selected columns
 console.log(headerNames);
+console.log(selectedColumns);
 allSeries = allSeries.map((series, index) => {
     if (selectedColumns.includes(headerNames[index + 1])) {
         // Use the column name as the series name
