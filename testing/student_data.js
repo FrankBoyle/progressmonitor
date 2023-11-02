@@ -26,8 +26,7 @@ function extractDataFromTable() {
         scores.push(rowScores);
     });
 
-    // Reversing the order of dates and scores.
-    return { dates: dates.reverse(), scores: scores.reverse() };
+    return { dates, scores };
 }
 
 function populateSeriesData(selectedColumns, headerMap, scores) {
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //console.log("Dates:", dates);
     //console.log("Scores:", scores);
 
-    console.log("Header Names:", headerNames);
+    //console.log("Header Names:", headerNames);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
