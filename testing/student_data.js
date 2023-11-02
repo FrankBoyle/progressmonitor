@@ -112,6 +112,7 @@ function getAllSeries(scores, headerNames) {
     return series;
 }
 
+
 // The debounce function
 function debounce(func, wait) {
     let timeout;
