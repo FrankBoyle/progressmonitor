@@ -160,14 +160,17 @@ if (isset($_GET['metadata_id'])) {
     foreach ($scoreNames as $category => $scores) {
         foreach ($scores as $index => $scoreName) {
             $scoreColumnName = 'score' . ($index + 1);
+            $customColumnName = htmlspecialchars($scoreName); // Custom column name
             echo '<label>';
-            echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '">';
+            echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '"';
+            echo ' data-column-name="' . $customColumnName . '">'; // Include custom name as data attribute
             echo htmlspecialchars($scoreName);
             echo '</label>';
         }
     }
     ?>
 </div>
+
 
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
