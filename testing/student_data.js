@@ -102,11 +102,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function getAllSeries(scores, headerNames) {
     const series = [];
-    for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
-        const columnName = headerNames[i]; // Get the column name from headerNames
+    for (let i = 0; i < headerNames.length; i++) { // Change loop condition
+        const scoreData = scores.map(row => row[i]);
+        const columnName = headerNames[i];
         series.push({
-            name: columnName, // Use the column name as the series name
+            name: columnName,
             data: scoreData,
         });
     }
