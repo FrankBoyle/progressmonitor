@@ -196,6 +196,18 @@ function initializeChart() {
     }, 50));
 };
 
+function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
+    const series = [];
+    for (let i = 1; i < headerNames.length - 1; i++) {
+        const scoreData = scores.map(row => row[i - 1]);
+        series.push({
+            name: customNames[i - 1] || `score${i}`,  // Use custom name if available, otherwise generic name
+            data: scoreData,
+            visible: false  // Hide the series by default
+        });
+    }
+    return series;
+}
 
 // The debounce function
 function debounce(func, wait) {
