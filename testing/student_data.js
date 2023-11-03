@@ -4,6 +4,7 @@ var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
+let allSeries = [];  // <-- Define it here at the top with other global variables
 
 $(function() {
     $("#accordion").accordion({
@@ -59,16 +60,14 @@ function extractDataFromTable() {
 function populateSeriesData(selectedColumns, headerMap, scores) {
     const seriesData = [];
     for (const col of selectedColumns) {
-      const headerName = headerMap[col];
-      const headerIndex = headerNames.indexOf(headerName);
-      if (headerIndex !== -1) {
-        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
-      }
+        const headerName = headerMap[col];
+        const headerIndex = headerNames.indexOf(headerName);
+        if (headerIndex !== -1 && scores[scoreRow] && scores[scoreRow][headerIndex]) {
+            seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
+        }
     }
     return seriesData;
-  }
- 
-
+}
 
 function getAllSeries(scores, headerNames) {
     const series = [];
