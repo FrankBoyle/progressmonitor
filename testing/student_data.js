@@ -57,15 +57,21 @@ function initializeChart() {
     chart.render();
 
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const chartSeriesNames = chart.w.globals.seriesNames;
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
             allSeries.forEach(s => {
-                if (chart.getSeriesByName(s.name).length > 0) {
-                    chart.hideSeries(s.name);
-                } else {
-                    console.warn(`Series with name ${s.name} not found in the chart.`);
+                try {
+                    if (chartSeriesNames.includes(s.name)) {
+                        chart.hideSeries(s.name);
+                    } else {
+                        console.warn(`Series with name ${s.name} not found in the chart.`);
+                    }
+                } catch (error) {
+                    console.error(`Error hiding series with name ${s.name}.`, error);
                 }
             });
+                   
             
         // Hide all series
         allSeries.forEach(s => chart.hideSeries(s.name));
