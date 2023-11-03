@@ -59,7 +59,14 @@ function initializeChart() {
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
-    
+            allSeries.forEach(s => {
+                if (chart.getSeriesByName(s.name).length > 0) {
+                    chart.hideSeries(s.name);
+                } else {
+                    console.warn(`Series with name ${s.name} not found in the chart.`);
+                }
+            });
+            
         // Hide all series
         allSeries.forEach(s => chart.hideSeries(s.name));
     
