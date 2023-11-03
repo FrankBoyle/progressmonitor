@@ -99,10 +99,10 @@ function initializeChart() {
     }    
 
 function updateChart() {
-    const selectedColumns = [...new Set(selectedColumns)]; // Ensure unique column names
+    const uniqueSelectedColumns = [...new Set(selectedColumns)]; // Ensure unique column names
 
     // Filter the series based on selected columns
-    const seriesToGraph = allSeries.filter(series => selectedColumns.includes(series.name));
+    const newSeriesData = allSeries.filter(series => uniqueSelectedColumns.includes(series.name));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
@@ -140,10 +140,7 @@ function updateChart() {
             }
         },
     });
-        chart.update({
-            series: seriesToGraph
-        });
-};
+}
 
     let allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
@@ -160,13 +157,13 @@ function updateChart() {
     updateAllSeriesNames(selectedColumns);
 
     // Listen for checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.value); // Assuming the checkbox value attribute holds the column name
-    
-        updateChart(selectedColumns);
-    }, 50));
-    
+document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.value); // Assuming the checkbox value attribute holds the column name
+
+    updateChart(selectedColumns);
+}, 50));
+
     
 };
 
