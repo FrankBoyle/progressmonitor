@@ -113,55 +113,47 @@ function updateAllSeriesNames(customColumnNames) {
     });
 }
 
+function updateChart(selectedColumns) {
+    // Create a new series array based on selected columns
+    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
 
-    // Define a function to update the chart with new series data and trendlines
-    function updateChart(selectedColumns) {
-                // Update the visibility of each series based on selectedColumns
-                allSeries = allSeries.map(series => ({
-                    ...series,
-                    visible: selectedColumns.includes(series.name)
-                }));
-        
-                // Filter allSeries based on selected columns
-                const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-
-        // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-        const trendlineSeriesData = [];
-        newSeriesData.forEach(series => {
-            const trendlineData = getTrendlineData(series.data);
-            trendlineSeriesData.push({
-                name: series.name + ' Trendline',
-                data: trendlineData,
-                type: 'line',
-                stroke: {
-                    width: 1.5,
-                    dashArray: [5, 5],
-                    colors: ['#FF0000']
-                }
-            });
+    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+    const trendlineSeriesData = [];
+    newSeriesData.forEach(series => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
+            name: series.name + ' Trendline',
+            data: trendlineData,
+            type: 'line',
+            stroke: {
+                width: 1.5,
+                dashArray: [5, 5],
+                colors: ['#FF0000']
+            }
         });
+    });
 
-        // Add trendline data to series
-        const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-        console.log("Final Series Data:", finalSeriesData);
+    // Add trendline data to series
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    console.log("Final Series Data:", finalSeriesData);
 
-        // Update the chart with the new series data and updated names
-        chart.updateSeries(finalSeriesData);
+    // Update the chart with the new series data and updated names
+    chart.updateSeries(finalSeriesData);
 
-        // Update series names in the legend
-        chart.updateOptions({
-            xaxis: {
-                categories: dates
-            },
-            yaxis: {
-                labels: {
-                    formatter: function(val) {
-                        return parseFloat(val).toFixed(0);
-                    }
+    // Update series names in the legend
+    chart.updateOptions({
+        xaxis: {
+            categories: dates
+        },
+        yaxis: {
+            labels: {
+                formatter: function(val) {
+                    return parseFloat(val).toFixed(0);
                 }
-            },
-        });
-    }
+            }
+        },
+    });
+}
 
     let allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
