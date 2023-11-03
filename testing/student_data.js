@@ -142,6 +142,17 @@ function initializeChart() {
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
 
+    // Define a function to update all series names
+function updateAllSeriesNames(customColumnNames) {
+    allSeries = allSeries.map((series, index) => {
+        const customColumnName = customColumnNames[index] || headerNames[index + 1];
+        return {
+            ...series,
+            name: customColumnName,
+        };
+    });
+}
+
 
 
     let allSeries = getAllSeries(scores, headerNames);
@@ -307,6 +318,7 @@ function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
     return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
 }
+
 
 ////////////////////////////////////////////////
 
