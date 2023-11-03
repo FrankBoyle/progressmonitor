@@ -36,25 +36,11 @@ function extractDataFromTable() {
     const scores = [];
 
     tableRows.forEach((row) => {
-        const dateCell = row.querySelector("td:first-child");
-        if (dateCell) {
-            dates.push(dateCell.textContent.trim());
-        } else {
-            dates.push(""); // or some default date or error handling
-        }
-
-        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
-        const rowScores = [];
-
-        scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0', 10));
-        });
-
+        dates.push(row.querySelector("td:first-child").textContent.trim());
+        const rowScores = Array.from(row.querySelectorAll("td:not(:first-child):not(:last-child)"))
+                              .map(cell => parseInt(cell.textContent || '0', 10));
         scores.push(rowScores);
     });
-
-    console.log('Extracted Dates:', dates);
-    console.log('Extracted Scores:', scores);
 
     return { dates, scores };
 }
@@ -73,81 +59,47 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
 
-// Define a function to update the series names
-function updateSeriesNames(selectedColumns) {
-    // Update the series names based on selected columns
-    allSeries = allSeries.map((series, index) => {
-        const customColumnName = selectedColumns[index]; // Get custom column name from the checkbox
-        return {
-            ...series,
-            name: customColumnName,
-        };
-    });
+  function getAllSeries(scores, headerNames) {
+    const series = [];
+    for (let i = 1; i < headerNames.length - 1; i++) {
+        series.push({
+            name: headerNames[i],
+            data: scores.map(row => row[i - 1]),
+            visible: false
+        });
+    }
+    return series;
 }
 
 function initializeChart() {
-    const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    console.log('Extracted Header Names:', headerNames);
-
     const { dates, scores } = extractDataFromTable();
-    console.log("Extracted Dates:", dates);
-    console.log("Extracted Scores:", scores);
 
-    // Define a function to update all series names
-function updateAllSeriesNames(customColumnNames) {
-    allSeries = allSeries.map((series, index) => {
-        const customColumnName = customColumnNames[index] || headerNames[index + 1];
-        return {
-            ...series,
-            name: customColumnName,
-        };
+    // Fetch header names just once
+    headerNames = Array.from(document.querySelector('#dataTable thead tr').querySelectorAll('th'))
+                       .map(th => th.innerText.trim());
+
+    let allSeries = getAllSeries(scores, headerNames);
+    const options = getChartOptions(dates);
+    chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+
+    document.getElementById("columnSelector").addEventListener("change", function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                                     .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+        allSeries = updateAllSeriesNames(allSeries, selectedColumns);
+        updateChart(selectedColumns);
     });
 }
 
 function updateChart(selectedColumns) {
-    // Create a new series array based on selected columns
-    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-
-    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    const trendlineSeriesData = [];
-    newSeriesData.forEach(series => {
-        const trendlineData = getTrendlineData(series.data);
-        trendlineSeriesData.push({
-            name: series.name + ' Trendline',
-            data: trendlineData,
-            type: 'line',
-            stroke: {
-                width: 1.5,
-                dashArray: [5, 5],
-                colors: ['#FF0000']
-            }
-            
-        });
-        console.log("New Series Data for Chart:", newSeriesData);
-        console.log("Trendline Series Data:", trendlineSeriesData);
-    });
-
-    // Add trendline data to series
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    console.log("Final Series Data:", finalSeriesData);
-
-    // Update the chart with the new series data and updated names
-    chart.updateSeries(finalSeriesData);
-
-    // Update series names in the legend
-    chart.updateOptions({
-        xaxis: {
-            categories: dates
-        },
-        yaxis: {
-            labels: {
-                formatter: function(val) {
-                    return parseFloat(val).toFixed(0);
-                }
-            }
-        },
-    });
+    const newSeriesData = chart.w.globals.series.filter(series => selectedColumns.includes(series.name));
+    const trendlineSeriesData = newSeriesData.map(series => ({
+        name: series.name + ' Trendline',
+        data: getTrendlineData(series.data),
+        type: 'line',
+        stroke: { width: 1.5, dashArray: [5, 5], colors: ['#FF0000'] }
+    }));
+    chart.updateSeries([...newSeriesData, ...trendlineSeriesData]);
 }
 
     let allSeries = getAllSeries(scores, headerNames);
@@ -183,7 +135,7 @@ function updateChart(selectedColumns) {
         // Update the chart with new series data and trendlines
         updateChart(selectedColumns);
     }, 50));
-};
+
 
 function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
     const series = [];
@@ -218,29 +170,12 @@ var dataSeries = [
 ];
 
 // Create the data labels settings
-var dataLabelsSettings = {
+const dataLabelsSettings = {
     enabled: true,
     formatter: function(val, opts) {
-        console.log("Data Label Value:", val, "Options:", opts);
-        var seriesName = opts.w.config.series[opts.seriesIndex].name;
-
-        // Hide data labels for 'Benchmark' and 'Trendline'.
-        if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) {
-            return '';  // Return empty string to hide the label
-        }
-
-        // Format for bar charts
-        if (opts.w.config.chart.type === 'bar') {
-            return val.toFixed(0);
-        }
-
-        // Format for line charts
-        if (opts.w.config.chart.type === 'line') {
-            return val;  // or val.toFixed(2) if you want two decimal places
-        }
-
-        // Default return
-        return val;
+        const seriesName = opts.w.config.series[opts.seriesIndex].name;
+        if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) return '';
+        return opts.w.config.chart.type === 'bar' ? val.toFixed(0) : val;
     }
 };
 
@@ -248,52 +183,22 @@ function getChartOptions(dates) {
     return {
         series: [],
         chart: {
-            events: {
-                updated: function(chartContext, config) {
-                    console.log('Chart updated!', config.globals.series);
-                }
-            },
+            events: { updated: function(chartContext, config) { console.log('Chart updated!', config.globals.series); } },
             width: 1000,
             type: 'line',
-            zoom: {
-                enabled: true
-            },
-            animations: {
-                enabled: false
-            }
+            zoom: { enabled: true },
+            animations: { enabled: false }
         },
-        dataLabels: dataLabelsSettings,     
-        yaxis: {
-            labels: {
-                formatter: function(val) {
-                    return parseFloat(val).toFixed(0);
-                }
-            }
-        },
-        stroke: {
-            curve: 'smooth',
-            size: 2
-        },
-        xaxis: {
-            categories: dates
-        }
+        dataLabels: dataLabelsSettings,
+        yaxis: { labels: { formatter: function(val) { return parseFloat(val).toFixed(0); } } },
+        stroke: { curve: 'smooth', size: 2 },
+        xaxis: { categories: dates }
     };
 }
 
-const trendlineOptions = {
-    color: '#888',            // Grey color for trendlines
-    dashArray: 5,             // Makes the line dashed
-    width: 2                  // Line width
-};
-
 function calculateTrendline(data) {
-    var sumX = 0;
-    var sumY = 0;
-    var sumXY = 0;
-    var sumXX = 0;
-    var count = 0;
-
-    data.forEach(function (y, x) { // Adjusting the loop here
+    let [sumX, sumY, sumXY, sumXX, count] = [0, 0, 0, 0, 0];
+    data.forEach((y, x) => {
         if (y !== null) {
             sumX += x;
             sumY += y;
@@ -302,22 +207,14 @@ function calculateTrendline(data) {
             count++;
         }
     });
-
-    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
-    var intercept = (sumY - slope * sumX) / count;
-
-    // Debugging print statements
-    console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
-    console.log("slope:", slope, "intercept:", intercept);
-
-    return function (x) {
-        return slope * x + intercept;
-    };
+    const slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / count;
+    return x => slope * x + intercept;
 }
 
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
-    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
+    return seriesData.map((y, x) => trendlineFunction(x));
 }
 
 ////////////////////////////////////////////////
