@@ -99,11 +99,10 @@ function initializeChart() {
     }    
 
 function updateChart() {
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
+    const uniqueSelectedColumns = [...new Set(selectedColumns)]; // Ensure unique column names
 
     // Filter the series based on selected columns
-    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+    const newSeriesData = allSeries.filter(series => uniqueSelectedColumns.includes(series.name));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
