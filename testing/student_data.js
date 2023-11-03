@@ -78,14 +78,9 @@ function initializeChart() {
     headerNames = Array.from(document.querySelector('#dataTable thead tr').querySelectorAll('th'))
                        .map(th => th.innerText.trim());
 
-    let allSeries = getAllSeries(scores, headerNames);
-    const options = getChartOptions(dates);
-    chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
-
     document.getElementById("columnSelector").addEventListener("change", function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-                                     .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
         allSeries = updateAllSeriesNames(allSeries, selectedColumns);
         updateChart(selectedColumns);
     });
@@ -100,7 +95,12 @@ function updateChart(selectedColumns) {
         stroke: { width: 1.5, dashArray: [5, 5], colors: ['#FF0000'] }
     }));
     chart.updateSeries([...newSeriesData, ...trendlineSeriesData]);
-} 
+}
+
+    let allSeries = getAllSeries(scores, headerNames);
+    const options = getChartOptions(dates);
+    chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();    
 
     // Hide all series initially
     //allSeries.forEach((s, index) => chart.hideSeries(s.name));
