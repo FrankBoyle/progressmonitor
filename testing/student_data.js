@@ -68,6 +68,8 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
  
+
+
 function getAllSeries(scores, headerNames) {
     const series = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
@@ -81,6 +83,19 @@ function getAllSeries(scores, headerNames) {
     return series;
 }
 
+
+// Define a function to update the series names
+function updateSeriesNames(selectedColumns) {
+    // Update the series names based on selected columns
+    allSeries = allSeries.map((series, index) => {
+        const customColumnName = selectedColumns[index]; // Get custom column name from the checkbox
+        return {
+            ...series,
+            name: customColumnName,
+        };
+    });
+}
+
 function initializeChart() {
     let headerNames;
     const headerRow = document.querySelector('#dataTable thead tr');
@@ -88,21 +103,22 @@ function initializeChart() {
     const { dates, scores } = extractDataFromTable();
 
     // Define a function to update all series names
-    function updateAllSeriesNames(customColumnNames) {
-        return allSeries.map((series, index) => {
-            const customColumnName = customColumnNames[index] || headerNames[index + 1];
-            return {
-                ...series,
-                name: customColumnName,
-            };
-        });
-    }    
+function updateAllSeriesNames(customColumnNames) {
+    allSeries = allSeries.map((series, index) => {
+        const customColumnName = customColumnNames[index] || headerNames[index + 1];
+        return {
+            ...series,
+            name: customColumnName,
+        };
+    });
+}
 
 function updateChart() {
-    const uniqueSelectedColumns = [...new Set(selectedColumns)]; // Ensure unique column names
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
 
     // Filter the series based on selected columns
-    const newSeriesData = allSeries.filter(series => uniqueSelectedColumns.includes(series.name));
+    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
@@ -157,14 +173,11 @@ function updateChart() {
     updateAllSeriesNames(selectedColumns);
 
     // Listen for checkbox changes
-document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.value); // Assuming the checkbox value attribute holds the column name
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
 
-    updateChart(selectedColumns);
-}, 50));
-
-    
+        // Update the chart with new series data and trendlines
+        updateChart();
+    }, 50));
 };
 
 function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
