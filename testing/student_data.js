@@ -140,9 +140,8 @@ function updateChart() {
             }
         },
     });
-        chart.update({
-            series: seriesToGraph
-        });
+    chart.series = seriesToGraph;
+    chart.redraw();
 };
 
     let allSeries = getAllSeries(scores, headerNames);
