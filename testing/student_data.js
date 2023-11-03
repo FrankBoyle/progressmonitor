@@ -65,6 +65,8 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
         seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
       }
     }
+    console.log("Populated Series Data:", seriesData);
+
     return seriesData;
   }
  
@@ -100,6 +102,8 @@ function initializeChart() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
+    console.log("Extracted Dates:", dates);
+    console.log("Extracted Scores:", scores);
 
     // Define a function to update all series names
 function updateAllSeriesNames(customColumnNames) {
@@ -129,7 +133,10 @@ function updateChart(selectedColumns) {
                 dashArray: [5, 5],
                 colors: ['#FF0000']
             }
+            
         });
+        console.log("New Series Data for Chart:", newSeriesData);
+        console.log("Trendline Series Data:", trendlineSeriesData);
     });
 
     // Add trendline data to series
@@ -167,6 +174,7 @@ function updateChart(selectedColumns) {
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getAllSeriesWithCustomNames(scores, headerNames, selectedColumns);
+    console.log("All Series with Custom Names:", allSeries);
 
     // Update all series names with custom names
     updateAllSeriesNames(selectedColumns);
@@ -220,6 +228,7 @@ var dataSeries = [
 var dataLabelsSettings = {
     enabled: true,
     formatter: function(val, opts) {
+        console.log("Data Label Value:", val, "Options:", opts);
         var seriesName = opts.w.config.series[opts.seriesIndex].name;
 
         // Hide data labels for 'Benchmark' and 'Trendline'.
