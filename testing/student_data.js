@@ -97,6 +97,7 @@ function updateSeriesNames(selectedColumns) {
 }
 
 function initializeChart() {
+    let headerNames;
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
@@ -110,7 +111,6 @@ function updateAllSeriesNames(customColumnNames) {
             name: customColumnName,
         };
     });
-}
 }
 
 function updateChart(selectedColumns) {
@@ -186,7 +186,7 @@ function updateChart(selectedColumns) {
         // Update the chart with new series data and trendlines
         updateChart(selectedColumns);
     }, 50));
-
+};
 
 function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
     const series = [];
