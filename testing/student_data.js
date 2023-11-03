@@ -157,9 +157,8 @@ function updateChart(selectedColumns) {
 
     let allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
-    options.series = allSeries;
-    let chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();    
 
     // Hide all series initially
     //allSeries.forEach((s, index) => chart.hideSeries(s.name));
