@@ -104,6 +104,8 @@ function updateSeriesNames(selectedColumns) {
 function initializeChart() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
+    console.log('Extracted Header Names:', headerNames);
+
     const { dates, scores } = extractDataFromTable();
     console.log("Extracted Dates:", dates);
     console.log("Extracted Scores:", scores);
@@ -202,11 +204,13 @@ function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
     const series = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
+        const seriesName = customNames[i - 1] || `score${i}`;
         series.push({
-            name: customNames[i - 1] || `score${i}`,  // Use custom name if available, otherwise generic name
+            name: seriesName,
             data: scoreData,
             visible: false  // Hide the series by default
         });
+        console.log(`Generated Series ${i} with Name:`, seriesName);
     }
     return series;
 }
