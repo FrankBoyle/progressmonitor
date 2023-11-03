@@ -53,6 +53,9 @@ function extractDataFromTable() {
         scores.push(rowScores);
     });
 
+    console.log('Extracted Dates:', dates);
+    console.log('Extracted Scores:', scores);
+
     return { dates, scores };
 }
 
