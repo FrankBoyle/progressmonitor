@@ -68,8 +68,6 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
  
-
-
 function getAllSeries(scores, headerNames) {
     const series = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
@@ -81,19 +79,6 @@ function getAllSeries(scores, headerNames) {
         });
     }
     return series;
-}
-
-
-// Define a function to update the series names
-function updateSeriesNames(selectedColumns) {
-    // Update the series names based on selected columns
-    allSeries = allSeries.map((series, index) => {
-        const customColumnName = selectedColumns[index]; // Get custom column name from the checkbox
-        return {
-            ...series,
-            name: customColumnName,
-        };
-    });
 }
 
 function initializeChart() {
