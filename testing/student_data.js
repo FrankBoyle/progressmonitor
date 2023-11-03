@@ -1,100 +1,267 @@
 var benchmark = null;
-var benchmarkSeriesIndex = null; 
-var selectedChartType = 'line'; 
+var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
+var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
-let chart = null;
-let headerNames;
+let chart = null; // This makes the chart variable accessible throughout the script
+let headerNames;  // Declare it outside
 
 $(function() {
     $("#accordion").accordion({
         collapsible: true,
         heightStyle: "content",
-        active: false,
+        active: false, // Ensure all panels are closed initially
         activate: function(event, ui) {
             if (ui.newPanel.has('#chart').length) {
+                // Check if the chart is already initialized.
                 if (!chart) {
-                    initializeChart();
+                    initializeChart(); // Initialize the chart the first time.
                 } else {
-                    chart.updateSeries(chart.w.globals.series);
+                    chart.updateSeries(chart.w.globals.series); // Refresh or update if needed.
                 }
             }
         }
     });
 });
 
+$("#accordion").on("accordionactivate", function(event, ui) {
+    if (ui.newPanel.is(":contains('#chart')")) {
+        // Assuming 'chart' is the variable where your ApexChart instance is stored.
+        chart.updateSeries(chart.w.globals.series);
+    }
+});
+
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
     const scores = [];
+
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
-        dates.push(dateCell ? dateCell.textContent.trim() : "");
-        const scoreCells = Array.from(row.querySelectorAll("td:not(:first-child):not(:last-child)"));
-        scores.push(scoreCells.map(cell => parseInt(cell.textContent || '0', 10)));
+        if (dateCell) {
+            dates.push(dateCell.textContent.trim());
+        } else {
+            dates.push(""); // or some default date or error handling
+        }
+
+        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
+        const rowScores = [];
+
+        scoreCells.forEach((cell) => {
+            rowScores.push(parseInt(cell.textContent || '0', 10));
+        });
+
+        scores.push(rowScores);
     });
+
     return { dates, scores };
 }
 
-function getAllSeries(scores, headerNames, customNames = []) {
-    return headerNames.slice(1, -1).map((header, i) => ({
-        name: customNames[i] || `score${i + 1}`,
-        data: scores.map(row => row[i]),
-        visible: false
-    }));
+function populateSeriesData(selectedColumns, headerMap, scores) {
+    const seriesData = [];
+    for (const col of selectedColumns) {
+      const headerName = headerMap[col];
+      const headerIndex = headerNames.indexOf(headerName);
+      if (headerIndex !== -1) {
+        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
+      }
+    }
+    return seriesData;
+  }
+ 
+
+
+function getAllSeries(scores, headerNames) {
+    const series = [];
+    for (let i = 1; i < headerNames.length - 1; i++) {
+        const scoreData = scores.map(row => row[i - 1]);
+        series.push({
+            name: `score${i}`,
+            data: scoreData,
+            visible: false  // Hide the series by default
+        });
+    }
+    return series;
+}
+
+
+// Define a function to update the series names
+function updateSeriesNames(selectedColumns) {
+    // Update the series names based on selected columns
+    allSeries = allSeries.map((series, index) => {
+        const customColumnName = selectedColumns[index]; // Get custom column name from the checkbox
+        return {
+            ...series,
+            name: customColumnName,
+        };
+    });
 }
 
 function initializeChart() {
+    let headerNames;
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
 
+    // Define a function to update all series names
+function updateAllSeriesNames(customColumnNames) {
+    allSeries = allSeries.map((series, index) => {
+        const customColumnName = customColumnNames[index] || headerNames[index + 1];
+        return {
+            ...series,
+            name: customColumnName,
+        };
+    });
+}
+
+function updateChart(selectedColumns) {
+    // Create a new series array based on selected columns
+    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+
+    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+    const trendlineSeriesData = [];
+    newSeriesData.forEach(series => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
+            name: series.name + ' Trendline',
+            data: trendlineData,
+            type: 'line',
+            stroke: {
+                width: 1.5,
+                dashArray: [5, 5],
+                colors: ['#FF0000']
+            }
+        });
+    });
+
+    // Add trendline data to series
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    console.log("Final Series Data:", finalSeriesData);
+
+    // Update the chart with the new series data and updated names
+    chart.updateSeries(finalSeriesData);
+
+    // Update series names in the legend
+    chart.updateOptions({
+        xaxis: {
+            categories: dates
+        },
+        yaxis: {
+            labels: {
+                formatter: function(val) {
+                    return parseFloat(val).toFixed(0);
+                }
+            }
+        },
+    });
+}
+
+    let allSeries = getAllSeries(scores, headerNames);
+    const options = getChartOptions(dates);
+    chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();    
+
+    // Hide all series initially
+    //allSeries.forEach((s, index) => chart.hideSeries(s.name));
+
+    // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    let allSeries = getAllSeries(scores, headerNames, selectedColumns);
+    allSeries = getAllSeriesWithCustomNames(scores, headerNames, selectedColumns);
 
-    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
-    chart.render();
+    // Update all series names with custom names
+    updateAllSeriesNames(selectedColumns);
 
+    // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const chartSeriesNames = chart.w.globals.seriesNames;
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
-            allSeries.forEach(s => {
-                try {
-                    if (chartSeriesNames.includes(s.name)) {
-                        chart.hideSeries(s.name);
-                    } else {
-                        console.warn(`Series with name ${s.name} not found in the chart.`);
-                    }
-                } catch (error) {
-                    console.error(`Error hiding series with name ${s.name}.`, error);
-                }
-            });
-                   
-            
-        // Hide all series
-        allSeries.forEach(s => chart.hideSeries(s.name));
-    
-        // Show only the selected ones
-        selectedColumns.forEach(column => chart.showSeries(column));
-    
+
+        // Update all series names with custom names
+        updateAllSeriesNames(selectedColumns);
+
+        // Update the chart series with the updated names
+        chart.updateSeries(allSeries);
+
         // Update the chart with new series data and trendlines
         updateChart(selectedColumns);
     }, 50));
-    
+};
+
+function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
+    const series = [];
+    for (let i = 1; i < headerNames.length - 1; i++) {
+        const scoreData = scores.map(row => row[i - 1]);
+        series.push({
+            name: customNames[i - 1] || `score${i}`,  // Use custom name if available, otherwise generic name
+            data: scoreData,
+            visible: false  // Hide the series by default
+        });
+    }
+    return series;
 }
+
+// The debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            func.apply(context, args);
+        }, wait);
+    };
+}
+
+var dataSeries = [
+    //... Your series data ...
+];
+
+// Create the data labels settings
+var dataLabelsSettings = {
+    enabled: true,
+    formatter: function(val, opts) {
+        var seriesName = opts.w.config.series[opts.seriesIndex].name;
+
+        // Hide data labels for 'Benchmark' and 'Trendline'.
+        if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) {
+            return '';  // Return empty string to hide the label
+        }
+
+        // Format for bar charts
+        if (opts.w.config.chart.type === 'bar') {
+            return val.toFixed(0);
+        }
+
+        // Format for line charts
+        if (opts.w.config.chart.type === 'line') {
+            return val;  // or val.toFixed(2) if you want two decimal places
+        }
+
+        // Default return
+        return val;
+    }
+};
 
 function getChartOptions(dates) {
     return {
         series: [],
         chart: {
+            events: {
+                updated: function(chartContext, config) {
+                    console.log('Chart updated!', config.globals.series);
+                }
+            },
             width: 1000,
             type: 'line',
-            zoom: { enabled: true },
-            animations: { enabled: false }
+            zoom: {
+                enabled: true
+            },
+            animations: {
+                enabled: false
+            }
         },
-        dataLabels: dataLabelsSettings,
+        dataLabels: dataLabelsSettings,     
         yaxis: {
             labels: {
                 formatter: function(val) {
@@ -112,32 +279,20 @@ function getChartOptions(dates) {
     };
 }
 
-function updateChart(allSeries, dates) {
-    const trendlineSeriesData = allSeries.map(series => ({
-        name: series.name + ' Trendline',
-        data: getTrendlineData(series.data),
-        type: 'line',
-        stroke: {
-            width: 1.5,
-            dashArray: [5, 5],
-            colors: ['#FF0000']
-        }
-    }));
-
-    chart.updateSeries([...allSeries, ...trendlineSeriesData]);
-    chart.updateOptions({
-        xaxis: { categories: dates }
-    });
-}
-
-function getTrendlineData(seriesData) {
-    const trendlineFunction = calculateTrendline(seriesData);
-    return seriesData.map((_, x) => trendlineFunction(x));
-}
+const trendlineOptions = {
+    color: '#888',            // Grey color for trendlines
+    dashArray: 5,             // Makes the line dashed
+    width: 2                  // Line width
+};
 
 function calculateTrendline(data) {
-    var sumX = 0, sumY = 0, sumXY = 0, sumXX = 0, count = 0;
-    data.forEach(function(y, x) {
+    var sumX = 0;
+    var sumY = 0;
+    var sumXY = 0;
+    var sumXX = 0;
+    var count = 0;
+
+    data.forEach(function (y, x) { // Adjusting the loop here
         if (y !== null) {
             sumX += x;
             sumY += y;
@@ -146,29 +301,23 @@ function calculateTrendline(data) {
             count++;
         }
     });
+
     var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
     var intercept = (sumY - slope * sumX) / count;
-    return x => slope * x + intercept;
-}
 
-function debounce(func, wait) {
-    let timeout;
-    return function() {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, arguments), wait);
+    // Debugging print statements
+    console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
+    console.log("slope:", slope, "intercept:", intercept);
+
+    return function (x) {
+        return slope * x + intercept;
     };
 }
 
-var dataSeries = []; // Empty series array
-var dataLabelsSettings = {
-    enabled: true,
-    formatter: function(val, opts) {
-        var seriesName = opts.w.config.series[opts.seriesIndex].name;
-        if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) return '';
-        return opts.w.config.chart.type === 'bar' ? val.toFixed(0) : val;
-    }
-};
-
+function getTrendlineData(seriesData) {
+    const trendlineFunction = calculateTrendline(seriesData);
+    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
+}
 
 ////////////////////////////////////////////////
 
