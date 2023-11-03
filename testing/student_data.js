@@ -4,7 +4,6 @@ var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
-let allSeries = [];
 
 $(function() {
     $("#accordion").accordion({
