@@ -162,7 +162,8 @@ function updateChart(selectedColumns) {
 
     // Hide all series initially
     //allSeries.forEach((s, index) => chart.hideSeries(s.name));
-
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+    .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
     allSeries = getAllSeriesWithCustomNames(scores, headerNames, selectedColumns);
 
     // Update all series names with custom names
@@ -170,9 +171,6 @@ function updateChart(selectedColumns) {
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
-
         // Update all series names with custom names
         updateAllSeriesNames(selectedColumns);
 
