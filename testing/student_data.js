@@ -188,6 +188,7 @@ function updateChart(selectedColumns) {
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
+            console.log('Selected Columns on Checkbox Change:', selectedColumns);
 
         // Update all series names with custom names
         updateAllSeriesNames(selectedColumns);
