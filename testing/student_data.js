@@ -90,7 +90,7 @@ function initializeChart() {
     // Define a function to update all series names
     function updateAllSeriesNames(customColumnNames) {
         return allSeries.map((series, index) => {
-            const customColumnName = headerNames[index + 1];
+            const customColumnName = customColumnNames[index] || headerNames[index + 1];
             return {
                 ...series,
                 name: customColumnName,
