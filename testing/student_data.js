@@ -159,9 +159,16 @@ function updateChart() {
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+    
+        // Update all series names with custom names
+        allSeries = updateAllSeriesNames(selectedColumns);
+    
         // Update the chart with new series data and trendlines
-        updateChart();
+        updateChart(selectedColumns);
     }, 50));
+    
 };
 
 function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
