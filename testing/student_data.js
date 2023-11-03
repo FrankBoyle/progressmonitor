@@ -95,24 +95,6 @@ function updateSeriesNames(selectedColumns) {
         };
     });
 }
-
-function initializeChart() {
-    let headerNames;
-    const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    const { dates, scores } = extractDataFromTable();
-
-    // Define a function to update all series names
-function updateAllSeriesNames(customColumnNames) {
-    allSeries = allSeries.map((series, index) => {
-        const customColumnName = customColumnNames[index] || headerNames[index + 1];
-        return {
-            ...series,
-            name: customColumnName,
-        };
-    });
-}
-
 function updateChart(selectedColumns) {
     // Create a new series array based on selected columns
     const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
@@ -154,6 +136,13 @@ function updateChart(selectedColumns) {
         },
     });
 }
+function initializeChart() {
+    let headerNames;
+    const headerRow = document.querySelector('#dataTable thead tr');
+    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
+    const { dates, scores } = extractDataFromTable();
+
+
 
     let allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
