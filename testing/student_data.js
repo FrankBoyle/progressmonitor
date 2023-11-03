@@ -4,6 +4,7 @@ var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
+let allSeries = [];
 
 $(function() {
     $("#accordion").accordion({
@@ -68,21 +69,17 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
  
-
-
-function getAllSeries(scores, headerNames) {
-    const series = [];
+  function getAllSeries(scores, headerNames) {
+    allSeries.length = 0; // clear the current content
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
-        series.push({
+        allSeries.push({
             name: `score${i}`,
             data: scoreData,
             visible: false  // Hide the series by default
         });
     }
-    return series;
 }
-
 
 // Define a function to update the series names
 function updateSeriesNames(selectedColumns) {
@@ -143,15 +140,16 @@ function initializeChart() {
     const { dates, scores } = extractDataFromTable();
 
     // Define a function to update all series names
-function updateAllSeriesNames(customColumnNames) {
-    allSeries = allSeries.map((series, index) => {
-        const customColumnName = customColumnNames[index] || headerNames[index + 1];
-        return {
-            ...series,
-            name: customColumnName,
-        };
-    });
-}
+    function updateAllSeriesNames(customColumnNames) {
+        allSeries = allSeries.map((series, index) => {
+            const customColumnName = customColumnNames[index] || headerNames[index + 1];
+            return {
+                ...series,
+                name: customColumnName,
+            };
+        });
+    }
+    
 
 
 
@@ -189,16 +187,15 @@ function updateAllSeriesNames(customColumnNames) {
 };
 
 function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
-    const series = [];
+    allSeries.length = 0; // clear the current content
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
-        series.push({
+        allSeries.push({
             name: customNames[i - 1] || `score${i}`,  // Use custom name if available, otherwise generic name
             data: scoreData,
             visible: false  // Hide the series by default
         });
     }
-    return series;
 }
 
 // The debounce function
