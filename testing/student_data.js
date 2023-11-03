@@ -72,22 +72,6 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 
     return seriesData;
   }
- 
-
-
-function getAllSeries(scores, headerNames) {
-    const series = [];
-    for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
-        series.push({
-            name: `score${i}`,
-            data: scoreData,
-            visible: false  // Hide the series by default
-        });
-    }
-    return series;
-}
-
 
 // Define a function to update the series names
 function updateSeriesNames(selectedColumns) {
@@ -203,9 +187,10 @@ function updateChart(selectedColumns) {
 
 function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
     const series = [];
+    // Skipping the first and last headers (Date and Action)
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
-        const seriesName = customNames[i - 1] || `score${i}`;
+        const seriesName = headerNames[i] || `score${i}`;
         series.push({
             name: seriesName,
             data: scoreData,
