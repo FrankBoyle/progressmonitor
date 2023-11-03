@@ -56,13 +56,20 @@ function initializeChart() {
     chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
     chart.render();
 
-    document.getElementById("columnSelector").addEventListener("change", debounce(() => {
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-        allSeries = getAllSeries(scores, headerNames, selectedColumns);
-        updateChart(allSeries, dates);
+            .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
+    
+        // Hide all series
+        allSeries.forEach(s => chart.hideSeries(s.name));
+    
+        // Show only the selected ones
+        selectedColumns.forEach(column => chart.showSeries(column));
+    
+        // Update the chart with new series data and trendlines
+        updateChart(selectedColumns);
     }, 50));
+    
 }
 
 function getChartOptions(dates) {
