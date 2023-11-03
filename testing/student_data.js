@@ -88,7 +88,7 @@ function initializeChart() {
     const { dates, scores } = extractDataFromTable();
 
     // Define a function to update all series names
-    function updateAllSeriesNames(headerNames) {
+    function updateAllSeriesNames(customColumnNames) {
         return allSeries.map((series, index) => {
             const customColumnName = headerNames[index + 1];
             return {
@@ -140,8 +140,9 @@ function updateChart() {
             }
         },
     });
-    chart.series = seriesToGraph;
-    chart.redraw();
+        chart.update({
+            series: seriesToGraph
+        });
 };
 
     let allSeries = getAllSeries(scores, headerNames);
