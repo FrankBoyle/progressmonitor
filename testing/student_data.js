@@ -93,46 +93,6 @@ function updateSeriesNames(selectedColumns) {
     });
 }
 
-function updateChart(selectedColumns) {
-    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-
-    // Calculate trendlines only for numeric series data.
-    const trendlineSeriesData = newSeriesData
-        .filter(series => series.data.every(val => typeof val === 'number'))
-        .map(series => {
-            const trendlineData = getTrendlineData(series.data);
-            return {
-                name: series.name + ' Trendline',
-                data: trendlineData,
-                type: 'line',
-                stroke: {
-                    width: 1.5,
-                    dashArray: [5, 5],
-                    colors: ['#FF0000']
-                }
-            };
-        });
-
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-
-    // Update the chart with the new series data and updated names
-    chart.updateSeries(finalSeriesData);
-
-    // Update series names in the legend
-    chart.updateOptions({
-        xaxis: {
-            categories: dates
-        },
-        yaxis: {
-            labels: {
-                formatter: function(val) {
-                    return parseFloat(val).toFixed(0);
-                }
-            }
-        }
-    });
-}
-
 function initializeChart() {
     let headerNames;
     const headerRow = document.querySelector('#dataTable thead tr');
@@ -149,9 +109,48 @@ function initializeChart() {
             };
         });
     }
-    
 
+function updateChart(selectedColumns) {
+    // Create a new series array based on selected columns
+    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
 
+    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+    const trendlineSeriesData = [];
+    newSeriesData.forEach(series => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
+            name: series.name + ' Trendline',
+            data: trendlineData,
+            type: 'line',
+            stroke: {
+                width: 1.5,
+                dashArray: [5, 5],
+                colors: ['#FF0000']
+            }
+        });
+    });
+
+    // Add trendline data to series
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    console.log("Final Series Data:", finalSeriesData);
+
+    // Update the chart with the new series data and updated names
+    chart.updateSeries(finalSeriesData);
+
+    // Update series names in the legend
+    chart.updateOptions({
+        xaxis: {
+            categories: dates
+        },
+        yaxis: {
+            labels: {
+                formatter: function(val) {
+                    return parseFloat(val).toFixed(0);
+                }
+            }
+        },
+    });
+}
 
     let allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
