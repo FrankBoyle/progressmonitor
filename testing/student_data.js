@@ -44,10 +44,10 @@ function extractDataFromTable() {
         }
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
-        const rowScores = [];
+        const rowScores = {};
 
-        scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0', 10));
+        scoreCells.forEach((cell, index) => {
+            rowScores[headerNames[index + 1]] = parseInt(cell.textContent || '0', 10);
         });
 
         scores.push(rowScores);
@@ -113,8 +113,11 @@ function updateAllSeriesNames(customColumnNames) {
     });
 }
 
-function updateChart(selectedColumns) {
-    // Create a new series array based on selected columns
+function updateChart() {
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
+
+    // Filter the series based on selected columns
     const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
@@ -171,14 +174,8 @@ function updateChart(selectedColumns) {
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        // Update all series names with custom names
-        updateAllSeriesNames(selectedColumns);
-
-        // Update the chart series with the updated names
-        chart.updateSeries(allSeries);
-
         // Update the chart with new series data and trendlines
-        updateChart(selectedColumns);
+        updateChart();
     }, 50));
 };
 
