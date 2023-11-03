@@ -163,10 +163,6 @@ function updateChart(selectedColumns) {
     // Hide all series initially
     //allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
-    // Get the custom column names from the checkboxes
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
     allSeries = getAllSeriesWithCustomNames(scores, headerNames, selectedColumns);
 
     // Update all series names with custom names
