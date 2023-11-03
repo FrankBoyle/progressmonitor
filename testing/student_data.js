@@ -100,12 +100,7 @@ function updateChart(selectedColumns) {
         stroke: { width: 1.5, dashArray: [5, 5], colors: ['#FF0000'] }
     }));
     chart.updateSeries([...newSeriesData, ...trendlineSeriesData]);
-}
-
-    let allSeries = getAllSeries(scores, headerNames);
-    const options = getChartOptions(dates);
-    chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();    
+} 
 
     // Hide all series initially
     //allSeries.forEach((s, index) => chart.hideSeries(s.name));
