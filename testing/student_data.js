@@ -4,7 +4,6 @@ var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames;  // Declare it outside
-let allSeries = [];  // <-- Define it here at the top with other global variables
 
 $(function() {
     $("#accordion").accordion({
@@ -45,10 +44,10 @@ function extractDataFromTable() {
         }
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
-        const rowScores = {};
+        const rowScores = [];
 
-        scoreCells.forEach((cell, index) => {
-            rowScores[headerNames[index + 1]] = parseInt(cell.textContent || '0', 10);
+        scoreCells.forEach((cell) => {
+            rowScores.push(parseInt(cell.textContent || '0', 10));
         });
 
         scores.push(rowScores);
@@ -60,14 +59,16 @@ function extractDataFromTable() {
 function populateSeriesData(selectedColumns, headerMap, scores) {
     const seriesData = [];
     for (const col of selectedColumns) {
-        const headerName = headerMap[col];
-        const headerIndex = headerNames.indexOf(headerName);
-        if (headerIndex !== -1 && scores[scoreRow] && scores[scoreRow][headerIndex]) {
-            seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
-        }
+      const headerName = headerMap[col];
+      const headerIndex = headerNames.indexOf(headerName);
+      if (headerIndex !== -1) {
+        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
+      }
     }
     return seriesData;
-}
+  }
+ 
+
 
 function getAllSeries(scores, headerNames) {
     const series = [];
@@ -96,6 +97,7 @@ function updateSeriesNames(selectedColumns) {
 }
 
 function initializeChart() {
+    let headerNames;
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
@@ -111,11 +113,8 @@ function updateAllSeriesNames(customColumnNames) {
     });
 }
 
-function updateChart() {
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
-
-    // Filter the series based on selected columns
+function updateChart(selectedColumns) {
+    // Create a new series array based on selected columns
     const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
@@ -163,8 +162,11 @@ function updateChart() {
 
     // Hide all series initially
     //allSeries.forEach((s, index) => chart.hideSeries(s.name));
+
+    // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-    .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
     allSeries = getAllSeriesWithCustomNames(scores, headerNames, selectedColumns);
 
     // Update all series names with custom names
@@ -172,9 +174,17 @@ function updateChart() {
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.getAttribute("data-column-name") || ''); // Get custom names
+
+        // Update all series names with custom names
+        updateAllSeriesNames(selectedColumns);
+
+        // Update the chart series with the updated names
+        chart.updateSeries(allSeries);
 
         // Update the chart with new series data and trendlines
-        updateChart();
+        updateChart(selectedColumns);
     }, 50));
 };
 
