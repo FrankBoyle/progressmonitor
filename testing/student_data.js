@@ -131,7 +131,7 @@ function updateAllSeriesNames(customColumnNames) {
 }
 
 // Updates the chart based on selected columns.
-function updateChart(selectedColumns) {
+function updateChart(selectedColumns, colorOptions) {
     // Clear existing series data
     chart.updateSeries([]);
 
