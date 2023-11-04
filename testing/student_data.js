@@ -271,9 +271,8 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData, seriesColors, trendlineColors) {
 // Generate colors for series and trendlines
-colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
-seriesColors = colorsAndTrendlineColors.seriesColors;
-trendlineColors = colorsAndTrendlineColors.trendlineColors;
+const { seriesColors, trendlineColors } = generateColors(finalSeriesData, trendlineSeriesData);
+
 
     seriesColors = colors.slice(0, allSeries.length);
     trendlineSeriesColors = trendlineColors.slice(0, trendlineSeriesData.length);
@@ -302,7 +301,7 @@ trendlineColors = colorsAndTrendlineColors.trendlineColors;
             dashArray: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? 5 : 0
             ),
-            colors: trendlineSeriesColors, // Add trendline colors here
+            colors: trendlineColors, // Add trendline colors here
         },
     };
 }
@@ -383,6 +382,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
+
 
 
 
