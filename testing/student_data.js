@@ -62,16 +62,18 @@ function extractDataFromTable() {
         const rowScores = [];
 
         scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0', 10));
+            const score = parseInt(cell.textContent.trim() || '0', 10); // Replace empty cells with 0
+            rowScores.push(isNaN(score) ? null : score); // Handle empty cells as null
         });
 
         scores.push(rowScores);
     });
     console.log("Extracted dates:", dates);
     console.log("Extracted scores:", scores);
-    
+
     return { dates, scores };
 }
+
 
 // Populates the series data based on selected columns, header map, and scores.
 function populateSeriesData(selectedColumns, headerMap, scores) {
@@ -336,11 +338,6 @@ function createTrendlineSeries(data, slope, intercept) {
 
     return trendlineData;
 }
-
-// Example usage:
-const originalData = [null, 2, 4, 6, 8, null, 12, 14, 16, 18];
-const { slope, intercept } = calculateTrendline(originalData);
-const trendlineData = createTrendlineSeries(originalData, slope, intercept);
 
 console.log('Trendline slope:', slope);
 console.log('Trendline intercept:', intercept);
