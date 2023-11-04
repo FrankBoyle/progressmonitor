@@ -273,23 +273,14 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData) {
     const { colors, trendlineColors } = generateColors(finalSeriesData, trendlineSeriesData);
-    const originalSeriesColors = generateDarkerColors(colors);
+
+    const seriesColors = colors.slice(0, allSeries.length);
+    const trendlineSeriesColors = trendlineColors.slice(0, trendlineSeriesData.length);
+
     return {
         series: finalSeriesData,
         chart: {
-            events: {
-                updated: function(chartContext, config) {
-                    console.log('Chart updated!', config.globals.series);
-                }
-            },
-            width: 1000,
-            type: 'line',
-            zoom: {
-                enabled: true
-            },
-            animations: {
-                enabled: false
-            }
+            // ... (other chart settings)
         },
         dataLabels: dataLabelsSettings,     
         yaxis: {
@@ -299,27 +290,22 @@ function getChartOptions(dates, trendlineSeriesData) {
                 }
             }
         },
-        stroke: {
-            curve: 'smooth',
-            size: 6
-        },
         xaxis: {
             categories: dates
         },
-        colors: [
-            '#1f77b4', // Dark Blue
-            '#ff7f0e', // Dark Orange
-            '#2ca02c', // Dark Green
-            '#d62728', // Dark Red
-            '#9467bd', // Dark Purple
-            '#8c564b', // Dark Brown
-            '#e377c2', // Light Pink
-            '#7f7f7f', // Gray
-            '#bcbd22', // Olive Green
-            '#17becf'  // Turquoise
-          ],
+        colors: seriesColors,
+        stroke: {
+            width: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? 2 : 4
+            ),
+            dashArray: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? 5 : 0
+            ),
+            colors: trendlineSeriesColors, // Add trendline colors here
+        },
     };
 }
+
 
 const trendlineOptions = {
     dashArray: 5,             // Makes the line dashed
