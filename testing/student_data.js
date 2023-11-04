@@ -198,7 +198,7 @@ function initializeChart() {
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, trendlineSeriesData));
+    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, trendlineSeriesData, seriesColors, trendlineColors));
     console.log("Extracted header names:", headerNames);
     console.log("Selected columns from checkboxes:", selectedColumns);
 
@@ -263,7 +263,7 @@ var dataLabelsSettings = {
     }
 };
 
-function getChartOptions(dates, trendlineSeriesData) {
+function getChartOptions(dates, trendlineSeriesData, seriesColors, trendlineColors) {
     const { colors, trendlineColors } = generateColors(finalSeriesData, trendlineSeriesData);
 
     seriesColors = colors.slice(0, allSeries.length);
@@ -348,9 +348,6 @@ function getDefaultColors() {
 }
 const defaultColors = getDefaultColors();
 // Generate colors and trendline colors
-
-// Initialize the chart
-initializeChart();
 
 function generateColors(finalSeriesData, trendlineSeriesData) {
     const seriesList = finalSeriesData.concat(trendlineSeriesData);
