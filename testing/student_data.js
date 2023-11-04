@@ -153,16 +153,14 @@ function initializeChart() {
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
 
-    allSeries = getUpdatedSeriesNames(allSeries, customColumnNames);
-    const options = getChartOptions(dates);
-    chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();    
-
     // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-        allSeries = getUpdatedSeriesNames(allSeries, customColumnNames);
+    allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
+    const options = getChartOptions(dates);
+    chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();    
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
