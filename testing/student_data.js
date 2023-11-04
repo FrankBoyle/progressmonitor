@@ -294,26 +294,33 @@ const trendlineOptions = {
 };
 
 function calculateTrendline(data) {
-    var sumX = 0;
-    var sumY = 0;
-    var sumXY = 0;
-    var sumXX = 0;
-    var count = 0;
-    data = data.filter(item => item !== null); // filter out null values
+    const nonNullData = data.filter(value => value !== null && !isNaN(value));
 
+    if (nonNullData.length === 0) {
+        // Handle the case where there are no valid data points
+        return { slope: 0, intercept: 0 };
+    }
 
-    data.forEach(function (y, x) { // Adjusting the loop here
-        if (y !== null) {
-            sumX += x;
-            sumY += y;
-            sumXY += x * y;
-            sumXX += x * x;
-            count++;
-        }
-    });
+    let sumX = 0;
+    let sumY = 0;
+    let sumXY = 0;
+    let sumXX = 0;
 
-    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
-    var intercept = (sumY - slope * sumX) / count;
+    for (let i = 0; i < nonNullData.length; i++) {
+        const x = i + 1; // X values are 1-based
+        const y = nonNullData[i];
+
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXX += x * x;
+    }
+
+    const n = nonNullData.length;
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
     console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
 
     // Debugging print statements
@@ -324,6 +331,7 @@ function calculateTrendline(data) {
         return slope * x + intercept;
     };
 }
+
 
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
