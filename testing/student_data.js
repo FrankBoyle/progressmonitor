@@ -71,15 +71,16 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
   }
  
   function getAllSeries(scores, headerNames) {
-    allSeries.length = 0; // clear the current content
+    const seriesList = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
-        allSeries.push({
+        seriesList.push({
             name: `score${i}`,
             data: scoreData,
             visible: false  // Hide the series by default
         });
     }
+    return seriesList;
 }
 
 // Define a function to update the series names
@@ -93,23 +94,6 @@ function updateSeriesNames(selectedColumns) {
         };
     });
 }
-
-function initializeChart() {
-    let headerNames;
-    const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    const { dates, scores } = extractDataFromTable();
-
-    // Define a function to update all series names
-    function updateAllSeriesNames(customColumnNames) {
-        allSeries = allSeries.map((series, index) => {
-            const customColumnName = customColumnNames[index] || headerNames[index + 1];
-            return {
-                ...series,
-                name: customColumnName,
-            };
-        });
-    }
 
 function updateChart(selectedColumns) {
     // Create a new series array based on selected columns
@@ -153,22 +137,21 @@ function updateChart(selectedColumns) {
     });
 }
 
-    let allSeries = getAllSeries(scores, headerNames);
+function initializeChart() {
+    const headerRow = document.querySelector('#dataTable thead tr');
+    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
+    const { dates, scores } = extractDataFromTable();
+
+    allSeries = getAllSeries(scores, headerNames);
     const options = getChartOptions(dates);
     chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();    
-
-    // Hide all series initially
-    //allSeries.forEach((s, index) => chart.hideSeries(s.name));
 
     // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getAllSeriesWithCustomNames(scores, headerNames, selectedColumns);
-
-    // Update all series names with custom names
-    updateAllSeriesNames(selectedColumns);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -187,15 +170,16 @@ function updateChart(selectedColumns) {
 };
 
 function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
-    allSeries.length = 0; // clear the current content
+    const seriesList = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
-        allSeries.push({
+        seriesList.push({
             name: customNames[i - 1] || `score${i}`,  // Use custom name if available, otherwise generic name
             data: scoreData,
             visible: false  // Hide the series by default
         });
     }
+    return seriesList;
 }
 
 // The debounce function
