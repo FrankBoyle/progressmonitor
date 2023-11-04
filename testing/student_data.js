@@ -192,7 +192,7 @@ function initializeChart() {
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-    const options = getChartOptions(dates);
+    const options = getChartOptions(dates, trendlineSeriesData);
     chart = new ApexCharts(document.querySelector("#chart"), options);
     console.log("Extracted header names:", headerNames);
     console.log("Selected columns from checkboxes:", selectedColumns);
@@ -292,7 +292,7 @@ function getChartOptions(dates, trendlineSeriesData) {
         xaxis: {
             categories: dates
         },
-        colors: originalSeriesColors,
+        colors: [...originalSeriesColors, ...trendlineColors], // Concatenate original and trendline colors
     };
 }
 
