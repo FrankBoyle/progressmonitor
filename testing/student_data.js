@@ -147,8 +147,8 @@ function updateChart(selectedColumns) {
     console.log("New series data based on selected columns:", newSeriesData);
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
-    console.log(colorsArray);
     let colorsArray = generateColors(finalSeriesData);
+    console.log(colorsArray);
 
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
