@@ -11,7 +11,6 @@ let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
 // Initialize color objects for series and trendlines
 let seriesColors = {};
-let trendlineColors = {};
 
 console.log("Initial global variables:", {
     benchmark,
