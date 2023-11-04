@@ -28,7 +28,7 @@ $(function() {
     });
 });
 
-
+// Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
@@ -55,6 +55,7 @@ function extractDataFromTable() {
     return { dates, scores };
 }
 
+// Populates the series data based on selected columns, header map, and scores.
 function populateSeriesData(selectedColumns, headerMap, scores) {
     const seriesData = [];
     for (const col of selectedColumns) {
@@ -67,6 +68,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
  
+  // Generates a series list with scores and header names.
   function getAllSeries(scores, headerNames) {
     const seriesList = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
@@ -80,7 +82,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesList;
 }
 
-// Define a function to update the series names
+// Updates all series names based on provided custom column names.
 function updateAllSeriesNames(customColumnNames) {
     allSeries = allSeries.map((series, index) => {
         const customColumnName = customColumnNames[index] || headerNames[index + 1];
@@ -91,6 +93,7 @@ function updateAllSeriesNames(customColumnNames) {
     });
 }
 
+// Updates the chart based on selected columns.
 function updateChart(selectedColumns) {
     // Create a new series array based on selected columns
     const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
@@ -133,6 +136,7 @@ function updateChart(selectedColumns) {
     });
 }
 
+// Initializes the chart with default settings.
 function initializeChart() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
@@ -165,6 +169,7 @@ function initializeChart() {
     }, 50));
 };
 
+// Generates a series list with scores, header names, and custom names.
 function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
     const seriesList = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
