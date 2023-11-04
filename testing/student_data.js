@@ -294,7 +294,6 @@ function getChartOptions(dates) {
 }
 
 const trendlineOptions = {
-    color: '#FF0000', // Make sure this color is correctly set
     dashArray: 5,             // Makes the line dashed
     width: 2                  // Line width
 };
