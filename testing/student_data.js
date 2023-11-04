@@ -343,7 +343,6 @@ function getDefaultColors() {
     ];
 }
 // Generate colors and trendline colors
-
 function generateColors(finalSeriesData, trendlineSeriesData) {
     const seriesList = finalSeriesData.concat(trendlineSeriesData);
 
@@ -356,7 +355,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
             // Assign the same color for all non-trendline series
             const seriesColor = defaultColors[idx % defaultColors.length];
             seriesColors[series.name] = seriesColor;
-
+            
             // Set the trendline color to match the series color
             trendlineColors[series.name + ' Trendline'] = seriesColor;
         } else {
@@ -374,6 +373,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
+
 
 
 ////////////////////////////////////////////////
