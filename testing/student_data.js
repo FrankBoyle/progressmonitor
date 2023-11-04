@@ -165,7 +165,7 @@ chart.updateOptions({
     },
     stroke: {
         colors: finalSeriesData.map((series, idx) => 
-            series.name.includes('Trendline') ? trendlineOptions.color : undefined
+        series.name.includes('Trendline') ? trendlineOptions.color : 'defaultColorHere' // replace 'defaultColorHere' with a valid color or the original series color.
         ),
         width: finalSeriesData.map((series, idx) => 
             series.name.includes('Trendline') ? trendlineOptions.width : 2
