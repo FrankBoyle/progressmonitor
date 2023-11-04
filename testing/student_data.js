@@ -188,7 +188,7 @@ function initializeChart() {
 const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
 seriesColors = colorsAndTrendlineColors.seriesColors;
 trendlineColors = colorsAndTrendlineColors.trendlineColors;
-updateChart(selectedColumns, colorOptions);
+updateChart(selectedColumns, colorsAndTrendlineColors);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -202,7 +202,7 @@ updateChart(selectedColumns, colorOptions);
         chart.updateSeries(allSeries);
 
         // Update the chart with new series data and trendlines
-        updateChart(selectedColumns, colorOptions);
+updateChart(selectedColumns, colorsAndTrendlineColors);
     }, 50));
 };
 
