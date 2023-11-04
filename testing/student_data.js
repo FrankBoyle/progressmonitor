@@ -170,10 +170,13 @@ chart.updateOptions({
 
     stroke: {
         width: finalSeriesData.map(series =>
-            series.name.includes('Trendline') ? 2 : 4
+            series.name.includes('Trendline') ? trendlineOptions.width : 4
         ),
         dashArray: finalSeriesData.map(series =>
-            series.name.includes('Trendline') ? 5 : 0
+            series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+        ),
+        smooth: finalSeriesData.map(series =>
+            !series.name.includes('Trendline')  // Set smooth to true for non-trendline series
         )
     },
 });
