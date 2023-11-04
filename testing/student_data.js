@@ -254,7 +254,7 @@ var dataLabelsSettings = {
     }
 };
 
-function getChartOptions(dates) {
+function getChartOptions(dates, finalSeriesData) {
     return {
         series: [],
         chart: {
