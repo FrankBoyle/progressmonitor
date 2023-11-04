@@ -347,16 +347,21 @@ const defaultColors = getDefaultColors();
 function generateColors(finalSeriesData) {
     const defaultColors = getDefaultColors();
     const colors = [];
+    const colorMap = {};
 
     finalSeriesData.forEach((series, idx) => {
-        if (series.name.includes('Trendline')) {
-            // Get the color of the corresponding series (that's why we subtract 1 from idx)
-            colors.push(defaultColors[(idx - 1) % defaultColors.length]);
+        const seriesName = series.name;
+        if (seriesName.includes('Trendline')) {
+            // Use the same color for trendlines as their corresponding series
+            const correspondingSeriesName = seriesName.replace(' Trendline', '');
+            colors.push(colorMap[correspondingSeriesName]);
         } else {
-            colors.push(defaultColors[idx % defaultColors.length]);
+            const color = defaultColors[idx % defaultColors.length];
+            colors.push(color);
+            colorMap[seriesName] = color;
         }
     });
-    console.log(colors);
+
     return colors;
 }
 
