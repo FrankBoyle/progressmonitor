@@ -283,9 +283,18 @@ function getChartOptions(dates, trendlineSeriesData) {
         xaxis: {
             categories: dates
         },
-
+        stroke: {
+            width: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.width : 4
+            ),
+            dashArray: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+            ),
+            smooth: finalSeriesData.map(series =>
+                !series.name.includes('Trendline')  // Set smooth to true for non-trendline series
+            )
+        },
         colors: colorOptions.seriesColors, // Use seriesColors from the returned object
-
     };
 }
 
