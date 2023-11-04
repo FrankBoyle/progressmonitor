@@ -169,7 +169,18 @@ function updateChart(selectedColumns) {
             }
         },
         series: finalSeriesData,
-        colors: ['#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133', '#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133'],
+        colors: [
+            '#1f77b4', // Dark Blue
+            '#ff7f0e', // Dark Orange
+            '#2ca02c', // Dark Green
+            '#d62728', // Dark Red
+            '#9467bd', // Dark Purple
+            '#8c564b', // Dark Brown
+            '#e377c2', // Light Pink
+            '#7f7f7f', // Gray
+            '#bcbd22', // Olive Green
+            '#17becf'  // Turquoise
+          ],
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? 2 : 4
