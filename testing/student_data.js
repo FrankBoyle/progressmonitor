@@ -175,9 +175,6 @@ chart.updateOptions({
         dashArray: finalSeriesData.map(series =>
             series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
         ),
-        smooth: finalSeriesData.map(series =>
-            !series.name.includes('Trendline')  // Set smooth to true for non-trendline series
-        )
     },
 });
 
@@ -302,6 +299,8 @@ function calculateTrendline(data) {
     var sumXY = 0;
     var sumXX = 0;
     var count = 0;
+    data = data.filter(item => item !== null); // filter out null values
+
 
     data.forEach(function (y, x) { // Adjusting the loop here
         if (y !== null) {
