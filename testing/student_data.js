@@ -68,18 +68,29 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
  
-  // Generates a series list with scores and header names.
-  function getAllSeries(scores, headerNames) {
+// This function replaces both getAllSeries and getAllSeriesWithCustomNames
+function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
         seriesList.push({
-            name: `score${i}`,
+            name: customNames[i - 1] || `score${i}`,
             data: scoreData,
             visible: false  // Hide the series by default
         });
     }
     return seriesList;
+}
+
+// This function will now return the new series list
+function getUpdatedSeriesNames(seriesList, customColumnNames) {
+    return seriesList.map((series, index) => {
+        const customColumnName = customColumnNames[index] || headerNames[index + 1];
+        return {
+            ...series,
+            name: customColumnName,
+        };
+    });
 }
 
 // Updates all series names based on provided custom column names.
@@ -142,7 +153,7 @@ function initializeChart() {
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
 
-    allSeries = getAllSeries(scores, headerNames);
+    allSeries = getUpdatedSeriesNames(allSeries, customColumnNames);
     const options = getChartOptions(dates);
     chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();    
@@ -151,7 +162,7 @@ function initializeChart() {
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    allSeries = getAllSeriesWithCustomNames(scores, headerNames, selectedColumns);
+        allSeries = getUpdatedSeriesNames(allSeries, customColumnNames);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -168,20 +179,6 @@ function initializeChart() {
         updateChart(selectedColumns);
     }, 50));
 };
-
-// Generates a series list with scores, header names, and custom names.
-function getAllSeriesWithCustomNames(scores, headerNames, customNames) {
-    const seriesList = [];
-    for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
-        seriesList.push({
-            name: customNames[i - 1] || `score${i}`,  // Use custom name if available, otherwise generic name
-            data: scoreData,
-            visible: false  // Hide the series by default
-        });
-    }
-    return seriesList;
-}
 
 // The debounce function
 function debounce(func, wait) {
