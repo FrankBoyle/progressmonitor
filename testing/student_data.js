@@ -134,7 +134,7 @@ function generateFinalSeriesData(data, selectedColumns) {
     const finalSeriesData = [];
 
     for (let i = 0; i < selectedColumns.length; i++) {
-        const columnName = selectedColumns[i-1];
+        const columnName = selectedColumns[i];
         const columnData = data[columnName]; // Assuming 'data' is an object with column data
 
         if (columnData) {
@@ -195,31 +195,28 @@ function updateChart(selectedColumns, seriesColors, trendlineColors) {
     });
 }
 
-// Initialize the chart and update functions
+// Initializes the chart with default settings.
 function initializeChart() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
-    allSeries = generateSeriesData(scores, headerNames); // Update series data
+    allSeries = generateSeriesData(scores, headerNames); // Add this line
 
     // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, trendlineSeriesData));
+    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, trendlineSeriesData, seriesColors, trendlineColors));
     console.log("Extracted header names:", headerNames);
     console.log("Selected columns from checkboxes:", selectedColumns);
 
-    chart.render();
-
-    // Generate colors for series and trendlines
-    const colorsAndTrendlineColors = generateColors(allSeries, trendlineSeriesData);
-    seriesColors = colorsAndTrendlineColors.seriesColors;
-    trendlineColors = colorsAndTrendlineColors.trendlineColors;
-
-    // Update the chart with initial data
-    updateChart(selectedColumns, seriesColors, trendlineColors);
+    chart.render();    
+// Generate colors for series and trendlines
+const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
+seriesColors = colorsAndTrendlineColors.seriesColors;
+trendlineColors = colorsAndTrendlineColors.trendlineColors;
+updateChart(selectedColumns, seriesColors, trendlineColors); 
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -233,9 +230,9 @@ function initializeChart() {
         chart.updateSeries(allSeries);
 
         // Update the chart with new series data and trendlines
-        updateChart(selectedColumns, seriesColors, trendlineColors);
+updateChart(selectedColumns, colorsAndTrendlineColors);
     }, 0));
-}
+};
 
 // The debounce function
 function debounce(func, wait) {
