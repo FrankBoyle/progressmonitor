@@ -376,14 +376,17 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
     const colors = {};
     const trendlineColors = {};
 
+    // Assign colors to series
     finalSeriesData.forEach((series, idx) => {
-        const seriesName = series.name;
-        if (seriesName.includes('Trendline')) {
-            const correspondingSeriesName = seriesName.replace(' Trendline', '');
-            trendlineColors[correspondingSeriesName] = defaultColors[idx % defaultColors.length];
-        } else {
-            colors[seriesName] = defaultColors[idx % defaultColors.length];
+        if (!series.name.includes('Trendline')) {
+            colors[series.name] = defaultColors[idx % defaultColors.length];
         }
+    });
+
+    // Assign trendline colors based on corresponding series names
+    trendlineSeriesData.forEach((trendline, idx) => {
+        const correspondingSeriesName = trendline.name.replace(' Trendline', '');
+        trendlineColors[correspondingSeriesName] = defaultColors[idx % defaultColors.length];
     });
 
     // Create arrays from color objects
@@ -395,7 +398,6 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     return { colors: seriesColors, trendlineColors: trendlineSeriesColors };
 }
-
 
 function generateDarkerColors(colors) {
     const darkerColors = [];
