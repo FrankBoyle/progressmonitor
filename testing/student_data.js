@@ -130,7 +130,7 @@ function updateAllSeriesNames(customColumnNames) {
     });
 }
 
-// Updates the chart based on selected columns.
+// Update the chart based on selected columns.
 function updateChart(selectedColumns, colorOptions) {
     // Clear existing series data
     chart.updateSeries([]);
@@ -146,7 +146,9 @@ function updateChart(selectedColumns, colorOptions) {
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            ...trendlineOptions
+            ...trendlineOptions,
+            // Set the trendline color to match the series color
+            color: series.color,
         });
     });
 
@@ -155,30 +157,25 @@ function updateChart(selectedColumns, colorOptions) {
     console.log("New series data based on selected columns:", newSeriesData);
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
-    // Generate colors for series and trendlines
-    colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
-    seriesColors = colorsAndTrendlineColors.seriesColors;
-    trendlineColors = colorsAndTrendlineColors.trendlineColors;
 
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
     // Update series names in the legend
-    // Update series names in the legend
-chart.updateOptions({
-    // ... (other options)
+    chart.updateOptions({
+        // ... (other options)
 
-    stroke: {
-        width: finalSeriesData.map(series =>
-            series.name.includes('Trendline') ? trendlineOptions.width : 4
-        ),
-        dashArray: finalSeriesData.map(series =>
-            series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
-        ),
-    },
-});
-
+        stroke: {
+            width: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.width : 4
+            ),
+            dashArray: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+            ),
+        },
+    });
 }
+
 
 // Initializes the chart with default settings.
 function initializeChart() {
@@ -359,6 +356,8 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
         if (!series.name.includes('Trendline')) {
             // Assign the same color for all non-trendline series
             seriesColors[series.name] = defaultColors[0];
+            // Set the trendline color to match the series color
+            trendlineColors[`${series.name} Trendline`] = defaultColors[0];
         } else {
             // Assign a different color for trendlines
             trendlineColors[series.name] = defaultColors[1];
@@ -374,6 +373,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
+
 
 ////////////////////////////////////////////////
 
