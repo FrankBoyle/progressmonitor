@@ -69,7 +69,7 @@ function extractDataFromTable() {
     });
     console.log("Extracted dates:", dates);
     console.log("Extracted scores:", scores);
-    
+
     return { dates, scores };
 }
 
@@ -88,10 +88,10 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
 
-  // Modify generateSeriesData to skip dates with missing values
+// Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
-    for (let i = 1; i < headerNames.length - 1; i++) {
+    for (let i = 1; i < headerNames.length; i++) { // Changed the loop condition
         const scoreData = scores.map(row => row[i - 1]);
         const seriesData = scoreData.filter(value => !isNaN(value)); // Filter out NaN values
         seriesList.push({
@@ -150,12 +150,12 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update function signature
+function updateChart(selectedColumns, seriesColors, trendlineColors) {
     // Clear existing series data
     chart.updateSeries([]);
 
     // Create a new series array based on selected columns
-    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
+    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index]));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
@@ -195,29 +195,31 @@ function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update
     });
 }
 
-
-// Initializes the chart with default settings.
+// Initialize the chart and update functions
 function initializeChart() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
-    allSeries = generateSeriesData(scores, headerNames); // Add this line
+    allSeries = generateSeriesData(scores, headerNames); // Update series data
 
     // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, trendlineSeriesData, seriesColors, trendlineColors));
+    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, trendlineSeriesData));
     console.log("Extracted header names:", headerNames);
     console.log("Selected columns from checkboxes:", selectedColumns);
 
-    chart.render();    
-// Generate colors for series and trendlines
-const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
-seriesColors = colorsAndTrendlineColors.seriesColors;
-trendlineColors = colorsAndTrendlineColors.trendlineColors;
-updateChart(selectedColumns, seriesColors, trendlineColors); 
+    chart.render();
+
+    // Generate colors for series and trendlines
+    const colorsAndTrendlineColors = generateColors(allSeries, trendlineSeriesData);
+    seriesColors = colorsAndTrendlineColors.seriesColors;
+    trendlineColors = colorsAndTrendlineColors.trendlineColors;
+
+    // Update the chart with initial data
+    updateChart(selectedColumns, seriesColors, trendlineColors);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -231,9 +233,9 @@ updateChart(selectedColumns, seriesColors, trendlineColors);
         chart.updateSeries(allSeries);
 
         // Update the chart with new series data and trendlines
-updateChart(selectedColumns, colorsAndTrendlineColors);
+        updateChart(selectedColumns, seriesColors, trendlineColors);
     }, 0));
-};
+}
 
 // The debounce function
 function debounce(func, wait) {
