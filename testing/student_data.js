@@ -3,7 +3,7 @@ var benchmarkSeriesIndex = null; // It's null initially because the series index
 var selectedChartType = 'line'; // Default chart type
 var xCategories = [];
 let chart = null; // This makes the chart variable accessible throughout the script
-let headerNames;  // Declare it outside
+let headerNames = [];  // Declare it outside
 let allSeries = [];
 
 
@@ -84,10 +84,9 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 }
 
 // Define a function to update the series names
-function updateSeriesNames(selectedColumns) {
-    // Update the series names based on selected columns
+function updateAllSeriesNames(customColumnNames) {
     allSeries = allSeries.map((series, index) => {
-        const customColumnName = selectedColumns[index]; // Get custom column name from the checkbox
+        const customColumnName = customColumnNames[index] || headerNames[index + 1];
         return {
             ...series,
             name: customColumnName,
