@@ -9,6 +9,9 @@ let allSeries = [];  // Will store all data series.
 let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
+// Initialize color objects for series and trendlines
+let seriesColors = {};
+let trendlineColors = {};
 
 console.log("Initial global variables:", {
     benchmark,
@@ -346,31 +349,27 @@ function getDefaultColors() {
 const defaultColors = getDefaultColors();
 
 function generateColors(finalSeriesData, trendlineSeriesData) {
-    const defaultColors = getDefaultColors();
-    const colors = {};
-    const trendlineColors = {};
+    const seriesList = finalSeriesData.concat(trendlineSeriesData);
 
-    // Assign colors to series
-    finalSeriesData.forEach((series, idx) => {
+    // Assign colors to series and trendlines
+    seriesList.forEach((series, idx) => {
         if (!series.name.includes('Trendline')) {
-            colors[series.name] = defaultColors[idx % defaultColors.length];
+            seriesColors[series.name] = defaultColors[idx % defaultColors.length];
+        } else {
+            // Assign trendline colors based on corresponding series names
+            const correspondingSeriesName = series.name.replace(' Trendline', '');
+            trendlineColors[correspondingSeriesName] = defaultColors[idx % defaultColors.length];
         }
     });
 
-    // Assign trendline colors based on corresponding series names
-    trendlineSeriesData.forEach((trendline, idx) => {
-        const correspondingSeriesName = trendline.name.replace(' Trendline', '');
-        trendlineColors[correspondingSeriesName] = defaultColors[idx % defaultColors.length];
-    });
+    // Convert color objects to arrays
+    const seriesColorArray = Object.values(seriesColors);
+    const trendlineColorArray = Object.values(trendlineColors);
 
-    // Create arrays from color objects
-    const seriesColors = Object.values(colors);
-    const trendlineSeriesColors = Object.values(trendlineColors);
+    console.log("Series colors:", seriesColorArray);
+    console.log("Trendline colors:", trendlineColorArray);
 
-    console.log("colors is:", seriesColors);
-    console.log("trendlineColors is:", trendlineSeriesColors);
-
-    return { colors: seriesColors, trendlineColors: trendlineSeriesColors };
+    return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
 
 function generateDarkerColors(colors) {
