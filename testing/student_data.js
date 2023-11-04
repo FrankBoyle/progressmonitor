@@ -167,7 +167,7 @@ function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update
             type: 'line',
             ...trendlineOptions,
             // Set the trendline color to match the series color
-            color: trendlineColors[series.name.replace(' Trendline', '')], // Remove ' Trendline' when looking up the color
+            //color: trendlineColors[series.name.replace(' Trendline', '')], // Remove ' Trendline' when looking up the color
         });
     });
 
