@@ -169,7 +169,7 @@ chart.updateOptions({
     },
     series: finalSeriesData, // this is your series data
 
-    colors: generateColors(finalSeriesData),
+    colors: ['#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133', '#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133'],
 
     stroke: {
         width: finalSeriesData.map(series => 
