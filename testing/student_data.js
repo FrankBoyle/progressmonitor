@@ -269,14 +269,8 @@ var dataLabelsSettings = {
     }
 };
 
-function getChartOptions(dates, trendlineSeriesData, seriesColors, trendlineColors) {
-// Generate colors for series and trendlines
-colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
-seriesColors = colorsAndTrendlineColors.seriesColors;
-trendlineColors = colorsAndTrendlineColors.trendlineColors;
-
-    seriesColors = colors.slice(0, allSeries.length);
-    trendlineSeriesColors = trendlineColors.slice(0, trendlineSeriesData.length);
+function getChartOptions(dates, trendlineSeriesData) {
+    const colorOptions = generateColors(finalSeriesData, trendlineSeriesData);
 
     return {
         series: finalSeriesData,
@@ -294,7 +288,7 @@ trendlineColors = colorsAndTrendlineColors.trendlineColors;
         xaxis: {
             categories: dates
         },
-        colors: seriesColors,
+        colors: colorOptions.seriesColors, // Use seriesColors from the returned object
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? 2 : 4
@@ -302,10 +296,11 @@ trendlineColors = colorsAndTrendlineColors.trendlineColors;
             dashArray: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? 5 : 0
             ),
-            colors: trendlineColors, // Add trendline colors here
+            colors: colorOptions.trendlineColors, // Use trendlineColors from the returned object
         },
     };
 }
+
 
 const trendlineOptions = {
     dashArray: 5,             // Makes the line dashed
