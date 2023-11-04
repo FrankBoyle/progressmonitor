@@ -152,6 +152,8 @@ function updateChart(selectedColumns) {
     console.log("New series data based on selected columns:", newSeriesData);
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
+    // Generate colors for series and trendlines
+    const { colors, trendlineColors } = generateColors(finalSeriesData, trendlineSeriesData);
 
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
@@ -358,7 +360,7 @@ function getDefaultColors() {
 }
 const defaultColors = getDefaultColors();
 
-function generateColors(finalSeriesData) {
+function generateColors(finalSeriesData, trendlineSeriesData) {
     const defaultColors = getDefaultColors();
     const colors = [];
     const trendlineColors = [];
