@@ -92,7 +92,10 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => row[i - 1]);
+        const scoreData = scores.map(row => {
+            const value = row[i - 1];
+            return isNaN(value) ? 0 : value; // Replace NaN with 0
+        });
         seriesList.push({
             name: customNames[i - 1] || `score${i}`,
             data: scoreData,
