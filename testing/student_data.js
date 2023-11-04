@@ -1,13 +1,14 @@
+// Defining global variables for the script.
 var benchmark = null;
 var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
-var selectedChartType = 'line'; // Default chart type
+var selectedChartType = 'line';  // Default chart type
 var xCategories = [];
-let chart = null; // This makes the chart variable accessible throughout the script
-let headerNames = [];  // Declare it outside
-let allSeries = [];
-let dates = []; // Defined in a higher scope
+let chart = null;  // This makes the chart variable accessible throughout the script.
+let headerNames = [];  // Will store header names extracted from the table.
+let allSeries = [];  // Will store all data series.
+let dates = [];  // To store extracted dates from table rows.
 
-
+// Initialize the accordion.
 $(function() {
     $("#accordion").accordion({
         collapsible: true,
@@ -15,16 +16,18 @@ $(function() {
         active: false, // Ensure all panels are closed initially
         activate: function(event, ui) {
             if (ui.newPanel.has('#chart').length) {
-                // Check if the chart is already initialized.
+                // If the chart is not yet initialized, do so.
+                // Otherwise, refresh the chart.
                 if (!chart) {
-                    initializeChart(); // Initialize the chart the first time.
+                    initializeChart();
                 } else {
-                    chart.updateSeries(chart.w.globals.series); // Refresh or update if needed.
+                    chart.updateSeries(chart.w.globals.series);
                 }
             }
         }
     });
 });
+
 
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
