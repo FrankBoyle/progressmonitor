@@ -350,7 +350,6 @@ function getDefaultColors() {
         '#D433FF'
     ];
 }
-const defaultColors = getDefaultColors();
 // Generate colors and trendline colors
 
 function generateColors(finalSeriesData, trendlineSeriesData) {
