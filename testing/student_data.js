@@ -130,6 +130,25 @@ function updateAllSeriesNames(customColumnNames) {
     });
 }
 
+function generateFinalSeriesData(data, selectedColumns) {
+    const finalSeriesData = [];
+
+    for (let i = 0; i < selectedColumns.length; i++) {
+        const columnName = selectedColumns[i];
+        const columnData = data[columnName]; // Assuming 'data' is an object with column data
+
+        if (columnData) {
+            finalSeriesData.push({
+                name: columnName,
+                data: columnData,
+                // Additional properties for the series, if needed
+            });
+        }
+    }
+
+    return finalSeriesData;
+}
+
 // Update the chart based on selected columns.
 function updateChart(selectedColumns, colorOptions) {
     // Clear existing series data
