@@ -26,13 +26,6 @@ $(function() {
     });
 });
 
-$("#accordion").on("accordionactivate", function(event, ui) {
-    if (ui.newPanel.is(":contains('#chart')")) {
-        // Assuming 'chart' is the variable where your ApexChart instance is stored.
-        chart.updateSeries(chart.w.globals.series);
-    }
-});
-
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
