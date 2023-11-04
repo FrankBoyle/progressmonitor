@@ -130,52 +130,36 @@ function updateAllSeriesNames(customColumnNames) {
     });
 }
 
-// Update the chart based on selected columns.
-function updateChart(selectedColumns, colorOptions) {
-    // Clear existing series data
-    chart.updateSeries([]);
+function generateColors(finalSeriesData, trendlineSeriesData) {
+    const seriesList = finalSeriesData.concat(trendlineSeriesData);
 
-    // Create a new series array based on selected columns
-    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
+    const seriesColors = {};
+    const trendlineColors = {};
+    const defaultColors = getDefaultColors(); // Get default colors
 
-    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    const trendlineSeriesData = [];
-    newSeriesData.forEach(series => {
-        const trendlineData = getTrendlineData(series.data);
-        trendlineSeriesData.push({
-            name: series.name + ' Trendline',
-            data: trendlineData,
-            type: 'line',
-            ...trendlineOptions,
+    seriesList.forEach((series, idx) => {
+        if (!series.name.includes('Trendline')) {
+            // Assign the same color for all non-trendline series
+            const seriesColor = defaultColors[idx % defaultColors.length];
+            seriesColors[series.name] = seriesColor;
+
             // Set the trendline color to match the series color
-            color: series.color,
-        });
+            trendlineColors[series.name + ' Trendline'] = seriesColor;
+        } else {
+            // Assign a different color for trendlines
+            trendlineColors[series.name] = defaultColors[defaultColors.length - 1];
+        }
     });
 
-    // Add trendline data to series
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    console.log("New series data based on selected columns:", newSeriesData);
-    console.log("Trendline series data:", trendlineSeriesData);
-    console.log("Final series data for updating the chart:", finalSeriesData);
+    // Convert color objects to arrays
+    const seriesColorArray = Object.values(seriesColors);
+    const trendlineColorArray = Object.values(trendlineColors);
 
-    // Update the chart with the new series data and updated names
-    chart.updateSeries(finalSeriesData);
+    console.log("Series colors:", seriesColorArray);
+    console.log("Trendline colors:", trendlineColorArray);
 
-    // Update series names in the legend
-    chart.updateOptions({
-        // ... (other options)
-
-        stroke: {
-            width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.width : 4
-            ),
-            dashArray: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
-            ),
-        },
-    });
+    return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
-
 
 // Initializes the chart with default settings.
 function initializeChart() {
@@ -355,12 +339,14 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
     seriesList.forEach((series, idx) => {
         if (!series.name.includes('Trendline')) {
             // Assign the same color for all non-trendline series
-            seriesColors[series.name] = defaultColors[0];
+            const seriesColor = defaultColors[idx % defaultColors.length];
+            seriesColors[series.name] = seriesColor;
+
             // Set the trendline color to match the series color
-            trendlineColors[`${series.name} Trendline`] = defaultColors[0];
+            trendlineColors[series.name + ' Trendline'] = seriesColor;
         } else {
             // Assign a different color for trendlines
-            trendlineColors[series.name] = defaultColors[1];
+            trendlineColors[series.name] = defaultColors[defaultColors.length - 1];
         }
     });
 
