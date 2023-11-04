@@ -176,7 +176,9 @@ function updateChart(selectedColumns, colorOptions) {
     console.log("New series data based on selected columns:", newSeriesData);
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
-
+// In the updateChart function:
+console.log("Series colors:", colorsAndTrendlineColors.seriesColors);
+console.log("Trendline colors:", colorsAndTrendlineColors.trendlineColors);
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
@@ -278,7 +280,8 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData) {
     const colorOptions = generateColors(finalSeriesData, trendlineSeriesData);
-    console.log(colorOptions);
+    // In the getChartOptions function:
+console.log("Colors in getChartOptions:", colorOptions.seriesColors, colorOptions.trendlineColors);
     return {
         series: finalSeriesData,
         chart: {
