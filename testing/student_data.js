@@ -163,17 +163,18 @@ chart.updateOptions({
             }
         }
     },
+    series: finalSeriesData, // this is your series data
+
+    colors: generateColors(finalSeriesData),
+
     stroke: {
-        colors: finalSeriesData.map((series, idx) => 
-        series.name.includes('Trendline') ? trendlineOptions.color : 'defaultColorHere' // replace 'defaultColorHere' with a valid color or the original series color.
+        width: finalSeriesData.map(series => 
+            series.name.includes('Trendline') ? 2 : 1
         ),
-        width: finalSeriesData.map((series, idx) => 
-            series.name.includes('Trendline') ? trendlineOptions.width : 2
-        ),
-        dashArray: finalSeriesData.map((series, idx) => 
-            series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+        dashArray: finalSeriesData.map(series => 
+            series.name.includes('Trendline') ? 5 : 0
         )
-    }
+    },
 });
 }
 
@@ -189,7 +190,7 @@ function initializeChart() {
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-    const options = getChartOptions(dates, finalSeriesData);
+    const options = getChartOptions(dates);
     chart = new ApexCharts(document.querySelector("#chart"), options);
     console.log("Extracted header names:", headerNames);
     console.log("Selected columns from checkboxes:", selectedColumns);
@@ -254,7 +255,7 @@ var dataLabelsSettings = {
     }
 };
 
-function getChartOptions(dates, finalSeriesData) {
+function getChartOptions(dates) {
     return {
         series: [],
         chart: {
@@ -281,17 +282,12 @@ function getChartOptions(dates, finalSeriesData) {
             }
         },
         stroke: {
-            width: finalSeriesData.map(series => 
-                series.name.includes('Trendline') ? 2 : 1
-            ),
-            dashArray: finalSeriesData.map(series => 
-                series.name.includes('Trendline') ? 5 : 0
-            )
+            curve: 'smooth',
+            size: 2
         },
         xaxis: {
             categories: dates
         },
-        colors: generateColors(finalSeriesData),
     };
 }
 
