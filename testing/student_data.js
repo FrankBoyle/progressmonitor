@@ -165,30 +165,6 @@ trendlineColors = colorsAndTrendlineColors.trendlineColors;
     chart.updateSeries(finalSeriesData);
 
     // Update series names in the legend
-    chart.updateOptions({
-        xaxis: {
-            categories: dates
-        },
-        yaxis: {
-            labels: {
-                formatter: function (val) {
-                    return parseFloat(val).toFixed(0);
-                }
-            }
-        },
-        series: finalSeriesData,
-
-        stroke: {
-            width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? 2 : 4
-            ),
-            dashArray: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? 5 : 0
-            )
-        },
-        colors: colorOptions.seriesColors, // Use seriesColors from the returned object
-
-    });
 }
 
 // Initializes the chart with default settings.
