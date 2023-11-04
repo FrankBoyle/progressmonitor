@@ -133,7 +133,7 @@ function updateChart(selectedColumns) {
     const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    trendlineSeriesData = [...trendlineSeriesData, ...newTrendlineSeriesData];
+    trendlineSeriesData = [...trendlineSeriesData, ...trendlineSeriesData];
     newSeriesData.forEach(series => {
         const trendlineData = getTrendlineData(series.data);
         trendlineSeriesData.push({
