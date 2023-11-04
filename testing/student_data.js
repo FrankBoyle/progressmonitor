@@ -10,9 +10,8 @@ let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
 // Initialize color objects for series and trendlines
-const defaultColors = getDefaultColors();
-// Generate colors and trendline colors
-const { seriesColors, trendlineColors } = generateColors(allSeries, trendlineSeriesData);
+let seriesColors = {};
+let trendlineColors = {};
 
 console.log("Initial global variables:", {
     benchmark,
@@ -346,6 +345,9 @@ function getDefaultColors() {
         '#D433FF'
     ];
 }
+const defaultColors = getDefaultColors();
+// Generate colors and trendline colors
+const { seriesColors, trendlineColors } = generateColors(allSeries, trendlineSeriesData);
 
 // Initialize the chart
 initializeChart();
