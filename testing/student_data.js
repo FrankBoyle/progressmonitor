@@ -5,6 +5,7 @@ var xCategories = [];
 let chart = null; // This makes the chart variable accessible throughout the script
 let headerNames = [];  // Declare it outside
 let allSeries = [];
+let dates = []; // Defined in a higher scope
 
 
 $(function() {
