@@ -1,8 +1,8 @@
-// Defining global letiables for the script.
-let benchmark = null;
-let benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
-let selectedChartType = 'line';  // Default chart type
-let xCategories = [];
+// Defining global variables for the script.
+var benchmark = null;
+var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
+var selectedChartType = 'line';  // Default chart type
+var xCategories = [];
 let chart = null;  // This makes the chart variable accessible throughout the script.
 let headerNames = [];  // Will store header names extracted from the table.
 let allSeries = [];  // Will store all data series.
@@ -214,7 +214,7 @@ function initializeChart() {
 
     chart.render();    
 // Generate colors for series and trendlines
-const colorsAndTrendlineColors = generateDeterministicColors(finalSeriesData);
+const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
 seriesColors = colorsAndTrendlineColors.seriesColors;
 trendlineColors = colorsAndTrendlineColors.trendlineColors;
 updateChart(selectedColumns, seriesColors, trendlineColors); 
@@ -247,15 +247,15 @@ function debounce(func, wait) {
     };
 }
 
-let dataSeries = [
+var dataSeries = [
     //... Your series data ...
 ];
 
 // Create the data labels settings
-let dataLabelsSettings = {
+var dataLabelsSettings = {
     enabled: true,
     formatter: function(val, opts) {
-        let seriesName = opts.w.config.series[opts.seriesIndex].name;
+        var seriesName = opts.w.config.series[opts.seriesIndex].name;
 
         // Hide data labels for 'Benchmark' and 'Trendline'.
         if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) {
@@ -278,7 +278,7 @@ let dataLabelsSettings = {
 };
 
 function getChartOptions(dates, trendlineSeriesData) {
-    const colorOptions = generateDeterministicColors(finalSeriesData);;
+    const colorOptions = generateColors(finalSeriesData, trendlineSeriesData);
     // In the getChartOptions function:
 console.log("Colors in getChartOptions:", colorOptions.seriesColors, colorOptions.trendlineColors);
     return {
@@ -354,48 +354,34 @@ function getTrendlineData(seriesData) {
     return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
 }
 
-// Define a fixed set of primary colors.
-const primaryColors = [
-    '#FF5733', '#33FF57', '#5733FF',
-    '#FF33A1', '#FFD133', '#33FFE0',
-    '#A233FF', '#FF8333', '#33A1FF',
-    '#D433FF'
-];
-
-// Function to generate a lighter shade of a given color.
-function getLighterColor(hex, lum) {
-    hex = String(hex).replace(/[^0-9a-f]/gi, '');
-    lum = lum || 0;
-    let rgb = "#", c;
-    for (let i = 0; i < 3; i++) {
-        c = parseInt(hex.substr(i * 2, 2), 16);
-        c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-        rgb += ("00" + c).substr(c.length);
-    }
-    return rgb;
+function getDefaultColors() {
+    return [
+        '#FF5733', '#33FF57', '#5733FF', 
+        '#FF33A1', '#FFD133', '#33FFE0', 
+        '#A233FF', '#FF8333', '#33A1FF', 
+        '#D433FF'
+    ];
 }
+// Generate colors and trendline colors
+function generateColors(finalSeriesData, trendlineSeriesData) {
+    const seriesList = finalSeriesData.concat(trendlineSeriesData);
 
-// Generate colors and trendline colors deterministically.
-function generateDeterministicColors(finalSeriesData) {
     const seriesColors = {};
     const trendlineColors = {};
+    const defaultColors = getDefaultColors(); // Get default colors
 
-    finalSeriesData.forEach((series, idx) => {
-        // Use primary color or generate a new one if index exceeds the primary color list.
-        let color;
-        if (idx < primaryColors.length) {
-            color = primaryColors[idx];
+    seriesList.forEach((series, idx) => {
+        if (!series.name.includes('Trendline')) {
+            // Assign the same color for all non-trendline series
+            const seriesColor = defaultColors[idx % defaultColors.length];
+            seriesColors[series.name] = seriesColor;
         } else {
-            // Generate a new color programmatically (This can be refined).
-            // For simplicity, we're just altering the shade here.
-            color = getLighterColor(primaryColors[idx % primaryColors.length], -0.1 * (Math.floor(idx / primaryColors.length)));
+            // Assign a different color for trendlines
+            trendlineColors[series.name] = defaultColors[defaultColors.length - 1];
         }
-        seriesColors[series.name] = color;
-        // For the trendline color, use a lighter shade of the series color.
-        trendlineColors[series.name + ' Trendline'] = getLighterColor(color, 0.5);
     });
 
-    // Convert color objects to arrays.
+    // Convert color objects to arrays
     const seriesColorArray = Object.values(seriesColors);
     const trendlineColorArray = Object.values(trendlineColors);
 
@@ -859,7 +845,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         });
 
         $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
-            let date = data.split('/');
+            var date = data.split('/');
             return (date[2] + date[0] + date[1]) * 1;
         };
 
