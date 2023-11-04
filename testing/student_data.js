@@ -199,7 +199,6 @@ function initializeChart() {
 
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
     chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, trendlineSeriesData));
-    chart = new ApexCharts(document.querySelector("#chart"), options);
     console.log("Extracted header names:", headerNames);
     console.log("Selected columns from checkboxes:", selectedColumns);
 
@@ -347,6 +346,11 @@ function getDefaultColors() {
     ];
 }
 const defaultColors = getDefaultColors();
+// Generate colors and trendline colors
+const { seriesColors, trendlineColors } = generateColors(allSeries, trendlineSeriesData);
+
+// Initialize the chart
+initializeChart();
 
 function generateColors(finalSeriesData, trendlineSeriesData) {
     const seriesList = finalSeriesData.concat(trendlineSeriesData);
