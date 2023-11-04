@@ -168,17 +168,6 @@ function updateChart(selectedColumns, colorOptions) {
 chart.updateOptions({
     // ... (other options)
 
-    stroke: {
-        width: finalSeriesData.map(series =>
-            series.name.includes('Trendline') ? trendlineOptions.width : 4
-        ),
-        dashArray: finalSeriesData.map(series =>
-            series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
-        ),
-        smooth: finalSeriesData.map(series =>
-            !series.name.includes('Trendline')  // Set smooth to true for non-trendline series
-        )
-    },
 });
 
 }
