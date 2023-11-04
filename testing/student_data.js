@@ -127,7 +127,6 @@ function updateAllSeriesNames(customColumnNames) {
 
 // Updates the chart based on selected columns.
 function updateChart(selectedColumns) {
-    let colorsArray = generateColors(finalSeriesData);
     // Create a new series array based on selected columns
     const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
@@ -149,6 +148,7 @@ function updateChart(selectedColumns) {
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
     console.log(colorsArray);
+    let colorsArray = generateColors(finalSeriesData);
 
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
