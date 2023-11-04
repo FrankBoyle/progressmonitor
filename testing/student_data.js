@@ -198,7 +198,7 @@ function initializeChart() {
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-    const options = getChartOptions(dates, trendlineSeriesData);
+    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, trendlineSeriesData));
     chart = new ApexCharts(document.querySelector("#chart"), options);
     console.log("Extracted header names:", headerNames);
     console.log("Selected columns from checkboxes:", selectedColumns);
