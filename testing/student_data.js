@@ -283,6 +283,10 @@ function getChartOptions(dates) {
                 }
             }
         },
+        stroke: {
+            curve: 'smooth',
+            size: 2
+        },
         xaxis: {
             categories: dates
         },
