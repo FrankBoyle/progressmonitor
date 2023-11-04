@@ -62,18 +62,16 @@ function extractDataFromTable() {
         const rowScores = [];
 
         scoreCells.forEach((cell) => {
-            const score = parseInt(cell.textContent.trim() || '0', 10); // Replace empty cells with 0
-            rowScores.push(isNaN(score) ? null : score); // Handle empty cells as null
+            rowScores.push(parseInt(cell.textContent || '0', 10));
         });
 
         scores.push(rowScores);
     });
     console.log("Extracted dates:", dates);
     console.log("Extracted scores:", scores);
-
+    
     return { dates, scores };
 }
-
 
 // Populates the series data based on selected columns, header map, and scores.
 function populateSeriesData(selectedColumns, headerMap, scores) {
@@ -295,55 +293,37 @@ const trendlineOptions = {
     width: 2                  // Line width
 };
 
-// Calculate trendline slope and intercept
 function calculateTrendline(data) {
-    let sumX = 0;
-    let sumY = 0;
-    let sumXY = 0;
-    let sumXX = 0;
-    let n = 0; // Count of non-null values
+    var sumX = 0;
+    var sumY = 0;
+    var sumXY = 0;
+    var sumXX = 0;
+    var count = 0;
+    data = data.filter(item => item !== null); // filter out null values
 
-    for (let i = 0; i < data.length; i++) {
-        const x = i + 1; // X values are 1-based
-        const y = data[i];
 
-        if (y !== null && !isNaN(y)) {
+    data.forEach(function (y, x) { // Adjusting the loop here
+        if (y !== null) {
             sumX += x;
             sumY += y;
             sumXY += x * y;
             sumXX += x * x;
-            n++;
+            count++;
         }
-    }
-
-    if (n === 0) {
-        // Handle the case where all values are null
-        return { slope: 0, intercept: 0 };
-    }
-
-    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-    const intercept = (sumY - slope * sumX) / n;
-
-    return { slope, intercept };
-}
-
-
-// Function to create trendline series
-function createTrendlineSeries(data, slope, intercept) {
-    const trendlineData = data.map((y, i) => {
-        const x = i + 1; // X values are 1-based
-        if (y === null || isNaN(y)) {
-            return null;
-        }
-        return slope * x + intercept;
     });
 
-    return trendlineData;
-}
+    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / count;
+    console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
 
-console.log('Trendline slope:', slope);
-console.log('Trendline intercept:', intercept);
-console.log('Trendline series data:', trendlineData);
+    // Debugging print statements
+    console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
+    console.log("slope:", slope, "intercept:", intercept);
+
+    return function (x) {
+        return slope * x + intercept;
+    };
+}
 
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
