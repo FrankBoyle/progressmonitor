@@ -128,7 +128,7 @@ function updateAllSeriesNames(customColumnNames) {
 // Updates the chart based on selected columns.
 function updateChart(selectedColumns) {
     // Create a new series array based on selected columns
-    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
+    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
@@ -175,6 +175,7 @@ function initializeChart() {
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
+    allSeries = generateSeriesData(scores, headerNames); // Add this line
 
     // Get the custom column names from the checkboxes
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
