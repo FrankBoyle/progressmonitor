@@ -134,7 +134,7 @@ function generateFinalSeriesData(data, selectedColumns) {
     const finalSeriesData = [];
 
     for (let i = 0; i < selectedColumns.length; i++) {
-        const columnName = selectedColumns[i];
+        const columnName = selectedColumns[i-1];
         const columnData = data[columnName]; // Assuming 'data' is an object with column data
 
         if (columnData) {
