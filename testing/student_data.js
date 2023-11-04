@@ -278,7 +278,7 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData) {
     const colorOptions = generateColors(finalSeriesData, trendlineSeriesData);
-
+    console.log(colorOptions);
     return {
         series: finalSeriesData,
         chart: {
