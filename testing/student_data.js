@@ -258,8 +258,8 @@ var dataLabelsSettings = {
 };
 
 function getChartOptions(dates) {
-    const trendlineColors = generateColors(trendlineSeriesData);
-    const originalSeriesColors = generateDarkerColors(trendlineColors);
+    const { colors, trendlineColors } = generateColors(finalSeriesData);
+    const originalSeriesColors = generateDarkerColors(colors);
     return {
         series: finalSeriesData,
         chart: {
@@ -349,46 +349,36 @@ const defaultColors = getDefaultColors();
 function generateColors(finalSeriesData) {
     const defaultColors = getDefaultColors();
     const colors = [];
-    const colorMap = {};
+    const trendlineColors = [];
 
     finalSeriesData.forEach((series, idx) => {
         const seriesName = series.name;
         if (seriesName.includes('Trendline')) {
-            // Use the same color for trendlines as their corresponding series
-            const correspondingSeriesName = seriesName.replace(' Trendline', '');
-            colors.push(colorMap[correspondingSeriesName]);
+            trendlineColors.push(defaultColors[idx % defaultColors.length]);
         } else {
-            const color = defaultColors[idx % defaultColors.length];
-            colors.push(color);
-            colorMap[seriesName] = color;
+            colors.push(defaultColors[idx % defaultColors.length]);
         }
     });
 
-    return colors;
+    return { colors, trendlineColors };
 }
 
+function generateDarkerColors(colors) {
+    const darkerColors = [];
+    colors.forEach(color => {
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
 
-function generateDarkerColors(trendlineColors) {
-    const originalSeriesColors = [];
-
-    for (const color of trendlineColors) {
-        // Convert the color to RGB
-        const hexColor = color.slice(1);
-        const r = parseInt(hexColor.slice(0, 2), 16);
-        const g = parseInt(hexColor.slice(2, 4), 16);
-        const b = parseInt(hexColor.slice(4, 6), 16);
-
-        // Make the color slightly darker
         const darkerR = Math.max(0, r - 20);
         const darkerG = Math.max(0, g - 20);
         const darkerB = Math.max(0, b - 20);
 
-        // Convert back to HEX
         const darkerColor = `#${darkerR.toString(16).padStart(2, '0')}${darkerG.toString(16).padStart(2, '0')}${darkerB.toString(16).padStart(2, '0')}`;
-        originalSeriesColors.push(darkerColor);
-    }
+        darkerColors.push(darkerColor);
+    });
 
-    return originalSeriesColors;
+    return darkerColors;
 }
 
 ////////////////////////////////////////////////
