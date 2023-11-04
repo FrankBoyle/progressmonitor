@@ -8,6 +8,17 @@ let headerNames = [];  // Will store header names extracted from the table.
 let allSeries = [];  // Will store all data series.
 let dates = [];  // To store extracted dates from table rows.
 
+console.log("Initial global variables:", {
+    benchmark,
+    benchmarkSeriesIndex,
+    selectedChartType,
+    xCategories,
+    chart,
+    headerNames,
+    allSeries,
+    dates
+});
+
 // Initialize the accordion.
 $(function() {
     $("#accordion").accordion({
@@ -51,7 +62,9 @@ function extractDataFromTable() {
 
         scores.push(rowScores);
     });
-
+    console.log("Extracted dates:", dates);
+    console.log("Extracted scores:", scores);
+    
     return { dates, scores };
 }
 
@@ -65,6 +78,8 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
         seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
       }
     }
+    console.log("Populated series data:", seriesData);
+
     return seriesData;
   }
  
@@ -79,6 +94,8 @@ function generateSeriesData(scores, headerNames, customNames = []) {
             visible: false  // Hide the series by default
         });
     }
+    console.log("Generated series list:", seriesList);
+
     return seriesList;
 }
 
@@ -86,6 +103,8 @@ function generateSeriesData(scores, headerNames, customNames = []) {
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
     return seriesList.map((series, index) => {
         const customColumnName = customColumnNames[index] || headerNames[index + 1];
+        console.log("Updated series list with custom column names:", seriesList);
+
         return {
             ...series,
             name: customColumnName,
@@ -97,6 +116,8 @@ function getUpdatedSeriesNames(seriesList, customColumnNames) {
 function updateAllSeriesNames(customColumnNames) {
     allSeries = allSeries.map((series, index) => {
         const customColumnName = customColumnNames[index] || headerNames[index + 1];
+        console.log("All series after updating names:", allSeries);
+
         return {
             ...series,
             name: customColumnName,
@@ -127,8 +148,10 @@ function updateChart(selectedColumns) {
 
     // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    console.log("Final Series Data:", finalSeriesData);
-
+    console.log("New series data based on selected columns:", newSeriesData);
+    console.log("Trendline series data:", trendlineSeriesData);
+    console.log("Final series data for updating the chart:", finalSeriesData);
+    
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
@@ -160,6 +183,9 @@ function initializeChart() {
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
     const options = getChartOptions(dates);
     chart = new ApexCharts(document.querySelector("#chart"), options);
+    console.log("Extracted header names:", headerNames);
+    console.log("Selected columns from checkboxes:", selectedColumns);
+
     chart.render();    
 
     // Listen for checkbox changes
@@ -281,6 +307,7 @@ function calculateTrendline(data) {
 
     var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
     var intercept = (sumY - slope * sumX) / count;
+    console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
 
     // Debugging print statements
     console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
@@ -649,7 +676,7 @@ if (isDateDuplicate(currentDate)) {
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');
-        console.log(metadata_id);
+        //console.log(metadata_id);
 
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
