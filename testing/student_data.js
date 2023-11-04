@@ -295,11 +295,10 @@ function getChartOptions(dates, trendlineSeriesData) {
         xaxis: {
             categories: dates
         },
-
+        colors: colorOptions.seriesColors.concat(colorOptions.trendlineColors), // Combine series and trendline colors
         curve: {
             type: 'smooth' // Set curve type to smooth for original series
-        },
-        colors: colorOptions.seriesColors, // Use seriesColors from the returned object
+        }
     };
 }
 
