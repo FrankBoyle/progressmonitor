@@ -373,6 +373,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
 
+
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
