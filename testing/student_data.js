@@ -1,8 +1,8 @@
-// Defining global variables for the script.
-var benchmark = null;
-var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
-var selectedChartType = 'line';  // Default chart type
-var xCategories = [];
+// Defining global letiables for the script.
+let benchmark = null;
+let benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
+let selectedChartType = 'line';  // Default chart type
+let xCategories = [];
 let chart = null;  // This makes the chart variable accessible throughout the script.
 let headerNames = [];  // Will store header names extracted from the table.
 let allSeries = [];  // Will store all data series.
@@ -247,15 +247,15 @@ function debounce(func, wait) {
     };
 }
 
-var dataSeries = [
+let dataSeries = [
     //... Your series data ...
 ];
 
 // Create the data labels settings
-var dataLabelsSettings = {
+let dataLabelsSettings = {
     enabled: true,
     formatter: function(val, opts) {
-        var seriesName = opts.w.config.series[opts.seriesIndex].name;
+        let seriesName = opts.w.config.series[opts.seriesIndex].name;
 
         // Hide data labels for 'Benchmark' and 'Trendline'.
         if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) {
@@ -859,7 +859,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         });
 
         $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
-            var date = data.split('/');
+            let date = data.split('/');
             return (date[2] + date[0] + date[1]) * 1;
         };
 
