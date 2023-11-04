@@ -285,7 +285,7 @@ function getChartOptions(dates) {
         },
         stroke: {
             curve: 'smooth',
-            size: 2
+            size: 6
         },
         xaxis: {
             categories: dates
