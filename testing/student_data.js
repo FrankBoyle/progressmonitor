@@ -91,7 +91,11 @@ function generateSeriesData(scores, headerNames, customNames = []) {
         seriesList.push({
             name: customNames[i - 1] || `score${i}`,
             data: scoreData,
-            visible: false  // Hide the series by default
+            visible: false,  // Hide the series by default
+            stroke: {
+                curve: 'smooth',
+                size: 2
+            },
         });
     }
     console.log("Generated series list:", seriesList);
