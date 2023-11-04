@@ -88,24 +88,44 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return seriesData;
   }
  
-// This function replaces both getAllSeries and getAllSeriesWithCustomNames
+  function interpolateMissingData(scoreData) {
+    const interpolatedData = [];
+    for (let i = 0; i < scoreData.length; i++) {
+        if (!isNaN(scoreData[i])) {
+            interpolatedData.push(scoreData[i]);
+        } else {
+            // Interpolate missing data (linear interpolation)
+            let j = i - 1;
+            while (j >= 0 && isNaN(scoreData[j])) {
+                j--;
+            }
+            if (j >= 0 && !isNaN(scoreData[j])) {
+                const missingData = (scoreData[i + 1] || 0) + (scoreData[j] || 0);
+                interpolatedData.push(missingData / 2);
+            } else {
+                interpolatedData.push(0); // Fallback to 0 if no preceding data is available
+            }
+        }
+    }
+    return interpolatedData;
+}
+
+// Modify generateSeriesData to use interpolated data
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
-        const scoreData = scores.map(row => {
-            const value = row[i - 1];
-            return isNaN(value) ? 0 : value; // Replace NaN with 0
-        });
+        const scoreData = scores.map(row => row[i - 1]);
+        const interpolatedData = interpolateMissingData(scoreData);
         seriesList.push({
             name: customNames[i - 1] || `score${i}`,
-            data: scoreData,
+            data: interpolatedData,
             visible: false,  // Hide the series by default
         });
     }
     console.log("Generated series list:", seriesList);
-
     return seriesList;
 }
+
 
 // This function will now return the new series list
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
