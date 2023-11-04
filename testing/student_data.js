@@ -202,7 +202,7 @@ updateChart(selectedColumns, colorsAndTrendlineColors);
         chart.updateSeries(allSeries);
 
         // Update the chart with new series data and trendlines
-        updateChart(selectedColumns);
+        updateChart(selectedColumns, colorsAndTrendlineColors);
     }, 50));
 };
 
