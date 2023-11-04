@@ -294,7 +294,7 @@ function getChartOptions(dates, trendlineSeriesData) {
         xaxis: {
             categories: dates
         },
-        colors: [...originalSeriesColors, ...trendlineColors], // Concatenate original and trendline colors
+        colors: ['#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133', '#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133'],
     };
 }
 
