@@ -301,30 +301,32 @@ function calculateTrendline(data) {
     let sumY = 0;
     let sumXY = 0;
     let sumXX = 0;
+    let n = 0; // Count of non-null values
 
     for (let i = 0; i < data.length; i++) {
         const x = i + 1; // X values are 1-based
         const y = data[i];
 
-        if (y === null || isNaN(y)) {
-            // Skip null or NaN values
-            continue;
+        if (y !== null && !isNaN(y)) {
+            sumX += x;
+            sumY += y;
+            sumXY += x * y;
+            sumXX += x * x;
+            n++;
         }
-
-        sumX += x;
-        sumY += y;
-        sumXY += x * y;
-        sumXX += x * x;
     }
 
-    const n = data.length;
+    if (n === 0) {
+        // Handle the case where all values are null
+        return { slope: 0, intercept: 0 };
+    }
 
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-
     const intercept = (sumY - slope * sumX) / n;
 
     return { slope, intercept };
 }
+
 
 // Function to create trendline series
 function createTrendlineSeries(data, slope, intercept) {
