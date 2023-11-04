@@ -296,7 +296,6 @@ function getChartOptions(dates, trendlineSeriesData) {
             dashArray: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? 5 : 0
             ),
-            colors: colorOptions.trendlineColors, // Use trendlineColors from the returned object
         },
     };
 }
