@@ -138,11 +138,8 @@ function updateChart(selectedColumns) {
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            stroke: {
-                width: 1.5,
-                dashArray: [5, 5],
-                colors: ['#FF0000']
-            }
+            ...trendlineOptions  // Spread the trendlineOptions to include color, dashArray, and width
+
         });
     });
 
