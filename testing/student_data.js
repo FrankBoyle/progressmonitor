@@ -209,9 +209,10 @@ function initializeChart() {
 
     chart.render();    
 // Generate colors for series and trendlines
-colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
+const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
 seriesColors = colorsAndTrendlineColors.seriesColors;
 trendlineColors = colorsAndTrendlineColors.trendlineColors;
+updateChart(selectedColumns, colorsAndTrendlineColors);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
