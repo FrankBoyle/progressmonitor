@@ -186,6 +186,8 @@ trendlineColors = colorsAndTrendlineColors.trendlineColors;
                 series.name.includes('Trendline') ? 5 : 0
             )
         },
+        colors: colorOptions.seriesColors, // Use seriesColors from the returned object
+
     });
 }
 
@@ -369,10 +371,6 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
-
-
-
-
 
 ////////////////////////////////////////////////
 
