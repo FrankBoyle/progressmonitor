@@ -157,9 +157,9 @@ function updateChart(selectedColumns) {
     console.log("Final series data for updating the chart:", finalSeriesData);
     // Generate colors for series and trendlines
 // Generate colors for series and trendlines
-const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
-const seriesColors = colorsAndTrendlineColors.seriesColors;
-const trendlineColors = colorsAndTrendlineColors.trendlineColors;
+colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
+seriesColors = colorsAndTrendlineColors.seriesColors;
+trendlineColors = colorsAndTrendlineColors.trendlineColors;
 
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
@@ -207,9 +207,9 @@ function initializeChart() {
 
     chart.render();    
 // Generate colors for series and trendlines
-const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
-const seriesColors = colorsAndTrendlineColors.seriesColors;
-const trendlineColors = colorsAndTrendlineColors.trendlineColors;
+colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
+seriesColors = colorsAndTrendlineColors.seriesColors;
+trendlineColors = colorsAndTrendlineColors.trendlineColors;
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -271,9 +271,9 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData, seriesColors, trendlineColors) {
 // Generate colors for series and trendlines
-const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
-const seriesColors = colorsAndTrendlineColors.seriesColors;
-const trendlineColors = colorsAndTrendlineColors.trendlineColors;
+colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
+seriesColors = colorsAndTrendlineColors.seriesColors;
+trendlineColors = colorsAndTrendlineColors.trendlineColors;
 
     seriesColors = colors.slice(0, allSeries.length);
     trendlineSeriesColors = trendlineColors.slice(0, trendlineSeriesData.length);
