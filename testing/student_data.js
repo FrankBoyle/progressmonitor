@@ -138,12 +138,9 @@ function updateChart(selectedColumns) {
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            stroke: {
-                ...trendlineOptions
-            }
+            ...trendlineOptions  // Spread the trendlineOptions to include color, dashArray, and width
         });
     });
-    
 
     // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
@@ -154,19 +151,30 @@ function updateChart(selectedColumns) {
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
-    // Update series names in the legend
-    chart.updateOptions({
-        xaxis: {
-            categories: dates
-        },
-        yaxis: {
-            labels: {
-                formatter: function(val) {
-                    return parseFloat(val).toFixed(0);
-                }
+// Update series names in the legend
+chart.updateOptions({
+    xaxis: {
+        categories: dates
+    },
+    yaxis: {
+        labels: {
+            formatter: function(val) {
+                return parseFloat(val).toFixed(0);
             }
-        },
-    });
+        }
+    },
+    stroke: {
+        colors: finalSeriesData.map((series, idx) => 
+            series.name.includes('Trendline') ? trendlineOptions.color : undefined
+        ),
+        width: finalSeriesData.map((series, idx) => 
+            series.name.includes('Trendline') ? trendlineOptions.width : 2
+        ),
+        dashArray: finalSeriesData.map((series, idx) => 
+            series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+        )
+    }
+});
 }
 
 // Initializes the chart with default settings.
