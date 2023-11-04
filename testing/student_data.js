@@ -150,7 +150,7 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns, colorOptions) {
+function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update function signature
     // Clear existing series data
     chart.updateSeries([]);
 
@@ -167,7 +167,7 @@ function updateChart(selectedColumns, colorOptions) {
             type: 'line',
             ...trendlineOptions,
             // Set the trendline color to match the series color
-            color: colorOptions.trendlineColors[series.name],
+            color: trendlineColors[series.name], // Use trendlineColors here
         });
     });
 
@@ -176,9 +176,7 @@ function updateChart(selectedColumns, colorOptions) {
     console.log("New series data based on selected columns:", newSeriesData);
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
-// In the updateChart function:
-console.log("Series colors:", colorsAndTrendlineColors.seriesColors);
-console.log("Trendline colors:", colorsAndTrendlineColors.trendlineColors);
+
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
@@ -196,6 +194,7 @@ console.log("Trendline colors:", colorsAndTrendlineColors.trendlineColors);
         },
     });
 }
+
 
 // Initializes the chart with default settings.
 function initializeChart() {
@@ -218,7 +217,7 @@ function initializeChart() {
 const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
 seriesColors = colorsAndTrendlineColors.seriesColors;
 trendlineColors = colorsAndTrendlineColors.trendlineColors;
-updateChart(selectedColumns, colorsAndTrendlineColors);
+updateChart(selectedColumns, seriesColors, trendlineColors); 
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
