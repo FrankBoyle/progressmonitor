@@ -183,7 +183,7 @@ trendlineColors = colorsAndTrendlineColors.trendlineColors;
                 series.name.includes('Trendline') ? 2 : 4
             ),
             dashArray: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? 5 : 0
+                series.name.includes('Trendline') ? 0 : undefined
             )
         },
     });
