@@ -69,7 +69,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
   }
  
   function getAllSeries(scores, headerNames) {
-    //allSeries.length = 0; // clear the current content
+    allSeries.length = 0; // clear the current content
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
         allSeries.push({
