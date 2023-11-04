@@ -189,7 +189,7 @@ function initializeChart() {
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-    const options = getChartOptions(dates);
+    const options = getChartOptions(someDates, finalSeriesData);
     chart = new ApexCharts(document.querySelector("#chart"), options);
     console.log("Extracted header names:", headerNames);
     console.log("Selected columns from checkboxes:", selectedColumns);
@@ -281,8 +281,12 @@ function getChartOptions(dates, finalSeriesData) {
             }
         },
         stroke: {
-            curve: 'smooth',
-            size: 2
+            width: finalSeriesData.map(series => 
+                series.name.includes('Trendline') ? 2 : 1
+            ),
+            dashArray: finalSeriesData.map(series => 
+                series.name.includes('Trendline') ? 5 : 0
+            )
         },
         xaxis: {
             categories: dates
