@@ -358,6 +358,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     const seriesColors = {};
     const trendlineColors = {};
+    const defaultColors = getDefaultColors(); // Get default colors
 
     seriesList.forEach((series, idx) => {
         if (!series.name.includes('Trendline')) {
@@ -378,6 +379,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
+
 
 
 
