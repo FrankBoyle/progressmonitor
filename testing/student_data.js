@@ -170,10 +170,10 @@ chart.updateOptions({
 
     stroke: {
         width: finalSeriesData.map(series =>
-            series.name.includes('Trendline') ? trendlineOptions.width : 4
+            series.name.includes('Trendline') ? 2 : 4
         ),
         dashArray: finalSeriesData.map(series =>
-            series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+            series.name.includes('Trendline') ? 5 : 0
         )
     },
 });
