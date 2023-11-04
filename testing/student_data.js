@@ -258,8 +258,10 @@ var dataLabelsSettings = {
 };
 
 function getChartOptions(dates) {
+    const trendlineColors = generateColors(trendlineSeriesData);
+    const originalSeriesColors = generateDarkerColors(trendlineColors);
     return {
-        series: [],
+        series: finalSeriesData,
         chart: {
             events: {
                 updated: function(chartContext, config) {
@@ -290,6 +292,7 @@ function getChartOptions(dates) {
         xaxis: {
             categories: dates
         },
+        colors: originalSeriesColors,
     };
 }
 
@@ -362,6 +365,30 @@ function generateColors(finalSeriesData) {
     });
 
     return colors;
+}
+
+
+function generateDarkerColors(trendlineColors) {
+    const originalSeriesColors = [];
+
+    for (const color of trendlineColors) {
+        // Convert the color to RGB
+        const hexColor = color.slice(1);
+        const r = parseInt(hexColor.slice(0, 2), 16);
+        const g = parseInt(hexColor.slice(2, 4), 16);
+        const b = parseInt(hexColor.slice(4, 6), 16);
+
+        // Make the color slightly darker
+        const darkerR = Math.max(0, r - 20);
+        const darkerG = Math.max(0, g - 20);
+        const darkerB = Math.max(0, b - 20);
+
+        // Convert back to HEX
+        const darkerColor = `#${darkerR.toString(16).padStart(2, '0')}${darkerG.toString(16).padStart(2, '0')}${darkerB.toString(16).padStart(2, '0')}`;
+        originalSeriesColors.push(darkerColor);
+    }
+
+    return originalSeriesColors;
 }
 
 ////////////////////////////////////////////////
