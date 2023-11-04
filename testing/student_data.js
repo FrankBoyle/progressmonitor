@@ -712,10 +712,7 @@ if (isDateDuplicate(currentDate)) {
         dateCell.click();
 
         $(document).on('click', '.saveRow', async function() {
-            const row = $(this).closest('tr'); // Define the row variable here
-        
-            // Rest of your code...
-        
+            const row = $(this).closest('tr'); // Define the row variable here    
             const performanceId = row.data('performance-id');
             const school_id = $('#schoolIdInput').val();
             const urlParams = new URLSearchParams(window.location.search);
