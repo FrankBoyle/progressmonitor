@@ -306,7 +306,6 @@ function getChartOptions(dates, trendlineSeriesData) {
     };
 }
 
-
 const trendlineOptions = {
     dashArray: 5,             // Makes the line dashed
     width: 2                  // Line width
