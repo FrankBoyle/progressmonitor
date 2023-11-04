@@ -289,10 +289,10 @@ function getChartOptions(dates, trendlineSeriesData) {
             ),
             dashArray: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
-            ),
-            smooth: finalSeriesData.map(series =>
-                !series.name.includes('Trendline')  // Set smooth to true for non-trendline series
             )
+        },
+        curve: {
+            type: 'smooth' // Set curve type to smooth for original series
         },
         colors: colorOptions.seriesColors, // Use seriesColors from the returned object
     };
