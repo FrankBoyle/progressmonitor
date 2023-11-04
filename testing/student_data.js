@@ -156,15 +156,28 @@ function updateChart(selectedColumns, colorOptions) {
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
     // Generate colors for series and trendlines
-// Generate colors for series and trendlines
-colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
-seriesColors = colorsAndTrendlineColors.seriesColors;
-trendlineColors = colorsAndTrendlineColors.trendlineColors;
+    colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
+    seriesColors = colorsAndTrendlineColors.seriesColors;
+    trendlineColors = colorsAndTrendlineColors.trendlineColors;
 
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
     // Update series names in the legend
+    // Update series names in the legend
+chart.updateOptions({
+    // ... (other options)
+
+    stroke: {
+        width: finalSeriesData.map(series =>
+            series.name.includes('Trendline') ? trendlineOptions.width : 4
+        ),
+        dashArray: finalSeriesData.map(series =>
+            series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+        )
+    },
+});
+
 }
 
 // Initializes the chart with default settings.
