@@ -257,8 +257,8 @@ var dataLabelsSettings = {
     }
 };
 
-function getChartOptions(dates) {
-    const { colors, trendlineColors } = generateColors(finalSeriesData);
+function getChartOptions(dates, trendlineSeriesData) {
+    const { colors, trendlineColors } = generateColors(finalSeriesData, trendlineSeriesData);
     const originalSeriesColors = generateDarkerColors(colors);
     return {
         series: finalSeriesData,
