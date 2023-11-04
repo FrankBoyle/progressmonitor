@@ -7,6 +7,7 @@ let chart = null;  // This makes the chart variable accessible throughout the sc
 let headerNames = [];  // Will store header names extracted from the table.
 let allSeries = [];  // Will store all data series.
 let dates = [];  // To store extracted dates from table rows.
+let finalSeriesData = []; // Declare it as a global variable
 
 console.log("Initial global variables:", {
     benchmark,
@@ -143,7 +144,7 @@ function updateChart(selectedColumns) {
     });
 
     // Add trendline data to series
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
     console.log("New series data based on selected columns:", newSeriesData);
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
