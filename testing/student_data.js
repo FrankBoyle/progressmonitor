@@ -711,42 +711,44 @@ if (isDateDuplicate(currentDate)) {
         const dateCell = newRow.find('td[data-field-name="score_date"]');
         dateCell.click();
 
-    $(document).on('click', '.saveRow', async function() {
-        const row = $(this).closest('tr'); // Define the row variable here
-        const performanceId = row.data('performance-id');
-        const school_id = $('#schoolIdInput').val();
-        const urlParams = new URLSearchParams(window.location.search);
-        const metadata_id = urlParams.get('metadata_id');
-        console.log(metadata_id);
-
-        // Disable the save button to prevent multiple clicks
-        $(this).prop('disabled', true);
-    
-        // If it's not a new entry, simply return and do nothing.
-        if (performanceId !== 'new') {
-            //alert("This row is not a new entry. Please click on the cells to edit them.");
-            return;
-        }
-    
-        let scores = {};
-        for (let i = 1; i <= 10; i++) {
-            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
-            if (scoreValue.trim() === '') {
-                scores[`score${i}`] = null; // Send null if score is empty or only contains whitespace
-            } else {
-                // Handle non-empty score values, e.g., validate or parse them if necessary
-                scores[`score${i}`] = scoreValue;
-            }
-        }
+        $(document).on('click', '.saveRow', async function() {
+            const row = $(this).closest('tr'); // Define the row variable here
         
-    
-        const postData = {
-            student_id: CURRENT_STUDENT_ID,
-            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
-            scores: scores, // Include the scores object in postData
-            metadata_id: metadata_id,
-            school_id: school_id,
-        };
+            // Rest of your code...
+        
+            const performanceId = row.data('performance-id');
+            const school_id = $('#schoolIdInput').val();
+            const urlParams = new URLSearchParams(window.location.search);
+            const metadata_id = urlParams.get('metadata_id');
+            console.log(metadata_id);
+        
+            // Disable the save button to prevent multiple clicks
+            $(this).prop('disabled', true);
+        
+            // If it's not a new entry, simply return and do nothing.
+            if (performanceId !== 'new') {
+                //alert("This row is not a new entry. Please click on the cells to edit them.");
+                return;
+            }
+        
+            let scores = {};
+            for (let i = 1; i <= 10; i++) {
+                const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
+                if (scoreValue === '') {
+                    scores[`score${i}`] = null; // Send null if score is empty
+                } else {
+                    // Handle non-empty score values, e.g., validate or parse them if necessary
+                    scores[`score${i}`] = scoreValue;
+                }
+            }
+        
+            const postData = {
+                student_id: CURRENT_STUDENT_ID,
+                score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+                scores: scores, // Include the scores object in postData
+                metadata_id: metadata_id,
+                school_id: school_id,
+            };
     
         if (isDateDuplicate(postData.score_date)) {
            // alert("An entry for this date already exists. Please choose a different date.");
