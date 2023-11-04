@@ -92,10 +92,6 @@ function generateSeriesData(scores, headerNames, customNames = []) {
             name: customNames[i - 1] || `score${i}`,
             data: scoreData,
             visible: false,  // Hide the series by default
-            stroke: {
-                curve: 'smooth',
-                size: 2
-            },
         });
     }
     console.log("Generated series list:", seriesList);
@@ -286,10 +282,6 @@ function getChartOptions(dates) {
                     return parseFloat(val).toFixed(0);
                 }
             }
-        },
-        stroke: {
-            curve: 'smooth',
-            size: 2
         },
         xaxis: {
             categories: dates
