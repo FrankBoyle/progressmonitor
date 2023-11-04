@@ -138,10 +138,12 @@ function updateChart(selectedColumns) {
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            ...trendlineOptions  // Spread the trendlineOptions to include color, dashArray, and width
-
+            stroke: {
+                ...trendlineOptions
+            }
         });
     });
+    
 
     // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
