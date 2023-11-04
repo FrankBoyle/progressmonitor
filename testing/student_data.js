@@ -169,7 +169,7 @@ function updateChart(selectedColumns) {
             }
         },
         series: finalSeriesData,
-        colors: generateColors(finalSeriesData),
+        colors: ['#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133', '#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133'],
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? 2 : 1
