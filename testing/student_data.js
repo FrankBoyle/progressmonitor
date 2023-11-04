@@ -289,14 +289,7 @@ function getChartOptions(dates, trendlineSeriesData) {
             categories: dates
         },
         colors: colorOptions.seriesColors, // Use seriesColors from the returned object
-        stroke: {
-            width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? 2 : 4
-            ),
-            dashArray: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? 0 : undefined
-            ),
-        },
+
     };
 }
 
