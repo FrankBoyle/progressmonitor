@@ -293,7 +293,6 @@ function getChartOptions(dates, trendlineSeriesData) {
     };
 }
 
-
 const trendlineOptions = {
     dashArray: 5,             // Makes the line dashed
     width: 2                  // Line width
@@ -353,11 +352,11 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     seriesList.forEach((series, idx) => {
         if (!series.name.includes('Trendline')) {
-            seriesColors[series.name] = defaultColors[idx % defaultColors.length];
+            // Assign the same color for all non-trendline series
+            seriesColors[series.name] = defaultColors[0];
         } else {
-            // Assign trendline colors based on corresponding series names
-            const correspondingSeriesName = series.name.replace(' Trendline', '');
-            trendlineColors[correspondingSeriesName] = defaultColors[idx % defaultColors.length];
+            // Assign a different color for trendlines
+            trendlineColors[series.name] = defaultColors[1];
         }
     });
 
