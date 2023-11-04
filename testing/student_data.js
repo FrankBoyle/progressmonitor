@@ -374,9 +374,6 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
             // Assign the same color for all non-trendline series
             const seriesColor = defaultColors[idx % defaultColors.length];
             seriesColors[series.name] = seriesColor;
-            
-            // Set the trendline color to match the series color
-            trendlineColors[series.name + ' Trendline'] = seriesColor;
         } else {
             // Assign a different color for trendlines
             trendlineColors[series.name] = defaultColors[defaultColors.length - 1];
@@ -392,8 +389,6 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
-
-
 
 ////////////////////////////////////////////////
 
