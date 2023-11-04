@@ -281,6 +281,7 @@ function getChartOptions(dates, trendlineSeriesData) {
             categories: dates
         },
 
+        colors: colorOptions.seriesColors, // Use seriesColors from the returned object
 
     };
 }
