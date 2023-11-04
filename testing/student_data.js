@@ -271,8 +271,9 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData, seriesColors, trendlineColors) {
 // Generate colors for series and trendlines
-const { seriesColors, trendlineColors } = generateColors(finalSeriesData, trendlineSeriesData);
-
+colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
+seriesColors = colorsAndTrendlineColors.seriesColors;
+trendlineColors = colorsAndTrendlineColors.trendlineColors;
 
     seriesColors = colors.slice(0, allSeries.length);
     trendlineSeriesColors = trendlineColors.slice(0, trendlineSeriesData.length);
