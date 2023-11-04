@@ -203,6 +203,7 @@ function initializeChart() {
     console.log("Selected columns from checkboxes:", selectedColumns);
 
     chart.render();    
+    const { seriesColors, trendlineColors } = generateColors(allSeries, trendlineSeriesData);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -347,7 +348,6 @@ function getDefaultColors() {
 }
 const defaultColors = getDefaultColors();
 // Generate colors and trendline colors
-const { seriesColors, trendlineColors } = generateColors(allSeries, trendlineSeriesData);
 
 // Initialize the chart
 initializeChart();
@@ -374,25 +374,6 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
     console.log("Trendline colors:", trendlineColorArray);
 
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
-}
-
-function generateDarkerColors(colors) {
-    const darkerColors = [];
-    colors.forEach(color => {
-        const r = parseInt(color.slice(1, 3), 16);
-        const g = parseInt(color.slice(3, 5), 16);
-        const b = parseInt(color.slice(5, 7), 16);
-
-        const darkerR = Math.max(0, r - 20);
-        const darkerG = Math.max(0, g - 20);
-        const darkerB = Math.max(0, b - 20);
-
-        const darkerColor = `#${darkerR.toString(16).padStart(2, '0')}${darkerG.toString(16).padStart(2, '0')}${darkerB.toString(16).padStart(2, '0')}`;
-        darkerColors.push(darkerColor);
-    });
-
-    console.log("darkerColors is : " + darkerColors);
-    return darkerColors;
 }
 
 ////////////////////////////////////////////////
