@@ -172,7 +172,7 @@ function updateChart(selectedColumns) {
         colors: ['#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133', '#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133'],
         stroke: {
             width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? 5 : 1
+                series.name.includes('Trendline') ? 2 : 4
             ),
             dashArray: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? 5 : 0
