@@ -361,7 +361,9 @@ const defaultColors = getDefaultColors();
 function generateColors(finalSeriesData, trendlineSeriesData) {
     const seriesList = finalSeriesData.concat(trendlineSeriesData);
 
-    // Assign colors to series and trendlines
+    const seriesColors = {};
+    const trendlineColors = {};
+
     seriesList.forEach((series, idx) => {
         if (!series.name.includes('Trendline')) {
             seriesColors[series.name] = defaultColors[idx % defaultColors.length];
@@ -381,6 +383,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
     return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
 }
+
 
 
 ////////////////////////////////////////////////
