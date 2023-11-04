@@ -129,57 +129,56 @@ function updateAllSeriesNames(customColumnNames) {
 
 // Updates the chart based on selected columns.
 function updateChart(selectedColumns) {
+    // Clear existing series data
+    chart.updateSeries([]);
+
     // Create a new series array based on selected columns
     const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    trendlineSeriesData = [...trendlineSeriesData, ...trendlineSeriesData];
+    const trendlineSeriesData = [];
     newSeriesData.forEach(series => {
         const trendlineData = getTrendlineData(series.data);
         trendlineSeriesData.push({
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            ...trendlineOptions  // Spread the trendlineOptions to include color, dashArray, and width
+            ...trendlineOptions
         });
     });
 
     // Add trendline data to series
-    finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
     console.log("New series data based on selected columns:", newSeriesData);
     console.log("Trendline series data:", trendlineSeriesData);
     console.log("Final series data for updating the chart:", finalSeriesData);
-    let colorsArray = generateColors(finalSeriesData);
-    console.log(colorsArray);
 
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
-// Update series names in the legend
-chart.updateOptions({
-    xaxis: {
-        categories: dates
-    },
-    yaxis: {
-        labels: {
-            formatter: function(val) {
-                return parseFloat(val).toFixed(0);
+    // Update series names in the legend
+    chart.updateOptions({
+        xaxis: {
+            categories: dates
+        },
+        yaxis: {
+            labels: {
+                formatter: function (val) {
+                    return parseFloat(val).toFixed(0);
+                }
             }
-        }
-    },
-    series: finalSeriesData, // this is your series data
-
-    colors: ['#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133', '#FF5733', '#33FF57', '#5733FF', '#FF33A1', '#FFD133'],
-
-    stroke: {
-        width: finalSeriesData.map(series => 
-            series.name.includes('Trendline') ? 2 : 1
-        ),
-        dashArray: finalSeriesData.map(series => 
-            series.name.includes('Trendline') ? 5 : 0
-        )
-    },
-});
+        },
+        series: finalSeriesData,
+        colors: generateColors(finalSeriesData),
+        stroke: {
+            width: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? 2 : 1
+            ),
+            dashArray: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? 5 : 0
+            )
+        },
+    });
 }
 
 // Initializes the chart with default settings.
