@@ -203,7 +203,7 @@ updateChart(selectedColumns, colorsAndTrendlineColors);
 
         // Update the chart with new series data and trendlines
 updateChart(selectedColumns, colorsAndTrendlineColors);
-    }, 50));
+    }, 0));
 };
 
 // The debounce function
