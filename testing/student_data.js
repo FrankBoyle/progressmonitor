@@ -360,8 +360,8 @@ function generateColors(finalSeriesData) {
             colors.push(defaultColors[idx % defaultColors.length]);
         }
     });
-    console.log(colors);
-    console.log(trendlineColors);
+    console.log("colors is : " + colors);
+    console.log("trendlineColors is : " + trendlineColors);
 
     return { colors, trendlineColors };
 }
@@ -381,7 +381,7 @@ function generateDarkerColors(colors) {
         darkerColors.push(darkerColor);
     });
 
-    console.log(darkerColors);
+    console.log("darkerColors is : " + darkerColors);
     return darkerColors;
 }
 
