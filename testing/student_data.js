@@ -110,21 +110,22 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
     return interpolatedData;
 }
 
-// Modify generateSeriesData to use interpolated data
+// Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
     for (let i = 1; i < headerNames.length - 1; i++) {
         const scoreData = scores.map(row => row[i - 1]);
-        const interpolatedData = interpolateMissingData(scoreData);
+        const seriesData = scoreData.filter(value => !isNaN(value)); // Filter out NaN values
         seriesList.push({
             name: customNames[i - 1] || `score${i}`,
-            data: interpolatedData,
+            data: seriesData,
             visible: false,  // Hide the series by default
         });
     }
     console.log("Generated series list:", seriesList);
     return seriesList;
 }
+
 
 
 // This function will now return the new series list
