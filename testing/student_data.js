@@ -281,17 +281,12 @@ function getChartOptions(dates) {
             }
         },
         stroke: {
-            width: finalSeriesData.map(series => 
-                series.name.includes('Trendline') ? 2 : 1
-            ),
-            dashArray: finalSeriesData.map(series => 
-                series.name.includes('Trendline') ? 5 : 0
-            )
+            curve: 'smooth',
+            size: 2
         },
         xaxis: {
             categories: dates
-        },
-        colors: generateColors(finalSeriesData),
+        }
     };
 }
 
@@ -337,30 +332,6 @@ function getTrendlineData(seriesData) {
 }
 
 
-function getDefaultColors() {
-    return [
-        '#FF5733', '#33FF57', '#5733FF', 
-        '#FF33A1', '#FFD133', '#33FFE0', 
-        '#A233FF', '#FF8333', '#33A1FF', 
-        '#D433FF'
-    ];
-}
-
-function generateColors(finalSeriesData) {
-    const defaultColors = getDefaultColors();
-    const colors = [];
-
-    finalSeriesData.forEach((series, idx) => {
-        if (series.name.includes('Trendline')) {
-            // Get the color of the corresponding series (that's why we subtract 1 from idx)
-            colors.push(defaultColors[(idx - 1) % defaultColors.length]);
-        } else {
-            colors.push(defaultColors[idx % defaultColors.length]);
-        }
-    });
-
-    return colors;
-}
 
 ////////////////////////////////////////////////
 
