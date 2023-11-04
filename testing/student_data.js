@@ -369,6 +369,7 @@ function generateColors(finalSeriesData, trendlineSeriesData) {
 
 ////////////////////////////////////////////////
 
+
 $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
@@ -700,9 +701,7 @@ if (isDateDuplicate(currentDate)) {
         newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
         
         for (let i = 1; i <= 10; i++) {
-            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
-            newRow.append(`<td class="editable" data-field-name="score${i}">${scoreValue}</td>`);
-            
+            newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
         }
         
         newRow.append('<td><button class="saveRow">Save</button></td>');
@@ -719,7 +718,7 @@ if (isDateDuplicate(currentDate)) {
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');
-        //console.log(metadata_id);
+        console.log(metadata_id);
 
         // Disable the save button to prevent multiple clicks
         $(this).prop('disabled', true);
