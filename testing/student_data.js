@@ -150,12 +150,12 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns, seriesColors, trendlineColors) {
+function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update function signature
     // Clear existing series data
     chart.updateSeries([]);
 
     // Create a new series array based on selected columns
-    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index]));
+    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
@@ -194,6 +194,7 @@ function updateChart(selectedColumns, seriesColors, trendlineColors) {
         },
     });
 }
+
 
 // Initializes the chart with default settings.
 function initializeChart() {
