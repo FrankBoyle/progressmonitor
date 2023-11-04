@@ -177,6 +177,7 @@ trendlineColors = colorsAndTrendlineColors.trendlineColors;
             }
         },
         series: finalSeriesData,
+        colors: colorOptions.seriesColors, // Use seriesColors from the returned object
 
         stroke: {
             width: finalSeriesData.map(series =>
