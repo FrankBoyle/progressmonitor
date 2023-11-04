@@ -373,22 +373,29 @@ const defaultColors = getDefaultColors();
 
 function generateColors(finalSeriesData, trendlineSeriesData) {
     const defaultColors = getDefaultColors();
-    const colors = [];
-    const trendlineColors = [];
+    const colors = {};
+    const trendlineColors = {};
 
     finalSeriesData.forEach((series, idx) => {
         const seriesName = series.name;
         if (seriesName.includes('Trendline')) {
-            trendlineColors.push(defaultColors[idx % defaultColors.length]);
+            const correspondingSeriesName = seriesName.replace(' Trendline', '');
+            trendlineColors[correspondingSeriesName] = defaultColors[idx % defaultColors.length];
         } else {
-            colors.push(defaultColors[idx % defaultColors.length]);
+            colors[seriesName] = defaultColors[idx % defaultColors.length];
         }
     });
-    console.log("colors is : " + colors);
-    console.log("trendlineColors is : " + trendlineColors);
 
-    return { colors, trendlineColors };
+    // Create arrays from color objects
+    const seriesColors = Object.values(colors);
+    const trendlineSeriesColors = Object.values(trendlineColors);
+
+    console.log("colors is:", seriesColors);
+    console.log("trendlineColors is:", trendlineSeriesColors);
+
+    return { colors: seriesColors, trendlineColors: trendlineSeriesColors };
 }
+
 
 function generateDarkerColors(colors) {
     const darkerColors = [];
