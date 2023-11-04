@@ -293,37 +293,58 @@ const trendlineOptions = {
     width: 2                  // Line width
 };
 
+// Calculate trendline slope and intercept
 function calculateTrendline(data) {
-    var sumX = 0;
-    var sumY = 0;
-    var sumXY = 0;
-    var sumXX = 0;
-    var count = 0;
-    data = data.filter(item => item !== null); // filter out null values
+    let sumX = 0;
+    let sumY = 0;
+    let sumXY = 0;
+    let sumXX = 0;
 
+    for (let i = 0; i < data.length; i++) {
+        const x = i + 1; // X values are 1-based
+        const y = data[i];
 
-    data.forEach(function (y, x) { // Adjusting the loop here
-        if (y !== null) {
-            sumX += x;
-            sumY += y;
-            sumXY += x * y;
-            sumXX += x * x;
-            count++;
+        if (y === null || isNaN(y)) {
+            // Skip null or NaN values
+            continue;
         }
+
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXX += x * x;
+    }
+
+    const n = data.length;
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+
+    const intercept = (sumY - slope * sumX) / n;
+
+    return { slope, intercept };
+}
+
+// Function to create trendline series
+function createTrendlineSeries(data, slope, intercept) {
+    const trendlineData = data.map((y, i) => {
+        const x = i + 1; // X values are 1-based
+        if (y === null || isNaN(y)) {
+            return null;
+        }
+        return slope * x + intercept;
     });
 
-    var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
-    var intercept = (sumY - slope * sumX) / count;
-    console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
-
-    // Debugging print statements
-    console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
-    console.log("slope:", slope, "intercept:", intercept);
-
-    return function (x) {
-        return slope * x + intercept;
-    };
+    return trendlineData;
 }
+
+// Example usage:
+const originalData = [null, 2, 4, 6, 8, null, 12, 14, 16, 18];
+const { slope, intercept } = calculateTrendline(originalData);
+const trendlineData = createTrendlineSeries(originalData, slope, intercept);
+
+console.log('Trendline slope:', slope);
+console.log('Trendline intercept:', intercept);
+console.log('Trendline series data:', trendlineData);
 
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
