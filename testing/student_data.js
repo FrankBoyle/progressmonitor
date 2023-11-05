@@ -430,17 +430,8 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     // Debugging: Log the stackedBarChartSeriesData
     console.log("Stacked Bar Chart Series Data:", stackedBarChartSeriesData);
 
-    // Calculate totals for each date
-    const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
-        const columnIndex = headerNames.indexOf(colName) - 1; // Subtract 1 to account for date column
-        return sum + (scoreRow[columnIndex] || 0);
-    }, 0));
-
-    // Debugging: Log the totals
-    console.log("Totals:", totals);
-
-    // Return both the series data and the totals
-    return { seriesData: stackedBarChartSeriesData, totals };
+    // Return only the series data without totals
+    return stackedBarChartSeriesData;
 }
 
 // Initialize the bar chart
@@ -449,12 +440,6 @@ function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-    const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
-    seriesData.push({
-        name: 'Total',
-        data: totals
-    });
 
     // Initialize the bar chart with appropriate options
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData));
@@ -474,13 +459,7 @@ function updateBarChart(selectedColumns) {
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
-    const { seriesData: newSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
-
-    // Add the totals to the series data for updating
-    newSeriesData.push({
-        name: 'Total',
-        data: totals
-    });
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
     // Update the bar chart with the new data series and options
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
