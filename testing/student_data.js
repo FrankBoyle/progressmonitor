@@ -1,5 +1,5 @@
 // Defining global variables for the script.
-var barChart;  // Declare barChart variable at the global level
+let barChart = null;  // Declare barChart variable at the global level
 let benchmark = null;
 let benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
 let selectedColumns = [];
@@ -34,24 +34,16 @@ $("#accordion").accordion({
     active: false, // Ensure all panels are closed initially
     activate: function(event, ui) {
         if (ui.newPanel.has('#chart').length) {
-            selectedChartType = 'line';
-            console.log("Line Graph activated"); // Debugging log
-            if (!chart) {
-                initializeChart();
-            } else {
-                chart.updateSeries(chart.w.globals.series);
-            }
+            // Code for line chart activation
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Graph activated"); // Debugging log
+            console.log("Bar Graph activated");
             if (barChart === null) {
-                initializeBarChart();
+                initializeBarChart(); // Only initialize if barChart is null
             }
         }
     }
 });
-
-
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
