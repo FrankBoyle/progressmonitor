@@ -393,25 +393,10 @@ function extractDataForBarChart() {
     return { dates, scores };
 }
 
-// Create a function to populate the bar chart series data.
-function populateBarChartSeriesData(selectedColumns, headerMap, scores) {
-    const seriesData = [];
-    for (const col of selectedColumns) {
-      const headerName = headerMap[col];
-      const headerIndex = headerNames.indexOf(headerName);
-      if (headerIndex !== -1) {
-        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
-      }
-    }
-    console.log("Populated bar chart series data:", seriesData);
-
-    return seriesData;
-}
-
 // Modify the initializeBarChart function to populate the chart.
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
-    allSeries = populateBarChartSeriesData(selectedColumns, headerMap, scores); // Update selectedColumns, headerMap, and headerNames as needed.
+    allSeries = populateBarChartSeriesData(selectedColumns, scores); // Update selectedColumns as needed.
 
     const barChartOptions = {
         chart: {
@@ -438,7 +423,7 @@ function initializeBarChart() {
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
-    const newSeriesData = populateBarChartSeriesData(selectedColumns, headerMap, scores); // Update headerMap as needed.
+    const newSeriesData = populateBarChartSeriesData(selectedColumns, scores); // Update headerMap as needed.
     barChart.updateSeries(newSeriesData);
 }
 
