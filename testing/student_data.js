@@ -77,8 +77,8 @@ function extractDataFromTable() {
 
         scores.push(rowScores);
     });
-    //console.log("Extracted dates:", dates);
-    //console.log("Extracted scores:", scores);
+    console.log("Extracted dates:", dates);
+    console.log("Extracted scores:", scores);
 
     return { dates, scores };
 }
@@ -361,40 +361,12 @@ function getTrendlineData(seriesData) {
 }
 
 ////////////////////////////////////////////////
-// Extracts dates and scores data from the provided HTML table.
-function extractDataForBarChart() {
-    const tableRows = document.querySelectorAll("table tbody tr");
-    const dates = [];
-    const scores = [];
-
-    tableRows.forEach((row) => {
-        const dateCell = row.querySelector("td:first-child");
-        if (dateCell) {
-            dates.push(dateCell.textContent.trim());
-        } else {
-            dates.push(""); // or some default date or error handling
-        }
-
-        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
-        const rowScores = [];
-
-        scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0', 10));
-        });
-
-        scores.push(rowScores);
-    });
-    console.log("Extracted dates:", dates);
-    console.log("Extracted scores:", scores);
-
-    return { dates, scores };
-}
 
 // Initialize the bar chart
 function initializeBarChart() {
     console.log("initializeBarChart called");
 
-    const { dates, scores } = extractDataForBarChart();
+    const { dates, scores } = extractDataFromTable();
 
     // Define chart options for the bar chart
     const barChartOptions = {
