@@ -401,15 +401,8 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     // Initialize columnIndexMap and create empty arrays for each column
     selectedColumns.forEach((col, index) => {
         columnIndexMap[col] = index;
-        stackedBarChartSeriesData.push({
-            name: 'Total',
-            data: totals.map((total, index) => ({
-                x: dates[index],
-                y: total,
-                label: total.toString(), // Convert the total to a string for the label
-            })),
+        stackedBarChartData.push([]);
     });
-});
 
     // Iterate through the scores and populate the stackedBarChartData
     scores.forEach((scoreRow) => {
@@ -431,24 +424,12 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     return stackedBarChartSeriesData;
 }
 
-// Modify the initializeBarChart function to calculate and display totals.
+// Modify the initializeBarChart function to populate the chart with global colors.
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
     const stackedBarChartSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
-
-    // Calculate totals for each date
-    const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
-        const columnIndex = headerNames.indexOf(colName) - 1; // Subtract 1 to account for date column
-        return sum + (scoreRow[columnIndex] || 0);
-    }, 0));
-
-    // Update the labels for the last series (totals)
-    stackedBarChartSeriesData.push({
-        name: 'Total',
-        data: totals,
-    });
 
     const barChartOptions = {
         chart: {
@@ -460,18 +441,6 @@ function initializeBarChart() {
         },
         series: stackedBarChartSeriesData,
         colors: seriesColors, // Use global colors for bars
-        dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-                if (val === 0) {
-                    return ''; // Hide labels for zero values
-                }
-                return val;
-            },
-            style: {
-                fontSize: '16px', // Set the font size for the data labels
-            },
-        },
     };
 
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
@@ -485,10 +454,6 @@ function initializeBarChart() {
     }, 250));
 }
 
-// Initialize the chart
-initializeBarChart();
-
-
 // Create the updateBarChart function.
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
@@ -499,6 +464,9 @@ function updateBarChart(selectedColumns) {
 
     barChart.updateSeries(newSeriesData);
 }
+
+// Initialize the chart
+initializeBarChart();
 
 ////////////////////////////////////////////////
 
