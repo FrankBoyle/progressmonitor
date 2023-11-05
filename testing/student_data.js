@@ -495,8 +495,8 @@ function getBarChartOptions(dates, seriesData) {
     });
 
     const annotations = totalValues.map((total, index) => ({
-        x: index,
-        y: total + 5, // Initial Y position (adjust as needed)
+        x: dates[index], // Use the date instead of index
+        y: total + 5, // You may need to adjust this for exact positioning
         label: {
             text: `Total: ${total}`,
             borderColor: 'transparent',
@@ -513,7 +513,7 @@ function getBarChartOptions(dates, seriesData) {
                 },
             },
         },
-    }));
+    }));    
 
     // Adjust the Y position of annotations based on bar heights
     annotations.forEach((annotation, index) => {
