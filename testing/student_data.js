@@ -9,9 +9,6 @@ let allSeries = [];  // Will store all data series.
 let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
-// Initialize color objects for series and trendlines
-let seriesColors = {};
-let trendlineColors = {};
 
 console.log("Initial global variables:", {
     benchmark,
@@ -150,7 +147,7 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update function signature
+function updateChart(selectedColumns) { // Update function signature
     // Clear existing series data
     chart.updateSeries([]);
 
@@ -166,8 +163,6 @@ function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update
             data: trendlineData,
             type: 'line',
             ...trendlineOptions,
-            // Set the trendline color to match the series color
-            //color: trendlineColors[series.name.replace(' Trendline', '')], // Remove ' Trendline' when looking up the color
         });
     });
 
@@ -183,8 +178,6 @@ function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update
     // Update series names in the legend
     chart.updateOptions({
         // ... (other options)
-        colors: seriesColors.concat(Object.values(trendlineColors)),
-
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 4
@@ -211,11 +204,8 @@ function initializeChart() {
     // Update series names
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
 
-    // Generate colors
-    const { seriesColors, trendlineColors } = generateColors(allSeries, trendlineSeriesData);
-
     // Initialize the chart
-    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates, seriesColors, trendlineColors));
+    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
     chart.render();    
 
     // Update the chart on checkbox changes
@@ -223,7 +213,7 @@ function initializeChart() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-        updateChart(selectedColumns, seriesColors, trendlineColors);
+        updateChart(selectedColumns);
     }, 0));
 };
 
@@ -270,9 +260,7 @@ var dataLabelsSettings = {
 };
 
 function getChartOptions(dates, trendlineSeriesData) {
-    const colorOptions = generateColors(finalSeriesData, trendlineSeriesData);
     // In the getChartOptions function:
-console.log("Colors in getChartOptions:", colorOptions.seriesColors, colorOptions.trendlineColors);
     return {
         series: finalSeriesData,
         chart: {
@@ -289,7 +277,6 @@ console.log("Colors in getChartOptions:", colorOptions.seriesColors, colorOption
         xaxis: {
             categories: dates
         },
-        colors: colorOptions.seriesColors.concat(colorOptions.trendlineColors), // Combine series and trendline colors
         curve: {
             type: 'smooth' // Set curve type to smooth for original series
         }
@@ -344,55 +331,6 @@ function calculateTrendline(data) {
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
     return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
-}
-
-function getDefaultColors() {
-    return [
-        '#FF5733', '#33FF57', '#5733FF', 
-        '#FF33A1', '#FFD133', '#33FFE0', 
-        '#A233FF', '#FF8333', '#33A1FF', 
-        '#D433FF'
-    ];
-}
-
-// Helper function to generate a shade of a color
-function getShade(color, percent) {
-    let R = parseInt(color.substring(1, 3), 16);
-    let G = parseInt(color.substring(3, 5), 16);
-    let B = parseInt(color.substring(5, 7), 16);
-
-    R = parseInt(R * (100 + percent) / 100);
-    G = parseInt(G * (100 + percent) / 100);
-    B = parseInt(B * (100 + percent) / 100);
-
-    R = (R < 255) ? R : 255;
-    G = (G < 255) ? G : 255;
-    B = (B < 255) ? B : 255;
-
-    let RR = ((R.toString(16).length === 1) ? "0" + R.toString(16) : R.toString(16));
-    let GG = ((G.toString(16).length === 1) ? "0" + G.toString(16) : G.toString(16));
-    let BB = ((B.toString(16).length === 1) ? "0" + B.toString(16) : B.toString(16));
-
-    return "#" + RR + GG + BB;
-}
-
-// Generate colors for series and corresponding trendlines
-function generateColors(finalSeriesData, trendlineSeriesData) {
-    const defaultColors = getDefaultColors();
-    const seriesColors = [];
-    const trendlineColors = {};
-    
-    for (let i = 0; i < finalSeriesData.length; i++) {
-        const color = defaultColors[i % defaultColors.length];
-        seriesColors.push(color);
-        
-        // Generating a darker shade for the trendline
-        trendlineColors[finalSeriesData[i].name] = getShade(color, -30);
-    }
-
-    console.log("Generated colors:", seriesColors, trendlineColors);
-    
-    return { seriesColors, trendlineColors };
 }
 
 ////////////////////////////////////////////////
