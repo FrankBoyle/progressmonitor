@@ -498,7 +498,7 @@ function getBarChartOptions(dates, seriesData) {
     // Create annotations for running totals
     const annotations = totalValues.map((total, index) => ({
         x: index, // Category index
-        y: total,
+        y: total + 50, // Adjust the Y position to place annotations above the columns
         label: {
             text: `Total: ${total}`,
             borderColor: 'transparent',
