@@ -397,7 +397,7 @@ function initializeBarChart() {
     console.log("initializeBarChart called");
 
     // Extract data specific to the bar chart
-    const { dates, scores } = extractDataFromTableForBarChart();
+    const { dates, scores } = extractDataForBarChart();
 
     // Define chart options for the bar chart
     const barChartOptions = {
