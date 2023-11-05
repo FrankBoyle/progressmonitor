@@ -349,7 +349,35 @@ function getTrendlineData(seriesData) {
 }
 
 ////////////////////////////////////////////////
+// Initialize the bar chart
+function initializeBarChart() {
+    // Extract data for the bar chart (similar to what you did for the line chart)
+    const { dates, scores } = extractDataFromTable();
+    const selectedColumns = getSelectedColumns(); // Define this function to get selected columns
 
+    // Populate series data for the bar chart
+    const barChartSeriesData = populateSeriesData(selectedColumns, headerMap, scores);
+
+    // Define chart options for the bar chart
+    const barChartOptions = {
+        chart: {
+            type: 'bar',
+            // Add other options as needed
+        },
+        xaxis: {
+            categories: dates,
+        },
+        series: barChartSeriesData.map((series, index) => ({
+            name: seriesNames[index], // Define seriesNames based on your data
+            data: series,
+        })),
+        // Add other chart options as needed
+    };
+
+    // Create and render the bar chart
+    const barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
+    barChart.render();
+}
 
 ////////////////////////////////////////////////
 
