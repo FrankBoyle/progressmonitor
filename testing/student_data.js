@@ -47,7 +47,13 @@ $("#accordion").accordion({
 });
 
 // Function to extract data and generate series list
-function extractDataAndGenerateSeries() {
+function extractDataAndGenerateSeries(customColumnNames) {
+    // Ensure customColumnNames is defined
+    if (!customColumnNames) {
+        console.error("customColumnNames is not defined");
+        return;
+    }
+
     // Extract data from the table here
     const { dates, scores } = extractDataFromTable();
 
