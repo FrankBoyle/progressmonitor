@@ -459,39 +459,17 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
-    // Extract data and populate stacked bar chart series data and columnTotals
+    //console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
-    const { seriesData, columnTotals } = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
+
+    // Populate stacked bar chart series data based on selected columns
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
     // Update the bar chart with the new data series and options
-    barChart.updateOptions(getBarChartOptions(dates, seriesData, columnTotals));
+    barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
 }
 
-function getBarChartOptions(dates, seriesData, columnTotals) {
-    const dataLabels = {
-        enabled: true,
-        formatter: function (val, opts) {
-            if (val === 0) {
-                return ''; // Hide labels for zero values
-            }
-            return val;
-        },
-        style: {
-            fontSize: '16px', // Set the font size for the data labels
-        },
-    };
-
-    // Add total values above the stacked bars
-    seriesData.forEach((series, index) => {
-        dataLabels[`total${index}`] = {
-            enabled: true,
-            position: 'top', // Display above the bars
-            formatter: function () {
-                return columnTotals[index].toString();
-            },
-        };
-    });
-
+function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'bar',
@@ -500,12 +478,25 @@ function getBarChartOptions(dates, seriesData, columnTotals) {
         xaxis: {
             categories: dates,
         },
-        series: seriesData,
+        series: seriesData.map((series, index) => ({
+            ...series,
+            color: seriesColors[index], // Set the color for each bar series
+        })),
         colors: seriesColors, // Use global colors for bars
-        dataLabels: dataLabels, // Include dataLabels with total values
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                if (val === 0) {
+                    return ''; // Hide labels for zero values
+                }
+                return val;
+            },
+            style: {
+                fontSize: '16px', // Set the font size for the data labels
+            },
+        },
     };
 }
-
 
 ////////////////////////////////////////////////
 
