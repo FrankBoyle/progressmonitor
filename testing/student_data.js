@@ -183,16 +183,16 @@ function updateChart(selectedColumns) { // Update function signature
     // Update series names in the legend
     chart.updateOptions({
         dropShadow: {
+            enabled: true,
             color: '#000',
             top: 0,  // Change to 0 to see if positioning is the issue
             left: 0,  // Change to 0 for same reason
             blur: 20,  // Increase blur for visibility
             opacity: 0.5  // Increase opacity for visibility
         },
-        
         stroke: {
             width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.width : 6
+                series.name.includes('Trendline') ? trendlineOptions.width : 5
             ),
             dashArray: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
