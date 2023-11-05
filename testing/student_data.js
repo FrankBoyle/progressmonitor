@@ -12,7 +12,7 @@ let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
 let scores = [];  // Declare scores globally
-
+let stackedBarChartSeriesData = [];
 
 const seriesColors = [
     '#082645',  // dark blue
