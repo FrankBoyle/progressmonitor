@@ -501,7 +501,7 @@ function getBarChartOptions(dates, seriesData) {
             text: `Total: ${total}`,
             borderColor: 'transparent',
             style: {
-                background: 'transparent',
+                background: '#f2f2f2',
                 color: '#333',
                 fontSize: '14px',
                 fontWeight: 'bold',
@@ -509,7 +509,7 @@ function getBarChartOptions(dates, seriesData) {
                     left: 10,
                     right: 10,
                     top: 4,
-                    bottom: 4,
+                    bottom: 5,
                 },
             },
         },
