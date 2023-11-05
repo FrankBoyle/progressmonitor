@@ -280,12 +280,11 @@ function getChartOptions(dates, trendlineSeriesData) {
             categories: dates
         },
         dropShadow: {
-            enabled: true,
             color: '#000',
-            top: 10,  // Change to 0 to see if positioning is the issue
-            left: 10,  // Change to 0 for same reason
-            blur: 50,  // Increase blur for visibility
-            opacity: 1.0,  // Increase opacity for visibility
+            top: 0,  // Change to 0 to see if positioning is the issue
+            left: 0,  // Change to 0 for same reason
+            blur: 20,  // Increase blur for visibility
+            opacity: 0.5  // Increase opacity for visibility
         },
         stroke: {
             width: finalSeriesData.map(series =>
