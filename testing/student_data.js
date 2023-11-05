@@ -150,7 +150,7 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns, seriesColors, trendlineColors) {
+function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update function signature
     // Clear existing series data
     chart.updateSeries([]);
 
@@ -290,6 +290,7 @@ console.log("Colors in getChartOptions:", colorOptions.seriesColors, colorOption
             categories: dates
         },
         colors: seriesColors.concat(trendlineColors),
+
     };
 }
 
@@ -374,19 +375,21 @@ function getShade(color, percent) {
 }
 
 // Generate colors for series and corresponding trendlines
-function generateColors(seriesData, trendlineSeriesData) {
-    const colors = getDefaultColors();
-    const seriesColors = {};
+function generateColors(finalSeriesData, trendlineSeriesData) {
+    const defaultColors = getDefaultColors();
+    const seriesColors = [];
     const trendlineColors = {};
+    
+    for (let i = 0; i < finalSeriesData.length; i++) {
+        const color = defaultColors[i % defaultColors.length];
+        seriesColors.push(color);
+        
+        // Generating a darker shade for the trendline
+        trendlineColors[finalSeriesData[i].name] = getShade(color, -30);
+    }
 
-    seriesData.forEach((series, i) => {
-        seriesColors[series.name] = colors[i % colors.length];
-    });
-
-    trendlineSeriesData.forEach((trendline, i) => {
-        trendlineColors[trendline.name] = getShade(colors[i % colors.length], -20);
-    });
-
+    console.log("Generated colors:", seriesColors, trendlineColors);
+    
     return { seriesColors, trendlineColors };
 }
 
