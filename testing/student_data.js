@@ -422,9 +422,10 @@ function initializeBarChart() {
     }, 250));
 }
 
-
 // Update the bar chart based on selected columns.
 function updateBarChart() {
+    console.log("updateBarChart called"); // Add this line
+
     // Clear existing series data
     barChart.updateSeries([]);
 
