@@ -206,25 +206,33 @@ function updateChart(selectedColumns) { // Update function signature
     });
 }
 
-// Initialize the chart with default settings (line chart by default)
+// Initializes the chart with default settings.
 function initializeChart() {
+    // Extract headers and data
+    const headerRow = document.querySelector('#dataTable thead tr');
+    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
     const { dates, scores } = extractDataFromTable();
     allSeries = generateSeriesData(scores, headerNames);
+
+    // Get selected columns
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
+    // Update series names
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
 
-    // Initialize the line chart with appropriate options
+    // Initialize the chart
     chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
-    chart.render();
+    chart.render();    
 
     // Update the chart on checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
         updateChart(selectedColumns);
     }, 250));
-}
+};
 
 // The debounce function
 function debounce(func, wait) {
