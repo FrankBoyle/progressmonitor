@@ -380,7 +380,12 @@ function extractDataForBarChart() {
 
 // Initialize the bar chart
 function initializeBarChart() {
-    console.log("initializeBarChart called"); // Add this line for debugging
+    console.log("initializeBarChart called");
+
+    // Clear any existing bar chart instance if it exists
+    if (barChart) {
+        barChart.destroy();
+    }
 
     const { dates, scores } = extractDataForBarChart();
 
@@ -401,8 +406,16 @@ function initializeBarChart() {
     };
 
     // Create and render the bar chart
-    const barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
+    barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
     barChart.render();
+}
+
+// Then, when you want to update the series in your accordion function:
+if (barChart) {
+    barChart.updateSeries([{
+        name: 'Bar Chart Series', // Name of the series
+        data: scores, // Data for the bar chart
+    }]);
 }
 
 ////////////////////////////////////////////////
