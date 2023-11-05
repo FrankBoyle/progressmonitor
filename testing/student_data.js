@@ -430,17 +430,8 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     // Debugging: Log the stackedBarChartSeriesData
     console.log("Stacked Bar Chart Series Data:", stackedBarChartSeriesData);
 
-    // Calculate totals for each date
-    const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
-        const columnIndex = headerNames.indexOf(colName) - 1; // Subtract 1 to account for date column
-        return sum + (scoreRow[columnIndex] || 0);
-    }, 0));
-
-    // Debugging: Log the totals
-    console.log("Totals:", totals);
-
-    // Return both the series data and the totals
-    return { seriesData: stackedBarChartSeriesData, totals };
+    // Return only the series data without totals
+    return stackedBarChartSeriesData;
 }
 
 // Initialize the bar chart with empty data
@@ -470,11 +461,7 @@ function updateBarChart(selectedColumns) {
 
     // Extract data for the selected columns
     const { dates, scores } = extractDataForBarChart();
-    const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
-    seriesData.push({
-        name: 'Total',
-        data: totals
-    });
+    const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
     // Update the bar chart with the new data
     barChart.updateOptions({ xaxis: { categories: dates } });
