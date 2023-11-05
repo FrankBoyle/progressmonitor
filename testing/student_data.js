@@ -275,10 +275,10 @@ function getChartOptions(dates, trendlineSeriesData) {
             dropShadow: {
                 enabled: true,
                 color: '#000',
-                top: 5,  // Change to 0 to see if positioning is the issue
-                left: 5,  // Change to 0 for same reason
+                top: -15,  // Change to 0 to see if positioning is the issue
+                left: 15,  // Change to 0 for same reason
                 blur: 7,  // Increase blur for visibility
-                opacity: 1  // Increase opacity for visibility
+                opacity: 0.5  // Increase opacity for visibility
             },
         },
         colors: seriesColors,
