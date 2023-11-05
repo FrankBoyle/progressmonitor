@@ -136,10 +136,7 @@ if (isset($_GET['metadata_id'])) {
 </table>
 
 <button id="addDataRow">Add Data Row</button>
-<div>
-    <label>Show Trendlines:</label>
-    <input type="checkbox" id="toggleTrendlines" checked> <!-- Checked by default -->
-</div>
+
 
 <!-- Existing checkboxes for column selection -->
 <div id="columnSelector">
