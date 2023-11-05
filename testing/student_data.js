@@ -393,7 +393,7 @@ function extractDataForBarChart() {
     return { dates, scores };
 }
 
-// Create a function to populate the stacked bar chart series data.
+// Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores) {
     const stackedBarChartData = [];
     const columnIndexMap = {};
@@ -419,28 +419,27 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
         data: stackedBarChartData[index],
     }));
 
-    console.log("Populated stacked bar chart series data:", stackedBarChartSeriesData);
-
-    return stackedBarChartSeriesData;
-}
-
-// Modify the initializeBarChart function to calculate and display totals.
-function initializeBarChart() {
-    const { dates, scores } = extractDataForBarChart();
-
-    // Populate stacked bar chart series data based on selected columns
-    const stackedBarChartSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
-
     // Calculate totals for each date
     const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
         const columnIndex = headerNames.indexOf(colName) - 1; // Subtract 1 to account for date column
         return sum + (scoreRow[columnIndex] || 0);
     }, 0));
 
-    // Update the labels for the last series (totals)
+    // Return both the series data and the totals
+    return { seriesData: stackedBarChartSeriesData, totals };
+}
+
+// Initialize the bar chart.
+function initializeBarChart() {
+    const { dates, scores } = extractDataForBarChart();
+
+    // Populate stacked bar chart series data based on selected columns
+    const { seriesData: stackedBarChartSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
+
+    // Add the totals to the series data
     stackedBarChartSeriesData.push({
         name: 'Total',
-        data: totals,
+        data: totals
     });
 
     const barChartOptions = {
@@ -481,18 +480,22 @@ function initializeBarChart() {
 // Initialize the chart
 initializeBarChart();
 
-
-// Create the updateBarChart function.
+// Update the bar chart.
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
-    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+    const { seriesData: newSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
+
+    // Add the totals to the series data for updating
+    newSeriesData.push({
+        name: 'Total',
+        data: totals
+    });
 
     barChart.updateSeries(newSeriesData);
 }
-
 
 ////////////////////////////////////////////////
 
