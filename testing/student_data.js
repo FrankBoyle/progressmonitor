@@ -444,11 +444,11 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
 
 // Initialize the bar chart
 function initializeBarChart() {
-    // Extract initial selected columns before initializing the bar chart
+    // Extract data and populate the selectedColumns array
+    const { dates, scores } = extractDataForBarChart();
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    const { dates, scores } = extractDataForBarChart();
     const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
     seriesData.push({
         name: 'Total',
