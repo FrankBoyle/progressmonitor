@@ -941,7 +941,7 @@ $(document).ready(function() {
                 alert("There was an error saving the data.");
             }
         }
-        location.reload
+        location.reload();
     });    
 
 // Custom filter for DataTables
