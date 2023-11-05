@@ -858,12 +858,6 @@ $(document).ready(function() {
     }
 
     $('#addDataRow').off('click').click(function() {
-        // Check for an existing "new" row
-        if ($('tr[data-performance-id="new"]').length) {
-            alert("Please save the existing new entry before adding another one.");
-            return;
-        }
-    
         const currentDate = getCurrentDate();
         if (isDateDuplicate(currentDate)) {
             alert("An entry for this date already exists. Please choose a different date.");
@@ -898,7 +892,7 @@ $(document).ready(function() {
     
         // Show the datepicker immediately
         tempInput.datepicker('show');
-    });
+    });    
     
     // Attach event handler for the "Save" button outside the datepicker function
     $(document).on('click', '.saveRow', async function() {
@@ -948,7 +942,8 @@ $(document).ready(function() {
                 alert("There was an error saving the data.");
             }
         }
-    });    
+    });
+    
 
 // Custom filter for DataTables
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
