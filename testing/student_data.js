@@ -41,7 +41,7 @@ $(function() {
                 } else if (selectedChartType === 'bar') {
                     // If the chart is not yet initialized, do so.
                     // Otherwise, refresh the bar chart.
-                    if (!barChart) {
+                    if (barChart) {
                         initializeBarChart();
                     } else {
                         barChart.updateSeries(barChart.w.globals.series);
