@@ -279,27 +279,28 @@ function getChartOptions(dates, trendlineSeriesData) {
         }),
         chart: {
             // ... (other chart settings)
-            colors: seriesColors,
-            dataLabels: dataLabelsSettings,
-            yaxis: {
-                labels: {
-                    formatter: function(val) {
+        },
+        colors: seriesColors,
+        dataLabels: dataLabelsSettings,
+        yaxis: {
+            labels: {
+                formatter: function(val) {
                     return parseFloat(val).toFixed(0);
-                    }
                 }
-            },
-            xaxis: {
-                categories: dates
-            },
-            stroke: {
-                width: finalSeriesData.map(series =>
+            }
+        },
+        xaxis: {
+            categories: dates
+        },
+        stroke: {
+            width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 6
-                ),
-                curve: 'smooth'
-            },
-            markers: {
-                size: 0
-            },
+            ),
+            curve: 'smooth'
+        },
+
+        markers: {
+            size: 0
         },
     };
 }
