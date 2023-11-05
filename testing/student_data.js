@@ -39,9 +39,9 @@ $(function() {
                         chart.updateSeries(chart.w.globals.series);
                     }
                 } else if (selectedChartType === 'bar') {
-                    // If the chart is not yet initialized, do so.
+                    // If the bar chart is not yet initialized, do so.
                     // Otherwise, refresh the bar chart.
-                    if (barChart) {
+                    if (!barChart) {
                         initializeBarChart();
                     } else {
                         barChart.updateSeries(barChart.w.globals.series);
@@ -49,8 +49,9 @@ $(function() {
                 }
             }
         }
-    });    
+    });
 });
+
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
