@@ -29,28 +29,25 @@ $(function() {
         heightStyle: "content",
         active: false, // Ensure all panels are closed initially
         activate: function(event, ui) {
-            if (ui.newPanel.has('#chart').length) {
-                if (selectedChartType === 'line') {
-                    // If the chart is not yet initialized, do so.
-                    // Otherwise, refresh the line chart.
-                    if (!chart) {
-                        initializeChart();
-                    } else {
-                        chart.updateSeries(chart.w.globals.series);
-                    }
-                } else if (selectedChartType === 'bar') {
-                    // If the bar chart is not yet initialized, do so.
-                    // Otherwise, refresh the bar chart.
-                    if (!barChart) {
-                        initializeBarChart();
-                    } else {
-                        barChart.updateSeries(barChart.w.globals.series);
-                    }
+            if (ui.newHeader.text() === 'Line Graph') {
+                selectedChartType = 'line';
+                if (!chart) {
+                    initializeChart();
+                } else {
+                    chart.updateSeries(chart.w.globals.series);
+                }
+            } else if (ui.newHeader.text() === 'Bar Graph') {
+                selectedChartType = 'bar';
+                if (!barChart) {
+                    initializeBarChart();
+                } else {
+                    barChart.updateSeries(barChart.w.globals.series);
                 }
             }
         }
     });
 });
+
 
 
 // Extracts dates and scores data from the provided HTML table.
