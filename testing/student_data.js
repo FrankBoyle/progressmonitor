@@ -419,6 +419,27 @@ function initializeBarChart() {
     }, 250));
 }
 
+function populateBarChartSeriesData(selectedColumns, scores) {
+    const seriesData = [];
+    for (const col of selectedColumns) {
+        // Find the index of the selected column in the headerNames array
+        const columnIndex = headerNames.indexOf(col);
+
+        if (columnIndex !== -1) {
+            // Extract the data for the selected column from scores
+            const columnData = scores.map(scoreRow => scoreRow[columnIndex]);
+            
+            // Push the extracted data to the seriesData array
+            seriesData.push(columnData);
+        } else {
+            console.warn(`Column '${col}' not found in headerNames.`);
+        }
+    }
+    console.log("Populated bar chart series data:", seriesData);
+
+    return seriesData;
+}
+
 function populateBarChartSeriesData(selectedColumns, headerMap, scores) {
     const seriesData = [];
     for (const col of selectedColumns) {
