@@ -385,26 +385,24 @@ function getShade(color, percent) {
 }
 
 // Generate colors for series and corresponding trendlines
-function generateColors(seriesList) {
+function generateColors(finalSeriesData, trendlineSeriesData) {
     const defaultColors = getDefaultColors();
     const seriesColors = [];
-    const trendlineColors = [];
-
-    for(let i = 0; i < seriesList.length; i++) {
-        const series = seriesList[i];
+    const trendlineColors = {};
+    
+    for (let i = 0; i < finalSeriesData.length; i++) {
         const color = defaultColors[i % defaultColors.length];
         seriesColors.push(color);
-
-        if (series.name.includes('Trendline')) {
-            trendlineColors.push(getShade(color, -30));  // darken the color by 30% for trendlines
-        }
+        
+        // Generating a darker shade for the trendline
+        trendlineColors[finalSeriesData[i].name] = getShade(color, -30);
     }
 
-    console.log("Series colors:", seriesColors);
-    console.log("Trendline colors:", trendlineColors);
-
+    console.log("Generated colors:", seriesColors, trendlineColors);
+    
     return { seriesColors, trendlineColors };
 }
+
 
 ////////////////////////////////////////////////
 
