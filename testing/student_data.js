@@ -404,7 +404,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
         stackedBarChartData.push([]);
     });
 
-    // Iterate through the scores to accumulate values for each column
+    // Iterate through the scores and populate the stackedBarChartData
     scores.forEach((scoreRow) => {
         selectedColumns.forEach((col) => {
             const columnIndex = columnIndexMap[col];
@@ -414,15 +414,10 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
         });
     });
 
-    // Calculate the sums for each category (column)
-    const sums = stackedBarChartData.map((data) =>
-        data.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-    );
-
-    const stackedBarChartSeriesData = [{
-        name: 'Stacked Bar Chart',
-        data: sums,
-    }];
+    const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
+        name: col,
+        data: stackedBarChartData[index],
+    }));
 
     console.log("Populated stacked bar chart series data:", stackedBarChartSeriesData);
 
