@@ -461,7 +461,11 @@ function updateBarChart(selectedColumns) {
 
     // Extract data for the selected columns
     const { dates, scores } = extractDataForBarChart();
-    const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+    const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
+    seriesData.push({
+        name: 'Total',
+        data: totals
+    });
 
     // Update the bar chart with the new data
     barChart.updateOptions({ xaxis: { categories: dates } });
