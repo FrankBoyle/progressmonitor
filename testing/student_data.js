@@ -265,14 +265,6 @@ function getChartOptions(dates, trendlineSeriesData) {
             if (!series.name.includes('Trendline')) {  // If it's not a trendline, apply dropShadow
                 return {
                     ...series,
-                    dropShadow: {
-                        enabled: true,
-                        color: '#000',
-                        top: 0,  // Change to 0 to see if positioning is the issue
-                        left: 0,  // Change to 0 for same reason
-                        blur: 20,  // Increase blur for visibility
-                        opacity: 0.5  // Increase opacity for visibility
-                    }
                 }
             }
             return series;  // Return the series as-is for trendlines
@@ -291,6 +283,14 @@ function getChartOptions(dates, trendlineSeriesData) {
         },
         xaxis: {
             categories: dates
+        },
+        dropShadow: {
+            enabled: true,
+            color: '#000',
+            top: 0,  // Change to 0 to see if positioning is the issue
+            left: 0,  // Change to 0 for same reason
+            blur: 20,  // Increase blur for visibility
+            opacity: 0.5  // Increase opacity for visibility
         },
         stroke: {
             width: finalSeriesData.map(series =>
