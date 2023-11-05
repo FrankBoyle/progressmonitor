@@ -467,7 +467,6 @@ function updateBarChart(selectedColumns) {
     barChart.updateOptions(getBarChartOptions(dates, seriesData, columnTotals));
 }
 
-
 function getBarChartOptions(dates, seriesData, columnTotals) {
     const dataLabels = {
         enabled: true,
@@ -506,6 +505,7 @@ function getBarChartOptions(dates, seriesData, columnTotals) {
         dataLabels: dataLabels, // Include dataLabels with total values
     };
 }
+
 
 ////////////////////////////////////////////////
 
