@@ -423,16 +423,13 @@ function initializeBarChart() {
 }
 
 // Update the bar chart based on selected columns.
-function updateBarChart() {
-    console.log("updateBarChart called"); // Add this line
-
-    // Clear existing series data
-    barChart.updateSeries([]);
+function updateBarChart(selectedColumns) {
+    console.log("updateBarChart called");
 
     // Create a new series array based on selected columns
     const newSeriesData = generateFinalSeriesData({ dates, scores }, selectedColumns);
 
-    // Update the bar chart with the new series data and updated names
+    // Update the bar chart with the new series data
     barChart.updateSeries(newSeriesData);
 }
 
