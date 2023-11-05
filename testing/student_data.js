@@ -279,7 +279,7 @@ function getChartOptions(dates, trendlineSeriesData) {
         },
         stroke: {
             width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.width : 4
+                series.name.includes('Trendline') ? trendlineOptions.width : 6
             ),
             curve: 'smooth' // This makes the original series line smooth
         },
@@ -311,7 +311,6 @@ function getChartOptions(dates, trendlineSeriesData) {
         }
     };
 }
-
 
 const trendlineOptions = {
     dashArray: 5,             // Makes the line dashed
