@@ -485,16 +485,19 @@ function getBarChartOptions(dates, seriesData, columnTotals) {
         },
     };
 
-    // Add total values above the stacked bars
-    seriesData.forEach((series, index) => {
-        dataLabels[`total${index}`] = {
-            enabled: true,
-            position: 'top', // Display above the bars
-            formatter: function () {
-                return columnTotals[index].toString();
-            },
-        };
-    });
+    // Check if seriesData is an array
+    if (Array.isArray(seriesData)) {
+        // Add total values above the stacked bars
+        seriesData.forEach((series, index) => {
+            dataLabels[`total${index}`] = {
+                enabled: true,
+                position: 'top', // Display above the bars
+                formatter: function () {
+                    return columnTotals[index].toString();
+                },
+            };
+        });
+    }
 
     return {
         chart: {
