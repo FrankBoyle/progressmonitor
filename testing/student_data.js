@@ -289,8 +289,10 @@ console.log("Colors in getChartOptions:", colorOptions.seriesColors, colorOption
         xaxis: {
             categories: dates
         },
-        colors: seriesColors.concat(trendlineColors),
-
+        colors: colorOptions.seriesColors.concat(colorOptions.trendlineColors), // Combine series and trendline colors
+        curve: {
+            type: 'smooth' // Set curve type to smooth for original series
+        }
     };
 }
 
