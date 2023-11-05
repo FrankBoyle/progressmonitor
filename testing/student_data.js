@@ -44,14 +44,13 @@ $("#accordion").accordion({
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
             console.log("Bar Graph activated"); // Debugging log
-            if (!barChart) {
+            if (barChart === null) {
                 initializeBarChart();
-            } else {
-                // Add code to update the bar chart here if needed
             }
         }
     }
 });
+
 
 
 // Extracts dates and scores data from the provided HTML table.
