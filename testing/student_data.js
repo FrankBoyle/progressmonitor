@@ -477,10 +477,6 @@ function initializeBarChart() {
     }, 250));
 }
 
-// Initialize the chart
-initializeBarChart();
-
-
 // Update the bar chart.
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
