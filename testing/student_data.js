@@ -862,7 +862,15 @@ $(document).ready(function() {
             alert("Please save the existing new entry before adding another one.");
             return;
         }
-    
+            // Show the datepicker when the button is clicked
+            $('#newRowDate').datepicker({
+                dateFormat: 'mm/dd/yy',
+                onSelect: function(dateText) {
+                    // Call a function to handle the selected date
+                    handleSelectedDate(dateText);
+                }
+            }).datepicker('show');
+        
         const currentDate = getCurrentDate();
         if (isDateDuplicate(currentDate)) {
             alert("An entry for this date already exists. Please choose a different date.");
@@ -940,13 +948,7 @@ $(document).ready(function() {
                 });
             }
         }).datepicker('show');   // Show the datepicker immediately
-                    // Pressing Enter to save changes
-                    input.off('keypress').keypress(function(e) {
-                        if (e.which === 13) {
-                            e.preventDefault();
-                            input.blur();
-                        }
-                    });
+        
     });
     
 
