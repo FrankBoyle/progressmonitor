@@ -870,19 +870,15 @@ $(document).ready(function() {
             });
         });
     }
+    
     $('#addDataRow').off('click').click(function() {
         if ($('tr[data-performance-id="new"]').length) {
             alert("Please save the existing new entry before adding another one.");
             return;
         }
-        
-        const currentDate = getCurrentDate();
-        if (isDateDuplicate(currentDate)) {
-            return;
-        }
     
         const newRow = $("<tr data-performance-id='new'>");
-        newRow.append(`<td class="editable" data-field-name="score_date">${currentDate}</td>`);
+        newRow.append('<td class="editable" data-field-name="score_date"></td>');  // Initialized without a date
         
         for (let i = 1; i <= 10; i++) {
             newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
@@ -894,6 +890,13 @@ $(document).ready(function() {
         dateCell.click();
     
         dateCell.on('change', async function() {
+            const selectedDate = $(this).text();
+            if (isDateDuplicate(selectedDate)) {
+                alert("An entry for this date already exists. Please choose a different date.");
+                newRow.remove();  // Remove the newly added row if the date is duplicate
+                return;
+            }
+    
             const row = $(this).closest('tr');
             const performanceId = row.data('performance-id');
             const school_id = $('#schoolIdInput').val();
@@ -912,15 +915,11 @@ $(document).ready(function() {
     
             const postData = {
                 student_id: CURRENT_STUDENT_ID,
-                score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+                score_date: convertToDatabaseDate(selectedDate),
                 scores: scores,
                 metadata_id: metadata_id,
                 school_id: school_id,
             };
-    
-            if (isDateDuplicate(postData.score_date)) {
-                return;
-            }
     
             const response = await ajaxCall('POST', 'insert_performance.php', postData);
             if (response && response.performance_id) {
@@ -935,7 +934,8 @@ $(document).ready(function() {
             }
             location.reload();
         });
-    });    
+    });
+     
 
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
