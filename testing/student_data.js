@@ -281,6 +281,7 @@ function getChartOptions(dates, trendlineSeriesData) {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 6
             ),
+            curve: 'smooth' // This makes the original series line smooth
         },
         fill: {
             type: 'solid',
@@ -305,9 +306,6 @@ function getChartOptions(dates, trendlineSeriesData) {
             blur: 10,
             opacity: 0.2
         },
-        curve: {
-            type: 'smooth' // Set curve type to smooth for original series
-        }
     };
 }
 
