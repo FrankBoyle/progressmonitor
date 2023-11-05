@@ -839,20 +839,6 @@ $(document).ready(function() {
                             newRow.attr('data-performance-id', response.performance_id);
                             newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                         }
-    
-                        /* New code for updating score8 starts here
-                        if (['score1', 'score2', 'score3', 'score4'].includes(fieldName)) {
-                            const row = cell.closest('tr');
-                            const score1 = parseFloat(row.find('td[data-field-name="score1"]').text()) || 0;
-                            const score2 = parseFloat(row.find('td[data-field-name="score2"]').text()) || 0;
-                            const score3 = parseFloat(row.find('td[data-field-name="score3"]').text()) || 0;
-                            const score4 = parseFloat(row.find('td[data-field-name="score4"]').text()) || 0;
-                            const average = (score1 + score2 + score3 + score4) / 4;
-                            row.find('td[data-field-name="score8"]').text(average.toFixed(2)); // Format the result to 2 decimal places
-                            // Update the score8 value in the database
-                            updateScoreInDatabase(row, 'score8', average.toFixed(2));
-                        }
-                        */
                     },
                     error: function() {
                         // Handle any error here, e.g., show a notification to the user
@@ -941,7 +927,7 @@ $(document).ready(function() {
                     if (response && response.performance_id) {
                         row.attr('data-performance-id', response.performance_id);
                         row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
-                        row.find('td.editable').text('');
+                        //row.find('td.editable').text('');
                         row.find('.saveRow').prop('disabled', false);
                     } else {
                         if (response && response.error) {
