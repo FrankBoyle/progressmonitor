@@ -494,32 +494,26 @@ function getBarChartOptions(dates, seriesData) {
         });
     });
 
-    const annotations = totalValues.map((total, index) => {
-        // Offset might need to be adjusted based on visual representation
-        const yOffset = total + 10; // Offset to position the label above the highest bar
-    
-        return {
-            x: dates[index], // Use the date to match the x-axis categories
-            y: yOffset,
-            label: {
-                text: `Total: ${total}`,
-                borderColor: 'transparent',
-                style: {
-                    background: '#f2f2f2',
-                    color: '#333',
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    padding: {
-                        left: 10,
-                        right: 10,
-                        top: 4,
-                        bottom: 4,
-                    },
+    const annotations = totalValues.map((total, index) => ({
+        x: dates[index], // Use the date instead of index
+        y: total + 5, // You may need to adjust this for exact positioning
+        label: {
+            text: `Total: ${total}`,
+            borderColor: 'transparent',
+            style: {
+                background: 'transparent',
+                color: '#333',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 4,
+                    bottom: 4,
                 },
             },
-        };
-    });
-      
+        },
+    }));    
 
     // Adjust the Y position of annotations based on bar heights
     annotations.forEach((annotation, index) => {
