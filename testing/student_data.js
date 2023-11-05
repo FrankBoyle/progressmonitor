@@ -30,16 +30,26 @@ $(function() {
         active: false, // Ensure all panels are closed initially
         activate: function(event, ui) {
             if (ui.newPanel.has('#chart').length) {
-                // If the chart is not yet initialized, do so.
-                // Otherwise, refresh the chart.
-                if (!chart) {
-                    initializeChart();
-                } else {
-                    chart.updateSeries(chart.w.globals.series);
+                if (selectedChartType === 'line') {
+                    // If the chart is not yet initialized, do so.
+                    // Otherwise, refresh the line chart.
+                    if (!chart) {
+                        initializeChart();
+                    } else {
+                        chart.updateSeries(chart.w.globals.series);
+                    }
+                } else if (selectedChartType === 'bar') {
+                    // If the chart is not yet initialized, do so.
+                    // Otherwise, refresh the bar chart.
+                    if (!barChart) {
+                        initializeBarChart();
+                    } else {
+                        barChart.updateSeries(barChart.w.globals.series);
+                    }
                 }
             }
         }
-    });
+    });    
 });
 
 // Extracts dates and scores data from the provided HTML table.
@@ -349,14 +359,30 @@ function getTrendlineData(seriesData) {
 }
 
 ////////////////////////////////////////////////
+function extractDataForBarChart() {
+    const tableRows = document.querySelectorAll("table tbody tr");
+    const dates = [];
+    const scores = [];
+
+    tableRows.forEach((row) => {
+        const dateCell = row.querySelector("td:first-child");
+        if (dateCell) {
+            dates.push(dateCell.textContent.trim());
+        } else {
+            dates.push(""); // or some default date or error handling
+        }
+
+        const scoreCell = row.querySelector("td:last-child");
+        const score = parseInt(scoreCell.textContent || '0', 10);
+        scores.push(score);
+    });
+
+    return { dates, scores };
+}
+
 // Initialize the bar chart
 function initializeBarChart() {
-    // Extract data for the bar chart (similar to what you did for the line chart)
-    const { dates, scores } = extractDataFromTable();
-    const selectedColumns = getSelectedColumns(); // Define this function to get selected columns
-
-    // Populate series data for the bar chart
-    const barChartSeriesData = populateSeriesData(selectedColumns, headerMap, scores);
+    const { dates, scores } = extractDataForBarChart();
 
     // Define chart options for the bar chart
     const barChartOptions = {
@@ -367,10 +393,10 @@ function initializeBarChart() {
         xaxis: {
             categories: dates,
         },
-        series: barChartSeriesData.map((series, index) => ({
-            name: seriesNames[index], // Define seriesNames based on your data
-            data: series,
-        })),
+        series: [{
+            name: 'Bar Chart Series', // Name of the series
+            data: scores, // Data for the bar chart
+        }],
         // Add other chart options as needed
     };
 
