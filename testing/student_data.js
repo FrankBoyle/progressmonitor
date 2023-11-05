@@ -858,12 +858,6 @@ $(document).ready(function() {
     }
 
     $('#addDataRow').off('click').click(function() {
-        // Check for an existing "new" row
-        if ($('tr[data-performance-id="new"]').length) {
-            alert("Please save the existing new entry before adding another one.");
-            return;
-        }
-    
         const currentDate = getCurrentDate();
         if (isDateDuplicate(currentDate)) {
             alert("An entry for this date already exists. Please choose a different date.");
@@ -893,6 +887,9 @@ $(document).ready(function() {
     
                 // Cleanup temporary input
                 tempInput.remove();
+    
+                // Force a save immediately upon selecting a date
+                saveRowData(newRow);
             }
         });
     
@@ -901,15 +898,19 @@ $(document).ready(function() {
     });
     
     // Attach event handler for the "Save" button outside the datepicker function
-    $(document).on('click', '.saveRow', async function() {
+    $(document).on('click', '.saveRow', function() {
         const row = $(this).closest('tr');
+        saveRowData(row);
+    });
+    
+    async function saveRowData(row) {
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');
     
         // Disable the save button to prevent multiple clicks
-        $(this).prop('disabled', true);
+        row.find('.saveRow').prop('disabled', true);
     
         if (performanceId !== 'new') {
             return;
@@ -941,8 +942,10 @@ $(document).ready(function() {
                 alert("There was an error saving the data.");
             }
         }
+    
+        // Reload the page to show the new row with a delete button
         location.reload();
-    });    
+    }    
 
 // Custom filter for DataTables
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
