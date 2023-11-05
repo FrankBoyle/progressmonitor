@@ -462,7 +462,7 @@ function initializeBarChart() {
                 return val;
             },
             style: {
-                fontSize: '20px', // Set the font size for the data labels
+                fontSize: '16px', // Set the font size for the data labels
             },
         },
     };
