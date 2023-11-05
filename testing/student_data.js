@@ -386,8 +386,6 @@ function extractDataForBarChart() {
 
         scores.push(rowScores);
     });
-    console.log("Extracted dates:", dates);
-    console.log("Extracted scores:", scores);
 
     return { dates, scores };
 }
@@ -424,6 +422,7 @@ function initializeBarChart() {
         updateBarChart(selectedColumns);
     }, 250));
 }
+
 
 // Update the bar chart based on selected columns.
 function updateBarChart(selectedColumns) {
