@@ -940,7 +940,13 @@ $(document).ready(function() {
                 });
             }
         }).datepicker('show');   // Show the datepicker immediately
-        
+                    // Pressing Enter to save changes
+                    input.off('keypress').keypress(function(e) {
+                        if (e.which === 13) {
+                            e.preventDefault();
+                            input.blur();
+                        }
+                    });
     });
     
 
