@@ -498,7 +498,7 @@ function getBarChartOptions(dates, seriesData) {
     // Create annotations for running totals
     const annotations = totalValues.map((total, index) => ({
         x: index, // Category index
-        y: total + 10, // Adjust the Y position to place annotations above the columns
+        y: total + 5, // Adjust the Y position to place annotations above the columns
         label: {
             text: `Total: ${total}`,
             borderColor: 'transparent',
@@ -514,8 +514,8 @@ function getBarChartOptions(dates, seriesData) {
                     bottom: 4
                 },
             },
-            offsetX: 0, // Adjust the horizontal position (0 for center)
-            offsetY: -10, // Adjust the vertical position (negative value to place above)
+            offsetY: -20, // Adjust the vertical position to place above the bars
+            position: 'top', // Align the annotation with the top of the bars
         },
     }));
 
