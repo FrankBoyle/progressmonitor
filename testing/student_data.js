@@ -398,29 +398,29 @@ function extractDataForBarChart() {
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const stackedBarChartData = [];
     const columnIndexMap = {};
-    const columnTotals = []; // Array to store column totals
 
-    // Initialize columnIndexMap, create empty arrays for each column, and initialize columnTotals
+    // Initialize columnIndexMap and create empty arrays for each column
     selectedColumns.forEach((col, index) => {
         columnIndexMap[col] = index;
         stackedBarChartData.push([]);
-        columnTotals.push(0);
     });
 
-    // Iterate through the scores and populate the stackedBarChartData and columnTotals
+    // Debugging: Log the columnIndexMap and selectedColumns
+    console.log("Column Index Map:", columnIndexMap);
+    console.log("Selected Columns:", selectedColumns);
+
+    // Iterate through the scores and populate the stackedBarChartData
     scores.forEach((scoreRow) => {
         selectedColumns.forEach((col) => {
             const columnIndex = columnIndexMap[col];
             if (columnIndex !== undefined) {
-                const value = scoreRow[columnIndex];
-                stackedBarChartData[columnIndex].push(value);
-                columnTotals[columnIndex] += value;
+                stackedBarChartData[columnIndex].push(scoreRow[columnIndex]);
             }
         });
     });
 
-    // Debugging: Log the columnTotals
-    console.log("Column Totals:", columnTotals);
+    // Debugging: Log the stackedBarChartData
+    console.log("Stacked Bar Chart Data:", stackedBarChartData);
 
     const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
         name: col,
@@ -431,8 +431,8 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     // Debugging: Log the stackedBarChartSeriesData
     console.log("Stacked Bar Chart Series Data:", stackedBarChartSeriesData);
 
-    // Return the series data along with columnTotals
-    return { seriesData: stackedBarChartSeriesData, columnTotals };
+    // Return only the series data without totals
+    return stackedBarChartSeriesData;
 }
 
 // Initialize the bar chart
