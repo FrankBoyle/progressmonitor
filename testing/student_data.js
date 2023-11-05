@@ -444,6 +444,10 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
 
 // Initialize the bar chart
 function initializeBarChart() {
+    // Extract initial selected columns before initializing the bar chart
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
     const { dates, scores } = extractDataForBarChart();
     const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
     seriesData.push({
@@ -462,7 +466,6 @@ function initializeBarChart() {
         updateBarChart(selectedColumns);
     }, 250));
 }
-
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
