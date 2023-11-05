@@ -418,7 +418,7 @@ function initializeBarChart() {
             const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
                 .map(checkbox => checkbox.getAttribute("data-column-name") || '');
     
-            updateChart(selectedColumns);
+            updateBarChart(selectedColumns);
         }, 250));
 }
 
