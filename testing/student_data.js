@@ -636,6 +636,8 @@ $(document).ready(function() {
             const scoreInput = row.find(`td[data-field-name="score${i}"] input`);
             const scoreValue = scoreInput.val().trim(); // Retrieve the user-entered value from the input field
             scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
+            // Set the user-entered value in the table cell
+            row.find(`td[data-field-name="score${i}"]`).text(scoreValue);
         }
     
         const postData = {
@@ -652,7 +654,7 @@ $(document).ready(function() {
                     row.attr('data-performance-id', response.performance_id);
                     row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
                     // Clear input fields for this row
-                    row.find('td.editable input').val(''); // Clear input fields
+                    row.find('td.editable input').val('');
                     row.find('.saveRow').prop('disabled', false);
                 } else {
                     if (response && response.error) {
@@ -663,8 +665,7 @@ $(document).ready(function() {
                 }
                 location.reload();
             });
-    }
-    
+    }    
 
     async function saveEditedDate(cell, newDate) {
         const performanceId = cell.closest('tr').data('performance-id');
