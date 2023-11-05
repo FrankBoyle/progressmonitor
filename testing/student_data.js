@@ -394,11 +394,6 @@ function extractDataForBarChart() {
 function initializeBarChart() {
     console.log("initializeBarChart called");
 
-    // Clear any existing bar chart instance if it exists
-    if (barChart) {
-        barChart.destroy();
-    }
-
     const { dates, scores } = extractDataForBarChart();
 
     // Define chart options for the bar chart
@@ -434,13 +429,13 @@ function updateBarChart() {
 // Initialize the chart
 initializeBarChart();
 
-// Update the chart on checkbox changes
-document.getElementById("barChart").addEventListener("change", debounce(function() {
-    selectedColumns = Array.from(document.querySelectorAll("#barChart"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+    // Update the chart on checkbox changes
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    updateBarChart(selectedColumns);
-}, 250));
+        updateChart(selectedColumns);
+    }, 250));
 
 // Then, when you want to update the series in your accordion function:
 if (barChart) {
