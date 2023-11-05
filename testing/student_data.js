@@ -870,7 +870,7 @@ $(document).ready(function() {
             });
         });
     }
-    
+
     $('#addDataRow').off('click').click(function() {
         if ($('tr[data-performance-id="new"]').length) {
             alert("Please save the existing new entry before adding another one.");
@@ -878,7 +878,7 @@ $(document).ready(function() {
         }
     
         const newRow = $("<tr data-performance-id='new'>");
-        newRow.append('<td class="editable" data-field-name="score_date"></td>');  // Initialized without a date
+        newRow.append('<td class="editable" data-field-name="score_date"><input type="text" class="date-input"></td>');  // Use an input for date
         
         for (let i = 1; i <= 10; i++) {
             newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
@@ -886,14 +886,15 @@ $(document).ready(function() {
         
         $("table").append(newRow);
     
-        const dateCell = newRow.find('td[data-field-name="score_date"]');
-        dateCell.click();
+        const dateInput = newRow.find('input.date-input');
+        dateInput.click();  // Assuming the datepicker is triggered on click
     
-        dateCell.on('change', async function() {
-            const selectedDate = $(this).text();
+        dateInput.on('change', async function() {
+            const selectedDate = $(this).val();
+            
             if (isDateDuplicate(selectedDate)) {
                 alert("An entry for this date already exists. Please choose a different date.");
-                newRow.remove();  // Remove the newly added row if the date is duplicate
+                newRow.remove();
                 return;
             }
     
@@ -924,7 +925,8 @@ $(document).ready(function() {
             const response = await ajaxCall('POST', 'insert_performance.php', postData);
             if (response && response.performance_id) {
                 row.attr('data-performance-id', response.performance_id);
-                row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
+                row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(selectedDate));
+                $(this).remove();  // Remove the input after saving
             } else {
                 if (response && response.error) {
                     alert("Error: " + response.error);
@@ -934,9 +936,8 @@ $(document).ready(function() {
             }
             location.reload();
         });
-    });
+    });    
      
-
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
             dateFormat: 'mm/dd/yy',
