@@ -283,18 +283,6 @@ function getChartOptions(dates, trendlineSeriesData) {
             ),
             curve: 'smooth' // This makes the original series line smooth
         },
-        fill: {
-            type: 'solid',
-            opacity: 1,
-            gradient: {
-                shadeIntensity: 1,
-                inverseColors: false,
-                opacityFrom: 0.6,
-                opacityTo: 0.8,
-                stops: [0, 100],
-                type: "horizontal",
-            },
-        },
         markers: {
             size: 4
         },
