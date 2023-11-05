@@ -934,6 +934,13 @@ $(document).ready(function() {
             row.attr('data-performance-id', response.performance_id);
             row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
             row.find('.saveRow').prop('disabled', false);
+    
+            // Add the new row to the DataTable and redraw it
+            const table = $('table').DataTable();
+            table.row.add(row).draw(false);
+    
+            // Add a delete button to the new row
+            row.find('td:last-child').html('<button class="deleteRow">Delete</button>');
         } else {
             if (response && response.error) {
                 alert("Error: " + response.error);
@@ -941,7 +948,6 @@ $(document).ready(function() {
                 alert("There was an error saving the data.");
             }
         }
-        location.reload();
     });    
 
 // Custom filter for DataTables
