@@ -424,15 +424,12 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     return stackedBarChartSeriesData;
 }
 
-// Modify the initializeBarChart function to populate the chart with running totals.
+// Modify the initializeBarChart function to populate the chart with global colors.
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
     const stackedBarChartSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
-
-    // Calculate running totals for each category (date)
-    const runningTotals = calculateRunningTotals(stackedBarChartSeriesData);
 
     const barChartOptions = {
         chart: {
@@ -444,13 +441,6 @@ function initializeBarChart() {
         },
         series: stackedBarChartSeriesData,
         colors: seriesColors, // Use global colors for bars
-        dataLabels: {
-            enabled: true,
-            offsetY: -20, // Adjust the offset for proper positioning
-            formatter: function (val, opts) {
-                return runningTotals[opts.dataPointIndex].toFixed(2); // Display running total with two decimal places
-            },
-        },
     };
 
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
@@ -463,20 +453,6 @@ function initializeBarChart() {
         updateBarChart(selectedColumns);
     }, 250));
 }
-
-// Function to calculate running totals for each category (date)
-function calculateRunningTotals(seriesData) {
-    const runningTotals = new Array(seriesData[0].data.length).fill(0);
-
-    return seriesData.map((series) => ({
-        name: series.name,
-        data: series.data.map((value, index) => {
-            runningTotals[index] += value;
-            return runningTotals[index];
-        }),
-    }));
-}
-
 
 // Create the updateBarChart function.
 function updateBarChart(selectedColumns) {
