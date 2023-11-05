@@ -42,6 +42,10 @@ $("#accordion").accordion({
             } else {
                 chart.updateSeries(chart.w.globals.series);
             }
+
+            // Reset chart-related variables when switching to line chart
+            allSeries = []; // Clear allSeries
+            headerNames = []; // Clear headerNames
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
             console.log("Bar Graph activated");
@@ -53,9 +57,14 @@ $("#accordion").accordion({
                     .map(checkbox => checkbox.getAttribute("data-column-name") || '');
                 updateBarChart(selectedColumns);
             }
+
+            // Reset chart-related variables when switching to bar chart
+            allSeries = []; // Clear allSeries
+            headerNames = []; // Clear headerNames
         }
     }
 });
+
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
