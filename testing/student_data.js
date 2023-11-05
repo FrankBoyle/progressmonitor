@@ -232,7 +232,7 @@ updateChart(selectedColumns, seriesColors, trendlineColors);
         chart.updateSeries(allSeries);
 
         // Update the chart with new series data and trendlines
-updateChart(selectedColumns, colorsAndTrendlineColors);
+updateChart(selectedColumns, seriesColors, trendlineColors);
     }, 0));
 };
 
