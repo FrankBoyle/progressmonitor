@@ -12,6 +12,17 @@ let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
 let scores = [];  // Declare scores globally
+let lineChartData = {
+    dates: [],
+    scores: [],
+    headerNames: [],
+};
+let barChartData = {
+    dates: [],
+    scores: [],
+    headerNames: [],
+};
+
 const seriesColors = [
     '#1976D2',  // dark blue
     '#FF8C00',  // dark orange
@@ -55,17 +66,19 @@ $("#accordion").accordion({
 });
 
 // Extracts dates and scores data from the provided HTML table.
-function extractDataFromTable() {
+function extractDataForLineChart() {
     const tableRows = document.querySelectorAll("table tbody tr");
-    const dates = [];
-    const scores = [];
+
+    // Clear previous data
+    lineChartData.dates = [];
+    lineChartData.scores = [];
 
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
         if (dateCell) {
-            dates.push(dateCell.textContent.trim());
+            lineChartData.dates.push(dateCell.textContent.trim());
         } else {
-            dates.push(""); // or some default date or error handling
+            lineChartData.dates.push(""); // or some default date or error handling
         }
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
@@ -75,12 +88,8 @@ function extractDataFromTable() {
             rowScores.push(parseInt(cell.textContent || '0', 10));
         });
 
-        scores.push(rowScores);
+        lineChartData.scores.push(rowScores);
     });
-    console.log("Extracted dates:", dates);
-    console.log("Extracted scores:", scores);
-
-    return { dates, scores };
 }
 
 // Populates the series data based on selected columns, header map, and scores.
@@ -161,6 +170,20 @@ function generateFinalSeriesData(data, selectedColumns) {
     return finalSeriesData;
 }
 
+function initializeLineChart() {
+    console.log("initializeLineChart called");
+
+    // Extract data for line chart
+    extractDataForLineChart();
+
+    // Get selected columns
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
+    // Initialize the line chart
+    initializeChart('line', selectedColumns, lineChartData);
+}
+
 // Update the chart based on selected columns.
 function updateChart(selectedColumns) { // Update function signature
     // Clear existing series data
@@ -205,7 +228,7 @@ function updateChart(selectedColumns) { // Update function signature
 }
 
 // Initializes the chart with default settings.
-function initializeChart() {
+function initializeChart(chartType, selectedColumns, chartData) {
     // Extract headers and data
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
@@ -220,7 +243,7 @@ function initializeChart() {
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
 
     // Initialize the chart
-    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
+    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions);
     chart.render();    
 
     // Update the chart on checkbox changes
@@ -361,18 +384,21 @@ function getTrendlineData(seriesData) {
 }
 
 ////////////////////////////////////////////////
+
 // Extracts dates and scores data from the provided HTML table.
 function extractDataForBarChart() {
     const tableRows = document.querySelectorAll("table tbody tr");
-    const dates = [];
-    const scores = [];
+
+    // Clear previous data
+    barChartData.dates = [];
+    barChartData.scores = [];
 
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
         if (dateCell) {
-            dates.push(dateCell.textContent.trim());
+            barChartData.dates.push(dateCell.textContent.trim());
         } else {
-            dates.push(""); // or some default date or error handling
+            barChartData.dates.push(""); // or some default date or error handling
         }
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
@@ -382,44 +408,23 @@ function extractDataForBarChart() {
             rowScores.push(parseInt(cell.textContent || '0', 10));
         });
 
-        scores.push(rowScores);
+        barChartData.scores.push(rowScores);
     });
-    console.log("Extracted dates:", dates);
-    console.log("Extracted scores:", scores);
-
-    return { dates, scores };
 }
 
 // Initialize the bar chart
 function initializeBarChart() {
     console.log("initializeBarChart called");
 
-    const { dates, scores } = extractDataForBarChart();
+    // Extract data for bar chart
+    extractDataForBarChart();
 
-    // Define chart options for the bar chart
-    const barChartOptions = {
-        chart: {
-            type: 'bar',
-            // Add other options as needed
-        },
-        xaxis: {
-            categories: dates,
-        },
-        series: generateFinalSeriesData({ dates, scores }, selectedColumns),
-        // Add other chart options as needed
-    };
+    // Get selected columns
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    // Create and render the bar chart
-    barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
-    barChart.render();
-
-    // Add an event listener to update the bar chart when checkboxes change
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-        updateBarChart(selectedColumns);
-    }, 250));
+    // Initialize the bar chart
+    initializeChart('bar', selectedColumns, barChartData);
 }
 
 // Update the bar chart based on selected columns.
