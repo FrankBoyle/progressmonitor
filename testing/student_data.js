@@ -294,9 +294,9 @@ function getChartOptions(dates, trendlineSeriesData) {
                     enabled: true,
                     top: 0,
                     left: 0,
-                    blur: 5,
+                    blur: 10,
                     color: seriesColors, // Adjust if seriesColors is an array
-                    opacity: 0.3
+                    opacity: 0.4
                 } : {
                     enabled: false
                 };
