@@ -409,10 +409,7 @@ function initializeBarChart() {
         xaxis: {
             categories: dates,
         },
-        series: [{
-            name: 'Bar Chart Series', // Name of the series
-            data: scores, // Data for the bar chart
-        }],
+        series: generateFinalSeriesData({ dates, scores }, selectedColumns),
         // Add other chart options as needed
     };
 
@@ -420,6 +417,29 @@ function initializeBarChart() {
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
     barChart.render();
 }
+
+// Update the bar chart based on selected columns.
+function updateBarChart(selectedColumns) {
+    // Clear existing series data
+    barChart.updateSeries([]);
+
+    // Create a new series array based on selected columns
+    const newSeriesData = generateFinalSeriesData({ dates, scores }, selectedColumns);
+
+    // Update the bar chart with the new series data and updated names
+    barChart.updateSeries(newSeriesData);
+}
+
+// Initialize the chart
+initializeBarChart();
+
+// Update the chart on checkbox changes
+document.getElementById("barColumnSelector").addEventListener("change", debounce(function() {
+    const selectedColumns = Array.from(document.querySelectorAll("#barColumnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
+    updateBarChart(selectedColumns);
+}, 250));
 
 // Then, when you want to update the series in your accordion function:
 if (barChart) {
