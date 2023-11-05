@@ -274,11 +274,11 @@ function getChartOptions(dates, trendlineSeriesData) {
             type: 'line',
             dropShadow: {
                 enabled: true,
-                color: '#000',
+                color: seriesColors,
                 top: 10,  // Change to 0 to see if positioning is the issue
                 left: 10,  // Change to 0 for same reason
                 blur: 10,  // Increase blur for visibility
-                opacity: 0.4  // Increase opacity for visibility
+                opacity: 0.3  // Increase opacity for visibility
             },
         },
         colors: seriesColors,
