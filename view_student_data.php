@@ -46,18 +46,24 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="student_data.js"></script>
+    <script src="student_data.js"  defer></script>
     
     <script>
     // Get the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
+    var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
     </script>
 
 <style>
     .dataTables_filter {
         display: none;
     }
+    
+    #chart, #barChart {
+    transition: opacity 0.3s;
+}
+
 </style>
 </head>
 <body>
@@ -69,7 +75,7 @@ if (isset($_GET['metadata_id'])) {
 <div>
 <a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
-<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($student_id); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 </div>
 
@@ -87,76 +93,62 @@ if (isset($_GET['metadata_id'])) {
 <?php endforeach; ?>
 </div>
 
-<table border="1">
-<thead>
-    <tr>
-        <th>Date</th>
-        <?php 
-        // Iterate through all key-value pairs in $scoreNames.
-        foreach ($scoreNames as $category => $values) {
-            // Check if the current category's values are an array (assuming you only want arrays).
-            if (is_array($values)) {
-                // Iterate through each item in the current category's array.
-                foreach ($values as $score) {
-                    // Print the score as a table header. Apply any necessary formatting or escaping here.
-                    echo "<th>" . htmlspecialchars($score) . "</th>";
-                }
-            } else {
-                // If it's not an array, it might be a standalone category name. You can decide how to handle these cases.
-                // For example, you might want to print it as a header, too.
-                echo "<th>" . htmlspecialchars($values) . "</th>";
-            }
-        }
-        ?>
-        <th>Action</th>
-    </tr>
-</thead>
-
-    <?php if (empty($performanceData)): ?>
+<!-- Snippet of the modified code -->
+<table border="1" id="dataTable">
+    <thead>
         <tr>
-            <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-        </tr>
-    <?php else: ?>
-        <?php foreach ($performanceData as $data): ?>
-            <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                <td class="editable" data-field-name="score_date">
-                    <?php
-                    if (isset($data['score_date'])) {
-                        echo date("m/d/Y", strtotime($data['score_date']));
+            <th>Date</th>
+            <?php 
+            foreach ($scoreNames as $category => $values) {
+                if (is_array($values)) {
+                    foreach ($values as $score) {
+                        echo "<th>" . htmlspecialchars($score) . "</th>";
                     }
-                    ?>
-                </td>
-                <!-- Add scores using loop -->
-                <?php for ($i = 1; $i <= 10; $i++): ?>
-                    <td class="editable" data-field-name="score<?php echo $i; ?>">
-                        <?php
-                        if (isset($data['score'.$i])) {
-                            echo $data['score'.$i];
-                        }
-                        ?>
-                    </td>
-                <?php endfor; ?>
-                <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td> <!-- New delete button for each row -->
+                } else {
+                    echo "<th>" . htmlspecialchars($values) . "</th>";
+                }
+            }
+            ?>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (empty($performanceData)): ?>
+            <tr>
+                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
             </tr>
-        <?php endforeach; ?>
-    <?php endif; ?>
+        <?php else: ?>
+            <?php foreach ($performanceData as $data): ?>
+                <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                    <td class="editable" data-field-name="score_date">
+                        <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
+                    </td>
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <td class="editable" data-field-name="score<?php echo $i; ?>">
+                            <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
+                        </td>
+                    <?php endfor; ?>
+                    <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
 </table>
+
 <button id="addDataRow">Add Data Row</button>
-<div>
-    <label>Show Trendlines:</label>
-    <input type="checkbox" id="toggleTrendlines" checked> <!-- Checked by default -->
-</div>
+<input type="text" id="newRowDate" style="display: none;">
 
 <!-- Existing checkboxes for column selection -->
-<div>
+<div id="columnSelector">
     <label>Select Columns to Display:</label>
-    <!-- Existing PHP code to generate checkboxes -->
     <?php
     foreach ($scoreNames as $category => $scores) {
         foreach ($scores as $index => $scoreName) {
             $scoreColumnName = 'score' . ($index + 1);
+            $customColumnName = htmlspecialchars($scoreName); // Custom column name
             echo '<label>';
-            echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '">';
+            echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '"';
+            echo ' data-column-name="' . $customColumnName . '">'; // Include custom name as data attribute
             echo htmlspecialchars($scoreName);
             echo '</label>';
         }
@@ -164,22 +156,22 @@ if (isset($_GET['metadata_id'])) {
     ?>
 </div>
 
+
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
 <button type ="button" id="updateBenchmark">Update Benchmark</button>
-<div>
-    <label>Select Chart Type:</label>
-    <label>
-        <input type="radio" name="chartType" value="line" checked>
-        Line Chart
-    </label>
-    <label>
-        <input type="radio" name="chartType" value="bar">
-        Bar Chart
-    </label>
+
+<div id="accordion">
+    <h3>Line Graph</h3>
+    <div>
+    <div id="chart" style="width: 1000px;"></div>
+    </div>
+    <h3>Bar Graph</h3>
+    <div>
+    <div id="barChart" style="width: 1000px;"></div>
+    </div>
 </div>
-<div id="chart"></div> <!-- Div to display the chart -->
-<!-- Radio buttons to select chart type -->
+
 
 </body>
 </html>

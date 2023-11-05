@@ -1,17 +1,14 @@
 <?php
 include("./users/auth_session.php");
 include("./users/db.php");
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bfactor Progress Monitoring</title>
+  <title>bFactor Progress Monitoring</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -873,7 +870,7 @@ include("./users/db.php");
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="logout.php">Sign Out</a></li>
+            <li class="breadcrumb-item"><a href="./users/logout.php">Sign Out</a></li>
 
             </ol>
           </div><!-- /.col -->
