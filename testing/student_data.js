@@ -395,7 +395,7 @@ function extractDataForBarChart() {
 }
 
 // Populate the stacked bar chart series data.
-function populateStackedBarChartSeriesData(selectedColumns, scores) {
+function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const stackedBarChartData = [];
     const columnIndexMap = {};
 
@@ -425,6 +425,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
         name: col,
         data: stackedBarChartData[index],
+        color: seriesColors[headerNames.indexOf(col)], // Set the color based on header order
     }));
 
     // Debugging: Log the stackedBarChartSeriesData
@@ -442,7 +443,7 @@ function initializeBarChart() {
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     // Define seriesData as an empty array
-    const seriesData = [];
+    const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
     // Initialize the bar chart with appropriate options
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData));
