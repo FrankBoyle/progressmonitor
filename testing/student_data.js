@@ -32,30 +32,22 @@ $("#accordion").accordion({
     collapsible: true,
     heightStyle: "content",
     active: false, // Ensure all panels are closed initially
-    activate: function(event, ui) {
-        if (ui.newPanel.has('#chart').length) {
-            // Code for line chart activation
+    activate: function (event, ui) {
+        if (ui.newPanel.has('#lineChart').length) {
             selectedChartType = 'line';
-            console.log("Line Graph activated");
+            console.log("Line Chart activated");
             extractDataAndGenerateSeries(); // Call the common function
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Graph activated");
+            console.log("Bar Chart activated");
             extractDataAndGenerateSeries(); // Call the common function
         }
-    }
+    },
 });
 
 // Function to extract data and generate series list
 function extractDataAndGenerateSeries(customColumnNames) {
-    // Ensure customColumnNames is defined
-    if (!customColumnNames) {
-        console.error("customColumnNames is not defined");
-        return;
-    }
-
-    // Extract data from the table here
-    const { dates, scores } = extractDataFromTable();
+    // Your existing code for extracting data goes here
 
     // Generate and update series list here
     const seriesList = generateSeriesData(scores, headerNames);
