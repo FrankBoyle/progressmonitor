@@ -9,6 +9,7 @@ let allSeries = [];  // Will store all data series.
 let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
+const seriesColors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F6', '#FFFF33'];  // Add as many colors as you like
 
 console.log("Initial global variables:", {
     benchmark,
@@ -88,18 +89,20 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 // Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
-    for (let i = 1; i < headerNames.length; i++) { // Changed the loop condition
+    for (let i = 1; i < headerNames.length; i++) { // Keep the loop condition
         const scoreData = scores.map(row => row[i - 1]);
         const seriesData = scoreData.filter(value => !isNaN(value)); // Filter out NaN values
         seriesList.push({
             name: customNames[i - 1] || `score${i}`,
             data: seriesData,
+            color: seriesColors[i - 1], // Add this line to set color
             //visible: false,  // Hide the series by default
         });
     }
     console.log("Generated series list:", seriesList);
     return seriesList;
 }
+
 
 // This function will now return the new series list
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
@@ -156,15 +159,17 @@ function updateChart(selectedColumns) { // Update function signature
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
-    newSeriesData.forEach(series => {
+    newSeriesData.forEach((series, index) => {
         const trendlineData = getTrendlineData(series.data);
         trendlineSeriesData.push({
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
+            color: series.color,  // Ensure trendline has same color as series
             ...trendlineOptions,
         });
     });
+    
 
     // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
@@ -266,6 +271,7 @@ function getChartOptions(dates, trendlineSeriesData) {
         chart: {
             // ... (other chart settings)
         },
+        colors: seriesColors,  // Add this line
         dataLabels: dataLabelsSettings,     
         yaxis: {
             labels: {
