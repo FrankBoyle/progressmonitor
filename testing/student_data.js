@@ -206,33 +206,37 @@ function updateChart(selectedColumns) { // Update function signature
     });
 }
 
-// Initializes the chart with default settings.
-function initializeChart() {
-    // Extract headers and data
-    const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    const { dates, scores } = extractDataFromTable();
-    allSeries = generateSeriesData(scores, headerNames);
+// Initialization function for both line and bar charts
+function initializeChart(chartType) {
+    console.log(`initialize${chartType}Chart called`);
 
-    // Get selected columns
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+    // Extract data and set up options for the specific chart type (line or bar)
+    let chartOptions = {};
+    if (chartType === 'Line') {
+        const { dates, scores } = extractDataFromTable();
+        chartOptions = getChartOptions(dates);
+    } else if (chartType === 'Bar') {
+        const { dates, scores } = extractDataFromTableForBarChart();
+        chartOptions = getBarChartOptions(dates);
+    }
+
+    // Get selected columns and populate series data
+    const selectedColumns = getSelectedColumns();
+    const seriesData = populateSeriesData(selectedColumns, headerMap, scores);
 
     // Update series names
-    allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
+    const updatedSeriesData = updateAllSeriesNames(seriesData, selectedColumns);
 
-    // Initialize the chart
-    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
-    chart.render();    
+    // Initialize the chart based on the chart type
+    if (chartType === 'Line') {
+        chart = new ApexCharts(document.querySelector("#chart"), chartOptions);
+    } else if (chartType === 'Bar') {
+        barChart = new ApexCharts(document.querySelector("#barChart"), chartOptions);
+    }
 
-    // Update the chart on checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-        updateChart(selectedColumns);
-    }, 250));
-};
+    // Render the chart
+    chart.render();
+}
 
 // The debounce function
 function debounce(func, wait) {
