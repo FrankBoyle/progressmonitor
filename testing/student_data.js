@@ -22,33 +22,34 @@ const seriesColors = [
     '#C21807'   // deep red
 ];
 
-// Initialize the accordion.
-$(function() {
-    $("#accordion").accordion({
-        collapsible: true,
-        heightStyle: "content",
-        active: false, // Ensure all panels are closed initially
-        activate: function(event, ui) {
-            if (ui.newHeader.text() === 'Line Graph') {
-                selectedChartType = 'line';
-                if (!chart) {
-                    initializeChart();
-                } else {
-                    chart.updateSeries(chart.w.globals.series);
-                }
-            } else if (ui.newHeader.text() === 'Bar Graph') {
-                selectedChartType = 'bar';
-                if (!barChart) {
-                    initializeBarChart();
-                } else {
-                    barChart.updateSeries(barChart.w.globals.series);
-                }
+// Inside your accordion activation function
+$("#accordion").accordion({
+    collapsible: true,
+    heightStyle: "content",
+    active: false, // Ensure all panels are closed initially
+    activate: function(event, ui) {
+        if (ui.newPanel.has('#chart').length) {
+            selectedChartType = 'line';
+            console.log("Line Graph activated"); // Debugging log
+            if (!chart) {
+                initializeChart();
+            } else {
+                chart.updateSeries(chart.w.globals.series);
+            }
+        } else if (ui.newPanel.has('#barChart').length) {
+            selectedChartType = 'bar';
+            console.log("Bar Graph activated"); // Debugging log
+            if (!barChart) {
+                initializeBarChart();
+            } else {
+                barChart.updateSeries([{
+                    name: 'Bar Chart Series', // Name of the series
+                    data: scores, // Data for the bar chart
+                }]);
             }
         }
-    });
+    }
 });
-
-
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
