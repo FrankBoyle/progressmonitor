@@ -186,22 +186,9 @@ function updateChart(selectedColumns) { // Update function signature
             color: '#000',
             top: 0,  // Change to 0 to see if positioning is the issue
             left: 0,  // Change to 0 for same reason
-            blur: 10,  // Increase blur for visibility
+            blur: 20,  // Increase blur for visibility
             opacity: 0.5  // Increase opacity for visibility
         },
-        animations: {
-            enabled: true,
-            easing: 'easeinout', // Can choose different easing effects like 'easeout', 'easein', 'swing', etc.
-            speed: 800, // Duration of animation in milliseconds
-            animateGradually: {
-                enabled: true,
-                delay: 150 // This will slowly start the animations one by one
-            },
-            dynamicAnimation: {
-                enabled: true,
-                speed: 350 // This will create dynamic (real-time) updating animation
-            }
-        },        
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 5
@@ -290,22 +277,9 @@ function getChartOptions(dates, trendlineSeriesData) {
                 color: seriesColors,
                 top: 0,  // Change to 0 to see if positioning is the issue
                 left: 0,  // Change to 0 for same reason
-                blur: 5,  // Increase blur for visibility
-                opacity: 0.3  // Increase opacity for visibility
+                blur: 3,  // Increase blur for visibility
+                opacity: 0.2  // Increase opacity for visibility
             },
-            animations: {
-                enabled: true,
-                easing: 'easeinout', // Can choose different easing effects like 'easeout', 'easein', 'swing', etc.
-                speed: 800, // Duration of animation in milliseconds
-                animateGradually: {
-                    enabled: true,
-                    delay: 150 // This will slowly start the animations one by one
-                },
-                dynamicAnimation: {
-                    enabled: true,
-                    speed: 350 // This will create dynamic (real-time) updating animation
-                }
-            }            
         },
         colors: seriesColors,
         dataLabels: dataLabelsSettings,
