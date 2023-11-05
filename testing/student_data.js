@@ -219,7 +219,7 @@ function initializeChart() {
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
         updateChart(selectedColumns);
-    }, 0));
+    }, 250));
 };
 
 // The debounce function
@@ -262,11 +262,6 @@ var dataLabelsSettings = {
 function getChartOptions(dates, trendlineSeriesData) {
     return {
         series: finalSeriesData.map(series => {
-            if (!series.name.includes('Trendline')) {  // If it's not a trendline, apply dropShadow
-                return {
-                    ...series,
-                }
-            }
             return series;  // Return the series as-is for trendlines
         }),
         chart: {
