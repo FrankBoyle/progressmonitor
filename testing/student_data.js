@@ -477,7 +477,10 @@ function getBarChartOptions(dates, seriesData) {
         xaxis: {
             categories: dates,
         },
-        series: seriesData,
+        series: seriesData.map((series, index) => ({
+            ...series,
+            color: seriesColors[index], // Set the color for each bar series
+        })),
         colors: seriesColors, // Use global colors for bars
         dataLabels: {
             enabled: true,
