@@ -413,14 +413,15 @@ function initializeBarChart() {
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
     barChart.render();
 
-        // Update the chart on checkbox changes
-        document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-            const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-                .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-    
-            updateBarChart(selectedColumns);
-        }, 250));
+    // Add an event listener to update the bar chart when checkboxes change
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
+        updateBarChart(selectedColumns);
+    }, 250));
 }
+
 
 // Update the bar chart based on selected columns.
 function updateBarChart() {
