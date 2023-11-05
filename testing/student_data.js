@@ -347,44 +347,9 @@ function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
     return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
 }
+
 ////////////////////////////////////////////////
-// Function to initialize the bar chart
-function initializeBarChart() {
-    // Extract headers and data
-    const { dates, scores } = extractDataFromTable();
-    const barChartOptions = getBarChartOptions(dates);
 
-    // Initialize the bar chart
-    const barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
-    barChart.render();
-}
-
-// Initialize both line and bar charts within the accordion
-$(function() {
-    $("#accordion").accordion({
-        // Existing code for the line chart accordion
-
-        // New section for the bar chart accordion
-        activate: function(event, ui) {
-            if (ui.newPanel.has('#barChart').length) {
-                initializeBarChart();
-            }
-        }
-    });
-});
-
-function getBarChartOptions(dates) {
-    return {
-        series: finalSeriesData.map(series => {
-            return series; // Return the series as-is for bar chart
-        }),
-        chart: {
-            type: 'bar', // Set chart type to 'bar'
-            // Additional bar chart options here
-        },
-        // Other bar chart options like dataLabels, yaxis, etc.
-    };
-}
 
 ////////////////////////////////////////////////
 
