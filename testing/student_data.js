@@ -32,18 +32,17 @@ $("#accordion").accordion({
     collapsible: true,
     heightStyle: "content",
     active: false, // Ensure all panels are closed initially
-    activate: function(event, ui) {
-        if (ui.newPanel.has('#chart').length) {
-            // Code for line chart activation
+    activate: function (event, ui) {
+        if (ui.newPanel.has('#lineChart').length) {
             selectedChartType = 'line';
-            console.log("Line Graph activated");
+            console.log("Line Chart activated");
             extractDataAndGenerateSeries(); // Call the common function
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Graph activated");
+            console.log("Bar Chart activated");
             extractDataAndGenerateSeries(); // Call the common function
         }
-    }
+    },
 });
 
 // Function to extract data and generate series list
