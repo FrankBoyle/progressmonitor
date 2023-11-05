@@ -436,6 +436,12 @@ function initializeBarChart() {
     // Populate stacked bar chart series data based on selected columns
     const { seriesData: stackedBarChartSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
 
+    // Add the totals to the series data
+    stackedBarChartSeriesData.push({
+        name: 'Total',
+        data: totals
+    });
+
     const barChartOptions = {
         chart: {
             type: 'bar',
@@ -443,20 +449,6 @@ function initializeBarChart() {
         },
         xaxis: {
             categories: dates,
-            annotations: totals.map((total, index) => {
-                return {
-                    x: index,
-                    label: {
-                        borderColor: '#FFF',
-                        offsetY: -20,
-                        style: {
-                            color: '#000',
-                            background: '#FFF',
-                        },
-                        text: total.toString()
-                    }
-                };
-            })
         },
         series: stackedBarChartSeriesData,
         colors: seriesColors, // Use global colors for bars
@@ -474,10 +466,6 @@ function initializeBarChart() {
         },
     };
 
-    if (barChart) {
-        barChart.destroy();
-    }
-    
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
     barChart.render();
 
