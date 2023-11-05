@@ -485,8 +485,7 @@ function updateBarChart(selectedColumns) {
 }
 
 function getBarChartOptions(dates, seriesData) {
-    const categories = dates;
-    const totalValues = new Array(categories.length).fill(0);
+    const totalValues = new Array(dates.length).fill(0);
 
     // Calculate running totals for each category
     seriesData.forEach((series) => {
@@ -495,10 +494,9 @@ function getBarChartOptions(dates, seriesData) {
         });
     });
 
-    // Create annotations for running totals
     const annotations = totalValues.map((total, index) => ({
-        x: index, // Category index
-        y: total + 5, // Adjust the Y position to place annotations above the columns
+        x: index,
+        y: total + 5,
         label: {
             text: `Total: ${total}`,
             borderColor: 'transparent',
@@ -511,11 +509,9 @@ function getBarChartOptions(dates, seriesData) {
                     left: 10,
                     right: 10,
                     top: 4,
-                    bottom: 4
+                    bottom: 4,
                 },
             },
-            offsetY: -20, // Adjust the vertical position to place above the bars
-            position: 'top', // Align the annotation with the top of the bars
         },
     }));
 
@@ -546,7 +542,7 @@ function getBarChartOptions(dates, seriesData) {
             },
         },
         annotations: {
-            points: annotations,
+            xaxis: annotations, // Use xaxis for positioning
         },
     };
 }
