@@ -493,9 +493,6 @@ function updateBarChart(selectedColumns) {
     barChart.updateSeries(newSeriesData);
 }
 
-// Initialize the chart
-initializeBarChart();
-
 ////////////////////////////////////////////////
 
 $(document).ready(function() {
