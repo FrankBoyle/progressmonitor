@@ -393,10 +393,36 @@ function extractDataForBarChart() {
     return { dates, scores };
 }
 
+// Create a function to populate the bar chart series data.
+function populateBarChartSeriesData(selectedColumns, scores) {
+    const seriesData = selectedColumns.map((col) => {
+        const columnIndex = headerNames.indexOf(col);
+        if (columnIndex !== -1) {
+            const columnData = scores.map((scoreRow) => scoreRow[columnIndex]);
+            return {
+                name: col,
+                data: columnData,
+            };
+        } else {
+            console.warn(`Column '${col}' not found in headerNames.`);
+            return null;
+        }
+    });
+
+    // Filter out null entries (columns not found)
+    const filteredSeriesData = seriesData.filter((entry) => entry !== null);
+
+    console.log("Populated bar chart series data:", filteredSeriesData);
+
+    return filteredSeriesData;
+}
+
 // Modify the initializeBarChart function to populate the chart.
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
-    allSeries = populateBarChartSeriesData(selectedColumns, scores); // Update selectedColumns as needed.
+
+    // Populate bar chart series data based on selected columns
+    const barChartSeriesData = populateBarChartSeriesData(selectedColumns, scores);
 
     const barChartOptions = {
         chart: {
@@ -405,63 +431,28 @@ function initializeBarChart() {
         xaxis: {
             categories: dates,
         },
-        series: allSeries,
+        series: barChartSeriesData,
     };
 
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
     barChart.render();
 
     // Add an event listener to update the bar chart when checkboxes change
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
         updateBarChart(selectedColumns);
     }, 250));
 }
 
-function populateBarChartSeriesData(selectedColumns, scores) {
-    const seriesData = [];
-    for (const col of selectedColumns) {
-        // Find the index of the selected column in the headerNames array
-        const columnIndex = headerNames.indexOf(col);
-
-        if (columnIndex !== -1) {
-            // Extract the data for the selected column from scores
-            const columnData = scores.map(scoreRow => scoreRow[columnIndex]);
-            
-            // Log the extracted column data for debugging
-            console.log(`Column '${col}' data:`, columnData);
-            
-            // Push the extracted data to the seriesData array
-            seriesData.push(columnData);
-        } else {
-            console.warn(`Column '${col}' not found in headerNames.`);
-        }
-    }
-    console.log("Populated bar chart series data:", seriesData);
-
-    return seriesData;
-}
-
-function populateBarChartSeriesData(selectedColumns, headerMap, scores) {
-    const seriesData = [];
-    for (const col of selectedColumns) {
-      const headerName = headerMap[col];
-      const headerIndex = headerNames.indexOf(headerName);
-      if (headerIndex !== -1) {
-        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
-      }
-    }
-    console.log("Populated bar chart series data:", seriesData);
-
-    return seriesData;
-}
-
 // Create the updateBarChart function.
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
-    const newSeriesData = populateBarChartSeriesData(selectedColumns, scores); // Update headerMap as needed.
+
+    // Populate bar chart series data based on selected columns
+    const newSeriesData = populateBarChartSeriesData(selectedColumns, scores);
+
     barChart.updateSeries(newSeriesData);
 }
 
