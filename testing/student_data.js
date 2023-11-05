@@ -2,6 +2,7 @@
 var barChart;  // Declare barChart variable at the global level
 let benchmark = null;
 let benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
+let selectedColumns = [];
 let selectedChartType = 'line';  // Default chart type
 let xCategories = [];
 let chart = null;  // This makes the chart variable accessible throughout the script.
@@ -419,7 +420,7 @@ function initializeBarChart() {
 }
 
 // Update the bar chart based on selected columns.
-function updateBarChart(selectedColumns) {
+function updateBarChart() {
     // Clear existing series data
     barChart.updateSeries([]);
 
@@ -435,7 +436,7 @@ initializeBarChart();
 
 // Update the chart on checkbox changes
 document.getElementById("barColumnSelector").addEventListener("change", debounce(function() {
-    const selectedColumns = Array.from(document.querySelectorAll("#barColumnSelector input:checked"))
+    selectedColumns = Array.from(document.querySelectorAll("#barColumnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     updateBarChart(selectedColumns);
