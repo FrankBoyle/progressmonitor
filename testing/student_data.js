@@ -424,7 +424,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     return stackedBarChartSeriesData;
 }
 
-// Modify the initializeBarChart function to populate the chart.
+// Modify the initializeBarChart function to populate the chart with global colors.
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
 
@@ -440,6 +440,7 @@ function initializeBarChart() {
             categories: dates,
         },
         series: stackedBarChartSeriesData,
+        colors: seriesColors, // Use global colors for bars
     };
 
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
