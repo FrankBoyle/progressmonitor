@@ -429,44 +429,17 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     return { seriesData: stackedBarChartSeriesData, totals };
 }
 
-// Initialize the bar chart.
+// Initialize the bar chart
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
-
-    // Populate stacked bar chart series data based on selected columns
-    const { seriesData: stackedBarChartSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
-
-    // Add the totals to the series data
-    stackedBarChartSeriesData.push({
+    const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
+    seriesData.push({
         name: 'Total',
         data: totals
     });
 
-    const barChartOptions = {
-        chart: {
-            type: 'bar',
-            stacked: true, // Enable stacking
-        },
-        xaxis: {
-            categories: dates,
-        },
-        series: stackedBarChartSeriesData,
-        colors: seriesColors, // Use global colors for bars
-        dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-                if (val === 0) {
-                    return ''; // Hide labels for zero values
-                }
-                return val;
-            },
-            style: {
-                fontSize: '16px', // Set the font size for the data labels
-            },
-        },
-    };
-
-    barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
+    // Initialize the bar chart with appropriate options
+    barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData));
     barChart.render();
 
     // Add an event listener to update the bar chart when checkboxes change
@@ -494,6 +467,31 @@ function updateBarChart(selectedColumns) {
     barChart.updateSeries(newSeriesData);
 }
 
+function getBarChartOptions(dates, seriesData) {
+    return {
+        chart: {
+            type: 'bar',
+            stacked: true, // Enable stacking
+        },
+        xaxis: {
+            categories: dates,
+        },
+        series: seriesData,
+        colors: seriesColors, // Use global colors for bars
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                if (val === 0) {
+                    return ''; // Hide labels for zero values
+                }
+                return val;
+            },
+            style: {
+                fontSize: '16px', // Set the font size for the data labels
+            },
+        },
+    };
+}
 
 ////////////////////////////////////////////////
 
