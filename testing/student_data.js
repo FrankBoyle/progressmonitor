@@ -227,7 +227,7 @@ function initializeChart() {
     allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
 
     // Initialize the chart
-    chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
+    chart = new ApexCharts(document.querySelector("#lineChart"), getChartOptions(dates));
     chart.render();    
 
     // Update the chart on checkbox changes
