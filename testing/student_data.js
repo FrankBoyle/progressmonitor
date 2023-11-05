@@ -382,6 +382,8 @@ function extractDataForBarChart() {
 
 // Initialize the bar chart
 function initializeBarChart() {
+    console.log("initializeBarChart called"); // Add this line for debugging
+
     const { dates, scores } = extractDataForBarChart();
 
     // Define chart options for the bar chart
