@@ -34,34 +34,24 @@ $("#accordion").accordion({
     active: false, // Ensure all panels are closed initially
     activate: function(event, ui) {
         if (ui.newPanel.has('#chart').length) {
-            // Code for line chart activation
             selectedChartType = 'line';
-            console.log("Line Graph activated");
-            extractDataAndGenerateSeries(); // Call the common function
+            console.log("Line Graph activated"); // Debugging log
+            if (!chart) {
+                initializeChart();
+            } else {
+                chart.updateSeries(chart.w.globals.series);
+            }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Graph activated");
-            extractDataAndGenerateSeries(); // Call the common function
+            console.log("Bar Graph activated"); // Debugging log
+            if (barChart === null) {
+                initializeBarChart();
+            }
         }
     }
 });
 
-// Function to extract data and generate series list
-function extractDataAndGenerateSeries() {
-    // Extract data from the table here
-    const { dates, scores } = extractDataFromTable();
 
-    // Generate and update series list here
-    const seriesList = generateSeriesData(scores, headerNames);
-    const updatedSeriesList = getUpdatedSeriesNames(seriesList, customColumnNames);
-
-    // Use the extracted data and series list for further processing or chart initialization
-    if (selectedChartType === 'line') {
-        // Initialize or update the line chart
-    } else if (selectedChartType === 'bar') {
-        // Initialize or update the bar chart
-    }
-}
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
