@@ -360,6 +360,7 @@ function getTrendlineData(seriesData) {
 }
 
 ////////////////////////////////////////////////
+// Extracts dates and scores data from the provided HTML table.
 function extractDataForBarChart() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
@@ -373,19 +374,17 @@ function extractDataForBarChart() {
             dates.push(""); // or some default date or error handling
         }
 
-        const scoreCell = row.querySelector("td:last-child");
-        const scoreText = scoreCell.textContent.trim(); // Get the trimmed text content
+        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
+        const rowScores = [];
 
-        if (scoreText === "" || isNaN(scoreText)) {
-            // Handle empty cells or non-numeric data
-            scores.push(0); // Use a default value or handle it differently
-        } else {
-            const score = parseInt(scoreText, 10);
-            scores.push(score);
-        }
+        scoreCells.forEach((cell) => {
+            rowScores.push(parseInt(cell.textContent || '0', 10));
+        });
+
+        scores.push(rowScores);
     });
-
-    console.log(dates, scores); // Log dates and scores for debugging
+    //console.log("Extracted dates:", dates);
+    //console.log("Extracted scores:", scores);
 
     return { dates, scores };
 }
