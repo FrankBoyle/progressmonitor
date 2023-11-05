@@ -31,11 +31,11 @@ const seriesColors = [
 $("#accordion").accordion({
     collapsible: true,
     heightStyle: "content",
-    active: false, // Ensure all panels are closed initially
+    active: false,
     activate: function(event, ui) {
         if (ui.newPanel.has('#chart').length) {
             selectedChartType = 'line';
-            console.log("Line Graph activated"); // Debugging log
+            console.log("Line Graph activated");
             if (!chart) {
                 initializeChart();
             } else {
@@ -43,15 +43,18 @@ $("#accordion").accordion({
             }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Graph activated"); // Debugging log
+            console.log("Bar Graph activated");
             if (barChart === null) {
-                initializeBarChart();
+                initializeBarChart(); // Initialize the bar chart
+            } else {
+                // Update the bar chart with the selected columns
+                const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                    .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+                updateBarChart(selectedColumns);
             }
         }
     }
 });
-
-
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
