@@ -424,12 +424,24 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     return stackedBarChartSeriesData;
 }
 
-// Modify the initializeBarChart function to populate the chart with global colors.
+// Modify the initializeBarChart function to calculate and display totals.
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
     const stackedBarChartSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+
+    // Calculate totals for each date
+    const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
+        const columnIndex = headerNames.indexOf(colName) - 1; // Subtract 1 to account for date column
+        return sum + (scoreRow[columnIndex] || 0);
+    }, 0));
+
+    // Update the labels for the last series (totals)
+    stackedBarChartSeriesData.push({
+        name: 'Total',
+        data: totals,
+    });
 
     const barChartOptions = {
         chart: {
@@ -441,6 +453,18 @@ function initializeBarChart() {
         },
         series: stackedBarChartSeriesData,
         colors: seriesColors, // Use global colors for bars
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                if (val === 0) {
+                    return ''; // Hide labels for zero values
+                }
+                return val;
+            },
+            style: {
+                fontSize: '16px', // Set the font size for the data labels
+            },
+        },
     };
 
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
@@ -453,6 +477,10 @@ function initializeBarChart() {
         updateBarChart(selectedColumns);
     }, 250));
 }
+
+// Initialize the chart
+initializeBarChart();
+
 
 // Create the updateBarChart function.
 function updateBarChart(selectedColumns) {
