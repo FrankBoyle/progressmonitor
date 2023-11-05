@@ -245,13 +245,8 @@ var dataLabelsSettings = {
         var seriesName = opts.w.config.series[opts.seriesIndex].name;
 
         // Hide data labels for 'Benchmark' and 'Trendline'.
-        if (seriesName === 'Benchmark' || seriesName.includes('Trendline')) {
+        if (seriesName.includes('Trendline')) {
             return '';  // Return empty string to hide the label
-        }
-
-        // Format for bar charts
-        if (opts.w.config.chart.type === 'bar') {
-            return val.toFixed(0);
         }
 
         // Format for line charts
