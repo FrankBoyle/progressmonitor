@@ -65,8 +65,8 @@ function extractDataFromTable() {
 
         scores.push(rowScores);
     });
-    console.log("Extracted dates:", dates);
-    console.log("Extracted scores:", scores);
+    //console.log("Extracted dates:", dates);
+    //console.log("Extracted scores:", scores);
 
     return { dates, scores };
 }
@@ -81,7 +81,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
         seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
       }
     }
-    console.log("Populated series data:", seriesData);
+    //console.log("Populated series data:", seriesData);
 
     return seriesData;
   }
@@ -99,7 +99,7 @@ function generateSeriesData(scores, headerNames, customNames = []) {
             //visible: false,  // Hide the series by default
         });
     }
-    console.log("Generated series list:", seriesList);
+    //console.log("Generated series list:", seriesList);
     return seriesList;
 }
 
@@ -108,7 +108,7 @@ function generateSeriesData(scores, headerNames, customNames = []) {
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
     return seriesList.map((series, index) => {
         const customColumnName = customColumnNames[index] || headerNames[index + 1];
-        console.log("Updated series list with custom column names:", seriesList);
+        //console.log("Updated series list with custom column names:", seriesList);
 
         return {
             ...series,
@@ -121,7 +121,7 @@ function getUpdatedSeriesNames(seriesList, customColumnNames) {
 function updateAllSeriesNames(customColumnNames) {
     allSeries = allSeries.map((series, index) => {
         const customColumnName = customColumnNames[index] || headerNames[index + 1];
-        console.log("All series after updating names:", allSeries);
+        //console.log("All series after updating names:", allSeries);
 
         return {
             ...series,
@@ -173,9 +173,9 @@ function updateChart(selectedColumns) { // Update function signature
 
     // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    console.log("New series data based on selected columns:", newSeriesData);
-    console.log("Trendline series data:", trendlineSeriesData);
-    console.log("Final series data for updating the chart:", finalSeriesData);
+    //console.log("New series data based on selected columns:", newSeriesData);
+    //console.log("Trendline series data:", trendlineSeriesData);
+    //console.log("Final series data for updating the chart:", finalSeriesData);
 
     // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
@@ -340,11 +340,11 @@ function calculateTrendline(data) {
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
+    //console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
 
     // Debugging print statements
-    console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
-    console.log("slope:", slope, "intercept:", intercept);
+    //console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
+    //console.log("slope:", slope, "intercept:", intercept);
 
     return function (x) {
         return slope * x + intercept;
