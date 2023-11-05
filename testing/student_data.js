@@ -481,7 +481,7 @@ function getBarChartOptions(dates, seriesData) {
             ...series,
             color: seriesColors[index], // Set the color for each bar series
         })),
-        colors: seriesColors, // Use global colors for bars
+        colors: seriesColors[index], // Use global colors for bars
         dataLabels: {
             enabled: true,
             formatter: function (val) {
