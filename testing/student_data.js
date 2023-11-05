@@ -363,6 +363,7 @@ function getTrendlineData(seriesData) {
 }
 
 ////////////////////////////////////////////////
+
 // Extracts dates and scores data from the provided HTML table.
 function extractDataForBarChart() {
     const tableRows = document.querySelectorAll("table tbody tr");
@@ -392,27 +393,20 @@ function extractDataForBarChart() {
     return { dates, scores };
 }
 
-// Initialize the bar chart
+// Initialize the bar chart with default settings
 function initializeBarChart() {
-    console.log("initializeBarChart called");
+    const { dates, scores } = extractDataForBarChart();
 
-    // Extract data specific to the bar chart
-    const { dates, scores } = extractDataFromTable();
-
-    // Define chart options for the bar chart
     const barChartOptions = {
         chart: {
             type: 'bar',
-            // Add specific bar chart options here
         },
         xaxis: {
             categories: dates,
         },
         series: generateFinalSeriesData({ dates, scores }, selectedColumns),
-        // Add other chart options specific to the bar chart
     };
 
-    // Create and render the bar chart
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
     barChart.render();
 
@@ -420,7 +414,6 @@ function initializeBarChart() {
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
         updateBarChart(selectedColumns);
     }, 250));
 }
