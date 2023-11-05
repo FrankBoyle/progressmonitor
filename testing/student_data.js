@@ -418,17 +418,10 @@ function initializeBarChart() {
     }, 250));
 }
 
-
-// Update the bar chart based on selected columns.
+// Update the bar chart based on selected columns
 function updateBarChart(selectedColumns) {
-    console.log("updateBarChart called");
-
-    // Pass dates and scores to generateFinalSeriesData
+    const { dates, scores } = extractDataForBarChart();
     const newSeriesData = generateFinalSeriesData({ dates, scores }, selectedColumns);
-
-    console.log("newSeriesData:", newSeriesData); // Log the generated data
-
-    // Update the bar chart with the new series data
     barChart.updateSeries(newSeriesData);
 }
 
