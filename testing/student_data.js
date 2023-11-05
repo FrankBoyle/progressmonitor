@@ -12,7 +12,8 @@ let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
 let scores = [];  // Declare scores globally
-
+// Define a flag to track whether the bar chart has been initialized
+let isBarChartInitialized = false;
 
 const seriesColors = [
     '#082645',  // dark blue
@@ -35,7 +36,7 @@ $("#accordion").accordion({
     activate: function(event, ui) {
         if (ui.newPanel.has('#chart').length) {
             selectedChartType = 'line';
-            //console.log("Line Graph activated");
+            console.log("Line Graph activated");
             if (!chart) {
                 initializeChart();
             } else {
@@ -43,8 +44,8 @@ $("#accordion").accordion({
             }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            //console.log("Bar Graph activated");
-            if (barChart === null) {
+            console.log("Bar Graph activated");
+            if (!isBarChartInitialized) {
                 initializeBarChart(); // Initialize the bar chart
             } else {
                 // Update the bar chart with the selected columns
@@ -442,47 +443,42 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     return { seriesData: stackedBarChartSeriesData, totals };
 }
 
-// Initialize the bar chart
+// Initialize the bar chart with empty data
 function initializeBarChart() {
-    // Extract data and populate the selectedColumns array
-    const { dates, scores } = extractDataForBarChart();
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+    // Create an empty bar chart
+    const dates = [];
+    const emptyData = [];
+    for (let i = 0; i < headerNames.length - 1; i++) {
+        emptyData.push([]);
+    }
 
+    const emptySeriesData = generateFinalSeriesData(emptyData, selectedColumns);
+    const emptyOptions = getBarChartOptions(dates, emptySeriesData);
+
+    barChart = new ApexCharts(document.querySelector("#barChart"), emptyOptions);
+    barChart.render();
+
+    // Set the flag to true
+    isBarChartInitialized = true;
+}
+
+// Update the bar chart based on selected columns
+function updateBarChart(selectedColumns) {
+    if (!isBarChartInitialized) {
+        initializeBarChart();
+    }
+
+    // Extract data for the selected columns
+    const { dates, scores } = extractDataForBarChart();
     const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
     seriesData.push({
         name: 'Total',
         data: totals
     });
 
-    // Initialize the bar chart with appropriate options
-    barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData));
-    barChart.render();
-
-    // Add an event listener to update the bar chart when checkboxes change
-    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-        updateBarChart(selectedColumns);
-    }, 250));
-}
-
-// Update the bar chart with new data based on selected columns
-function updateBarChart(selectedColumns) {
-    //console.log("Update Bar Chart called~!");
-    const { dates, scores } = extractDataForBarChart();
-
-    // Populate stacked bar chart series data based on selected columns
-    const { seriesData: newSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
-
-    // Add the totals to the series data for updating
-    newSeriesData.push({
-        name: 'Total',
-        data: totals
-    });
-
-    // Update the bar chart with the new data series and options
-    barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
+    // Update the bar chart with the new data
+    barChart.updateOptions({ xaxis: { categories: dates } });
+    barChart.updateSeries(seriesData);
 }
 
 function getBarChartOptions(dates, seriesData) {
