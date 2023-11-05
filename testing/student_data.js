@@ -436,12 +436,6 @@ function initializeBarChart() {
     // Populate stacked bar chart series data based on selected columns
     const { seriesData: stackedBarChartSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
 
-    // Add the totals to the series data
-    stackedBarChartSeriesData.push({
-        name: 'Total',
-        data: totals
-    });
-
     const barChartOptions = {
         chart: {
             type: 'bar',
@@ -454,15 +448,19 @@ function initializeBarChart() {
         colors: seriesColors, // Use global colors for bars
         dataLabels: {
             enabled: true,
-            formatter: function (val) {
+            formatter: function (val, opts) {
                 if (val === 0) {
                     return ''; // Hide labels for zero values
+                }
+                if (opts.dataPointIndex === (stackedBarChartSeriesData.length - 1)) {
+                    return totals[opts.dataPointIndex];  // Display total for the last segment of the stack
                 }
                 return val;
             },
             style: {
                 fontSize: '16px', // Set the font size for the data labels
             },
+            offsetY: -20,  // Adjust this value to position the label above the stack
         },
     };
 
