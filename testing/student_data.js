@@ -261,7 +261,22 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData) {
     return {
-        series: finalSeriesData,
+        series: finalSeriesData.map(series => {
+            if (!series.name.includes('Trendline')) {  // If it's not a trendline, apply dropShadow
+                return {
+                    ...series,
+                    dropShadow: {
+                        enabled: true,
+                        color: '#000',
+                        top: 0,  // Change to 0 to see if positioning is the issue
+                        left: 0,  // Change to 0 for same reason
+                        blur: 20,  // Increase blur for visibility
+                        opacity: 0.5  // Increase opacity for visibility
+                    }
+                }
+            }
+            return series;  // Return the series as-is for trendlines
+        }),
         chart: {
             // ... (other chart settings)
         },
@@ -281,18 +296,22 @@ function getChartOptions(dates, trendlineSeriesData) {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 6
             ),
-            curve: 'smooth' // This makes the original series line smooth
+            curve: 'smooth'
+        },
+        fill: {
+            type: 'solid',
+            opacity: 1,
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.6,
+                opacityTo: 0.8,
+                stops: [0, 100],
+                type: "horizontal",
+            },
         },
         markers: {
             size: 4
-        },
-        dropShadow: { // Adding drop shadow to the series line
-            enabled: true,
-            color: '#000',
-            top: 18,
-            left: 7,
-            blur: 10,
-            opacity: 0.2
         },
     };
 }
