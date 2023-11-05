@@ -183,6 +183,7 @@ function updateChart(selectedColumns, seriesColors, trendlineColors) { // Update
     // Update series names in the legend
     chart.updateOptions({
         // ... (other options)
+        colors: seriesColors.concat(Object.values(trendlineColors)),
 
         stroke: {
             width: finalSeriesData.map(series =>
