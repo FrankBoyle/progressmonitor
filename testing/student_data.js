@@ -462,23 +462,22 @@ function initializeBarChart() {
     isBarChartInitialized = true;
 }
 
-// Update the bar chart based on selected columns
+// Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
-    if (!isBarChartInitialized) {
-        initializeBarChart();
-    }
-
-    // Extract data for the selected columns
+    //console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
-    const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
-    seriesData.push({
+
+    // Populate stacked bar chart series data based on selected columns
+    const { seriesData: newSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
+
+    // Add the totals to the series data for updating
+    newSeriesData.push({
         name: 'Total',
         data: totals
     });
 
-    // Update the bar chart with the new data
-    barChart.updateOptions({ xaxis: { categories: dates } });
-    barChart.updateSeries(seriesData);
+    // Update the bar chart with the new data series and options
+    barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
 }
 
 function getBarChartOptions(dates, seriesData) {
