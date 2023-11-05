@@ -60,7 +60,7 @@ if (isset($_GET['metadata_id'])) {
         display: none;
     }
     
-    #chart {
+    #chart, #barChart {
     transition: opacity 0.3s;
 }
 
