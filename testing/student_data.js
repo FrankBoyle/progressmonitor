@@ -267,9 +267,19 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData) {
     return {
-        series: finalSeriesData,
+        series: finalSeriesData.map(series => {
+            return series;  // Return the series as-is for trendlines
+        }),
         chart: {
             type: 'line',
+            dropShadow: {
+                enabled: true,
+                color: seriesColors,
+                top: 0,  // Change to 0 to see if positioning is the issue
+                left: 0,  // Change to 0 for same reason
+                blur: 5,  // Increase blur for visibility
+                opacity: 0.3  // Increase opacity for visibility
+            },
         },
         colors: seriesColors,
         dataLabels: dataLabelsSettings,
@@ -283,25 +293,14 @@ function getChartOptions(dates, trendlineSeriesData) {
         xaxis: {
             categories: dates
         },
+
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 6
             ),
-            curve: 'smooth',
-            // Applying dropShadow only to trendline series
-            dropShadow: finalSeriesData.map(series => {
-                return series.name.includes('Trendline') ? {
-                    enabled: true,
-                    top: 0,
-                    left: 0,
-                    blur: 10,
-                    color: seriesColors, // Adjust if seriesColors is an array
-                    opacity: 0.8
-                } : {
-                    enabled: true
-                };
-            })
+            curve: 'smooth'
         },
+
         markers: {
             size: 4
         },
