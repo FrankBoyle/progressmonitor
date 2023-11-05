@@ -14,8 +14,8 @@ let trendlineSeriesData = []; // Declare both as global variables
 let scores = [];  // Declare scores globally
 const seriesColors = [
     '#1976D2',  // dark blue
-    '#388E3C',  // dark green
     '#FF8C00',  // dark orange
+    '#388E3C',  // dark green
     '#D32F2F',  // dark red
     '#7B1FA2',  // dark purple
     '#8D6E63',  // brown
