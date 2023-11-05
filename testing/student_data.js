@@ -496,7 +496,7 @@ function getBarChartOptions(dates, seriesData) {
 
     const annotations = totalValues.map((total, index) => ({
         x: index,
-        y: total + 5,
+        y: total + 5, // Initial Y position (adjust as needed)
         label: {
             text: `Total: ${total}`,
             borderColor: 'transparent',
@@ -514,6 +514,12 @@ function getBarChartOptions(dates, seriesData) {
             },
         },
     }));
+
+    // Adjust the Y position of annotations based on bar heights
+    annotations.forEach((annotation, index) => {
+        const maxBarHeight = Math.max(...seriesData.map((series) => series.data[index]));
+        annotation.y = totalValues[index] + maxBarHeight / 2; // Adjust as needed
+    });
 
     return {
         chart: {
@@ -542,7 +548,7 @@ function getBarChartOptions(dates, seriesData) {
             },
         },
         annotations: {
-            xaxis: annotations, // Use xaxis for positioning
+            xaxis: annotations,
         },
     };
 }
