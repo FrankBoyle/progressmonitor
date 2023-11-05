@@ -856,101 +856,51 @@ $(document).ready(function() {
             });
         });
     }
-    $('#addDataRow').off('click').click(function() {
-        // Check for an existing "new" row
-        if ($('tr[data-performance-id="new"]').length) {
-            alert("Please save the existing new entry before adding another one.");
-            return;
-        }
-            // Show the datepicker when the button is clicked
-            $('#newRowDate').datepicker({
-                dateFormat: 'mm/dd/yy',
-                onSelect: function(dateText) {
-                    // Call a function to handle the selected date
-                    handleSelectedDate(dateText);
-                }
-            }).datepicker('show');
-        
-        const currentDate = getCurrentDate();
-        if (isDateDuplicate(currentDate)) {
-            alert("An entry for this date already exists. Please choose a different date.");
-            return;
-        }
-    
-        // Create a temporary input to attach datepicker
-        let tempInput = $("<input type='text' style='position: absolute; opacity: 0;'>").appendTo('body');
-        tempInput.datepicker({
-            onSelect: function(dateText) {
-                if (isDateDuplicate(dateText)) {
-                    alert("An entry for this date already exists. Please choose a different date.");
-                    return;
-                }
-    
-                // Create the new row after date is selected
-                const newRow = $("<tr data-performance-id='new'>");
-                newRow.append(`<td class="editable" data-field-name="score_date">${dateText}</td>`);
-                
-                for (let i = 1; i <= 10; i++) {
-                    newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
-                }
-    
-                newRow.append('<td><button class="saveRow">Save</button></td>');
-                $("table").append(newRow);
-    
-                //newRow.find('td.editable').click();
-                attachEditableHandler();
-    
-                // Cleanup temporary input
-                tempInput.remove();
-    
-                $(document).on('click', '.saveRow', async function() {
-                    const row = $(this).closest('tr');
-                    const performanceId = row.data('performance-id');
-                    const school_id = $('#schoolIdInput').val();
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const metadata_id = urlParams.get('metadata_id');
-                    
-                    // Disable the save button to prevent multiple clicks
-                    $(this).prop('disabled', true);
-    
-                    if (performanceId !== 'new') {
-                        return;
-                    }
-    
-                    let scores = {};
-                    for (let i = 1; i <= 10; i++) {
-                        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
-                        scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
-                    }
-    
-                    const postData = {
-                        student_id: CURRENT_STUDENT_ID,
-                        score_date: convertToDatabaseDate(dateText),
-                        scores: scores,
-                        metadata_id: metadata_id,
-                        school_id: school_id,
-                    };
-    
-                    const response = await ajaxCall('POST', 'insert_performance.php', postData);
-                    if (response && response.performance_id) {
-                        row.attr('data-performance-id', response.performance_id);
-                        row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
-                        //row.find('td.editable').text('');
-                        row.find('.saveRow').prop('disabled', false);
-                    } else {
-                        if (response && response.error) {
-                            alert("Error: " + response.error);
-                        } else {
-                            alert("There was an error saving the data.");
-                        }
-                    }
-                    location.reload();
-                });
+
+$('#addDataRow').off('click').click(function() {
+    // Check for an existing "new" row
+    if ($('tr[data-performance-id="new"]').length) {
+        alert("Please save the existing new entry before adding another one.");
+        return;
+    }
+
+    const currentDate = getCurrentDate();
+    if (isDateDuplicate(currentDate)) {
+        alert("An entry for this date already exists. Please choose a different date.");
+        return;
+    }
+
+    // Create a temporary input to attach datepicker
+    const tempInput = $("<input type='text' style='position: absolute; opacity: 0;'>").appendTo('body');
+    tempInput.datepicker({
+        dateFormat: 'mm/dd/yy',
+        onSelect: function(dateText) {
+            if (isDateDuplicate(dateText)) {
+                alert("An entry for this date already exists. Please choose a different date.");
+                return;
             }
-        }).datepicker('show');   // Show the datepicker immediately
-        
+
+            // Create the new row after date is selected
+            const newRow = $("<tr data-performance-id='new'>");
+            newRow.append(`<td class="editable" data-field-name="score_date">${dateText}</td>`);
+
+            for (let i = 1; i <= 10; i++) {
+                newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+            }
+
+            newRow.append('<td><button class="saveRow">Save</button></td>');
+            $("table").append(newRow);
+
+            attachEditableHandler(newRow);
+
+            // Cleanup temporary input
+            tempInput.remove();
+        }
     });
-    
+
+    // Show the datepicker immediately
+    tempInput.datepicker('show');
+});   
 
         // Initialize the datepicker
         $("#startDateFilter").datepicker({
