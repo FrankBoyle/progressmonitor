@@ -12,7 +12,7 @@ let trendlineSeriesData = []; // Declare both as global variables
 const seriesColors = [
     '#1976D2',  // dark blue
     '#388E3C',  // dark green
-    '#FBC02D',  // dark yellow
+    '#FF8C00',  // dark orange
     '#D32F2F',  // dark red
     '#7B1FA2',  // dark purple
     '#8D6E63',  // brown
