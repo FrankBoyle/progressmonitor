@@ -436,7 +436,7 @@ function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
-    const stackedBarChartSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+    stackedBarChartSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
     // Calculate totals for each date
     const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
@@ -489,19 +489,33 @@ function initializeBarChart() {
     }, 250));
 }
 
-// Create the updateBarChart function.
+// Initialize the chart
+initializeBarChart();
+
+// Modify the updateBarChart function to update the chart using the same variable
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
 
-    // Populate stacked bar chart series data based on selected columns
-    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+    // Calculate totals for each date
+    const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
+        const columnIndex = headerNames.indexOf(colName) - 1; // Subtract 1 to account for date column
+        return sum + (scoreRow[columnIndex] || 0);
+    }, 0));
 
-    barChart.updateSeries(newSeriesData);
+    // Update the labels for the last series (totals)
+    stackedBarChartSeriesData.pop(); // Remove the previous 'Total' series
+    stackedBarChartSeriesData.push({
+        name: 'Total',
+        data: totals.map((total, index) => ({
+            x: dates[index],
+            y: total,
+            label: total.toString(), // Convert the total to a string for the label
+        })),
+    });
+
+    barChart.updateSeries(stackedBarChartSeriesData);
 }
-
-// Initialize the chart
-initializeBarChart();
 
 ////////////////////////////////////////////////
 
