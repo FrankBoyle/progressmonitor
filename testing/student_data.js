@@ -374,15 +374,21 @@ function extractDataForBarChart() {
         }
 
         const scoreCell = row.querySelector("td:last-child");
-        const score = parseInt(scoreCell.textContent || '0', 10);
-        scores.push(score);
+        const scoreText = scoreCell.textContent.trim(); // Get the trimmed text content
+
+        if (scoreText === "" || isNaN(scoreText)) {
+            // Handle empty cells or non-numeric data
+            scores.push(0); // Use a default value or handle it differently
+        } else {
+            const score = parseInt(scoreText, 10);
+            scores.push(score);
+        }
     });
 
     console.log(dates, scores); // Log dates and scores for debugging
 
     return { dates, scores };
 }
-
 
 // Initialize the bar chart
 function initializeBarChart() {
