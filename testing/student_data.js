@@ -362,33 +362,48 @@ function getDefaultColors() {
         '#D433FF'
     ];
 }
-// Generate colors and trendline colors
-function generateColors(finalSeriesData, trendlineSeriesData) {
-    const seriesList = finalSeriesData.concat(trendlineSeriesData);
 
-    const seriesColors = {};
-    const trendlineColors = {};
-    const defaultColors = getDefaultColors(); // Get default colors
+// Helper function to generate a shade of a color
+function getShade(color, percent) {
+    let R = parseInt(color.substring(1, 3), 16);
+    let G = parseInt(color.substring(3, 5), 16);
+    let B = parseInt(color.substring(5, 7), 16);
 
-    seriesList.forEach((series, idx) => {
-        if (!series.name.includes('Trendline')) {
-            // Assign the same color for all non-trendline series
-            const seriesColor = defaultColors[idx % defaultColors.length];
-            seriesColors[series.name] = seriesColor;
-        } else {
-            // Assign a different color for trendlines
-            trendlineColors[series.name] = defaultColors[defaultColors.length - 1];
+    R = parseInt(R * (100 + percent) / 100);
+    G = parseInt(G * (100 + percent) / 100);
+    B = parseInt(B * (100 + percent) / 100);
+
+    R = (R < 255) ? R : 255;
+    G = (G < 255) ? G : 255;
+    B = (B < 255) ? B : 255;
+
+    let RR = ((R.toString(16).length === 1) ? "0" + R.toString(16) : R.toString(16));
+    let GG = ((G.toString(16).length === 1) ? "0" + G.toString(16) : G.toString(16));
+    let BB = ((B.toString(16).length === 1) ? "0" + B.toString(16) : B.toString(16));
+
+    return "#" + RR + GG + BB;
+}
+
+// Generate colors for series and corresponding trendlines
+function generateColors(seriesList) {
+    const defaultColors = getDefaultColors();
+    const seriesColors = [];
+    const trendlineColors = [];
+
+    for(let i = 0; i < seriesList.length; i++) {
+        const series = seriesList[i];
+        const color = defaultColors[i % defaultColors.length];
+        seriesColors.push(color);
+
+        if (series.name.includes('Trendline')) {
+            trendlineColors.push(getShade(color, -30));  // darken the color by 30% for trendlines
         }
-    });
+    }
 
-    // Convert color objects to arrays
-    const seriesColorArray = Object.values(seriesColors);
-    const trendlineColorArray = Object.values(trendlineColors);
+    console.log("Series colors:", seriesColors);
+    console.log("Trendline colors:", trendlineColors);
 
-    console.log("Series colors:", seriesColorArray);
-    console.log("Trendline colors:", trendlineColorArray);
-
-    return { seriesColors: seriesColorArray, trendlineColors: trendlineColorArray };
+    return { seriesColors, trendlineColors };
 }
 
 ////////////////////////////////////////////////
