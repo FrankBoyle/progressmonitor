@@ -480,22 +480,18 @@ function initializeBarChart() {
 // Initialize the chart
 initializeBarChart();
 
-// Update the bar chart.
+
+// Create the updateBarChart function.
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
-    const { seriesData: newSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
-
-    // Add the totals to the series data for updating
-    newSeriesData.push({
-        name: 'Total',
-        data: totals
-    });
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
     barChart.updateSeries(newSeriesData);
 }
+
 
 ////////////////////////////////////////////////
 
