@@ -35,7 +35,7 @@ $("#accordion").accordion({
     activate: function(event, ui) {
         if (ui.newPanel.has('#chart').length) {
             selectedChartType = 'line';
-            console.log("Line Graph activated");
+            //console.log("Line Graph activated");
             if (!chart) {
                 initializeChart();
             } else {
@@ -43,7 +43,7 @@ $("#accordion").accordion({
             }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Graph activated");
+            //console.log("Bar Graph activated");
             if (barChart === null) {
                 initializeBarChart(); // Initialize the bar chart
             } else {
@@ -79,8 +79,8 @@ function extractDataFromTable() {
 
         scores.push(rowScores);
     });
-    console.log("Extracted dates:", dates);
-    console.log("Extracted scores:", scores);
+    //console.log("Extracted dates:", dates);
+    //console.log("Extracted scores:", scores);
 
     return { dates, scores };
 }
@@ -95,7 +95,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
         seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
       }
     }
-    console.log("Populated series data:", seriesData);
+    //console.log("Populated series data:", seriesData);
 
     return seriesData;
   }
@@ -113,7 +113,7 @@ function generateSeriesData(scores, headerNames, customNames = []) {
             //visible: false,  // Hide the series by default
         });
     }
-    console.log("Generated series list:", seriesList);
+    //console.log("Generated series list:", seriesList);
     return seriesList;
 }
 
@@ -122,7 +122,7 @@ function generateSeriesData(scores, headerNames, customNames = []) {
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
     return seriesList.map((series, index) => {
         const customColumnName = customColumnNames[index] || headerNames[index + 1];
-        console.log("Updated series list with custom column names:", seriesList);
+        //console.log("Updated series list with custom column names:", seriesList);
 
         return {
             ...series,
@@ -387,8 +387,8 @@ function extractDataForBarChart() {
 
         scores.push(rowScores);
     });
-    console.log("Extracted dates:", dates);
-    console.log("Extracted scores:", scores);
+    //console.log("Extracted dates:", dates);
+    //console.log("Extracted scores:", scores);
 
     return { dates, scores };
 }
@@ -453,7 +453,7 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
-    console.log("Update Bar Chart called~!");
+    //console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
