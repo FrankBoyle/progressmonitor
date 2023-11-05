@@ -937,6 +937,10 @@ $(document).ready(function() {
             row.attr('data-performance-id', response.performance_id);
             row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
             row.find('.saveRow').prop('disabled', false);
+    
+            // Reload the table to show the new row
+            const table = $('table').DataTable();
+            table.row.add(row).draw(false);
         } else {
             if (response && response.error) {
                 alert("Error: " + response.error);
@@ -944,8 +948,7 @@ $(document).ready(function() {
                 alert("There was an error saving the data.");
             }
         }
-    });
-      
+    });  
 
 // Custom filter for DataTables
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
