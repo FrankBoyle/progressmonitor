@@ -474,6 +474,10 @@ function initializeBarChart() {
         },
     };
 
+    if (barChart) {
+        barChart.destroy();
+    }
+    
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
     barChart.render();
 
