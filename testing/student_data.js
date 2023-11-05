@@ -1,14 +1,15 @@
 // Defining global variables for the script.
-var benchmark = null;
-var benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
-var selectedChartType = 'line';  // Default chart type
-var xCategories = [];
+let benchmark = null;
+let benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
+let selectedChartType = 'line';  // Default chart type
+let xCategories = [];
 let chart = null;  // This makes the chart variable accessible throughout the script.
 let headerNames = [];  // Will store header names extracted from the table.
 let allSeries = [];  // Will store all data series.
 let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
+let scores = [];  // Declare scores globally
 const seriesColors = [
     '#1976D2',  // dark blue
     '#388E3C',  // dark green
