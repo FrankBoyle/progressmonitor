@@ -443,23 +443,29 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     return { seriesData: stackedBarChartSeriesData, totals };
 }
 
-// Initialize the bar chart with empty data
+// Initialize the bar chart
 function initializeBarChart() {
-    // Create an empty bar chart
-    const dates = [];
-    const emptyData = [];
-    for (let i = 0; i < headerNames.length - 1; i++) {
-        emptyData.push([]);
-    }
+    // Extract data and populate the selectedColumns array
+    const { dates, scores } = extractDataForBarChart();
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    const emptySeriesData = generateFinalSeriesData(emptyData, selectedColumns);
-    const emptyOptions = getBarChartOptions(dates, emptySeriesData);
+    const { seriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
+    seriesData.push({
+        name: 'Total',
+        data: totals
+    });
 
-    barChart = new ApexCharts(document.querySelector("#barChart"), emptyOptions);
+    // Initialize the bar chart with appropriate options
+    barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData));
     barChart.render();
 
-    // Set the flag to true
-    isBarChartInitialized = true;
+    // Add an event listener to update the bar chart when checkboxes change
+    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+        updateBarChart(selectedColumns);
+    }, 250));
 }
 
 // Update the bar chart with new data based on selected columns
