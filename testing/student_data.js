@@ -300,7 +300,7 @@ function getChartOptions(dates, trendlineSeriesData) {
         },
 
         markers: {
-            size: 3
+            size: 4
         },
     };
 }
