@@ -34,16 +34,24 @@ $("#accordion").accordion({
     active: false, // Ensure all panels are closed initially
     activate: function(event, ui) {
         if (ui.newPanel.has('#chart').length) {
-            // Code for line chart activation
+            selectedChartType = 'line';
+            console.log("Line Graph activated"); // Debugging log
+            if (!chart) {
+                initializeChart();
+            } else {
+                chart.updateSeries(chart.w.globals.series);
+            }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Graph activated");
+            console.log("Bar Graph activated"); // Debugging log
             if (barChart === null) {
-                initializeBarChart(); // Only initialize if barChart is null
+                initializeBarChart();
             }
         }
     }
 });
+
+
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
