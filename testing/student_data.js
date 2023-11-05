@@ -77,8 +77,8 @@ function extractDataFromTable() {
 
         scores.push(rowScores);
     });
-    //console.log("Extracted dates:", dates);
-    //console.log("Extracted scores:", scores);
+    console.log("Extracted dates:", dates);
+    console.log("Extracted scores:", scores);
 
     return { dates, scores };
 }
