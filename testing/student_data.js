@@ -395,20 +395,8 @@ function extractDataForBarChart() {
 
 // Initialize the bar chart with default settings
 function initializeBarChart() {
-    // Extract headers and data
-    const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    const { dates, scores } = extractDataFromTable();
-    allSeries = generateSeriesData(scores, headerNames);
+    const { dates, scores } = extractDataForBarChart();
 
-    // Get selected columns
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-    // Update series names
-    allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-
-    // Define chart options for the bar chart
     const barChartOptions = {
         chart: {
             type: 'bar',
@@ -432,26 +420,22 @@ function initializeBarChart() {
 
 // Update the bar chart based on selected columns
 function updateBarChart(selectedColumns) {
-    console.log("update Bar Chart called~!");
-    
-    // Extract headers and data
-    const headerRow = document.querySelector('#dataTable thead tr');
-    headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    const { dates, scores } = extractDataFromTable();
-    allSeries = generateSeriesData(scores, headerNames);
-
-    // Update series names
-    allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
-
-    // Define new series data for the bar chart
+    console.log("update Bar Chart called~!")
+    const { dates, scores } = extractDataForBarChart();
     const newSeriesData = generateFinalSeriesData({ dates, scores }, selectedColumns);
-
-    // Update the bar chart with the new series data
     barChart.updateSeries(newSeriesData);
 }
 
 // Initialize the chart
 initializeBarChart();
+
+// Then, when you want to update the series in your accordion function:
+if (barChart) {
+    barChart.updateSeries([{
+        name: 'Bar Chart Series', // Name of the series
+        data: scores, // Data for the bar chart
+    }]);
+}
 
 ////////////////////////////////////////////////
 
