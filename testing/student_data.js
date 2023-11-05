@@ -450,7 +450,8 @@ function initializeBarChart() {
     }, 250));
 }
 
-// Update the bar chart.
+
+// Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
@@ -464,7 +465,8 @@ function updateBarChart(selectedColumns) {
         data: totals
     });
 
-    barChart.updateSeries(newSeriesData);
+    // Update the bar chart with the new data series and options
+    barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
 }
 
 function getBarChartOptions(dates, seriesData) {
