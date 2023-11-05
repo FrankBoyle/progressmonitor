@@ -9,7 +9,19 @@ let allSeries = [];  // Will store all data series.
 let dates = [];  // To store extracted dates from table rows.
 let finalSeriesData = [];
 let trendlineSeriesData = []; // Declare both as global variables
-const seriesColors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F6', '#FFFF33'];  // Add as many colors as you like
+const seriesColors = [
+    '#1976D2',  // dark blue
+    '#388E3C',  // dark green
+    '#FBC02D',  // dark yellow
+    '#D32F2F',  // dark red
+    '#7B1FA2',  // dark purple
+    '#8D6E63',  // brown
+    '#C2185B',  // pink
+    '#0288D1',  // light blue
+    '#7C4DFF',  // deep purple
+    '#C21807'   // deep red
+];
+
 
 console.log("Initial global variables:", {
     benchmark,
