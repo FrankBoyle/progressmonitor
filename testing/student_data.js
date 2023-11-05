@@ -32,27 +32,22 @@ $("#accordion").accordion({
     collapsible: true,
     heightStyle: "content",
     active: false, // Ensure all panels are closed initially
-    activate: function (event, ui) {
-        if (ui.newPanel.has('#lineChart').length) {
+    activate: function(event, ui) {
+        if (ui.newPanel.has('#chart').length) {
+            // Code for line chart activation
             selectedChartType = 'line';
-            console.log("Line Chart activated");
+            console.log("Line Graph activated");
             extractDataAndGenerateSeries(); // Call the common function
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Chart activated");
+            console.log("Bar Graph activated");
             extractDataAndGenerateSeries(); // Call the common function
         }
-    },
+    }
 });
 
 // Function to extract data and generate series list
-function extractDataAndGenerateSeries(customColumnNames) {
-    // Ensure customColumnNames is defined
-    if (!customColumnNames) {
-        console.error("customColumnNames is not defined");
-        return;
-    }
-
+function extractDataAndGenerateSeries() {
     // Extract data from the table here
     const { dates, scores } = extractDataFromTable();
 
