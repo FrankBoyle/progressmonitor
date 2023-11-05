@@ -117,7 +117,6 @@ function generateSeriesData(scores, headerNames, customNames = []) {
     return seriesList;
 }
 
-
 // This function will now return the new series list
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
     return seriesList.map((series, index) => {
