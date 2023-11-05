@@ -1,4 +1,5 @@
 // Defining global variables for the script.
+var barChart;  // Declare barChart variable at the global level
 let benchmark = null;
 let benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
 let selectedChartType = 'line';  // Default chart type
