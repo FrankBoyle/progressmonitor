@@ -889,7 +889,7 @@ $(document).ready(function() {
                 newRow.append('<td><button class="saveRow">Save</button></td>');
                 $("table").append(newRow);
     
-                newRow.find('td.editable').click();
+                //newRow.find('td.editable').click();
                 attachEditableHandler();
     
                 // Cleanup temporary input
