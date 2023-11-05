@@ -28,6 +28,19 @@ const seriesColors = [
     '#C21807'   // deep red
 ];
 
+const barChartSeriesColors = [
+    '#082645',  // dark blue
+    '#FF8C00',  // dark orange
+    '#388E3C',  // dark green
+    '#D32F2F',  // dark red
+    '#7B1FA2',  // dark purple
+    '#1976D2',  // dark blue
+    '#C2185B',  // pink
+    '#0288D1',  // light blue
+    '#7C4DFF',  // deep purple
+    '#C21807'   // deep red
+];
+
 // Inside your accordion activation function
 $("#accordion").accordion({
     collapsible: true,
@@ -480,9 +493,9 @@ function getBarChartOptions(dates, seriesData) {
         },
         series: seriesData.map((series, index) => ({
             ...series,
-            color: seriesColors[index], // Set the color for each bar series
+            color: barChartSeriesColors[index], // Use bar chart colors
         })),
-        colors: seriesColors, // Use global colors for bars
+        colors: barChartSeriesColors, // Use bar chart colors for the legend
         dataLabels: {
             enabled: true,
             formatter: function (val) {
