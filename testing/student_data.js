@@ -485,20 +485,52 @@ function updateBarChart(selectedColumns) {
 }
 
 function getBarChartOptions(dates, seriesData) {
+    const categories = dates;
+    const totalValues = new Array(categories.length).fill(0);
+
+    // Calculate running totals for each category
+    seriesData.forEach((series) => {
+        series.data.forEach((value, index) => {
+            totalValues[index] += value;
+        });
+    });
+
+    // Create annotations for running totals
+    const annotations = totalValues.map((total, index) => ({
+        x: index, // Category index
+        y: total,
+        label: {
+            text: `Total: ${total}`,
+            borderColor: 'transparent',
+            style: {
+                background: '#f2f2f2',
+                color: '#333',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 4,
+                    bottom: 4
+                },
+            },
+        },
+    }));
+
     return {
         chart: {
             type: 'bar',
-            width: 1000, // Set the width to 1000 pixels
-            stacked: true, // Enable stacking
+            width: 1000,
+            stacked: true,
         },
         xaxis: {
             categories: dates,
         },
         series: seriesData.map((series, index) => ({
             ...series,
-            color: barChartSeriesColors[index], // Use bar chart colors
+            color: barChartSeriesColors[index],
         })),
-        colors: barChartSeriesColors, // Use bar chart colors for the legend
+        colors: barChartSeriesColors,
         dataLabels: {
             enabled: true,
             formatter: function (val) {
@@ -508,8 +540,11 @@ function getBarChartOptions(dates, seriesData) {
                 return val;
             },
             style: {
-                fontSize: '16px', // Set the font size for the data labels
+                fontSize: '16px',
             },
+        },
+        annotations: {
+            points: annotations,
         },
     };
 }
