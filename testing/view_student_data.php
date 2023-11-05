@@ -164,11 +164,11 @@ if (isset($_GET['metadata_id'])) {
 <div id="accordion">
     <h3>Line Graph</h3>
     <div>
-        <div id="chart"></div> <!-- Div to display the chart -->
+    <div id="chart" style="width: 1000px; height: 500px;"></div>
     </div>
     <h3>Bar Graph</h3>
     <div>
-        <div id="barChart"></div> <!-- Div for the bar chart -->
+    <div id="barChart" style="width: 1000px; height: 500px;"></div>
     </div>
 </div>
 
