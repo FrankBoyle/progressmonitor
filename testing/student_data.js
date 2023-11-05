@@ -429,6 +429,9 @@ function populateBarChartSeriesData(selectedColumns, scores) {
             // Extract the data for the selected column from scores
             const columnData = scores.map(scoreRow => scoreRow[columnIndex]);
             
+            // Log the extracted column data for debugging
+            console.log(`Column '${col}' data:`, columnData);
+            
             // Push the extracted data to the seriesData array
             seriesData.push(columnData);
         } else {
