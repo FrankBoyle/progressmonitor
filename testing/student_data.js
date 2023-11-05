@@ -283,35 +283,24 @@ function getChartOptions(dates, trendlineSeriesData) {
         xaxis: {
             categories: dates
         },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shadeIntensity: 1,
-                inverseColors: false,
-                opacityFrom: 0.7,
-                opacityTo: 0.9,
-                stops: [0, 100],
-                gradientToColors: seriesColors,
-                // Only apply dropShadow to series with 'Trendline' in the name
-                dropShadow: finalSeriesData.map(series => {
-                    return series.name.includes('Trendline') ? {
-                        enabled: true,
-                        top: 0,
-                        left: 0,
-                        blur: 5,
-                        color: seriesColors, // You might need to adjust this if seriesColors is an array
-                        opacity: 0.3
-                    } : {
-                        enabled: false
-                    };
-                })
-            }
-        },
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 6
             ),
-            curve: 'smooth'
+            curve: 'smooth',
+            // Applying dropShadow only to trendline series
+            dropShadow: finalSeriesData.map(series => {
+                return series.name.includes('Trendline') ? {
+                    enabled: true,
+                    top: 0,
+                    left: 0,
+                    blur: 5,
+                    color: seriesColors, // Adjust if seriesColors is an array
+                    opacity: 0.3
+                } : {
+                    enabled: false
+                };
+            })
         },
         markers: {
             size: 4
