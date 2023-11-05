@@ -412,6 +412,14 @@ function initializeBarChart() {
     // Create and render the bar chart
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
     barChart.render();
+
+        // Update the chart on checkbox changes
+        document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+            const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+    
+            updateChart(selectedColumns);
+        }, 250));
 }
 
 // Update the bar chart based on selected columns.
@@ -428,14 +436,6 @@ function updateBarChart() {
 
 // Initialize the chart
 initializeBarChart();
-
-    // Update the chart on checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-        updateChart(selectedColumns);
-    }, 250));
 
 // Then, when you want to update the series in your accordion function:
 if (barChart) {
