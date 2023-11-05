@@ -386,7 +386,7 @@ function extractDataForBarChart() {
 
         scores.push(rowScores);
     });
-
+    console.log(dates, scores);
     return { dates, scores };
 }
 
