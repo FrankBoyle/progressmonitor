@@ -217,7 +217,7 @@ function initializeChart() {
 const colorsAndTrendlineColors = generateColors(finalSeriesData, trendlineSeriesData);
 seriesColors = colorsAndTrendlineColors.seriesColors;
 trendlineColors = colorsAndTrendlineColors.trendlineColors;
-updateChart(selectedColumns, seriesColors, trendlineColors); 
+updateChart(selectedColumns, seriesColors, trendlineColors);
 
     // Listen for checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
