@@ -165,12 +165,11 @@ function updateChart(selectedColumns) { // Update function signature
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            color: series.color,  // Ensure trendline has same color as series
+            color: seriesColors[index],  // Ensure trendline has same color as series
             ...trendlineOptions,
         });
     });
     
-
     // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
     //console.log("New series data based on selected columns:", newSeriesData);
