@@ -47,14 +47,12 @@ $("#accordion").accordion({
             if (!barChart) {
                 initializeBarChart();
             } else {
-                barChart.updateSeries([{
-                    name: 'Bar Chart Series', // Name of the series
-                    data: scores, // Data for the bar chart
-                }]);
+                // Add code to update the bar chart here if needed
             }
         }
     }
 });
+
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
