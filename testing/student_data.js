@@ -22,18 +22,6 @@ const seriesColors = [
     '#C21807'   // deep red
 ];
 
-
-console.log("Initial global variables:", {
-    benchmark,
-    benchmarkSeriesIndex,
-    selectedChartType,
-    xCategories,
-    chart,
-    headerNames,
-    allSeries,
-    dates
-});
-
 // Initialize the accordion.
 $(function() {
     $("#accordion").accordion({
@@ -277,14 +265,13 @@ var dataLabelsSettings = {
 };
 
 function getChartOptions(dates, trendlineSeriesData) {
-    // In the getChartOptions function:
     return {
         series: finalSeriesData,
         chart: {
             // ... (other chart settings)
         },
-        colors: seriesColors,  // Add this line
-        dataLabels: dataLabelsSettings,     
+        colors: seriesColors,
+        dataLabels: dataLabelsSettings,
         yaxis: {
             labels: {
                 formatter: function(val) {
@@ -295,11 +282,41 @@ function getChartOptions(dates, trendlineSeriesData) {
         xaxis: {
             categories: dates
         },
+        stroke: {
+            width: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.width : 4
+            ),
+            curve: 'smooth' // This makes the original series line smooth
+        },
+        fill: {
+            type: 'solid',
+            opacity: 1,
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.6,
+                opacityTo: 0.8,
+                stops: [0, 100],
+                type: "horizontal",
+            },
+        },
+        markers: {
+            size: 4
+        },
+        dropShadow: { // Adding drop shadow to the series line
+            enabled: true,
+            color: '#000',
+            top: 18,
+            left: 7,
+            blur: 10,
+            opacity: 0.2
+        },
         curve: {
             type: 'smooth' // Set curve type to smooth for original series
         }
     };
 }
+
 
 const trendlineOptions = {
     dashArray: 5,             // Makes the line dashed
