@@ -376,7 +376,7 @@ function extractDataForBarChart() {
         const score = parseInt(scoreCell.textContent || '0', 10);
         scores.push(score);
     });
-
+    console.log(dates, scores);
     return { dates, scores };
 }
 
