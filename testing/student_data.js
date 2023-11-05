@@ -296,9 +296,9 @@ function getChartOptions(dates, trendlineSeriesData) {
                     left: 0,
                     blur: 10,
                     color: seriesColors, // Adjust if seriesColors is an array
-                    opacity: 0.4
+                    opacity: 0.8
                 } : {
-                    enabled: false
+                    enabled: true
                 };
             })
         },
