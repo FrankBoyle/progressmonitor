@@ -915,15 +915,18 @@ $(document).ready(function() {
             return;
         }
     
-        let scores = {};
+        const scores = {};
         for (let i = 1; i <= 10; i++) {
             const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
             scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
         }
     
+        // Capture the selected date from the row
+        const selectedDate = row.find('td[data-field-name="score_date"]').text();
+    
         const postData = {
             student_id: CURRENT_STUDENT_ID,
-            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+            score_date: convertToDatabaseDate(selectedDate),
             scores: scores,
             metadata_id: metadata_id,
             school_id: school_id,
@@ -941,7 +944,8 @@ $(document).ready(function() {
                 alert("There was an error saving the data.");
             }
         }
-    });    
+    });
+      
 
 // Custom filter for DataTables
 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
