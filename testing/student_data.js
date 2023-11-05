@@ -364,7 +364,7 @@ function getTrendlineData(seriesData) {
 
 ////////////////////////////////////////////////
 // Extracts dates and scores data from the provided HTML table.
-function extractDataForBarChart() {
+function extractDataFromTableForBarChart() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
     const scores = [];
@@ -396,19 +396,20 @@ function extractDataForBarChart() {
 function initializeBarChart() {
     console.log("initializeBarChart called");
 
-    const { dates, scores } = extractDataForBarChart();
+    // Extract data specific to the bar chart
+    const { dates, scores } = extractDataFromTableForBarChart();
 
     // Define chart options for the bar chart
     const barChartOptions = {
         chart: {
             type: 'bar',
-            // Add other options as needed
+            // Add specific bar chart options here
         },
         xaxis: {
             categories: dates,
         },
         series: generateFinalSeriesData({ dates, scores }, selectedColumns),
-        // Add other chart options as needed
+        // Add other chart options specific to the bar chart
     };
 
     // Create and render the bar chart
@@ -422,6 +423,11 @@ function initializeBarChart() {
 
         updateBarChart(selectedColumns);
     }, 250));
+}
+
+// Modify this function to extract data specific to the bar chart
+function extractDataFromTableForBarChart() {
+    // ... (extraction logic specific to the bar chart)
 }
 
 // Update the bar chart based on selected columns.
