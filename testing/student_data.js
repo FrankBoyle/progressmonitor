@@ -398,44 +398,40 @@ function extractDataForBarChart() {
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const stackedBarChartData = [];
     const columnIndexMap = {};
+    const columnTotals = []; // Array to store column totals
 
-    // Initialize columnIndexMap and create empty arrays for each column
+    // Initialize columnIndexMap, create empty arrays for each column, and initialize columnTotals
     selectedColumns.forEach((col, index) => {
         columnIndexMap[col] = index;
         stackedBarChartData.push([]);
+        columnTotals.push(0);
     });
 
-    // Debugging: Log the columnIndexMap and selectedColumns
-    console.log("Column Index Map:", columnIndexMap);
-    console.log("Selected Columns:", selectedColumns);
-
-    // Initialize an array to store column totals
-    const columnTotals = new Array(selectedColumns.length).fill(0);
-
-    // Iterate through the scores and populate the stackedBarChartData
+    // Iterate through the scores and populate the stackedBarChartData and columnTotals
     scores.forEach((scoreRow) => {
         selectedColumns.forEach((col) => {
             const columnIndex = columnIndexMap[col];
             if (columnIndex !== undefined) {
-                const score = scoreRow[columnIndex];
-                stackedBarChartData[columnIndex].push(score);
-                columnTotals[columnIndex] += score; // Update column totals
+                const value = scoreRow[columnIndex];
+                stackedBarChartData[columnIndex].push(value);
+                columnTotals[columnIndex] += value;
             }
         });
     });
 
-    // Debugging: Log the stackedBarChartData
-    console.log("Stacked Bar Chart Data:", stackedBarChartData);
+    // Debugging: Log the columnTotals
+    console.log("Column Totals:", columnTotals);
 
     const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
         name: col,
         data: stackedBarChartData[index],
+        color: seriesColors[index], // Set the color based on index
     }));
 
     // Debugging: Log the stackedBarChartSeriesData
     console.log("Stacked Bar Chart Series Data:", stackedBarChartSeriesData);
 
-    // Return both seriesData and columnTotals
+    // Return the series data along with columnTotals
     return { seriesData: stackedBarChartSeriesData, columnTotals };
 }
 
@@ -471,6 +467,7 @@ function updateBarChart(selectedColumns) {
     barChart.updateOptions(getBarChartOptions(dates, seriesData, columnTotals));
 }
 
+
 function getBarChartOptions(dates, seriesData, columnTotals) {
     const dataLabels = {
         enabled: true,
@@ -485,19 +482,16 @@ function getBarChartOptions(dates, seriesData, columnTotals) {
         },
     };
 
-    // Check if seriesData is an array
-    if (Array.isArray(seriesData)) {
-        // Add total values above the stacked bars
-        seriesData.forEach((series, index) => {
-            dataLabels[`total${index}`] = {
-                enabled: true,
-                position: 'top', // Display above the bars
-                formatter: function () {
-                    return columnTotals[index].toString();
-                },
-            };
-        });
-    }
+    // Add total values above the stacked bars
+    seriesData.forEach((series, index) => {
+        dataLabels[`total${index}`] = {
+            enabled: true,
+            position: 'top', // Display above the bars
+            formatter: function () {
+                return columnTotals[index].toString();
+            },
+        };
+    });
 
     return {
         chart: {
