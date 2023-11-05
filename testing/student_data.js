@@ -435,8 +435,8 @@ function updateBarChart() {
 initializeBarChart();
 
 // Update the chart on checkbox changes
-document.getElementById("barColumnSelector").addEventListener("change", debounce(function() {
-    selectedColumns = Array.from(document.querySelectorAll("#barColumnSelector input:checked"))
+document.getElementById("barChart").addEventListener("change", debounce(function() {
+    selectedColumns = Array.from(document.querySelectorAll("#barChart"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     updateBarChart(selectedColumns);
