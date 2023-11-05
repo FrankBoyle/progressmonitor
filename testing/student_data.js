@@ -364,7 +364,7 @@ function getTrendlineData(seriesData) {
 
 ////////////////////////////////////////////////
 
-// Extracts dates and scores data from the provided HTML table.
+// Modify the extractDataForBarChart function to extract data.
 function extractDataForBarChart() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
@@ -387,15 +387,31 @@ function extractDataForBarChart() {
 
         scores.push(rowScores);
     });
-    console.log(dates);
-    console.log(scores);
+    console.log("Extracted dates:", dates);
+    console.log("Extracted scores:", scores);
 
     return { dates, scores };
 }
 
-// Initialize the bar chart with default settings
+// Create a function to populate the bar chart series data.
+function populateBarChartSeriesData(selectedColumns, headerMap, scores) {
+    const seriesData = [];
+    for (const col of selectedColumns) {
+      const headerName = headerMap[col];
+      const headerIndex = headerNames.indexOf(headerName);
+      if (headerIndex !== -1) {
+        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
+      }
+    }
+    console.log("Populated bar chart series data:", seriesData);
+
+    return seriesData;
+}
+
+// Modify the initializeBarChart function to populate the chart.
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
+    allSeries = populateBarChartSeriesData(selectedColumns, headerMap, scores); // Update selectedColumns, headerMap, and headerNames as needed.
 
     const barChartOptions = {
         chart: {
@@ -404,7 +420,7 @@ function initializeBarChart() {
         xaxis: {
             categories: dates,
         },
-        series: generateFinalSeriesData({ dates, scores }, selectedColumns),
+        series: allSeries,
     };
 
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
@@ -418,24 +434,16 @@ function initializeBarChart() {
     }, 250));
 }
 
-// Update the bar chart based on selected columns
+// Create the updateBarChart function.
 function updateBarChart(selectedColumns) {
-    console.log("update Bar Chart called~!")
+    console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
-    const newSeriesData = generateFinalSeriesData({ dates, scores }, selectedColumns);
+    const newSeriesData = populateBarChartSeriesData(selectedColumns, headerMap, scores); // Update headerMap as needed.
     barChart.updateSeries(newSeriesData);
 }
 
 // Initialize the chart
 initializeBarChart();
-
-// Then, when you want to update the series in your accordion function:
-if (barChart) {
-    barChart.updateSeries([{
-        name: 'Bar Chart Series', // Name of the series
-        data: scores, // Data for the bar chart
-    }]);
-}
 
 ////////////////////////////////////////////////
 
