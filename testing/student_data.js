@@ -419,6 +419,20 @@ function initializeBarChart() {
     }, 250));
 }
 
+function populateBarChartSeriesData(selectedColumns, headerMap, scores) {
+    const seriesData = [];
+    for (const col of selectedColumns) {
+      const headerName = headerMap[col];
+      const headerIndex = headerNames.indexOf(headerName);
+      if (headerIndex !== -1) {
+        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
+      }
+    }
+    console.log("Populated bar chart series data:", seriesData);
+
+    return seriesData;
+}
+
 // Create the updateBarChart function.
 function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
