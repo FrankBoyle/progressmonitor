@@ -414,13 +414,14 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
         });
     });
 
-    // Calculate totals for each date
-    const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
-        const columnIndex = headerNames.indexOf(colName) - 1; // Subtract 1 to account for date column
-        return sum + (scoreRow[columnIndex] || 0);
-    }, 0));
+    const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
+        name: col,
+        data: stackedBarChartData[index],
+    }));
 
-    return { seriesData: stackedBarChartSeriesData, totals };
+    console.log("Populated stacked bar chart series data:", stackedBarChartSeriesData);
+
+    return stackedBarChartSeriesData;
 }
 
 // Modify the initializeBarChart function to calculate and display totals.
@@ -428,7 +429,13 @@ function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
-    const { seriesData: stackedBarChartSeriesData, totals } = populateStackedBarChartSeriesData(selectedColumns, scores);
+    const stackedBarChartSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+
+    // Calculate totals for each date
+    const totals = scores.map(scoreRow => selectedColumns.reduce((sum, colName, index) => {
+        const columnIndex = headerNames.indexOf(colName) - 1; // Subtract 1 to account for date column
+        return sum + (scoreRow[columnIndex] || 0);
+    }, 0));
 
     // Update the labels for the last series (totals)
     stackedBarChartSeriesData.push({
@@ -481,10 +488,11 @@ function updateBarChart(selectedColumns) {
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
-    const { seriesData: newSeriesData } = populateStackedBarChartSeriesData(selectedColumns, scores);
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
     barChart.updateSeries(newSeriesData);
 }
+
 
 ////////////////////////////////////////////////
 
