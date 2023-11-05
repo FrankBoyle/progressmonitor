@@ -267,19 +267,9 @@ var dataLabelsSettings = {
 
 function getChartOptions(dates, trendlineSeriesData) {
     return {
-        series: finalSeriesData.map(series => {
-            return series;  // Return the series as-is for trendlines
-        }),
+        series: finalSeriesData,
         chart: {
             type: 'line',
-            dropShadow: {
-                enabled: true,
-                color: seriesColors,
-                top: 0,  // Change to 0 to see if positioning is the issue
-                left: 0,  // Change to 0 for same reason
-                blur: 5,  // Increase blur for visibility
-                opacity: 0.3  // Increase opacity for visibility
-            },
         },
         colors: seriesColors,
         dataLabels: dataLabelsSettings,
@@ -293,14 +283,36 @@ function getChartOptions(dates, trendlineSeriesData) {
         xaxis: {
             categories: dates
         },
-
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                stops: [0, 100],
+                gradientToColors: seriesColors,
+                // Only apply dropShadow to series with 'Trendline' in the name
+                dropShadow: finalSeriesData.map(series => {
+                    return series.name.includes('Trendline') ? {
+                        enabled: true,
+                        top: 0,
+                        left: 0,
+                        blur: 5,
+                        color: seriesColors, // You might need to adjust this if seriesColors is an array
+                        opacity: 0.3
+                    } : {
+                        enabled: false
+                    };
+                })
+            }
+        },
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 6
             ),
             curve: 'smooth'
         },
-
         markers: {
             size: 4
         },
