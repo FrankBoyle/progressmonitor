@@ -441,6 +441,9 @@ function initializeBarChart() {
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
+    // Define seriesData as an empty array
+    const seriesData = [];
+
     // Initialize the bar chart with appropriate options
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData));
     barChart.render();
