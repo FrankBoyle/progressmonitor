@@ -393,45 +393,58 @@ function extractDataForBarChart() {
     return { dates, scores };
 }
 
-// Create a function to populate the bar chart series data.
-function populateBarChartSeriesData(selectedColumns, scores) {
-    const seriesData = selectedColumns.map((col) => {
-        const columnIndex = headerNames.indexOf(col);
-        if (columnIndex !== -1) {
-            const columnData = scores.map((scoreRow) => scoreRow[columnIndex]);
-            return {
-                name: col,
-                data: columnData,
-            };
-        } else {
-            console.warn(`Column '${col}' not found in headerNames.`);
-            return null;
-        }
+// Create a function to populate the stacked bar chart series data.
+function populateStackedBarChartSeriesData(selectedColumns, scores) {
+    const stackedBarChartData = [];
+    const columnIndexMap = {};
+
+    // Initialize columnIndexMap and create empty arrays for each column
+    selectedColumns.forEach((col, index) => {
+        columnIndexMap[col] = index;
+        stackedBarChartData.push([]);
     });
 
-    // Filter out null entries (columns not found)
-    const filteredSeriesData = seriesData.filter((entry) => entry !== null);
+    // Iterate through the scores to accumulate values for each column
+    scores.forEach((scoreRow) => {
+        selectedColumns.forEach((col) => {
+            const columnIndex = columnIndexMap[col];
+            if (columnIndex !== undefined) {
+                stackedBarChartData[columnIndex].push(scoreRow[columnIndex]);
+            }
+        });
+    });
 
-    console.log("Populated bar chart series data:", filteredSeriesData);
+    // Calculate the sums for each category (column)
+    const sums = stackedBarChartData.map((data) =>
+        data.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+    );
 
-    return filteredSeriesData;
+    const stackedBarChartSeriesData = [{
+        name: 'Stacked Bar Chart',
+        data: sums,
+    }];
+
+    console.log("Populated stacked bar chart series data:", stackedBarChartSeriesData);
+
+    return stackedBarChartSeriesData;
 }
 
 // Modify the initializeBarChart function to populate the chart.
 function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
 
-    // Populate bar chart series data based on selected columns
-    const barChartSeriesData = populateBarChartSeriesData(selectedColumns, scores);
+    // Populate stacked bar chart series data based on selected columns
+    const stackedBarChartSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
     const barChartOptions = {
         chart: {
             type: 'bar',
+            stacked: true, // Enable stacking
         },
         xaxis: {
             categories: dates,
         },
-        series: barChartSeriesData,
+        series: stackedBarChartSeriesData,
     };
 
     barChart = new ApexCharts(document.querySelector("#barChart"), barChartOptions);
@@ -450,8 +463,8 @@ function updateBarChart(selectedColumns) {
     console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
 
-    // Populate bar chart series data based on selected columns
-    const newSeriesData = populateBarChartSeriesData(selectedColumns, scores);
+    // Populate stacked bar chart series data based on selected columns
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
     barChart.updateSeries(newSeriesData);
 }
