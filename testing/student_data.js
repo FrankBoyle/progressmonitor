@@ -425,7 +425,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
         name: col,
         data: stackedBarChartData[index],
-        color: seriesColors[headerNames.indexOf(col)], // Set the color based on header order
+        color: seriesColors[index], // Set the color based on index
     }));
 
     // Debugging: Log the stackedBarChartSeriesData
