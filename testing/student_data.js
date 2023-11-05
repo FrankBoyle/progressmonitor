@@ -36,7 +36,7 @@ $("#accordion").accordion({
     activate: function(event, ui) {
         if (ui.newPanel.has('#chart').length) {
             selectedChartType = 'line';
-            console.log("Line Graph activated");
+            //console.log("Line Graph activated");
             if (!chart) {
                 initializeChart();
             } else {
@@ -44,8 +44,8 @@ $("#accordion").accordion({
             }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            console.log("Bar Graph activated");
-            if (!isBarChartInitialized) {
+            //console.log("Bar Graph activated");
+            if (barChart === null) {
                 initializeBarChart(); // Initialize the bar chart
             } else {
                 // Update the bar chart with the selected columns
