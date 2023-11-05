@@ -280,6 +280,19 @@ function getChartOptions(dates, trendlineSeriesData) {
                 blur: 5,  // Increase blur for visibility
                 opacity: 0.3  // Increase opacity for visibility
             },
+            animations: {
+                enabled: true,
+                easing: 'easeinout', // Can choose different easing effects like 'easeout', 'easein', 'swing', etc.
+                speed: 800, // Duration of animation in milliseconds
+                animateGradually: {
+                    enabled: true,
+                    delay: 150 // This will slowly start the animations one by one
+                },
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350 // This will create dynamic (real-time) updating animation
+                }
+            }            
         },
         colors: seriesColors,
         dataLabels: dataLabelsSettings,
