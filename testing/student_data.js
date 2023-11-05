@@ -401,8 +401,15 @@ function populateStackedBarChartSeriesData(selectedColumns, scores) {
     // Initialize columnIndexMap and create empty arrays for each column
     selectedColumns.forEach((col, index) => {
         columnIndexMap[col] = index;
-        stackedBarChartData.push([]);
+        stackedBarChartSeriesData.push({
+            name: 'Total',
+            data: totals.map((total, index) => ({
+                x: dates[index],
+                y: total,
+                label: total.toString(), // Convert the total to a string for the label
+            })),
     });
+});
 
     // Iterate through the scores and populate the stackedBarChartData
     scores.forEach((scoreRow) => {
@@ -440,7 +447,11 @@ function initializeBarChart() {
     // Update the labels for the last series (totals)
     stackedBarChartSeriesData.push({
         name: 'Total',
-        data: totals,
+        data: totals.map((total, index) => ({
+            x: dates[index],
+            y: total,
+            label: total.toString(), // Convert the total to a string for the label
+        })),
     });
 
     const barChartOptions = {
@@ -462,7 +473,7 @@ function initializeBarChart() {
                 return val;
             },
             style: {
-                fontSize: '16px', // Set the font size for the data labels
+                fontSize: '20px', // Set the font size for the data labels
             },
         },
     };
@@ -477,10 +488,6 @@ function initializeBarChart() {
         updateBarChart(selectedColumns);
     }, 250));
 }
-
-// Initialize the chart
-initializeBarChart();
-
 
 // Create the updateBarChart function.
 function updateBarChart(selectedColumns) {
