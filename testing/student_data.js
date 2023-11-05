@@ -420,6 +420,7 @@ function initializeBarChart() {
 
 // Update the bar chart based on selected columns
 function updateBarChart(selectedColumns) {
+    console.log("update Bar Chart called~!")
     const { dates, scores } = extractDataForBarChart();
     const newSeriesData = generateFinalSeriesData({ dates, scores }, selectedColumns);
     barChart.updateSeries(newSeriesData);
