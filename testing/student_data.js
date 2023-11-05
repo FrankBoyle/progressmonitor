@@ -426,7 +426,7 @@ function initializeBarChart() {
 function updateBarChart(selectedColumns) {
     console.log("updateBarChart called");
 
-    // Create a new series array based on selected columns
+    // Pass dates and scores to generateFinalSeriesData
     const newSeriesData = generateFinalSeriesData({ dates, scores }, selectedColumns);
 
     console.log("newSeriesData:", newSeriesData); // Log the generated data
