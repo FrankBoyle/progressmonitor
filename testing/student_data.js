@@ -95,7 +95,7 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
         seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
       }
     }
-    //console.log("Populated series data:", seriesData);
+    console.log("Populated series data:", seriesData);
 
     return seriesData;
   }
@@ -113,7 +113,7 @@ function generateSeriesData(scores, headerNames, customNames = []) {
             //visible: false,  // Hide the series by default
         });
     }
-    //console.log("Generated series list:", seriesList);
+    console.log("Generated series list:", seriesList);
     return seriesList;
 }
 
@@ -122,7 +122,7 @@ function generateSeriesData(scores, headerNames, customNames = []) {
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
     return seriesList.map((series, index) => {
         const customColumnName = customColumnNames[index] || headerNames[index + 1];
-        //console.log("Updated series list with custom column names:", seriesList);
+        console.log("Updated series list with custom column names:", seriesList);
 
         return {
             ...series,
@@ -135,7 +135,7 @@ function getUpdatedSeriesNames(seriesList, customColumnNames) {
 function updateAllSeriesNames(customColumnNames) {
     allSeries = allSeries.map((series, index) => {
         const customColumnName = customColumnNames[index] || headerNames[index + 1];
-        //console.log("All series after updating names:", allSeries);
+        console.log("All series after updating names:", allSeries);
 
         return {
             ...series,
