@@ -135,8 +135,8 @@ if (isset($_GET['metadata_id'])) {
     </tbody>
 </table>
 
-<button id="addDataRow">Add Data Row</button>
-
+<button id="addNewRowButton">Add New Row</button>
+<input type="text" id="newRowDate" style="display: none;">
 
 <!-- Existing checkboxes for column selection -->
 <div id="columnSelector">
