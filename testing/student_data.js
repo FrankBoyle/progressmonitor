@@ -165,7 +165,7 @@ function updateChart(selectedColumns) { // Update function signature
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            color: seriesColors[index],  // Ensure trendline has same color as series
+            color: series.color,  // Ensure trendline has same color as series
             ...trendlineOptions,
         });
     });
