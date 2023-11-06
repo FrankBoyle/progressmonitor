@@ -355,8 +355,6 @@ $students = fetchStudentsByTeacher($teacherId);
                   </button>
                 </div>
               </div>
-              <div id="chart"></div>
-
               <!-- /.card-body -->
                   </div>
                   <!-- ./col -->
