@@ -549,6 +549,7 @@ function getBarChartOptions(dates, seriesData) {
         },
         annotations: {
             xaxis: annotations,
+            orientation: 'horizontal',
         },
     };
 }
