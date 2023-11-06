@@ -497,6 +497,7 @@ function getBarChartOptions(dates, seriesData) {
     const annotations = totalValues.map((total, index) => ({
         x: dates[index], // Use the date instead of index
         y: total + 5, // You may need to adjust this for exact positioning
+        orientation: 'horizontal',
         label: {
             text: `Total: ${total}`,
             borderColor: 'transparent',
