@@ -520,6 +520,7 @@ function getBarChartOptions(dates, seriesData) {
         },
         annotations: {
             position: 'front', // Ensure annotations are positioned on top of the bars
+            orientation: 'horizontal',
             items: annotations, // Use the annotations we just constructed
         },
     };
