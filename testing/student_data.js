@@ -472,47 +472,36 @@ function initializeBarChart() {
     }, 250));
 }
 
-    function getBarChartOptions(dates, seriesData) {
-        // These values depend on the specifics of how your charting library
-        // renders the bars and handles annotations
-        const labelPadding = 5; // Padding between labels
-        const labelStart = 10; // Starting position for the first label
-        let labelXPosition = labelStart;
-    
-        // Calculate total values for each stack to position annotations at the end
-        const totalValues = seriesData.reduce((totals, series) => {
-            series.data.forEach((value, index) => {
-                totals[index] = (totals[index] || 0) + value;
-            });
-            return totals;
-        }, []);
-    
-        // Calculate positions for each label
-        const annotations = [];
-        seriesData.forEach((series, seriesIndex) => {
-            series.data.forEach((value, index) => {
-                if (value !== 0) { // Assuming you don't want labels for zero values
-                    annotations.push({
-                        x: labelXPosition,
-                        y: totalValues[index] - (value / 2), // Position label in the middle of the segment
-                        label: {
-                            text: value.toString(),
-                            style: {
-                                fontSize: '10px',
-                                fontWeight: 'bold',
-                                colors: ['#fff']
-                            }
-                        }
-                    });
-    
-                    // Increment the X position for the next label
-                    labelXPosition += value.toString().length * labelPadding;
-                }
-            });
-    
-            // Reset the X position for the next stack of labels
-            labelXPosition = labelStart + (labelPadding * seriesIndex);
+function getBarChartOptions(dates, seriesData) {
+    const annotations = [];
+    let xOffset = 0; // Starting offset for the first label
+    const xOffsetIncrement = 10; // Incremental value to move the labels to the right
+
+    seriesData.forEach((series, seriesIndex) => {
+        series.data.forEach((value, index) => {
+            // Only add annotation if value is not zero
+            if (value !== 0) {
+                annotations.push({
+                    x: dates[index],
+                    y: value / 2, // Center label in the middle of the bar segment
+                    x2: xOffset, // Use this to position the label horizontally
+                    label: {
+                        text: `${series.name}: ${value}`,
+                        orientation: 'horizontal', // Ensure label is oriented horizontally
+                        position: 'top', // Position label at the top of the bar segment
+                        // Adjust style as needed
+                        style: {
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            background: 'transparent'
+                        },
+                    },
+                });
+                xOffset += xOffsetIncrement; // Increment the xOffset for the next label
+            }
         });
+        xOffset = 0; // Reset offset for the next series of data
+    });
 
     return {
         chart: {
@@ -530,15 +519,8 @@ function initializeBarChart() {
             categories: dates,
         },
         annotations: {
-            yaxis: annotations.map((ann) => ({
-                y: ann.y,
-                y2: ann.y,
-                label: ann.label
-            })),
-            xaxis: annotations.map((ann) => ({
-                x: ann.x,
-                label: ann.label
-            }))
+            position: 'front', // Ensure annotations are positioned on top of the bars
+            items: annotations, // Use the annotations we just constructed
         },
     };
 }
