@@ -309,21 +309,27 @@ $students = fetchStudentsByTeacher($teacherId);
     </form>
 
     <?php if ($message): ?>
-        <p><?= $message ?></p>
-    <?php endif; ?>
+    <p><?= $message ?></p>
+<?php endif; ?>
 
-    <?php if (!empty($students)): ?>
-        <h2>Students:</h2>
-        <?php foreach ($students as $student): ?>
-            <?php
-                // Fetch the smallest metadata_id for the student's school_id
-                $metadataId = getSmallestMetadataId($student['school_id']);
-            ?>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= $student['name'] ?></a><br>
-        <?php endforeach; ?>
-    <?php else: ?>
-        No students found for this teacher.
-    <?php endif; ?>
+<?php if (!empty($students)): ?>
+    <?php 
+    // Sort students alphabetically by 'name'
+    usort($students, function($a, $b) {
+        return strcmp($a['name'], $b['name']);
+    });
+    ?>
+    <h2>Students:</h2>
+    <?php foreach ($students as $student): ?>
+        <?php
+            // Fetch the smallest metadata_id for the student's school_id
+            $metadataId = getSmallestMetadataId($student['school_id']);
+        ?>
+        <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= htmlspecialchars($student['name']) ?></a><br>
+    <?php endforeach; ?>
+<?php else: ?>
+    No students found for this teacher.
+<?php endif; ?>
 
     <div class="content">
       <div class="container-fluid">
