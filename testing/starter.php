@@ -328,7 +328,7 @@ $students = fetchStudentsByTeacher($teacherId);
     <div class="content">
       <div class="container-fluid">
               <div class="card-body">
-                <h5 class="card-title"><?php echo($selectedTable);?></h5>
+                <h5 class="card-title"></h5>
 
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
