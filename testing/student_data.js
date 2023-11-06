@@ -472,6 +472,18 @@ function initializeBarChart() {
     }, 250));
 }
 
+// Update the bar chart with new data based on selected columns
+function updateBarChart(selectedColumns) {
+    //console.log("Update Bar Chart called~!");
+    const { dates, scores } = extractDataForBarChart();
+
+    // Populate stacked bar chart series data based on selected columns
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+
+    // Update the bar chart with the new data series and options
+    barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
+}
+
 function getBarChartOptions(dates, seriesData) {
     const annotations = [];
     let xOffset = 0; // Starting offset for the first label
@@ -520,7 +532,6 @@ function getBarChartOptions(dates, seriesData) {
         },
         annotations: {
             position: 'front', // Ensure annotations are positioned on top of the bars
-            orientation: 'horizontal',
             items: annotations, // Use the annotations we just constructed
         },
     };
