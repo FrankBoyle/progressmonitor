@@ -485,34 +485,40 @@ function updateBarChart(selectedColumns) {
 }
 
 function getBarChartOptions(dates, seriesData) {
-    const annotations = [];
-    let xOffset = 0; // Starting offset for the first label
-    const xOffsetIncrement = 10; // Incremental value to move the labels to the right
+    const totalValues = new Array(dates.length).fill(0);
 
-    seriesData.forEach((series, seriesIndex) => {
+    // Calculate running totals for each category
+    seriesData.forEach((series) => {
         series.data.forEach((value, index) => {
-            // Only add annotation if value is not zero
-            if (value !== 0) {
-                annotations.push({
-                    x: dates[index],
-                    y: value / 2, // Center label in the middle of the bar segment
-                    x2: xOffset, // Use this to position the label horizontally
-                    label: {
-                        text: `${series.name}: ${value}`,
-                        orientation: 'horizontal', // Ensure label is oriented horizontally
-                        position: 'top', // Position label at the top of the bar segment
-                        // Adjust style as needed
-                        style: {
-                            fontSize: '10px',
-                            fontWeight: 'bold',
-                            background: 'transparent'
-                        },
-                    },
-                });
-                xOffset += xOffsetIncrement; // Increment the xOffset for the next label
-            }
+            totalValues[index] += value;
         });
-        xOffset = 0; // Reset offset for the next series of data
+    });
+
+    const annotations = totalValues.map((total, index) => ({
+        x: dates[index], // Use the date instead of index
+        y: total + 5, // You may need to adjust this for exact positioning
+        label: {
+            text: `Total: ${total}`,
+            borderColor: 'transparent',
+            style: {
+                background: '#f2f2f2',
+                color: '#333',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 4,
+                    bottom: 5,
+                },
+            },
+        },
+    }));    
+
+    // Adjust the Y position of annotations based on bar heights
+    annotations.forEach((annotation, index) => {
+        const maxBarHeight = Math.max(...seriesData.map((series) => series.data[index]));
+        annotation.y = totalValues[index] + maxBarHeight / 2; // Adjust as needed
     });
 
     return {
@@ -521,18 +527,28 @@ function getBarChartOptions(dates, seriesData) {
             width: 1000,
             stacked: true,
         },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-            },
-        },
-        series: seriesData,
         xaxis: {
             categories: dates,
         },
+        series: seriesData.map((series, index) => ({
+            ...series,
+            color: barChartSeriesColors[index],
+        })),
+        colors: barChartSeriesColors,
+        dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+                if (val === 0) {
+                    return ''; // Hide labels for zero values
+                }
+                return val;
+            },
+            style: {
+                fontSize: '16px',
+            },
+        },
         annotations: {
-            position: 'front', // Ensure annotations are positioned on top of the bars
-            items: annotations, // Use the annotations we just constructed
+            xaxis: annotations,
         },
     };
 }
