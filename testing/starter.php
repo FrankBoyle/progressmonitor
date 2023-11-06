@@ -1,101 +1,22 @@
 <?php
-include("./users/auth_session.php");
-?>
+include './users/fetch_students.php';
 
-<?php
-session_start(); // Start the session
-
-$servername = "localhost";
-$username = "AndersonSchool";
-$password = "SpecialEd69$";
-$dbname = "AndersonSchool";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!isset($_SESSION['teacher_id'])) {
+    die("Teacher ID not set in session");
 }
 
-$selectedTable = $_POST['selected_table'] ?? $_SESSION['selected_table'] ?? 'JaylaBrazzle1'; // Set a default table name
+$teacherId = $_SESSION['teacher_id'];
+$message = "";  // Initialize an empty message variable
 
-//echo "Updating records in table: $selectedTable<br>";
-
-// Handle updates for ID, date, score, and baseline
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    foreach ($_POST['id'] as $key => $id) {
-        $date = $_POST["date"][$key];
-        $score = $_POST["score"][$key];
-        $baseline = $_POST["baseline"][$key];
-
-        $update_sql = "UPDATE $selectedTable SET date='$date', score='$score', baseline='$baseline' WHERE id=$id";
-       
-        if ($conn->query($update_sql) !== TRUE) {
-            echo "Error updating record: " . $conn->error;
-        }
+// Handle form submission for adding new student
+if (isset($_POST['add_new_student'])) {
+    $newStudentName = $_POST['new_student_name'];
+    if (!empty($newStudentName)) {
+        $message = addNewStudent($newStudentName, $teacherId);
     }
 }
 
-// Handle goal update
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_goal'])) {
-    $newGoal = $_POST["edit_goal"];
-    
-    // Update the goal in the database
-    $updateGoalSql = "UPDATE $selectedTable SET goal='$newGoal' WHERE 1";
-    if ($conn->query($updateGoalSql) !== TRUE) {
-        echo "Error updating goal: " . $conn->error;
-    }
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['select_table'])) {
-    // Handle student selection
-    $selectedTable = $_POST['selected_table'];
-    $_SESSION['selected_table'] = $selectedTable; // Store the selected table value in a session variable
-}
-
-// Fetch data for the table
-$tableDataArray = array();
-$tableSql = "SELECT id, date, score, baseline, goal FROM $selectedTable";
-$tableResult = $conn->query($tableSql);
-if ($tableResult->num_rows > 0) {
-    while ($row = $tableResult->fetch_assoc()) {
-        $tableDataArray[] = $row;
-    }
-}
-
-// Fetch and store data from the database for the chart
-$chartDataArray1 = array();
-$chartSql1 = "SELECT date FROM $selectedTable";
-$chartResult1 = $conn->query($chartSql1);
-if ($chartResult1->num_rows > 0) {
-    while ($row = $chartResult1->fetch_assoc()) {
-        $chartDataArray1[] = array(
-            'x1' => $row['date'],     // Use the 'date' column as the x-variable
-        );
-    }
-}
-
-$chartDataArray2 = array();
-$chartSql2 = "SELECT baseline FROM $selectedTable";
-$chartResult2 = $conn->query($chartSql2);
-if ($chartResult2->num_rows > 0) {
-    while ($row = $chartResult2->fetch_assoc()) {
-        $chartDataArray2[] = array(
-            'y1' => $row['baseline'] // Use the 'baseline' column as the second y-variable
-        );
-    }
-}
-
-$chartDataArray3 = array();
-$chartSql3 = "SELECT score FROM $selectedTable";
-$chartResult3 = $conn->query($chartSql3);
-if ($chartResult3->num_rows > 0) {
-    while ($row = $chartResult3->fetch_assoc()) {
-        $chartDataArray3[] = array(
-            'y2' => $row['score'] // Use the 'baseline' column as the second y-variable
-        );
-    }
-}
-
+$students = fetchStudentsByTeacher($teacherId);
 ?>
 
 <!DOCTYPE html>
@@ -365,7 +286,7 @@ if ($chartResult3->num_rows > 0) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Progress Monitoring Starter Page</h1>
+            <h1 class="m-0">Progress Monitoring</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -379,126 +300,30 @@ if ($chartResult3->num_rows > 0) {
     <!-- /.content-header -->
 
     <!-- Main content -->
+    <?php
+include './users/fetch_students.php';
+
+if (!isset($_SESSION['teacher_id'])) {
+    die("Teacher ID not set in session");
+}
+
+$teacherId = $_SESSION['teacher_id'];
+$message = "";  // Initialize an empty message variable
+
+// Handle form submission for adding new student
+if (isset($_POST['add_new_student'])) {
+    $newStudentName = $_POST['new_student_name'];
+    if (!empty($newStudentName)) {
+        $message = addNewStudent($newStudentName, $teacherId);
+    }
+}
+
+$students = fetchStudentsByTeacher($teacherId);
+?>
     <div class="content">
       <div class="container-fluid">
               <div class="card-body">
                 <h5 class="card-title"><?php echo($selectedTable);?></h5>
-
-                 <form method="post">
-                    <select name="selected_table">
-                      <option value='JaylaBrazzle1'<?= $selectedTable === 'JaylaBrazzle1' ? ' selected' : '' ?>>JaylaBrazzle1</option>
-                      <option value='JaylaBrazzle2'<?= $selectedTable === 'JaylaBrazzle2' ? ' selected' : '' ?>>JaylaBrazzle2</option>
-                      <option value='JaylaBrazzle3'<?= $selectedTable === 'JaylaBrazzle3' ? ' selected' : '' ?>>JaylaBrazzle3</option>
-                      <option value='JaylaBrazzle4'<?= $selectedTable === 'JaylaBrazzle4' ? ' selected' : '' ?>>JaylaBrazzle4</option>
-                      <option value='NicoleElkins1'<?= $selectedTable === 'NicoleElkins1' ? ' selected' : '' ?>>NicoleElkins1</option>
-                      <option value='NicoleElkins2'<?= $selectedTable === 'NicoleElkins2' ? ' selected' : '' ?>>NicoleElkins2</option>
-                      <option value='NicoleElkins3'<?= $selectedTable === 'NicoleElkins3' ? ' selected' : '' ?>>NicoleElkins3</option>
-                      <option value='NicoleElkins4'<?= $selectedTable === 'NicoleElkins4' ? ' selected' : '' ?>>NicoleElkins4</option>
-                    </select>
-                    <input type="submit" name="select_table" value="Select Student">
-                  </form>
-
-
-<!-- Form for updating the goal -->
-                  <form method="post" action="">
-                    <?php
-                    // Fetch the current goal value from the database
-                      $goalSql = "SELECT goal FROM $selectedTable LIMIT 1";
-                      $goalResult = $conn->query($goalSql);
-
-                        if ($goalResult && $goalResult->num_rows > 0) {
-                          $goalRow = $goalResult->fetch_assoc();
-                          $currentGoal = $goalRow["goal"];
-                          echo '<label for="edit_goal">Edit Goal: </label>';
-                          echo '<textarea name="edit_goal" id="edit_goal" rows="5" cols="40">' . htmlspecialchars($currentGoal) . '</textarea>';
-                        }
-                    ?>
-
-
-
-                    <input type="submit" name="save_goal" value="Save Goal">
-                  </form>
-
-
-<!-- Form for updating ID, date, score, and baseline -->
-                  <form method='post' action="">
-                    <table border='1'>
-                      <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Score</th>
-                        <th>Baseline</th>
-                      </tr>
-                    <?php
-                      foreach ($tableDataArray as $row) {
-                        echo "<tr>";
-                        echo "<td><input type='hidden' name='id[]' value='{$row["id"]}'>{$row["id"]}</td>";
-                        echo "<td><input type='date' name='date[]' value='{$row["date"]}'></td>";
-                        echo "<td><input type='number' name='score[]' value='{$row["score"]}'></td>";
-                        echo "<td><input type='number' name='baseline[]' value='{$row["baseline"]}'></td>";
-                        echo "</tr>";
-                      }
-                    ?>
-                    </table>
-                    <input type='submit' name='update' value='Update'>
-                  </form>
-
-<!--                
-                  < ?php
-session_start(); // Start the session
-
-$servername = "localhost";
-$username = "AndersonSchool";
-$password = "SpecialEd69$";
-$dbname = "bFactor-test";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Assuming you have the logged in teacher's ID stored in a session variable
-$teacherId = $_SESSION['teacher_id'];
-
-$stmt = $conn->prepare("SELECT s.* FROM Students s INNER JOIN Teacher-Student-Assignment tsa ON s.student_id = tsa.student_id WHERE tsa.teacher_id = ?");
-$stmt->bind_param('i', $teacherId);
-$stmt->execute();
-
-$result = $stmt->get_result();
-$students = $result->fetch_all(MYSQLI_ASSOC);
-
-foreach ($students as $student) {
-    echo "<a href='view_student_data.php?student_id=" . $student['student_id'] . "'>" . $student['name'] . "</a><br>";
-}
-
-if (isset($_GET['student_id'])) {
-    $studentId = $_GET['student_id'];
-
-    $stmt = $conn->prepare("SELECT * FROM Performance WHERE student_id = ? ORDER BY score_date DESC LIMIT 41");  // you can change the LIMIT as needed
-    $stmt->bind_param('i', $studentId);
-    $stmt->execute();
-    
-    $result = $stmt->get_result();
-    $performanceData = $result->fetch_all(MYSQLI_ASSOC);
-    
-    echo "<table border='1'>";
-    echo "<tr><th>Week Start Date</th><th>Score1</th><th>Score2</th>...<th>Score10</th></tr>";  // Add more headers if needed
-    
-    foreach ($performanceData as $data) {
-        echo "<tr>";
-        for ($i = 1; $i <= 10; $i++) {
-            echo "<td>" . $data['score' . $i] . "</td>";
-        }
-        echo "</tr>";
-    }
-    
-    echo "</table>";
-}
-?>
--->
-
-
 
                 <a href="#" class="card-link">Card link</a>
                 <a href="#" class="card-link">Another link</a>
@@ -520,184 +345,6 @@ if (isset($_GET['student_id'])) {
                 </div>
               </div>
               <div id="chart"></div>
-
-<script>
-// Data from PHP
-var chartDataArray1 = <?php echo json_encode($chartDataArray1); ?>;
-var chartDataArray2 = <?php echo json_encode($chartDataArray2); ?>;
-var chartDataArray3 = <?php echo json_encode($chartDataArray3); ?>;
-
-// Process data to match ApexCharts format
-var chartData = [];
-var xCategories = [];
-
-for (var i = 0; i < chartDataArray1.length; i++) {
-var xValue = new Date(chartDataArray1[i].x1).getTime();
-var y1Value = chartDataArray2[i] ? parseFloat(chartDataArray2[i].y1) : null;
-var y2Value = chartDataArray3[i] ? parseFloat(chartDataArray3[i].y2) : null;
-
-chartData.push({
-x: xValue,
-y1: y1Value,
-y2: y2Value,
-});
-
-var formattedDate = new Date(xValue).toLocaleDateString();
-xCategories.push(formattedDate);
-}
-
-// Calculate linear regression for Score data series
-function calculateTrendline(data) {
-var sumX = 0;
-var sumY = 0;
-var sumXY = 0;
-var sumXX = 0;
-var count = 0;
-
-data.forEach(function (point) {
-var x = point.x;
-var y = point.y2;
-
-if (y !== null) {
-sumX += x;
-sumY += y;
-sumXY += x * y;
-sumXX += x * x;
-count++;
-}
-});
-
-var slope = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
-var intercept = (sumY - slope * sumX) / count;
-
-return function (x) {
-return slope * x + intercept;
-};
-}
-
-var trendlineFunction = calculateTrendline(chartData);
-
-// Create ApexCharts chart
-var options = {
-series: [
-{
-name: 'Baseline',
-data: chartData.map(item => ({ x: item.x, y: item.y1 })),
-},
-{
-name: 'Score',
-data: chartData.map(item => ({ x: item.x, y: item.y2 })),
-
-},
-{
-name: 'Trendline',
-data: chartData.map(item => ({ x: item.x, y: trendlineFunction(item.x) })),
-
-},
-],
-chart: {
-type: 'line',
-stacked: false,
-width: 1000,
-toolbar: {
-show: true,
-tools: {
-download: false, // Enable the download button
-},},
-dropShadow: {
-enabled: true,
-color: '#000',
-top: 18,
-left: 7,
-blur: 10,
-opacity: 0.2
-},
-},
-stroke: {
-curve: 'smooth',
-width: [1, 3, 1],
-},
-markers: {
-size: 5,
-colors: undefined,
-strokeColors: '#fff',
-strokeWidth: 2,
-strokeOpacity: 0.9,
-strokeDashArray: 0,
-fillOpacity: 1,
-discrete: [],
-shape: "circle",
-radius: 2,
-offsetX: 0,
-offsetY: 0,
-onClick: undefined,
-onDblClick: undefined,
-showNullDataPoints: true,
-hover: {
-size: undefined,
-sizeOffset: 3
-}
-},
-xaxis: {
-categories: xCategories,
-type: 'datetime',
-tickAmount: xCategories.length,
-labels: {
-hideOverlappingLabels: false,
-formatter: function(value, timestamp, opts) {
-return new Date(value).toLocaleDateString(); // Format date label
-}
-},
-title: {
-text: 'Date'
-}
-},
-yaxis: {
-title: {
-text: 'Value'
-},
-labels: {
-formatter: function (value) {
-return value.toFixed(0);
-}
-}
-},
-grid: {
-xaxis: {
-lines: {
-show: true
-}
-}
-},
-annotations: {
-points: chartData
-.filter(item => item.y2 !== null)
-.map(item => ({
-x: item.x,
-y: item.y2,
-marker: {
-    size: 4,
-    fillColor: '#4CAF50',
-    offsetY: -15,
-},
-label: {
-    borderColor: '#4CAF50',
-    style: {
-        color: '#fff',
-        background: '#4CAF50'
-    },
-    text: item.y2.toFixed(0)  // Display 0 decimal places
-}
-})),
-},
-colors: ['#2196F3', '#4CAF50', '#FF5722'], // Trendline color added
-};
-
-var chart = new ApexCharts(document.querySelector("#chart"), options);
-chart.render();
-</script>
-
-
 
               <!-- /.card-body -->
                   </div>
