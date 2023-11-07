@@ -180,13 +180,10 @@ if (isset($_GET['metadata_id'])) {
 <script>
   $(function () {
     // Initialize DataTable for the table with ID 'dataTable'
-    $("#dataTable").DataTable({
-        "destroy": true,
-      "responsive": true,
-      "lengthChange": false,
-      "autoWidth": false,
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    })
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
   });
 </script>
 </body>
