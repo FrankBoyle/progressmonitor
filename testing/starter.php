@@ -49,7 +49,7 @@ $students = fetchStudentsByTeacher($teacherId);
   <!-- Daterange picker -->
   <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
-  <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="../../plugins/summernote/summernote-bs4.min.css">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
 
@@ -323,7 +323,7 @@ $students = fetchStudentsByTeacher($teacherId);
         </div>
         <!-- /.col-->
       </div>
-      
+
     <!-- Add New Student Form -->
     <form method="post" action="">
         <label for="new_student_name">New Student Name:</label>
