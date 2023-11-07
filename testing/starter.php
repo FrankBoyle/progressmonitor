@@ -305,7 +305,7 @@ $students = fetchStudentsByTeacher($teacherId);
           <div class="card card-outline card-info">
             <div class="card-header">
               <h3 class="card-title">
-                Summernote
+                Goal Box Sample
               </h3>
             </div>
             <!-- /.card-header -->
@@ -315,7 +315,6 @@ $students = fetchStudentsByTeacher($teacherId);
               </textarea>
             </div>
             <div class="card-footer">
-              Visit <a href="https://github.com/summernote/summernote/">Summernote</a> documentation for more examples and information about the plugin.
             </div>
           </div>
         </div>
