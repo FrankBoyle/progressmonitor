@@ -306,8 +306,9 @@ $students = fetchStudentsByTeacher($teacherId);
           <div class="row">
             <div class="col-md-3 col-sm-6 col-12">
               <div class="info-box">
+              <span class="info-box-text">Goal Box Sample</span>
+
                 <div class="info-box-content">
-                <span class="info-box-text">Goal Box Sample</span>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
