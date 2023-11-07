@@ -497,6 +497,7 @@ function getBarChartOptions(dates, seriesData) {
     const annotations = totalValues.map((total, index) => ({
         x: dates[index], // Use the date instead of index
         y: total + 5, // You may need to adjust this for exact positioning
+        orientation: 'horizontal',
         label: {
             text: `Total: ${total}`,
             borderColor: 'transparent',
@@ -549,6 +550,7 @@ function getBarChartOptions(dates, seriesData) {
         },
         annotations: {
             xaxis: annotations,
+            orientation: 'horizontal',
         },
     };
 }
@@ -563,7 +565,6 @@ $(document).ready(function() {
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
 
-    // Now the input field should have the correct metadata_id value
     //console.log(metadata_id);
 
     function getCurrentDate() {
@@ -653,15 +654,6 @@ $(document).ready(function() {
         });  
     }
 
-    //let dateAscending = true; // to keep track of current order
-
-    $('#toggleDateOrder').on('click', function() {
-        const table = $('table').DataTable();
-        dateAscending = !dateAscending; // flip the state
-
-        table.order([0, dateAscending ? 'asc' : 'desc']).draw();
-    });
-
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
         const performanceId = $(this).data('performance-id');
@@ -734,17 +726,17 @@ $(document).ready(function() {
         return isDuplicate;
     }
     
-
     function attachEditableHandler() {
-        //$('table').on('click', '.editable:not([data-field-name="score8"])', function() {
         $('table').on('click', '.editable', function() {
             const cell = $(this);
-            const originalValue = cell.text();
+            const originalValue = cell.text().trim(); // Trim whitespace from the original value
+            const originalWidth = cell.width();
             const input = $('<input type="text">');
             input.val(originalValue);
-
+    
             let datePickerActive = false;
-
+            let isEditing = true; // Flag to track if the cell is in editing mode
+    
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
@@ -752,20 +744,17 @@ $(document).ready(function() {
                         datePickerActive = true;
                     },
                     onClose: function(selectedDate) {
-    if (isValidDate(new Date(selectedDate))) {
-        const currentPerformanceId = cell.closest('tr').data('performance-id');
-        if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-            //alert("This date already exists. Please choose a different date.");
-            cell.html(originalValue); // Revert to the original value
-            return;
-        }
-        cell.text(selectedDate);  // Set the selected date
-        cell.append(input.hide());  // Hide the input to show the cell text
-        saveEditedDate(cell, selectedDate); // Save the edited date
-    }
-    datePickerActive = false;
-}
-
+                        if (isValidDate(new Date(selectedDate))) {
+                            const currentPerformanceId = cell.closest('tr').data('performance-id');
+                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+                                input.val(originalValue); // Revert to the original value
+                                return;
+                            }
+                            input.hide();
+                            saveEditedDate(cell, selectedDate);
+                        }
+                        datePickerActive = false;
+                    }
                 });
                 cell.html(input);
                 input.focus();
@@ -773,89 +762,93 @@ $(document).ready(function() {
                 cell.html(input);
                 input.focus();
             }
-
-            input.blur(function() {
-                if (datePickerActive) {
-                    return;
-                }
-
-                let newValue = input.val();
-                cell.html(newValue);
-                const performanceId = cell.closest('tr').data('performance-id');
     
-                // Check if it's a new row. If so, just return and don't do any AJAX call. 
-                if (performanceId === 'new') {
-                    return;
-                }
-
-                if (cell.data('field-name') === 'score_date') {
-                    const parts = newValue.split('/');
-                    if (parts.length !== 3) {
-                        cell.html(originalValue);
+            // Listen for Enter key press
+            input.on('keydown', function(e) {
+                if (e.keyCode === 13) { // Enter key pressed
+                    e.preventDefault();
+                    const newValue = input.val();
+                    cell.text(newValue);
+                    isEditing = false; // Editing is complete
+    
+                    const performanceId = cell.closest('tr').data('performance-id');
+    
+                    if (performanceId === 'new') {
                         return;
                     }
-                    // Save the new value for the database but display the original mm/dd/yyyy format to the user
-                    cell.html(newValue);  // The selected value from datepicker is already in mm/dd/yyyy format, so just display it
-                    newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
-                    saveEditedDate(cell, newValue); // Save the edited date
-                } else {
-                    cell.html(newValue);
-                }
-
-                //const performanceId = cell.closest('tr').data('performance-id');
-                const fieldName = cell.data('field-name');
-                const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-                const studentId = $('#currentStudentId').val();
-                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
-                const school_id = $('#schoolIdInput').val();
-
-                let postData = {
-                    performance_id: performanceId,
-                    field_name: fieldName,
-                    new_value: newValue,
-                    student_id: studentId,
-                    score_date: weekStartDate,
-                    metadata_id: metadata_id,
-                    school_id: school_id,
-                };
-
-                if (performanceId === 'new') {
-                    const row = $(this).closest('tr');
-                    let scores = {};
-                    for (let i = 1; i <= 10; i++) {
-                        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-                        scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
-                    }
-                    postData.scores = scores;
-                }
-
-                $.ajax({
-                    type: 'POST',
-                    url: targetUrl,
-                    data: postData,
-                    success: function(response) {
-                        if (performanceId === 'new') {
-                            const newRow = $('tr[data-performance-id="new"]');
-                            newRow.attr('data-performance-id', response.performance_id);
-                            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+    
+                    if (cell.data('field-name') === 'score_date') {
+                        const parts = newValue.split('/');
+                        if (parts.length !== 3) {
+                            cell.text(originalValue);
+                            return;
                         }
-                    },
-                    error: function() {
-                        // Handle any error here, e.g., show a notification to the user
-                        //alert("There was an error updating the data.");
+                        const convertedValue = convertToDatabaseDate(newValue);
+                        saveEditedDate(cell, convertedValue);
+                    } else {
+                        const fieldName = cell.data('field-name');
+                        const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+                        const studentId = $('#currentStudentId').val();
+                        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+                        const school_id = $('#schoolIdInput').val();
+    
+                        let postData = {
+                            performance_id: performanceId,
+                            field_name: fieldName,
+                            new_value: newValue,
+                            student_id: studentId,
+                            score_date: weekStartDate,
+                            metadata_id: metadata_id,
+                            school_id: school_id,
+                        };
+    
+                        if (performanceId === 'new') {
+                            const row = $(this).closest('tr');
+                            let scores = {};
+                            for (let i = 1; i <= 10; i++) {
+                                const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+                                scores['score' + i] = scoreValue ? scoreValue : null;
+                            }
+                            postData.scores = scores;
+                        }
+    
+                        $.ajax({
+                            type: 'POST',
+                            url: targetUrl,
+                            data: postData,
+                            success: function(response) {
+                                if (performanceId === 'new') {
+                                    const newRow = $('tr[data-performance-id="new"]');
+                                    newRow.attr('data-performance-id', response.performance_id);
+                                    newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+                                }
+                            },
+                            error: function() {
+                                // Handle any error here
+                            }
+                        });
                     }
-                });
+    
+                    // Set the cell's width back to its original width
+                    cell.width(originalWidth);
+                }
             });
-
-            // Pressing Enter to save changes
-            input.off('keypress').keypress(function(e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-                    input.blur();
+    
+            // Listen for blur event (clicking outside the input)
+            input.on('blur', function() {
+                if (isEditing) {
+                    const newValue = input.val();
+                    cell.text(newValue);
+                    isEditing = false; // Editing is complete
+    
+                    // Set the cell's width back to its original width
+                    cell.width(originalWidth);
                 }
             });
         });
     }
+    
+
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
@@ -986,12 +979,17 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         let table = $('table').DataTable({
             "order": [[0, "asc"]],
             "lengthChange": false,
-            //"searching": false,
+            "searching": false,
             "paging": false,
             "info": false,
+            "sorting": false,
             "columns": [
                 { "type": "date-us" },
                 null, null, null, null, null, null, null, null, null, null, null
-            ]
+            ],
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         });
-});
+    
+        // Move the buttons container to the desired location
+        table.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
+    });

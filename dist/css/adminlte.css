@@ -10687,6 +10687,7 @@ body,
 
 .wrapper .content-wrapper {
   min-height: calc(100vh - calc(3.5rem + 1px) - calc(3.5rem + 1px));
+  background-color: #f0f0f0; /* Replace with the shade of grey you want */
 }
 
 .layout-boxed .wrapper {
@@ -11751,7 +11752,7 @@ body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-m
 }
 
 .content-wrapper {
-  background-color: #f4f6f9;
+  background-color: #b5b3b3; /* Replace with your preferred shade of grey */
 }
 
 .content-wrapper > .content {

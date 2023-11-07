@@ -38,6 +38,8 @@ if (isset($_GET['metadata_id'])) {
 <head>
     <meta charset="UTF-8">
     <title><?php echo $studentName; ?></title>
+  <!-- DataTables -->
+
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -46,6 +48,20 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="./plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="./plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="./plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="./plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="./plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="./plugins/jszip/jszip.min.js"></script>
+<script src="./plugins/pdfmake/pdfmake.min.js"></script>
+<script src="./plugins/pdfmake/vfs_fonts.js"></script>
+<script src="./plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="./plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="./plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="student_data.js"  defer></script>
     
     <script>
@@ -56,15 +72,29 @@ if (isset($_GET['metadata_id'])) {
     </script>
 
 <style>
-    .dataTables_filter {
-        display: none;
-    }
-    
-    #chart, #barChart {
-    transition: opacity 0.3s;
+#dataTable_wrapper .col-md-6:eq(0) {
+    position: relative;
+    z-index: 1000;
 }
 
+    .editable {
+        cursor: pointer;
+    }
+
+    .editable.editing {
+        background-color: #f4f4f4;
+    }
+
+    .editable input {
+        border: none;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        background-color: transparent;
+        outline: none;
+    }
 </style>
+
 </head>
 <body>
 <h1>Student Performance Data</h1>
@@ -172,6 +202,8 @@ if (isset($_GET['metadata_id'])) {
     </div>
 </div>
 
+<script>
 
+</script>
 </body>
 </html>
