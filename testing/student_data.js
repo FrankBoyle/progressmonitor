@@ -845,14 +845,8 @@ $(document).ready(function() {
                     cell.width(originalWidth);
                 }
             });
-    
-            // Prevent double-click from clearing the cell
-            cell.on('dblclick', function(e) {
-                e.preventDefault();
-            });
         });
     }
-    
     
 
 
