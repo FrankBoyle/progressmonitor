@@ -987,7 +987,19 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-   // Check if DataTable is already initialized on the table
+        let table = $('table').DataTable({
+            "order": [[0, "asc"]],
+            "lengthChange": false,
+            //"searching": false,
+            "paging": false,
+            "info": false,
+            "columns": [
+                { "type": "date-us" },
+                null, null, null, null, null, null, null, null, null, null, null
+            ]
+        });
+        
+           // Check if DataTable is already initialized on the table
    if (!$.fn.DataTable.isDataTable('#dataTable')) {
     // DataTable is not yet initialized, so initialize it
     const dataTable = $("#dataTable").DataTable({
@@ -1003,18 +1015,4 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     // DataTable is already initialized, no need to reinitialize
     console.log("DataTable is already initialized.");
 }
-
-
-        let table = $('table').DataTable({
-            "order": [[0, "asc"]],
-            "lengthChange": false,
-            //"searching": false,
-            "paging": false,
-            "info": false,
-            "columns": [
-                { "type": "date-us" },
-                null, null, null, null, null, null, null, null, null, null, null
-            ]
-        });
-        
     });
