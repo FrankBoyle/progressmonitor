@@ -77,7 +77,7 @@ if (isset($_GET['metadata_id'])) {
     z-index: 1000;
 }
 
-    .editable {
+.editable {
         cursor: pointer;
     }
 
@@ -86,14 +86,12 @@ if (isset($_GET['metadata_id'])) {
     }
 
     .editable input {
-        width: 100%;
         border: none;
-        padding: 0; /* Remove padding */
-        margin: 0; /* Remove margin */
+        padding: 0;
+        margin: 0;
         box-sizing: border-box;
         background-color: transparent;
         outline: none;
-        text-align: left; /* Start cursor at the far left */
     }
 </style>
 

@@ -568,16 +568,22 @@ $(document).ready(function() {
     $('.editable').on('click', function () {
         var $cell = $(this);
         var currentValue = $cell.text().trim();
-        $cell.addClass('editing').html('<input type="text" value="' + currentValue + '">');
+        $cell.addClass('editing').html('<input type="text">');
         var $input = $cell.find('input');
+        $input.val(currentValue); // Set the input value
         $input.focus();
-        // Set the cursor position to the beginning of the input
+        // Set the cursor position to the end of the input
         var inputValLength = $input.val().length;
-        $input[0].setSelectionRange(0, inputValLength);
+        $input[0].setSelectionRange(inputValLength, inputValLength);
         
         $input.blur(function () {
             var newValue = $(this).val();
-            $cell.removeClass('editing').text(newValue);
+            $cell.removeClass('editing');
+            if (newValue === "") {
+                $cell.text(null); // Set the cell as null if the input is empty
+            } else {
+                $cell.text(newValue);
+            }
         });
     });
     //console.log(metadata_id);
