@@ -167,7 +167,6 @@ if (isset($_GET['metadata_id'])) {
     <div id="barChart" style="width: 1000px;"></div>
     </div>
 </div>
-<script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
