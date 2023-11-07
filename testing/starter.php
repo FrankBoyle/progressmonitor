@@ -471,7 +471,7 @@ $students = fetchStudentsByTeacher($teacherId);
 <script src="../../plugins/summernote/summernote-bs4.min.js"></script>
 <script>
     $(document).ready(function() {
-      $('#summernote').summernote({
+      $('.goaltext').summernote({
         toolbar: [
           // Only include buttons for font type and basic styling
           ['font', ['fontname']], // Font type
