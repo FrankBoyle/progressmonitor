@@ -187,19 +187,13 @@ if (isset($_GET['metadata_id'])) {
 <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script>
   $(function () {
+    // Initialize DataTable for the table with ID 'dataTable'
     $("#dataTable").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#dataTable').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
       "responsive": true,
-    });
+      "lengthChange": false,
+      "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
   });
 </script>
 </body>
