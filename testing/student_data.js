@@ -565,7 +565,7 @@ $(document).ready(function() {
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
     
-    $('table').on('dblclick', '.editable', function () {
+    $('table').on('click', '.editable', function () {
         var $cell = $(this);
         var currentValue = $cell.text().trim();
         var $input = $('<input type="text">');
@@ -592,9 +592,7 @@ $(document).ready(function() {
             $cell.text(null); // Set the cell as null if the input is empty
         } else {
             $cell.text(newValue);
-        }
-            }
-    
+        }}
     //console.log(metadata_id);
 
     function getCurrentDate() {
