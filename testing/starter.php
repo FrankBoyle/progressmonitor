@@ -344,7 +344,6 @@ $students = fetchStudentsByTeacher($teacherId);
                           return strcmp($a['name'], $b['name']);
                         });
                       ?>
-                      <h2>Students:</h2>
                       <?php foreach ($students as $student): ?>
                       <?php
                         // Fetch the smallest metadata_id for the student's school_id
