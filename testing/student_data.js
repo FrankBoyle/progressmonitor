@@ -827,12 +827,21 @@ $(document).ready(function() {
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                const newValue = input.val();
                 toggleEditMode(cell, input);
-                cell.text(newValue);
             });
         });
     }
+    
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            input.hide();
+        } else {
+            cell.addClass('editing');
+            input.show();
+        }
+    }
+    
     
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
