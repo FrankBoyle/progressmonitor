@@ -845,9 +845,7 @@ $(document).ready(function() {
             input.show();
         }
     }
-    
-    
-       
+     
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();

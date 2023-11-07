@@ -95,8 +95,14 @@ if (isset($_GET['metadata_id'])) {
     }
 
     .fixed-width {
-    width: 100px; /* Set your desired width here */
+        width: 100px; /* Set your desired width here */
     }
+
+    .fixed-width-cell {
+        width: 100px; /* Set your desired width here */
+        white-space: nowrap; /* Prevent text from wrapping */
+    }
+
 </style>
 
 </head>
