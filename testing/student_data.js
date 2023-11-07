@@ -726,11 +726,11 @@ $(document).ready(function() {
         return isDuplicate;
     }
     
-
     function attachEditableHandler() {
         $('table').on('click', '.editable', function() {
             const cell = $(this);
             const originalValue = cell.text();
+            const originalWidth = cell.width(); // Store the original width here
             const input = $('<input type="text">');
             input.val(originalValue);
     
@@ -841,6 +841,7 @@ $(document).ready(function() {
             });
         });
     }
+    
     
     
     
