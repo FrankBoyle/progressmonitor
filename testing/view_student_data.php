@@ -41,6 +41,7 @@ if (isset($_GET['metadata_id'])) {
   <!-- DataTables -->
   <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -108,7 +109,7 @@ if (isset($_GET['metadata_id'])) {
 </div>
 
 <!-- Snippet of the modified code -->
-<table border="1" id="dataTable" class="table table-bordered table-hover">
+<table border="1" id="dataTable" class="table">
     <thead>
         <tr>
             <th>Date</th>
