@@ -327,9 +327,11 @@ $students = fetchStudentsByTeacher($teacherId);
         <input type="submit" name="add_new_student" value="Add New Student">
     </form>
 
-    <div class="content">
-      <div class="container-fluid">
-              <div class="card-body">
+    <section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
                 <h5 class="card-title">Student List</h5>
                   <?php if ($message): ?>
                     <p><?= $message ?></p>
@@ -354,8 +356,10 @@ $students = fetchStudentsByTeacher($teacherId);
                           No students found for this teacher.
                       <?php endif; ?>
                       </div>
-        </div>
-      </div>
+                    </div>
+                  </div>
+                </div>
+    </section>
     <div class="content">
       <div class="container-fluid">
               <div class="card-body">
