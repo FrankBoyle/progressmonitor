@@ -570,7 +570,7 @@ $(document).ready(function() {
         var currentValue = $cell.text().trim();
         var $input = $('<input type="text">');
         $input.val(currentValue);
-        $cell.addClass('editing').html($input);
+        $cell.addClass('editing').empty().append($input);
         $input.focus();
 
         $input.on('keydown', function (e) {
@@ -587,12 +587,9 @@ $(document).ready(function() {
 
     function saveCellValue($cell, $input) {
         var newValue = $input.val();
-        $cell.removeClass('editing');
-        if (newValue === "") {
-            $cell.text(null); // Set the cell as null if the input is empty
-        } else {
-            $cell.text(newValue);
-        }}
+        $cell.removeClass('editing').empty().text(newValue); // Restore the original content
+        // Here, you can add code to save the edited value to the database using AJAX.
+    }
     //console.log(metadata_id);
 
     function getCurrentDate() {
