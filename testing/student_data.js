@@ -564,16 +564,22 @@ $(document).ready(function() {
 
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
+    
     $('.editable').on('click', function () {
         var $cell = $(this);
         var currentValue = $cell.text().trim();
         $cell.addClass('editing').html('<input type="text" value="' + currentValue + '">');
-        $cell.find('input').focus().blur(function () {
+        var $input = $cell.find('input');
+        $input.focus();
+        // Set the cursor position to the beginning of the input
+        var inputValLength = $input.val().length;
+        $input[0].setSelectionRange(0, inputValLength);
+        
+        $input.blur(function () {
             var newValue = $(this).val();
             $cell.removeClass('editing').text(newValue);
         });
     });
-    // Now the input field should have the correct metadata_id value
     //console.log(metadata_id);
 
     function getCurrentDate() {

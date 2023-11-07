@@ -70,7 +70,7 @@ if (isset($_GET['metadata_id'])) {
     const metadata_id = urlParams.get('metadata_id');
     var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
     </script>
-    
+
 <style>
 #dataTable_wrapper .col-md-6:eq(0) {
     position: relative;
@@ -88,11 +88,12 @@ if (isset($_GET['metadata_id'])) {
     .editable input {
         width: 100%;
         border: none;
-        padding: 0;
-        margin: 0;
+        padding: 0; /* Remove padding */
+        margin: 0; /* Remove margin */
         box-sizing: border-box;
         background-color: transparent;
         outline: none;
+        text-align: left; /* Start cursor at the far left */
     }
 </style>
 
