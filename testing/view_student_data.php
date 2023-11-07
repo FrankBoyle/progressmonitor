@@ -69,6 +69,13 @@ if (isset($_GET['metadata_id'])) {
     const metadata_id = urlParams.get('metadata_id');
     var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
     </script>
+<style>
+#dataTable_wrapper .col-md-6:eq(0) {
+    position: relative;
+    z-index: 1000;
+}
+
+</style>
 
 </head>
 <body>
