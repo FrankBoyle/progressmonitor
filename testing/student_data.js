@@ -565,35 +565,34 @@ $(document).ready(function() {
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
     
-    $('.editable').on('click', function () {
+    $('table').on('dblclick', '.editable', function () {
         var $cell = $(this);
         var currentValue = $cell.text().trim();
-        $cell.addClass('editing').html('<input type="text">');
-        var $input = $cell.find('input');
-        $input.val(currentValue); // Set the input value
+        var $input = $('<input type="text">');
+        $input.val(currentValue);
+        $cell.addClass('editing').html($input);
         $input.focus();
-        
+
         $input.on('keydown', function (e) {
             if (e.keyCode === 13) { // Enter key pressed
                 e.preventDefault();
-                var newValue = $(this).val();
-                $cell.removeClass('editing');
-                if (newValue === "") {
-                    $cell.text(null); // Set the cell as null if the input is empty
-                } else {
-                    $cell.text(newValue);
-                }
+                saveCellValue($cell, $input);
             }
         });
-        
+
         $input.on('blur', function () {
-            var newValue = $(this).val();
-            $cell.removeClass('editing');
-            if (newValue === "") {
-                $cell.text(null); // Set the cell as null if the input is empty
-            } else {
-                $cell.text(newValue);
-            }
+            saveCellValue($cell, $input);
+        });
+    });
+
+    function saveCellValue($cell, $input) {
+        var newValue = $input.val();
+        $cell.removeClass('editing');
+        if (newValue === "") {
+            $cell.text(null); // Set the cell as null if the input is empty
+        } else {
+            $cell.text(newValue);
+        }
         });
     });
     //console.log(metadata_id);
