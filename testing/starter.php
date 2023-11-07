@@ -304,7 +304,7 @@ $students = fetchStudentsByTeacher($teacherId);
   <div class="container-fluid">
     <h5 class="mb-2">GOALS</h5>
     <div class="row">
-      <div class="col-md-3 col-sm-6 col-12">
+      <div class="col-md-5 col-sm-6 col-12">
         <div class="info-box">
           <!-- If you want to add an icon to the box, uncomment this
           <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
