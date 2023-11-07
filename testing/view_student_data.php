@@ -101,6 +101,8 @@ if (isset($_GET['metadata_id'])) {
     .fixed-width-cell {
         width: 100px; /* Set your desired width here */
         white-space: nowrap; /* Prevent text from wrapping */
+        padding: 0;
+        margin: 0;
     }
 
 </style>
