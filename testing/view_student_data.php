@@ -70,12 +70,6 @@ if (isset($_GET['metadata_id'])) {
     var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
     </script>
 
-<style>
-    .dataTables_filter {
-        display: none;
-    }
-
-</style>
 </head>
 <body>
 <h1>Student Performance Data</h1>
