@@ -977,11 +977,12 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         };
 
         let table = $('table').DataTable({
-            //"order": [[0, "asc"]],
+            "order": [[0, "asc"]],
             "lengthChange": false,
             "searching": false,
             "paging": false,
             "info": false,
+            "sorting": false,
             "columns": [
                 { "type": "date-us" },
                 null, null, null, null, null, null, null, null, null, null, null
