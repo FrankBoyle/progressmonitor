@@ -993,6 +993,7 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             //"searching": false,
             "paging": false,
             "info": false,
+            "search": false,
             "columns": [
                 { "type": "date-us" },
                 null, null, null, null, null, null, null, null, null, null, null
