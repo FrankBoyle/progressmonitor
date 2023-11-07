@@ -996,23 +996,10 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             "columns": [
                 { "type": "date-us" },
                 null, null, null, null, null, null, null, null, null, null, null
-            ]
+            ],
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         });
-        
-           // Check if DataTable is already initialized on the table
-   if (!$.fn.DataTable.isDataTable('#dataTable')) {
-    // DataTable is not yet initialized, so initialize it
-    const dataTable = $("#dataTable").DataTable({
-        "responsive": true,
-        "lengthChange": false,
-        "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    });
-
-    // Move the buttons container to the desired location
-    dataTable.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
-} else {
-    // DataTable is already initialized, no need to reinitialize
-    console.log("DataTable is already initialized.");
-}
+    
+        // Move the buttons container to the desired location
+        table.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
     });
