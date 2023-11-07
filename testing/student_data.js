@@ -564,7 +564,15 @@ $(document).ready(function() {
 
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
-
+    $('.editable').on('click', function () {
+        var $cell = $(this);
+        var currentValue = $cell.text().trim();
+        $cell.addClass('editing').html('<input type="text" value="' + currentValue + '">');
+        $cell.find('input').focus().blur(function () {
+            var newValue = $(this).val();
+            $cell.removeClass('editing').text(newValue);
+        });
+    });
     // Now the input field should have the correct metadata_id value
     //console.log(metadata_id);
 
@@ -729,7 +737,6 @@ $(document).ready(function() {
     
 
     function attachEditableHandler() {
-        //$('table').on('click', '.editable:not([data-field-name="score8"])', function() {
         $('table').on('click', '.editable', function() {
             const cell = $(this);
             const originalValue = cell.text();
