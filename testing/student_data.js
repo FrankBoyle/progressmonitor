@@ -564,39 +564,7 @@ $(document).ready(function() {
 
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
-    
-    $('table').on('mousedown', '.editable', function (event) {
-        var $cell = $(this);
 
-        if (!$cell.hasClass('editing')) {
-            // Prevent default mousedown behavior to avoid deselecting text
-            event.preventDefault();
-            
-            var currentValue = $cell.text().trim();
-            var $input = $('<input type="text">');
-            $input.val(currentValue);
-            
-            $cell.addClass('editing').empty().append($input);
-            $input.focus();
-
-            $input.on('keydown', function (e) {
-                if (e.keyCode === 13) { // Enter key pressed
-                    e.preventDefault();
-                    saveCellValue($cell, $input);
-                }
-            });
-
-            $input.on('blur', function () {
-                saveCellValue($cell, $input);
-            });
-        }
-    });
-
-    function saveCellValue($cell, $input) {
-        var newValue = $input.val();
-        $cell.removeClass('editing').empty().text(newValue); // Restore the original content
-        // Here, you can add code to save the edited value to the database using AJAX.
-    }
     //console.log(metadata_id);
 
     function getCurrentDate() {
@@ -760,7 +728,34 @@ $(document).ready(function() {
     
 
     function attachEditableHandler() {
-        $('table').on('click', '.editable', function() {
+        $('table').on('mousedown', '.editable', function (event) {
+            var $cell = $(this);
+    
+            if (!$cell.hasClass('editing')) {
+                // Prevent default mousedown behavior to avoid deselecting text
+                event.preventDefault();
+                
+                var currentValue = $cell.text().trim();
+                var $input = $('<input type="text">');
+                $input.val(currentValue);
+                
+                $cell.addClass('editing').empty().append($input);
+                $input.focus();
+    
+                $input.on('keydown', function (e) {
+                    if (e.keyCode === 13) { // Enter key pressed
+                        e.preventDefault();
+                        saveCellValue($cell, $input);
+                    }
+                });
+    
+                $input.on('blur', function () {
+                    saveCellValue($cell, $input);
+                });
+            }
+        });
+    
+        $('table').on('click', '.editable', function () {
             const cell = $(this);
             const originalValue = cell.text();
             const input = $('<input type="text">');
@@ -771,14 +766,13 @@ $(document).ready(function() {
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
-                    beforeShow: function() {
+                    beforeShow: function () {
                         datePickerActive = true;
                     },
-                    onClose: function(selectedDate) {
+                    onClose: function (selectedDate) {
                         if (isValidDate(new Date(selectedDate))) {
                             const currentPerformanceId = cell.closest('tr').data('performance-id');
                             if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                //alert("This date already exists. Please choose a different date.");
                                 input.val(originalValue); // Revert to the original value
                                 return;
                             }
@@ -795,18 +789,16 @@ $(document).ready(function() {
                 input.focus();
             }
     
-            input.blur(function() {
+            input.blur(function () {
                 if (datePickerActive) {
                     return;
                 }
     
                 let newValue = input.val();
-                // Update the cell content with the new value
-                cell.text(newValue);
+                cell.html(newValue);
     
                 const performanceId = cell.closest('tr').data('performance-id');
     
-                // Check if it's a new row. If so, just return and don't do any AJAX call. 
                 if (performanceId === 'new') {
                     return;
                 }
@@ -817,10 +809,9 @@ $(document).ready(function() {
                         cell.text(originalValue); // Revert to the original value
                         return;
                     }
-                    newValue = convertToDatabaseDate(newValue);  // Convert to yyyy-mm-dd format for database use
-                    saveEditedDate(cell, newValue); // Save the edited date
+                    newValue = convertToDatabaseDate(newValue);
+                    saveEditedDate(cell, newValue);
                 } else {
-                    // Perform AJAX call here to save the updated value
                     const fieldName = cell.data('field-name');
                     const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
                     const studentId = $('#currentStudentId').val();
@@ -842,7 +833,7 @@ $(document).ready(function() {
                         let scores = {};
                         for (let i = 1; i <= 10; i++) {
                             const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-                            scores['score' + i] = scoreValue ? scoreValue : null; // Send null if score is empty
+                            scores['score' + i] = scoreValue ? scoreValue : null;
                         }
                         postData.scores = scores;
                     }
@@ -851,23 +842,21 @@ $(document).ready(function() {
                         type: 'POST',
                         url: targetUrl,
                         data: postData,
-                        success: function(response) {
+                        success: function (response) {
                             if (performanceId === 'new') {
                                 const newRow = $('tr[data-performance-id="new"]');
                                 newRow.attr('data-performance-id', response.performance_id);
                                 newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                             }
                         },
-                        error: function() {
-                            // Handle any error here, e.g., show a notification to the user
-                            //alert("There was an error updating the data.");
+                        error: function () {
+                            // Handle any error here
                         }
                     });
                 }
             });
     
-            // Pressing Enter to save changes
-            input.off('keypress').keypress(function(e) {
+            input.off('keypress').keypress(function (e) {
                 if (e.which === 13) {
                     e.preventDefault();
                     input.blur();
@@ -875,6 +864,7 @@ $(document).ready(function() {
             });
         });
     }
+    
     
 
     $('#addDataRow').off('click').click(function() {
