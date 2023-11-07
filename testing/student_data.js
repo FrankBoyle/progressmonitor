@@ -990,10 +990,9 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         let table = $('table').DataTable({
             "order": [[0, "asc"]],
             "lengthChange": false,
-            //"searching": false,
+            "searching": false,
             "paging": false,
             "info": false,
-            "search": false,
             "columns": [
                 { "type": "date-us" },
                 null, null, null, null, null, null, null, null, null, null, null
