@@ -298,18 +298,20 @@ $students = fetchStudentsByTeacher($teacherId);
       </div><!-- /.container-fluid -->
     </section>
 
+
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-outline card-info">
-            <div class="card-header">
-              <h3 class="card-title">
-                Goal Box Sample
-              </h3>
-            </div>
+      <div class="container-fluid">
+        <h5 class="mb-2">Goal 1</h5>
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+              <div class="info-box">
+                <div class="info-box-content">
+                    Goal Box Sample
+                  </h3>
+                </div>
             <!-- /.card-header -->
-            <div class="card-body">
+              <div class="card-body">
               <textarea id="summernote">
                 Place <em>some</em> <u>text</u> <strong>here</strong>
               </textarea>
