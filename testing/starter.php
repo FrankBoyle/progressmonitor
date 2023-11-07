@@ -442,3 +442,15 @@ $students = fetchStudentsByTeacher($teacherId);
 <script src="./dist/js/adminlte.min.js"></script>
 </body>
 </html>
+<script>
+  $(function () {
+    // Summernote
+    $('#summernote').summernote()
+
+    // CodeMirror
+    CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+      mode: "htmlmixed",
+      theme: "monokai"
+    });
+  })
+</script>
