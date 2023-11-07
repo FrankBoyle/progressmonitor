@@ -178,23 +178,15 @@ if (isset($_GET['metadata_id'])) {
 </div>
 
 <script>
-$(function () {
-  // Check if the DataTable already exists and if so, just retrieve it
-  let dataTable = $("#dataTable").DataTable({
-    "destroy": true,
-    "retrieve": true,
-    "responsive": true, 
-    "lengthChange": false, 
-    "autoWidth": false,
-    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+
+  $(function () {
+    // Initialize DataTable for the table with ID 'dataTable'
+    $("#dataTable").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
   });
-
-  // If the DataTable did not exist before, it will be initialized and we can append the buttons
-  if (!dataTable.buttons) {
-    dataTable.buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
-  }
-});
-
+  
 </script>
 </body>
 </html>
