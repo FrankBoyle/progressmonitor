@@ -61,7 +61,7 @@ if (isset($_GET['metadata_id'])) {
 <script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <script src="student_data.js"></script>
+    <script src="student_data.js"  defer></script>
     
     <script>
     // Get the metadata_id from the URL parameter
