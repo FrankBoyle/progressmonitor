@@ -443,10 +443,16 @@ $students = fetchStudentsByTeacher($teacherId);
 <!-- Summernote -->
 <script src="../../plugins/summernote/summernote-bs4.min.js"></script>
 <script>
-  $(function () {
-    // Summernote
-    $('#summernote').summernote()
-  })
-</script>
+    $(document).ready(function() {
+      $('#summernote').summernote({
+        toolbar: [
+          // Only include buttons for font type and basic styling
+          ['font', ['fontname']], // Font type
+          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
+        ],
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
+      });
+    });
+  </script>
 </body>
 </html>
