@@ -308,6 +308,12 @@ $students = fetchStudentsByTeacher($teacherId);
               <div class="info-box">
                 <div class="info-box-content">
                 <span class="info-box-text">Goal 1</span>
+                <span class="info-box-text">Goal 1</span>
+
+                <span class="info-box-text">Goal 1</span>
+
+                <span class="info-box-text">Goal 1</span>
+
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
