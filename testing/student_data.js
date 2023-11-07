@@ -659,7 +659,7 @@ $(document).ready(function() {
 
     $('#toggleDateOrder').on('click', function() {
         // Fetch the existing DataTable instance
-        const table = $('table').DataTable({ retrieve: true });
+        //const table = $('table').DataTable({ retrieve: true });
         dateAscending = !dateAscending; // flip the state
     
         // Now set the order and redraw the table
