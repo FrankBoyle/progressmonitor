@@ -312,7 +312,7 @@ $students = fetchStudentsByTeacher($teacherId);
           <div class="info-box-content">
             <span class="info-box-text">Goal 1</span>
             <!-- Summernote editor -->
-            <textarea id="summernote">
+            <textarea id="summernote" class = "goaltext">
               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
           </div>
@@ -326,7 +326,7 @@ $students = fetchStudentsByTeacher($teacherId);
           <div class="info-box-content">
             <span class="info-box-text">Goal 2</span>
             <!-- Summernote editor -->
-            <textarea id="summernote">
+            <textarea id="summernote" class = "goaltext">
               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
           </div>
@@ -340,7 +340,7 @@ $students = fetchStudentsByTeacher($teacherId);
           <div class="info-box-content">
             <span class="info-box-text">Goal 3</span>
             <!-- Summernote editor -->
-            <textarea id="summernote">
+            <textarea id="summernote" class = "goaltext">
               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
           </div>
