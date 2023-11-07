@@ -999,6 +999,13 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             ]
         });
         
+ // Append buttons container to the body
+ $("#dataTable").DataTable({
+    "responsive": true,
+    "lengthChange": false,
+    "autoWidth": false,
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+}).buttons().container().appendTo('body');
 
         
     });
