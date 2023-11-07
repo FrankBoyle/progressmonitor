@@ -561,7 +561,22 @@ $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
+    // Check if DataTable is already initialized on the table
+    if (!$.fn.DataTable.isDataTable('#dataTable')) {
+        // DataTable is not yet initialized, so initialize it
+        const dataTable = $("#dataTable").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        });
 
+        // Move the buttons container to the desired location
+        dataTable.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
+    } else {
+        // DataTable is already initialized, no need to reinitialize
+        console.log("DataTable is already initialized.");
+    }
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
 
@@ -998,14 +1013,5 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                 null, null, null, null, null, null, null, null, null, null, null
             ]
         });
-        
- // Append buttons container to the body
- $("#dataTable").DataTable({
-    "responsive": true,
-    "lengthChange": false,
-    "autoWidth": false,
-    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-}).buttons().container().appendTo('body');
-
         
     });
