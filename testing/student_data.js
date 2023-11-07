@@ -831,6 +831,16 @@ $(document).ready(function() {
             });
         });
     }
+    
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            input.hide();
+        } else {
+            cell.addClass('editing');
+            input.show();
+        }
+    }
        
 
     $('#addDataRow').off('click').click(function() {
