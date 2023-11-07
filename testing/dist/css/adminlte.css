@@ -10331,6 +10331,7 @@ a.text-dark:hover, a.text-dark:focus {
   }
   body {
     min-width: 992px !important;
+    background-color: #f0f0f0; /* Replace with the shade of grey you want */
   }
   .container {
     min-width: 992px !important;
