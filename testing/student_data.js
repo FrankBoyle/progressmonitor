@@ -655,17 +655,6 @@ $(document).ready(function() {
         });  
     }
 
-    //let dateAscending = true; // to keep track of current order
-
-    $('#toggleDateOrder').on('click', function() {
-        // Fetch the existing DataTable instance
-        //const table = $('table').DataTable({ retrieve: true });
-        dateAscending = !dateAscending; // flip the state
-    
-        // Now set the order and redraw the table
-        table.order([0, dateAscending ? 'asc' : 'desc']).draw();
-    });    
-
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
         const performanceId = $(this).data('performance-id');
