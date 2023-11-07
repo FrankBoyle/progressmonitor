@@ -319,7 +319,7 @@ $students = fetchStudentsByTeacher($teacherId);
             </div>
           </div>
         </div>
-</div>
+
       <!-- Add New Student Form -->
     <form method="post" action="">
         <label for="new_student_name">New Student Name:</label>
