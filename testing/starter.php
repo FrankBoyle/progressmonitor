@@ -318,6 +318,34 @@ $students = fetchStudentsByTeacher($teacherId);
           </div>
         </div>
       </div>
+      <div class="col-md-4 col-sm-6 col-12">
+        <div class="info-box">
+          <!-- If you want to add an icon to the box, uncomment this
+          <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
+          -->
+          <div class="info-box-content">
+            <span class="info-box-text">Goal 2</span>
+            <!-- Summernote editor -->
+            <textarea id="summernote">
+              Place <em>some</em> <u>text</u> <strong>here</strong>
+            </textarea>
+          </div>
+        </div>
+      </div>   
+      <div class="col-md-4 col-sm-6 col-12">
+        <div class="info-box">
+          <!-- If you want to add an icon to the box, uncomment this
+          <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
+          -->
+          <div class="info-box-content">
+            <span class="info-box-text">Goal 3</span>
+            <!-- Summernote editor -->
+            <textarea id="summernote">
+              Place <em>some</em> <u>text</u> <strong>here</strong>
+            </textarea>
+          </div>
+        </div>
+      </div>    
     </div>
   </div>
 </section>
