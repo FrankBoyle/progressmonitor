@@ -729,8 +729,8 @@ $(document).ready(function() {
     function attachEditableHandler() {
         $('table').on('click', '.editable', function() {
             const cell = $(this);
-            const originalValue = cell.text();
-            const originalWidth = cell.width(); // Store the original width here
+            const originalValue = cell.text().trim(); // Trim whitespace from the original value
+            const originalWidth = cell.width();
             const input = $('<input type="text">');
             input.val(originalValue);
     
@@ -768,7 +768,7 @@ $(document).ready(function() {
                 }
     
                 let newValue = input.val();
-                cell.html(newValue);
+                cell.text(newValue);
     
                 const performanceId = cell.closest('tr').data('performance-id');
     
