@@ -593,8 +593,8 @@ $(document).ready(function() {
         } else {
             $cell.text(newValue);
         }
-        });
-    });
+            }
+    
     //console.log(metadata_id);
 
     function getCurrentDate() {
