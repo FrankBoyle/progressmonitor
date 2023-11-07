@@ -729,14 +729,12 @@ $(document).ready(function() {
     function attachEditableHandler() {
         $('table').on('click', '.editable', function() {
             const cell = $(this);
-            const originalValue = cell.text().trim(); // Trim whitespace from the original value
-            const originalWidth = cell.width();
+            if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
+            const originalValue = cell.text().trim();
             const input = $('<input type="text">');
             input.val(originalValue);
-    
+            
             let datePickerActive = false;
-            let isEditing = true; // Flag to track if the cell is in editing mode
-    
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
@@ -747,36 +745,32 @@ $(document).ready(function() {
                         if (isValidDate(new Date(selectedDate))) {
                             const currentPerformanceId = cell.closest('tr').data('performance-id');
                             if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                input.val(originalValue); // Revert to the original value
-                                return;
+                                input.val(originalValue);
+                            } else {
+                                saveEditedDate(cell, selectedDate);
                             }
-                            input.hide();
-                            saveEditedDate(cell, selectedDate);
                         }
+                        toggleEditMode(cell, input);
                         datePickerActive = false;
                     }
                 });
-                cell.html(input);
-                input.focus();
-            } else {
-                cell.html(input);
-                input.focus();
             }
+    
+            cell.addClass('editing');
+            cell.empty().append(input);
+            input.focus();
     
             // Listen for Enter key press
             input.on('keydown', function(e) {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
                     const newValue = input.val();
+                    toggleEditMode(cell, input);
                     cell.text(newValue);
-                    isEditing = false; // Editing is complete
-    
                     const performanceId = cell.closest('tr').data('performance-id');
-    
                     if (performanceId === 'new') {
                         return;
                     }
-    
                     if (cell.data('field-name') === 'score_date') {
                         const parts = newValue.split('/');
                         if (parts.length !== 3) {
@@ -828,27 +822,59 @@ $(document).ready(function() {
                             }
                         });
                     }
-    
-                    // Set the cell's width back to its original width
-                    cell.width(originalWidth);
                 }
             });
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                if (isEditing) {
-                    const newValue = input.val();
-                    cell.text(newValue);
-                    isEditing = false; // Editing is complete
-    
-                    // Set the cell's width back to its original width
-                    cell.width(originalWidth);
-                }
+                toggleEditMode(cell, input);
             });
         });
     }
     
-
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            input.hide();
+        } else {
+            cell.addClass('editing');
+            input.show();
+        }
+    }
+    
+    
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            input.hide();
+        } else {
+            cell.addClass('editing');
+            input.show();
+        }
+    }
+    
+    
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            input.hide();
+        } else {
+            cell.addClass('editing');
+            input.show();
+        }
+    }
+    
+    
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            input.hide();
+        } else {
+            cell.addClass('editing');
+            input.show();
+        }
+    }
+    
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
