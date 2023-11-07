@@ -999,10 +999,13 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             ]
         });
         
-        // Initialize DataTable for the table with ID 'dataTable'
-        $("#dataTable").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)').css('z-index', '1000');
+// Append buttons container to the body
+$("#dataTable").DataTable({
+    "responsive": true,
+    "lengthChange": false,
+    "autoWidth": false,
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+}).buttons().container().appendTo('body');
+
         
     });
