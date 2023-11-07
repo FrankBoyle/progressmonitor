@@ -561,8 +561,8 @@ $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
-    
-    // Check if DataTable is already initialized on the table
+
+   // Check if DataTable is already initialized on the table
     if (!$.fn.DataTable.isDataTable('#dataTable')) {
         // DataTable is not yet initialized, so initialize it
         const dataTable = $("#dataTable").DataTable({
