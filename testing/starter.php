@@ -302,11 +302,12 @@ $students = fetchStudentsByTeacher($teacherId);
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <h5 class="mb-2">Goal 1</h5>
+        <h5 class="mb-2">GOALS</h5>
           <div class="row">
             <div class="col-md-3 col-sm-6 col-12">
               <div class="info-box">
                 <div class="info-box-content">
+                <span class="info-box-text">Goal 1</span>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
