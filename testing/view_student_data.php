@@ -187,6 +187,7 @@ if (isset($_GET['metadata_id'])) {
   $(function () {
     // Initialize DataTable for the table with ID 'dataTable'
     $("#dataTable").DataTable({
+        "destroy": true,
       "responsive": true,
       "lengthChange": false,
       "autoWidth": false,
