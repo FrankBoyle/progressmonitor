@@ -181,6 +181,7 @@ if (isset($_GET['metadata_id'])) {
 $(function () {
   // Check if the DataTable already exists and if so, just retrieve it
   let dataTable = $("#dataTable").DataTable({
+    "destroy": false,
     "retrieve": true,
     "responsive": true, 
     "lengthChange": false, 
