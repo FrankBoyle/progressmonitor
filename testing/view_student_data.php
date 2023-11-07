@@ -77,7 +77,7 @@ if (isset($_GET['metadata_id'])) {
     z-index: 1000;
 }
 
-.editable {
+    .editable {
         cursor: pointer;
     }
 

@@ -572,11 +572,21 @@ $(document).ready(function() {
         var $input = $cell.find('input');
         $input.val(currentValue); // Set the input value
         $input.focus();
-        // Set the cursor position to the end of the input
-        var inputValLength = $input.val().length;
-        $input[0].setSelectionRange(inputValLength, inputValLength);
         
-        $input.blur(function () {
+        $input.on('keydown', function (e) {
+            if (e.keyCode === 13) { // Enter key pressed
+                e.preventDefault();
+                var newValue = $(this).val();
+                $cell.removeClass('editing');
+                if (newValue === "") {
+                    $cell.text(null); // Set the cell as null if the input is empty
+                } else {
+                    $cell.text(newValue);
+                }
+            }
+        });
+        
+        $input.on('blur', function () {
             var newValue = $(this).val();
             $cell.removeClass('editing');
             if (newValue === "") {
