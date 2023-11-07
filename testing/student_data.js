@@ -1001,5 +1001,5 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
         });
     
         // Move the buttons container to the desired location
-        table.buttons().container().appendTo('.dataTables_wrapper .col-md-8:eq(0)');
+        table.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
     });
