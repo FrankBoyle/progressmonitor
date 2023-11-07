@@ -738,7 +738,6 @@ $(document).ready(function() {
             cell.addClass('editing');
             const originalValue = cell.text().trim(); // Trim whitespace from the original value
             const input = $('<input type="text">');
-            input.val(originalValue);
     
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
@@ -756,6 +755,8 @@ $(document).ready(function() {
                     }
                 });
             }
+    
+            input.val(originalValue); // Set the input value after datepicker initialization
     
             input.on('keydown', function (e) {
                 if (e.keyCode === 13) { // Enter key pressed
@@ -826,6 +827,9 @@ $(document).ready(function() {
                             });
                         }
                     }
+                } else {
+                    // If the value did not change, set it back to the original value
+                    cell.text(originalValue);
                 }
             });
     
@@ -833,6 +837,7 @@ $(document).ready(function() {
             input.focus();
         });
     }
+    
     
     
     
