@@ -736,7 +736,7 @@ $(document).ready(function() {
             }
     
             cell.addClass('editing');
-            const originalValue = cell.text();
+            const originalValue = cell.text().trim(); // Trim whitespace from the original value
             const input = $('<input type="text">');
             input.val(originalValue);
     
@@ -765,14 +765,14 @@ $(document).ready(function() {
             });
     
             input.on('blur', function () {
-                const newValue = input.val();
+                const newValue = input.val().trim(); // Trim whitespace from the new value
                 input.remove(); // Remove the input element
                 cell.removeClass('editing');
-                
+    
                 if (newValue !== originalValue) {
                     cell.text(newValue);
                     const performanceId = cell.closest('tr').data('performance-id');
-                    
+    
                     if (performanceId !== 'new') {
                         if (cell.data('field-name') === 'score_date') {
                             const parts = newValue.split('/');
@@ -788,7 +788,7 @@ $(document).ready(function() {
                             const studentId = $('#currentStudentId').val();
                             const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
                             const school_id = $('#schoolIdInput').val();
-        
+    
                             let postData = {
                                 performance_id: performanceId,
                                 field_name: fieldName,
@@ -798,17 +798,17 @@ $(document).ready(function() {
                                 metadata_id: metadata_id,
                                 school_id: school_id,
                             };
-        
+    
                             if (performanceId === 'new') {
                                 const row = $(this).closest('tr');
                                 let scores = {};
                                 for (let i = 1; i <= 10; i++) {
-                                    const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+                                    const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim(); // Trim whitespace
                                     scores['score' + i] = scoreValue ? scoreValue : null;
                                 }
                                 postData.scores = scores;
                             }
-        
+    
                             $.ajax({
                                 type: 'POST',
                                 url: targetUrl,
@@ -833,6 +833,7 @@ $(document).ready(function() {
             input.focus();
         });
     }
+    
     
     
     
