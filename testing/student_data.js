@@ -562,24 +562,6 @@ $(document).ready(function() {
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
 
-   // Check if DataTable is already initialized on the table
-    if (!$.fn.DataTable.isDataTable('#dataTable')) {
-        // DataTable is not yet initialized, so initialize it
-        const dataTable = $("#dataTable").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        });
-
-        // Move the buttons container to the desired location
-        dataTable.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
-    } else {
-        // DataTable is already initialized, no need to reinitialize
-        console.log("DataTable is already initialized.");
-    }
-
-
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
 
@@ -1004,6 +986,24 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             var date = data.split('/');
             return (date[2] + date[0] + date[1]) * 1;
         };
+
+   // Check if DataTable is already initialized on the table
+   if (!$.fn.DataTable.isDataTable('#dataTable')) {
+    // DataTable is not yet initialized, so initialize it
+    const dataTable = $("#dataTable").DataTable({
+        "responsive": true,
+        "lengthChange": false,
+        "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    });
+
+    // Move the buttons container to the desired location
+    dataTable.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
+} else {
+    // DataTable is already initialized, no need to reinitialize
+    console.log("DataTable is already initialized.");
+}
+
 
         let table = $('table').DataTable({
             "order": [[0, "asc"]],
