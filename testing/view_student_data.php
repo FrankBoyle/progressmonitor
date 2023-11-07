@@ -72,10 +72,10 @@ if (isset($_GET['metadata_id'])) {
     </script>
 
 <style>
-#dataTable_wrapper .col-md-6:eq(0) {
-    position: relative;
-    z-index: 1000;
-}
+    #dataTable_wrapper .col-md-6:eq(0) {
+        position: relative;
+        z-index: 1000;
+    }
 
     .editable {
         cursor: pointer;
@@ -92,6 +92,10 @@ if (isset($_GET['metadata_id'])) {
         box-sizing: border-box;
         background-color: transparent;
         outline: none;
+    }
+
+    .fixed-width {
+    width: 100px; /* Set your desired width here */
     }
 </style>
 

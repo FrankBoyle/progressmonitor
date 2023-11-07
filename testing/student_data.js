@@ -733,7 +733,7 @@ $(document).ready(function() {
             const originalValue = cell.text().trim();
             const input = $('<input type="text">');
             input.val(originalValue);
-            
+    
             let datePickerActive = false;
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
@@ -845,6 +845,7 @@ $(document).ready(function() {
             input.show();
         }
     }
+    
     
        
 
