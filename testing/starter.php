@@ -333,7 +333,7 @@ $students = fetchStudentsByTeacher($teacherId);
           <div class="card card-outline card-info">
             <div class="card-header">
               <h3 class="card-title">
-                STUDENT LIST
+                STUDENT LIST<br>
               </h3>
                   <?php if ($message): ?>
                     <p><?= $message ?></p>
