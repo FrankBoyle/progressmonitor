@@ -178,15 +178,7 @@ if (isset($_GET['metadata_id'])) {
 </div>
 
 <script>
-
-  $(function () {
-    // Initialize DataTable for the table with ID 'dataTable'
-    $("#dataTable").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
-  });
-  
+ 
 </script>
 </body>
 </html>
