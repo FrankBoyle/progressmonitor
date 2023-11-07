@@ -565,24 +565,31 @@ $(document).ready(function() {
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
     
-    $('table').on('click', '.editable', function () {
+    $('table').on('mousedown', '.editable', function (event) {
         var $cell = $(this);
-        var currentValue = $cell.text().trim();
-        var $input = $('<input type="text">');
-        $input.val(currentValue);
-        $cell.addClass('editing').empty().append($input);
-        $input.focus();
 
-        $input.on('keydown', function (e) {
-            if (e.keyCode === 13) { // Enter key pressed
-                e.preventDefault();
+        if (!$cell.hasClass('editing')) {
+            // Prevent default mousedown behavior to avoid deselecting text
+            event.preventDefault();
+            
+            var currentValue = $cell.text().trim();
+            var $input = $('<input type="text">');
+            $input.val(currentValue);
+            
+            $cell.addClass('editing').empty().append($input);
+            $input.focus();
+
+            $input.on('keydown', function (e) {
+                if (e.keyCode === 13) { // Enter key pressed
+                    e.preventDefault();
+                    saveCellValue($cell, $input);
+                }
+            });
+
+            $input.on('blur', function () {
                 saveCellValue($cell, $input);
-            }
-        });
-
-        $input.on('blur', function () {
-            saveCellValue($cell, $input);
-        });
+            });
+        }
     });
 
     function saveCellValue($cell, $input) {
