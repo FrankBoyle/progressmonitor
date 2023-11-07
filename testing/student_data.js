@@ -735,6 +735,7 @@ $(document).ready(function() {
             input.val(originalValue);
     
             let datePickerActive = false;
+            let isEditing = true; // Flag to track if the cell is in editing mode
     
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
@@ -768,6 +769,7 @@ $(document).ready(function() {
                     e.preventDefault();
                     const newValue = input.val();
                     cell.text(newValue);
+                    isEditing = false; // Editing is complete
     
                     const performanceId = cell.closest('tr').data('performance-id');
     
@@ -834,24 +836,19 @@ $(document).ready(function() {
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                const newValue = input.val();
-                cell.text(newValue);
+                if (isEditing) {
+                    const newValue = input.val();
+                    cell.text(newValue);
+                    isEditing = false; // Editing is complete
     
-                // Set the cell's width back to its original width
-                cell.width(originalWidth);
+                    // Set the cell's width back to its original width
+                    cell.width(originalWidth);
+                }
             });
         });
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
