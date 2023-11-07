@@ -59,11 +59,6 @@ if (isset($_GET['metadata_id'])) {
     .dataTables_filter {
         display: none;
     }
-    
-    #chart, #barChart {
-    transition: opacity 0.3s;
-}
-
 </style>
 </head>
 <body>
