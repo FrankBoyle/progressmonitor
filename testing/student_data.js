@@ -735,7 +735,7 @@ $(document).ready(function() {
             input.val(originalValue);
     
             let datePickerActive = false;
-            let isEditing = true; // Flag to track if the cell is in editing mode
+            let isEditing = false; // Flag to track if the cell is in editing mode
     
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
@@ -845,8 +845,19 @@ $(document).ready(function() {
                     cell.width(originalWidth);
                 }
             });
+    
+            // Prevent double-click from clearing the cell
+            cell.on('dblclick', function(e) {
+                e.preventDefault();
+            });
+    
+            // Prevent further editing if the cell is already in edit mode
+            if (isEditing) {
+                input.prop('disabled', true);
+            }
         });
     }
+    
     
 
 
