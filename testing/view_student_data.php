@@ -185,7 +185,14 @@ if (isset($_GET['metadata_id'])) {
 </div>
 
 <script>
- 
+ // Append buttons container to the body
+$("#dataTable").DataTable({
+    "responsive": true,
+    "lengthChange": false,
+    "autoWidth": false,
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+}).buttons().container().appendTo('body');
+
 </script>
 </body>
 </html>
