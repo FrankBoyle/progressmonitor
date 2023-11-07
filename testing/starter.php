@@ -301,21 +301,25 @@ $students = fetchStudentsByTeacher($teacherId);
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <h5 class="mb-2">GOALS</h5>
-          <div class="row">
-            <div class="col-md-3 col-sm-6 col-12">
-              <div class="info-box">
-                <div class="info-box-content">
-                <span class="info-box-text">Goal 1</span>
-                </div>
-                <textarea id="summernote">
-                  Place <em>some</em> <u>text</u> <strong>here</strong>
-                </textarea>
-              </div>
+  <div class="container-fluid">
+    <h5 class="mb-2">GOALS</h5>
+    <div class="row">
+      <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+          <!-- If you want to add an icon to the box, uncomment this
+          <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
+          -->
+          <div class="info-box-content">
+            <span class="info-box-text">Goal 1</span>
+            <!-- Summernote editor -->
+            <textarea id="summernote">
+              Place <em>some</em> <u>text</u> <strong>here</strong>
+            </textarea>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 </section>
       <!-- Add New Student Form -->
     <form method="post" action="">
