@@ -730,7 +730,8 @@ $(document).ready(function() {
     function attachEditableHandler() {
         $('table').on('click', '.editable', function () {
             const cell = $(this);
-    
+            cell.width(cell.width()); // Set the width explicitly
+
             if (cell.hasClass('editing')) {
                 return; // Do nothing if already editing
             }
