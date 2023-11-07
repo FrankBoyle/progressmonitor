@@ -307,20 +307,20 @@ $students = fetchStudentsByTeacher($teacherId);
             <div class="col-md-3 col-sm-6 col-12">
               <div class="info-box">
                 <div class="info-box-content">
-                    Goal Box Sample
-                  </h3>
+                <span class="info-box-text">Goal Box Sample</span>
                 </div>
-            <!-- /.card-header -->
-              <div class="card-body">
-              <textarea id="summernote">
-                Place <em>some</em> <u>text</u> <strong>here</strong>
-              </textarea>
-            </div>
-            <div class="card-footer">
+                <!-- /.card-header -->
+                <div class="card-body">
+                <textarea id="summernote">
+                  Place <em>some</em> <u>text</u> <strong>here</strong>
+                </textarea>
+              </div>
+              <div class="card-footer">
             </div>
           </div>
         </div>
       </div>
+  </div>
       <!-- Add New Student Form -->
     <form method="post" action="">
         <label for="new_student_name">New Student Name:</label>
