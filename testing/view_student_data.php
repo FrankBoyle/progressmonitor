@@ -99,7 +99,7 @@ if (isset($_GET['metadata_id'])) {
 </div>
 
 <!-- Snippet of the modified code -->
-<table border="1" id="dataTable" class="table table-bordered table-striped">
+<table border="1" id="dataTable" class="table table-bordered table-hover table-striped">
     <thead>
         <tr>
             <th>Date</th>
