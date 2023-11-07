@@ -729,13 +729,12 @@ $(document).ready(function() {
     function attachEditableHandler() {
         $('table').on('click', '.editable', function() {
             const cell = $(this);
+            if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
             const originalValue = cell.text().trim();
-            const originalWidth = cell.width();
             const input = $('<input type="text">');
             input.val(originalValue);
-    
+            
             let datePickerActive = false;
-    
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
@@ -766,15 +765,12 @@ $(document).ready(function() {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
                     const newValue = input.val();
-                    cell.removeClass('editing');
+                    toggleEditMode(cell, input);
                     cell.text(newValue);
-    
                     const performanceId = cell.closest('tr').data('performance-id');
-    
                     if (performanceId === 'new') {
                         return;
                     }
-    
                     if (cell.data('field-name') === 'score_date') {
                         const parts = newValue.split('/');
                         if (parts.length !== 3) {
@@ -826,23 +822,28 @@ $(document).ready(function() {
                             }
                         });
                     }
-    
-                    // Set the cell's width back to its original width
-                    cell.width(originalWidth);
                 }
             });
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
                 const newValue = input.val();
-                cell.removeClass('editing');
+                toggleEditMode(cell, input);
                 cell.text(newValue);
-    
-                // Set the cell's width back to its original width
-                cell.width(originalWidth);
             });
         });
     }
+    
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            input.hide();
+        } else {
+            cell.addClass('editing');
+            input.show();
+        }
+    }
+    
     
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
