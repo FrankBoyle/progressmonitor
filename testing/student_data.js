@@ -561,6 +561,7 @@ $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
+    
     // Check if DataTable is already initialized on the table
     if (!$.fn.DataTable.isDataTable('#dataTable')) {
         // DataTable is not yet initialized, so initialize it
@@ -577,6 +578,8 @@ $(document).ready(function() {
         // DataTable is already initialized, no need to reinitialize
         console.log("DataTable is already initialized.");
     }
+
+
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
 
