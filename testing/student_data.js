@@ -727,10 +727,11 @@ $(document).ready(function() {
     }
     
     function attachEditableHandler() {
-        $('table').on('dblclick', '.editable', function() {
+        $('table').on('dblclick', '.editable', function () {
             const cell = $(this);
             if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
-            const originalValue = cell.text().trim();
+    
+            let originalValue = cell.text().trim(); // Store the original value before replacing content
             const input = $('<input type="text">');
             input.val(originalValue);
     
@@ -778,8 +779,8 @@ $(document).ready(function() {
     function saveCellValue(cell, input) {
         const newValue = input.val();
         console.log("Cell contents:", cell.html()); // Log the entire HTML content of the cell
-const originalValue = cell.text().trim();
-console.log("Original Value:", originalValue);
+        const originalValue = cell.text().trim();
+        console.log("Original Value:", originalValue);
     
         console.log("Original Value:", originalValue);
         console.log("New Value:", newValue);
@@ -850,8 +851,6 @@ console.log("Original Value:", originalValue);
             });
         }
     }
-    
-    
     
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
