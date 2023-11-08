@@ -732,7 +732,12 @@ $(document).ready(function() {
             if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
     
             // Store the original value in a variable
-            const originalValue = cell.text().trim();
+            let originalValue;
+            if (cell.find('input').length > 0) {
+                originalValue = cell.find('input').val().trim();
+            } else {
+                originalValue = cell.text().trim();
+            }
     
             // Create an input element and set its value to the original value
             const input = $('<input type="text">');
