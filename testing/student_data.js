@@ -733,8 +733,11 @@ $(document).ready(function() {
     
             // Store the original value in a variable
             let originalValue;
-            if (cell.find('input').length > 0) {
-                originalValue = cell.find('input').val().trim();
+    
+            // Check if the cell contains an input element with a non-empty value
+            const inputElement = cell.find('input[type="text"]');
+            if (inputElement.length && inputElement.val().trim() !== '') {
+                originalValue = inputElement.val().trim();
             } else {
                 originalValue = cell.text().trim();
             }
