@@ -727,16 +727,18 @@ $(document).ready(function() {
     }
     
     function attachEditableHandler() {
-        $('table').on('dblclick', '.editable', function () {
+        $('table').on('dblclick', '.editable', function() {
             const cell = $(this);
             if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
     
-            // Store the original value before replacing content
-            let originalValue = cell.text().trim();
+            // Store the original value in a data attribute
+            cell.data('original-value', cell.text().trim());
+    
             const input = $('<input type="text">');
-            input.val(originalValue);
+            input.val(cell.data('original-value'));
     
             let datePickerActive = false;
+    
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
@@ -747,7 +749,7 @@ $(document).ready(function() {
                         if (isValidDate(new Date(selectedDate))) {
                             const currentPerformanceId = cell.closest('tr').data('performance-id');
                             if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                input.val(originalValue);
+                                input.val(cell.data('original-value'));
                             } else {
                                 saveEditedDate(cell, selectedDate);
                             }
