@@ -727,7 +727,7 @@ $(document).ready(function() {
     }
     
     function attachEditableHandler() {
-        $('table').on('click', '.editable', function() {
+        $('table').on('dblclick', '.editable', function() {
             const cell = $(this);
             if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
             const originalValue = cell.text().trim();
