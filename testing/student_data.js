@@ -779,7 +779,11 @@ $(document).ready(function() {
         const newValue = input.val();
         const originalValue = cell.text().trim();
     
+        console.log("Original Value:", originalValue);
+        console.log("New Value:", newValue);
+    
         if (newValue === originalValue) {
+            console.log("No change detected.");
             toggleEditMode(cell, input);
             return; // No change, exit without saving or making an AJAX request
         }
@@ -844,6 +848,7 @@ $(document).ready(function() {
             });
         }
     }
+    
     
     
     function toggleEditMode(cell, input) {
