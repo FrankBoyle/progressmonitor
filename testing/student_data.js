@@ -731,7 +731,8 @@ $(document).ready(function() {
             const cell = $(this);
             if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
     
-            let originalValue = cell.text().trim(); // Store the original value before replacing content
+            // Store the original value before replacing content
+            let originalValue = cell.text().trim();
             const input = $('<input type="text">');
             input.val(originalValue);
     
@@ -780,8 +781,6 @@ $(document).ready(function() {
         const newValue = input.val();
         console.log("Cell contents:", cell.html()); // Log the entire HTML content of the cell
         const originalValue = cell.text().trim();
-        console.log("Original Value:", originalValue);
-    
         console.log("Original Value:", originalValue);
         console.log("New Value:", newValue);
     
