@@ -731,11 +731,12 @@ $(document).ready(function() {
             const cell = $(this);
             if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
     
-            // Store the original value in a data attribute
-            cell.data('original-value', cell.text().trim());
+            // Store the original value in a variable
+            const originalValue = cell.text().trim();
     
+            // Create an input element and set its value to the original value
             const input = $('<input type="text">');
-            input.val(cell.data('original-value'));
+            input.val(originalValue);
     
             let datePickerActive = false;
     
@@ -749,7 +750,7 @@ $(document).ready(function() {
                         if (isValidDate(new Date(selectedDate))) {
                             const currentPerformanceId = cell.closest('tr').data('performance-id');
                             if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                input.val(cell.data('original-value'));
+                                input.val(originalValue);
                             } else {
                                 saveEditedDate(cell, selectedDate);
                             }
