@@ -777,12 +777,21 @@ $(document).ready(function() {
     
     function saveCellValue(cell, input) {
         const newValue = input.val();
+        const originalValue = cell.text().trim();
+    
+        if (newValue === originalValue) {
+            toggleEditMode(cell, input);
+            return; // No change, exit without saving or making an AJAX request
+        }
+    
         toggleEditMode(cell, input);
         cell.text(newValue);
+    
         const performanceId = cell.closest('tr').data('performance-id');
         if (performanceId === 'new') {
             return;
         }
+    
         if (cell.data('field-name') === 'score_date') {
             const parts = newValue.split('/');
             if (parts.length !== 3) {
@@ -836,6 +845,7 @@ $(document).ready(function() {
         }
     }
     
+    
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
             cell.removeClass('editing');
@@ -845,7 +855,6 @@ $(document).ready(function() {
             input.show();
         }
     }
-    
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
