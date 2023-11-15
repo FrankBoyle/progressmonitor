@@ -106,7 +106,6 @@ if (isset($_GET['metadata_id'])) {
 <a href="test.php" class="btn btn-primary">Student List</a>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($student_id); ?>" />
-<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 </div>
 
 <div>
