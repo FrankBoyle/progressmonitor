@@ -17,6 +17,14 @@ if (isset($_POST['add_new_student'])) {
 }
 
 $students = fetchStudentsByTeacher($teacherId);
+
+// Function to compare student names for sorting
+function sortByName($a, $b) {
+    return strcmp($a['name'], $b['name']);
+}
+
+// Sort the students array by name
+usort($students, 'sortByName');
 ?>
 
 <!DOCTYPE html>
