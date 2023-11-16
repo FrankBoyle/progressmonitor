@@ -429,7 +429,10 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
         selectedColumns.forEach((col) => {
             const columnIndex = columnIndexMap[col];
             if (columnIndex !== undefined) {
-                stackedBarChartData[columnIndex].push(scoreRow[columnIndex]);
+                const value = scoreRow[columnIndex];
+                if (!isNaN(value) && value !== null) {
+                    stackedBarChartData[columnIndex].push(value);
+                }
             }
         });
     });
@@ -449,6 +452,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     // Return only the series data without totals
     return stackedBarChartSeriesData;
 }
+
 
 // Initialize the bar chart
 function initializeBarChart() {
