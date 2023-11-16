@@ -1004,8 +1004,8 @@ $(document).ready(function() {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-// Initialize DataTable
-let table = $('table').DataTable({
+   // Define the DataTable and apply custom date filter
+   let table = $('#dataTable').DataTable({
     "order": [[0, "asc"]],
     "lengthChange": false,
     "searching": false,
@@ -1016,7 +1016,16 @@ let table = $('table').DataTable({
         { "type": "date-us" },
         null, null, null, null, null, null, null, null, null, null, null
     ],
-    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+    "columnDefs": [
+        {
+            "targets": [0], // Apply the date filter to the first column (date)
+            "type": "date-us",
+            "render": function (data) {
+                return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
+            }
+        }
+    ]
 });
     
         // Move the buttons container to the desired location
