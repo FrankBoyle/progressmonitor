@@ -1005,22 +1005,6 @@ $(document).ready(function() {
         ]
     });
 
-    // Apply custom date filter function
-    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-        let selectedDate = $("#startDateFilter").datepicker("getDate");
-        if (!selectedDate) {
-            return true; // If no date selected, show all rows
-        }
-
-        let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
-
-        // Convert both dates to time for a safer comparison
-        let rowDateTime = rowDate.getTime();
-        let selectedDateTime = selectedDate.getTime();
-
-        return rowDateTime >= selectedDateTime;
-    });
-
     // Apply date filter when date is selected
     $("#startDateFilter").on("change", function() {
         table.draw();

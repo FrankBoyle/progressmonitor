@@ -130,11 +130,6 @@ if (isset($_GET['metadata_id'])) {
 <?php endforeach; ?>
 </div>
 
-<div>
-    <label for="startDateFilter">Filter by Start Date:</label>
-    <input type="text" id="startDateFilter">
-</div>
-
 <!-- Snippet of the modified code -->
 <table border="1" id="dataTable">
     <thead>
