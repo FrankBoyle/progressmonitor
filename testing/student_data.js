@@ -791,7 +791,7 @@ $(document).ready(function() {
     function saveCellValue(cell, input) {
         const newValue = input.val();
         console.log("Cell contents:", cell.html()); // Log the entire HTML content of the cell
-        const originalValue = cell.text();
+        const originalValue = cell.text().trim();
         console.log("Original Value:", originalValue);
         console.log("New Value:", newValue);
     
