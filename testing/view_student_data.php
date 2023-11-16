@@ -211,7 +211,7 @@ if (isset($_GET['metadata_id'])) {
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-closed">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fabtn-block-tachometer-alt"></i>
               <p>
                 Starter Pages
                 <i class="right fas fa-angle-left"></i>
@@ -370,7 +370,7 @@ if (isset($_GET['metadata_id'])) {
                             <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
                         </td>
                     <?php endfor; ?>
-                    <td><button class="deleteRow, btn btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                    <td><button class="deleteRow, btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
