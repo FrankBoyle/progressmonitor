@@ -319,6 +319,7 @@ if (isset($_GET['metadata_id'])) {
     </div>
   </div>
 </section>
+</div>
 
 <div>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
