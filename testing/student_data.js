@@ -1004,19 +1004,20 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-        let table = $('table').DataTable({
-            "order": [[0, "asc"]],
-            "lengthChange": false,
-            "searching": false,
-            "paging": false,
-            "info": false,
-            "sorting": false,
-            "columns": [
-                { "type": "date-us" },
-                null, null, null, null, null, null, null, null, null, null, null
-            ],
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        });
+// Initialize DataTable
+let table = $('table').DataTable({
+    "order": [[0, "asc"]],
+    "lengthChange": false,
+    "searching": false,
+    "paging": false,
+    "info": false,
+    "sorting": false,
+    "columns": [
+        { "type": "date-us" },
+        null, null, null, null, null, null, null, null, null, null, null
+    ],
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+});
     
         // Move the buttons container to the desired location
         table.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
