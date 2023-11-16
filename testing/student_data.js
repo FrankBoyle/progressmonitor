@@ -564,7 +564,11 @@ $(document).ready(function() {
 
     // Initialize the datepicker for the startDateFilter input field
     $("#startDateFilter").datepicker({
-        dateFormat: 'mm/dd/yy'
+        dateFormat: 'mm/dd/yy',
+        onSelect: function() {
+            // Trigger a change event when a date is selected to trigger the filtering
+            $(this).trigger("change");
+        }
     });
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
