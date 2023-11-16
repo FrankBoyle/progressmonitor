@@ -131,9 +131,8 @@ if (isset($_GET['metadata_id'])) {
 </div>
 
 <div>
-<label for="startDateFilter">Filter by Start Date:</label>
-<input type="text" id="startDateFilter">
-<button id="filterButton">Filter</button>
+    <label for="startDateFilter">Filter by Start Date:</label>
+    <input type="text" id="startDateFilter" class="datepicker">
 </div>
 
 <!-- Snippet of the modified code -->

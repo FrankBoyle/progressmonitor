@@ -561,13 +561,10 @@ $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
-    // Initialize the datepicker
-    $("#startDateFilter").datepicker({
-        dateFormat: 'mm/dd/yy',
-        onSelect: function(dateText) {
-            // Trigger the DataTables filter when a date is selected
-            table.draw();
-        }
+
+    // Initialize the datepicker for the startDateFilter input field
+    $(".datepicker").datepicker({
+        dateFormat: 'mm/dd/yy'
     });
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
