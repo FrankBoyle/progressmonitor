@@ -563,7 +563,7 @@ $(document).ready(function() {
     const metadata_id = urlParams.get('metadata_id');
 
     // Initialize the datepicker for the startDateFilter input field
-    $(".datepicker").datepicker({
+    $("#startDateFilter").datepicker({
         dateFormat: 'mm/dd/yy'
     });
     // Set the retrieved metadata_id as the value of the input field
