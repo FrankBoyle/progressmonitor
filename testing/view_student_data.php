@@ -84,22 +84,12 @@ if (isset($_GET['metadata_id'])) {
     <!-- Daterange picker -->
     <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
-    <link rel="stylesheet" href="../../plugins/summernote/summernote-bs4.min.css">
+    <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
     <script src="student_data.js"  defer></script>
     
     <script>
-    $(document).ready(function() {
-      $('.goaltext').summernote({
-        toolbar: [
-          // Only include buttons for font type and basic styling
-          ['font', ['fontname']], // Font type
-          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
-        ],
-        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
-      });
-    });
     // Get the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
