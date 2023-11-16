@@ -255,8 +255,8 @@ if (isset($_GET['metadata_id'])) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1><?php echo $studentName; ?> <?php echo $selectedCategoryName; ?> Performance Data</h1>
-            <a href="home.php" class="btn btn-primary">Home</a>  
+            <h1><?php echo $studentName; ?> Performance Data - <?php echo $selectedCategoryName; ?></h1>
+            <a href="home.php" class="btn btn-block btn-primary">Home</a>  
         </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -370,14 +370,14 @@ if (isset($_GET['metadata_id'])) {
                             <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
                         </td>
                     <?php endfor; ?>
-                    <td><button class="deleteRow" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                    <td><button class="deleteRow, btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
     </tbody>
 </table>
 
-<button id="addDataRow">Add Data Row</button>
+<button id="addDataRow" class="btn btn-block btn-primary">Add Data Row</button>
 <input type="text" id="newRowDate" style="display: none;">
 
 <!-- Existing checkboxes for column selection -->
@@ -401,7 +401,7 @@ if (isset($_GET['metadata_id'])) {
 
 <label>Enter Benchmark Value:</label>
 <input type="text" id="benchmarkValue">
-<button type ="button" id="updateBenchmark">Update Benchmark</button>
+<button type ="button" id="updateBenchmark" class="btn btn-block btn-primary">Update Benchmark</button>
 
 <div id="accordion">
     <h3>Line Graph</h3>
