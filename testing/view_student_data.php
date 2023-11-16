@@ -119,8 +119,8 @@ if (isset($_GET['metadata_id'])) {
     }
 </style>
 
-<body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 </head>
+<body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 
 <div class="wrapper">
 
