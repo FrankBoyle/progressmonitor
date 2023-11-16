@@ -969,22 +969,6 @@ $(document).ready(function() {
         location.reload();
     }    
 
-    // Apply custom date filter function
-    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-        let selectedDate = $("#startDateFilter").datepicker("getDate");
-        if (!selectedDate) {
-            return true; // If no date selected, show all rows
-        }
-
-        let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
-
-        // Convert both dates to time for a safer comparison
-        let rowDateTime = rowDate.getTime();
-        let selectedDateTime = selectedDate.getTime();
-
-        return rowDateTime >= selectedDateTime;
-    });
-
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
@@ -1004,34 +988,51 @@ $(document).ready(function() {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-   // Define the DataTable and apply custom date filter
-   let table = $('#dataTable').DataTable({
-    "order": [[0, "asc"]],
-    "lengthChange": false,
-    "searching": false,
-    "paging": false,
-    "info": false,
-    "sorting": false,
-    "columns": [
-        { "type": "date-us" },
-        null, null, null, null, null, null, null, null, null, null, null
-    ],
-    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-    "columnDefs": [
-        {
-            "targets": [0], // Apply the date filter to the first column (date)
-            "type": "date-us",
-            "render": function (data) {
-                return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
+    // Define the DataTable and apply custom date filter
+    let table = $('#dataTable').DataTable({
+        "order": [[0, "asc"]],
+        "lengthChange": false,
+        "searching": false,
+        "paging": false,
+        "info": false,
+        "sorting": false,
+        "columns": [
+            { "type": "date-us" },
+            null, null, null, null, null, null, null, null, null, null, null
+        ],
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "columnDefs": [
+            {
+                "targets": [0], // Apply the date filter to the first column (date)
+                "type": "date-us",
+                "render": function (data) {
+                    return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
+                }
             }
+        ]
+    });
+
+    // Apply custom date filter function
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        let selectedDate = $("#startDateFilter").datepicker("getDate");
+        if (!selectedDate) {
+            return true; // If no date selected, show all rows
         }
-    ]
-});
-    
+
+        let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
+
+        // Convert both dates to time for a safer comparison
+        let rowDateTime = rowDate.getTime();
+        let selectedDateTime = selectedDate.getTime();
+
+        return rowDateTime >= selectedDateTime;
+    });
+
     // Apply date filter when date is selected
     $("#startDateFilter").on("change", function() {
         table.draw();
     });
-        // Move the buttons container to the desired location
-        table.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
-    });
+
+    // Handle initial filtering when the page loads
+    table.draw();
+});
