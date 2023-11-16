@@ -969,21 +969,21 @@ $(document).ready(function() {
         location.reload();
     }    
 
-// Custom filter for DataTables
-$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-    let selectedDate = $("#startDateFilter").datepicker("getDate");
-    if (!selectedDate) {
-        return true; // if no date selected, show all rows
-    }
+    // Apply custom date filter function
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        let selectedDate = $("#startDateFilter").datepicker("getDate");
+        if (!selectedDate) {
+            return true; // If no date selected, show all rows
+        }
 
-    let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
+        let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
 
-    // Convert both dates to time for a safer comparison
-    let rowDateTime = rowDate.getTime();
-    let selectedDateTime = selectedDate.getTime();
+        // Convert both dates to time for a safer comparison
+        let rowDateTime = rowDate.getTime();
+        let selectedDateTime = selectedDate.getTime();
 
-    return rowDateTime >= selectedDateTime;
-});
+        return rowDateTime >= selectedDateTime;
+    });
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
