@@ -883,8 +883,16 @@ $(document).ready(function() {
         }
     
         // Create a temporary input to attach datepicker
-        const tempInput = $("<input type='text' style='position: absolute; opacity: 0;'>").appendTo('body');
-        tempInput.datepicker({
+   // Adjusting the position of the temporary input
+   const tempInput = $("<input type='text'>").appendTo('body');
+   tempInput.css({
+       position: 'fixed',
+       top: '50%', // Adjust as needed
+       left: '50%', // Adjust as needed
+       transform: 'translate(-50%, -50%)',
+       zIndex: 1000 // To ensure it's above other elements
+   });
+       tempInput.datepicker({
             dateFormat: 'mm/dd/yy',
             onSelect: function(dateText) {
                 if (isDateDuplicate(dateText)) {
