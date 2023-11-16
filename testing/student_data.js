@@ -562,14 +562,6 @@ $(document).ready(function() {
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
 
-    // Initialize the datepicker for the startDateFilter input field
-    $("#startDateFilter").datepicker({
-        dateFormat: 'mm/dd/yy',
-        onSelect: function() {
-            // Trigger a change event when a date is selected to trigger the filtering
-            $(this).trigger("change");
-        }
-    });
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
 
