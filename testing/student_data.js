@@ -1028,6 +1028,10 @@ $(document).ready(function() {
     ]
 });
     
+    // Apply date filter when date is selected
+    $("#startDateFilter").on("change", function() {
+        table.draw();
+    });
         // Move the buttons container to the desired location
         table.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
     });
