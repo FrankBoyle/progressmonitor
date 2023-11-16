@@ -282,7 +282,7 @@ if (isset($_GET['metadata_id'])) {
           <div class="info-box-content">
             <span class="info-box-text">Goal 1</span>
             <!-- Summernote editor -->
-            <textarea id="summernote" class = "goaltext">
+            <textarea id="summernote1" class = "goaltext">
               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
           </div>
@@ -296,7 +296,7 @@ if (isset($_GET['metadata_id'])) {
           <div class="info-box-content">
             <span class="info-box-text">Goal 2</span>
             <!-- Summernote editor -->
-            <textarea id="summernote" class = "goaltext">
+            <textarea id="summernote2" class = "goaltext">
               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
           </div>
@@ -310,7 +310,7 @@ if (isset($_GET['metadata_id'])) {
           <div class="info-box-content">
             <span class="info-box-text">Goal 3</span>
             <!-- Summernote editor -->
-            <textarea id="summernote" class = "goaltext">
+            <textarea id="summernote3" class = "goaltext">
               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
           </div>
