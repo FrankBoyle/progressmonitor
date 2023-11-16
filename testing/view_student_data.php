@@ -413,5 +413,19 @@ if (isset($_GET['metadata_id'])) {
     <div id="barChart" style="width: 1000px;"></div>
     </div>
 </div>
+
+  <script>
+    $(document).ready(function() {
+      $('.goaltext').summernote({
+        toolbar: [
+          // Only include buttons for font type and basic styling
+          ['font', ['fontname']], // Font type
+          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
+        ],
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
+      });
+    });
+  </script>
+
 </body>
 </html>
