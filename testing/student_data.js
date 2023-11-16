@@ -970,7 +970,7 @@ $(document).ready(function() {
     }    
 
 // Custom filter for DataTables
-$.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     let selectedDate = $("#startDateFilter").datepicker("getDate");
     if (!selectedDate) {
         return true; // if no date selected, show all rows
@@ -978,13 +978,12 @@ $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
 
     let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
 
-    // Convert both dates to time for comparison
+    // Convert both dates to time for a safer comparison
     let rowDateTime = rowDate.getTime();
     let selectedDateTime = selectedDate.getTime();
 
     return rowDateTime >= selectedDateTime;
 });
-
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
