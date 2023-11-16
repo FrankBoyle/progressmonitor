@@ -66,25 +66,25 @@ if (isset($_GET['metadata_id'])) {
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="./plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- iCheck -->
-    <link rel="stylesheet" href="./plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- JQVMap -->
-    <link rel="stylesheet" href="./plugins/jqvmap/jqvmap.min.css">
+    <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
-    <link rel="stylesheet" href="./plugins/summernote/summernote-bs4.min.css">
+    <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
     <script src="student_data.js"  defer></script>
@@ -428,13 +428,13 @@ if (isset($_GET['metadata_id'])) {
 
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
+<script src="/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
+<script src="/dist/js/adminlte.min.js"></script>
 <!-- Summernote -->
-<script src="../../plugins/summernote/summernote-bs4.min.js"></script>
+<script src="/plugins/summernote/summernote-bs4.min.js"></script>
 <script>
     $(document).ready(function() {
       $('.goaltext').summernote({
