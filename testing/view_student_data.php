@@ -122,17 +122,18 @@ if (isset($_GET['metadata_id'])) {
 </div>
 
 <div>
-<label for="startDateFilter">Filter by Start Date:</label>
-<input type="text" id="startDateFilter">
-</div>
-
-<div>
 <!-- Add the generated links here -->
 <?php foreach ($metadataEntries as $metadataEntry): ?>
     <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
         <?php echo $metadataEntry['category_name']; ?>
     </a><br>
 <?php endforeach; ?>
+</div>
+
+<div>
+<label for="startDateFilter">Filter by Start Date:</label>
+<input type="text" id="startDateFilter">
+<button id="filterButton">Filter</button>
 </div>
 
 <!-- Snippet of the modified code -->
