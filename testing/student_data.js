@@ -562,14 +562,6 @@ $(document).ready(function() {
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
     
-    $('.goaltext').summernote({
-        toolbar: [
-          // Only include buttons for font type and basic styling
-          ['font', ['fontname']], // Font type
-          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
-        ],
-        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
-      });
     
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
