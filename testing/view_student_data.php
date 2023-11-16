@@ -426,8 +426,26 @@ if (isset($_GET['metadata_id'])) {
     </div>
 </div>
 
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- Summernote -->
+<script src="../../plugins/summernote/summernote-bs4.min.js"></script>
 <script>
-
-</script>
+    $(document).ready(function() {
+      $('.goaltext').summernote({
+        toolbar: [
+          // Only include buttons for font type and basic styling
+          ['font', ['fontname']], // Font type
+          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
+        ],
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
+      });
+    });
+  </script>
 </body>
 </html>
