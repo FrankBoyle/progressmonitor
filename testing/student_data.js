@@ -795,12 +795,6 @@ $(document).ready(function() {
         console.log("Original Value:", originalValue);
         console.log("New Value:", newValue);
     
-        if (newValue === originalValue) {
-            console.log("No change detected.");
-            toggleEditMode(cell, input);
-            return; // No change, exit without saving or making an AJAX request
-        }
-    
         toggleEditMode(cell, input);
         cell.text(newValue);
     
