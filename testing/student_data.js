@@ -483,6 +483,8 @@ function updateBarChart(selectedColumns) {
 
     // Update bar chart
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
+    barChart.render(); // Or a similar method to force redraw/update
+
 }
 
 function getBarChartOptions(dates, seriesData, headerNames) {
