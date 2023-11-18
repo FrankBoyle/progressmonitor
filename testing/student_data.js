@@ -241,12 +241,12 @@ function initializeChart() {
     chart.render();    
 
     // Update the chart on checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-        updateChart(selectedColumns);
+            .map(checkbox => checkbox.value); // Use .value instead of .getAttribute("data-column-name")
+        updateBarChart(selectedColumns);
     }, 250));
+    
 };
 
 // The debounce function
@@ -469,9 +469,10 @@ function initializeBarChart() {
     // Add an event listener to update the bar chart when checkboxes change
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+            .map(checkbox => checkbox.value); // Use .value instead of .getAttribute("data-column-name")
         updateBarChart(selectedColumns);
     }, 250));
+    
 }
 
 // Update the bar chart with new data based on selected columns
