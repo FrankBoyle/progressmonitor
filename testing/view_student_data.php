@@ -402,6 +402,13 @@ if (isset($_GET['metadata_id'])) {
 </div>
 </section>
 
+
+<section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
 <!-- Existing checkboxes for column selection -->
 <div id="columnSelector">
     <label>Select Columns to Display:</label>
@@ -420,12 +427,6 @@ if (isset($_GET['metadata_id'])) {
     ?>
 </div>
 
-<section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-outline card-info">
-            <div class="card-header">
-              <h3 class="card-title"></h3>
   <!--
     <label>Enter Benchmark Value:</label>
     <input type="text" id="benchmarkValue">
