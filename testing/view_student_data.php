@@ -58,28 +58,28 @@ if (isset($_GET['metadata_id'])) {
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- jsGrid -->
-    <link rel="stylesheet" href="./plugins/jsgrid/jsgrid.min.css"> 
-    <link rel="stylesheet" href="./plugins/jsgrid/jsgrid-theme.min.css"> 
+    <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css"> 
+    <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css"> 
     <!-- Theme style -->
-    <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="./plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- iCheck -->
-    <link rel="stylesheet" href="./plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- JQVMap -->
-    <link rel="stylesheet" href="./plugins/jqvmap/jqvmap.min.css">
+    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
-    <link rel="stylesheet" href="../../plugins/summernote/summernote-bs4.min.css">
+    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
     
     <script>
     // Get the metadata_id from the URL parameter
@@ -88,7 +88,7 @@ if (isset($_GET['metadata_id'])) {
     var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
     </script>
 
-<style>
+  <style>
     #dataTable_wrapper .col-md-6:eq(0) {
         position: relative;
         z-index: 1000;
@@ -121,9 +121,9 @@ if (isset($_GET['metadata_id'])) {
         padding: 0;
         margin: 0;
     }
-</style>
-
+  </style>
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
 
 <div class="wrapper">
