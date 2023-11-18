@@ -427,32 +427,20 @@ function extractDataForBarChart() {
 
 // Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
-    const columnIndexMap = {};
-    const stackedBarChartData = [];
+    const seriesData = [];
 
-    // Map user-friendly column names to their respective indices
-    selectedColumns.forEach((userFriendlyName, index) => {
-        const columnIndex = headerNames.indexOf(userFriendlyName);
+    selectedColumns.forEach(columnName => {
+        const columnIndex = headerNames.indexOf(columnName);
         if (columnIndex !== -1) {
-            columnIndexMap[userFriendlyName] = columnIndex;
-            stackedBarChartData.push({ name: userFriendlyName, data: [] });
+            // Adjusting for the 'Date' column if it's the first column
+            const data = scores.map(row => row[columnIndex - 1] || 0); 
+            seriesData.push({ name: columnName, data: data });
         } else {
-            console.error(`Column ${userFriendlyName} not found in header names`);
+            console.error(`Column ${columnName} not found in header names`);
         }
     });
 
-    // Populate data for each series based on the columnIndexMap
-    scores.forEach((scoreRow) => {
-        Object.keys(columnIndexMap).forEach((key) => {
-            const columnIndex = columnIndexMap[key];
-            const series = stackedBarChartData.find(series => series.name === key);
-            if (series) {
-                series.data.push(scoreRow[columnIndex - 1] || 0); // Adjust for the date column
-            }
-        });
-    });
-
-    return stackedBarChartData;
+    return seriesData;
 }
 
 // Initialize the bar chart
@@ -479,18 +467,20 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
+    // Re-extract the data
     const { dates, scores } = extractDataForBarChart();
-    const headerNames = ['Date', 'Column1', 'Column2', 'Column3', 'Column4']; // Replace with actual column names
+    headerNames = Array.from(document.querySelector('#dataTable thead tr').querySelectorAll('th'))
+                         .map(th => th.innerText.trim());
 
     console.log("Selected Columns (updateBarChart):", selectedColumns);
     console.log("Header Names (updateBarChart):", headerNames);
-    console.log("Dates (updateBarChart):", dates);
-    console.log("Scores (updateBarChart):", scores);
 
+    // Populate series data
     const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
     console.log("New Series Data (updateBarChart):", newSeriesData);
 
+    // Update bar chart
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
 }
 
