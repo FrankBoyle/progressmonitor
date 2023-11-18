@@ -477,7 +477,7 @@ function initializeBarChart() {
 }
 
 // Update the bar chart with new data based on selected columns
-function updateBarChart(selectedColumns, scores, headerNames) {
+function updateBarChart(selectedColumns, headerNames) {
     //console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
 
