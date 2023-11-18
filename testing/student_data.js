@@ -431,7 +431,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
 
     return selectedColumns.map((col, index) => ({
         name: col,
-        data: stackedBarChartData[index],
+        data: stackedBarChartData[index].filter(value => !isNaN(value)), // Filter out NaN values
         color: seriesColors[index % seriesColors.length],
     }));
 }
