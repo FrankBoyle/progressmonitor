@@ -428,14 +428,13 @@ function extractDataForBarChart() {
 // Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const seriesData = [];
+
     selectedColumns.forEach(columnName => {
         const columnIndex = headerNames.indexOf(columnName);
         if (columnIndex !== -1) {
-            const data = scores.map(row => row[columnIndex - 1] || 0);
-            seriesData.push({ 
-                name: columnName, // This sets the series name used in the legend
-                data: data 
-            });
+            // Adjusting for the 'Date' column if it's the first column
+            const data = scores.map(row => row[columnIndex - 1] || 0); 
+            seriesData.push({ name: columnName, data: data });
         } else {
             console.error(`Column ${columnName} not found in header names`);
         }
@@ -443,7 +442,6 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
 
     return seriesData;
 }
-
 
 // Initialize the bar chart
 function initializeBarChart() {
@@ -456,7 +454,7 @@ function initializeBarChart() {
     const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
     // Pass headerNames to getBarChartOptions function
-    barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, initialSeries, headerNames));
+    barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData, headerNames));
     barChart.render();
 
     // Add an event listener to update the bar chart when checkboxes change
@@ -484,7 +482,6 @@ function updateBarChart(selectedColumns) {
 
     // Update bar chart
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
-    barChart.updateSeries(newSeriesData, true); // The 'true' parameter forces a redraw
 }
 
 function getBarChartOptions(dates, seriesData, headerNames) {
@@ -530,10 +527,6 @@ function getBarChartOptions(dates, seriesData, headerNames) {
             type: 'bar',
             width: 1000,
             stacked: true,
-        },
-        legend: {
-            show: true,  // Ensure the legend is always shown
-            showForSingleSeries: true, // Important for single series
         },
         xaxis: {
             categories: dates,
