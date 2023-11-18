@@ -394,14 +394,13 @@ if (isset($_GET['metadata_id'])) {
         <?php endif; ?>
     </tbody>
 </table>
+<button id="addDataRow" class="btn btn-primary">Add Data Row</button>
+<input type="text" id="newRowDate" style="display: none;">
 </div>
 </div>
 </div>
 </div>
 </section>
-
-<button id="addDataRow" class="btn btn-primary">Add Data Row</button>
-<input type="text" id="newRowDate" style="display: none;">
 
 <!-- Existing checkboxes for column selection -->
 <div id="columnSelector">
