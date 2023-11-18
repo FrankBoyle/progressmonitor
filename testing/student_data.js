@@ -410,7 +410,6 @@ function extractDataForBarChart() {
 }
 
 // Populate the stacked bar chart series data.
-
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const columnIndexMap = {};
     const stackedBarChartData = new Array(selectedColumns.length).fill().map(() => []);
@@ -420,7 +419,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     });
 
     scores.forEach((scoreRow) => {
-        Object.keys(columnIndexMap).forEach((col) => {
+        selectedColumns.forEach((col) => {
             const columnIndex = columnIndexMap[col];
             const value = scoreRow[columnIndex];
             console.log("Column:", col, "Column Index:", columnIndex, "Value:", value);
