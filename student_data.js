@@ -72,9 +72,6 @@ $("#accordion").accordion({
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
-    console.log('Selected Columns:', selectedColumns);
-    console.log('Header Names:', headerNames);
-    console.log('Scores:', scores);
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
     const scores = [];
@@ -414,24 +411,25 @@ function extractDataForBarChart() {
 
 // Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
-    console.log('Selected Columns:', selectedColumns);
-    console.log('Header Names:', headerNames);
-    console.log('Scores:', scores);
-
     const stackedBarChartData = [];
     const columnIndexMap = {};
 
-    // Map selected columns to indices and initialize empty arrays for each column
+    // Initialize columnIndexMap and create empty arrays for each column
     selectedColumns.forEach((col, index) => {
         columnIndexMap[col] = index;
         stackedBarChartData.push([]);
     });
 
+    // Debugging: Log the columnIndexMap and selectedColumns
+    //console.log("Column Index Map:", columnIndexMap);
+    //console.log("Selected Columns:", selectedColumns);
+
+    // Iterate through the scores and populate the stackedBarChartData
     scores.forEach((scoreRow) => {
         selectedColumns.forEach((col) => {
             const columnIndex = columnIndexMap[col];
             if (columnIndex !== undefined) {
-                const value = scoreRow[headerNames.indexOf(col) + 1]; // Find index based on headerNames
+                const value = scoreRow[columnIndex];
                 if (!isNaN(value) && value !== null) {
                     stackedBarChartData[columnIndex].push(value);
                 }
@@ -439,16 +437,22 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
         });
     });
 
+    // Debugging: Log the stackedBarChartData
+    //console.log("Stacked Bar Chart Data:", stackedBarChartData);
+
     const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
         name: col,
         data: stackedBarChartData[index],
         color: seriesColors[index], // Set the color based on index
     }));
 
-    console.log('Stacked Bar Chart Data:', stackedBarChartSeriesData);
+    // Debugging: Log the stackedBarChartSeriesData
+    //console.log("Stacked Bar Chart Series Data:", stackedBarChartSeriesData);
 
+    // Return only the series data without totals
     return stackedBarChartSeriesData;
 }
+
 
 // Initialize the bar chart
 function initializeBarChart() {
@@ -456,15 +460,6 @@ function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-    console.log('Extracted dates:', dates);
-    console.log('Extracted scores:', scores);
-    console.log('Initial Header Names:', headerNames); // Log initial header names
-
-    // Update headerNames based on selected columns
-    headerNames = ['Date', ...selectedColumns]; // Assuming the first column is the date column
-
-    console.log('Updated Header Names:', headerNames); // Log updated header names
 
     // Define seriesData as an empty array
     const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
@@ -477,41 +472,20 @@ function initializeBarChart() {
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-        // Update headerNames based on selected columns
-        headerNames = ['Date', ...selectedColumns]; // Assuming the first column is the date column
-
-        console.log('Updated Header Names:', headerNames); // Log updated header names
-
         updateBarChart(selectedColumns);
     }, 250));
 }
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
-    const selectedData = {};
+    //console.log("Update Bar Chart called~!");
+    const { dates, scores } = extractDataForBarChart();
 
-    selectedColumns.forEach(column => {
-        const columnIndex = headerNames.indexOf(column) - 1;
-        if (columnIndex >= 0) {
-            selectedData[column] = scores[columnIndex];
-        }
-    });
+    // Populate stacked bar chart series data based on selected columns
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
 
-    const barChartData = Object.entries(selectedData).map(([name, data]) => ({
-        name: name,
-        data: data
-    }));
-
-    if (barChart) {
-        try {
-            barChart.updateOptions(getBarChartOptions(dates, barChartData));
-        } catch (error) {
-            console.error("Error updating bar chart:", error);
-        }
-    } else {
-        initializeBarChart();
-    }
+    // Update the bar chart with the new data series and options
+    barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
 }
 
 function getBarChartOptions(dates, seriesData) {
@@ -570,7 +544,7 @@ function getBarChartOptions(dates, seriesData) {
             enabled: true,
             formatter: function (val) {
                 if (val === 0) {
-                    return '';
+                    return ''; // Hide labels for zero values
                 }
                 return val;
             },
