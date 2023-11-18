@@ -490,10 +490,10 @@ function updateBarChart(selectedColumns) {
 
 function getBarChartOptions(dates, seriesData, headerNames) {
     const totalValues = new Array(dates.length).fill(0);
-    const categories = headerNames.slice(1); // Exclude the first element if it's not part of categories
+    const selectedSeriesData = seriesData.filter(series => headerNames.includes(series.name));
 
     // Calculate running totals for each category
-    seriesData.forEach((series) => {
+    selectedSeriesData.forEach((series) => {
         series.data.forEach((value, index) => {
             totalValues[index] += value;
         });
@@ -523,7 +523,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 
     // Adjust the Y position of annotations based on bar heights
     annotations.forEach((annotation, index) => {
-        const maxBarHeight = Math.max(...seriesData.map((series) => series.data[index]));
+        const maxBarHeight = Math.max(...selectedSeriesData.map((series) => series.data[index]));
         annotation.y = totalValues[index] + maxBarHeight / 2; // Adjust as needed
     });
 
@@ -534,9 +534,9 @@ function getBarChartOptions(dates, seriesData, headerNames) {
             stacked: true,
         },
         xaxis: {
-            categories: categories,
+            categories: dates,
         },
-        series: seriesData.map((series, index) => ({
+        series: selectedSeriesData.map((series, index) => ({
             ...series,
             color: barChartSeriesColors[index],
         })),
