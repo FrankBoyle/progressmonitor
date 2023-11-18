@@ -487,6 +487,7 @@ function initializeBarChart() {
     }, 250));
 }
 
+// Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
     const selectedData = {};
 
@@ -514,9 +515,42 @@ function updateBarChart(selectedColumns) {
 }
 
 function getBarChartOptions(dates, seriesData) {
-    const annotations = []; // Make sure to define annotations
+    const totalValues = new Array(dates.length).fill(0);
 
-    // Here goes your existing implementation for annotations
+    // Calculate running totals for each category
+    seriesData.forEach((series) => {
+        series.data.forEach((value, index) => {
+            totalValues[index] += value;
+        });
+    });
+
+    const annotations = totalValues.map((total, index) => ({
+        x: dates[index], // Use the date instead of index
+        y: total + 5, // You may need to adjust this for exact positioning
+        orientation: 'horizontal',
+        label: {
+            text: `Total: ${total}`,
+            borderColor: 'transparent',
+            style: {
+                background: '#f2f2f2',
+                color: '#333',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 4,
+                    bottom: 5,
+                },
+            },
+        },
+    }));    
+
+    // Adjust the Y position of annotations based on bar heights
+    annotations.forEach((annotation, index) => {
+        const maxBarHeight = Math.max(...seriesData.map((series) => series.data[index]));
+        annotation.y = totalValues[index] + maxBarHeight / 2; // Adjust as needed
+    });
 
     return {
         chart: {
