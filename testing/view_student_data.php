@@ -61,6 +61,9 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- jsGrid -->
+    <link rel="stylesheet" href="./plugins/jsgrid/jsgrid.min.css"> 
+    <link rel="stylesheet" href="./plugins/jsgrid/jsgrid-theme.min.css"> 
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <!-- Ionicons -->
