@@ -490,6 +490,7 @@ function updateBarChart(selectedColumns) {
 
 function getBarChartOptions(dates, seriesData, headerNames) {
     const totalValues = new Array(dates.length).fill(0);
+    const categories = headerNames.slice(1); // Exclude the first element if it's not part of categories
 
     // Calculate running totals for each category
     seriesData.forEach((series) => {
@@ -533,7 +534,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
             stacked: true,
         },
         xaxis: {
-            categories: dates,
+            categories: categories,
         },
         series: seriesData.map((series, index) => ({
             ...series,
