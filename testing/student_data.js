@@ -430,14 +430,13 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     const columnIndexMap = {};
     const stackedBarChartData = [];
 
-    selectedColumns.forEach((userFriendlyName) => {
-        const technicalName = userFriendlyName; // Assuming userFriendlyName is the technical name
+    selectedColumns.forEach((technicalName) => {
         const columnIndex = headerNames.indexOf(technicalName);
         if (columnIndex !== -1) {
             columnIndexMap[technicalName] = columnIndex;
-            stackedBarChartData.push({ name: userFriendlyName, data: [] });
+            stackedBarChartData.push({ name: technicalName, data: [] }); // Use technical name
         } else {
-            console.error(`Column ${userFriendlyName} not found in header names`);
+            console.error(`Column ${technicalName} not found in header names`);
         }
     });
 
