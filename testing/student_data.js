@@ -750,9 +750,7 @@ $(document).ready(function() {
             // Create an input element and set its value to the original value
             const input = $('<input type="text">');
             input.val(originalValue);
-    
-            let datePickerActive = false;
-    
+        
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
