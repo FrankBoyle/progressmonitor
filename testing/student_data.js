@@ -528,6 +528,9 @@ function getBarChartOptions(dates, seriesData, headerNames) {
             width: 1000,
             stacked: true,
         },
+        legend: {
+            show: true,  // Ensure the legend is always shown
+        },
         xaxis: {
             categories: dates,
         },
