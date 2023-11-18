@@ -172,8 +172,8 @@ if (isset($_GET['metadata_id'])) {
   </nav>
   <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index.php" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -211,7 +211,7 @@ if (isset($_GET['metadata_id'])) {
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-closed">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fabtn-block-tachometer-alt"></i>
+              <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Starter Pages
                 <i class="right fas fa-angle-left"></i>
@@ -247,7 +247,7 @@ if (isset($_GET['metadata_id'])) {
     </div>
     <!-- /.sidebar -->
   </aside>
-
+  
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
