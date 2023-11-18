@@ -428,33 +428,27 @@ function extractDataForBarChart() {
 // Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const columnIndexMap = {};
-    const stackedBarChartData = new Array(selectedColumns.length).fill().map(() => []);
+    const stackedBarChartData = [];
 
-    // Map selected columns to their respective indices
-    selectedColumns.forEach((col, index) => {
+    selectedColumns.forEach((col) => {
         const columnIndex = headerNames.indexOf(col);
         if (columnIndex !== -1) {
             columnIndexMap[col] = columnIndex;
+            // Initialize empty data array for this series
+            stackedBarChartData.push({ name: col, data: [] });
         } else {
             console.error(`Column ${col} not found in header names`);
         }
     });
 
     scores.forEach((scoreRow) => {
-        Object.keys(columnIndexMap).forEach((col) => {
-            const columnIndex = columnIndexMap[col] - 1; // Adjust for the date column
-            const value = scoreRow[columnIndex];
-            if (!isNaN(value) && value !== null) {
-                stackedBarChartData[selectedColumns.indexOf(col)].push(value);
-            }
+        stackedBarChartData.forEach((series) => {
+            const columnIndex = columnIndexMap[series.name] - 1; // -1 for the date column
+            series.data.push(scoreRow[columnIndex] || 0); // Add 0 for missing values
         });
     });
 
-    return selectedColumns.map((col, index) => ({
-        name: col,
-        data: stackedBarChartData[index],
-        color: seriesColors[index % seriesColors.length],
-    }));
+    return stackedBarChartData;
 }
 
 // Initialize the bar chart
