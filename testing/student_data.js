@@ -423,21 +423,17 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
         Object.keys(columnIndexMap).forEach((col) => {
             const columnIndex = columnIndexMap[col];
             const value = scoreRow[columnIndex];
+            console.log("Column:", col, "Column Index:", columnIndex, "Value:", value);
             if (!isNaN(value) && value !== null) {
                 stackedBarChartData[columnIndex].push(value);
             }
         });
     });
 
-    console.log("Column Index Map:", columnIndexMap);
-    console.log("Selected Columns:", selectedColumns);
-    console.log("Scores:", scores);
-    console.log("Stacked Bar Chart Data:", stackedBarChartData);
-
     return selectedColumns.map((col, index) => ({
         name: col,
         data: stackedBarChartData[index],
-        color: seriesColors[index % seriesColors.length], // Set color based on index
+        color: seriesColors[index % seriesColors.length],
     }));
 }
 
