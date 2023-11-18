@@ -72,6 +72,9 @@ $("#accordion").accordion({
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
+    console.log('Selected Columns:', selectedColumns);
+    console.log('Header Names:', headerNames);
+    console.log('Scores:', scores);
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
     const scores = [];
@@ -454,6 +457,10 @@ function initializeBarChart() {
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
+    console.log('Extracted dates:', dates);
+    console.log('Extracted scores:', scores);
+    console.log('Initial Header Names:', headerNames); // Log initial header names
+
     // Define seriesData as an empty array
     const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
@@ -471,9 +478,9 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
-    console.log('Header Names in updateBarChart:', headerNames);
-
     const { dates, scores } = extractDataForBarChart();
+
+    console.log('Updated Header Names:', headerNames); // Log updated header names
 
     const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
