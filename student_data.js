@@ -486,11 +486,20 @@ function updateBarChart(selectedColumns) {
     // Filter the scores to include only the data for selected columns
     const selectedScores = scores.map(row => selectedIndices.map(index => row[index]));
 
-    // Populate stacked bar chart series data based on selected columns
-    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, selectedScores);
+    // Create an empty array for the selected series data
+    const seriesData = [];
+
+    // Iterate through selected indices to populate the seriesData array
+    selectedIndices.forEach((index, i) => {
+        seriesData.push({
+            name: selectedColumns[i],
+            data: selectedScores.map(row => row[i]),
+            color: seriesColors[index % seriesColors.length], // Use colors cyclically
+        });
+    });
 
     // Update the bar chart with the new data series and options
-    barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
+    barChart.updateOptions(getBarChartOptions(dates, seriesData));
 }
 
 function getBarChartOptions(dates, seriesData) {
