@@ -410,6 +410,7 @@ function extractDataForBarChart() {
 }
 
 // Populate the stacked bar chart series data.
+
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const columnIndexMap = {};
     const stackedBarChartData = new Array(selectedColumns.length).fill().map(() => []);
@@ -427,6 +428,11 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
             }
         });
     });
+
+    console.log("Column Index Map:", columnIndexMap);
+    console.log("Selected Columns:", selectedColumns);
+    console.log("Scores:", scores);
+    console.log("Stacked Bar Chart Data:", stackedBarChartData);
 
     return selectedColumns.map((col, index) => ({
         name: col,
@@ -459,13 +465,17 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns, headerNames) {
-    //console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
 
-    // Populate stacked bar chart series data based on selected columns
+    console.log("Selected Columns (updateBarChart):", selectedColumns);
+    console.log("Header Names (updateBarChart):", headerNames);
+    console.log("Dates (updateBarChart):", dates);
+    console.log("Scores (updateBarChart):", scores);
+
     const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
-    // Update the bar chart with the new data series and options
+    console.log("New Series Data (updateBarChart):", newSeriesData);
+
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
 }
 
