@@ -463,8 +463,9 @@ function initializeBarChart() {
 }
 
 // Update the bar chart with new data based on selected columns
-function updateBarChart(selectedColumns, headerNames) {
+function updateBarChart(selectedColumns) {
     const { dates, scores } = extractDataForBarChart();
+    const headerNames = ['Date', 'Column1', 'Column2', 'Column3', 'Column4']; // Replace with actual column names
 
     console.log("Selected Columns (updateBarChart):", selectedColumns);
     console.log("Header Names (updateBarChart):", headerNames);
@@ -475,7 +476,7 @@ function updateBarChart(selectedColumns, headerNames) {
 
     console.log("New Series Data (updateBarChart):", newSeriesData);
 
-    barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
+    barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
 }
 
 function getBarChartOptions(dates, seriesData, headerNames) {
