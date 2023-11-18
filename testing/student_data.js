@@ -456,7 +456,11 @@ function initializeBarChart() {
     const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
     // Pass headerNames to getBarChartOptions function
-    barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData, headerNames));
+    // Initialize with a default series
+    barChart = new ApexCharts(
+        document.querySelector("#barChart"), 
+        getBarChartOptions(dates, [{name: 'Placeholder', data: [0]}], headerNames)
+    );
     barChart.render();
 
     // Add an event listener to update the bar chart when checkboxes change
@@ -533,6 +537,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
         },
         legend: {
             show: true,  // Ensure the legend is always shown
+            showForSingleSeries: true, // Important for single series
         },
         xaxis: {
             categories: dates,
