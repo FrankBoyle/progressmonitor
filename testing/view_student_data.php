@@ -338,34 +338,40 @@ if (isset($_GET['metadata_id'])) {
     </a><br>
 <?php endforeach; ?>
 </div>
+<section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title">
 
-<!-- Snippet of the modified code -->
-<table border="1" id="dataTable">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <?php 
-            foreach ($scoreNames as $category => $values) {
-                if (is_array($values)) {
-                    foreach ($values as $score) {
-                        echo "<th>" . htmlspecialchars($score) . "</th>";
-                    }
-                } else {
-                    echo "<th>" . htmlspecialchars($values) . "</th>";
-                }
-            }
-            ?>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (empty($performanceData)): ?>
-            <tr>
-                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-            </tr>
-        <?php else: ?>
-            <?php foreach ($performanceData as $data): ?>
-                <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                <table border="1" id="dataTable">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                        <?php 
+                          foreach ($scoreNames as $category => $values) {
+                            if (is_array($values)) {
+                              foreach ($values as $score) {
+                                echo "<th>" . htmlspecialchars($score) . "</th>";
+                              }
+                            } else {
+                              echo "<th>" . htmlspecialchars($values) . "</th>";
+                            }
+                          }
+                          ?>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                <tbody>
+          
+                <?php if (empty($performanceData)): ?>
+                  <tr>
+                    <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+                  </tr>
+                <?php else: ?>
+                <?php foreach ($performanceData as $data): ?>
+                  <tr data-performance-id="<?php echo $data['performance_id']; ?>">
                     <td class="editable" data-field-name="score_date">
                         <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
                     </td>
@@ -373,13 +379,18 @@ if (isset($_GET['metadata_id'])) {
                         <td class="editable" data-field-name="score<?php echo $i; ?>">
                             <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
                         </td>
-                    <?php endfor; ?>
+                      <?php endfor; ?>
                     <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
     </tbody>
 </table>
+</div>
+</div>
+</div>
+</div>
+</section>
 
 <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
 <input type="text" id="newRowDate" style="display: none;">
