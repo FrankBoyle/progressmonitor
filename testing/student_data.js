@@ -416,31 +416,28 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
 
     // Map selected columns to their respective indices
     selectedColumns.forEach((col, index) => {
-        columnIndexMap[col] = headerNames.indexOf(col);
+        columnIndexMap[col] = index;
     });
+
+    // Log the mapping to ensure correct association
+    console.log("Column Index Map:", columnIndexMap);
 
     scores.forEach((scoreRow) => {
         Object.keys(columnIndexMap).forEach((col) => {
             const columnIndex = columnIndexMap[col];
             const value = scoreRow[columnIndex];
+            console.log("Column:", col, "Column Index:", columnIndex, "Value:", value);
             if (!isNaN(value) && value !== null) {
-                stackedBarChartData[columnIndexMap[col]].push(value);
+                stackedBarChartData[columnIndex].push(value);
             }
         });
     });
 
-    // Filter out columns with all NaN values
-    return selectedColumns.map((col, index) => {
-        const columnData = stackedBarChartData[index].filter(value => !isNaN(value));
-        if (columnData.length > 0) {
-            return {
-                name: col,
-                data: columnData,
-                color: seriesColors[index % seriesColors.length],
-            };
-        }
-        return null;
-    }).filter(Boolean);
+    return selectedColumns.map((col, index) => ({
+        name: col,
+        data: stackedBarChartData[index],
+        color: seriesColors[index % seriesColors.length],
+    }));
 }
 
 // Initialize the bar chart
