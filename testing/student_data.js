@@ -411,48 +411,29 @@ function extractDataForBarChart() {
 
 // Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
-    const stackedBarChartData = [];
     const columnIndexMap = {};
+    const stackedBarChartData = new Array(selectedColumns.length).fill().map(() => []);
 
-    // Initialize columnIndexMap and create empty arrays for each column
     selectedColumns.forEach((col, index) => {
         columnIndexMap[col] = index;
-        stackedBarChartData.push([]);
     });
 
-    // Debugging: Log the columnIndexMap and selectedColumns
-    console.log("Column Index Map:", columnIndexMap);
-    console.log("Selected Columns:", selectedColumns);
-
-    // Iterate through the scores and populate the stackedBarChartData
     scores.forEach((scoreRow) => {
-        selectedColumns.forEach((col) => {
+        Object.keys(columnIndexMap).forEach((col) => {
             const columnIndex = columnIndexMap[col];
-            if (columnIndex !== undefined) {
-                const value = scoreRow[columnIndex];
-                if (!isNaN(value) && value !== null) {
-                    stackedBarChartData[columnIndex].push(value);
-                }
+            const value = scoreRow[columnIndex];
+            if (!isNaN(value) && value !== null) {
+                stackedBarChartData[columnIndex].push(value);
             }
         });
     });
 
-    // Debugging: Log the stackedBarChartData
-    console.log("Stacked Bar Chart Data:", stackedBarChartData);
-
-    const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
+    return selectedColumns.map((col, index) => ({
         name: col,
         data: stackedBarChartData[index],
-        color: seriesColors[index], // Set the color based on index
+        color: seriesColors[index % seriesColors.length], // Set color based on index
     }));
-
-    // Debugging: Log the stackedBarChartSeriesData
-    console.log("Stacked Bar Chart Series Data:", stackedBarChartSeriesData);
-
-    // Return only the series data without totals
-    return stackedBarChartSeriesData;
 }
-
 
 // Initialize the bar chart
 function initializeBarChart() {
