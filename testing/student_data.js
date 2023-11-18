@@ -482,7 +482,7 @@ function updateBarChart(selectedColumns, headerNames) {
     const { dates, scores } = extractDataForBarChart();
 
     // Populate stacked bar chart series data based on selected columns
-    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
     // Update the bar chart with the new data series and options
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
