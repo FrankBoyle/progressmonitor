@@ -58,28 +58,28 @@ if (isset($_GET['metadata_id'])) {
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- jsGrid -->
-    <link rel="stylesheet" href="plugins/jsgrid/jsgrid.min.css"> 
-    <link rel="stylesheet" href="plugins/jsgrid/jsgrid-theme.min.css"> 
+    <link rel="stylesheet" href="./plugins/jsgrid/jsgrid.min.css"> 
+    <link rel="stylesheet" href="./plugins/jsgrid/jsgrid-theme.min.css"> 
     <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="./dist/css/adminlte.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="./plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- iCheck -->
-    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="./plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- JQVMap -->
-    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+    <link rel="stylesheet" href="./plugins/jqvmap/jqvmap.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="./dist/css/adminlte.min.css">
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
-    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+    <link rel="stylesheet" href="../../plugins/summernote/summernote-bs4.min.css">
     
     <script>
     // Get the metadata_id from the URL parameter
@@ -122,6 +122,7 @@ if (isset($_GET['metadata_id'])) {
         margin: 0;
     }
   </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
@@ -338,40 +339,34 @@ if (isset($_GET['metadata_id'])) {
     </a><br>
 <?php endforeach; ?>
 </div>
-<section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-outline card-info">
-            <div class="card-header">
-              <h3 class="card-title">
 
-                <table border="1" id="dataTable">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                        <?php 
-                          foreach ($scoreNames as $category => $values) {
-                            if (is_array($values)) {
-                              foreach ($values as $score) {
-                                echo "<th>" . htmlspecialchars($score) . "</th>";
-                              }
-                            } else {
-                              echo "<th>" . htmlspecialchars($values) . "</th>";
-                            }
-                          }
-                          ?>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                <tbody>
-          
-                <?php if (empty($performanceData)): ?>
-                  <tr>
-                    <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-                  </tr>
-                <?php else: ?>
-                <?php foreach ($performanceData as $data): ?>
-                  <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+<!-- Snippet of the modified code -->
+<table border="1" id="dataTable">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <?php 
+            foreach ($scoreNames as $category => $values) {
+                if (is_array($values)) {
+                    foreach ($values as $score) {
+                        echo "<th>" . htmlspecialchars($score) . "</th>";
+                    }
+                } else {
+                    echo "<th>" . htmlspecialchars($values) . "</th>";
+                }
+            }
+            ?>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (empty($performanceData)): ?>
+            <tr>
+                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+            </tr>
+        <?php else: ?>
+            <?php foreach ($performanceData as $data): ?>
+                <tr data-performance-id="<?php echo $data['performance_id']; ?>">
                     <td class="editable" data-field-name="score_date">
                         <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
                     </td>
@@ -379,18 +374,13 @@ if (isset($_GET['metadata_id'])) {
                         <td class="editable" data-field-name="score<?php echo $i; ?>">
                             <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
                         </td>
-                      <?php endfor; ?>
+                    <?php endfor; ?>
                     <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
     </tbody>
 </table>
-</div>
-</div>
-</div>
-</div>
-</section>
 
 <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
 <input type="text" id="newRowDate" style="display: none;">
