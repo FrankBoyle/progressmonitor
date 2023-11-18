@@ -489,20 +489,30 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
-    const { dates, scores } = extractDataForBarChart();
+    const selectedData = {}; // Define an object to store selected column data
 
-    console.log('Updated Header Names:', headerNames); // Log updated header names
+    // Populate selectedData with the appropriate scores for the selected columns
+    selectedColumns.forEach(column => {
+        selectedData[column] = scores[headerNames.indexOf(column) - 1];
+    });
 
-    // Update headerNames based on selected columns
-    headerNames = ['Date', ...selectedColumns]; // Assuming the first column is the date column
+    const barChartData = [];
 
-    console.log('Updated Header Names:', headerNames); // Log updated header names
-
-    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
+    // Loop through selected columns to construct data for the bar chart
+    selectedColumns.forEach(column => {
+        const data = selectedData[column];
+        if (data) {
+            barChartData.push({
+                name: column,
+                data: data
+            });
+        }
+    });
 
     // Check if barChart exists and then update
     if (barChart) {
-        barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
+        // Update the bar chart with the newly constructed data
+        barChart.updateOptions(getBarChartOptions(dates, barChartData));
     } else {
         // Initialize the bar chart if it's null
         initializeBarChart();
