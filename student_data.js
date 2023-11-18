@@ -471,6 +471,8 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
+    console.log('Header Names in updateBarChart:', headerNames);
+
     const { dates, scores } = extractDataForBarChart();
 
     const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
