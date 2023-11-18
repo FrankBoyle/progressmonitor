@@ -493,11 +493,6 @@ function updateBarChart(selectedColumns) {
 
     console.log('Updated Header Names:', headerNames); // Log updated header names
 
-    // Update headerNames based on selected columns
-    headerNames = ['Date', ...selectedColumns]; // Assuming the first column is the date column
-
-    console.log('Updated Header Names:', headerNames); // Log updated header names
-
     const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
     // Check if barChart exists and then update
