@@ -411,6 +411,10 @@ function extractDataForBarChart() {
 
 // Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
+    console.log('Selected Columns:', selectedColumns);
+    console.log('Header Names:', headerNames);
+    console.log('Scores:', scores);
+
     const stackedBarChartData = [];
     const columnIndexMap = {};
 
@@ -437,6 +441,8 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
         data: stackedBarChartData[index],
         color: seriesColors[index], // Set the color based on index
     }));
+
+    console.log('Stacked Bar Chart Data:', stackedBarChartSeriesData);
 
     return stackedBarChartSeriesData;
 }
