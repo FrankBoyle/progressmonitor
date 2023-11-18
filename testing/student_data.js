@@ -429,9 +429,8 @@ function extractDataForBarChart() {
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const columnIndexMap = {};
     const stackedBarChartData = new Array(selectedColumns.length).fill().map(() => []);
-    console.log("Selected Columns:", selectedColumns);
-    console.log("Header Names:", headerNames);
-    // Map selected columns to their respective indices in the headerNames array
+
+    // Map selected columns to their respective indices
     selectedColumns.forEach((col, index) => {
         const columnIndex = headerNames.indexOf(col);
         if (columnIndex !== -1) {
@@ -441,14 +440,10 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
         }
     });
 
-    // Log the mapping to ensure correct association
-    console.log("Column Index Map:", columnIndexMap);
-
     scores.forEach((scoreRow) => {
         Object.keys(columnIndexMap).forEach((col) => {
-            const columnIndex = columnIndexMap[col];
-            const value = scoreRow[columnIndex - 1]; // -1 because the first column (date) is excluded from scoreRow
-            console.log("Column:", col, "Column Index:", columnIndex, "Value:", value);
+            const columnIndex = columnIndexMap[col] - 1; // Adjust for the date column
+            const value = scoreRow[columnIndex];
             if (!isNaN(value) && value !== null) {
                 stackedBarChartData[selectedColumns.indexOf(col)].push(value);
             }
