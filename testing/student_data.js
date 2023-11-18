@@ -483,8 +483,7 @@ function updateBarChart(selectedColumns) {
 
     // Update bar chart
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
-    barChart.render(); // Or a similar method to force redraw/update
-
+    
 }
 
 function getBarChartOptions(dates, seriesData, headerNames) {
@@ -536,6 +535,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
         },
         legend: {
             show: true,  // Ensure the legend is always shown
+            showForSingleSeries: true, // Important for single series
         },
         series: seriesData.map((series, index) => ({
             ...series,
