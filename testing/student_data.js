@@ -430,17 +430,18 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     const columnIndexMap = {};
     const stackedBarChartData = [];
 
-    selectedColumns.forEach((col) => {
-        const columnIndex = headerNames.indexOf(col);
+    selectedColumns.forEach((userFriendlyName) => {
+        const technicalName = userFriendlyName; // Assuming userFriendlyName is the technical name
+        const columnIndex = headerNames.indexOf(technicalName);
         if (columnIndex !== -1) {
-            columnIndexMap[col] = columnIndex;
-            // Initialize empty data array for this series
-            stackedBarChartData.push({ name: col, data: [] });
+            columnIndexMap[technicalName] = columnIndex;
+            stackedBarChartData.push({ name: userFriendlyName, data: [] });
         } else {
-            console.error(`Column ${col} not found in header names`);
+            console.error(`Column ${userFriendlyName} not found in header names`);
         }
     });
 
+    // Populate data for each series
     scores.forEach((scoreRow) => {
         stackedBarChartData.forEach((series) => {
             const columnIndex = columnIndexMap[series.name] - 1; // -1 for the date column
@@ -467,7 +468,7 @@ function initializeBarChart() {
 
     // Add an event listener to update the bar chart when checkboxes change
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
         updateBarChart(selectedColumns);
     }, 250));
