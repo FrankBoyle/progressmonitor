@@ -429,11 +429,18 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
         });
     });
 
-    return selectedColumns.map((col, index) => ({
-        name: col,
-        data: stackedBarChartData[index].filter(value => !isNaN(value)), // Filter out NaN values
-        color: seriesColors[index % seriesColors.length],
-    }));
+    // Filter out columns with all NaN values
+    return selectedColumns.map((col, index) => {
+        const columnData = stackedBarChartData[index].filter(value => !isNaN(value));
+        if (columnData.length > 0) {
+            return {
+                name: col,
+                data: columnData,
+                color: seriesColors[index % seriesColors.length],
+            };
+        }
+        return null;
+    }).filter(Boolean);
 }
 
 // Initialize the bar chart
