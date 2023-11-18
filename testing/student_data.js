@@ -460,10 +460,10 @@ function initializeBarChart() {
     const { dates, scores } = extractDataForBarChart();
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+        console.log("Header Names in initializeBarChart:", headerNames);
 
     // Define seriesData as an empty array
     const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
-    console.log("Header Names in initializeBarChart:", headerNames);
 
     // Initialize the bar chart with appropriate options
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData));
