@@ -379,6 +379,22 @@ function getTrendlineData(seriesData) {
 }
 
 ////////////////////////////////////////////////
+function generateStackedBarChartData(scores, headerNames, customNames = []) {
+    const seriesList = [];
+
+    // Assuming scores is an array of arrays representing columns of data
+
+    for (let i = 1; i < headerNames.length; i++) {
+        const scoreData = scores.map(row => row[i]);
+        const seriesData = scoreData.map(value => isNaN(value) ? 0 : value); // Replace NaN with 0
+        seriesList.push({
+            name: customNames[i - 1] || `Column${i}`, // Modify the naming convention if needed
+            data: seriesData,
+            // You can set other properties here as needed
+        });
+    }
+    return seriesList;
+}
 
 // Modify the extractDataForBarChart function to extract data.
 function extractDataForBarChart() {
