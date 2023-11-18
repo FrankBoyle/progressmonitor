@@ -429,7 +429,8 @@ function extractDataForBarChart() {
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const columnIndexMap = {};
     const stackedBarChartData = new Array(selectedColumns.length).fill().map(() => []);
-
+    console.log("Selected Columns:", selectedColumns);
+    console.log("Header Names:", headerNames);
     // Map selected columns to their respective indices in the headerNames array
     selectedColumns.forEach((col, index) => {
         const columnIndex = headerNames.indexOf(col);
