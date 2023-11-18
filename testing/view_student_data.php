@@ -420,10 +420,17 @@ if (isset($_GET['metadata_id'])) {
     ?>
 </div>
 
-
-<label>Enter Benchmark Value:</label>
-<input type="text" id="benchmarkValue">
-<button type ="button" id="updateBenchmark" class="btn btn-primary">Update Benchmark</button>
+<section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+  <!--
+    <label>Enter Benchmark Value:</label>
+    <input type="text" id="benchmarkValue">
+    <button type ="button" id="updateBenchmark" class="btn btn-primary">Update Benchmark</button>
+  -->
 
 <div id="accordion">
     <h3>Line Graph</h3>
@@ -435,6 +442,12 @@ if (isset($_GET['metadata_id'])) {
     <div id="barChart" style="width: 1000px;"></div>
     </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
 
   <script>
     $(document).ready(function() {
