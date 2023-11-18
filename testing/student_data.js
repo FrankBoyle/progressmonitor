@@ -430,9 +430,14 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     const columnIndexMap = {};
     const stackedBarChartData = new Array(selectedColumns.length).fill().map(() => []);
 
-    // Map selected columns to their respective indices
+    // Map selected columns to their respective indices in the headerNames array
     selectedColumns.forEach((col, index) => {
-        columnIndexMap[col] = index;
+        const columnIndex = headerNames.indexOf(col);
+        if (columnIndex !== -1) {
+            columnIndexMap[col] = columnIndex;
+        } else {
+            console.error(`Column ${col} not found in header names`);
+        }
     });
 
     // Log the mapping to ensure correct association
@@ -441,10 +446,10 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     scores.forEach((scoreRow) => {
         Object.keys(columnIndexMap).forEach((col) => {
             const columnIndex = columnIndexMap[col];
-            const value = scoreRow[columnIndex];
+            const value = scoreRow[columnIndex - 1]; // -1 because the first column (date) is excluded from scoreRow
             console.log("Column:", col, "Column Index:", columnIndex, "Value:", value);
             if (!isNaN(value) && value !== null) {
-                stackedBarChartData[columnIndex].push(value);
+                stackedBarChartData[selectedColumns.indexOf(col)].push(value);
             }
         });
     });
