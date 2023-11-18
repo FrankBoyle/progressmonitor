@@ -332,7 +332,7 @@ if (isset($_GET['metadata_id'])) {
         <div class="col-md-12">
           <div class="card card-outline card-info">
             <div class="card-header">
-              <h3 class="card-title">Categories</h3>
+              <h3 class="card-title">Categories</h3><br>
                 <?php foreach ($metadataEntries as $metadataEntry): ?>
                   <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
                     <?php echo $metadataEntry['category_name']; ?>
