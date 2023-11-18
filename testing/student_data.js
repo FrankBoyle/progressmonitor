@@ -241,12 +241,12 @@ function initializeChart() {
     chart.render();    
 
     // Update the chart on checkbox changes
-    document.getElementById("columnSelector").addEventListener("change", debounce(function () {
-        selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.value); // Use .value instead of .getAttribute("data-column-name")
-        updateBarChart(selectedColumns);
-    }, 250));
-    
+document.getElementById("columnSelector").addEventListener("change", debounce(function () {
+    selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.value); // Use .value instead of .getAttribute("data-column-name")
+    updateBarChart(selectedColumns);
+}, 250));
+
 };
 
 // The debounce function
@@ -430,13 +430,14 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     const columnIndexMap = {};
     const stackedBarChartData = [];
 
-    selectedColumns.forEach((technicalName) => {
+    selectedColumns.forEach((userFriendlyName) => {
+        const technicalName = userFriendlyName; // Assuming userFriendlyName is the technical name
         const columnIndex = headerNames.indexOf(technicalName);
         if (columnIndex !== -1) {
             columnIndexMap[technicalName] = columnIndex;
-            stackedBarChartData.push({ name: technicalName, data: [] }); // Use technical name
+            stackedBarChartData.push({ name: userFriendlyName, data: [] });
         } else {
-            console.error(`Column ${technicalName} not found in header names`);
+            console.error(`Column ${userFriendlyName} not found in header names`);
         }
     });
 
@@ -468,10 +469,9 @@ function initializeBarChart() {
     // Add an event listener to update the bar chart when checkboxes change
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.value); // Use .value instead of .getAttribute("data-column-name")
+            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
         updateBarChart(selectedColumns);
     }, 250));
-    
 }
 
 // Update the bar chart with new data based on selected columns
