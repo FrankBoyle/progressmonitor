@@ -456,17 +456,16 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
 
 // Initialize the bar chart
 function initializeBarChart() {
-    // Extract data and populate the selectedColumns array
+    // Ensure headerNames is populated correctly before calling getBarChartOptions
     const { dates, scores } = extractDataForBarChart();
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-        console.log("Header Names in initializeBarChart:", headerNames);
 
-    // Define seriesData as an empty array
+    // Pass headerNames explicitly to getBarChartOptions
     const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
-    // Initialize the bar chart with appropriate options
-    barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData));
+    // Pass headerNames to getBarChartOptions function
+    barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData, headerNames));
     barChart.render();
 
     // Add an event listener to update the bar chart when checkboxes change
@@ -489,7 +488,7 @@ function updateBarChart(selectedColumns) {
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
 }
 
-function getBarChartOptions(dates, seriesData) {
+function getBarChartOptions(dates, seriesData, headerNames) {
     const totalValues = new Array(dates.length).fill(0);
 
     // Calculate running totals for each category
