@@ -489,25 +489,20 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
-    const selectedData = {}; // Define an object to store selected column data
+    const selectedData = {}; // Object to store selected column data
 
     // Populate selectedData with the appropriate scores for the selected columns
     selectedColumns.forEach(column => {
-        selectedData[column] = scores[headerNames.indexOf(column) - 1];
-    });
-
-    const barChartData = [];
-
-    // Loop through selected columns to construct data for the bar chart
-    selectedColumns.forEach(column => {
-        const data = selectedData[column];
-        if (data) {
-            barChartData.push({
-                name: column,
-                data: data
-            });
+        const columnIndex = headerNames.indexOf(column) - 1;
+        if (columnIndex >= 0) {
+            selectedData[column] = scores[columnIndex];
         }
     });
+
+    const barChartData = Object.entries(selectedData).map(([name, data]) => ({
+        name: name,
+        data: data
+    }));
 
     // Check if barChart exists and then update
     if (barChart) {
