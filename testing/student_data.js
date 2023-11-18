@@ -416,19 +416,15 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
 
     // Map selected columns to their respective indices
     selectedColumns.forEach((col, index) => {
-        columnIndexMap[col] = index;
+        columnIndexMap[col] = headerNames.indexOf(col);
     });
-
-    // Log the mapping to ensure correct association
-    console.log("Column Index Map:", columnIndexMap);
 
     scores.forEach((scoreRow) => {
         Object.keys(columnIndexMap).forEach((col) => {
             const columnIndex = columnIndexMap[col];
             const value = scoreRow[columnIndex];
-            console.log("Column:", col, "Column Index:", columnIndex, "Value:", value);
             if (!isNaN(value) && value !== null) {
-                stackedBarChartData[columnIndex].push(value);
+                stackedBarChartData[columnIndexMap[col]].push(value);
             }
         });
     });
