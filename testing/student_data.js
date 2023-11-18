@@ -490,7 +490,6 @@ function updateBarChart(selectedColumns, headerNames) {
 
 function getBarChartOptions(dates, seriesData, headerNames) {
     const totalValues = new Array(dates.length).fill(0);
-    const seriesData = seriesData.filter(series => headerNames.includes(series.name));
 
     // Calculate running totals for each category
     seriesData.forEach((series) => {
