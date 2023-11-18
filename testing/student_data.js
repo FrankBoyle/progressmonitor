@@ -241,12 +241,12 @@ function initializeChart() {
     chart.render();    
 
     // Update the chart on checkbox changes
-document.getElementById("columnSelector").addEventListener("change", debounce(function () {
-    selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.value); // Use .value instead of .getAttribute("data-column-name")
-    updateBarChart(selectedColumns);
-}, 250));
+    document.getElementById("columnSelector").addEventListener("change", debounce(function() {
+        selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
+        updateChart(selectedColumns);
+    }, 250));
 };
 
 // The debounce function
