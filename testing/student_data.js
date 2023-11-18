@@ -62,7 +62,7 @@ $("#accordion").accordion({
                 initializeBarChart(); // Initialize the bar chart
             } else {
                 // Update the bar chart with the selected columns
-                const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
                     .map(checkbox => checkbox.getAttribute("data-column-name") || '');
                 updateBarChart(selectedColumns);
             }
@@ -230,7 +230,7 @@ function initializeChart() {
     allSeries = generateSeriesData(scores, headerNames);
 
     // Get selected columns
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+    selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     // Update series names
@@ -456,7 +456,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
 function initializeBarChart() {
     // Ensure headerNames is populated correctly before calling getBarChartOptions
     const { dates, scores } = extractDataForBarChart();
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+    selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
     // Pass headerNames explicitly to getBarChartOptions
