@@ -50,8 +50,6 @@ $students = fetchStudentsByTeacher($teacherId);
   <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../../plugins/summernote/summernote-bs4.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
 
 
 </head>
