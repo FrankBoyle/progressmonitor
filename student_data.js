@@ -131,6 +131,7 @@ function generateSeriesData(scores, headerNames, customNames = []) {
     return seriesList;
 }
 
+
 // This function will now return the new series list
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
     return seriesList.map((series, index) => {
@@ -420,21 +421,24 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     });
 
     // Debugging: Log the columnIndexMap and selectedColumns
-    console.log("Column Index Map:", columnIndexMap);
-    console.log("Selected Columns:", selectedColumns);
+    //console.log("Column Index Map:", columnIndexMap);
+    //console.log("Selected Columns:", selectedColumns);
 
     // Iterate through the scores and populate the stackedBarChartData
     scores.forEach((scoreRow) => {
         selectedColumns.forEach((col) => {
             const columnIndex = columnIndexMap[col];
             if (columnIndex !== undefined) {
-                stackedBarChartData[columnIndex].push(scoreRow[columnIndex]);
+                const value = scoreRow[columnIndex];
+                if (!isNaN(value) && value !== null) {
+                    stackedBarChartData[columnIndex].push(value);
+                }
             }
         });
     });
 
     // Debugging: Log the stackedBarChartData
-    console.log("Stacked Bar Chart Data:", stackedBarChartData);
+    //console.log("Stacked Bar Chart Data:", stackedBarChartData);
 
     const stackedBarChartSeriesData = selectedColumns.map((col, index) => ({
         name: col,
@@ -443,11 +447,12 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     }));
 
     // Debugging: Log the stackedBarChartSeriesData
-    console.log("Stacked Bar Chart Series Data:", stackedBarChartSeriesData);
+    //console.log("Stacked Bar Chart Series Data:", stackedBarChartSeriesData);
 
     // Return only the series data without totals
     return stackedBarChartSeriesData;
 }
+
 
 // Initialize the bar chart
 function initializeBarChart() {
@@ -560,7 +565,8 @@ $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
-
+    
+    
     // Set the retrieved metadata_id as the value of the input field
     $('#metadataIdInput').val(metadata_id);
 
@@ -676,6 +682,31 @@ $(document).ready(function() {
         }, 'json');
     });
 
+    function updateScoreInDatabase(row, metadataFieldName, newValue) {
+        const performanceId = row.data('performance-id');
+        const studentId = CURRENT_STUDENT_ID;
+        const score_date = row.find('td[data-field-name="score_date"]').text();
+        
+        // Assuming that metadataFieldName would be something like "score1_name" and we'd need to update "score1"
+        const fieldNameToUpdate = metadataFieldName.replace('_name', '');
+    
+        const postData = {
+            performance_id: performanceId,
+            field_name: fieldNameToUpdate, // Use the extracted field name to update the appropriate score column
+            new_value: newValue,
+            student_id: studentId,
+            score_date: score_date
+            
+        };
+    
+        ajaxCall('POST', 'update_performance.php', postData).then(response => {
+            if (response && !response.success) {
+                console.error('Error updating the score in the database.');
+            }
+        });
+    }
+    
+
     function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
         //console.log("Checking for duplicate of:", dateString);
         let isDuplicate = false;
@@ -704,11 +735,24 @@ $(document).ready(function() {
         $('table').on('dblclick', '.editable', function() {
             const cell = $(this);
             if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
-            const originalValue = cell.text().trim();
+    
+            // Store the original value in a variable
+            let originalValue;
+    
+            // Check if the cell contains an input element with a non-empty value
+            const inputElement = cell.find('input[type="text"]');
+            if (inputElement.length && inputElement.val().trim() !== '') {
+                originalValue = inputElement.val().trim();
+            } else {
+                originalValue = cell.text().trim();
+            }
+    
+            // Create an input element and set its value to the original value
             const input = $('<input type="text">');
             input.val(originalValue);
-            
+    
             let datePickerActive = false;
+    
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
@@ -751,12 +795,27 @@ $(document).ready(function() {
     
     function saveCellValue(cell, input) {
         const newValue = input.val();
+        //console.log("Cell contents:", cell.html()); // Log the entire HTML content of the cell
+        const originalValue = cell.text().trim();
+        //console.log("Original Value:", originalValue);
+        //console.log("New Value:", newValue);
+    
+        /*
+        if (newValue === originalValue) {
+            console.log("No change detected.");
+            toggleEditMode(cell, input);
+            return; // No change, exit without saving or making an AJAX request
+        }
+        */
+
         toggleEditMode(cell, input);
         cell.text(newValue);
+    
         const performanceId = cell.closest('tr').data('performance-id');
         if (performanceId === 'new') {
             return;
         }
+    
         if (cell.data('field-name') === 'score_date') {
             const parts = newValue.split('/');
             if (parts.length !== 3) {
@@ -819,8 +878,6 @@ $(document).ready(function() {
             input.show();
         }
     }
-    
-       
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
@@ -830,8 +887,16 @@ $(document).ready(function() {
         }
     
         // Create a temporary input to attach datepicker
-        const tempInput = $("<input type='text' style='position: absolute; opacity: 0;'>").appendTo('body');
-        tempInput.datepicker({
+   // Adjusting the position of the temporary input
+   const tempInput = $("<input type='text'>").appendTo('body');
+   tempInput.css({
+       position: 'fixed',
+       top: '50%', // Adjust as needed
+       left: '50%', // Adjust as needed
+       transform: 'translate(-50%, -50%)',
+       zIndex: 1000 // To ensure it's above other elements
+   });
+       tempInput.datepicker({
             dateFormat: 'mm/dd/yy',
             onSelect: function(dateText) {
                 if (isDateDuplicate(dateText)) {
@@ -912,23 +977,6 @@ $(document).ready(function() {
         location.reload();
     }    
 
-// Custom filter for DataTables
-$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-    let selectedDate = $("#startDateFilter").datepicker("getDate");
-    if (!selectedDate) {
-        return true; // if no date selected, show all rows
-    }
-
-    let rowDate = $.datepicker.parseDate("mm/dd/yy", data[0]);
-
-    // Convert both dates to time for a safer comparison
-    let rowDateTime = rowDate.getTime();
-    let selectedDateTime = selectedDate.getTime();
-
-    //console.log(`Comparing rowDate ${rowDate} to selectedDate ${selectedDate}. Result: ${rowDateTime >= selectedDateTime}`);
-    return rowDateTime >= selectedDateTime;
-});
-
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
@@ -948,20 +996,35 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-        let table = $('table').DataTable({
-            "order": [[0, "asc"]],
-            "lengthChange": false,
-            "searching": false,
-            "paging": false,
-            "info": false,
-            "sorting": false,
-            "columns": [
-                { "type": "date-us" },
-                null, null, null, null, null, null, null, null, null, null, null
-            ],
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        });
-    
-        // Move the buttons container to the desired location
-        table.buttons().container().appendTo('.dataTables_wrapper .col-md-6:eq(0)');
+    // Define the DataTable and apply custom date filter
+    let table = $('#dataTable').DataTable({
+        "order": [[0, "asc"]],
+        "lengthChange": false,
+        "searching": false,
+        "paging": false,
+        "info": false,
+        "sorting": false,
+        "columns": [
+            { "type": "date-us" },
+            null, null, null, null, null, null, null, null, null, null, null
+        ],
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "columnDefs": [
+            {
+                "targets": [0], // Apply the date filter to the first column (date)
+                "type": "date-us",
+                "render": function (data) {
+                    return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
+                }
+            }
+        ]
     });
+
+    // Apply date filter when date is selected
+    $("#startDateFilter").on("change", function() {
+        table.draw();
+    });
+
+    // Handle initial filtering when the page loads
+    table.draw();
+});
