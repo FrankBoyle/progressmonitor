@@ -423,7 +423,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     console.log("Column Index Map:", columnIndexMap);
 
     scores.forEach((scoreRow) => {
-        selectedColumns.forEach((col) => {
+        Object.keys(columnIndexMap).forEach((col) => {
             const columnIndex = columnIndexMap[col];
             const value = scoreRow[columnIndex];
             console.log("Column:", col, "Column Index:", columnIndex, "Value:", value);
