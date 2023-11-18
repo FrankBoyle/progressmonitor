@@ -414,7 +414,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
     const stackedBarChartData = [];
     const columnIndexMap = {};
 
-    // Initialize columnIndexMap and create empty arrays for each column
+    // Map selected columns to indices and initialize empty arrays for each column
     selectedColumns.forEach((col, index) => {
         columnIndexMap[col] = index;
         stackedBarChartData.push([]);
@@ -424,7 +424,7 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
         selectedColumns.forEach((col) => {
             const columnIndex = columnIndexMap[col];
             if (columnIndex !== undefined) {
-                const value = scoreRow[columnIndex];
+                const value = scoreRow[headerNames.indexOf(col) + 1]; // Find index based on headerNames
                 if (!isNaN(value) && value !== null) {
                     stackedBarChartData[columnIndex].push(value);
                 }
