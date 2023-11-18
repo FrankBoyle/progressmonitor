@@ -327,21 +327,29 @@ if (isset($_GET['metadata_id'])) {
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 </div>
 
-<div>
-<!-- Add the generated links here -->
-<?php foreach ($metadataEntries as $metadataEntry): ?>
-    <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
-        <?php echo $metadataEntry['category_name']; ?>
-    </a><br>
-<?php endforeach; ?>
-</div>
+<section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title">Categories</h3>
+                <?php foreach ($metadataEntries as $metadataEntry): ?>
+                  <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
+                    <?php echo $metadataEntry['category_name']; ?>
+                  </a><br>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>        
 
 <section class="content">
       <div class="row">
         <div class="col-md-12">
           <div class="card card-outline card-info">
             <div class="card-header">
-              <h3 class="card-title">
+              <h3 class="card-title"></h3>
 
                 <table border="1" id="dataTable">
                   <thead>
