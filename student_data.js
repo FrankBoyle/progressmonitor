@@ -461,6 +461,11 @@ function initializeBarChart() {
     console.log('Extracted scores:', scores);
     console.log('Initial Header Names:', headerNames); // Log initial header names
 
+    // Update headerNames based on selected columns
+    headerNames = ['Date', ...selectedColumns]; // Assuming the first column is the date column
+
+    console.log('Updated Header Names:', headerNames); // Log updated header names
+
     // Define seriesData as an empty array
     const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
@@ -472,6 +477,12 @@ function initializeBarChart() {
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
+        // Update headerNames based on selected columns
+        headerNames = ['Date', ...selectedColumns]; // Assuming the first column is the date column
+
+        console.log('Updated Header Names:', headerNames); // Log updated header names
+
         updateBarChart(selectedColumns);
     }, 250));
 }
@@ -479,6 +490,11 @@ function initializeBarChart() {
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
     const { dates, scores } = extractDataForBarChart();
+
+    console.log('Updated Header Names:', headerNames); // Log updated header names
+
+    // Update headerNames based on selected columns
+    headerNames = ['Date', ...selectedColumns]; // Assuming the first column is the date column
 
     console.log('Updated Header Names:', headerNames); // Log updated header names
 
