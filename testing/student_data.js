@@ -379,11 +379,28 @@ function getTrendlineData(seriesData) {
 }
 
 ////////////////////////////////////////////////
-// Modify extractDataForBarChart to return scores as an array of arrays
+function generateStackedBarChartData(scores, headerNames, customNames = []) {
+    const seriesList = [];
+
+    // Assuming scores is an array of arrays representing columns of data
+
+    for (let i = 1; i < headerNames.length; i++) {
+        const scoreData = scores.map(row => row[i]);
+        const seriesData = scoreData.map(value => isNaN(value) ? 0 : value); // Replace NaN with 0
+        seriesList.push({
+            name: customNames[i - 1] || `Column${i}`, // Modify the naming convention if needed
+            data: seriesData,
+            // You can set other properties here as needed
+        });
+    }
+    return seriesList;
+}
+
+// Modify the extractDataForBarChart function to extract data.
 function extractDataForBarChart() {
     const tableRows = document.querySelectorAll("table tbody tr");
     const dates = [];
-    const scores = Array.from({ length: 5 }, () => []);
+    const scores = [];
 
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
@@ -394,30 +411,18 @@ function extractDataForBarChart() {
         }
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
+        const rowScores = [];
 
-        scoreCells.forEach((cell, index) => {
-            const value = parseInt(cell.textContent || '0', 10);
-            scores[index].push(isNaN(value) ? 0 : value);
+        scoreCells.forEach((cell) => {
+            rowScores.push(parseInt(cell.textContent || '0', 10));
         });
+
+        scores.push(rowScores);
     });
+    //console.log("Extracted dates:", dates);
+    //console.log("Extracted scores:", scores);
 
     return { dates, scores };
-}
-
-// Modify generateStackedBarChartData to use scores as an array of arrays
-function generateStackedBarChartData(scores, headerNames, customNames = []) {
-    const seriesList = [];
-
-    for (let i = 0; i < scores.length; i++) {
-        const seriesData = scores[i].map(value => isNaN(value) ? 0 : value);
-        seriesList.push({
-            name: customNames[i] || `Column${i + 1}`, // Adjust index and naming if needed
-            data: seriesData,
-            // Other properties can be set here as needed
-        });
-    }
-
-    return seriesList;
 }
 
 // Populate the stacked bar chart series data.
