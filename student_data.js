@@ -478,11 +478,16 @@ function initializeBarChart() {
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
-    //console.log("Update Bar Chart called~!");
     const { dates, scores } = extractDataForBarChart();
 
+    // Get the indices of selected columns
+    const selectedIndices = selectedColumns.map(column => headerNames.indexOf(column));
+
+    // Filter the scores to include only the data for selected columns
+    const selectedScores = scores.map(row => selectedIndices.map(index => row[index]));
+
     // Populate stacked bar chart series data based on selected columns
-    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores);
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, selectedScores);
 
     // Update the bar chart with the new data series and options
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData));
