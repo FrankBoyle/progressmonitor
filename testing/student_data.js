@@ -531,6 +531,9 @@ function getBarChartOptions(dates, seriesData, headerNames) {
         xaxis: {
             categories: dates,
         },
+        legend: {
+            show: true,  // Ensure the legend is always shown
+        },
         series: seriesData.map((series, index) => ({
             ...series,
             color: barChartSeriesColors[index],
