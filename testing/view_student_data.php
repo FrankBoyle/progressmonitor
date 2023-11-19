@@ -289,7 +289,7 @@ if (isset($_GET['metadata_id'])) {
         </div>
       </section>    
 
-      
+
     <!-- Main content -->
     <section class="content">
     <div class="card card-outline card-info">
@@ -452,7 +452,40 @@ if (isset($_GET['metadata_id'])) {
 </div>
 </div>
 </section>
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+              </div>
+            </div><!-- /.card -->
+          </div>
+          <!-- /.col-md-6 -->
 
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+    <div class="p-3">
+      <h5>Title</h5>
+      <p>Sidebar content</p>
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      Anything you want
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor</a>.</strong> All rights reserved.
+  </footer>
+</div>
+<!-- ./wrapper -->
 
   <script>
     $(document).ready(function() {
