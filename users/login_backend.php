@@ -45,7 +45,7 @@
                 }
                 
                 // Redirect to the desired page after successful login
-                header("Location: ../test.php");
+                header("Location: ../home.php");
                 exit(); 
             } else {
                 echo '<p class="error">Username or password is incorrect!</p>';
