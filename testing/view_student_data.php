@@ -270,6 +270,26 @@ if (isset($_GET['metadata_id'])) {
     </section>
 
 
+    <section class="content">
+      <div class="row">
+         <div class="col-md-4 col-sm-6 col-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title">
+                Categories
+              </h3><br>
+                <?php foreach ($metadataEntries as $metadataEntry): ?>
+                  <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
+                    <?php echo $metadataEntry['category_name']; ?>
+                  </a><br>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>    
+
+      
     <!-- Main content -->
     <section class="content">
     <div class="card card-outline card-info">
@@ -328,26 +348,7 @@ if (isset($_GET['metadata_id'])) {
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($student_id); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
-</div>
-
-<section class="content">
-      <div class="row">
-         <div class="col-md-4 col-sm-6 col-12">
-          <div class="card card-outline card-info">
-            <div class="card-header">
-              <h3 class="card-title">
-                Categories
-              </h3><br>
-                <?php foreach ($metadataEntries as $metadataEntry): ?>
-                  <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
-                    <?php echo $metadataEntry['category_name']; ?>
-                  </a><br>
-                <?php endforeach; ?>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>        
+</div>   
 
 <section class="content">
       <div class="row">
