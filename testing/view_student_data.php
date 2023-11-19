@@ -276,7 +276,6 @@ if (isset($_GET['metadata_id'])) {
         <h5 class="mb-2">GOALS</h5>
         <div class="row">
          <div class="col-md-4 col-sm-6 col-12">
-         <div class="card card-outline card-info">
           <div class="info-box">
             <!-- If you want to add an icon to the box, uncomment this
               <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
@@ -315,7 +314,6 @@ if (isset($_GET['metadata_id'])) {
             <textarea id="summernote3" class = "goaltext">
               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
-            </div>
           </div>
         </div>
       </div>    
