@@ -287,7 +287,6 @@ if (isset($_GET['metadata_id'])) {
               <textarea id="summernote1" class = "goaltext">
                Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
-          </div>
         </div>
       </div>
       <div class="col-md-4 col-sm-6 col-12">
