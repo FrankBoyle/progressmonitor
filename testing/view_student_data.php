@@ -272,8 +272,11 @@ if (isset($_GET['metadata_id'])) {
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
-        <h5 class="mb-2">GOALS</h5>
+    <div class="card card-outline card-info">
+  <div class="card-header">
+    <h3 class="card-title">Goals</h3>
+  </div>
+  <div class="card-body">
         <div class="row">
          <div class="col-md-4 col-sm-6 col-12">
           <div class="info-box">
