@@ -272,19 +272,19 @@ if (isset($_GET['metadata_id'])) {
 
     <!-- Main content -->
     <section class="content">
-  <div class="container-fluid">
-    <h5 class="mb-2">GOALS</h5>
-    <div class="row">
-      <div class="col-md-4 col-sm-6 col-12">
-        <div class="info-box">
-          <!-- If you want to add an icon to the box, uncomment this
-          <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
-          -->
-          <div class="info-box-content">
-            <span class="info-box-text">Goal 1</span>
-            <!-- Summernote editor -->
-            <textarea id="summernote1" class = "goaltext">
-              Place <em>some</em> <u>text</u> <strong>here</strong>
+      <div class="container-fluid">
+        <h5 class="mb-2">GOALS</h5>
+        <div class="row">
+         <div class="col-md-4 col-sm-6 col-12">
+          <div class="info-box">
+            <!-- If you want to add an icon to the box, uncomment this
+              <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
+            -->
+            <div class="info-box-content">
+              <span class="info-box-text">Goal 1</span>
+               <!-- Summernote editor -->
+              <textarea id="summernote1" class = "goaltext">
+               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
           </div>
         </div>
@@ -329,7 +329,7 @@ if (isset($_GET['metadata_id'])) {
 
 <section class="content">
       <div class="row">
-        <div class="col-md-12">
+      <div class="col-md-4 col-sm-6 col-12">
           <div class="card card-outline card-info">
             <div class="card-header">
               <h3 class="card-title">
@@ -348,7 +348,7 @@ if (isset($_GET['metadata_id'])) {
 
 <section class="content">
       <div class="row">
-        <div class="col-md-12">
+      <div class="col-md-4 col-sm-6 col-12">
           <div class="card card-outline card-info">
             <div class="card-header">
               <h3 class="card-title"></h3>
@@ -405,7 +405,7 @@ if (isset($_GET['metadata_id'])) {
 
 <section class="content">
       <div class="row">
-        <div class="col-md-12">
+      <div class="col-md-4 col-sm-6 col-12">
           <div class="card card-outline card-info">
             <div class="card-header">
               <h3 class="card-title"></h3>
