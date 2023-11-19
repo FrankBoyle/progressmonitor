@@ -38,9 +38,13 @@ if (isset($_GET['metadata_id'])) {
 <head>
     <meta charset="UTF-8">
     <title><?php echo $studentName; ?></title>
-  
+    
     <!-- DataTables -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -50,30 +54,27 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
-
-    <!-- Bootstrap 4 -->
-    <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
    
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="./plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="./plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="./plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- iCheck -->
-    <link rel="stylesheet" href="./plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- JQVMap -->
-    <link rel="stylesheet" href="./plugins/jqvmap/jqvmap.min.css">
+    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="./dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <!-- Daterange picker -->
-    <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
     <script src="student_data.js"  defer></script>
     
@@ -172,8 +173,8 @@ if (isset($_GET['metadata_id'])) {
   </nav>
   <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index.php" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -211,7 +212,7 @@ if (isset($_GET['metadata_id'])) {
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-closed">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fabtn-block-tachometer-alt"></i>
+              <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Starter Pages
                 <i class="right fas fa-angle-left"></i>
@@ -247,7 +248,7 @@ if (isset($_GET['metadata_id'])) {
     </div>
     <!-- /.sidebar -->
   </aside>
-
+  
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -269,21 +270,44 @@ if (isset($_GET['metadata_id'])) {
     </section>
 
 
+    <section class="content">
+      <div class="row">
+         <div class="col-md-4 col-sm-6 col-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title">
+                Categories
+              </h3><br>
+                <?php foreach ($metadataEntries as $metadataEntry): ?>
+                  <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
+                    <?php echo $metadataEntry['category_name']; ?>
+                  </a><br>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>    
+
+
     <!-- Main content -->
     <section class="content">
-  <div class="container-fluid">
-    <h5 class="mb-2">GOALS</h5>
-    <div class="row">
-      <div class="col-md-4 col-sm-6 col-12">
-        <div class="info-box">
-          <!-- If you want to add an icon to the box, uncomment this
-          <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
-          -->
-          <div class="info-box-content">
-            <span class="info-box-text">Goal 1</span>
-            <!-- Summernote editor -->
-            <textarea id="summernote1" class = "goaltext">
-              Place <em>some</em> <u>text</u> <strong>here</strong>
+    <div class="card card-outline card-info">
+  <div class="card-header">
+    <h3 class="card-title">Goals</h3>
+  </div>
+  <div class="card-body">
+        <div class="row">
+         <div class="col-md-4 col-sm-6 col-12">
+          <div class="info-box">
+            <!-- If you want to add an icon to the box, uncomment this
+              <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
+            -->
+            <div class="info-box-content">
+              <span class="info-box-text">Goal 1</span>
+               <!-- Summernote editor -->
+              <textarea id="summernote1" class = "goaltext">
+               Place <em>some</em> <u>text</u> <strong>here</strong>
             </textarea>
           </div>
         </div>
@@ -324,44 +348,42 @@ if (isset($_GET['metadata_id'])) {
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
 <input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($student_id); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
-</div>
+</div>   
 
-<div>
-<!-- Add the generated links here -->
-<?php foreach ($metadataEntries as $metadataEntry): ?>
-    <a href="?student_id=<?php echo $student_id; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
-        <?php echo $metadataEntry['category_name']; ?>
-    </a><br>
-<?php endforeach; ?>
-</div>
+<section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
 
-<!-- Snippet of the modified code -->
-<table border="1" id="dataTable">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <?php 
-            foreach ($scoreNames as $category => $values) {
-                if (is_array($values)) {
-                    foreach ($values as $score) {
-                        echo "<th>" . htmlspecialchars($score) . "</th>";
-                    }
-                } else {
-                    echo "<th>" . htmlspecialchars($values) . "</th>";
-                }
-            }
-            ?>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (empty($performanceData)): ?>
-            <tr>
-                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-            </tr>
-        <?php else: ?>
-            <?php foreach ($performanceData as $data): ?>
-                <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                <table border="1" id="dataTable">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                        <?php 
+                          foreach ($scoreNames as $category => $values) {
+                            if (is_array($values)) {
+                              foreach ($values as $score) {
+                                echo "<th>" . htmlspecialchars($score) . "</th>";
+                              }
+                            } else {
+                              echo "<th>" . htmlspecialchars($values) . "</th>";
+                            }
+                          }
+                          ?>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                <tbody>
+          
+                <?php if (empty($performanceData)): ?>
+                  <tr>
+                    <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+                  </tr>
+                <?php else: ?>
+                <?php foreach ($performanceData as $data): ?>
+                  <tr data-performance-id="<?php echo $data['performance_id']; ?>">
                     <td class="editable" data-field-name="score_date">
                         <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
                     </td>
@@ -369,17 +391,28 @@ if (isset($_GET['metadata_id'])) {
                         <td class="editable" data-field-name="score<?php echo $i; ?>">
                             <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
                         </td>
-                    <?php endfor; ?>
+                      <?php endfor; ?>
                     <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
     </tbody>
 </table>
-
 <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
 <input type="text" id="newRowDate" style="display: none;">
+</div>
+</div>
+</div>
+</div>
+</section>
 
+
+<section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
 <!-- Existing checkboxes for column selection -->
 <div id="columnSelector">
     <label>Select Columns to Display:</label>
@@ -398,10 +431,11 @@ if (isset($_GET['metadata_id'])) {
     ?>
 </div>
 
-
-<label>Enter Benchmark Value:</label>
-<input type="text" id="benchmarkValue">
-<button type ="button" id="updateBenchmark" class="btn btn-primary">Update Benchmark</button>
+  <!--
+    <label>Enter Benchmark Value:</label>
+    <input type="text" id="benchmarkValue">
+    <button type ="button" id="updateBenchmark" class="btn btn-primary">Update Benchmark</button>
+  -->
 
 <div id="accordion">
     <h3>Line Graph</h3>
@@ -413,6 +447,84 @@ if (isset($_GET['metadata_id'])) {
     <div id="barChart" style="width: 1000px;"></div>
     </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="content">
+      <div class="container-fluid">
+              <div class="card-body">
+                <h5 class="card-title"></h5>
+
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+              </div>
+            </div>
+            
+            <!-- solid sales graph -->
+            <div class="card info">
+              <div class="card-header border-0">
+                <h3 class="card-title">
+                  <i class="fas fa-th mr-1"></i>
+                  Graph
+                </h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-body -->
+                  </div>
+                  <!-- ./col -->
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+
+
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+              </div>
+            </div><!-- /.card -->
+          </div>
+          <!-- /.col-md-6 -->
+
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+    <div class="p-3">
+      <h5>Title</h5>
+      <p>Sidebar content</p>
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      Anything you want
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor</a>.</strong> All rights reserved.
+  </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
 
   <script>
     $(document).ready(function() {
