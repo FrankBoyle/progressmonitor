@@ -348,7 +348,7 @@ if (isset($_GET['metadata_id'])) {
 
 <section class="content">
       <div class="row">
-      <div class="col-md-4 col-sm-6 col-12">
+        <div class="col-md-12">
           <div class="card card-outline card-info">
             <div class="card-header">
               <h3 class="card-title"></h3>
@@ -405,7 +405,7 @@ if (isset($_GET['metadata_id'])) {
 
 <section class="content">
       <div class="row">
-      <div class="col-md-4 col-sm-6 col-12">
+        <div class="col-md-12">
           <div class="card card-outline card-info">
             <div class="card-header">
               <h3 class="card-title"></h3>
