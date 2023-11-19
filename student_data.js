@@ -428,13 +428,14 @@ function extractDataForBarChart() {
 // Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const seriesData = [];
-
     selectedColumns.forEach(columnName => {
         const columnIndex = headerNames.indexOf(columnName);
         if (columnIndex !== -1) {
-            // Adjusting for the 'Date' column if it's the first column
-            const data = scores.map(row => row[columnIndex - 1] || 0); 
-            seriesData.push({ name: columnName, data: data });
+            const data = scores.map(row => row[columnIndex - 1] || 0);
+            seriesData.push({ 
+                name: columnName, // This sets the series name used in the legend
+                data: data 
+            });
         } else {
             console.error(`Column ${columnName} not found in header names`);
         }
@@ -482,6 +483,7 @@ function updateBarChart(selectedColumns) {
 
     // Update bar chart
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
+    
 }
 
 function getBarChartOptions(dates, seriesData, headerNames) {
@@ -530,6 +532,10 @@ function getBarChartOptions(dates, seriesData, headerNames) {
         },
         xaxis: {
             categories: dates,
+        },
+        legend: {
+            show: true,  // Ensure the legend is always shown
+            showForSingleSeries: true, // Important for single series
         },
         series: seriesData.map((series, index) => ({
             ...series,
