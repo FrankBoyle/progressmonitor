@@ -275,7 +275,7 @@ if (isset($_GET['metadata_id'])) {
       <div class="container-fluid">
         <h5 class="mb-2">GOALS</h5>
         <div class="row">
-         <div class="col-md-4 col-sm-6 col-12">
+        <div class="col-md-12">
          <div class="card card-outline card-info">
           <div class="info-box">
             <!-- If you want to add an icon to the box, uncomment this
