@@ -908,23 +908,34 @@ $(document).ready(function() {
 
     $('#addNewGoalBtn').on('click', function() {
         const newGoalText = $('#newGoalText').val().trim();
-
+        const studentId = CURRENT_STUDENT_ID; // Assuming you've already retrieved this
+        const schoolId = $('#schoolIdInput').val(); // Make sure this input exists and holds the school_id
+        const metadataId = urlParams.get('metadata_id'); // Retrieved from URL as in your example
+        const goalDate = getCurrentDate(); // Gets the current date in the format you need
+    
         if (newGoalText === '') {
             alert('Please enter a goal description.');
             return;
         }
-
+    
+        const postData = {
+            goal_description: newGoalText,
+            student_id: studentId,
+            metadata_id: metadataId,
+            school_id: schoolId,
+            goal_date: goalDate // Optional, depending on if your DB allows null for this field
+        };
+    
         $.ajax({
             type: 'POST',
             url: 'add_new_goal.php', // Your server-side script to add a new goal
-            data: { goal_description: newGoalText },
+            data: postData,
             success: function(response) {
                 if (response.success) {
                     alert('New goal added successfully.');
                     $('#newGoalText').val(''); // Clear the input field
                     // Optionally, refresh the goals list or add the new goal to the DOM
                 } else {
-                    console.log('New Goal Text:', newGoalText);
                     alert(response.message || 'Failed to add new goal.');
                 }
             },
@@ -932,7 +943,7 @@ $(document).ready(function() {
                 alert('Error occurred while adding new goal: ' + textStatus + ' - ' + errorThrown);
             }
         });
-    });
+    });    
 
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
