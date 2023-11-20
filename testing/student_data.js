@@ -881,47 +881,13 @@ $(document).ready(function() {
         }
     }
 
-// Function to replace the goal text with an input field
-function makeGoalEditable(goalElement) {
-    const currentText = goalElement.is('textarea') ? goalElement.val() : goalElement.text();
-    const inputField = $('<input>', {
-        type: 'text',
-        value: currentText,
-        class: 'goal-edit-input' // Add a class for styling if needed
-    });
-
-    goalElement.replaceWith(inputField);
-    inputField.focus();
-}
-
-// Function to revert the input field back to static text and save the changes
-function saveGoalText(inputField) {
-    const newText = inputField.val();
-    const goalId = inputField.closest('.goal-container').data('goal-id'); // Assuming a container with goal ID
-
-    updateGoalText(goalId, newText);
-
-    // Revert back to static text display
-    const textElement = $('<div>', { class: 'goaltext' }).text(newText);
-    inputField.replaceWith(textElement);
-}
-
-// Make goal text editable on double click
-$(document).on('dblclick', '.goaltext', function() {
-    makeGoalEditable($(this));
-});
-
-// Save changes and revert to static text on blur
-$(document).on('blur', '.goal-edit-input', function() {
-    saveGoalText($(this));
-});
-    
+    // Function to update goal text
     function updateGoalText(goalId, newText) {
         const postData = {
-            goal_id: goalId,
+            goal_id: goalId, // Adjust this parameter according to your actual goal ID
             new_text: newText
         };
-    
+        
         $.ajax({
             type: 'POST',
             url: 'update_goal.php', // URL of your PHP script
@@ -931,16 +897,21 @@ $(document).on('blur', '.goal-edit-input', function() {
                 if (response.success) {
                     alert('Goal updated successfully.');
                 } else {
-                    // More detailed error message from the server if available
                     alert(response.message || 'Failed to update goal.');
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                // Detailed error message
                 alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
             }
         });
-    }    
+    }
+
+    // Event handler for when the user clicks away from the textarea
+    $('.goaltext').on('blur', function() {
+        const goalId = $(this).attr('id').replace('summernote', ''); // Extract goal ID from textarea ID
+        const newText = $(this).val();
+        updateGoalText(goalId, newText);
+    });
     
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
