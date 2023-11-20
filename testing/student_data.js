@@ -881,12 +881,40 @@ $(document).ready(function() {
         }
     }
 
-    $('.goaltext').on('blur', function() {
-        const goalId = $(this).attr('id').replace('goalTextArea', ''); // Extract goal ID
-        const newText = $(this).is('textarea') ? $(this).val() : $(this).text(); // Get the text based on element type
-    
-        updateGoalText(goalId, newText);
+// Function to replace the goal text with an input field
+function makeGoalEditable(goalElement) {
+    const currentText = goalElement.is('textarea') ? goalElement.val() : goalElement.text();
+    const inputField = $('<input>', {
+        type: 'text',
+        value: currentText,
+        class: 'goal-edit-input' // Add a class for styling if needed
     });
+
+    goalElement.replaceWith(inputField);
+    inputField.focus();
+}
+
+// Function to revert the input field back to static text and save the changes
+function saveGoalText(inputField) {
+    const newText = inputField.val();
+    const goalId = inputField.closest('.goal-container').data('goal-id'); // Assuming a container with goal ID
+
+    updateGoalText(goalId, newText);
+
+    // Revert back to static text display
+    const textElement = $('<div>', { class: 'goaltext' }).text(newText);
+    inputField.replaceWith(textElement);
+}
+
+// Make goal text editable on double click
+$(document).on('dblclick', '.goaltext', function() {
+    makeGoalEditable($(this));
+});
+
+// Save changes and revert to static text on blur
+$(document).on('blur', '.goal-edit-input', function() {
+    saveGoalText($(this));
+});
     
     function updateGoalText(goalId, newText) {
         const postData = {
