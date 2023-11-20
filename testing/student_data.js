@@ -890,7 +890,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: 'update_goal.php', // Adjust this URL as necessary
+            url: 'update_goal.php', // Ensure this is the correct endpoint
             data: postData,
             dataType: 'json',
             success: function(response) {
@@ -908,8 +908,8 @@ $(document).ready(function() {
 
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
-        const goalId = $(this).data('goal-id'); // Get the goal ID from the data attribute
-        const newText = $(this).siblings('.goaltext').val(); // Get the text from the corresponding textarea
+        const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
+        const newText = $(this).siblings('.goaltext').val(); // Retrieves the text of the corresponding textarea
         updateGoalText(goalId, newText);
     });
     
