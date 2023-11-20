@@ -884,15 +884,15 @@ $(document).ready(function() {
     // Function to update goal text
     function updateGoalText(goalId, newText) {
         const postData = {
-            goal_id: goalId, // Adjust this parameter according to your actual goal ID
+            goal_id: goalId,
             new_text: newText
         };
-        
+
         $.ajax({
             type: 'POST',
-            url: 'update_goal.php', // URL of your PHP script
+            url: 'update_goal.php', // Adjust this URL as necessary
             data: postData,
-            dataType: 'json', // Expecting JSON response
+            dataType: 'json',
             success: function(response) {
                 if (response.success) {
                     alert('Goal updated successfully.');
@@ -909,7 +909,7 @@ $(document).ready(function() {
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
         const goalId = $(this).data('goal-id'); // Get the goal ID from the data attribute
-        const newText = $('#summernote' + goalId).val(); // Get the text from the corresponding textarea
+        const newText = $(this).siblings('.goaltext').val(); // Get the text from the corresponding textarea
         updateGoalText(goalId, newText);
     });
     
