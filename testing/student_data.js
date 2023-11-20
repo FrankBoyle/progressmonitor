@@ -906,6 +906,33 @@ $(document).ready(function() {
         });
     }
 
+    $('#addNewGoalBtn').on('click', function() {
+        const newGoalText = $('#newGoalText').val().trim();
+
+        if (newGoalText === '') {
+            alert('Please enter a goal description.');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'add_new_goal.php', // Your server-side script to add a new goal
+            data: { goal_description: newGoalText },
+            success: function(response) {
+                if (response.success) {
+                    alert('New goal added successfully.');
+                    $('#newGoalText').val(''); // Clear the input field
+                    // Optionally, refresh the goals list or add the new goal to the DOM
+                } else {
+                    alert(response.message || 'Failed to add new goal.');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error occurred while adding new goal: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    });
+    
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
         const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
@@ -913,6 +940,7 @@ $(document).ready(function() {
         updateGoalText(goalId, newText);
     });
     
+
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
         if (isDateDuplicate(currentDate)) {
