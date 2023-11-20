@@ -298,7 +298,7 @@ if (isset($_GET['metadata_id'])) {
         </div>
         <div class="card-body">
             <!-- Add an ID to the goals container for easier targeting -->
-            <div class="row" id="goalsContainer">
+            <div class="row" id="goalsList">
                 <?php foreach ($goals as $index => $goal): ?>
                 <div class="col-md-4 col-sm-6 col-12">
                     <div class="info-box">
