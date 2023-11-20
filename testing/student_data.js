@@ -959,7 +959,6 @@ $(document).ready(function() {
             }
         },        
     });
-    location.reload();
 });
 
     // Event handler for the save button
