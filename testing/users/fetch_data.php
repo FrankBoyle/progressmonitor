@@ -137,6 +137,9 @@ if (isset($_GET['student_id'], $_GET['metadata_id'])) {
     $goals = fetchGoals($studentId, $metadataId, $schoolId);
 }
 
+$studentId = $_GET['student_id'];
+$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
+
 if (!$school_id) {
     return;  // If there's no school_id, exit early
 }
