@@ -888,6 +888,7 @@ $(document).ready(function() {
     });
     
     function updateGoalText(goalId, newText) {
+        console.log('Updating goal text:', { goalId, newText }); // Debug log
         const postData = {
             goal_id: goalId,
             new_text: newText
