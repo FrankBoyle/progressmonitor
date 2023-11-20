@@ -926,26 +926,44 @@ $(document).ready(function() {
             //goal_date: goalDate // Optional, depending on if your DB allows null for this field
         };
     
-        $.ajax({
-            type: 'POST',
-            url: 'add_new_goal.php', // Adjust if necessary
-            data: postData,
-            dataType: 'json', // Expecting JSON response
-            success: function(response) {
-                if (response.success) {
-                    alert('New goal added successfully.');
-                    $('#newGoalText').val(''); // Clear the input field
-                } else {
-                    alert('Failed to add new goal: ' + response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                // Log the response to see what's actually being returned
-                console.error('AJAX error response:', xhr.responseText);
-                alert('Error occurred while adding new goal. Please check the console for more details.');
+    // Perform the AJAX request
+    $.ajax({
+        type: 'POST',
+        url: 'add_new_goal.php', // Adjust if necessary
+        data: postData,
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                // Clear the input field
+                $('#newGoalText').val('');
+
+                // Construct the new goal HTML
+                const newGoalHTML = `
+                    <div class="col-md-4 col-sm-6 col-12">
+                        <div class="info-box">
+                            <div class="info-box-content">
+                                <span class="info-box-text">Goal ${response.goal_id}</span>
+                                <textarea id="summernote${response.goal_id}" class="goaltext" contenteditable="true"
+                                          data-goal-id="${response.goal_id}">
+                                    ${response.goal_description}
+                                </textarea>
+                                <button class="save-goal-btn" data-goal-id="${response.goal_id}">✔</button>
+                            </div>
+                        </div>
+                    </div>`;
+
+                // Append the new goal to the goals container
+                $('.row').append(newGoalHTML);
+            } else {
+                alert(response.message || 'Failed to add new goal.');
             }
-        });
-    }); 
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX error response:', xhr.responseText);
+            alert('Error occurred while adding new goal. Please check the console for more details.');
+        }
+    });
+});
 
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
