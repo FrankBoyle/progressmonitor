@@ -313,6 +313,10 @@ if (isset($_GET['metadata_id'])) {
     </div>
     <?php endforeach; ?>
 </div>
+<div class="add-goal-form">
+    <input type="text" id="newGoalText" placeholder="Enter new goal description">
+    <button id="addNewGoalBtn">Add New Goal</button>
+</div>
           </div>
         </div>
 </section>
