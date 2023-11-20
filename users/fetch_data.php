@@ -99,6 +99,14 @@ function getSmallestMetadataId($schoolId) {
         return null; // No matching records found
     }
 }
+
+function fetchGoals($studentId, $metadataId, $schoolId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT * FROM Goals WHERE student_id = ? AND metadata_id = ? AND school_id = ? ORDER BY goal_date DESC");
+    $stmt->execute([$studentId, $metadataId, $schoolId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
@@ -118,6 +126,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetchGroups') {
 // If student_id is not set, exit early
 if (!isset($_GET['student_id'])) {
     return;
+}
+
+if (isset($_GET['student_id'], $_GET['metadata_id'])) {
+    $studentId = $_GET['student_id'];
+    $metadataId = $_GET['metadata_id'];
+    $schoolId = fetchSchoolIdForStudent($studentId); // Assuming you have this function as shown in your script
+
+    // Fetch the goals
+    $goals = fetchGoals($studentId, $metadataId, $schoolId);
 }
 
 $studentId = $_GET['student_id'];
