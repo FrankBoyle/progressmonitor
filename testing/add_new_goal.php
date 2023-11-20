@@ -19,7 +19,7 @@ function handleError($errorMessage) {
 // Check if the required POST data is present
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['goal_description'])) {
     // Extract and sanitize input
-    $goalDescription = filter_var($_POST['goal_description'], FILTER_SANITIZE_STRING);
+    $goalDescription = htmlspecialchars($_POST['goal_description']);
     $studentId = filter_var($_POST['student_id'], FILTER_SANITIZE_NUMBER_INT);
     $metadataId = filter_var($_POST['metadata_id'], FILTER_SANITIZE_NUMBER_INT);
     $schoolId = filter_var($_POST['school_id'], FILTER_SANITIZE_NUMBER_INT);
