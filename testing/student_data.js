@@ -911,7 +911,7 @@ $(document).ready(function() {
         const studentId = CURRENT_STUDENT_ID; // Assuming you've already retrieved this
         const schoolId = $('#schoolIdInput').val(); // Make sure this input exists and holds the school_id
         const metadataId = urlParams.get('metadata_id'); // Retrieved from URL as in your example
-        const goalDate = getCurrentDate(); // Gets the current date in the format you need
+        //const goalDate = getCurrentDate(); // Gets the current date in the format you need
     
         if (newGoalText === '') {
             alert('Please enter a goal description.');
