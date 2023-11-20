@@ -924,6 +924,7 @@ $(document).ready(function() {
                     $('#newGoalText').val(''); // Clear the input field
                     // Optionally, refresh the goals list or add the new goal to the DOM
                 } else {
+                    console.log('New Goal Text:', newGoalText);
                     alert(response.message || 'Failed to add new goal.');
                 }
             },
@@ -932,7 +933,7 @@ $(document).ready(function() {
             }
         });
     });
-    
+
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
         const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
