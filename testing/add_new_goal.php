@@ -15,14 +15,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['goal_description']) &
     $studentId = $_POST['student_id'];
     $metadataId = $_POST['metadata_id'];
     $schoolId = $_POST['school_id'];
-    $goalDate = !empty($_POST['goal_date']) ? $_POST['goal_date'] : null;
 
-    // Prepare and bind
-    $stmt = $connection->prepare("INSERT INTO Goals (student_id, goal_description, goal_date, school_id, metadata_id) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("issii", $studentId, $goalDescription, $goalDate, $schoolId, $metadataId);
+    // Set goalDate to NULL if not provided
+    $goalDate = !empty($_POST['goal_date']) ? $_POST['goal_date'] : NULL;
+
+    // Adjust the SQL query to handle a NULL goal_date
+    $stmt = $connection->prepare("INSERT INTO Goals (student_id, goal_description, school_id, metadata_id, goal_date) VALUES (?, ?, ?, ?, ?)");
+    // Notice the order of parameters should match the SQL query's order
+    
+    // Bind the parameters, including a NULL value for goal_date if it's not set
+    $stmt->bind_param("issii", $studentId, $goalDescription, $schoolId, $metadataId, $goalDate);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'goal_id' => $connection->insert_id]); // Return the new goal ID
+        echo json_encode(['success' => true, 'goal_id' => $connection->insert_id]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Database insertion failed: ' . $stmt->error]);
     }
