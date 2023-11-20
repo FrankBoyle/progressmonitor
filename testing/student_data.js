@@ -923,7 +923,7 @@ $(document).ready(function() {
             student_id: studentId,
             metadata_id: metadataId,
             school_id: schoolId,
-            goal_date: goalDate // Optional, depending on if your DB allows null for this field
+            //goal_date: goalDate // Optional, depending on if your DB allows null for this field
         };
     
         $.ajax({
