@@ -884,32 +884,32 @@ $(document).ready(function() {
     // Function to update goal text
     function updateGoalText(goalId, newText) {
         const postData = {
-            goal_id: goalId,
+            goal_id: goalId, // Adjust this parameter according to your actual goal ID
             new_text: newText
         };
-
-        console.log("Updating goal", postData); // Log data being sent
-
+        
         $.ajax({
             type: 'POST',
-            url: 'update_goal.php', // Adjust this URL as necessary
+            url: 'update_goal.php', // URL of your PHP script
             data: postData,
-            dataType: 'json',
+            dataType: 'json', // Expecting JSON response
             success: function(response) {
-                console.log("Update response:", response); // Log response
-                alert(response.message || 'Goal updated successfully.');
+                if (response.success) {
+                    alert('Goal updated successfully.');
+                } else {
+                    alert(response.message || 'Failed to update goal.');
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error occurred:', textStatus, errorThrown); // Log errors
-                alert('Error occurred while updating goal.');
+                alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
             }
         });
+    }
 
-    // Use event delegation for dynamically loaded content
-    $(document).on('blur', '.goaltext', function() {
-        const goalId = $(this).attr('id').replace('summernote', ''); // Adjust this ID extraction method as necessary
+    // Event handler for when the user clicks away from the textarea
+    $('.goaltext').on('blur', function() {
+        const goalId = $(this).attr('id').replace('summernote', ''); // Extract goal ID from textarea ID
         const newText = $(this).val();
-        console.log("Goal ID:", goalId, "New Text:", newText); // Log captured data
         updateGoalText(goalId, newText);
     });
     
