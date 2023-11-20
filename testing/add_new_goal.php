@@ -1,7 +1,7 @@
 <?php
 // Include the database connection script
 include('./users/db.php');
-//header('Content-Type: application/json');
+header('Content-Type: application/json');
 
 // Disable error display, log errors instead
 ini_set('display_errors', 0);
