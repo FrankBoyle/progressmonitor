@@ -882,34 +882,37 @@ $(document).ready(function() {
     }
 
     $('.goaltext').on('blur', function() {
-        const goalId = $(this).attr('id').replace('goalTextArea', ''); // Extract goal ID from textarea ID
-        const newText = $(this).val();
+        const goalId = $(this).attr('id').replace('goalTextArea', ''); // Extract goal ID
+        const newText = $(this).is('textarea') ? $(this).val() : $(this).text(); // Get the text based on element type
+    
         updateGoalText(goalId, newText);
     });
     
     function updateGoalText(goalId, newText) {
-        console.log('Updating goal text:', { goalId, newText }); // Debug log
         const postData = {
             goal_id: goalId,
             new_text: newText
         };
-        
+    
         $.ajax({
             type: 'POST',
-            url: 'update_goal.php', // URL of your PHP script that will update the goal text
+            url: 'update_goal.php', // URL of your PHP script
             data: postData,
+            dataType: 'json', // Expecting JSON response
             success: function(response) {
                 if (response.success) {
                     alert('Goal updated successfully.');
                 } else {
-                    alert('Failed to update goal.');
+                    // More detailed error message from the server if available
+                    alert(response.message || 'Failed to update goal.');
                 }
             },
-            error: function() {
-                alert('Error occurred while updating goal.');
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Detailed error message
+                alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
             }
         });
-    }
+    }    
     
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
