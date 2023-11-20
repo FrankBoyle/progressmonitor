@@ -1,11 +1,12 @@
 <?php
 // Include the database connection script
 include('./users/db.php');
+header('Content-Type: application/json');
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['goal_description'])) {
     $goalDescription = $_POST['goal_description'];
