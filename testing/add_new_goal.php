@@ -4,9 +4,8 @@ include('./users/db.php');
 header('Content-Type: application/json');
 
 // Disable error display, log errors instead
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-ini_set('log_errors', 0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Check if the required POST data is present
