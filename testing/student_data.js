@@ -928,22 +928,24 @@ $(document).ready(function() {
     
         $.ajax({
             type: 'POST',
-            url: 'add_new_goal.php', // Your server-side script to add a new goal
+            url: 'add_new_goal.php', // Adjust if necessary
             data: postData,
+            dataType: 'json', // Expecting JSON response
             success: function(response) {
                 if (response.success) {
                     alert('New goal added successfully.');
                     $('#newGoalText').val(''); // Clear the input field
-                    // Optionally, refresh the goals list or add the new goal to the DOM
                 } else {
-                    alert(response.message || 'Failed to add new goal.');
+                    alert('Failed to add new goal: ' + response.message);
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error occurred while adding new goal: ' + textStatus + ' - ' + errorThrown);
+            error: function(xhr, status, error) {
+                // Log the response to see what's actually being returned
+                console.error('AJAX error response:', xhr.responseText);
+                alert('Error occurred while adding new goal. Please check the console for more details.');
             }
         });
-    });    
+    }); 
 
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
