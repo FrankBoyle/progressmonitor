@@ -934,13 +934,13 @@ $(document).ready(function() {
         dataType: 'json',
         success: function(response) {
             if (response.success) {
-                alert('New goal added successfully.');
+                //alert('New goal added successfully.');
                 // Refresh the page after a short delay to allow the alert to be read by the user
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000); // Adjust the delay as needed
             } else {
-                alert(response.message || 'Failed to add new goal.');
+                //alert(response.message || 'Failed to add new goal.');
             }
         },      
     });
