@@ -935,29 +935,14 @@ $(document).ready(function() {
         success: function(response) {
             if (response.success) {
                 alert('New goal added successfully.');
-                $('#newGoalText').val(''); // Clear the input field
-        
-                // Check if the new goal is already in the list
-                if ($('#goal-' + response.goal_id).length === 0) { // If the goal isn't found
-                    // Append the new goal to the goals container
-                    $('#goalsList').append(
-                        '<div class="col-md-4 col-sm-6 col-12" id="goal-' + response.goal_id + '">' +
-                        '<div class="info-box">' +
-                        '<div class="info-box-content">' +
-                        '<span class="info-box-text">Goal ' + response.goal_id + '</span>' +
-                        '<textarea class="goaltext" contenteditable="true" data-goal-id="' + response.goal_id + '">' +
-                        response.goal_description +
-                        '</textarea>' +
-                        '<button class="save-goal-btn" data-goal-id="' + response.goal_id + '">✔</button>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>'
-                    );
-                }
+                // Refresh the page after a short delay to allow the alert to be read by the user
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000); // Adjust the delay as needed
             } else {
                 alert(response.message || 'Failed to add new goal.');
             }
-        },        
+        },      
     });
 });
 
