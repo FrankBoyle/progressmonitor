@@ -881,6 +881,35 @@ $(document).ready(function() {
         }
     }
 
+    $('.goaltext').on('blur', function() {
+        const goalId = $(this).attr('id').replace('goalTextArea', ''); // Extract goal ID from textarea ID
+        const newText = $(this).val();
+        updateGoalText(goalId, newText);
+    });
+    
+    function updateGoalText(goalId, newText) {
+        const postData = {
+            goal_id: goalId,
+            new_text: newText
+        };
+        
+        $.ajax({
+            type: 'POST',
+            url: 'update_goal.php', // URL of your PHP script that will update the goal text
+            data: postData,
+            success: function(response) {
+                if (response.success) {
+                    alert('Goal updated successfully.');
+                } else {
+                    alert('Failed to update goal.');
+                }
+            },
+            error: function() {
+                alert('Error occurred while updating goal.');
+            }
+        });
+    }
+    
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
         if (isDateDuplicate(currentDate)) {
