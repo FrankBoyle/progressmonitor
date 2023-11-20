@@ -303,9 +303,11 @@ if (isset($_GET['metadata_id'])) {
         <div class="info-box">
             <div class="info-box-content">
                 <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-                <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true">
+                <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
+                          data-goal-id="<?php echo $goal['goal_id']; ?>">
                     <?php echo htmlspecialchars($goal['goal_description']); ?>
                 </textarea>
+                <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
             </div>
         </div>
     </div>

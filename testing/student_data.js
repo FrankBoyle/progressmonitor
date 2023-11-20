@@ -906,10 +906,10 @@ $(document).ready(function() {
         });
     }
 
-    // Event handler for when the user clicks away from the textarea
-    $('.goaltext').on('blur', function() {
-        const goalId = $(this).attr('id').replace('summernote', ''); // Extract goal ID from textarea ID
-        const newText = $(this).val();
+    // Event handler for the save button
+    $(document).on('click', '.save-goal-btn', function() {
+        const goalId = $(this).data('goal-id'); // Get the goal ID from the data attribute
+        const newText = $('#summernote' + goalId).val(); // Get the text from the corresponding textarea
         updateGoalText(goalId, newText);
     });
     
