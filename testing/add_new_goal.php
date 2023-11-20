@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['goal_description']) &
     $studentId = $_POST['student_id'];
     $metadataId = $_POST['metadata_id'];
     $schoolId = $_POST['school_id'];
-    $goalDate = isset($_POST['goal_date']) ? $_POST['goal_date'] : date('Y-m-d'); // Use current date if not provided
+    //$goalDate = isset($_POST['goal_date']) ? $_POST['goal_date'] : date('Y-m-d'); // Use current date if not provided
 
     // Prepare and bind
     $stmt = $connection->prepare("INSERT INTO Goals (student_id, goal_description, goal_date, school_id, metadata_id) VALUES (?, ?, ?, ?, ?)");
