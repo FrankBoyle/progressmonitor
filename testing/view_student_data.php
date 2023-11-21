@@ -118,6 +118,15 @@ if (isset($_GET['metadata_id'])) {
         padding: 0;
         margin: 0;
     }
+    .info-box-content {
+    position: relative;
+}
+
+.goal-checkbox {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+}
 </style>
 
 </head>
