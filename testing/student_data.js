@@ -895,7 +895,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    alert('Goal updated successfully.');
+                    //alert('Goal updated successfully.');
                 } else {
                     alert(response.message || 'Failed to update goal.');
                 }
