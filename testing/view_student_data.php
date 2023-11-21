@@ -119,14 +119,70 @@ if (isset($_GET['metadata_id'])) {
         margin: 0;
     }
 
-    .goal-container {
-    cursor: pointer; /* Change cursor to indicate it's clickable */
-    transition: background-color 0.3s; /* Smooth transition for background color */
+/* Add this to your stylesheet or in a <style> tag in the head of your HTML */
+.goal-item {
+    position: relative;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
 }
 
-.goal-container.selected {
-    background-color: #e8f0fe; /* Highlight color when selected */
+.goal-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
+.goal-checkbox-label {
+    display: inline-block;
+    position: relative;
+}
+
+.goal-checkbox-custom {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background: #ddd;
+    border-radius: 20px;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.goal-checkbox-custom::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.goal-checkbox:checked + .goal-checkbox-custom {
+    background: #84c784;
+}
+
+.goal-checkbox:checked + .goal-checkbox-custom::after {
+    transform: translateX(20px);
+}
+
+.goaltext {
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin-right: 10px;
+    flex-grow: 1;
+}
+
+.save-goal-btn {
+    padding: 5px 10px;
+    background: #84c784;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
 
 </style>
 
@@ -299,7 +355,6 @@ if (isset($_GET['metadata_id'])) {
         </div>
       </section>    
 
-
 <!-- Main content -->
 <section class="content">
     <div class="card card-outline card-info">
@@ -307,22 +362,24 @@ if (isset($_GET['metadata_id'])) {
             <h3 class="card-title">Goals</h3>
         </div>
         <div class="card-body">
-            <!-- Add an ID to the goals container for easier targeting -->
             <div class="row" id="goalsList">
                 <?php foreach ($goals as $index => $goal): ?>
-                <div class="col-md-4 col-sm-6 col-12">
-                <div class="info-box">
-    <div class="info-box-content">
-        <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-        <!-- Add a checkbox input here -->
-        <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
-        <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
-                  data-goal-id="<?php echo $goal['goal_id']; ?>">
-            <?php echo htmlspecialchars($goal['goal_description']); ?>
-        </textarea>
-        <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
-    </div>
-</div>
+                <div class="col-md-4 col-sm-6 col-12 goal-item" id="goal-<?php echo $goal['goal_id']; ?>">
+                    <div class="info-box">
+                        <div class="info-box-content">
+                            <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+                            <div class="goal-actions">
+                                <label class="goal-checkbox-label">
+                                    <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                    <span class="goal-checkbox-custom"></span>
+                                </label>
+                                <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                    <?php echo htmlspecialchars($goal['goal_description']); ?>
+                                </textarea>
+                                <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">Save</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <?php endforeach; ?>
             </div>
