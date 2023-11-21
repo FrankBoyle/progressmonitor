@@ -953,18 +953,15 @@ $(document).ready(function() {
         updateGoalText(goalId, newText);
     });
     
-    $('.selectable-goal').on('click', function() {
-        // Toggle the 'selected' class to indicate selection
-        $(this).toggleClass('selected');
+    $(document).on('click', '.goal-container', function() {
+        $(this).toggleClass('selected'); // Toggle the 'selected' class on click
         var goalId = $(this).data('goal-id');
-        // Your logic here to handle goal selection
-        console.log('Goal ' + goalId + ' selected status: ' + $(this).hasClass('selected'));
+        var isSelected = $(this).hasClass('selected');
+        
+        // Your logic for when a goal is selected or unselected
+        console.log('Goal ' + goalId + ' selected: ' + isSelected);
     });
-
-    // Prevent propagation to the selectable-goal click event when clicking on the button or textarea
-    $('.save-goal-btn, .goaltext').on('click', function(e) {
-        e.stopPropagation();
-    });    
+    
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
