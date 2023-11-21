@@ -118,15 +118,16 @@ if (isset($_GET['metadata_id'])) {
         padding: 0;
         margin: 0;
     }
-    .info-box-content {
-    position: relative;
+
+    .goal-container {
+    cursor: pointer; /* Change cursor to indicate it's clickable */
+    transition: background-color 0.3s; /* Smooth transition for background color */
 }
 
-.goal-checkbox {
-    position: absolute;
-    top: 10px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
+.goal-container.selected {
+    background-color: #e8f0fe; /* Highlight color when selected */
 }
+
 </style>
 
 </head>
@@ -312,7 +313,9 @@ if (isset($_GET['metadata_id'])) {
                 <div class="col-md-4 col-sm-6 col-12">
                 <div class="info-box">
     <div class="info-box-content">
-    <div class="info-box goal-container" data-goal-id="<?php echo $goal['goal_id']; ?>">
+        <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+        <!-- Add a checkbox input here -->
+        <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
         <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
                   data-goal-id="<?php echo $goal['goal_id']; ?>">
             <?php echo htmlspecialchars($goal['goal_description']); ?>
