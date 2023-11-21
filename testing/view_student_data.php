@@ -290,8 +290,8 @@ if (isset($_GET['metadata_id'])) {
       </section>    
 
 
-    <!-- Main content -->
-    <section class="content">
+<!-- Main content -->
+<section class="content">
     <div class="card card-outline card-info">
   <div class="card-header">
     <h3 class="card-title">Goals</h3>
@@ -312,15 +312,33 @@ if (isset($_GET['metadata_id'])) {
         <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
     </div>
 </div>
-    </div>
-    <?php endforeach; ?>
-</div>
-<div class="add-goal-form">
-    <input type="text" id="newGoalText" placeholder="Enter new goal description">
-    <button id="addNewGoalBtn">Add New Goal</button>
-</div>
-          </div>
+        <div class="card-header">
+            <h3 class="card-title">Goals</h3>
         </div>
+        <div class="card-body">
+            <!-- Add an ID to the goals container for easier targeting -->
+            <div class="row" id="goalsList">
+                <?php foreach ($goals as $index => $goal): ?>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="info-box">
+                        <div class="info-box-content">
+                            <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+                            <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
+                                      data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                <?php echo htmlspecialchars($goal['goal_description']); ?>
+                            </textarea>
+                            <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="add-goal-form">
+                <input type="text" id="newGoalText" placeholder="Enter new goal description">
+                <button id="addNewGoalBtn">Add New Goal</button>
+            </div>
+        </div>
+    </div>
 </section>
 
 <div>

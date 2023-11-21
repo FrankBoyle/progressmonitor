@@ -881,6 +881,79 @@ $(document).ready(function() {
         }
     }
 
+    // Function to update goal text
+    function updateGoalText(goalId, newText) {
+        const postData = {
+            goal_id: goalId,
+            new_text: newText
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: 'update_goal.php', // Ensure this is the correct endpoint
+            data: postData,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    alert('Goal updated successfully.');
+                } else {
+                    alert(response.message || 'Failed to update goal.');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    $('#addNewGoalBtn').on('click', function() {
+        const newGoalText = $('#newGoalText').val().trim();
+        const studentId = CURRENT_STUDENT_ID; // Assuming you've already retrieved this
+        const schoolId = $('#schoolIdInput').val(); // Make sure this input exists and holds the school_id
+        const metadataId = urlParams.get('metadata_id'); // Retrieved from URL as in your example
+        //const goalDate = getCurrentDate(); // Gets the current date in the format you need
+    
+        if (newGoalText === '') {
+            alert('Please enter a goal description.');
+            return;
+        }
+    
+        const postData = {
+            goal_description: newGoalText,
+            student_id: studentId,
+            metadata_id: metadataId,
+            school_id: schoolId,
+            //goal_date: goalDate // Optional, depending on if your DB allows null for this field
+        };
+    
+    // Perform the AJAX request
+    $.ajax({
+        type: 'POST',
+        url: 'add_new_goal.php', // Adjust if necessary
+        data: postData,
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                //alert('New goal added successfully.');
+                // Refresh the page after a short delay to allow the alert to be read by the user
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000); // Adjust the delay as needed
+            } else {
+                //alert(response.message || 'Failed to add new goal.');
+            }
+        },      
+    });
+});
+
+    // Event handler for the save button
+    $(document).on('click', '.save-goal-btn', function() {
+        const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
+        const newText = $(this).siblings('.goaltext').val(); // Retrieves the text of the corresponding textarea
+        updateGoalText(goalId, newText);
+    });
+    
+
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
         if (isDateDuplicate(currentDate)) {
