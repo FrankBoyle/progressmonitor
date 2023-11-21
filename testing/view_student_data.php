@@ -119,13 +119,16 @@ if (isset($_GET['metadata_id'])) {
         margin: 0;
     }
 
-    .goal-container {
-    cursor: pointer; /* Change cursor to indicate it's clickable */
-    transition: background-color 0.3s; /* Smooth transition for background color */
+    .selectable-goal {
+    cursor: pointer; /* Indicate you can click */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc; /* Optional border */
+    border-radius: 4px; /* Rounded corners */
 }
 
-.goal-container.selected {
-    background-color: #e8f0fe; /* Highlight color when selected */
+.selectable-goal.selected {
+    background-color: #e9ecef; /* Change background to indicate selection */
 }
 
 </style>
