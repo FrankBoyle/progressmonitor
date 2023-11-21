@@ -953,6 +953,15 @@ $(document).ready(function() {
         updateGoalText(goalId, newText);
     });
     
+    $(document).on('click', '.goal-container', function() {
+        $(this).toggleClass('selected'); // Toggle the 'selected' class on click
+        var goalId = $(this).data('goal-id');
+        var isSelected = $(this).hasClass('selected');
+        
+        // Your logic for when a goal is selected or unselected
+        console.log('Goal ' + goalId + ' selected: ' + isSelected);
+    });
+    
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
