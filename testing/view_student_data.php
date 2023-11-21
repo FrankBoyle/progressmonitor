@@ -293,25 +293,6 @@ if (isset($_GET['metadata_id'])) {
 <!-- Main content -->
 <section class="content">
     <div class="card card-outline card-info">
-  <div class="card-header">
-    <h3 class="card-title">Goals</h3>
-  </div>
-  <div class="card-body">
-  <div class="row">
-    <?php foreach ($goals as $index => $goal): ?>
-    <div class="col-md-4 col-sm-6 col-12">
-    <div class="info-box">
-    <div class="info-box-content">
-        <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-        <!-- Add a checkbox input here -->
-        <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
-        <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
-                  data-goal-id="<?php echo $goal['goal_id']; ?>">
-            <?php echo htmlspecialchars($goal['goal_description']); ?>
-        </textarea>
-        <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
-    </div>
-</div>
         <div class="card-header">
             <h3 class="card-title">Goals</h3>
         </div>
@@ -519,11 +500,7 @@ if (isset($_GET['metadata_id'])) {
 </div>
 <!-- ./wrapper -->
 
-<!-- REQUIRED SCRIPTS -->
-<!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
-
-  <script>
+<script>
     $(document).ready(function() {
       $('.goaltext').summernote({
         toolbar: [
