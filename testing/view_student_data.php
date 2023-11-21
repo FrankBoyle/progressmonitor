@@ -300,16 +300,18 @@ if (isset($_GET['metadata_id'])) {
   <div class="row">
     <?php foreach ($goals as $index => $goal): ?>
     <div class="col-md-4 col-sm-6 col-12">
-        <div class="info-box">
-            <div class="info-box-content">
-                <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-                <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
-                          data-goal-id="<?php echo $goal['goal_id']; ?>">
-                    <?php echo htmlspecialchars($goal['goal_description']); ?>
-                </textarea>
-                <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
-            </div>
-        </div>
+    <div class="info-box">
+    <div class="info-box-content">
+        <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+        <!-- Add a checkbox input here -->
+        <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
+        <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
+                  data-goal-id="<?php echo $goal['goal_id']; ?>">
+            <?php echo htmlspecialchars($goal['goal_description']); ?>
+        </textarea>
+        <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
+    </div>
+</div>
     </div>
     <?php endforeach; ?>
 </div>
