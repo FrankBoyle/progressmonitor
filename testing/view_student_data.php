@@ -311,9 +311,8 @@ if (isset($_GET['metadata_id'])) {
                 <?php foreach ($goals as $index => $goal): ?>
                 <div class="col-md-4 col-sm-6 col-12">
                 <div class="info-box">
-                <div class="info-box goal-container" data-goal-id="<?php echo $goal['goal_id']; ?>">
-
     <div class="info-box-content">
+    <div class="info-box goal-container" data-goal-id="<?php echo $goal['goal_id']; ?>">
         <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
                   data-goal-id="<?php echo $goal['goal_id']; ?>">
             <?php echo htmlspecialchars($goal['goal_description']); ?>
