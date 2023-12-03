@@ -258,21 +258,12 @@ if (isset($_POST['add_new_student'])) {
             <input type="text" id="new_student_name" name="new_student_name">
             <input type="submit" name="add_new_student" value="Add New Student">
           </form>
+          
           <!-- Form to create a new group -->
           <form method="post">
             <input type="text" name="group_name" placeholder="Group Name">
-              <select name="group_type">
-                <option value="case_manager">Case Manager</option>
-                <option value="math">Math</option>
-                <option value="reading">Reading</option>
-                <option value="writing">Writing</option>
-                <option value="speech">Speech Therapy</option>
-                <option value="ot">Occupational Therapy</option>
-              </select>
-            <input type="number" name="school_id" placeholder="School ID">
             <button type="submit" name="create_group">Create Group</button>
           </form>
-
         </div>
       </div>
     </div>
@@ -327,10 +318,10 @@ if (isset($_POST['add_new_student'])) {
                     <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
                       <select name="group_id">
                         <?php foreach ($groups as $group): ?>
-                        <option value="<?= $group['group_id'] ?>"><?= $group['group_name'] ?></option>
+                          <option value="<?= $group['group_id'] ?>"><?= htmlspecialchars($group['group_name']) ?></option>
                         <?php endforeach; ?>
                       </select>
-                      <button type="submit" name="assign_to_group">Assign to Group</button>
+                    <button type="submit" name="assign_to_group">Assign to Group</button>
                   </form>
                 </span>
               </div>
