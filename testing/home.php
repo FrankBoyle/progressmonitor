@@ -282,6 +282,12 @@ $students = fetchStudentsByTeacher($teacherId);
                         $metadataId = getSmallestMetadataId($student['school_id']);
                       ?>
                       <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= htmlspecialchars($student['name']) ?></a><br>
+                        <!-- Archive button -->
+                        <form method="post">
+                        <input type="hidden" name="student_id_to_archive" value="<?= $student['student_id'] ?>">
+                        <button type="submit" name="archive_student">Archive</button>
+                      </form>
+                      
                       <?php endforeach; ?>
                       <?php else: ?>
                           No students found for this teacher.

@@ -9,7 +9,7 @@ include('db.php');
 
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = FALSE");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
@@ -40,6 +40,22 @@ function addNewStudent($studentName, $teacherId) {
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
+}
+
+function archiveStudent($studentId) {
+    global $connection;
+
+    $stmt = $connection->prepare("UPDATE Students SET archived = TRUE WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+
+    return "Student archived successfully.";
+}
+
+if (isset($_POST['archive_student'])) {
+    $studentIdToArchive = $_POST['student_id_to_archive'];
+    if (!empty($studentIdToArchive)) {
+        $message = archiveStudent($studentIdToArchive);
+    }
 }
 
 function getSmallestMetadataId($schoolId) {
