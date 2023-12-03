@@ -9,7 +9,8 @@ include('db.php');
 
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = FALSE");
+    $archived = $archived ? 'TRUE' : 'FALSE';
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = $archived");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
@@ -51,11 +52,35 @@ function archiveStudent($studentId) {
     return "Student archived successfully.";
 }
 
+function unarchiveStudent($studentId) {
+    global $connection;
+
+    $stmt = $connection->prepare("UPDATE Students SET archived = FALSE WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+
+    return "Student unarchived successfully.";
+}
+
 if (isset($_POST['archive_student'])) {
     $studentIdToArchive = $_POST['student_id_to_archive'];
     if (!empty($studentIdToArchive)) {
         $message = archiveStudent($studentIdToArchive);
     }
+}
+
+if (isset($_POST['toggle_view'])) {
+    $showArchived = isset($_POST['show_archived']) && $_POST['show_archived'] == '1';
+    $students = fetchStudents($teacherId, $showArchived);
+} elseif (isset($_POST['unarchive_student'])) {
+    $studentIdToUnarchive = $_POST['student_id_to_toggle'];
+    if (!empty($studentIdToUnarchive)) {
+        $message = unarchiveStudent($studentIdToUnarchive);
+        // Optionally, refresh the list of students
+        $students = fetchStudents($teacherId, true);
+    }
+} else {
+    // Default view for active students
+    $students = fetchStudents($teacherId);
 }
 
 function getSmallestMetadataId($schoolId) {
