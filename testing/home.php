@@ -264,16 +264,16 @@ if (isset($_POST['add_new_student'])) {
 
             <!-- Toggle Button -->
             <form method="post">
-  <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
-  <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
-</form>
+              <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
+              <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
+            </form>
 
 
-          <?php if ($message): ?>
-            <p><?= $message ?></p>
-          <?php endif; ?>
+            <?php if ($message): ?>
+              <p><?= $message ?></p>
+            <?php endif; ?>
 
-          <?php if (!empty($students)): ?>
+            <?php if (!empty($students)): ?>
             <?php 
               // Sort students alphabetically by 'name'
               usort($students, function($a, $b) {
@@ -288,18 +288,18 @@ if (isset($_POST['add_new_student'])) {
                     <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= htmlspecialchars($student['name']) ?></a>
                   </span>
                   <span style="margin-left: 10px;">
-  <form method="post" style="display: inline;">
-    <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-    <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
-      <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-    </button>
-  </form>
-</span>
+                    <form method="post" style="display: inline;">
+                      <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+                      <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
+                        <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+                      </button>
+                    </form>
+                  </span>
                 </div>
               <?php endforeach; ?>
             </div>
           <?php else: ?>
-              No students found for this teacher.
+            No students found for this teacher.
           <?php endif; ?>
         </div>
       </div>
