@@ -15,8 +15,6 @@ if (isset($_POST['add_new_student'])) {
         $message = addNewStudent($newStudentName, $teacherId);
     }
 }
-
-$students = fetchStudentsByTeacher($teacherId, $archived = false);
 ?>
 
 <!DOCTYPE html>

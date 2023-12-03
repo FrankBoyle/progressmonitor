@@ -71,8 +71,8 @@ if (isset($_POST['archive_student'])) {
     }
 }
 
+// Toggle the view based on the form submission
 if (isset($_POST['toggle_view'])) {
-    // Toggle the view based on the form submission
     $_SESSION['show_archived'] = $_POST['show_archived'] == '1';
 }
 
