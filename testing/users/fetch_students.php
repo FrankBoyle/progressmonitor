@@ -113,6 +113,29 @@ function getSmallestMetadataId($schoolId) {
     }
 }
 
+if (isset($_POST['create_group'])) {
+    $groupName = $_POST['group_name'];
+    $groupType = $_POST['group_type'];
+    $schoolId = $_POST['school_id']; // Ensure this matches your session or user data
+
+    // SQL to insert a new group
+    $stmt = $connection->prepare("INSERT INTO Groups (group_name, group_type, school_id) VALUES (?, ?, ?)");
+    $stmt->execute([$groupName, $groupType, $schoolId]);
+
+    $message = "New group created successfully.";
+}
+
+if (isset($_POST['assign_to_group'])) {
+    $studentId = $_POST['student_id'];
+    $groupId = $_POST['group_id'];
+
+    // SQL to insert student-group relationship
+    $stmt = $connection->prepare("INSERT INTO StudentGroup (student_id, group_id) VALUES (?, ?)");
+    $stmt->execute([$studentId, $groupId]);
+
+    $message = "Student assigned to group successfully.";
+}
+
 $teacherId = $_SESSION['teacher_id'];
 $message = "";  // Initialize an empty message variable
 
