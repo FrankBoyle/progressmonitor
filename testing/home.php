@@ -258,34 +258,48 @@ $students = fetchStudentsByTeacher($teacherId);
     </form>
 
     <section class="content">
-  <!-- Toggle Button -->
-  <form method="post">
-      <button type="submit" name="toggle_view"><?= isset($_POST['show_archived']) ? 'Show Active Students' : 'Show Archived Students' ?></button>
-      <input type="hidden" name="show_archived" value="<?= isset($_POST['show_archived']) ? '0' : '1' ?>">
-  </form>
-
-  <!-- Students List -->
   <div class="row">
-    <!-- ... rest of your layout ... -->
-    <div style="display: flex; flex-direction: column;">
-      <?php foreach ($students as $student): ?>
-        <div style="margin-bottom: 10px;">
-          <span>
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= htmlspecialchars($student['name']) ?></a>
-          </span>
-          <span style="margin-left: 10px;">
-            <form method="post" style="display: inline;">
-              <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-              <button type="submit" name="<?= isset($_POST['show_archived']) ? 'unarchive_student' : 'archive_student' ?>"><?= isset($_POST['show_archived']) ? 'Unarchive' : 'Archive' ?></button>
-            </form>
-          </span>
+    <div class="col-md-12">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+          <h3 class="card-title">
+            STUDENT LIST
+          </h3><br>
+          <?php if ($message): ?>
+            <p><?= $message ?></p>
+          <?php endif; ?>
+
+          <?php if (!empty($students)): ?>
+            <?php 
+              // Sort students alphabetically by 'name'
+              usort($students, function($a, $b) {
+                return strcmp($a['name'], $b['name']);
+              });
+            ?>
+            <div style="display: flex; flex-direction: column;">
+              <?php foreach ($students as $student): ?>
+                <div style="margin-bottom: 10px;">
+                  <!-- Student Name and Archive Button in the same line -->
+                  <span>
+                    <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= htmlspecialchars($student['name']) ?></a>
+                  </span>
+                  <span style="margin-left: 10px;">
+                    <form method="post" style="display: inline;">
+                      <input type="hidden" name="student_id_to_archive" value="<?= $student['student_id'] ?>">
+                      <button type="submit" name="archive_student">Archive</button>
+                    </form>
+                  </span>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          <?php else: ?>
+              No students found for this teacher.
+          <?php endif; ?>
         </div>
-      <?php endforeach; ?>
+      </div>
     </div>
-    <!-- ... -->
   </div>
 </section>
-
 
     <div class="content">
       <div class="container-fluid">
