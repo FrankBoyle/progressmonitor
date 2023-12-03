@@ -74,9 +74,6 @@ if (isset($_POST['toggle_view'])) {
     $showArchived = false;
 }
 
-// Fetch students based on the current view
-$students = fetchStudentsByTeacher($teacherId, $showArchived);
-
 function getSmallestMetadataId($schoolId) {
     global $connection;
 
