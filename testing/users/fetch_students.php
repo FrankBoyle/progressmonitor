@@ -65,9 +65,20 @@ function unarchiveStudent($studentId) {
 }
 
 if (isset($_POST['archive_student'])) {
-    $studentIdToArchive = $_POST['student_id_to_archive'];
-    if (!empty($studentIdToArchive)) {
+    if (isset($_POST['student_id_to_toggle'])) {
+        $studentIdToArchive = $_POST['student_id_to_toggle'];
         $message = archiveStudent($studentIdToArchive);
+    } else {
+        $message = "Student ID not provided for archiving.";
+    }
+}
+
+if (isset($_POST['unarchive_student'])) {
+    if (isset($_POST['student_id_to_toggle'])) {
+        $studentIdToUnarchive = $_POST['student_id_to_toggle'];
+        $message = unarchiveStudent($studentIdToUnarchive);
+    } else {
+        $message = "Student ID not provided for unarchiving.";
     }
 }
 
