@@ -12,6 +12,7 @@ if (isset($_POST['add_new_student'])) {
         $message = addNewStudent($newStudentName, $teacherId);
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -287,12 +288,11 @@ if (isset($_POST['add_new_student'])) {
                     <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= htmlspecialchars($student['name']) ?></a>
                   </span>
                   <span style="margin-left: 10px;">
-  <form method="post" style="display: inline;">
-    <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-    <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
-      <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-    </button>
-  </form>
+                  <form method="post">
+    <input type="hidden" name="student_id_to_archive" value="<?= $student['student_id'] ?>">
+    <button type="submit" name="archive_student">Archive</button>
+</form>
+
 </span>
                 </div>
               <?php endforeach; ?>
