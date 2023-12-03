@@ -42,6 +42,8 @@ function addNewStudent($studentName, $teacherId) {
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
+} else {
+    $teacherId = $_SESSION['teacher_id'];
 }
 
 function archiveStudent($studentId) {
