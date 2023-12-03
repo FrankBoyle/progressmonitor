@@ -318,23 +318,16 @@ if (isset($_POST['add_new_student'])) {
                 <span>
                   <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'><?= htmlspecialchars($student['name']) ?></a>
                 </span>
-                <span style="margin-left: 10px;">
-                  <form method="post" style="display: inline;">
+                <?php if (!$isGroupFilterActive): ?>
+            <span style="margin-left: 10px;">
+                <form method="post" style="display: inline;">
                     <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-                      <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
+                    <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
                         <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-                      </button>
-                  </form>
-                  <form method="post">
-                    <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
-                      <select name="group_id">
-                        <?php foreach ($groups as $group): ?>
-                          <option value="<?= $group['group_id'] ?>"><?= htmlspecialchars($group['group_name']) ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    <button type="submit" name="assign_to_group">Assign to Group</button>
-                  </form>
-                </span>
+                    </button>
+                </form>
+            </span>
+        <?php endif; ?>
               </div>
             <?php endforeach; ?>
           </div>
