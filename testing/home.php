@@ -257,7 +257,7 @@ $students = fetchStudentsByTeacher($teacherId);
         <input type="submit" name="add_new_student" value="Add New Student">
     </form>
 
-    <section class="content">
+<section class="content">
   <div class="row">
     <div class="col-md-12">
       <div class="card card-outline card-info">
@@ -265,6 +265,13 @@ $students = fetchStudentsByTeacher($teacherId);
           <h3 class="card-title">
             STUDENT LIST
           </h3><br>
+
+            <!-- Toggle Button -->
+            <form method="post">
+              <button type="submit" name="toggle_view"><?= isset($_POST['show_archived']) && $_POST['show_archived'] == '1' ? 'Show Active Students' : 'Show Archived Students' ?></button>
+              <input type="hidden" name="show_archived" value="<?= isset($_POST['show_archived']) && $_POST['show_archived'] == '1' ? '0' : '1' ?>">
+            </form>
+
           <?php if ($message): ?>
             <p><?= $message ?></p>
           <?php endif; ?>
@@ -284,11 +291,13 @@ $students = fetchStudentsByTeacher($teacherId);
                     <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= htmlspecialchars($student['name']) ?></a>
                   </span>
                   <span style="margin-left: 10px;">
-                    <form method="post" style="display: inline;">
-                      <input type="hidden" name="student_id_to_archive" value="<?= $student['student_id'] ?>">
-                      <button type="submit" name="archive_student">Archive</button>
-                    </form>
-                  </span>
+  <form method="post" style="display: inline;">
+    <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+    <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
+      <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+    </button>
+  </form>
+</span>
                 </div>
               <?php endforeach; ?>
             </div>

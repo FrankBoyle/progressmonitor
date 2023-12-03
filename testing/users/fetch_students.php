@@ -69,19 +69,13 @@ if (isset($_POST['archive_student'])) {
 }
 
 if (isset($_POST['toggle_view'])) {
-    $showArchived = isset($_POST['show_archived']) && $_POST['show_archived'] == '1';
-    $students = fetchStudentsByTeacher($teacherId, $showArchived);
-} elseif (isset($_POST['unarchive_student'])) {
-    $studentIdToUnarchive = $_POST['student_id_to_toggle'];
-    if (!empty($studentIdToUnarchive)) {
-        $message = unarchiveStudent($studentIdToUnarchive);
-        // Optionally, refresh the list of students
-        $students = fetchStudentsByTeacher($teacherId, true);
-    }
+    $showArchived = $_POST['show_archived'] == '1';
 } else {
-    // Default view for active students
-    $students = fetchStudentsByTeacher($teacherId, $showArchived);
+    $showArchived = false;
 }
+
+// Fetch students based on the current view
+$students = fetchStudentsByTeacher($teacherId, $showArchived);
 
 function getSmallestMetadataId($schoolId) {
     global $connection;
