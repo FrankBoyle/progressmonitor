@@ -282,30 +282,33 @@ if (isset($_POST['add_new_student'])) {
             ?>
             <div style="display: flex; flex-direction: column;">
               <?php foreach ($students as $student): ?>
-                <div style="margin-bottom: 10px;">
-                  <!-- Student Name and Archive Button in the same line -->
-                  <span>
-                    <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= $metadataId ?>'><?= htmlspecialchars($student['name']) ?></a>
-                  </span>
-                  <span style="margin-left: 10px;">
-                    <form method="post" style="display: inline;">
-                      <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+              <?php
+                // Fetch the smallest metadata_id for this student's school_id
+                $metadataId = getSmallestMetadataId($student['school_id']);
+              ?>
+              <div style="margin-bottom: 10px;">
+                <span>
+                  <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'><?= htmlspecialchars($student['name']) ?></a>
+                </span>
+                <span style="margin-left: 10px;">
+                  <form method="post" style="display: inline;">
+                    <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
                       <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
                         <?= $showArchived ? 'Unarchive' : 'Archive' ?>
                       </button>
-                    </form>
-                  </span>
-                </div>
-              <?php endforeach; ?>
-            </div>
-          <?php else: ?>
-            No students found for this teacher.
-          <?php endif; ?>
+                  </form>
+                </span>
+              </div>
+            <?php endforeach; ?>
+          </div>
+            <?php else: ?>
+              No students found for this teacher.
+            <?php endif; ?>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
     <div class="content">
       <div class="container-fluid">
