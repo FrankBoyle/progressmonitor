@@ -124,6 +124,33 @@ if (isset($_POST['create_group'])) {
     $message = "New group created successfully.";
 }
 
+if (isset($_POST['filter_by_group'])) {
+    $selectedGroupId = $_POST['selected_group_id'];
+
+    if (!empty($selectedGroupId)) {
+        // Fetch students assigned to the selected group
+        $students = fetchStudentsByGroup($teacherId, $selectedGroupId);
+    } else {
+        // Fetch all students if no group is selected
+        $students = fetchStudentsByTeacher($teacherId, $showArchived);
+    }
+} else {
+    // Default student fetch
+    $students = fetchStudentsByTeacher($teacherId, $showArchived);
+}
+
+// Function to fetch students by group
+function fetchStudentsByGroup($teacherId, $groupId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT s.* FROM Students s 
+                                   INNER JOIN StudentGroup sg ON s.student_id = sg.student_id 
+                                   WHERE sg.group_id = ? AND s.school_id IN 
+                                   (SELECT school_id FROM Teachers WHERE teacher_id = ?)");
+    $stmt->execute([$groupId, $teacherId]);
+    return $stmt->fetchAll();
+}
+
+
 // Fetch groups for the specific school
 $schoolId = $_SESSION['school_id'];
 $stmt = $connection->prepare("SELECT group_id, group_name FROM Groups WHERE school_id = ?");
