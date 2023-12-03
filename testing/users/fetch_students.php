@@ -7,10 +7,10 @@ error_reporting(E_ALL);
 
 include('db.php');
 
-function fetchStudentsByTeacher($teacherId) {
+function fetchStudentsByTeacher($teacherId, $archived = false) {
     global $connection;
-    $archived = $archived ? 'TRUE' : 'FALSE';
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = $archived");
+    $archivedValue = $archived ? 'TRUE' : 'FALSE'; // Determine whether to fetch archived students
+    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = $archivedValue");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll();
 }
@@ -70,17 +70,17 @@ if (isset($_POST['archive_student'])) {
 
 if (isset($_POST['toggle_view'])) {
     $showArchived = isset($_POST['show_archived']) && $_POST['show_archived'] == '1';
-    $students = fetchStudents($teacherId, $showArchived);
+    $students = fetchStudentsByTeacher($teacherId, $showArchived);
 } elseif (isset($_POST['unarchive_student'])) {
     $studentIdToUnarchive = $_POST['student_id_to_toggle'];
     if (!empty($studentIdToUnarchive)) {
         $message = unarchiveStudent($studentIdToUnarchive);
         // Optionally, refresh the list of students
-        $students = fetchStudents($teacherId, true);
+        $students = fetchStudentsByTeacher($teacherId, true);
     }
 } else {
     // Default view for active students
-    $students = fetchStudents($teacherId);
+    $students = fetchStudentsByTeacher($teacherId);
 }
 
 function getSmallestMetadataId($schoolId) {
