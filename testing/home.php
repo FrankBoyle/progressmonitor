@@ -268,9 +268,10 @@ $students = fetchStudentsByTeacher($teacherId, $archived = false);
 
             <!-- Toggle Button -->
             <form method="post">
-              <button type="submit" name="toggle_view"><?= isset($_POST['show_archived']) && $_POST['show_archived'] == '1' ? 'Show Active Students' : 'Show Archived Students' ?></button>
-              <input type="hidden" name="show_archived" value="<?= isset($_POST['show_archived']) && $_POST['show_archived'] == '1' ? '0' : '1' ?>">
-            </form>
+  <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
+  <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
+</form>
+
 
           <?php if ($message): ?>
             <p><?= $message ?></p>
