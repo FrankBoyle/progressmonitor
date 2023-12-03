@@ -5,9 +5,6 @@ if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
 
-$teacherId = $_SESSION['teacher_id'];
-$message = "";  // Initialize an empty message variable
-
 // Handle form submission for adding new student
 if (isset($_POST['add_new_student'])) {
     $newStudentName = $_POST['new_student_name'];
