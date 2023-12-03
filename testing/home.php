@@ -246,12 +246,23 @@ if (isset($_POST['add_new_student'])) {
     </div>
   </div>
 </section>
-      <!-- Add New Student Form -->
-    <form method="post" action="">
-        <label for="new_student_name">New Student Name:</label>
-        <input type="text" id="new_student_name" name="new_student_name">
-        <input type="submit" name="add_new_student" value="Add New Student">
-    </form>
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+          <!-- Add New Student Form -->
+          <form method="post" action="">
+            <label for="new_student_name">New Student Name:</label>
+            <input type="text" id="new_student_name" name="new_student_name">
+            <input type="submit" name="add_new_student" value="Add New Student">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="content">
   <div class="row">
