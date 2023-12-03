@@ -107,7 +107,7 @@ if (isset($_POST['add_new_student'])) {
     }
 }
 
-$students = fetchStudentsByTeacher($teacherId);
+//$students = fetchStudentsByTeacher($teacherId);
 
 ?>
 
