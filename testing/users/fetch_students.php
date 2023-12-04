@@ -132,7 +132,7 @@ if (isset($_POST['selected_group_id'])) {
 
     if ($selectedGroupId != "all_students") {
         // Fetch students assigned to the selected group
-        $students = fetchStudentsByGroup($selectedGroupId);
+        $students = fetchStudentsByGroup($teacherId, $selectedGroupId);
     } else {
         // Fetch all students
         $students = fetchStudentsByTeacher($teacherId, $showArchived);
