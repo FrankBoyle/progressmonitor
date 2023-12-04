@@ -310,7 +310,7 @@ function extractLastName($fullName) {
         <?php if ($isGroupFilterActive): ?>
           <form method="post" style="display: inline;">
             <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
-            <button type="submit" name="remove_from_group" style="background-color: red; color: white; border: none; cursor: pointer; padding: 2px 5px;">X</button>
+            <button type="submit" name="remove_from_group" onclick="return confirm('Are you sure you want to remove this student from the group?');" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">x</button>
           </form>
         <?php endif; ?>
 
