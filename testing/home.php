@@ -212,12 +212,7 @@ function extractLastName($fullName) {
     <div class="col-md-12">
       <div class="card card-outline card-info">
         <div class="card-header">
-          <!-- Add New Student Form -->
-          <form method="post" action="">
-            <label for="new_student_name">New Student Name:</label>
-            <input type="text" id="new_student_name" name="new_student_name">
-            <input type="submit" name="add_new_student" value="Add New Student">
-          </form>
+
           
           <!-- Form to create a new group -->
           <form method="post">
@@ -299,6 +294,13 @@ function extractLastName($fullName) {
             <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
           </form>
 
+          <!-- Add New Student Form -->
+          <form method="post" action="">
+            <label for="new_student_name">New Student Name:</label>
+            <input type="text" id="new_student_name" name="new_student_name">
+            <input type="submit" name="add_new_student" value="Add New Student">
+          </form>
+          
           <?php if (!empty($message)): ?>
     <p><?= htmlspecialchars($message) ?></p>
 <?php endif; ?>
