@@ -446,18 +446,15 @@ function extractLastName($fullName) {
             url: "./users/remove_student_from_group.php", // Correct path to your PHP script
             data: { student_id: studentId, group_id: groupId },
             success: function(response) {
-                // Handle the response
-                if(response === 'success') {
-                    // Option 1: Remove the student's element from the list
-                    $thisButton.closest('div').remove();
+    var data = JSON.parse(response);
+    if(data.status === 'success') {
+        // Update the UI or notify the user
+    } else {
+        // Handle errors
+        alert(data.message);
+    }
+}
 
-                    // Option 2: Or, update the list of students dynamically
-                    // You may need to write additional code here depending on how your student list is structured
-                } else {
-                    // Handle the case where PHP script sends back a different response
-                    alert("Could not remove the student from the group.");
-                }
-            },
             error: function() {
                 alert("Error removing student from the group.");
             }
