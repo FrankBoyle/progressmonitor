@@ -296,9 +296,10 @@ if (!isset($_SESSION['teacher_id'])) {
             <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
           </form>
 
-          <?php if ($message): ?>
-            <p><?= $message ?></p>
-          <?php endif; ?>
+          <?php if (!empty($message)): ?>
+    <p><?= htmlspecialchars($message) ?></p>
+<?php endif; ?>
+
 
           <?php if (!empty($students)): ?>
             <div style="display: flex; flex-direction: column;">
