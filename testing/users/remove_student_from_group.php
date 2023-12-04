@@ -28,12 +28,14 @@ function removeStudentFromGroup($studentId, $groupId) {
     }
 }
 
-// Handle AJAX request
+// Inside remove_student_from_group.php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['student_id'], $_POST['group_id'])) {
     $studentId = $_POST['student_id'];
     $groupId = $_POST['group_id'];
     
     // Call the function to remove the student from the group
     removeStudentFromGroup($studentId, $groupId);
+    // The rest of your PHP script
 }
+
 ?>
