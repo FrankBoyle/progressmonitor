@@ -277,29 +277,29 @@ function extractLastName($fullName) {
             <button type="submit" name="create_group">Create Group</button>
           </form>
 
-          <!-- List groups with edit and delete options -->
-          <?php foreach ($groups as $group): ?>
-            <form method="post">
-              <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-              <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
-              <button type="submit" name="edit_group">Update</button>
-              <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete</button>
-            </form>
-          <?php endforeach; ?>
+<!-- List groups with edit and delete options -->
+<?php foreach ($groups as $group): ?>
+    <form method="post">
+        <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+        <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
+        <button type="submit" name="edit_group">Update</button>
+        <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
+    </form>
+<?php endforeach; ?>
 
-          <!-- Dropdown to select a group for filtering -->
-          <form method="post" id="group_filter_form">
-            <select name="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
-              <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
-              <?php foreach ($groups as $group): ?>
-                <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
-                  <?= htmlspecialchars($group['group_name']) ?>
-                </option>
-              <?php endforeach; ?>
-            </select>
-          </form>
+<!-- Dropdown to select a group for filtering -->
+<form method="post" id="group_filter_form">
+    <select name="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
+        <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
+        <?php foreach ($groups as $group): ?>
+            <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
+                <?= htmlspecialchars($group['group_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</form>
 
-        </div>
+</div>
       </div>
     </div>
   </div>
@@ -340,8 +340,9 @@ function extractLastName($fullName) {
           </form>
 
           <?php if (!empty($message)): ?>
-            <p><?= htmlspecialchars($message) ?></p>
-          <?php endif; ?>
+    <p><?= htmlspecialchars($message) ?></p>
+<?php endif; ?>
+
 
           <?php if (!empty($students)): ?>
             <div style="display: flex; flex-direction: column;">
@@ -353,6 +354,7 @@ function extractLastName($fullName) {
                       <?= htmlspecialchars($student['name']) ?>
                     </a>
                   </span>
+
                   <?php if (!$isGroupFilterActive): ?>
                     <form method="post" style="display: inline; margin-right: 10px;">
                       <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
@@ -360,8 +362,8 @@ function extractLastName($fullName) {
                         <?= $showArchived ? 'Unarchive' : 'Archive' ?>
                       </button>
                     </form>
+
                   <?php endif; ?>
-                  <button type="button" class="remove-student" data-student-id="<?= htmlspecialchars($student['student_id']) ?>" data-group-id="<?= htmlspecialchars($student['group_id']) ?>">Remove from Group</button>
                 </div>
               <?php endforeach; ?>
             </div>
