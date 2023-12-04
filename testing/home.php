@@ -310,7 +310,7 @@ function extractLastName($fullName) {
         <?php if ($isGroupFilterActive): ?>
           <form method="post" style="display: inline;">
             <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
-            <button type="submit" name="remove_from_group" onclick="return confirm('Are you sure you want to remove this student from the group?');" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
+            <button type="submit" class="remove-student-btn" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" onclick="return confirm('Are you sure you want to remove this student from the group?');" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
           </form>
         <?php endif; ?>
 
@@ -432,26 +432,39 @@ function extractLastName($fullName) {
         }
     });    
 
-      $(".remove-student").click(function() {
-        var studentId = $(this).data("student-id");
-        var groupId = $(this).data("group-id");
-        var confirmation = confirm("Are you sure you want to remove this student from the group?");
-        if (confirmation) {
-          // Send an AJAX request to remove the student from the group
-          $.ajax({
+    $(".remove-student").click(function() {
+      var studentId = $(this).data("student-id");
+      var groupId = $(this).data("group-id");
+      var confirmation = confirm("Are you sure you want to remove this student from the group?");
+    
+      if (confirmation) {
+        var $thisButton = $(this); // Keep a reference to the button clicked
+
+        // Send an AJAX request to remove the student from the group
+        $.ajax({
             method: "POST",
-            url: "./users/remove_student_from_group.php", // Replace with the actual path to remove_student_from_group.php
+            url: "./users/remove_student_from_group.php", // Correct path to your PHP script
             data: { student_id: studentId, group_id: groupId },
             success: function(response) {
-              // Handle the response (e.g., refresh the student list in the group)
-              location.reload();
+                // Handle the response
+                if(response === 'success') {
+                    // Option 1: Remove the student's element from the list
+                    $thisButton.closest('div').remove();
+
+                    // Option 2: Or, update the list of students dynamically
+                    // You may need to write additional code here depending on how your student list is structured
+                } else {
+                    // Handle the case where PHP script sends back a different response
+                    alert("Could not remove the student from the group.");
+                }
             },
             error: function() {
-              alert("Error removing student from the group.");
+                alert("Error removing student from the group.");
             }
-          });
-        }
-      });
+        });
+    }
+});
+
 
 </script>
 </body>
