@@ -257,15 +257,15 @@ if (!isset($_SESSION['teacher_id'])) {
           </form>
 
 <!-- Dropdown to select a group for filtering -->
-<form method="post">
-    <select name="selected_group_id">
-        <option value="all_students" selected>All Students</option>
+<form method="post" id="group_filter_form">
+    <select name="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
+        <option value="all_students">All Students</option>
         <?php foreach ($groups as $group): ?>
-            <option value="<?= $group['group_id'] ?>"><?= htmlspecialchars($group['group_name']) ?></option>
+            <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
         <?php endforeach; ?>
     </select>
-    <button type="submit" name="filter_by_group">Filter</button>
 </form>
+
 
         </div>
       </div>

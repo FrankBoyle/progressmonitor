@@ -125,21 +125,18 @@ if (isset($_POST['create_group'])) {
     $message = "New group created successfully.";
 }
 
-$isGroupFilterActive = false;
+$isGroupFilterActive = isset($_POST['selected_group_id']) && $_POST['selected_group_id'] != "all_students";
 
-if (isset($_POST['filter_by_group'])) {
+if (isset($_POST['selected_group_id'])) {
     $selectedGroupId = $_POST['selected_group_id'];
 
-    if (!empty($selectedGroupId) && $selectedGroupId != "all_students") {
+    if ($selectedGroupId != "all_students") {
         // Fetch students assigned to the selected group
-        $students = fetchStudentsByGroup($teacherId, $selectedGroupId);
+        $students = fetchStudentsByGroup($selectedGroupId);
     } else {
-        // Fetch all students if "All Students" is selected or no group is selected
+        // Fetch all students
         $students = fetchStudentsByTeacher($teacherId, $showArchived);
     }
-} else {
-    // Default student fetch
-    $students = fetchStudentsByTeacher($teacherId, $showArchived);
 }
 
 // Function to fetch students by group
