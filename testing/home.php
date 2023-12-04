@@ -471,6 +471,50 @@ function extractLastName($fullName) {
     $(document).ready(function() {
         $('.select2').select2();
     });
+
+    
+    $(".delete-group").click(function() {
+        var groupId = $(this).data("group-id");
+        console.log(groupId); // Debugging line
+        var confirmation = confirm("Are you sure you want to delete this group?");
+        if (confirmation) {
+            // Send an AJAX request to delete the group
+            $.ajax({
+                method: "POST",
+                url: "./users/delete_group.php", // Replace with the actual path to delete_group.php
+                data: { group_id: groupId },
+                success: function(response) {
+                    // Handle the response (e.g., refresh the group list)
+                    location.reload();
+                },
+                error: function() {
+                    alert("Error deleting group.");
+                }
+            });
+        }
+    });    
+
+      $(".remove-student").click(function() {
+        var studentId = $(this).data("student-id");
+        var groupId = $(this).data("group-id");
+        var confirmation = confirm("Are you sure you want to remove this student from the group?");
+        if (confirmation) {
+          // Send an AJAX request to remove the student from the group
+          $.ajax({
+            method: "POST",
+            url: "./users/remove_student_from_group.php", // Replace with the actual path to remove_student_from_group.php
+            data: { student_id: studentId, group_id: groupId },
+            success: function(response) {
+              // Handle the response (e.g., refresh the student list in the group)
+              location.reload();
+            },
+            error: function() {
+              alert("Error removing student from the group.");
+            }
+          });
+        }
+      });
+
 </script>
 </body>
 </html>
