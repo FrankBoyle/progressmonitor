@@ -1,36 +1,38 @@
 <?php
 session_start();
-include('db.php'); // Make sure this path is correct
+include('db.php');
 
-if (isset($_POST['group_id'])) {
-    $groupId = $_POST['group_id'];
+// Check if the request is a POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['group_id'])) {
+        $groupId = $_POST['group_id'];
 
-    // Check if the group has any students
-    $checkStmt = $connection->prepare("SELECT COUNT(*) AS student_count FROM StudentGroup WHERE group_id = ?");
-    $checkStmt->execute([$groupId]);
-    $result = $checkStmt->fetch();
+        // Begin transaction
+        $connection->beginTransaction();
 
-    if ($result['student_count'] > 0) {
-        // Group has students, ask for confirmation
-        $confirmation = confirm("This group has students. Are you sure you want to delete this group and remove all students from it?");
-        if (!$confirmation) {
-            echo "Deletion canceled by user.";
-            exit;
+        try {
+            // Delete students from the group
+            $removeStudentsStmt = $connection->prepare("DELETE FROM StudentGroup WHERE group_id = ?");
+            $removeStudentsStmt->execute([$groupId]);
+
+            // Delete the group
+            $deleteStmt = $connection->prepare("DELETE FROM Groups WHERE group_id = ?");
+            $deleteStmt->execute([$groupId]);
+
+            // Commit transaction
+            $connection->commit();
+
+            echo json_encode(["status" => "success", "message" => "Group deleted successfully"]);
+        } catch (Exception $e) {
+            $connection->rollBack();
+            echo json_encode(["status" => "error", "message" => "Error deleting group: " . $e->getMessage()]);
         }
-        
-        // Remove all students from the group
-        $removeStudentsStmt = $connection->prepare("DELETE FROM StudentGroup WHERE group_id = ?");
-        $removeStudentsStmt->execute([$groupId]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Invalid request"]);
     }
-
-    // Delete the group from the database
-    $deleteStmt = $connection->prepare("DELETE FROM Groups WHERE group_id = ?");
-    $deleteStmt->execute([$groupId]);
-
-    // Send a success response back to the JavaScript
-    echo "Group deleted successfully";
 } else {
-    echo "Invalid request";
+    echo json_encode(["status" => "error", "message" => "Invalid request method"]);
 }
 ?>
+
 
