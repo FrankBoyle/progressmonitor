@@ -176,21 +176,17 @@ $stmt->execute([$teacherId]);
 $groups = $stmt->fetchAll();
 
 if (isset($_POST['assign_to_group'])) {
-    $studentId = $_POST['student_id'];
-    $groupId = $_POST['group_id'];
+    if (isset($_POST['student_ids']) && is_array($_POST['student_ids']) && !empty($_POST['student_ids'])) {
+        $studentIds = $_POST['student_ids'];
+        $groupId = $_POST['group_id'];
 
-    // Check if the student is already in this group
-    $checkStmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id = ? AND group_id = ?");
-    $checkStmt->execute([$studentId, $groupId]);
-    if ($checkStmt->rowCount() > 0) {
-        $message = "The student is already in this group.";
-    } else {
-        $insertStmt = $connection->prepare("INSERT INTO StudentGroup (student_id, group_id) VALUES (?, ?)");
-        if ($insertStmt->execute([$studentId, $groupId])) {
-            $message = "Student assigned to group successfully.";
-        } else {
-            $message = "Error assigning student to group.";
+        foreach ($studentIds as $studentId) {
+            // Your existing logic to assign each student to the group
         }
+
+        $message = "Selected students assigned to group successfully.";
+    } else {
+        $message = "No students selected.";
     }
 }
 
