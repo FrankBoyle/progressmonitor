@@ -255,18 +255,6 @@ function extractLastName($fullName) {
         <div class="card-header">
           <h3 class="card-title">STUDENT LIST</h3><br>
 
-<!-- Dropdown to select a group for filtering -->
-<form method="post" id="group_filter_form">
-    <select name="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
-        <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
-        <?php foreach ($groups as $group): ?>
-            <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
-                <?= htmlspecialchars($group['group_name']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</form>
-
           <!-- Form to Assign Students to Group -->
           <form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
             <div style="display: flex; align-items: center;">
@@ -300,7 +288,19 @@ function extractLastName($fullName) {
             <input type="text" id="new_student_name" name="new_student_name">
             <input type="submit" name="add_new_student" value="Add New Student">
           </form>
-          
+
+          <!-- Dropdown to select a group for filtering -->
+          <form method="post" id="group_filter_form">
+              <select name="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
+              <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
+              <?php foreach ($groups as $group): ?>
+            <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST         ['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
+                <?= htmlspecialchars($group['group_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</form>
+
           <?php if (!empty($message)): ?>
     <p><?= htmlspecialchars($message) ?></p>
 <?php endif; ?>
