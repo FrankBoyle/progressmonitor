@@ -341,9 +341,9 @@ if (!isset($_SESSION['teacher_id'])) {
           <button type="submit" name="assign_to_group">Assign to Group</button>
         </form>
         <?php if (!empty($message)): ?>
-    <script type="text/javascript">
-        alert("<?= addslashes($message) ?>");
-    </script>
+  <script type="text/javascript">
+    alert("<?= addslashes($message) ?>");
+  </script>
 <?php endif; ?>
 
       <?php endif; ?>
