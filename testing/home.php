@@ -438,34 +438,32 @@ function extractLastName($fullName) {
     });    
 
     $(".remove-student").click(function() {
-      var studentId = $(this).data("student-id");
-      var groupId = $(this).data("group-id");
-      var confirmation = confirm("Are you sure you want to remove this student from the group?");
-    
-      if (confirmation) {
-        var $thisButton = $(this); // Keep a reference to the button clicked
+    var studentId = $(this).data("student-id");
+    var groupId = $(this).data("group-id");
+    var confirmation = confirm("Are you sure you want to remove this student from the group?");
 
-        // Send an AJAX request to remove the student from the group
+    if (confirmation) {
+        // AJAX request to remove the student from the group
         $.ajax({
             method: "POST",
-            url: "./users/remove_student_from_group.php", // Correct path to your PHP script
+            url: "./users/remove_student_from_group.php",
             data: { student_id: studentId, group_id: groupId },
             success: function(response) {
-    var data = JSON.parse(response);
-    if(data.status === 'success') {
-        // Update the UI or notify the user
-    } else {
-        // Handle errors
-        alert(data.message);
-    }
-},
-
+                var data = JSON.parse(response);
+                if (data.status === 'success') {
+                    // Remove the student's element from the UI or update the list
+                    $(this).closest('.student').remove();
+                } else {
+                    alert(data.message);
+                }
+            },
             error: function() {
                 alert("Error removing student from the group.");
             }
         });
     }
 });
+
 
 
 </script>
