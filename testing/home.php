@@ -268,19 +268,12 @@ function extractLastName($fullName) {
               </select>
             </form>
 
-          <!-- Toggle Button -->
-          <form method="post">
-            <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
-            <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
-          </form>
-
           <!-- Add New Student Form -->
           <form method="post" action="">
             <label for="new_student_name">New Student Name:</label>
             <input type="text" id="new_student_name" name="new_student_name">
             <input type="submit" name="add_new_student" value="Add New Student">
           </form>
-
 
           <!-- Form to Assign Students to Group -->
           <form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
@@ -301,6 +294,12 @@ function extractLastName($fullName) {
               </div>
               <button type="submit" name="assign_to_group">Assign to Group</button>
             </div>
+          </form>
+          
+          <!-- Toggle Button -->
+          <form method="post">
+            <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
+            <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
           </form>
 
           <?php if (!empty($message)): ?>
