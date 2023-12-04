@@ -448,7 +448,7 @@ $(document).ready(function() {
         var groupId = $(this).closest('form').find('select[name="group_id"]').val();
         
         $.ajax({
-            url: 'assign_student_to_group.php', // Your PHP script that handles the assignment
+            url: './users/assign_student_to_group.php', // Your PHP script that handles the assignment
             type: 'POST',
             data: { student_id: studentId, group_id: groupId },
             success: function(response) {
