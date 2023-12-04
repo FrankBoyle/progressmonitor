@@ -288,76 +288,67 @@ if (!isset($_SESSION['teacher_id'])) {
     <div class="col-md-12">
       <div class="card card-outline card-info">
         <div class="card-header">
-          <h3 class="card-title">
-            STUDENT LIST
-          </h3><br>
+          <h3 class="card-title">STUDENT LIST</h3><br>
 
-            <!-- Toggle Button -->
-            <form method="post">
-              <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
-              <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
-            </form>
+          <!-- Toggle Button -->
+          <form method="post">
+            <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
+            <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
+          </form>
 
+          <?php if ($message): ?>
+            <p><?= $message ?></p>
+          <?php endif; ?>
 
-            <?php if ($message): ?>
-              <p><?= $message ?></p>
-            <?php endif; ?>
-
-            <?php if (!empty($students)): ?>
-            <?php 
-              // Sort students alphabetically by 'name'
-              usort($students, function($a, $b) {
-                return strcmp($a['name'], $b['name']);
-              });
-            ?>
+          <?php if (!empty($students)): ?>
             <div style="display: flex; flex-direction: column;">
-            <?php foreach ($students as $student): ?>
-    <?php $metadataId = getSmallestMetadataId($student['school_id']); ?>
+              <?php foreach ($students as $student): ?>
+                <?php $metadataId = getSmallestMetadataId($student['school_id']); ?>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                  <span style="margin-right: 10px;">
+                    <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'>
+                      <?= htmlspecialchars($student['name']) ?>
+                    </a>
+                  </span>
 
-    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-      <span style="margin-right: 10px;">
-        <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'>
-          <?= htmlspecialchars($student['name']) ?>
-        </a>
-      </span>
+                  <?php if (!$isGroupFilterActive): ?>
+                    <form method="post" style="display: inline; margin-right: 10px;">
+                      <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+                      <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
+                        <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+                      </button>
+                    </form>
 
-      <?php if (!$isGroupFilterActive): ?>
-        <form method="post" style="display: inline; margin-right: 10px;">
-          <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-          <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
-            <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-          </button>
-        </form>
+                    <form method="post" style="display: flex; align-items: center;">
+                      <select name="group_id" style="margin-right: 5px;">
+                        <?php foreach ($groups as $group): ?>
+                          <option value="<?= htmlspecialchars($group['group_id']) ?>">
+                            <?= htmlspecialchars($group['group_name']) ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                      <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
+                      <button type="submit" name="assign_to_group">Assign to Group</button>
+                    </form>
+                  <?php endif; ?>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          <?php else: ?>
+            No students found for this teacher.
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <form method="post" style="display: flex; align-items: center;">
-          <select name="group_id" style="margin-right: 5px;">
-            <?php foreach ($groups as $group): ?>
-              <option value="<?= htmlspecialchars($group['group_id']) ?>">
-                <?= htmlspecialchars($group['group_name']) ?>
-              </option>
-            <?php endforeach; ?>
-          </select>
-          <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
-          <button type="submit" name="assign_to_group">Assign to Group</button>
-        </form>
-        <?php if (!empty($message)): ?>
+<?php if (!empty($message)): ?>
   <script type="text/javascript">
     alert("<?= addslashes($message) ?>");
   </script>
 <?php endif; ?>
 
-      <?php endif; ?>
-    </div>
-  <?php endforeach; ?>
-          </div>
-            <?php else: ?>
-              No students found for this teacher.
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
     <div class="content">
       <div class="container-fluid">
@@ -450,5 +441,26 @@ if (!isset($_SESSION['teacher_id'])) {
       });
     });
   </script>
+  <script>
+$(document).ready(function() {
+    $('.assign-button').click(function() {
+        var studentId = $(this).data('student');
+        var groupId = $(this).closest('form').find('select[name="group_id"]').val();
+        
+        $.ajax({
+            url: 'assign_student_to_group.php', // Your PHP script that handles the assignment
+            type: 'POST',
+            data: { student_id: studentId, group_id: groupId },
+            success: function(response) {
+                // This is the message from your PHP script
+                alert(response.message);
+            },
+            error: function() {
+                alert('Error assigning student to group.');
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
