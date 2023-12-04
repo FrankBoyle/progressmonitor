@@ -199,65 +199,13 @@ function extractLastName($fullName) {
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="./test.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
               <li class="breadcrumb-item active">Text Editors</li>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
-
-    <!-- Main content -->
-    <section class="content">
-  <div class="container-fluid">
-    <h5 class="mb-2">GOALS</h5>
-    <div class="row">
-      <div class="col-md-4 col-sm-6 col-12">
-        <div class="info-box">
-          <!-- If you want to add an icon to the box, uncomment this
-          <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
-          -->
-          <div class="info-box-content">
-            <span class="info-box-text">Goal 1</span>
-            <!-- Summernote editor -->
-            <textarea id="summernote" class = "goaltext">
-              Place <em>some</em> <u>text</u> <strong>here</strong>
-            </textarea>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 col-sm-6 col-12">
-        <div class="info-box">
-          <!-- If you want to add an icon to the box, uncomment this
-          <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
-          -->
-          <div class="info-box-content">
-            <span class="info-box-text">Goal 2</span>
-            <!-- Summernote editor -->
-            <textarea id="summernote" class = "goaltext">
-              Place <em>some</em> <u>text</u> <strong>here</strong>
-            </textarea>
-          </div>
-        </div>
-      </div>   
-      <div class="col-md-4 col-sm-6 col-12">
-        <div class="info-box">
-          <!-- If you want to add an icon to the box, uncomment this
-          <span class="info-box-icon bg-info"><i class="far fa-star"></i></span>
-          -->
-          <div class="info-box-content">
-            <span class="info-box-text">Goal 3</span>
-            <!-- Summernote editor -->
-            <textarea id="summernote" class = "goaltext">
-              Place <em>some</em> <u>text</u> <strong>here</strong>
-            </textarea>
-          </div>
-        </div>
-      </div>    
-    </div>
-  </div>
-</section>
 
 <section class="content">
   <div class="row">
@@ -465,20 +413,6 @@ function extractLastName($fullName) {
 </div>
 <!-- ./wrapper -->
 
-<!-- Summernote -->
-<script src="../../plugins/summernote/summernote-bs4.min.js"></script>
-<script>
-    $(document).ready(function() {
-      $('.goaltext').summernote({
-        toolbar: [
-          // Only include buttons for font type and basic styling
-          ['font', ['fontname']], // Font type
-          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
-        ],
-        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
-      });
-    });
-  </script>
   <script>
     $(document).ready(function() {
         $('.select2').select2();
