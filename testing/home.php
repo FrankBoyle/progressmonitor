@@ -243,18 +243,18 @@ function extractLastName($fullName) {
         <div class="card-header">
           <h3 class="card-title">STUDENT LIST</h3><br>
 
-            <!-- Dropdown to select a group for filtering -->
-            <form method="post" id="group_filter_form">
-              <select name="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
-                <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
-                
-                <?php foreach ($groups as $group): ?>
-                  <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST         ['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
-                    <?= htmlspecialchars($group['group_name']) ?>
-                  </option>
-                <?php endforeach; ?>
-              </select>
-            </form>
+<!-- Dropdown to select a group for filtering -->
+<form method="post" id="group_filter_form">
+    <label for="selected_group_id">Sort Students by Group:</label>
+    <select name="selected_group_id" id="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
+        <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
+        <?php foreach ($groups as $group): ?>
+            <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
+                <?= htmlspecialchars($group['group_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</form>
 
           <!-- Add New Student Form -->
           <form method="post" action="">
