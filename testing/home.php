@@ -305,7 +305,15 @@ function extractLastName($fullName) {
                       <?= htmlspecialchars($student['name']) ?>
                     </a>
                   </span>
-            
+                  
+                          <!-- Red X Button to Remove Student from Group -->
+        <?php if ($isGroupFilterActive): ?>
+          <form method="post" style="display: inline;">
+            <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
+            <button type="submit" name="remove_from_group" style="background-color: red; color: white; border: none; cursor: pointer; padding: 2px 5px;">X</button>
+          </form>
+        <?php endif; ?>
+
                   <?php if (!$isGroupFilterActive): ?>
                     <form method="post" style="display: inline; margin-right: 10px;">
                       <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
@@ -314,15 +322,7 @@ function extractLastName($fullName) {
                       </button>
                     </form>
 
-                            <!-- Red X Button to Remove Student from Group -->
-        <?php if ($isGroupFilterActive): ?>
-          <form method="post" style="display: inline;">
-            <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
-            <button type="submit" name="remove_from_group" style="background-color: red; color: white; border: none; cursor: pointer; padding: 2px 5px;">X</button>
-          </form>
-        <?php endif; ?>
-        
-                  <?php endif; ?>
+                    <?php endif; ?>
                 </div>
               <?php endforeach; ?>
             </div>
