@@ -256,16 +256,17 @@ if (!isset($_SESSION['teacher_id'])) {
             <button type="submit" name="create_group">Create Group</button>
           </form>
 
-          <!-- Dropdown to select a group for filtering -->
-          <form method="post">
-            <select name="selected_group_id">
-              <option value="">Select a Group</option>
-                <?php foreach ($groups as $group): ?>
-              <option value="<?= $group['group_id'] ?>"><?= htmlspecialchars($group['group_name']) ?></option>
-                <?php endforeach; ?>
-            </select>
-            <button type="submit" name="filter_by_group">Filter</button>
-          </form>
+<!-- Dropdown to select a group for filtering -->
+<form method="post">
+    <select name="selected_group_id">
+        <option value="all_students" selected>All Students</option>
+        <?php foreach ($groups as $group): ?>
+            <option value="<?= $group['group_id'] ?>"><?= htmlspecialchars($group['group_name']) ?></option>
+        <?php endforeach; ?>
+    </select>
+    <button type="submit" name="filter_by_group">Filter</button>
+</form>
+
         </div>
       </div>
     </div>
