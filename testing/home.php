@@ -452,7 +452,8 @@ function extractLastName($fullName) {
 </div>
 <!-- ./wrapper -->
 
-
+<!-- Summernote -->
+<script src="../../plugins/summernote/summernote-bs4.min.js"></script>
 <script>
     $(document).ready(function() {
       $('.goaltext').summernote({
