@@ -317,6 +317,19 @@ if (!isset($_SESSION['teacher_id'])) {
                         <?= $showArchived ? 'Unarchive' : 'Archive' ?>
                     </button>
                 </form>
+
+                <form method="post">
+    <select name="group_id">
+        <?php foreach ($groups as $group): ?>
+            <option value="<?= htmlspecialchars($group['group_id']) ?>">
+                <?= htmlspecialchars($group['group_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
+    <button type="submit" name="assign_to_group">Assign to Group</button>
+</form>
+
             </span>
         <?php endif; ?>
               </div>
