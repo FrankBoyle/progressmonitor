@@ -179,17 +179,18 @@ if (isset($_POST['assign_to_group'])) {
     $studentId = $_POST['student_id'];
     $groupId = $_POST['group_id'];
 
-    // Check if the student is already assigned to this group
+    // Check if the student is already in this group
     $checkStmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id = ? AND group_id = ?");
     $checkStmt->execute([$studentId, $groupId]);
     if ($checkStmt->rowCount() > 0) {
-        // Student is already in this group
         $message = "The student is already in this group.";
     } else {
-        // Student is not in this group, proceed with insertion
         $insertStmt = $connection->prepare("INSERT INTO StudentGroup (student_id, group_id) VALUES (?, ?)");
-        $insertStmt->execute([$studentId, $groupId]);
-        $message = "Student assigned to group successfully.";
+        if ($insertStmt->execute([$studentId, $groupId])) {
+            $message = "Student assigned to group successfully.";
+        } else {
+            $message = "Error assigning student to group.";
+        }
     }
 }
 

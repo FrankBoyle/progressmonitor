@@ -441,26 +441,5 @@ if (!isset($_SESSION['teacher_id'])) {
       });
     });
   </script>
-  <script>
-$(document).ready(function() {
-    $('.assign-button').click(function() {
-        var studentId = $(this).data('student');
-        var groupId = $(this).closest('form').find('select[name="group_id"]').val();
-        
-        $.ajax({
-            url: './users/assign_student_to_group.php', // Your PHP script that handles the assignment
-            type: 'POST',
-            data: { student_id: studentId, group_id: groupId },
-            success: function(response) {
-                // This is the message from your PHP script
-                alert(response.message);
-            },
-            error: function() {
-                alert('Error assigning student to group.');
-            }
-        });
-    });
-});
-</script>
 </body>
 </html>
