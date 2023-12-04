@@ -311,40 +311,38 @@ if (!isset($_SESSION['teacher_id'])) {
               });
             ?>
             <div style="display: flex; flex-direction: column;">
-              <?php foreach ($students as $student): ?>
-              <?php
-                // Fetch the smallest metadata_id for this student's school_id
-                $metadataId = getSmallestMetadataId($student['school_id']);
-              ?>
-              <div style="margin-bottom: 10px;">
-                <span>
-                  <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'><?= htmlspecialchars($student['name']) ?></a>
-                </span>
-                <?php if (!$isGroupFilterActive): ?>
-            <span style="margin-left: 10px;">
-                <form method="post" style="display: inline;">
-                    <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-                    <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
-                        <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-                    </button>
-                </form>
+            <?php foreach ($students as $student): ?>
+    <?php $metadataId = getSmallestMetadataId($student['school_id']); ?>
 
-                <form method="post">
-    <select name="group_id">
-        <?php foreach ($groups as $group): ?>
-            <option value="<?= htmlspecialchars($group['group_id']) ?>">
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+      <span style="margin-right: 10px;">
+        <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'>
+          <?= htmlspecialchars($student['name']) ?>
+        </a>
+      </span>
+
+      <?php if (!$isGroupFilterActive): ?>
+        <form method="post" style="display: inline; margin-right: 10px;">
+          <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+          <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
+            <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+          </button>
+        </form>
+
+        <form method="post" style="display: flex; align-items: center;">
+          <select name="group_id" style="margin-right: 5px;">
+            <?php foreach ($groups as $group): ?>
+              <option value="<?= htmlspecialchars($group['group_id']) ?>">
                 <?= htmlspecialchars($group['group_name']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-    <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
-    <button type="submit" name="assign_to_group">Assign to Group</button>
-</form>
-
-            </span>
-        <?php endif; ?>
-              </div>
+              </option>
             <?php endforeach; ?>
+          </select>
+          <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
+          <button type="submit" name="assign_to_group">Assign to Group</button>
+        </form>
+      <?php endif; ?>
+    </div>
+  <?php endforeach; ?>
           </div>
             <?php else: ?>
               No students found for this teacher.
