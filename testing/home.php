@@ -256,6 +256,15 @@ if (!isset($_SESSION['teacher_id'])) {
             <button type="submit" name="create_group">Create Group</button>
           </form>
 
+          <!-- List groups with edit options -->
+<?php foreach ($groups as $group): ?>
+    <form method="post">
+        <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+        <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
+        <button type="submit" name="edit_group">Update</button>
+    </form>
+<?php endforeach; ?>
+
 <!-- Dropdown to select a group for filtering -->
 <form method="post" id="group_filter_form">
     <select name="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">

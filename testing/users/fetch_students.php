@@ -125,6 +125,22 @@ if (isset($_POST['create_group'])) {
     $message = "New group created successfully.";
 }
 
+if (isset($_POST['edit_group'])) {
+    $groupId = $_POST['group_id'];
+    $editedGroupName = $_POST['edited_group_name'];
+
+    // SQL to update the group name
+    $stmt = $connection->prepare("UPDATE Groups SET group_name = ? WHERE group_id = ?");
+    $stmt->execute([$editedGroupName, $groupId]);
+
+    $message = "Group name updated successfully.";
+
+    // Refresh the group list
+    $stmt = $connection->prepare("SELECT group_id, group_name FROM Groups WHERE teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    $groups = $stmt->fetchAll();
+}
+
 $isGroupFilterActive = isset($_POST['selected_group_id']) && $_POST['selected_group_id'] != "all_students";
 
 if (isset($_POST['selected_group_id'])) {
