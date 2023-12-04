@@ -310,14 +310,20 @@ function extractLastName($fullName) {
                           <?php foreach ($groups as $group): ?>
     <div class="group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">
         <h3><?= htmlspecialchars($group['group_name']) ?></h3>
-        <?php foreach ($group['students'] as $student): ?>
-            <div class="student">
-                <!-- Student Information -->
-                <button type="button" class="remove-student" data-student-id="<?= htmlspecialchars($student['student_id']) ?>" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">&times;</button>
-            </div>
-        <?php endforeach; ?>
+        <?php 
+        if (isset($group['students']) && is_array($group['students'])): // Check if 'students' key exists and is an array
+            foreach ($group['students'] as $student): ?>
+                <div class="student">
+                    <!-- Student Information -->
+                    <button type="button" class="remove-student" data-student-id="<?= htmlspecialchars($student['student_id']) ?>" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">&times;</button>
+                </div>
+            <?php endforeach; 
+        else: ?>
+            <p>No students in this group.</p>
+        <?php endif; ?>
     </div>
 <?php endforeach; ?>
+
 
                   <?php if (!$isGroupFilterActive): ?>
                     <form method="post" style="display: inline; margin-right: 10px;">
@@ -438,32 +444,34 @@ function extractLastName($fullName) {
     });    
 
     $(".remove-student").click(function() {
-    var studentId = $(this).data("student-id");
-    var groupId = $(this).data("group-id");
-    var confirmation = confirm("Are you sure you want to remove this student from the group?");
+      var studentId = $(this).data("student-id");
+      var groupId = $(this).data("group-id");
+      var confirmation = confirm("Are you sure you want to remove this student from the group?");
+    
+      if (confirmation) {
+        var $thisButton = $(this); // Keep a reference to the button clicked
 
-    if (confirmation) {
-        // AJAX request to remove the student from the group
+        // Send an AJAX request to remove the student from the group
         $.ajax({
             method: "POST",
-            url: "./users/remove_student_from_group.php",
+            url: "./users/remove_student_from_group.php", // Correct path to your PHP script
             data: { student_id: studentId, group_id: groupId },
             success: function(response) {
-                var data = JSON.parse(response);
-                if (data.status === 'success') {
-                    // Remove the student's element from the UI or update the list
-                    $(this).closest('.student').remove();
-                } else {
-                    alert(data.message);
-                }
-            },
+    var data = JSON.parse(response);
+    if(data.status === 'success') {
+        // Update the UI or notify the user
+    } else {
+        // Handle errors
+        alert(data.message);
+    }
+},
+
             error: function() {
                 alert("Error removing student from the group.");
             }
         });
     }
 });
-
 
 
 </script>
