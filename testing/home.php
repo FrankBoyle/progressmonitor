@@ -24,6 +24,10 @@ function extractLastName($fullName) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bfactor</title>
+  <!-- Include Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<!-- Include Select2 JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -332,17 +336,22 @@ function extractLastName($fullName) {
                       </button>
                     </form>
 
-                    <form method="post" style="display: flex; align-items: center;">
-                      <select name="group_id" style="margin-right: 5px;">
-                        <?php foreach ($groups as $group): ?>
-                          <option value="<?= htmlspecialchars($group['group_id']) ?>">
-                            <?= htmlspecialchars($group['group_name']) ?>
-                          </option>
-                        <?php endforeach; ?>
-                      </select>
-                      <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
-                      <button type="submit" name="assign_to_group">Assign to Group</button>
-                    </form>
+                    <form method="post" id="assign_multiple_students_form">
+    <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
+        <?php foreach ($students as $student): ?>
+            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <select name="group_id" class="select2">
+        <?php foreach ($groups as $group): ?>
+            <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <button type="submit" name="assign_to_group">Assign to Group</button>
+</form>
+
                   <?php endif; ?>
                 </div>
               <?php endforeach; ?>
@@ -454,5 +463,11 @@ function extractLastName($fullName) {
       });
     });
   </script>
+  <script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
+
 </body>
 </html>
