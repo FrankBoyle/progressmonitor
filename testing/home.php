@@ -453,7 +453,7 @@ function extractLastName($fullName) {
         // Handle errors
         alert(data.message);
     }
-}
+},
 
             error: function() {
                 alert("Error removing student from the group.");
