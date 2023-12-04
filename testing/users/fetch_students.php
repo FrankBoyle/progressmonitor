@@ -115,11 +115,12 @@ function getSmallestMetadataId($schoolId) {
 
 if (isset($_POST['create_group'])) {
     $groupName = $_POST['group_name'];
-    $schoolId = $_SESSION['school_id']; // Retrieve school_id from the session
+    $schoolId = $_SESSION['school_id']; // Retrieved from session
+    $teacherId = $_SESSION['teacher_id']; // Assuming teacher_id is stored in session
 
     // SQL to insert a new group
-    $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id) VALUES (?, ?)");
-    $stmt->execute([$groupName, $schoolId]);
+    $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
+    $stmt->execute([$groupName, $schoolId, $teacherId]);
 
     $message = "New group created successfully.";
 }
@@ -150,11 +151,10 @@ function fetchStudentsByGroup($teacherId, $groupId) {
     return $stmt->fetchAll();
 }
 
-
-// Fetch groups for the specific school
-$schoolId = $_SESSION['school_id'];
-$stmt = $connection->prepare("SELECT group_id, group_name FROM Groups WHERE school_id = ?");
-$stmt->execute([$schoolId]);
+// Fetch groups for the specific teacher
+$teacherId = $_SESSION['teacher_id'];
+$stmt = $connection->prepare("SELECT group_id, group_name FROM Groups WHERE teacher_id = ?");
+$stmt->execute([$teacherId]);
 $groups = $stmt->fetchAll();
 
 if (isset($_POST['assign_to_group'])) {
