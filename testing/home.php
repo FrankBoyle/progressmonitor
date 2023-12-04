@@ -307,23 +307,12 @@ function extractLastName($fullName) {
                   </span>
                   
                           <!-- Red X Button to Remove Student from Group -->
-                          <?php foreach ($groups as $group): ?>
-    <div class="group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">
-        <h3><?= htmlspecialchars($group['group_name']) ?></h3>
-        <?php 
-        if (isset($group['students']) && is_array($group['students'])): // Check if 'students' key exists and is an array
-            foreach ($group['students'] as $student): ?>
-                <div class="student">
-                    <!-- Student Information -->
-                    <button type="button" class="remove-student" data-student-id="<?= htmlspecialchars($student['student_id']) ?>" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">&times;</button>
-                </div>
-            <?php endforeach; 
-        else: ?>
-            <p>No students in this group.</p>
+                          <?php if ($isGroupFilterActive): ?>
+          <form method="post" style="display: inline;">
+            <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
+            <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" data-group-id="<?= htmlspecialchars($group['group_id']) ?>" name="remove_from_group" onclick="return confirm('Are you sure you want to remove this student from the group?');" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
+          </form>
         <?php endif; ?>
-    </div>
-<?php endforeach; ?>
-
 
                   <?php if (!$isGroupFilterActive): ?>
                     <form method="post" style="display: inline; margin-right: 10px;">
