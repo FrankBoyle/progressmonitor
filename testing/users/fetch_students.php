@@ -94,14 +94,14 @@ $showArchived = $_SESSION['show_archived'] ?? false;
 $students = fetchStudentsByTeacher($teacherId, $showArchived);
 
 usort($students, function($a, $b) {
-    $aLastName = lastName($a['name']);
-    $bLastName = lastName($b['name']);
+    $aLastName = extractLastName($a['name']);
+    $bLastName = extractLastName($b['name']);
     return strcmp($aLastName, $bLastName);
 });
 
-function lastName($fullName) {
+function extractLastName($fullName) {
     $parts = explode(' ', $fullName);
-    return array_pop($parts); // Assumes the last word is the last name
+    return end($parts); // Assumes the last word is the last name
 }
 
 function getSmallestMetadataId($schoolId) {
