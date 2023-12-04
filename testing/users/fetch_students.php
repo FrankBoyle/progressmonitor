@@ -137,6 +137,9 @@ if (isset($_POST['selected_group_id'])) {
         // Fetch all students
         $students = fetchStudentsByTeacher($teacherId, $showArchived);
     }
+} else {
+    // Fetch all students by default
+    $students = fetchStudentsByTeacher($teacherId, $showArchived);
 }
 
 // Function to fetch students by group
