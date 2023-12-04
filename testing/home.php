@@ -230,18 +230,6 @@ function extractLastName($fullName) {
     </form>
 <?php endforeach; ?>
 
-<!-- Dropdown to select a group for filtering -->
-<form method="post" id="group_filter_form">
-    <select name="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
-        <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
-        <?php foreach ($groups as $group): ?>
-            <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
-                <?= htmlspecialchars($group['group_name']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</form>
-
 </div>
       </div>
     </div>
@@ -295,7 +283,7 @@ function extractLastName($fullName) {
               <button type="submit" name="assign_to_group">Assign to Group</button>
             </div>
           </form>
-          
+
           <!-- Toggle Button -->
           <form method="post">
             <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
