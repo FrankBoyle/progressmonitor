@@ -340,6 +340,12 @@ if (!isset($_SESSION['teacher_id'])) {
           <input type="hidden" name="student_id" value="<?= $student['student_id'] ?>">
           <button type="submit" name="assign_to_group">Assign to Group</button>
         </form>
+        <?php if (!empty($message)): ?>
+    <script type="text/javascript">
+        alert("<?= addslashes($message) ?>");
+    </script>
+<?php endif; ?>
+
       <?php endif; ?>
     </div>
   <?php endforeach; ?>
