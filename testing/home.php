@@ -200,7 +200,7 @@ function extractLastName($fullName) {
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
-              <li class="breadcrumb-item active">Text Editors</li>
+              <li class="breadcrumb-item active">Student List</li>
             </ol>
           </div>
         </div>
