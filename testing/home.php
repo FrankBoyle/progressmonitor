@@ -4,15 +4,6 @@ include './users/fetch_students.php';
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
-
-// Handle form submission for adding new student
-if (isset($_POST['add_new_student'])) {
-    $newStudentName = $_POST['new_student_name'];
-    if (!empty($newStudentName)) {
-        $message = addNewStudent($newStudentName, $teacherId);
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
