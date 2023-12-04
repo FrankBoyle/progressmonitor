@@ -4,6 +4,18 @@ include './users/fetch_students.php';
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
+
+usort($students, function($a, $b) {
+  $aLastName = extractLastName($a['name']);
+  $bLastName = extractLastName($b['name']);
+  return strcmp($aLastName, $bLastName);
+});
+
+function extractLastName($fullName) {
+  $parts = explode(' ', $fullName);
+  return end($parts); // Assumes the last word is the last name
+}
+
 ?>
 
 <!DOCTYPE html>

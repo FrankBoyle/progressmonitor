@@ -93,17 +93,6 @@ $showArchived = $_SESSION['show_archived'] ?? false;
 // Fetch students based on the current view
 $students = fetchStudentsByTeacher($teacherId, $showArchived);
 
-usort($students, function($a, $b) {
-    $aLastName = extractLastName($a['name']);
-    $bLastName = extractLastName($b['name']);
-    return strcmp($aLastName, $bLastName);
-});
-
-function extractLastName($fullName) {
-    $parts = explode(' ', $fullName);
-    return end($parts); // Assumes the last word is the last name
-}
-
 function getSmallestMetadataId($schoolId) {
     global $connection;
 
