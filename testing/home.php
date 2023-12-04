@@ -481,7 +481,7 @@ function extractLastName($fullName) {
             // Send an AJAX request to delete the group
             $.ajax({
                 method: "POST",
-                url: "/users/delete_group.php", // Replace with the actual path to delete_group.php
+                url: "./users/delete_group.php", // Replace with the actual path to delete_group.php
                 data: { group_id: groupId },
                 success: function(response) {
                     // Handle the response (e.g., refresh the group list)
@@ -502,7 +502,7 @@ function extractLastName($fullName) {
           // Send an AJAX request to remove the student from the group
           $.ajax({
             method: "POST",
-            url: "/users/remove_student_from_group.php", // Replace with the actual path to remove_student_from_group.php
+            url: "./users/remove_student_from_group.php", // Replace with the actual path to remove_student_from_group.php
             data: { student_id: studentId, group_id: groupId },
             success: function(response) {
               // Handle the response (e.g., refresh the student list in the group)
