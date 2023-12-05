@@ -313,7 +313,7 @@ function getChartOptions(dates, trendlineSeriesData) {
                 top: 7,  // Change to 0 to see if positioning is the issue
                 left: 4,  // Change to 0 for same reason
                 blur: 4,  // Increase blur for visibility
-                opacity: 0.1  // Increase opacity for visibility
+                opacity: 0.15  // Increase opacity for visibility
             },
         },
         colors: seriesColors,
