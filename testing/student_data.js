@@ -127,24 +127,19 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 // Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
-    for (let i = 1; i < headerNames.length; i++) {
-        let allNulls = true;
+    for (let i = 1; i < headerNames.length; i++) { // Loop through headers, skipping the 'Date' column
         const scoreData = scores.map(row => {
             const score = row[i - 1]; // Adjust for zero-based index
-            if (score !== '') {
-                allNulls = false;
-                return parseInt(score, 10);
-            }
-            return null;
+            // Check if the value is numeric, otherwise return null for missing data
+            return score !== '' && !isNaN(score) ? score : null;
         });
-
         seriesList.push({
-            name: customNames[i - 1] || headerNames[i],
+            name: customNames[i - 1] || headerNames[i], // Use the header name if custom name is not provided
             data: scoreData,
-            color: seriesColors[i - 1],
-            allNulls: allNulls // Add a flag indicating if the series has all null values
+            color: seriesColors[i - 1] || undefined, // Fallback to a default color if necessary
         });
     }
+    //console.log("Generated series list:", seriesList);
     return seriesList;
 }
 
@@ -342,15 +337,9 @@ function getChartOptions(dates, trendlineSeriesData) {
             ),
             curve: 'smooth'
         },
+
         markers: {
-            size: allNullSeriesIndices.length ? 0 : 4, // Hide markers if there are all-null series
-            discrete: allNullSeriesIndices.map(index => ({
-                seriesIndex: index,
-                dataPointIndex: 0,
-                fillColor: '#fff',
-                strokeColor: '#fff',
-                size: 0
-            }))
+            size: 4
         },
     };
 }
