@@ -50,14 +50,21 @@ $("#accordion").accordion({
         if (ui.newPanel.has('#chart').length) {
             selectedChartType = 'line';
             //console.log("Line Graph activated");
+
+            // Update the selected columns based on the current state of the checkboxes
+            selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
             if (!chart) {
                 initializeChart();
             } else {
-                chart.updateSeries(chart.w.globals.series);
+                // Update the line chart with the selected columns
+                updateChart(selectedColumns); // Assuming updateChart is the function to update the line chart
             }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
             //console.log("Bar Graph activated");
+
             if (barChart === null) {
                 initializeBarChart(); // Initialize the bar chart
             } else {
