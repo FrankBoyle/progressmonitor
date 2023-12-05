@@ -517,7 +517,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
         orientation: 'horizontal',
         label: {
             text: `Total: ${total}`,
-            borderColor: 'transparent',
+            borderColor: 'black',
             style: {
                 background: '#f2f2f2',
                 color: '#333',
