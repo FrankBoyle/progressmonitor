@@ -3,14 +3,22 @@ session_start();
 include('auth_session.php');
 include('db.php');
 
+// At the start of your PHP script
+error_log("Student ID: " . $_POST['student_id']);
+error_log("Group ID: " . $_POST['group_id']);
+
 // Function to remove a student from a group
 function removeStudentFromGroup($studentId, $groupId) {
     global $connection; // Assuming you have a database connection
+        // Inside removeStudentFromGroup function
+        error_log("Executing query with Student ID = $studentId, Group ID = $groupId");
 
     try {
         // Check if the student is in the group
         $stmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id = ? AND group_id = ?");
         $stmt->execute([$studentId, $groupId]);
+
+        error_log("Query executed. Row count: " . $stmt->rowCount());
 
         if ($stmt->rowCount() > 0) {
             // Student is in the group, proceed with removal
