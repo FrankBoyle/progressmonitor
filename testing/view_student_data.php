@@ -125,8 +125,10 @@ if (isset($_GET['metadata_id'])) {
 }
 
 .goal-container.selected {
-    background-color: #e8f0fe; /* Highlight color when selected */
+    background-color: #e0e0e0; /* Light grey background for selected goals */
+    border: 1px solid #007bff; /* Blue border for selected goals */
 }
+
 
 </style>
 
@@ -311,7 +313,7 @@ if (isset($_GET['metadata_id'])) {
                 <?php foreach ($goals as $index => $goal): ?>
                 <div class="col-md-4 col-sm-6 col-12">
                     <div class="info-box">
-                        <div class="info-box-content">
+                        <div class="info-box-content goal-container">
                             <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
                             <!-- Nest the checkbox inside the label -->
                             <label class="goal-checkbox-label">

@@ -959,6 +959,16 @@ $(document).ready(function() {
     });
 });
 
+    // Event listener for goal checkbox change
+    $(document).on('change', '.goal-checkbox', function() {
+        var $goalContainer = $(this).closest('.goal-container');
+        if ($(this).is(':checked')) {
+            $goalContainer.addClass('selected');
+        } else {
+            $goalContainer.removeClass('selected');
+        }
+    });
+
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
         const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
@@ -967,16 +977,6 @@ $(document).ready(function() {
         alert('Goal Updated.');
         updateGoalText(goalId, newText);
     });
-    
-    $(document).on('click', '.goal-container', function() {
-        $(this).toggleClass('selected'); // Toggle the 'selected' class on click
-        var goalId = $(this).data('goal-id');
-        var isSelected = $(this).hasClass('selected');
-        
-        // Your logic for when a goal is selected or unselected
-        console.log('Goal ' + goalId + ' selected: ' + isSelected);
-    });
-    
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
