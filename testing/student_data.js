@@ -348,9 +348,15 @@ function getChartOptions(dates, trendlineSeriesData) {
             ),
             curve: 'smooth'
         },
-
         markers: {
-            size: 4
+            size: 0, // Hides markers for all-null series data points
+            discrete: [{
+              seriesIndex: indexOfAllNullSeries, // You need to calculate this index
+              dataPointIndex: 0, // Assuming the minimal data point is at index 0
+              fillColor: '#fff', // Same as background to "hide" the point
+              strokeColor: '#fff', // Same as background to "hide" the point
+              size: 5
+            }]
         },
     };
 }
