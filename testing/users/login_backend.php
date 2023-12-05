@@ -28,21 +28,20 @@
                 // Fetching additional information now that the user is verified
                 $accountId = $result['id'];
                 
-                $teacherQuery = $connection->prepare("SELECT teacher_id, school_id FROM Teachers WHERE account_id = :accountId");
+                $teacherQuery = $connection->prepare("SELECT teacher_id, school_id, is_admin FROM Teachers WHERE account_id = :accountId");
                 $teacherQuery->bindParam("accountId", $accountId, PDO::PARAM_INT);
                 $teacherQuery->execute();
                 
                 $teacherResult = $teacherQuery->fetch(PDO::FETCH_ASSOC);
-            
+                
                 if ($teacherResult) {
                     $_SESSION['teacher_id'] = $teacherResult['teacher_id'];
-
-                    // Assuming 'school_id' is the correct column name for the school identifier
-                    $_SESSION['school_id'] = $teacherResult['school_id']; // Store school_id in the session
+                    $_SESSION['school_id'] = $teacherResult['school_id'];
+                    $_SESSION['is_admin'] = $teacherResult['is_admin'] == 1; // Assuming 'is_admin' is the column name
                 } else {
                     echo '<p class="error">No teacher ID associated with this account.</p>';
-                    exit(); 
-                }
+                    exit();
+                }               
                 
                 // Redirect to the desired page after successful login
                 header("Location: ../home.php");
