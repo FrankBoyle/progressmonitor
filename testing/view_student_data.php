@@ -120,7 +120,7 @@ if (isset($_GET['metadata_id'])) {
     }
 
     .goal-container {
-    cursor: pointer; /* Change cursor to indicate it's clickable */
+    cursor: hand; /* Change cursor to indicate it's clickable */
     transition: background-color 0.3s; /* Smooth transition for background color */
 }
 
