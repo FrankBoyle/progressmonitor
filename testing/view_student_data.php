@@ -129,6 +129,9 @@ if (isset($_GET['metadata_id'])) {
     border: 1px solid #007bff; /* Blue border for selected goals */
 }
 
+.highlighted {
+    background-color: #ffff99; /* Yellow background for highlighting */
+}
 
 </style>
 
