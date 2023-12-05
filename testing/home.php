@@ -435,6 +435,7 @@ function extractLastName($fullName) {
     $(".remove-student").click(function() {
       var studentId = $(this).data("student-id");
       var groupId = $(this).data("group-id");
+      console.log(groupId);
       var confirmation = confirm("Are you sure you want to remove this student from the group?");
     
       if (confirmation) {
