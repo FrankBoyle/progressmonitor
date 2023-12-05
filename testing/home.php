@@ -432,38 +432,40 @@ function extractLastName($fullName) {
         }
     });    
 
-    $(".remove-student").click(function() {
-    var studentId = $(this).data("student-id");
-    var groupId = $("#selected_group_id").val(); // Fetching group_id from the dropdown
+    $(document).ready(function() {
+    $(document).off('click', '.remove-student').on('click', '.remove-student', function() {
+        var studentId = $(this).data("student-id");
+        var groupId = $("#selected_group_id").val();
 
-    // Check if a group is selected
-    if (groupId === 'all_students') {
-        alert("Please select a group first.");
-        return;
-    }
+        if (groupId === 'all_students') {
+            alert("Please select a group first.");
+            return;
+        }
 
-    var confirmation = confirm("Are you sure you want to remove this student from the group?");
-    if (confirmation) {
-        // AJAX call to remove the student from the group
-        $.ajax({
-            method: "POST",
-            url: "./users/remove_student_from_group.php",
-            data: { student_id: studentId, group_id: groupId },
-            success: function(response) {
-                var data = JSON.parse(response);
-                if (data.status === 'success') {
-                    // Update UI or notify the user
-                    // Example: $(this).closest('.student').remove();
-                } else {
-                    alert(data.message);
+        var confirmation = confirm("Are you sure you want to remove this student from the group?");
+        if (confirmation) {
+            var $this = $(this); // Cache this for use in the AJAX callback
+
+            $.ajax({
+                method: "POST",
+                url: "./users/remove_student_from_group.php",
+                data: { student_id: studentId, group_id: groupId },
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    if (data.status === 'success') {
+                        $this.closest('.student-container').remove();
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                error: function() {
+                    alert("Error removing student from the group.");
                 }
-            },
-            error: function() {
-                alert("Error removing student from the group.");
-            }
-        });
-    }
+            });
+        }
+    });
 });
+
 
 
 
