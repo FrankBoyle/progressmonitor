@@ -263,26 +263,28 @@ function extractLastName($fullName) {
             <input type="submit" name="add_new_student" value="Add New Student">
           </form>
 
-          <!-- Form to Assign Students to Group -->
-          <form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
-            <div style="display: flex; align-items: center;">
-              <div style="margin-right: 10px;">
-                <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
-                  <?php foreach ($students as $student): ?>
+<!-- Form to Assign Students to Group -->
+<form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
+    <div style="display: flex; align-items: center;">
+        <div style="margin-right: 10px;">
+            <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
+                <option disabled selected>Student name here</option>
+                <?php foreach ($students as $student): ?>
                     <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-              <div style="margin-right: 10px;">
-                <select name="group_id" class="select2">
-                  <?php foreach ($groups as $group): ?>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div style="margin-right: 10px;">
+            <select name="group_id" class="select2">
+                <?php foreach ($groups as $group): ?>
                     <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-              <button type="submit" name="assign_to_group">Assign to Group</button>
-            </div>
-          </form>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <button type="submit" name="assign_to_group">Assign to Group</button>
+    </div>
+</form>
+
 
           <?php if ($isAdmin): ?>
           <!-- Toggle Button -->
