@@ -205,7 +205,7 @@ function updateChart(selectedColumns) { // Update function signature
             data: trendlineData,
             type: 'line',
             width: 1000, // Set the width to 1000 pixels
-            color: barChartSeriesColors,  // Ensure trendline has same color as series
+            color: series.color,  // Ensure trendline has same color as series
             ...trendlineOptions,
         });
     });
@@ -318,7 +318,7 @@ function getChartOptions(dates, trendlineSeriesData) {
                 opacity: 0.15  // Increase opacity for visibility
             },
         },
-        colors: barChartSeriesColors,,
+        colors: seriesColors,
         dataLabels: dataLabelsSettings,
         yaxis: {
             labels: {
