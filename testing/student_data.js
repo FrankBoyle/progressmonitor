@@ -281,7 +281,11 @@ var dataLabelsSettings = {
     enabled: true,
     formatter: function(val, opts) {
         var seriesName = opts.w.config.series[opts.seriesIndex].name;
-
+        // If the value is null, return an empty string so no label is shown
+        if (val === null) {
+            return '';
+        }
+        
         // Hide data labels for 'Benchmark' and 'Trendline'.
         if (seriesName.includes('Trendline')) {
             return '';  // Return empty string to hide the label
