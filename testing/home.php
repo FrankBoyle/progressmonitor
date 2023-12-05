@@ -436,17 +436,15 @@ function extractLastName($fullName) {
     $(document).ready(function() {
     $(document).off('click', '.remove-student').on('click', '.remove-student', function() {
         var studentId = $(this).data("student-id");
-        var groupId = $("#selected_group_id").val();
+        var groupId = $("#selected_group_id").val(); // or another logic to get the correct groupId
+        var $thisButton = $(this); // Store the reference to the button
 
         if (groupId === 'all_students') {
             alert("Please select a group first.");
             return;
         }
 
-        var confirmation = confirm("Are you sure you want to remove this student from the group?");
-        if (confirmation) {
-            var $this = $(this); // Cache this for use in the AJAX callback
-
+        if (confirm("Are you sure you want to remove this student from the group?")) {
             $.ajax({
                 method: "POST",
                 url: "./users/remove_student_from_group.php",
@@ -454,7 +452,7 @@ function extractLastName($fullName) {
                 success: function(response) {
                     var data = JSON.parse(response);
                     if (data.status === 'success') {
-                        $this.closest('.student-container').remove(); // Replace '.student-container' with your actual container
+                        $thisButton.closest('div').remove(); // Remove the closest div that wraps student info
                     } else {
                         alert(data.message);
                     }
@@ -466,6 +464,7 @@ function extractLastName($fullName) {
         }
     });
 });
+
 
 </script>
 </body>
