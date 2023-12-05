@@ -320,15 +320,14 @@ if (isset($_GET['metadata_id'])) {
                             <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
                             <!-- Nest the checkbox inside the label -->
                             <label class="goal-checkbox-label">
-                                <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
-                                Select
-                            </label>
-                            <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
-                                      data-goal-id="<?php echo $goal['goal_id']; ?>">
-                                <?php echo htmlspecialchars($goal['goal_description']); ?>
-                            </textarea>
-                            <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
-                        </div>
+                            <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
+                </label>
+    <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" data-goal-id="<?php echo $goal['goal_id']; ?>">
+        <?php echo htmlspecialchars($goal['goal_description']); ?>
+    </textarea>
+    <input type="text" class="column-association" placeholder="Enter column names" data-goal-id="<?php echo $goal['goal_id']; ?>" />
+    <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
+</div>
                     </div>
                 </div>
                 <?php endforeach; ?>
