@@ -127,30 +127,24 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 // Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
-    for (let i = 1; i < headerNames.length; i++) { // Loop through headers, skipping the 'Date' column
+    for (let i = 1; i < headerNames.length; i++) {
         let allNulls = true;
         const scoreData = scores.map(row => {
-            const value = row[i - 1]; // Adjust for zero-based index
-            const score = value !== '' && !isNaN(value) ? value : null;
-            if (score !== null) {
+            const score = row[i - 1]; // Adjust for zero-based index
+            if (score !== '') {
                 allNulls = false;
+                return parseInt(score, 10);
             }
-            return score;
+            return null;
         });
-
-        if (allNulls) {
-            // If all values are null, insert a single minimal data point
-            // This can be at the first index or wherever appropriate
-            scoreData[0] = 0; // You can choose to set this to the minimum y-axis value
-        }
 
         seriesList.push({
-            name: customNames[i - 1] || headerNames[i], // Use the header name if custom name is not provided
+            name: customNames[i - 1] || headerNames[i],
             data: scoreData,
-            color: seriesColors[i - 1] || undefined, // Fallback to a default color if necessary
+            color: seriesColors[i - 1],
+            allNulls: allNulls // Add a flag indicating if the series has all null values
         });
     }
-    //console.log("Generated series list:", seriesList);
     return seriesList;
 }
 
@@ -349,14 +343,14 @@ function getChartOptions(dates, trendlineSeriesData) {
             curve: 'smooth'
         },
         markers: {
-            size: 0, // Hides markers for all-null series data points
-            discrete: [{
-              seriesIndex: indexOfAllNullSeries, // You need to calculate this index
-              dataPointIndex: 0, // Assuming the minimal data point is at index 0
-              fillColor: '#fff', // Same as background to "hide" the point
-              strokeColor: '#fff', // Same as background to "hide" the point
-              size: 5
-            }]
+            size: allNullSeriesIndices.length ? 0 : 4, // Hide markers if there are all-null series
+            discrete: allNullSeriesIndices.map(index => ({
+                seriesIndex: index,
+                dataPointIndex: 0,
+                fillColor: '#fff',
+                strokeColor: '#fff',
+                size: 0
+            }))
         },
     };
 }
