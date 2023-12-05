@@ -41,6 +41,12 @@ const barChartSeriesColors = [
     '#C21807'   // deep red
 ];
 
+// Initialization
+$(document).ready(function() {
+    initializeChart();  // Initialize line chart
+    initializeBarChart();  // Initialize bar chart
+});
+
 // Inside your accordion activation function
 $("#accordion").accordion({
     collapsible: true,
