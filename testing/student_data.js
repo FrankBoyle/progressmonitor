@@ -87,28 +87,24 @@ $("#accordion").accordion({
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
-    const dates = [];
-    const scores = [];
+    let data = [];
 
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
-        if (dateCell) {
-            dates.push(dateCell.textContent.trim());
-        } else {
-            dates.push(""); // or some default date or error handling
-        }
+        const date = dateCell ? dateCell.textContent.trim() : "";
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
-        const rowScores = [];
+        const rowScores = Array.from(scoreCells, cell => parseInt(cell.textContent || '0', 10));
 
-        scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0', 10));
-        });
-
-        scores.push(rowScores);
+        data.push({ date, scores: rowScores });
     });
-    //console.log("Extracted dates:", dates);
-    //console.log("Extracted scores:", scores);
+
+    // Sort the data by date in ascending order
+    data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // Extract dates and scores into separate arrays
+    const dates = data.map(item => item.date);
+    const scores = data.map(item => item.scores);
 
     return { dates, scores };
 }
