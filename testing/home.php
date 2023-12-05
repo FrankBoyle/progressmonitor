@@ -284,11 +284,13 @@ function extractLastName($fullName) {
             </div>
           </form>
 
+          <?php if ($isAdmin): ?>
           <!-- Toggle Button -->
           <form method="post">
             <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
             <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
           </form>
+          <?php endif; ?>
 
           <?php if (!empty($message)): ?>
     <p><?= htmlspecialchars($message) ?></p>
@@ -314,7 +316,7 @@ function extractLastName($fullName) {
     </form>
 <?php endif; ?>
 
-
+                  <?php if ($isAdmin): ?>
                   <?php if (!$isGroupFilterActive): ?>
                     <form method="post" style="display: inline; margin-right: 10px;">
                       <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
@@ -322,6 +324,7 @@ function extractLastName($fullName) {
                         <?= $showArchived ? 'Unarchive' : 'Archive' ?>
                       </button>
                     </form>
+                    <?php endif; ?>
 
                     <?php endif; ?>
                 </div>

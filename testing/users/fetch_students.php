@@ -47,12 +47,15 @@ if (!isset($_SESSION['teacher_id'])) {
 }
 
 function archiveStudent($studentId) {
-    global $connection;
-
-    $stmt = $connection->prepare("UPDATE Students SET archived = TRUE WHERE student_id = ?");
-    $stmt->execute([$studentId]);
-
-    return "Student archived successfully.";
+        global $connection;
+    if ($isAdmin) {
+        $stmt = $connection->prepare("UPDATE Students SET archived = TRUE WHERE student_id = ?");
+        $stmt->execute([$studentId]);
+        return "Student archived successfully.";
+    } else {
+              // Admin privileges required
+              die("Unauthorized access.");  
+    }
 }
 
 function unarchiveStudent($studentId) {
