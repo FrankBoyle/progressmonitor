@@ -895,7 +895,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    alert('Goal updated successfully.');
+                    //alert('Goal updated successfully.');
                 } else {
                     alert(response.message || 'Failed to update goal.');
                 }
@@ -951,6 +951,15 @@ $(document).ready(function() {
         const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
         const newText = $(this).siblings('.goaltext').val(); // Retrieves the text of the corresponding textarea
         updateGoalText(goalId, newText);
+    });
+    
+    $(document).on('click', '.goal-container', function() {
+        $(this).toggleClass('selected'); // Toggle the 'selected' class on click
+        var goalId = $(this).data('goal-id');
+        var isSelected = $(this).hasClass('selected');
+        
+        // Your logic for when a goal is selected or unselected
+        console.log('Goal ' + goalId + ' selected: ' + isSelected);
     });
     
 
