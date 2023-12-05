@@ -963,6 +963,8 @@ $(document).ready(function() {
     $(document).on('click', '.save-goal-btn', function() {
         const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
         const newText = $(this).siblings('.goaltext').val(); // Retrieves the text of the corresponding textarea
+        // Show an alert to the user
+        alert('Goal Updated.');
         updateGoalText(goalId, newText);
     });
     
