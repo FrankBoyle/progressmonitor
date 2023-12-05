@@ -412,7 +412,7 @@ if (isset($_GET['metadata_id'])) {
             $customColumnName = htmlspecialchars($scoreName); // Custom column name
             echo '<label>';
             echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '"';
-            echo ' data-column-name="' . $customColumnName . '">'; // Include custom name as data attribute
+            echo ' data-column-name="' . $customColumnName . '">';
             echo htmlspecialchars($scoreName);
             echo '</label>';
         }
