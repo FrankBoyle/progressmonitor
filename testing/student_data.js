@@ -41,40 +41,39 @@ const barChartSeriesColors = [
     '#C21807'   // deep red
 ];
 
-// Initialization
-$(document).ready(function() {
-    initializeChart();  // Initialize line chart
-    initializeBarChart();  // Initialize bar chart
-});
-
-// Accordion activation function
+// Inside your accordion activation function
 $("#accordion").accordion({
     collapsible: true,
     heightStyle: "content",
     active: false,
     activate: function(event, ui) {
-        selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-                               .map(checkbox => checkbox.getAttribute("data-column-name") || '');
         if (ui.newPanel.has('#chart').length) {
             selectedChartType = 'line';
-            updateLineChart(selectedColumns);  // Update line chart
+            //console.log("Line Graph activated");
+
+            // Update the selected columns based on the current state of the checkboxes
+            selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
+            if (!chart) {
+                initializeChart();
+            } else {
+                // Update the line chart with the selected columns
+                updateChart(selectedColumns); // Assuming updateChart is the function to update the line chart
+            }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
-            updateBarChart(selectedColumns);  // Update bar chart
+            //console.log("Bar Graph activated");
+
+            if (barChart === null) {
+                initializeBarChart(); // Initialize the bar chart
+            } else {
+                // Update the bar chart with the selected columns
+                selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                    .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+                updateBarChart(selectedColumns);
+            }
         }
-    }
-});
-
-// Checkbox change listener
-$("#columnSelector").on("change", "input[type='checkbox']", function() {
-    selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-                               .map(checkbox => checkbox.getAttribute("data-column-name") || '');
-
-    // Update the visible chart or both, based on your application's needs
-    if ($("#accordion").accordion("option", "active") === 0) {  // Check if line chart panel is active
-        updateLineChart(selectedColumns);
-    } else if ($("#accordion").accordion("option", "active") === 1) {  // Check if bar chart panel is active
-        updateBarChart(selectedColumns);
     }
 });
 
