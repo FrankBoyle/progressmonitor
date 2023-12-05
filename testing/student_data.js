@@ -961,12 +961,11 @@ $(document).ready(function() {
 
     // Event listener for goal checkbox change
     $(document).on('change', '.goal-checkbox', function() {
-        var $goalContainer = $(this).closest('.goal-container');
-        if ($(this).is(':checked')) {
-            $goalContainer.addClass('selected');
-        } else {
-            $goalContainer.removeClass('selected');
-        }
+        // Uncheck and remove 'selected' class from all other goals
+        $('.goal-checkbox').not(this).prop('checked', false).closest('.goal-container').removeClass('selected');
+        
+        // Toggle 'selected' class on the current goal container based on the checkbox state
+        $(this).closest('.goal-container').toggleClass('selected', this.checked);
     });
 
     // Event handler for the save button
