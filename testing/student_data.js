@@ -127,20 +127,21 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 // Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
-    for (let i = 1; i < headerNames.length; i++) { // Keep the loop condition
-        const scoreData = scores.map(row => row[i - 1]);
-        const seriesData = scoreData.filter(value => !isNaN(value)); // Filter out NaN values
+    for (let i = 1; i < headerNames.length; i++) { // Loop through headers
+        const scoreData = scores.map(row => {
+            // Check if the value is numeric or if it's null/empty
+            return isNaN(row[i - 1]) ? null : row[i - 1];
+        });
+        // Don't filter out null values; they need to be part of the series
         seriesList.push({
             name: customNames[i - 1] || `score${i}`,
-            data: seriesData,
-            color: seriesColors[i - 1], // Add this line to set color
-            //visible: false,  // Hide the series by default
+            data: scoreData,
+            color: seriesColors[i - 1],
         });
     }
     //console.log("Generated series list:", seriesList);
     return seriesList;
 }
-
 
 // This function will now return the new series list
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
