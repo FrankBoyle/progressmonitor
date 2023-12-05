@@ -180,7 +180,7 @@ $groups = $stmt->fetchAll();
 $isAdmin = false;
 
 // Fetch the admin status from the database
-$stmt = $connection->prepare("SELECT is_admin FROM Teachers WHERE teacher_id = ?");
+$stmt = $connection->prepare("SELECT Admin FROM Teachers WHERE teacher_id = ?");
 $stmt->execute([$teacherId]);
 $teacherData = $stmt->fetch(PDO::FETCH_ASSOC);
 
