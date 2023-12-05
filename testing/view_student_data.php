@@ -513,7 +513,7 @@ if (isset($_GET['metadata_id'])) {
 
 <script>
     $(document).ready(function() {
-      $('.goaltext').summernote({
+      $('.summernote').summernote({
         toolbar: [
           // Only include buttons for font type and basic styling
           ['font', ['fontname']], // Font type
