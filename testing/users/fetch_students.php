@@ -174,6 +174,18 @@ $teacherId = $_SESSION['teacher_id'];
 $stmt = $connection->prepare("SELECT group_id, group_name FROM Groups WHERE teacher_id = ?");
 $stmt->execute([$teacherId]);
 $groups = $stmt->fetchAll();
+$isAdmin = false;
+
+// Fetch the admin status from the database
+$stmt = $connection->prepare("SELECT is_admin FROM Teachers WHERE teacher_id = ?");
+$stmt->execute([$teacherId]);
+$teacherData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($teacherData && $teacherData['is_admin'] == 1) {
+    $isAdmin = true;
+}
+
+$_SESSION['is_admin'] = $isAdmin; // Storing isAdmin status in session for easy access
 
 if (isset($_POST['assign_to_group'])) {
     if (isset($_POST['student_ids']) && is_array($_POST['student_ids']) && !empty($_POST['student_ids'])) {
