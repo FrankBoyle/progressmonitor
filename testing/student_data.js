@@ -189,41 +189,48 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns) {
+function updateChart(selectedColumns) { // Update function signature
     // Clear existing series data
     chart.updateSeries([]);
 
-    // Regenerate allSeries with the current state, which includes nulls for missing data
-    const { dates, scores } = extractDataFromTable();
-    allSeries = generateSeriesData(scores, headerNames, selectedColumns); // Ensure selectedColumns is used as customNames
+    // Create a new series array based on selected columns
+    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
-    // Filter the allSeries for only those columns that have been selected
-    const newSeriesData = allSeries.filter(series => selectedColumns.includes(series.name));
-
-    // Generate trendline data for the new series
-    const trendlineSeriesData = newSeriesData.map(series => {
-        return {
+    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+    const trendlineSeriesData = [];
+    newSeriesData.forEach((series, index) => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
             name: series.name + ' Trendline',
-            data: getTrendlineData(series.data),
+            data: trendlineData,
             type: 'line',
-            color: series.color,
+            width: 1000, // Set the width to 1000 pixels
+            color: series.color,  // Ensure trendline has same color as series
             ...trendlineOptions,
-        };
+        });
     });
-
-    // Combine new series data with trendline data
+    
+    // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    //console.log("New series data based on selected columns:", newSeriesData);
+    //console.log("Trendline series data:", trendlineSeriesData);
+    //console.log("Final series data for updating the chart:", finalSeriesData);
 
-    // Update the chart with the new series data
+    // Update the chart with the new series data and updated names
+    chart.updateSeries(finalSeriesData);
+
+    // Update series names in the legend
     chart.updateOptions({
-        series: finalSeriesData,
-        xaxis: {
-            categories: dates // Ensure the x-axis uses the correct date categories
+        stroke: {
+            width: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.width : 5
+            ),
+            dashArray: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+            ),
         },
-        // Apply additional options as needed
     });
 }
-
 
 // Initializes the chart with default settings.
 function initializeChart() {
