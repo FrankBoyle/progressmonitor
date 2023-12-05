@@ -14,7 +14,7 @@ let trendlineSeriesData = []; // Declare both as global variables
 let scores = [];  // Declare scores globally
 // Define a flag to track whether the bar chart has been initialized
 let isBarChartInitialized = false;
-var goalColumnAssociations = {};
+
 
 const seriesColors = [
     '#082645',  // dark blue
@@ -960,35 +960,22 @@ $(document).ready(function() {
     });
 });
 
-    // Save button click event
-    $(document).on('click', '.save-goal-btn', function() {
-        const goalId = $(this).data('goal-id');
-        const newText = $(this).siblings('.goaltext').val();
-        const associatedColumns = $(this).siblings('.column-association').val();
-
-        // Update the goal-column associations
-        goalColumnAssociations[goalId] = associatedColumns.split(',').map(function(item) {
-            return item.trim(); // Trim whitespace from column names
-        });
-
-        updateGoalText(goalId, newText); // Existing update function
-        alert('Goal and column associations updated.');
+    // Event listener for goal checkbox change
+    $(document).on('change', '.goal-checkbox', function() {
+        // Uncheck and remove 'selected' class from all other goals
+        $('.goal-checkbox').not(this).prop('checked', false).closest('.goal-container').removeClass('selected');
+        
+        // Toggle 'selected' class on the current goal container based on the checkbox state
+        $(this).closest('.goal-container').toggleClass('selected', this.checked);
     });
 
-    // Checkbox change event to highlight columns
-    $(document).on('change', '.goal-checkbox', function() {
-        // Remove existing highlights
-        $('#dataTable th, #dataTable td').removeClass('highlighted');
-
-        // Highlight associated columns
-        if (this.checked) {
-            const goalId = $(this).data('goal-id');
-            const associatedColumns = goalColumnAssociations[goalId] || [];
-
-            associatedColumns.forEach(function(column) {
-                $('#dataTable th:contains("' + column + '"), #dataTable td.' + column).addClass('highlighted');
-            });
-        }
+    // Event handler for the save button
+    $(document).on('click', '.save-goal-btn', function() {
+        const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
+        const newText = $(this).siblings('.goaltext').val(); // Retrieves the text of the corresponding textarea
+        // Show an alert to the user
+        alert('Goal Updated.');
+        updateGoalText(goalId, newText);
     });
 
     $('#addDataRow').off('click').click(function() {
