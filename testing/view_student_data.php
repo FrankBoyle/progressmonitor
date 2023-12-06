@@ -601,6 +601,26 @@ $('.goal-checkbox').change(function() {
     }
 });
 
+document.getElementById('printButton').addEventListener('click', function() {
+    var selectedGoal = getSelectedGoalContent();
+    var graphContent = document.getElementById('chart').outerHTML; // Get the graph content
+    var notesContent = document.getElementById('graphNotes').value; // Get the notes content
+
+    var printWindow = window.open('', '_blank');
+    printWindow.document.write('<html><head><title>Print</title><link rel="stylesheet" href="path/to/your/print-stylesheet.css"></head><body>');
+    printWindow.document.write(selectedGoal + graphContent + notesContent);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => printWindow.print(), 1000); // Delay to ensure content loads
+});
+
+function getSelectedGoalContent() {
+    // Assuming selected goal has a specific class like 'selected'
+    var selectedGoal = document.querySelector('.goal-container.selected');
+    return selectedGoal ? selectedGoal.outerHTML : 'No goal selected';
+}
+
     });
   </script>
 
