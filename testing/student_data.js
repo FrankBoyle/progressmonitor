@@ -250,6 +250,7 @@ function initializeChart() {
     // Initialize the chart
     chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
     chart.render();    
+    console.log('Chart rendered:', $('#chart').data('apexcharts'));
 
     // Update the chart on checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -472,6 +473,7 @@ function initializeBarChart() {
     // Pass headerNames to getBarChartOptions function
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData, headerNames));
     barChart.render();
+    console.log('Chart rendered:', $('#barChart').data('apexcharts'));
 
     // Add an event listener to update the bar chart when checkboxes change
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {

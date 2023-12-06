@@ -639,7 +639,7 @@ $('#printButton').click(function() {
     }
 
     function getGraphContentAsImage(chartSelector, callback) {
-        var chart = $(chartSelector).data('apexcharts');
+      var chart = ApexCharts.getChartByID('chart');
         console.log('Chart object:', chart);
 
         if (chart) {
@@ -664,7 +664,7 @@ $('#printButton').click(function() {
         printWindow.document.close();
         setTimeout(() => printWindow.print(), 500);
     }
-    
+
     });
 
   </script>
