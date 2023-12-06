@@ -605,13 +605,18 @@ $('.goal-checkbox').change(function() {
 
     $('#printButton').click(function() {
     var selectedGoalContent = getSelectedGoalContent();
-    
+
     getGraphContentAsImage('#chart', function(graphImage) {
         var notesContent = $('#graphNotes').summernote('code');
-        var contentToPrint = '<div>' + selectedGoalContent + '</div>' +
-                             '<img src="' + graphImage + '">' +
-                             '<div>' + notesContent + '</div>';
+        var contentToPrint = '<div>' + selectedGoalContent + '</div>';
+        
+        if (graphImage) {
+            contentToPrint += '<img src="' + graphImage + '">';
+        } else {
+            contentToPrint += '<p>No graph available</p>';
+        }
 
+        contentToPrint += '<div>' + notesContent + '</div>';
         printContent(contentToPrint);
     });
 });
@@ -637,7 +642,7 @@ function getGraphContentAsImage(chartSelector, callback) {
             callback(imgURI);
         });
     } else {
-        callback(''); // No chart found
+        callback(null); // Indicate no chart was found
     }
 }
 
