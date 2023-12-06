@@ -637,25 +637,22 @@ function getSelectedGoalContent() {
 
 function getGraphContentAsImage(chartSelector, callback) {
     var chart = $(chartSelector).data('apexcharts');
-    console.log('Chart:', chart); // Debugging line
-
     if (chart) {
         chart.dataURI().then(({ imgURI }) => {
-            console.log('Image URI:', imgURI); // Debugging line
             callback(imgURI);
         });
     } else {
-        console.log('No chart found for selector:', chartSelector); // Debugging line
-        callback(null);
+        callback(null); // No chart found
     }
 }
 
-// Usage example
 getGraphContentAsImage('#chart', function(imageData) {
-    // Use imageData as the src for an img tag or however you need it
-    console.log(imageData); // This is your base64 image
+    if (imageData) {
+        console.log('Line Graph Image:', imageData); // This is your base64 image
+    } else {
+        console.log('No Line Graph found');
+    }
 });
-
 
 function printContent(content) {
     var printWindow = window.open('', '_blank');
