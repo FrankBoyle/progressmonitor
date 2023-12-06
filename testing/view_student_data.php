@@ -561,14 +561,26 @@ if (isset($_GET['metadata_id'])) {
 
     // Handle save button click
     $('#saveGraphNotes').click(function() {
-        var notes = $('#graphNotes').summernote('code');
-        var selectedGoalId = $('.goal-checkbox:checked').data('goal-id');
+    var notes = $('#graphNotes').summernote('code');
+    var goalId = $('.goal-checkbox:checked').data('goal-id');
+    var studentId = $('#currentStudentId').val(); // Assuming this is the correct way to get the student ID
+    var schoolId = $('#schoolIdInput').val();     // Assuming this is the correct way to get the school ID
+    var metadataId = urlParams.get('metadata_id'); // Assuming this is the correct way to get the metadata ID
 
-        // AJAX call to save the notes
-        $.post('./users/save_graph_notes.php', { notes: notes, goal_id: selectedGoalId }, function(response) {
-            // Handle response
-        });
+    // AJAX call to save the notes
+    $.post('./users/save_graph_notes.php', {
+        notes: notes,
+        goal_id: goalId,
+        student_id: studentId,
+        school_id: schoolId,
+        metadata_id: metadataId
+    }, function(response) {
+        // Handle response
+        console.log(response);
+    }).fail(function(error) {
+        console.log('Error: ', error);
     });
+});
     
     });
   </script>
