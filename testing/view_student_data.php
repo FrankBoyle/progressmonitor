@@ -602,7 +602,7 @@ $('.goal-checkbox').change(function() {
 });
 
     });
-    
+
     $('#printButton').click(function() {
     var selectedGoalContent = getSelectedGoalContent();
     
@@ -643,9 +643,9 @@ getGraphContentAsImage('#chart', function(imageData) {
 
 function printContent(content) {
     var printWindow = window.open('', '_blank');
-    printWindow.document.write('<html><head><title>Print</title></head><body>');
-    printWindow.document.write(content);
-    printWindow.document.write('</body></html>');
+printWindow.document.write('<html><head><title>Print</title></head><body>');
+printWindow.document.write(content);
+printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
 }
