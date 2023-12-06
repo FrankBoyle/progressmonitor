@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['goal_id'])) {
     $goalId = $_GET['goal_id'];
 
     try {
-        $stmt = $connection->prepare("SELECT notes FROM goal_notes WHERE goal_id = ?");
+        $stmt = $connection->prepare("SELECT notes FROM Goal_notes WHERE goal_id = ?");
         $stmt->execute([$goalId]);
 
         if ($stmt->rowCount() > 0) {
