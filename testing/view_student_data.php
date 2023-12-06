@@ -602,6 +602,21 @@ $('.goal-checkbox').change(function() {
 });
 
     });
+    
+    $('#printButton').click(function() {
+    var selectedGoalContent = getSelectedGoalContent();
+    
+    getGraphContentAsImage('#chart', function(graphImage) {
+        var notesContent = $('#graphNotes').summernote('code');
+        var contentToPrint = '<div>' + selectedGoalContent + '</div>' +
+                             '<img src="' + graphImage + '">' +
+                             '<div>' + notesContent + '</div>';
+
+        printContent(contentToPrint);
+    });
+});
+
+  
   </script>
 
 </body>
