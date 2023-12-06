@@ -451,6 +451,7 @@ if (isset($_GET['metadata_id'])) {
     <h3>Goal Notes</h3>
     <textarea id="graphNotes" class="summernote"></textarea>
     <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
+    <button id="printButton" class="btn btn-primary">Print</button>
 </div>
 
 </div>
