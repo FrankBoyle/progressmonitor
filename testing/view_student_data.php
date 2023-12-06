@@ -448,7 +448,7 @@ if (isset($_GET['metadata_id'])) {
 
 <!-- Editable notes section placed outside and below the accordion -->
 <div class="editable-notes-section">
-    <h3>Editable Notes</h3>
+    <h3>Goal Notes</h3>
     <textarea id="graphNotes" class="summernote"></textarea>
     <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
 </div>
