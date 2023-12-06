@@ -608,7 +608,7 @@ $('#printButton').click(function() {
         var selectedGoalContent = getSelectedGoalContent();
         console.log('Selected Goal Content:', selectedGoalContent);
 
-        getGraphContentAsImage('#chart', function(graphImage) {
+        getGraphContentAsImage('chart', function(graphImage) {
             console.log('Graph Image:', graphImage);
 
             var notesContent = $('#graphNotes').summernote('code');
@@ -640,6 +640,8 @@ $('#printButton').click(function() {
 
     function getGraphContentAsImage(chartId, callback) {
     var chart = ApexCharts.getChartByID(chartId);
+    console.log('Direct chart reference:', chart);
+
     if (chart) {
         chart.dataURI().then(({ imgURI }) => {
             callback(imgURI);
