@@ -616,13 +616,6 @@ $('.goal-checkbox').change(function() {
     });
 });
 
-
-function getSelectedGoalContent() {
-    // Assuming selected goal has a specific class like 'selected-goal'
-    var selectedGoal = $('.selected-goal');
-    return selectedGoal.length > 0 ? selectedGoal.html() : 'No goal selected';
-}
-
 function getSelectedGoalContent() {
     // Find the checkbox that is checked
     var selectedGoalCheckbox = $('.goal-checkbox:checked');
@@ -634,6 +627,17 @@ function getSelectedGoalContent() {
         return '<div>' + goalText + '</div>';
     } else {
         return 'No goal selected';
+    }
+}
+
+function getGraphContentAsImage(chartSelector, callback) {
+    var chart = $(chartSelector).data('apexcharts');
+    if (chart) {
+        chart.dataURI().then(({ imgURI }) => {
+            callback(imgURI);
+        });
+    } else {
+        callback(''); // No chart found
     }
 }
 
