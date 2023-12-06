@@ -564,7 +564,7 @@ if (isset($_GET['metadata_id'])) {
         var selectedGoalId = $('.goal-checkbox:checked').data('goal-id');
 
         // AJAX call to save the notes
-        $.post('save_graph_notes.php', { notes: notes, goal_id: selectedGoalId }, function(response) {
+        $.post('./users/save_graph_notes.php', { notes: notes, goal_id: selectedGoalId }, function(response) {
             // Handle response
         });
     });
