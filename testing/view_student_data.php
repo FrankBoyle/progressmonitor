@@ -603,42 +603,35 @@ $('.goal-checkbox').change(function() {
 });
 
 $('#printButton').click(function() {
-    var selectedGoalContent = getSelectedGoalContent();
-    captureChartImage('yourChartId', function(chartImage) {
-        var notesContent = $('#graphNotes').summernote('code');
-        var contentToPrint = '<div>' + selectedGoalContent + '</div>';
+        console.log('Print button clicked');
 
-        if (chartImage) {
-            contentToPrint += '<img src="' + chartImage + '">';
-        } else {
-            contentToPrint += '<p>No graph available</p>';
-        }
+        var selectedGoalContent = getSelectedGoalContent();
+        console.log('Selected Goal Content:', selectedGoalContent);
 
-        contentToPrint += '<div>' + notesContent + '</div>';
-        printContent(contentToPrint);
-    });
-});
+        getGraphContentAsImage('#chart', function(graphImage) {
+            console.log('Graph Image:', graphImage);
 
-function captureChartImage(chartId, callback) {
-    var chart = ApexCharts.getChartByID(chartId);
-    if (chart) {
-        chart.dataURI().then(({ imgURI }) => {
-            callback(imgURI);
-        }).catch(error => {
-            console.error('Error capturing chart image:', error);
-            callback(null);
+            var notesContent = $('#graphNotes').summernote('code');
+            console.log('Notes Content:', notesContent);
+
+            var contentToPrint = '<div>' + selectedGoalContent + '</div>';
+
+            if (graphImage) {
+                contentToPrint += '<img src="' + graphImage + '">';
+            } else {
+                contentToPrint += '<p>No graph available</p>';
+            }
+
+            contentToPrint += '<div>' + notesContent + '</div>';
+            printContent(contentToPrint);
         });
-    } else {
-        console.error('Chart not found:', chartId);
-        callback(null);
-    }
-}
+    });
 
     function getSelectedGoalContent() {
         var selectedGoalCheckbox = $('.goal-checkbox:checked');
         if (selectedGoalCheckbox.length > 0) {
             var goalContainer = selectedGoalCheckbox.closest('.goal-container');
-            var goalText = goalContainer.find('.goaltext').val(); // Assuming goal text is in the textarea
+            var goalText = goalContainer.find('.goaltext').val();
             return '<div>' + goalText + '</div>';
         } else {
             return 'No goal selected';
@@ -646,15 +639,22 @@ function captureChartImage(chartId, callback) {
     }
 
     function getGraphContentAsImage(chartSelector, callback) {
-    var chart = $(chartSelector).data('apexcharts');
-    if (chart) {
-        chart.dataURI().then(({ imgURI }) => {
-            callback(imgURI);
-        });
-    } else {
-        callback(null); // No chart found
+        var chart = $(chartSelector).data('apexcharts');
+        console.log('Chart object:', chart);
+
+        if (chart) {
+            chart.dataURI().then(({ imgURI }) => {
+                console.log('Image URI:', imgURI);
+                callback(imgURI);
+            }).catch(error => {
+                console.error('Error in dataURI:', error);
+                callback(null);
+            });
+        } else {
+            console.error('No chart found for selector:', chartSelector);
+            callback(null);
+        }
     }
-}
 
     function printContent(content) {
         var printWindow = window.open('', '_blank');
@@ -662,9 +662,9 @@ function captureChartImage(chartId, callback) {
         printWindow.document.write(content);
         printWindow.document.write('</body></html>');
         printWindow.document.close();
-        setTimeout(() => printWindow.print(), 500); // Delay to ensure content loads
+        setTimeout(() => printWindow.print(), 500);
     }
-
+    
     });
 
   </script>
