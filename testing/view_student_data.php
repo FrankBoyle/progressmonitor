@@ -582,6 +582,24 @@ if (isset($_GET['metadata_id'])) {
     });
 });
     
+$('.goal-checkbox').change(function() {
+    var goalId = $(this).data('goal-id');
+    if (this.checked) {
+        $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
+            var data = JSON.parse(response);
+            if (data.status === 'success') {
+                $('#graphNotes').summernote('code', data.notes);
+            } else {
+                $('#graphNotes').summernote('code', '');
+                // Optionally alert the user if no notes were found
+                alert(data.message);
+            }
+        });
+    } else {
+        $('#graphNotes').summernote('code', ''); // Clear the notes when no goal is selected
+    }
+});
+
     });
   </script>
 
