@@ -638,23 +638,20 @@ $('#printButton').click(function() {
         }
     }
 
-    function getGraphContentAsImage(chartSelector, callback) {
-      var chart = ApexCharts.getChartByID('chart');
-        console.log('Chart object:', chart);
-
-        if (chart) {
-            chart.dataURI().then(({ imgURI }) => {
-                console.log('Image URI:', imgURI);
-                callback(imgURI);
-            }).catch(error => {
-                console.error('Error in dataURI:', error);
-                callback(null);
-            });
-        } else {
-            console.error('No chart found for selector:', chartSelector);
+    function getGraphContentAsImage(chartId, callback) {
+    var chart = ApexCharts.getChartByID(chartId);
+    if (chart) {
+        chart.dataURI().then(({ imgURI }) => {
+            callback(imgURI);
+        }).catch(error => {
+            console.error('Error in dataURI:', error);
             callback(null);
-        }
+        });
+    } else {
+        console.error('No chart found with ID:', chartId);
+        callback(null);
     }
+}
 
     function printContent(content) {
         var printWindow = window.open('', '_blank');
