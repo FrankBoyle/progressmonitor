@@ -444,12 +444,13 @@ if (isset($_GET['metadata_id'])) {
     <div>
         <div id="barChart" style="width: 1000px;"></div>
     </div>
-    <!-- Add the editable notes section here -->
+</div>
+
+<!-- Editable notes section placed outside and below the accordion -->
+<div class="editable-notes-section">
     <h3>Editable Notes</h3>
-    <div>
-        <textarea id="graphNotes" class="summernote"></textarea>
-        <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
-    </div>
+    <textarea id="graphNotes" class="summernote"></textarea>
+    <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
 </div>
 
 </div>
