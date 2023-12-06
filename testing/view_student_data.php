@@ -637,12 +637,16 @@ function getSelectedGoalContent() {
 
 function getGraphContentAsImage(chartSelector, callback) {
     var chart = $(chartSelector).data('apexcharts');
+    console.log('Chart:', chart); // Debugging line
+
     if (chart) {
         chart.dataURI().then(({ imgURI }) => {
+            console.log('Image URI:', imgURI); // Debugging line
             callback(imgURI);
         });
     } else {
-        callback(null); // Indicate no chart was found
+        console.log('No chart found for selector:', chartSelector); // Debugging line
+        callback(null);
     }
 }
 
