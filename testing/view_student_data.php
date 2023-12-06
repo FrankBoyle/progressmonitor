@@ -604,7 +604,6 @@ $('.goal-checkbox').change(function() {
 
 $('#printButton').click(function() {
     var selectedGoalContent = getSelectedGoalContent();
-
     getGraphContentAsImage('#chart', function(graphImage) {
         var notesContent = $('#graphNotes').summernote('code');
         var contentToPrint = '<div>' + selectedGoalContent + '</div>';
@@ -632,15 +631,15 @@ $('#printButton').click(function() {
     }
 
     function getGraphContentAsImage(chartSelector, callback) {
-        var chart = $(chartSelector).data('apexcharts');
-        if (chart) {
-            chart.dataURI().then(({ imgURI }) => {
-                callback(imgURI);
-            });
-        } else {
-            callback(null); // No chart found
-        }
+    var chart = $(chartSelector).data('apexcharts');
+    if (chart) {
+        chart.dataURI().then(({ imgURI }) => {
+            callback(imgURI);
+        });
+    } else {
+        callback(null); // No chart found
     }
+}
 
     function printContent(content) {
         var printWindow = window.open('', '_blank');
