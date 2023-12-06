@@ -54,7 +54,8 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
-   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -648,7 +649,7 @@ $('#printButton').click(function() {
         printWindow.document.close();
         setTimeout(() => printWindow.print(), 500); // Delay to ensure content loads
     }
-    
+
     });
 
   </script>
