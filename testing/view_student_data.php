@@ -605,9 +605,8 @@ $('.goal-checkbox').change(function() {
 
     $('#printButton').click(function() {
     var selectedGoalContent = getSelectedGoalContent();
-});
 
-function getSelectedGoalContent() {
+    function getSelectedGoalContent() {
     // Find the checkbox that is checked
     var selectedGoalCheckbox = $('.goal-checkbox:checked');
 
@@ -640,7 +639,9 @@ printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
 }
-  
+});
+
+
   </script>
 
 </body>
