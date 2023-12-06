@@ -623,14 +623,17 @@ function getSelectedGoalContent() {
     return selectedGoal.length > 0 ? selectedGoal.html() : 'No goal selected';
 }
 
-function getGraphContentAsImage(chartSelector, callback) {
-    var chart = $(chartSelector).data('apexcharts');
-    if (chart) {
-        chart.dataURI().then(({ imgURI }) => {
-            callback(imgURI);
-        });
+function getSelectedGoalContent() {
+    // Find the checkbox that is checked
+    var selectedGoalCheckbox = $('.goal-checkbox:checked');
+
+    // If a goal is selected, find the corresponding goal description
+    if (selectedGoalCheckbox.length > 0) {
+        var goalContainer = selectedGoalCheckbox.closest('.goal-container');
+        var goalText = goalContainer.find('.goaltext').val(); // Assuming goal text is in the textarea
+        return '<div>' + goalText + '</div>';
     } else {
-        callback(''); // No chart found
+        return 'No goal selected';
     }
 }
 
