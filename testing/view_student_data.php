@@ -435,16 +435,23 @@ if (isset($_GET['metadata_id'])) {
     <button type ="button" id="updateBenchmark" class="btn btn-primary">Update Benchmark</button>
   -->
 
-<div id="accordion">
+  <div id="accordion">
     <h3>Line Graph</h3>
     <div>
-    <div id="chart" style="width: 1000px;"></div>
+        <div id="chart" style="width: 1000px;"></div>
     </div>
     <h3>Bar Graph</h3>
     <div>
-    <div id="barChart" style="width: 1000px;"></div>
+        <div id="barChart" style="width: 1000px;"></div>
+    </div>
+    <!-- Add the editable notes section here -->
+    <h3>Editable Notes</h3>
+    <div>
+        <textarea id="graphNotes" class="summernote"></textarea>
+        <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
     </div>
 </div>
+
 </div>
 </div>
 </div>
@@ -530,6 +537,38 @@ if (isset($_GET['metadata_id'])) {
         ],
         fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
       });
+
+    // Initialize Summernote
+    $('#graphNotes').summernote({
+        height: 300,
+        toolbar: [
+            // Add your toolbar options here
+        ]
+    });
+
+    // Disable the textbox initially
+    $('#graphNotes').summernote('disable');
+
+    // Enable/Disable the textbox based on goal selection
+    $('.goal-checkbox').change(function() {
+        if ($(this).is(':checked')) {
+            $('#graphNotes').summernote('enable');
+        } else {
+            $('#graphNotes').summernote('disable');
+        }
+    });
+
+    // Handle save button click
+    $('#saveGraphNotes').click(function() {
+        var notes = $('#graphNotes').summernote('code');
+        var selectedGoalId = $('.goal-checkbox:checked').data('goal-id');
+
+        // AJAX call to save the notes
+        $.post('save_graph_notes.php', { notes: notes, goal_id: selectedGoalId }, function(response) {
+            // Handle response
+        });
+    });
+    
     });
   </script>
 
