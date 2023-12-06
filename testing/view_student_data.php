@@ -604,12 +604,12 @@ $('.goal-checkbox').change(function() {
 
 $('#printButton').click(function() {
     var selectedGoalContent = getSelectedGoalContent();
-    getGraphContentAsImage('#chart', function(graphImage) {
+    captureChartImage('yourChartId', function(chartImage) {
         var notesContent = $('#graphNotes').summernote('code');
         var contentToPrint = '<div>' + selectedGoalContent + '</div>';
-        
-        if (graphImage) {
-            contentToPrint += '<img src="' + graphImage + '">';
+
+        if (chartImage) {
+            contentToPrint += '<img src="' + chartImage + '">';
         } else {
             contentToPrint += '<p>No graph available</p>';
         }
@@ -618,6 +618,21 @@ $('#printButton').click(function() {
         printContent(contentToPrint);
     });
 });
+
+function captureChartImage(chartId, callback) {
+    var chart = ApexCharts.getChartByID(chartId);
+    if (chart) {
+        chart.dataURI().then(({ imgURI }) => {
+            callback(imgURI);
+        }).catch(error => {
+            console.error('Error capturing chart image:', error);
+            callback(null);
+        });
+    } else {
+        console.error('Chart not found:', chartId);
+        callback(null);
+    }
+}
 
     function getSelectedGoalContent() {
         var selectedGoalCheckbox = $('.goal-checkbox:checked');
