@@ -636,9 +636,18 @@ function getSelectedGoalContent() {
 }
 
 function getGraphContentAsImage(chartSelector, callback) {
-    html2canvas(document.querySelector(chartSelector)).then(canvas => {
-        callback(canvas.toDataURL());
-    });
+    var chart = $(chartSelector).data('apexcharts');
+    console.log('Chart:', chart); // Debugging line
+
+    if (chart) {
+        chart.dataURI().then(({ imgURI }) => {
+            console.log('Image URI:', imgURI); // Debugging line
+            callback(imgURI);
+        });
+    } else {
+        console.log('No chart found for selector:', chartSelector); // Debugging line
+        callback(null);
+    }
 }
 
 // Usage example
