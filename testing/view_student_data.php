@@ -602,54 +602,6 @@ $('.goal-checkbox').change(function() {
 });
 
     });
-
-    $('#printButton').click(function() {
-    var selectedGoalContent = getSelectedGoalContent();
-    
-    getGraphContentAsImage('#chart', function(graphImage) {
-        var notesContent = $('#graphNotes').summernote('code');
-        var contentToPrint = '<div>' + selectedGoalContent + '</div>' +
-                             '<img src="' + graphImage + '">' +
-                             '<div>' + notesContent + '</div>';
-
-        printContent(contentToPrint);
-    });
-});
-
-
-function getSelectedGoalContent() {
-    // Assuming selected goal has a specific class like 'selected-goal'
-    var selectedGoal = $('.selected-goal');
-    return selectedGoal.length > 0 ? selectedGoal.html() : 'No goal selected';
-}
-
-function getGraphContentAsImage(chartSelector, callback) {
-    var chart = $(chartSelector).data('apexcharts');
-    if (chart) {
-        chart.dataURI().then(({ imgURI }) => {
-            callback(imgURI);
-        });
-    } else {
-        callback(''); // No chart found
-    }
-}
-
-// Usage example
-getGraphContentAsImage('#chart', function(imageData) {
-    // Use imageData as the src for an img tag or however you need it
-    console.log(imageData); // This is your base64 image
-});
-
-
-function printContent(content) {
-    var printWindow = window.open('', '_blank');
-printWindow.document.write('<html><head><title>Print</title></head><body>');
-printWindow.document.write(content);
-printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-}
-  
   </script>
 
 </body>
