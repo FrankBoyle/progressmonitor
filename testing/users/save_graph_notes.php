@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $notes = $_POST['notes'];
 
     // SQL to insert or update notes
-    $sql = "INSERT INTO goal_notes (goal_id, student_id, school_id, metadata_id, notes) 
+    $sql = "INSERT INTO Goal_notes (goal_id, student_id, school_id, metadata_id, notes) 
             VALUES (?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE student_id = ?, school_id = ?, metadata_id = ?, notes = ?";
     $stmt = $connection->prepare($sql);
