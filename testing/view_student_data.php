@@ -605,20 +605,6 @@ $('.goal-checkbox').change(function() {
 
     $('#printButton').click(function() {
     var selectedGoalContent = getSelectedGoalContent();
-
-    getGraphContentAsImage('#chart', function(graphImage) {
-        var notesContent = $('#graphNotes').summernote('code');
-        var contentToPrint = '<div>' + selectedGoalContent + '</div>';
-        
-        if (graphImage) {
-            contentToPrint += '<img src="' + graphImage + '">';
-        } else {
-            contentToPrint += '<p>No graph available</p>';
-        }
-
-        contentToPrint += '<div>' + notesContent + '</div>';
-        printContent(contentToPrint);
-    });
 });
 
 function getSelectedGoalContent() {
@@ -645,14 +631,6 @@ function getGraphContentAsImage(chartSelector, callback) {
         callback(null); // No chart found
     }
 }
-
-getGraphContentAsImage('#chart', function(imageData) {
-    if (imageData) {
-        console.log('Line Graph Image:', imageData); // This is your base64 image
-    } else {
-        console.log('No Line Graph found');
-    }
-});
 
 function printContent(content) {
     var printWindow = window.open('', '_blank');
