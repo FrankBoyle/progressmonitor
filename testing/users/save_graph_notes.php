@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "INSERT INTO goal_notes (goal_id, student_id, school_id, metadata_id, notes) 
             VALUES (?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE student_id = ?, school_id = ?, metadata_id = ?, notes = ?";
-    $stmt = $conn->prepare($sql);
+    $stmt = $connection->prepare($sql);
     $stmt->bind_param("iiiiiiis", $goalId, $studentId, $schoolId, $metadataId, $notes, $studentId, $schoolId, $metadataId, $notes);
 
     if ($stmt->execute()) {
