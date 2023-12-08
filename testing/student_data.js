@@ -54,13 +54,9 @@ $("#accordion").accordion({
     heightStyle: "content",
     active: false,
     activate: function(event, ui) {
-        if (ui.newPanel.has('#chart').length && chart) {
-            // Re-render or update the chart when its panel is opened
-            setTimeout(function() {
-                chart.updateOptions({
-                    // If you need to update any options, do it here
-                }, false, true); // The last parameter forces a redraw
-            }, 0); // Timeout to allow for the panel to become fully visible
+        if (ui.newPanel.has('#chart').length) {
+            selectedChartType = 'line';
+            //console.log("Line Graph activated");
 
             // Update the selected columns based on the current state of the checkboxes
             selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
