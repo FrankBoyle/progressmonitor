@@ -603,66 +603,37 @@ $('.goal-checkbox').change(function() {
 });
 
 $('#printButton').click(function() {
-        console.log('Print button clicked');
-
-        var selectedGoalContent = getSelectedGoalContent();
-        console.log('Selected Goal Content:', selectedGoalContent);
-
-        getGraphContentAsImage('chart', function(graphImage) {
-            console.log('Graph Image:', graphImage);
-
-            var notesContent = $('#graphNotes').summernote('code');
-            console.log('Notes Content:', notesContent);
-
-            var contentToPrint = '<div>' + selectedGoalContent + '</div>';
-
-            if (graphImage) {
-                contentToPrint += '<img src="' + graphImage + '">';
-            } else {
-                contentToPrint += '<p>No graph available</p>';
-            }
-
-            contentToPrint += '<div>' + notesContent + '</div>';
-            printContent(contentToPrint);
-        });
+    getGraphContentAsImage('chart', function(graphImage) {
+        var notesContent = $('#graphNotes').summernote('code');
+        var contentToPrint = '<div><img src="' + graphImage + '"></div>';
+        contentToPrint += '<div>' + notesContent + '</div>';
+        printContent(contentToPrint);
     });
+});
 
-    function getSelectedGoalContent() {
-        var selectedGoalCheckbox = $('.goal-checkbox:checked');
-        if (selectedGoalCheckbox.length > 0) {
-            var goalContainer = selectedGoalCheckbox.closest('.goal-container');
-            var goalText = goalContainer.find('.goaltext').val();
-            return '<div>' + goalText + '</div>';
-        } else {
-            return 'No goal selected';
-        }
-    }
-
-    function getGraphContentAsImage(chartId, callback) {
+function getGraphContentAsImage(chartId, callback) {
     var chart = ApexCharts.getChartByID(chartId);
-    console.log('Direct chart reference:', chart);
-
     if (chart) {
         chart.dataURI().then(({ imgURI }) => {
             callback(imgURI);
-        }).catch(error => {
-            console.error('Error in dataURI:', error);
-            callback(null);
         });
-    } else {
-        console.error('No chart found with ID:', chartId);
-        callback(null);
     }
 }
 
-    function printContent(content) {
-        var printWindow = window.open('', '_blank');
+function printContent(content) {
+    var printWindow = window.open('', '_blank');
+    var image = new Image();
+    image.onload = function() {
         printWindow.document.write('<html><head><title>Print</title></head><body>');
         printWindow.document.write(content);
         printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        setTimeout(() => printWindow.print(), 500);
-    }
+        printWindow.document.close(); // close the document before calling print to ensure all resources are loaded
+        printWindow.focus(); // focus on the new window to ensure the print dialog opens for it
+        setTimeout(() => printWindow.print(), 500); // slight delay to ensure content is rendered
+    };
+    image.src = content.match(/src="([^"]+)"/)[1]; // extract image src from content and set it to Image object
+}
+
 
     });
 
