@@ -61,6 +61,7 @@ $("#accordion").accordion({
                     // If you need to update any options, do it here
                 }, false, true); // The last parameter forces a redraw
             }, 0); // Timeout to allow for the panel to become fully visible
+
             // Update the selected columns based on the current state of the checkboxes
             selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
                 .map(checkbox => checkbox.getAttribute("data-column-name") || '');
@@ -233,9 +234,6 @@ function updateChart(selectedColumns) { // Update function signature
             ),
         },
     });
-    if (chart) {
-        chart.updateSeries(newSeriesData, true); // The 'true' flag forces a redraw
-    }
 }
 
 // Initializes the chart with default settings.
