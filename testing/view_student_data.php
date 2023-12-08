@@ -603,10 +603,11 @@ $('.goal-checkbox').change(function() {
 });
 
 $('#printButton').click(function() {
-    console.log('Print button clicked');
-    getGraphContentAsImage('chart', function(graphImage) {
+    // Make sure this ID matches your chart's container ID
+    var chartContainerId = 'chart';
+
+    getGraphContentAsImage(chartContainerId, function(graphImage) {
         if (graphImage) {
-            console.log('Graph Image received:', graphImage);
             var notesContent = $('#graphNotes').summernote('code');
             var contentToPrint = '<div><img src="' + graphImage + '"></div>';
             contentToPrint += '<div>' + notesContent + '</div>';
@@ -617,18 +618,19 @@ $('#printButton').click(function() {
     });
 });
 
-function getGraphContentAsImage(chartId, callback) {
-    console.log('Getting graph content as image for chart ID:', chartId);
-    var chart = ApexCharts.getChartByID(chartId);
-    if (chart) {
-        chart.dataURI().then(({ imgURI }) => {
+function getGraphContentAsImage(chartContainerId, callback) {
+    // Find the chart instance by the container ID
+    var chartInstance = ApexCharts.instances.find(chart => chart.rendered && chart.el.id === chartContainerId);
+    
+    if (chartInstance) {
+        chartInstance.dataURI().then(({ imgURI }) => {
             callback(imgURI);
         }).catch(error => {
             console.error('Error in converting chart to image:', error);
             callback(null);
         });
     } else {
-        console.error('No chart found with ID:', chartId);
+        console.error('No chart found with container ID:', chartContainerId);
         callback(null);
     }
 }
@@ -637,7 +639,6 @@ function printContent(content) {
     var printWindow = window.open('', '_blank');
     var image = new Image();
     image.onload = function() {
-        console.log('Image loaded, printing content');
         printWindow.document.write('<html><head><title>Print</title></head><body>');
         printWindow.document.write(content);
         printWindow.document.write('</body></html>');
@@ -651,15 +652,6 @@ function printContent(content) {
     image.src = content.match(/src="([^"]+)"/)[1];
 }
 
-// Add a check for potential popup blocker issues
-$(document).on('click', '#printButton', function() {
-    var w = window.open();
-    if (!w) {
-        alert('Please allow popups for this website');
-    } else {
-        w.close();
-    }
-});
 
 
     });
