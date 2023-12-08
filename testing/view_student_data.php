@@ -651,6 +651,17 @@ function printContent(content) {
     image.src = content.match(/src="([^"]+)"/)[1];
 }
 
+// Add a check for potential popup blocker issues
+$(document).on('click', '#printButton', function() {
+    var w = window.open();
+    if (!w) {
+        alert('Please allow popups for this website');
+    } else {
+        w.close();
+    }
+});
+
+
     });
 
   </script>
