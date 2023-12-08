@@ -603,20 +603,33 @@ $('.goal-checkbox').change(function() {
 });
 
 $('#printButton').click(function() {
+    console.log('Print button clicked');
     getGraphContentAsImage('chart', function(graphImage) {
-        var notesContent = $('#graphNotes').summernote('code');
-        var contentToPrint = '<div><img src="' + graphImage + '"></div>';
-        contentToPrint += '<div>' + notesContent + '</div>';
-        printContent(contentToPrint);
+        if (graphImage) {
+            console.log('Graph Image received:', graphImage);
+            var notesContent = $('#graphNotes').summernote('code');
+            var contentToPrint = '<div><img src="' + graphImage + '"></div>';
+            contentToPrint += '<div>' + notesContent + '</div>';
+            printContent(contentToPrint);
+        } else {
+            console.error('Failed to receive graph image');
+        }
     });
 });
 
 function getGraphContentAsImage(chartId, callback) {
+    console.log('Getting graph content as image for chart ID:', chartId);
     var chart = ApexCharts.getChartByID(chartId);
     if (chart) {
         chart.dataURI().then(({ imgURI }) => {
             callback(imgURI);
+        }).catch(error => {
+            console.error('Error in converting chart to image:', error);
+            callback(null);
         });
+    } else {
+        console.error('No chart found with ID:', chartId);
+        callback(null);
     }
 }
 
@@ -624,16 +637,19 @@ function printContent(content) {
     var printWindow = window.open('', '_blank');
     var image = new Image();
     image.onload = function() {
+        console.log('Image loaded, printing content');
         printWindow.document.write('<html><head><title>Print</title></head><body>');
         printWindow.document.write(content);
         printWindow.document.write('</body></html>');
-        printWindow.document.close(); // close the document before calling print to ensure all resources are loaded
-        printWindow.focus(); // focus on the new window to ensure the print dialog opens for it
-        setTimeout(() => printWindow.print(), 500); // slight delay to ensure content is rendered
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => printWindow.print(), 500);
     };
-    image.src = content.match(/src="([^"]+)"/)[1]; // extract image src from content and set it to Image object
+    image.onerror = function() {
+        console.error('Error loading the image');
+    };
+    image.src = content.match(/src="([^"]+)"/)[1];
 }
-
 
     });
 
