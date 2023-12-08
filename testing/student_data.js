@@ -233,6 +233,9 @@ function updateChart(selectedColumns) { // Update function signature
             ),
         },
     });
+    if (chart) {
+        chart.updateSeries(newSeriesData, true); // The 'true' flag forces a redraw
+    }
 }
 
 // Initializes the chart with default settings.
