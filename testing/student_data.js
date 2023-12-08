@@ -309,7 +309,7 @@ function getChartOptions(dates, trendlineSeriesData) {
         }),
         chart: {
             type: 'line',
-            width: 1000, // Set the width to 1000 pixels
+            width: 800, // Set the width to 1000 pixels
             dropShadow: {
                 enabled: true,
                 color: seriesColors,
