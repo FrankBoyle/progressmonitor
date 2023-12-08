@@ -204,7 +204,7 @@ function updateChart(selectedColumns) { // Update function signature
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            width: 1200, // Set the width to 1000 pixels
+            width: '85%', // Set the width to 1000 pixels
             color: series.color,  // Ensure trendline has same color as series
             ...trendlineOptions,
         });
@@ -309,7 +309,7 @@ function getChartOptions(dates, trendlineSeriesData) {
         }),
         chart: {
             type: 'line',
-            width: 1200, // Set the width to 1000 pixels
+            width: '85%', // Set the width to 1000 pixels
             dropShadow: {
                 enabled: true,
                 color: seriesColors,
@@ -544,7 +544,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
     return {
         chart: {
             type: 'bar',
-            width: 1200,
+            width: '85%',
             stacked: true,
         },
         xaxis: {
