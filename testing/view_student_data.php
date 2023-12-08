@@ -603,10 +603,8 @@ $('.goal-checkbox').change(function() {
 });
 
 $('#printButton').click(function() {
-    // Make sure this ID matches your chart's container ID
-    var chartContainerId = 'chart';
-
-    getGraphContentAsImage(chartContainerId, function(graphImage) {
+    var currentChart = selectedChartType === 'bar' ? barChart : chart;
+    getGraphContentAsImage(currentChart, function(graphImage) {
         if (graphImage) {
             var notesContent = $('#graphNotes').summernote('code');
             var contentToPrint = '<div><img src="' + graphImage + '"></div>';
@@ -618,19 +616,16 @@ $('#printButton').click(function() {
     });
 });
 
-function getGraphContentAsImage(chartContainerId, callback) {
-    // Find the chart instance by the container ID
-    var chartInstance = ApexCharts.instances.find(chart => chart.rendered && chart.el.id === chartContainerId);
-    
-    if (chartInstance) {
-        chartInstance.dataURI().then(({ imgURI }) => {
+function getGraphContentAsImage(chartVar, callback) {
+    if (chartVar) {
+        chartVar.dataURI().then(({ imgURI }) => {
             callback(imgURI);
         }).catch(error => {
             console.error('Error in converting chart to image:', error);
             callback(null);
         });
     } else {
-        console.error('No chart found with container ID:', chartContainerId);
+        console.error('Chart variable is null or undefined');
         callback(null);
     }
 }
