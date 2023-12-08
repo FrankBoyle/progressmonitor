@@ -619,17 +619,16 @@ $('#printButton').click(function() {
 });
 
 function getSelectedGoalContent() {
-    // Find the checked checkbox within the goal containers
     var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
     if (checkedCheckbox) {
-        // Find the closest goal-container to this checkbox
         var goalContainer = checkedCheckbox.closest('.goal-container');
         if (goalContainer) {
-            // Return the innerHTML of the goalContainer or specific part of it
-            return goalContainer.innerHTML;  // Adjust this if you want to return a specific part
+            // Extract and return only the goal text
+            var goalTextElement = goalContainer.querySelector('.goaltext');
+            return goalTextElement ? goalTextElement.value : ''; // Using value to get the text content
         }
     }
-    return 'No goal selected'; // Fallback text if no goal is selected
+    return 'No goal selected';
 }
 
 function getGraphContentAsImage(chartVar, callback) {
