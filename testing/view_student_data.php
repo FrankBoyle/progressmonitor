@@ -608,7 +608,7 @@ $('#printButton').click(function() {
         if (graphImage) {
             var notesContent = $('#graphNotes').summernote('code');
             var selectedGoalContent = getSelectedGoalContent();
-            var contentToPrint = '<div>' + selectedGoalContent + '</div>';
+            var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
             contentToPrint += '<div><img src="' + graphImage + '"></div>';
             contentToPrint += '<div>' + notesContent + '</div>';
             printContent(contentToPrint);
@@ -619,8 +619,8 @@ $('#printButton').click(function() {
 });
 
 function getSelectedGoalContent() {
-    var selectedGoalElement = document.querySelector('.selected-goal');
-    return selectedGoalElement ? selectedGoalElement.innerHTML : '';
+    var selectedGoalElement = document.querySelector('.selected-goal'); // Adjust this selector as needed
+    return selectedGoalElement ? selectedGoalElement.innerHTML : 'No goal selected'; // Fallback text
 }
 
 function getGraphContentAsImage(chartVar, callback) {
