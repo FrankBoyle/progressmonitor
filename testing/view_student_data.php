@@ -619,8 +619,17 @@ $('#printButton').click(function() {
 });
 
 function getSelectedGoalContent() {
-    var selectedGoalElement = document.querySelector('.selected-goal'); // Adjust this selector as needed
-    return selectedGoalElement ? selectedGoalElement.innerHTML : 'No goal selected'; // Fallback text
+    // Find the checked checkbox within the goal containers
+    var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
+    if (checkedCheckbox) {
+        // Find the closest goal-container to this checkbox
+        var goalContainer = checkedCheckbox.closest('.goal-container');
+        if (goalContainer) {
+            // Return the innerHTML of the goalContainer or specific part of it
+            return goalContainer.innerHTML;  // Adjust this if you want to return a specific part
+        }
+    }
+    return 'No goal selected'; // Fallback text if no goal is selected
 }
 
 function getGraphContentAsImage(chartVar, callback) {
