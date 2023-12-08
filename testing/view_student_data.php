@@ -607,7 +607,9 @@ $('#printButton').click(function() {
     getGraphContentAsImage(currentChart, function(graphImage) {
         if (graphImage) {
             var notesContent = $('#graphNotes').summernote('code');
-            var contentToPrint = '<div><img src="' + graphImage + '"></div>';
+            var selectedGoalContent = getSelectedGoalContent();
+            var contentToPrint = '<div>' + selectedGoalContent + '</div>';
+            contentToPrint += '<div><img src="' + graphImage + '"></div>';
             contentToPrint += '<div>' + notesContent + '</div>';
             printContent(contentToPrint);
         } else {
@@ -615,6 +617,11 @@ $('#printButton').click(function() {
         }
     });
 });
+
+function getSelectedGoalContent() {
+    var selectedGoalElement = document.querySelector('.selected-goal');
+    return selectedGoalElement ? selectedGoalElement.innerHTML : '';
+}
 
 function getGraphContentAsImage(chartVar, callback) {
     if (chartVar) {
