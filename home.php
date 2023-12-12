@@ -411,7 +411,10 @@ function extractLastName($fullName) {
   </footer>
 </div>
 <!-- ./wrapper -->
-
+<!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="./dist/js/adminlte.min.js"></script>
   <script>
 
 function confirmArchive(action) {
