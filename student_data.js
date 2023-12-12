@@ -15,6 +15,7 @@ let scores = [];  // Declare scores globally
 // Define a flag to track whether the bar chart has been initialized
 let isBarChartInitialized = false;
 
+
 const seriesColors = [
     '#082645',  // dark blue
     '#FF8C00',  // dark orange
@@ -41,6 +42,12 @@ const barChartSeriesColors = [
     '#C21807'   // deep red
 ];
 
+// Initialization
+$(document).ready(function() {
+    initializeChart();  // Initialize line chart
+    initializeBarChart();  // Initialize bar chart
+});
+
 // Inside your accordion activation function
 $("#accordion").accordion({
     collapsible: true,
@@ -50,14 +57,21 @@ $("#accordion").accordion({
         if (ui.newPanel.has('#chart').length) {
             selectedChartType = 'line';
             //console.log("Line Graph activated");
+
+            // Update the selected columns based on the current state of the checkboxes
+            selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+                .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
             if (!chart) {
                 initializeChart();
             } else {
-                chart.updateSeries(chart.w.globals.series);
+                // Update the line chart with the selected columns
+                updateChart(selectedColumns); // Assuming updateChart is the function to update the line chart
             }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
             //console.log("Bar Graph activated");
+
             if (barChart === null) {
                 initializeBarChart(); // Initialize the bar chart
             } else {
@@ -73,28 +87,24 @@ $("#accordion").accordion({
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
-    const dates = [];
-    const scores = [];
+    let data = [];
 
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
-        if (dateCell) {
-            dates.push(dateCell.textContent.trim());
-        } else {
-            dates.push(""); // or some default date or error handling
-        }
+        const date = dateCell ? dateCell.textContent.trim() : "";
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
-        const rowScores = [];
+        const rowScores = Array.from(scoreCells, cell => parseInt(cell.textContent || '0', 10));
 
-        scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0', 10));
-        });
-
-        scores.push(rowScores);
+        data.push({ date, scores: rowScores });
     });
-    //console.log("Extracted dates:", dates);
-    //console.log("Extracted scores:", scores);
+
+    // Sort the data by date in ascending order
+    data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // Extract dates and scores into separate arrays
+    const dates = data.map(item => item.date);
+    const scores = data.map(item => item.scores);
 
     return { dates, scores };
 }
@@ -117,20 +127,21 @@ function populateSeriesData(selectedColumns, headerMap, scores) {
 // Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
     const seriesList = [];
-    for (let i = 1; i < headerNames.length; i++) { // Keep the loop condition
-        const scoreData = scores.map(row => row[i - 1]);
-        const seriesData = scoreData.filter(value => !isNaN(value)); // Filter out NaN values
+    for (let i = 1; i < headerNames.length; i++) { // Loop through headers, skipping the 'Date' column
+        const scoreData = scores.map(row => {
+            const score = row[i - 1]; // Adjust for zero-based index
+            // Check if the value is numeric, otherwise return null for missing data
+            return score !== '' && !isNaN(score) ? score : null;
+        });
         seriesList.push({
-            name: customNames[i - 1] || `score${i}`,
-            data: seriesData,
-            color: seriesColors[i - 1], // Add this line to set color
-            //visible: false,  // Hide the series by default
+            name: customNames[i - 1] || headerNames[i], // Use the header name if custom name is not provided
+            data: scoreData,
+            color: seriesColors[i - 1] || undefined, // Fallback to a default color if necessary
         });
     }
     //console.log("Generated series list:", seriesList);
     return seriesList;
 }
-
 
 // This function will now return the new series list
 function getUpdatedSeriesNames(seriesList, customColumnNames) {
@@ -193,7 +204,7 @@ function updateChart(selectedColumns) { // Update function signature
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            width: 1000, // Set the width to 1000 pixels
+            width: '85%', // Set the width to 1000 pixels
             color: series.color,  // Ensure trendline has same color as series
             ...trendlineOptions,
         });
@@ -239,6 +250,7 @@ function initializeChart() {
     // Initialize the chart
     chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
     chart.render();    
+    console.log('Chart rendered:', $('#chart').data('apexcharts'));
 
     // Update the chart on checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -270,6 +282,10 @@ var dataLabelsSettings = {
     enabled: true,
     formatter: function(val, opts) {
         var seriesName = opts.w.config.series[opts.seriesIndex].name;
+        // If the value is null, return an empty string so no label is shown
+        if (val === null) {
+            return '';
+        }
 
         // Hide data labels for 'Benchmark' and 'Trendline'.
         if (seriesName.includes('Trendline')) {
@@ -293,14 +309,14 @@ function getChartOptions(dates, trendlineSeriesData) {
         }),
         chart: {
             type: 'line',
-            width: 1000, // Set the width to 1000 pixels
+            width: '85%', // Set the width to 1000 pixels
             dropShadow: {
                 enabled: true,
                 color: seriesColors,
-                top: 0,  // Change to 0 to see if positioning is the issue
-                left: 0,  // Change to 0 for same reason
-                blur: 3,  // Increase blur for visibility
-                opacity: 0.2  // Increase opacity for visibility
+                top: 7,  // Change to 0 to see if positioning is the issue
+                left: 6,  // Change to 0 for same reason
+                blur: 6,  // Increase blur for visibility
+                opacity: 0.15  // Increase opacity for visibility
             },
         },
         colors: seriesColors,
@@ -457,6 +473,7 @@ function initializeBarChart() {
     // Pass headerNames to getBarChartOptions function
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData, headerNames));
     barChart.render();
+    console.log('Chart rendered:', $('#barChart').data('apexcharts'));
 
     // Add an event listener to update the bar chart when checkboxes change
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
@@ -502,7 +519,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
         orientation: 'horizontal',
         label: {
             text: `Total: ${total}`,
-            borderColor: 'transparent',
+            borderColor: 'black',
             style: {
                 background: '#f2f2f2',
                 color: '#333',
@@ -527,7 +544,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
     return {
         chart: {
             type: 'bar',
-            width: 1000,
+            width: '85%',
             stacked: true,
         },
         xaxis: {
@@ -946,22 +963,23 @@ $(document).ready(function() {
     });
 });
 
+    // Event listener for goal checkbox change
+    $(document).on('change', '.goal-checkbox', function() {
+        // Uncheck and remove 'selected' class from all other goals
+        $('.goal-checkbox').not(this).prop('checked', false).closest('.goal-container').removeClass('selected');
+        
+        // Toggle 'selected' class on the current goal container based on the checkbox state
+        $(this).closest('.goal-container').toggleClass('selected', this.checked);
+    });
+
     // Event handler for the save button
     $(document).on('click', '.save-goal-btn', function() {
         const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
         const newText = $(this).siblings('.goaltext').val(); // Retrieves the text of the corresponding textarea
+        // Show an alert to the user
+        alert('Goal Updated.');
         updateGoalText(goalId, newText);
     });
-    
-    $(document).on('click', '.goal-container', function() {
-        $(this).toggleClass('selected'); // Toggle the 'selected' class on click
-        var goalId = $(this).data('goal-id');
-        var isSelected = $(this).hasClass('selected');
-        
-        // Your logic for when a goal is selected or unselected
-        console.log('Goal ' + goalId + ' selected: ' + isSelected);
-    });
-    
 
     $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();

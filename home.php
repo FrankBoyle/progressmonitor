@@ -321,11 +321,12 @@ function extractLastName($fullName) {
                   <?php if ($isAdmin): ?>
                   <?php if (!$isGroupFilterActive): ?>
                     <form method="post" style="display: inline; margin-right: 10px;">
-                      <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-                      <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
-                        <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-                      </button>
-                    </form>
+    <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+    <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
+        <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+    </button>
+</form>
+
                     <?php endif; ?>
 
                     <?php endif; ?>
@@ -412,6 +413,11 @@ function extractLastName($fullName) {
 <!-- ./wrapper -->
 
   <script>
+
+function confirmArchive(action) {
+    var message = action === 'Archive' ? 'Are you sure you want to archive this student?' : 'Are you sure you want to unarchive this student?';
+    return confirm(message);
+}
     $(document).ready(function() {
         $('.select2').select2();
     });

@@ -48,8 +48,8 @@ if (!isset($_SESSION['teacher_id'])) {
 
 function archiveStudent($studentId) {
         global $connection;
-    if ($isAdmin) {
-        $stmt = $connection->prepare("UPDATE Students SET archived = TRUE WHERE student_id = ?");
+        if ($_SESSION['is_admin']) { // Directly using the session variable
+            $stmt = $connection->prepare("UPDATE Students SET archived = TRUE WHERE student_id = ?");
         $stmt->execute([$studentId]);
         return "Student archived successfully.";
     } else {
