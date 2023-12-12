@@ -54,7 +54,8 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
     <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
-   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -125,7 +126,12 @@ if (isset($_GET['metadata_id'])) {
 }
 
 .goal-container.selected {
-    background-color: #e8f0fe; /* Highlight color when selected */
+    background-color: #e0e0e0; /* Light grey background for selected goals */
+    border: 1px solid #007bff; /* Blue border for selected goals */
+}
+
+.highlighted {
+    background-color: #ffff99; /* Yellow background for highlighting */
 }
 
 </style>
@@ -272,7 +278,7 @@ if (isset($_GET['metadata_id'])) {
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
-              <li class="breadcrumb-item active">Text Editors</li>
+              <li class="breadcrumb-item active">Performance Data</li>
             </ol>
           </div>
         </div>
@@ -307,22 +313,24 @@ if (isset($_GET['metadata_id'])) {
             <h3 class="card-title">Goals</h3>
         </div>
         <div class="card-body">
-            <!-- Add an ID to the goals container for easier targeting -->
             <div class="row" id="goalsList">
                 <?php foreach ($goals as $index => $goal): ?>
                 <div class="col-md-4 col-sm-6 col-12">
-                <div class="info-box">
-    <div class="info-box-content">
-        <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-        <!-- Add a checkbox input here -->
-        <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
-        <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
-                  data-goal-id="<?php echo $goal['goal_id']; ?>">
-            <?php echo htmlspecialchars($goal['goal_description']); ?>
-        </textarea>
-        <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
-    </div>
-</div>
+                    <div class="info-box">
+                        <div class="info-box-content goal-container">
+                            <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+                            <!-- Nest the checkbox inside the label -->
+                            <label class="goal-checkbox-label">
+                                <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
+                                Select
+                            </label>
+                            <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
+                                      data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                <?php echo htmlspecialchars($goal['goal_description']); ?>
+                            </textarea>
+                            <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
+                        </div>
+                    </div>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -333,6 +341,7 @@ if (isset($_GET['metadata_id'])) {
         </div>
     </div>
 </section>
+
 
 <div>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
@@ -427,16 +436,25 @@ if (isset($_GET['metadata_id'])) {
     <button type ="button" id="updateBenchmark" class="btn btn-primary">Update Benchmark</button>
   -->
 
-<div id="accordion">
+  <div id="accordion">
     <h3>Line Graph</h3>
     <div>
-    <div id="chart" style="width: 1000px;"></div>
+        <div id="chart" style="width: 1000px;"></div>
     </div>
     <h3>Bar Graph</h3>
     <div>
-    <div id="barChart" style="width: 1000px;"></div>
+        <div id="barChart" style="width: 1000px;"></div>
     </div>
 </div>
+
+<!-- Editable notes section placed outside and below the accordion -->
+<div class="editable-notes-section">
+    <h3>Goal Notes</h3>
+    <textarea id="graphNotes" class="summernote"></textarea>
+    <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
+    <button id="printButton" class="btn btn-primary">Print</button>
+</div>
+
 </div>
 </div>
 </div>
@@ -522,7 +540,132 @@ if (isset($_GET['metadata_id'])) {
         ],
         fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
       });
+
+    // Initialize Summernote
+    $('#graphNotes').summernote({
+        height: 300,
+        toolbar: [
+            // Add your toolbar options here
+        ]
     });
+
+    // Disable the textbox initially
+    $('#graphNotes').summernote('disable');
+
+    // Enable/Disable the textbox based on goal selection
+    $('.goal-checkbox').change(function() {
+        if ($(this).is(':checked')) {
+            $('#graphNotes').summernote('enable');
+        } else {
+            $('#graphNotes').summernote('disable');
+        }
+    });
+
+    // Handle save button click
+    $('#saveGraphNotes').click(function() {
+    var notes = $('#graphNotes').summernote('code');
+    var goalId = $('.goal-checkbox:checked').data('goal-id');
+    var studentId = $('#currentStudentId').val(); // Assuming this is the correct way to get the student ID
+    var schoolId = $('#schoolIdInput').val();     // Assuming this is the correct way to get the school ID
+    var metadataId = urlParams.get('metadata_id'); // Assuming this is the correct way to get the metadata ID
+
+    // AJAX call to save the notes
+    $.post('./users/save_graph_notes.php', {
+        notes: notes,
+        goal_id: goalId,
+        student_id: studentId,
+        school_id: schoolId,
+        metadata_id: metadataId
+    }, function(response) {
+        // Handle response
+        console.log(response);
+    }).fail(function(error) {
+        console.log('Error: ', error);
+    });
+});
+    
+$('.goal-checkbox').change(function() {
+    var goalId = $(this).data('goal-id');
+    if (this.checked) {
+        $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
+            var data = JSON.parse(response);
+            if (data.status === 'success') {
+                $('#graphNotes').summernote('code', data.notes);
+            } else {
+                $('#graphNotes').summernote('code', '');
+                // Optionally alert the user if no notes were found
+                alert(data.message);
+            }
+        });
+    } else {
+        $('#graphNotes').summernote('code', ''); // Clear the notes when no goal is selected
+    }
+});
+
+$('#printButton').click(function() {
+    var currentChart = selectedChartType === 'bar' ? barChart : chart;
+    getGraphContentAsImage(currentChart, function(graphImage) {
+        if (graphImage) {
+            var notesContent = $('#graphNotes').summernote('code');
+            var selectedGoalContent = getSelectedGoalContent();
+            var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
+            contentToPrint += '<div><img src="' + graphImage + '"></div>';
+            contentToPrint += '<div>' + notesContent + '</div>';
+            printContent(contentToPrint);
+        } else {
+            console.error('Failed to receive graph image');
+        }
+    });
+});
+
+function getSelectedGoalContent() {
+    var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
+    if (checkedCheckbox) {
+        var goalContainer = checkedCheckbox.closest('.goal-container');
+        if (goalContainer) {
+            // Extract and return only the goal text
+            var goalTextElement = goalContainer.querySelector('.goaltext');
+            return goalTextElement ? goalTextElement.value : ''; // Using value to get the text content
+        }
+    }
+    return 'No goal selected';
+}
+
+function getGraphContentAsImage(chartVar, callback) {
+    if (chartVar) {
+        chartVar.dataURI().then(({ imgURI }) => {
+            callback(imgURI);
+        }).catch(error => {
+            console.error('Error in converting chart to image:', error);
+            callback(null);
+        });
+    } else {
+        console.error('Chart variable is null or undefined');
+        callback(null);
+    }
+}
+
+function printContent(content) {
+    var printWindow = window.open('', '_blank');
+    var image = new Image();
+    image.onload = function() {
+        printWindow.document.write('<html><head><title>Print</title></head><body>');
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => printWindow.print(), 500);
+    };
+    image.onerror = function() {
+        console.error('Error loading the image');
+    };
+    image.src = content.match(/src="([^"]+)"/)[1];
+}
+
+
+
+    });
+
   </script>
 
 </body>
