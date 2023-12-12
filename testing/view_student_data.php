@@ -642,11 +642,13 @@ function getGraphContentAsImage(chartVar, callback) {
 }
 
 function printContent(content) {
+    var studentName = document.getElementById('studentName').value; // Fetch the student's name
+
     var printWindow = window.open('', '_blank');
     var image = new Image();
     image.onload = function() {
         printWindow.document.write('<html><head><title>Print</title></head><body>');
-        printWindow.document.write(studentName);
+        printWindow.document.write('<h1>' + studentName + '</h1>'); // Include the student's name
         printWindow.document.write(content);
         printWindow.document.write('</body></html>');
         printWindow.document.close();
