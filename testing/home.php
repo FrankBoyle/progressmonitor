@@ -322,8 +322,8 @@ function extractLastName($fullName) {
                   <?php if (!$isGroupFilterActive): ?>
                     <form method="post" style="display: inline; margin-right: 10px;">
                       <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-                      <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>">
-                        <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+                      <button type="submit" name="archive_student" onclick="return confirmArchive();">
+                        Archive
                       </button>
                     </form>
                     <?php endif; ?>
@@ -412,6 +412,10 @@ function extractLastName($fullName) {
 <!-- ./wrapper -->
 
   <script>
+    function confirmArchive() {
+    return confirm('Are you sure you want to archive this student?');
+}
+
     $(document).ready(function() {
         $('.select2').select2();
     });
@@ -438,7 +442,7 @@ function extractLastName($fullName) {
         }
     });    
 
-    $(document).ready(function() {
+    $(document).ready(function() 
     $(document).off('click', '.remove-student').on('click', '.remove-student', function() {
         var studentId = $(this).data("student-id");
         var groupId = $("#selected_group_id").val(); // or another logic to get the correct groupId
