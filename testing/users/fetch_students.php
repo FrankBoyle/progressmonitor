@@ -46,7 +46,7 @@ if (!isset($_SESSION['teacher_id'])) {
     $teacherId = $_SESSION['teacher_id'];
 }
 
-function archiveStudent($studentId) {
+function archiveStudent($studentId, $isAdmin) {
         global $connection;
     if ($isAdmin) {
         $stmt = $connection->prepare("UPDATE Students SET archived = TRUE WHERE student_id = ?");
@@ -58,7 +58,7 @@ function archiveStudent($studentId) {
     }
 }
 
-function unarchiveStudent($studentId) {
+function unarchiveStudent($studentId, $isAdmin) {
     global $connection;
 
     $stmt = $connection->prepare("UPDATE Students SET archived = FALSE WHERE student_id = ?");
@@ -70,7 +70,7 @@ function unarchiveStudent($studentId) {
 if (isset($_POST['archive_student'])) {
     if (isset($_POST['student_id_to_toggle'])) {
         $studentIdToArchive = $_POST['student_id_to_toggle'];
-        $message = archiveStudent($studentIdToArchive);
+        $message = archiveStudent($studentIdToArchive, $isAdmin);
     } else {
         $message = "Student ID not provided for archiving.";
     }
