@@ -642,20 +642,17 @@ function getGraphContentAsImage(chartVar, callback) {
 }
 
 function printContent(content) {
-    var studentName = document.getElementById('studentName').textContent;
     var printWindow = window.open('', '_blank');
     var image = new Image();
-
     image.onload = function() {
         printWindow.document.write('<html><head><title>Print</title></head><body>');
-        printWindow.document.write('<h1>' + studentName + '</h1>'); // Include the student's name at the top
+        printWindow.document.write(studentName);
         printWindow.document.write(content);
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.focus();
         setTimeout(() => printWindow.print(), 500);
     };
-
     image.onerror = function() {
         console.error('Error loading the image');
     };
