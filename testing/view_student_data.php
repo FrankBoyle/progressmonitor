@@ -72,8 +72,6 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- JQVMap -->
     <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <!-- Daterange picker -->
     <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
@@ -646,24 +644,25 @@ function getGraphContentAsImage(chartVar, callback) {
 }
 
 function printContent(content) {
+    var studentName = document.getElementById('studentName').textContent; // Fetch the student's name
     var printWindow = window.open('', '_blank');
     var image = new Image();
+
     image.onload = function() {
         printWindow.document.write('<html><head><title>Print</title></head><body>');
+        printWindow.document.write('<h1>' + studentName + '</h1>'); // Include the student's name
         printWindow.document.write(content);
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.focus();
         setTimeout(() => printWindow.print(), 500);
     };
+
     image.onerror = function() {
         console.error('Error loading the image');
     };
     image.src = content.match(/src="([^"]+)"/)[1];
 }
-
-
-
     });
 
   </script>
