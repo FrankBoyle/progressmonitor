@@ -571,6 +571,16 @@ if (isset($_GET['metadata_id'])) {
                           var endDate = $('#endDate').val();
                         });
 
+                                                // Perform filtering based on selected dates
+                                                $('.data-row').each(function() {
+                          var date = $(this).find('.date').text();
+                          if (date >= startDate && date <= endDate) {
+                            $(this).show();
+                          } else {
+                            $(this).hide();
+                          }
+                        });
+                        
                         $('.goaltext').summernote({
                           toolbar: [
                             ['font', ['fontname']],
