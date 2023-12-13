@@ -502,6 +502,14 @@ if (isset($_GET['metadata_id'])) {
                   
                   <script>
                     $(document).ready(function() {
+
+                                            // Initialize date picker
+                                            $('.datepicker').datepicker({
+                        format: 'yyyy-mm-dd',
+                        autoclose: true,
+                        todayHighlight: true
+                      });
+                      
                       $('.goaltext').summernote({
                         toolbar: [
                           ['font', ['fontname']],
