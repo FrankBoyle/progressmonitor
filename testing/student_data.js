@@ -841,107 +841,292 @@ $(document).ready(function() {
                 cell.text(originalValue);
                 return;
             }
-            // Function to convert a value to a database date format
-            function convertToDatabaseDate(value) {
-                // Implementation goes here
-            }
-
-            // Function to save edited date
-            function saveEditedDate(cell, convertedValue) {
-                // Implementation goes here
-            }
-
-            // Function to toggle edit mode
-            function toggleEditMode(cell, input) {
-                if (cell.hasClass('editing')) {
-                    cell.removeClass('editing');
-                    input.hide();
-                } else {
-                    cell.addClass('editing');
-                    input.show();
-                }
-            }
-
-            // Function to update goal text
-            function updateGoalText(goalId, newText) {
-                // Implementation goes here
-            }
-
-            // Event listener for adding a new goal
-            $('#addNewGoalBtn').on('click', function() {
-                // Implementation goes here
-            });
-
-            // Event listener for goal checkbox change
-            $(document).on('change', '.goal-checkbox', function() {
-                // Implementation goes here
-            });
-
-            // Event handler for the save button
-            $(document).on('click', '.save-goal-btn', function() {
-                // Implementation goes here
-            });
-
-            // Event handler for adding a new data row
-            $('#addDataRow').off('click').click(function() {
-                // Implementation goes here
-            });
-
-            // Event handler for the save button in a data row
-            $(document).on('click', '.saveRow', function() {
-                // Implementation goes here
-            });
-
-            // Function to save row data asynchronously
-            async function saveRowData(row) {
-                // Implementation goes here
-            }
-
-            // Event handler for preventing form submission on enter key press
-            $(document).on('keypress', '.saveRow', function(e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-                }
-            });
-
-            // Initialization code
-            $('#currentWeekStartDate').val(getCurrentDate());
-            attachEditableHandler();
-
-            $.fn.dataTable.ext.type.detect.unshift(function(value) {
-                return value && value.match(/^(\d{1,2}\/\d{1,2}\/\d{4})$/) ? 'date-us' : null;
-            });
-
-            $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
-                var date = data.split('/');
-                return (date[2] + date[0] + date[1]) * 1;
+            const convertedValue = convertToDatabaseDate(newValue);
+            saveEditedDate(cell, convertedValue);
+        } else {
+            const fieldName = cell.data('field-name');
+            const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+            const studentId = $('#currentStudentId').val();
+            const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+            const school_id = $('#schoolIdInput').val();
+    
+            let postData = {
+                performance_id: performanceId,
+                field_name: fieldName,
+                new_value: newValue,
+                student_id: studentId,
+                score_date: weekStartDate,
+                metadata_id: metadata_id,
+                school_id: school_id,
             };
-
-            // Define the DataTable and apply custom date filter
-            let table = $('#dataTable').DataTable({
-                "order": [[0, "asc"]],
-                "lengthChange": false,
-                "searching": false,
-                "paging": false,
-                "info": false,
-                "sorting": false,
-                "columns": [
-                    { "type": "date-us" },
-                    null, null, null, null, null, null, null, null, null, null, null
-                ],
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-                "columnDefs": [
-                    {
-                        "targets": [0], // Apply the date filter to the first column (date)
-                        "type": "date-us",
-                        "render": function (data) {
-                            return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
-                        }
+    
+            if (performanceId === 'new') {
+                const row = cell.closest('tr');
+                let scores = {};
+                for (let i = 1; i <= 10; i++) {
+                    const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+                    scores['score' + i] = scoreValue ? scoreValue : null;
+                }
+                postData.scores = scores;
+            }
+    
+            $.ajax({
+                type: 'POST',
+                url: targetUrl,
+                data: postData,
+                success: function(response) {
+                    if (performanceId === 'new') {
+                        const newRow = $('tr[data-performance-id="new"]');
+                        newRow.attr('data-performance-id', response.performance_id);
+                        newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
                     }
-                ]
+                },
+                error: function() {
+                    // Handle any error here
+                }
             });
+        }
+    }
+    
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            input.hide();
+        } else {
+            cell.addClass('editing');
+            input.show();
+        }
+    }
 
-            // Apply date filter when date is selected
-            $("#startDateFilter").on("change", function() {
-                table.draw();
-            });
+    // Function to update goal text
+    function updateGoalText(goalId, newText) {
+        const postData = {
+            goal_id: goalId,
+            new_text: newText
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: 'update_goal.php', // Ensure this is the correct endpoint
+            data: postData,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    //alert('Goal updated successfully.');
+                } else {
+                    alert(response.message || 'Failed to update goal.');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    $('#addNewGoalBtn').on('click', function() {
+        const newGoalText = $('#newGoalText').val().trim();
+        const studentId = CURRENT_STUDENT_ID; // Assuming you've already retrieved this
+        const schoolId = $('#schoolIdInput').val(); // Make sure this input exists and holds the school_id
+        const metadataId = urlParams.get('metadata_id'); // Retrieved from URL as in your example
+        //const goalDate = getCurrentDate(); // Gets the current date in the format you need
+    
+        if (newGoalText === '') {
+            alert('Please enter a goal description.');
+            return;
+        }
+    
+        const postData = {
+            goal_description: newGoalText,
+            student_id: studentId,
+            metadata_id: metadataId,
+            school_id: schoolId,
+            //goal_date: goalDate // Optional, depending on if your DB allows null for this field
+        };
+    
+    // Perform the AJAX request
+    $.ajax({
+        type: 'POST',
+        url: 'add_new_goal.php', // Adjust if necessary
+        data: postData,
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                //alert('New goal added successfully.');
+                // Refresh the page after a short delay to allow the alert to be read by the user
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000); // Adjust the delay as needed
+            } else {
+                //alert(response.message || 'Failed to add new goal.');
+            }
+        },      
+    });
+});
+
+    // Event listener for goal checkbox change
+    $(document).on('change', '.goal-checkbox', function() {
+        // Uncheck and remove 'selected' class from all other goals
+        $('.goal-checkbox').not(this).prop('checked', false).closest('.goal-container').removeClass('selected');
+        
+        // Toggle 'selected' class on the current goal container based on the checkbox state
+        $(this).closest('.goal-container').toggleClass('selected', this.checked);
+    });
+
+    // Event handler for the save button
+    $(document).on('click', '.save-goal-btn', function() {
+        const goalId = $(this).data('goal-id'); // This should now correctly get the goal ID
+        const newText = $(this).siblings('.goaltext').val(); // Retrieves the text of the corresponding textarea
+        // Show an alert to the user
+        alert('Goal Updated.');
+        updateGoalText(goalId, newText);
+    });
+
+    $('#addDataRow').off('click').click(function() {
+        const currentDate = getCurrentDate();
+        if (isDateDuplicate(currentDate)) {
+            alert("An entry for this date already exists. Please choose a different date.");
+            return;
+        }
+    
+        // Create a temporary input to attach datepicker
+   // Adjusting the position of the temporary input
+   const tempInput = $("<input type='text'>").appendTo('body');
+   tempInput.css({
+       position: 'fixed',
+       top: '50%', // Adjust as needed
+       left: '50%', // Adjust as needed
+       transform: 'translate(-50%, -50%)',
+       zIndex: 1000 // To ensure it's above other elements
+   });
+       tempInput.datepicker({
+            dateFormat: 'mm/dd/yy',
+            onSelect: function(dateText) {
+                if (isDateDuplicate(dateText)) {
+                    alert("An entry for this date already exists. Please choose a different date.");
+                    return;
+                }
+    
+                // Create the new row after date is selected
+                const newRow = $("<tr data-performance-id='new'>");
+                newRow.append(`<td class="editable" data-field-name="score_date">${dateText}</td>`);
+    
+                for (let i = 1; i <= 10; i++) {
+                    newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+                }
+    
+                newRow.append('<td><button class="saveRow">Save</button></td>');
+                $("table").append(newRow);
+    
+                // Cleanup temporary input
+                tempInput.remove();
+    
+                // Force a save immediately upon selecting a date
+                saveRowData(newRow);
+            }
+        });
+    
+        // Show the datepicker immediately
+        tempInput.datepicker('show');
+    });
+    
+    // Attach event handler for the "Save" button outside the datepicker function
+    $(document).on('click', '.saveRow', function() {
+        const row = $(this).closest('tr');
+        saveRowData(row);
+    });
+    
+    async function saveRowData(row) {
+        const performanceId = row.data('performance-id');
+        const school_id = $('#schoolIdInput').val();
+        const urlParams = new URLSearchParams(window.location.search);
+        const metadata_id = urlParams.get('metadata_id');
+    
+        // Disable the save button to prevent multiple clicks
+        row.find('.saveRow').prop('disabled', true);
+    
+        if (performanceId !== 'new') {
+            return;
+        }
+    
+        let scores = {};
+        for (let i = 1; i <= 10; i++) {
+            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
+            scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
+        }
+    
+        const postData = {
+            student_id: CURRENT_STUDENT_ID,
+            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+            scores: scores,
+            metadata_id: metadata_id,
+            school_id: school_id,
+        };
+    
+        const response = await ajaxCall('POST', 'insert_performance.php', postData);
+        if (response && response.performance_id) {
+            row.attr('data-performance-id', response.performance_id);
+            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
+            row.find('.saveRow').prop('disabled', false);
+        } else {
+            if (response && response.error) {
+                alert("Error: " + response.error);
+            } else {
+                alert("There was an error saving the data.");
+            }
+        }
+    
+        // Reload the page to show the new row with a delete button
+        location.reload();
+    }    
+
+        $(document).on('keypress', '.saveRow', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+            }
+        });
+
+        // Initialization code
+        $('#currentWeekStartDate').val(getCurrentDate());
+        attachEditableHandler();
+
+        $.fn.dataTable.ext.type.detect.unshift(function(value) {
+            return value && value.match(/^(\d{1,2}\/\d{1,2}\/\d{4})$/) ? 'date-us' : null;
+        });
+
+        $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
+            var date = data.split('/');
+            return (date[2] + date[0] + date[1]) * 1;
+        };
+
+    // Define the DataTable and apply custom date filter
+    let table = $('#dataTable').DataTable({
+        "order": [[0, "asc"]],
+        "lengthChange": false,
+        "searching": false,
+        "paging": false,
+        "info": false,
+        "sorting": false,
+        "columns": [
+            { "type": "date-us" },
+            null, null, null, null, null, null, null, null, null, null, null
+        ],
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "columnDefs": [
+            {
+                "targets": [0], // Apply the date filter to the first column (date)
+                "type": "date-us",
+                "render": function (data) {
+                    return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
+                }
+            }
+        ]
+    });
+
+    // Apply date filter when date is selected
+    $("#startDateFilter").on("change", function() {
+        table.draw();
+    });
+
+    // Handle initial filtering when the page loads
+    table.draw();
+});
