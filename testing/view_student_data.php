@@ -501,142 +501,185 @@ if (isset($_GET['metadata_id'])) {
                   <script src="./dist/js/adminlte.min.js"></script>
                   
                   <script>
-                    $(document).ready(function() {
+                    </section>
 
-                                            // Initialize date picker
-                                            $('.datepicker').datepicker({
-                        format: 'yyyy-mm-dd',
-                        autoclose: true,
-                        todayHighlight: true
-                      });
-                      
-                      $('.goaltext').summernote({
-                        toolbar: [
-                          ['font', ['fontname']],
-                          ['style', ['bold', 'italic', 'underline']]
-                        ],
-                        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
-                      });
+                    <div class="content">
+                      <div class="container-fluid">
+                        <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <a href="#" class="card-link">Card link</a>
+                          <a href="#" class="card-link">Another link</a>
+                        </div>
+                      </div>
 
-                      // Initialize Summernote
-                      $('#graphNotes').summernote({
-                        height: 300,
-                        toolbar: []
-                      });
+                      <!-- solid sales graph -->
+                      <div class="card info">
+                        <div class="card-header border-0">
+                          <h3 class="card-title">
+                            <i class="fas fa-th mr-1"></i>
+                            Graph
+                          </h3>
+                          <div class="card-tools">
+                            <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                              <i class="fas fa-minus"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
 
-                      // Disable the textbox initially
-                      $('#graphNotes').summernote('disable');
+                      <a href="#" class="card-link">Card link</a>
+                      <a href="#" class="card-link">Another link</a>
+                    </div>
 
-                      // Enable/Disable the textbox based on goal selection
-                      $('.goal-checkbox').change(function() {
-                        if ($(this).is(':checked')) {
-                          $('#graphNotes').summernote('enable');
-                        } else {
-                          $('#graphNotes').summernote('disable');
-                        }
-                      });
+                    <footer class="main-footer">
+                      <div class="float-right d-none d-sm-inline">
+                        Anything you want
+                      </div>
+                      <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor</a>.</strong>
+                      All rights reserved.
+                    </footer>
 
-                      // Handle save button click
-                      $('#saveGraphNotes').click(function() {
-                        var notes = $('#graphNotes').summernote('code');
-                        var goalId = $('.goal-checkbox:checked').data('goal-id');
-                        var studentId = $('#currentStudentId').val();
-                        var schoolId = $('#schoolIdInput').val();
-                        var metadataId = urlParams.get('metadata_id');
+                    <!-- Bootstrap 4 -->
+                    <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+                    <!-- AdminLTE App -->
+                    <script src="./dist/js/adminlte.min.js"></script>
 
-                        // AJAX call to save the notes
-                        $.post('./users/save_graph_notes.php', {
-                          notes: notes,
-                          goal_id: goalId,
-                          student_id: studentId,
-                          school_id: schoolId,
-                          metadata_id: metadataId
-                        }, function(response) {
-                          console.log(response);
-                        }).fail(function(error) {
-                          console.log('Error: ', error);
+                    <script>
+                      $(document).ready(function() {
+                        // Initialize date picker
+                        $('.datepicker').datepicker({
+                          format: 'yyyy-mm-dd',
+                          autoclose: true,
+                          todayHighlight: true
                         });
-                      });
 
-                      $('.goal-checkbox').change(function() {
-                        var goalId = $(this).data('goal-id');
-                        if (this.checked) {
-                          $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
-                            var data = JSON.parse(response);
-                            if (data.status === 'success') {
-                              $('#graphNotes').summernote('code', data.notes);
+                        $('.goaltext').summernote({
+                          toolbar: [
+                            ['font', ['fontname']],
+                            ['style', ['bold', 'italic', 'underline']]
+                          ],
+                          fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
+                        });
+
+                        // Initialize Summernote
+                        $('#graphNotes').summernote({
+                          height: 300,
+                          toolbar: []
+                        });
+
+                        // Disable the textbox initially
+                        $('#graphNotes').summernote('disable');
+
+                        // Enable/Disable the textbox based on goal selection
+                        $('.goal-checkbox').change(function() {
+                          if ($(this).is(':checked')) {
+                            $('#graphNotes').summernote('enable');
+                          } else {
+                            $('#graphNotes').summernote('disable');
+                          }
+                        });
+
+                        // Handle save button click
+                        $('#saveGraphNotes').click(function() {
+                          var notes = $('#graphNotes').summernote('code');
+                          var goalId = $('.goal-checkbox:checked').data('goal-id');
+                          var studentId = $('#currentStudentId').val();
+                          var schoolId = $('#schoolIdInput').val();
+                          var metadataId = urlParams.get('metadata_id');
+
+                          // AJAX call to save the notes
+                          $.post('./users/save_graph_notes.php', {
+                            notes: notes,
+                            goal_id: goalId,
+                            student_id: studentId,
+                            school_id: schoolId,
+                            metadata_id: metadataId
+                          }, function(response) {
+                            console.log(response);
+                          }).fail(function(error) {
+                            console.log('Error: ', error);
+                          });
+                        });
+
+                        $('.goal-checkbox').change(function() {
+                          var goalId = $(this).data('goal-id');
+                          if (this.checked) {
+                            $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
+                              var data = JSON.parse(response);
+                              if (data.status === 'success') {
+                                $('#graphNotes').summernote('code', data.notes);
+                              } else {
+                                $('#graphNotes').summernote('code', '');
+                                alert(data.message);
+                              }
+                            });
+                          } else {
+                            $('#graphNotes').summernote('code', '');
+                          }
+                        });
+
+                        $('#printButton').click(function() {
+                          var currentChart = selectedChartType === 'bar' ? barChart : chart;
+                          getGraphContentAsImage(currentChart, function(graphImage) {
+                            if (graphImage) {
+                              var notesContent = $('#graphNotes').summernote('code');
+                              var selectedGoalContent = getSelectedGoalContent();
+                              var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
+                              contentToPrint += '<div><img src="' + graphImage + '"></div>';
+                              contentToPrint += '<div>' + notesContent + '</div>';
+                              printContent(contentToPrint);
                             } else {
-                              $('#graphNotes').summernote('code', '');
-                              alert(data.message);
+                              console.error('Failed to receive graph image');
                             }
                           });
-                        } else {
-                          $('#graphNotes').summernote('code', '');
-                        }
-                      });
-
-                      $('#printButton').click(function() {
-                        var currentChart = selectedChartType === 'bar' ? barChart : chart;
-                        getGraphContentAsImage(currentChart, function(graphImage) {
-                          if (graphImage) {
-                            var notesContent = $('#graphNotes').summernote('code');
-                            var selectedGoalContent = getSelectedGoalContent();
-                            var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
-                            contentToPrint += '<div><img src="' + graphImage + '"></div>';
-                            contentToPrint += '<div>' + notesContent + '</div>';
-                            printContent(contentToPrint);
-                          } else {
-                            console.error('Failed to receive graph image');
-                          }
                         });
-                      });
 
-                      function getSelectedGoalContent() {
-                        var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
-                        if (checkedCheckbox) {
-                          var goalContainer = checkedCheckbox.closest('.goal-container');
-                          if (goalContainer) {
-                            var goalTextElement = goalContainer.querySelector('.goaltext');
-                            return goalTextElement ? goalTextElement.value : '';
+                        function getSelectedGoalContent() {
+                          var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
+                          if (checkedCheckbox) {
+                            var goalContainer = checkedCheckbox.closest('.goal-container');
+                            if (goalContainer) {
+                              var goalTextElement = goalContainer.querySelector('.goaltext');
+                              return goalTextElement ? goalTextElement.value : '';
+                            }
+                          }
+                          return 'No goal selected';
+                        }
+
+                        function getGraphContentAsImage(chartVar, callback) {
+                          if (chartVar) {
+                            chartVar.dataURI().then(({ imgURI }) => {
+                              callback(imgURI);
+                            }).catch(error => {
+                              console.error('Error in converting chart to image:', error);
+                              callback(null);
+                            });
+                          } else {
+                            console.error('Chart variable is null or undefined');
+                            callback(null);
                           }
                         }
-                        return 'No goal selected';
-                      }
 
-                      function getGraphContentAsImage(chartVar, callback) {
-                        if (chartVar) {
-                          chartVar.dataURI().then(({ imgURI }) => {
-                            callback(imgURI);
-                          }).catch(error => {
-                            console.error('Error in converting chart to image:', error);
-                            callback(null);
-                          });
-                        } else {
-                          console.error('Chart variable is null or undefined');
-                          callback(null);
+                        function printContent(content) {
+                          var studentName = document.getElementById('studentName').value;
+                          var printWindow = window.open('', '_blank');
+                          var image = new Image();
+                          image.onload = function() {
+                            printWindow.document.write('<html><head><title>Print</title></head><body>');
+                            printWindow.document.write('<h1>' + studentName + '</h1>');
+                            printWindow.document.write(content);
+                            printWindow.document.write('</body></html>');
+                            printWindow.document.close();
+                            printWindow.focus();
+                            setTimeout(() => printWindow.print(), 500);
+                          };
+                          image.onerror = function() {
+                            console.error('Error loading the image');
+                          };
+                          image.src = content.match(/src="([^"]+)"/)[1];
                         }
-                      }
-
-                      function printContent(content) {
-                        var studentName = document.getElementById('studentName').value;
-                        var printWindow = window.open('', '_blank');
-                        var image = new Image();
-                        image.onload = function() {
-                          printWindow.document.write('<html><head><title>Print</title></head><body>');
-                          printWindow.document.write('<h1>' + studentName + '</h1>');
-                          printWindow.document.write(content);
-                          printWindow.document.write('</body></html>');
-                          printWindow.document.close();
-                          printWindow.focus();
-                          setTimeout(() => printWindow.print(), 500);
-                        };
-                        image.onerror = function() {
-                          console.error('Error loading the image');
-                        };
-                        image.src = content.match(/src="([^"]+)"/)[1];
-                      }
-                    });
-                  </script>
+                      });
+                    </script>
 
                   </body>
                   </html>
