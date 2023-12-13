@@ -346,109 +346,118 @@ if (isset($_GET['metadata_id'])) {
 </div>   
 
 <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-outline card-info">
-            <div class="card-header">
-              <h3 class="card-title"></h3>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+          <h3 class="card-title"></h3>
 
-                <table border="1" id="dataTable">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <?php 
-                      foreach ($scoreNames as $category => $values) {
-                        if (is_array($values)) {
-                          foreach ($values as $score) {
-                            echo "<th>" . htmlspecialchars($score) . "</th>";
-                          }
-                        } else {
-                          echo "<th>" . htmlspecialchars($values) . "</th>";
-                        }
-                      }
-                      ?>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php if (empty($performanceData)): ?>
-                      <tr>
-                        <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-                      </tr>
-                    <?php else: ?>
-                      <?php foreach ($performanceData as $data): ?>
-                        <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                          <td class="editable" data-field-name="score_date">
-                            <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
-                          </td>
-                          <?php for ($i = 1; $i <= 10; $i++): ?>
-                            <td class="editable" data-field-name="score<?php echo $i; ?>">
-                              <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
-                            </td>
-                          <?php endfor; ?>
-                          <td>
-                            <button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button>
-                          </td>
-                        </tr>
-                      <?php endforeach; ?>
-                    <?php endif; ?>
-                  </tbody>
-                  </table>
-                  <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
-                  <input type="text" id="newRowDate" style="display: none;">
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </section>
+          <!-- Date Filter -->
+          <div class="date-filter">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate">
+            <button id="applyFilter">Apply</button>
+          </div>
 
-                  <section class="content">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="card card-outline card-info">
-                          <div class="card-header">
-                            <h3 class="card-title"></h3>
-                            <!-- Existing checkboxes for column selection -->
-                            <div id="columnSelector">
-                              <label>Select Columns to Display:</label>
-                              <?php
-                              foreach ($scoreNames as $category => $scores) {
-                                foreach ($scores as $index => $scoreName) {
-                                  $scoreColumnName = 'score' . ($index + 1);
-                                  $customColumnName = htmlspecialchars($scoreName); // Custom column name
-                                  echo '<label>';
-                                  echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '"';
-                                  echo ' data-column-name="' . $customColumnName . '">'; // Include custom name as data attribute
-                                  echo htmlspecialchars($scoreName);
-                                  echo '</label>';
-                                }
-                              }
-                              ?>
-                            </div>
+          <table border="1" id="dataTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <?php 
+                foreach ($scoreNames as $category => $values) {
+                  if (is_array($values)) {
+                    foreach ($values as $score) {
+                      echo "<th>" . htmlspecialchars($score) . "</th>";
+                    }
+                  } else {
+                    echo "<th>" . htmlspecialchars($values) . "</th>";
+                  }
+                }
+                ?>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (empty($performanceData)): ?>
+                <tr>
+                  <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+                </tr>
+              <?php else: ?>
+                <?php foreach ($performanceData as $data): ?>
+                  <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                    <td class="editable" data-field-name="score_date">
+                      <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
+                    </td>
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                      <td class="editable" data-field-name="score<?php echo $i; ?>">
+                        <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
+                      </td>
+                    <?php endfor; ?>
+                    <td>
+                      <button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </tbody>
+          </table>
+          <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
+          <input type="text" id="newRowDate" style="display: none;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                            <div id="accordion">
-                              <h3>Line Graph</h3>
-                              <div>
-                                <div id="chart" style="width: 1000px;"></div>
-                              </div>
-                              <h3>Bar Graph</h3>
-                              <div>
-                                <div id="barChart" style="width: 1000px;"></div>
-                              </div>
-                            </div>
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+          <h3 class="card-title"></h3>
+          <!-- Existing checkboxes for column selection -->
+          <div id="columnSelector">
+            <label>Select Columns to Display:</label>
+            <?php
+            foreach ($scoreNames as $category => $scores) {
+              foreach ($scores as $index => $scoreName) {
+                $scoreColumnName = 'score' . ($index + 1);
+                $customColumnName = htmlspecialchars($scoreName); // Custom column name
+                echo '<label>';
+                echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '"';
+                echo ' data-column-name="' . $customColumnName . '">'; // Include custom name as data attribute
+                echo htmlspecialchars($scoreName);
+                echo '</label>';
+              }
+            }
+            ?>
+          </div>
 
-                            <!-- Editable notes section placed outside and below the accordion -->
-                            <div class="editable-notes-section">
-                              <h3>Goal Notes</h3>
-                              <textarea id="graphNotes" class="summernote"></textarea>
-                              <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
-                              <button id="printButton" class="btn btn-primary">Print</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
+          <div id="accordion">
+            <h3>Line Graph</h3>
+            <div>
+              <div id="chart" style="width: 1000px;"></div>
+            </div>
+            <h3>Bar Graph</h3>
+            <div>
+              <div id="barChart" style="width: 1000px;"></div>
+            </div>
+          </div>
+
+          <!-- Editable notes section placed outside and below the accordion -->
+          <div class="editable-notes-section">
+            <h3>Goal Notes</h3>
+            <textarea id="graphNotes" class="summernote"></textarea>
+            <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
+            <button id="printButton" class="btn btn-primary">Print</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
                   <div class="content">
                     <div class="container-fluid">
