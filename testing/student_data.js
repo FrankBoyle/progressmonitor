@@ -945,6 +945,3 @@ $(document).ready(function() {
             $("#startDateFilter").on("change", function() {
                 table.draw();
             });
-
-            // Handle initial filtering when the page loads
-            table.draw();
