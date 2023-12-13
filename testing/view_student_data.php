@@ -637,6 +637,7 @@ if (isset($_GET['metadata_id'])) {
                                                                 };
                                                                 image.src = content.match(/src="([^"]+)"/)[1];
                                                               }
+                                                            });
                                                             </script>
 
                                                             </body>
