@@ -942,6 +942,10 @@ $(document).ready(function() {
             });
 
             // Apply date filter when date is selected
-            $("#startDateFilter").on("change", function() {
-                table.draw();
+            $('#addDataRow').on('click', function() {
+                let newRowData = [
+                    // Add your new row data here
+                ];
+
+                table.row.add(newRowData).draw(false);
             });
