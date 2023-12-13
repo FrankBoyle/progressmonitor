@@ -666,28 +666,282 @@ $(document).ready(function() {
 
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
+            //console.log(response); // <-- This is the debug line. 
+        
+            if (response && response.error && response.error === 'Duplicate date not allowed!') {
+                alert("Duplicate date not allowed!");
+                cell.html(cell.data('saved-date') || '');  
+            } else if (response && response.saved_date) {
+                cell.data('saved-date', response.saved_date);
+            } else {
+            }
+        });  
+    }
+
+    $(document).on('click', '.deleteRow', function() {
+        const row = $(this);  // Capture the button element for later use
+        const performanceId = $(this).data('performance-id');
+    
+        // Confirm before delete
+        if (!confirm('Are you sure you want to delete this row?')) {
+            return;
+        }
+    
+        // Send a request to delete the data from the server
+        $.post('delete_performance.php', {
+            performance_id: performanceId
+        }, function(response) {
+            // Handle the response, e.g., check if the deletion was successful
+            if (response.success) {
+                // Remove the corresponding row from the table
+                row.closest('tr').remove();
+            } else {
+                alert('Failed to delete data. Please try again.');
+            }
+        }, 'json');
+    });
+
+    function updateScoreInDatabase(row, metadataFieldName, newValue) {
+        const performanceId = row.data('performance-id');
+        const studentId = CURRENT_STUDENT_ID;
+        const score_date = row.find('td[data-field-name="score_date"]').text();
+        
+        // Assuming that metadataFieldName would be something like "score1_name" and we'd need to update "score1"
+        const fieldNameToUpdate = metadataFieldName.replace('_name', '');
+    
+        const postData = {
+            performance_id: performanceId,
+            field_name: fieldNameToUpdate, // Use the extracted field name to update the appropriate score column
+            new_value: newValue,
+            student_id: studentId,
+            score_date: score_date
+            
+        };
+    
+        ajaxCall('POST', 'update_performance.php', postData).then(response => {
+            if (response && !response.success) {
+                console.error('Error updating the score in the database.');
+            }
+        });
+    }
+    
+
+    function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
+        //console.log("Checking for duplicate of:", dateString);
+        let isDuplicate = false;
+    
+        $('table').find('td[data-field-name="score_date"]').each(function() {
+            const cellDate = $(this).text();
+            const $currentRow = $(this).closest('tr');
+            const performanceId = $currentRow.data('performance-id');
+            const studentId = $currentRow.data('student-id'); // Retrieve the student_id
+            const urlParams = new URLSearchParams(window.location.search);
+            const metadata_id = urlParams.get('metadata_id');    
+            // Check if date, student_id, and metadata_id are the same, but not the same performance entry
+            if (cellDate === dateString 
+                && performanceId !== currentPerformanceId 
+                && studentId === currentStudentId 
+                && metadata_id === currentMetadataId) {
+                isDuplicate = true;
+                return false; // Break out of the .each loop
+            }
+        });
+    
+        return isDuplicate;
+    }
+    
+    function attachEditableHandler() {
+        $('table').on('dblclick', '.editable', function() {
+            const cell = $(this);
+            if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
+    
+            // Store the original value in a variable
+            let originalValue;
+    
+            // Check if the cell contains an input element with a non-empty value
+            const inputElement = cell.find('input[type="text"]');
+            if (inputElement.length && inputElement.val().trim() !== '') {
+                originalValue = inputElement.val().trim();
+            } else {
+                originalValue = cell.text().trim();
+            }
+    
+            // Create an input element and set its value to the original value
+            const input = $('<input type="text">');
+            input.val(originalValue);
+    
+            let datePickerActive = false;
+    
+            if (cell.data('field-name') === 'score_date') {
+                input.datepicker({
+                    dateFormat: 'mm/dd/yy',
+                    beforeShow: function() {
+                        datePickerActive = true;
+                    },
+                    onClose: function(selectedDate) {
+                        if (isValidDate(new Date(selectedDate))) {
+                            const currentPerformanceId = cell.closest('tr').data('performance-id');
+                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+                                input.val(originalValue);
+                            } else {
+                                saveEditedDate(cell, selectedDate);
+                            }
+                        }
+                        toggleEditMode(cell, input);
+                        datePickerActive = false;
+                    }
+                });
+            }
+    
+            cell.addClass('editing');
+            cell.empty().append(input);
+            input.focus();
+    
+            // Listen for Enter key press
+            input.on('keydown', function(e) {
+                if (e.keyCode === 13) { // Enter key pressed
+                    e.preventDefault();
+                    saveCellValue(cell, input);
+                }
+            });
+    
+            // Listen for blur event (clicking outside the input)
+            input.on('blur', function() {
+                saveCellValue(cell, input);
+            });
+        });
+    }
+    
+    function saveCellValue(cell, input) {
+        const newValue = input.val();
+        //console.log("Cell contents:", cell.html()); // Log the entire HTML content of the cell
+        const originalValue = cell.text().trim();
+        //console.log("Original Value:", originalValue);
+        //console.log("New Value:", newValue);
+    
+        /*
+        if (newValue === originalValue) {
+            console.log("No change detected.");
+            toggleEditMode(cell, input);
+            return; // No change, exit without saving or making an AJAX request
+        }
+        */
+
+        toggleEditMode(cell, input);
+        cell.text(newValue);
+    
+        const performanceId = cell.closest('tr').data('performance-id');
+        if (performanceId === 'new') {
+            return;
+        }
+    
+        if (cell.data('field-name') === 'score_date') {
+            const parts = newValue.split('/');
+            if (parts.length !== 3) {
+                cell.text(originalValue);
+                return;
+            }
+            // Function to convert a value to a database date format
+            function convertToDatabaseDate(value) {
+                // Implementation goes here
+            }
+
+            // Function to save edited date
+            function saveEditedDate(cell, convertedValue) {
+                // Implementation goes here
+            }
+
+            // Function to toggle edit mode
+            function toggleEditMode(cell, input) {
+                if (cell.hasClass('editing')) {
+                    cell.removeClass('editing');
+                    input.hide();
+                } else {
+                    cell.addClass('editing');
+                    input.show();
+                }
+            }
+
+            // Function to update goal text
+            function updateGoalText(goalId, newText) {
+                // Implementation goes here
+            }
+
+            // Event listener for adding a new goal
+            $('#addNewGoalBtn').on('click', function() {
+                // Implementation goes here
+            });
+
+            // Event listener for goal checkbox change
+            $(document).on('change', '.goal-checkbox', function() {
+                // Implementation goes here
+            });
+
+            // Event handler for the save button
+            $(document).on('click', '.save-goal-btn', function() {
+                // Implementation goes here
+            });
+
             // Event handler for adding a new data row
             $('#addDataRow').off('click').click(function() {
                 // Implementation goes here
-                const newRowData = {
-                    // Populate the new row data here
-                };
+            });
 
-                // Send a request to the server to add the new row
-                $.post('add_row.php', newRowData, function(response) {
-                    if (response.success) {
-                        // Create a new row element with the returned data
-                        const newRow = $('<tr>').data('performance-id', response.performanceId);
-                        // Populate the new row with the data from the response
-                        // ...
+            // Event handler for the save button in a data row
+            $(document).on('click', '.saveRow', function() {
+                // Implementation goes here
+            });
 
-                        // Append the new row to the table
-                        $('#dataTable').append(newRow);
+            // Function to save row data asynchronously
+            async function saveRowData(row) {
+                // Implementation goes here
+            }
 
-                        // Attach the editable handler to the new row
-                        attachEditableHandler();
-                    } else {
-                        alert('Failed to add new row. Please try again.');
+            // Event handler for preventing form submission on enter key press
+            $(document).on('keypress', '.saveRow', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                }
+            });
+
+            // Initialization code
+            $('#currentWeekStartDate').val(getCurrentDate());
+            attachEditableHandler();
+
+            $.fn.dataTable.ext.type.detect.unshift(function(value) {
+                return value && value.match(/^(\d{1,2}\/\d{1,2}\/\d{4})$/) ? 'date-us' : null;
+            });
+
+            $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
+                var date = data.split('/');
+                return (date[2] + date[0] + date[1]) * 1;
+            };
+
+            // Define the DataTable and apply custom date filter
+            let table = $('#dataTable').DataTable({
+                "order": [[0, "asc"]],
+                "lengthChange": false,
+                "searching": false,
+                "paging": false,
+                "info": false,
+                "sorting": false,
+                "columns": [
+                    { "type": "date-us" },
+                    null, null, null, null, null, null, null, null, null, null, null
+                ],
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+                "columnDefs": [
+                    {
+                        "targets": [0], // Apply the date filter to the first column (date)
+                        "type": "date-us",
+                        "render": function (data) {
+                            return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
+                        }
                     }
-                }, 'json');
+                ]
+            });
+
+            // Apply date filter when date is selected
+            $("#startDateFilter").on("change", function() {
+                table.draw();
             });
