@@ -485,7 +485,10 @@ if (isset($_GET['metadata_id'])) {
                     <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor</a>.</strong>
                     All rights reserved.
                   </footer>
-
+<!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="./dist/js/adminlte.min.js"></script>
                   <script>
                     $(document).ready(function() {
                       $('.goaltext').summernote({
