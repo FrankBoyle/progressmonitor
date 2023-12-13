@@ -353,9 +353,6 @@ if (isset($_GET['metadata_id'])) {
               <h3 class="card-title"></h3>
 
                 <table border="1" id="dataTable">
-                  <?php
-                  // FILEPATH: /c:/Users/TUpecsi/OneDrive - Temple University/Documents/GitHub/progressmonitor/testing/view_student_data.php
-                  ?>
                   <thead>
                     <tr>
                       <th>Date</th>
