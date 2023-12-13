@@ -512,133 +512,146 @@ if (isset($_GET['metadata_id'])) {
                                                               ],
                                                               fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
                                                             });
-
-                                                            // Initialize Summernote
-                                                            $('#graphNotes').summernote({
-                                                              height: 300,
-                                                              toolbar: []
-                                                            });
-
-                                                            // Disable the textbox initially
-                                                            $('#graphNotes').summernote('disable');
-
-                                                            // Enable/Disable the textbox based on goal selection
-                                                            $('.goal-checkbox').change(function() {
-                                                              if ($(this).is(':checked')) {
-                                                                $('#graphNotes').summernote('enable');
-                                                              } else {
-                                                                $('#graphNotes').summernote('disable');
-                                                              }
-                                                            });
-
-                                                            // Handle save button click
-                                                            $('#saveGraphNotes').click(function() {
-                                                              var notes = $('#graphNotes').summernote('code');
-                                                              var goalId = $('.goal-checkbox:checked').data('goal-id');
-                                                              var studentId = $('#currentStudentId').val();
-                                                              var schoolId = $('#schoolIdInput').val();
-                                                              var metadataId = urlParams.get('metadata_id');
-
-                                                              // AJAX call to save the notes
-                                                              $.post('./users/save_graph_notes.php', {
-                                                                notes: notes,
-                                                                goal_id: goalId,
-                                                                student_id: studentId,
-                                                                school_id: schoolId,
-                                                                metadata_id: metadataId
-                                                              }, function(response) {
-                                                                console.log(response);
-                                                              }).fail(function(error) {
-                                                                console.log('Error: ', error);
+                                                            <script>
+                                                              // Date filter
+                                                              $(document).on('change', '#dateFilter', function() {
+                                                                var selectedDate = $(this).val();
+                                                                // Perform filtering based on selectedDate
+                                                                // ...
                                                               });
-                                                            });
 
-                                                            $('.goal-checkbox').change(function() {
-                                                              var goalId = $(this).data('goal-id');
-                                                              if (this.checked) {
-                                                                $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
-                                                                  var data = JSON.parse(response);
-                                                                  if (data.status === 'success') {
-                                                                    $('#graphNotes').summernote('code', data.notes);
+                                                              // Start date filter
+                                                              $(document).on('change', '#startDateFilter', function() {
+                                                                var startDate = $(this).val();
+                                                                // Perform filtering based on startDate
+                                                                // ...
+                                                              });
+
+                                                              // End date filter
+                                                              $(document).on('change', '#endDateFilter', function() {
+                                                                var endDate = $(this).val();
+                                                                // Perform filtering based on endDate
+                                                                // ...
+                                                              });
+
+                                                              // Initialize Summernote
+                                                              $('#graphNotes').summernote({
+                                                                height: 300,
+                                                                toolbar: []
+                                                              });
+
+                                                              // Disable the textbox initially
+                                                              $('#graphNotes').summernote('disable');
+
+                                                              // Enable/Disable the textbox based on goal selection
+                                                              $('.goal-checkbox').change(function() {
+                                                                if ($(this).is(':checked')) {
+                                                                  $('#graphNotes').summernote('enable');
+                                                                } else {
+                                                                  $('#graphNotes').summernote('disable');
+                                                                }
+                                                              });
+
+                                                              // Handle save button click
+                                                              $('#saveGraphNotes').click(function() {
+                                                                var notes = $('#graphNotes').summernote('code');
+                                                                var goalId = $('.goal-checkbox:checked').data('goal-id');
+                                                                var studentId = $('#currentStudentId').val();
+                                                                var schoolId = $('#schoolIdInput').val();
+                                                                var metadataId = urlParams.get('metadata_id');
+
+                                                                // AJAX call to save the notes
+                                                                $.post('./users/save_graph_notes.php', {
+                                                                  notes: notes,
+                                                                  goal_id: goalId,
+                                                                  student_id: studentId,
+                                                                  school_id: schoolId,
+                                                                  metadata_id: metadataId
+                                                                }, function(response) {
+                                                                  console.log(response);
+                                                                }).fail(function(error) {
+                                                                  console.log('Error: ', error);
+                                                                });
+                                                              });
+
+                                                              $('.goal-checkbox').change(function() {
+                                                                var goalId = $(this).data('goal-id');
+                                                                if (this.checked) {
+                                                                  $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
+                                                                    var data = JSON.parse(response);
+                                                                    if (data.status === 'success') {
+                                                                      $('#graphNotes').summernote('code', data.notes);
+                                                                    } else {
+                                                                      $('#graphNotes').summernote('code', '');
+                                                                      alert(data.message);
+                                                                    }
+                                                                  });
+                                                                } else {
+                                                                  $('#graphNotes').summernote('code', '');
+                                                                }
+                                                              });
+
+                                                              $('#printButton').click(function() {
+                                                                var currentChart = selectedChartType === 'bar' ? barChart : chart;
+                                                                getGraphContentAsImage(currentChart, function(graphImage) {
+                                                                  if (graphImage) {
+                                                                    var notesContent = $('#graphNotes').summernote('code');
+                                                                    var selectedGoalContent = getSelectedGoalContent();
+                                                                    var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
+                                                                    contentToPrint += '<div><img src="' + graphImage + '"></div>';
+                                                                    contentToPrint += '<div>' + notesContent + '</div>';
+                                                                    printContent(contentToPrint);
                                                                   } else {
-                                                                    $('#graphNotes').summernote('code', '');
-                                                                    alert(data.message);
+                                                                    console.error('Failed to receive graph image');
                                                                   }
                                                                 });
-                                                              } else {
-                                                                $('#graphNotes').summernote('code', '');
-                                                              }
-                                                            });
-
-                                                            $('#printButton').click(function() {
-                                                              var currentChart = selectedChartType === 'bar' ? barChart : chart;
-                                                              getGraphContentAsImage(currentChart, function(graphImage) {
-                                                                if (graphImage) {
-                                                                  var notesContent = $('#graphNotes').summernote('code');
-                                                                  var selectedGoalContent = getSelectedGoalContent();
-                                                                  var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
-                                                                  contentToPrint += '<div><img src="' + graphImage + '"></div>';
-                                                                  contentToPrint += '<div>' + notesContent + '</div>';
-                                                                  printContent(contentToPrint);
-                                                                } else {
-                                                                  console.error('Failed to receive graph image');
-                                                                }
                                                               });
-                                                            });
 
-                                                            function getSelectedGoalContent() {
-                                                              var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
-                                                              if (checkedCheckbox) {
-                                                                var goalContainer = checkedCheckbox.closest('.goal-container');
-                                                                if (goalContainer) {
-                                                                  var goalTextElement = goalContainer.querySelector('.goaltext');
-                                                                  return goalTextElement ? goalTextElement.value : '';
+                                                              function getSelectedGoalContent() {
+                                                                var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
+                                                                if (checkedCheckbox) {
+                                                                  var goalContainer = checkedCheckbox.closest('.goal-container');
+                                                                  if (goalContainer) {
+                                                                    var goalTextElement = goalContainer.querySelector('.goaltext');
+                                                                    return goalTextElement ? goalTextElement.value : '';
+                                                                  }
+                                                                }
+                                                                return 'No goal selected';
+                                                              }
+
+                                                              function getGraphContentAsImage(chartVar, callback) {
+                                                                if (chartVar) {
+                                                                  chartVar.dataURI().then(({ imgURI }) => {
+                                                                    callback(imgURI);
+                                                                  }).catch(error => {
+                                                                    console.error('Error in converting chart to image:', error);
+                                                                    callback(null);
+                                                                  });
+                                                                } else {
+                                                                  console.error('Chart variable is null or undefined');
+                                                                  callback(null);
                                                                 }
                                                               }
-                                                              return 'No goal selected';
-                                                            }
 
-                                                            function getGraphContentAsImage(chartVar, callback) {
-                                                              if (chartVar) {
-                                                                chartVar.dataURI().then(({ imgURI }) => {
-                                                                  callback(imgURI);
-                                                                }).catch(error => {
-                                                                  console.error('Error in converting chart to image:', error);
-                                                                  callback(null);
-                                                                });
-                                                              } else {
-                                                                console.error('Chart variable is null or undefined');
-                                                                callback(null);
+                                                              function printContent(content) {
+                                                                var studentName = document.getElementById('studentName').value;
+                                                                var printWindow = window.open('', '_blank');
+                                                                var image = new Image();
+                                                                image.onload = function() {
+                                                                  printWindow.document.write('<html><head><title>Print</title></head><body>');
+                                                                  printWindow.document.write('<h1>' + studentName + '</h1>');
+                                                                  printWindow.document.write(content);
+                                                                  printWindow.document.write('</body></html>');
+                                                                  printWindow.document.close();
+                                                                  printWindow.focus();
+                                                                  setTimeout(() => printWindow.print(), 500);
+                                                                };
+                                                                image.onerror = function() {
+                                                                  console.error('Error loading the image');
+                                                                };
+                                                                image.src = content.match(/src="([^"]+)"/)[1];
                                                               }
-                                                            }
+                                                            </script>
 
-                                                            function printContent(content) {
-                                                              var studentName = document.getElementById('studentName').value;
-                                                              var printWindow = window.open('', '_blank');
-                                                              var image = new Image();
-                                                              image.onload = function() {
-                                                                printWindow.document.write('<html><head><title>Print</title></head><body>');
-                                                                printWindow.document.write('<h1>' + studentName + '</h1>');
-                                                                printWindow.document.write(content);
-                                                                printWindow.document.write('</body></html>');
-                                                                printWindow.document.close();
-                                                                printWindow.focus();
-                                                                setTimeout(() => printWindow.print(), 500);
-                                                              };
-                                                              image.onerror = function() {
-                                                                console.error('Error loading the image');
-                                                              };
-                                                              image.src = content.match(/src="([^"]+)"/)[1];
-                                                            }
-                                                          });
-
-                                                          // Date filter
-                                                          $(document).on('change', '#dateFilter', function() {
-                                                            var selectedDate = $(this).val();
-                                                            // Perform filtering based on selectedDate
-                                                            // ...
-                                                          });
-                                                        </script>
-
-                                                        </body>
-                                                        </html>
+                                                            </body>
+                                                            </html>
