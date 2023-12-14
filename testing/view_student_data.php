@@ -404,15 +404,6 @@ if (isset($_GET['metadata_id'])) {
         <div id="barChart" style="width: 1000px;"></div>
     </div>
 </div>
-
-<!-- Editable notes section placed outside and below the accordion -->
-<div class="editable-notes-section">
-    <h3>Goal Notes</h3>
-    <textarea id="graphNotes" class="summernote"></textarea>
-    <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
-    <button id="printButton" class="btn btn-primary">Print</button>
-</div>
-
 </div>
 </div>
 </div>
@@ -454,6 +445,13 @@ if (isset($_GET['metadata_id'])) {
             </div>
         </div>
     </div>
+    <!-- Editable notes section placed outside and below the accordion -->
+<div class="editable-notes-section">
+    <h3>Goal Notes</h3>
+    <textarea id="graphNotes" class="summernote"></textarea>
+    <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
+    <button id="printButton" class="btn btn-primary">Print</button>
+</div>
 </section>
 
 <div class="content">
