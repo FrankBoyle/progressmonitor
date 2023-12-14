@@ -247,7 +247,8 @@ if (isset($_GET['metadata_id'])) {
           <li class="nav-item">
               <a href="./users/logout.php" class="nav-link">
                 <i class="nav-icon fas fa-sign-out-alt"></i>
-                <p>Sign Out</p>
+                <p>Sign Out<span class="right badge badge-danger"></span></p>
+              </a>
           </li>
         </ul>
       </nav>
