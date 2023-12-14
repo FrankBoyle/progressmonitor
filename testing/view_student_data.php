@@ -247,7 +247,7 @@ if (isset($_GET['metadata_id'])) {
           <li class="nav-item">
               <a href="./users/logout.php" class="nav-link">
                 <i class="nav-icon fas fa-sign-out-alt"></i>
-                <p>Sign Out<span class="right badge badge-danger"></span></p>
+                <p>Sign Out</p>
           </li>
         </ul>
       </nav>
@@ -265,13 +265,11 @@ if (isset($_GET['metadata_id'])) {
           <div class="col-sm-6">
             <h1><?php echo $studentName; ?> Performance Data - <?php echo $selectedCategoryName; ?></h1>
             <a href="home.php" class="btn btn-primary">Home</a>  
-          </div>
+        </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
-              <?php if (!empty($_SESSION['user'])): ?>
-                <li class="breadcrumb-item active">Performance Data</li>
-              <?php endif; ?>
+              <li class="breadcrumb-item active">Performance Data</li>
             </ol>
           </div>
         </div>
