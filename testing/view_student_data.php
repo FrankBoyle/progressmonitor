@@ -346,365 +346,326 @@ if (isset($_GET['metadata_id'])) {
 </div>   
 
 <section class="content">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card card-outline card-info">
-        <div class="card-header">
-          <h3 class="card-title"></h3>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
 
-          <!-- Date Filter -->
-          <div class="date-filter">
-            <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate">
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate">
-            <button id="applyFilter">Apply</button>
-          </div>
-
-          <table border="1" id="dataTable">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <?php 
-                foreach ($scoreNames as $category => $values) {
-                  if (is_array($values)) {
-                    foreach ($values as $score) {
-                      echo "<th>" . htmlspecialchars($score) . "</th>";
-                    }
-                  } else {
-                    echo "<th>" . htmlspecialchars($values) . "</th>";
-                  }
-                }
-                ?>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php if (empty($performanceData)): ?>
-                <tr>
-                  <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-                </tr>
-              <?php else: ?>
+                <table border="1" id="dataTable">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                        <?php 
+                          foreach ($scoreNames as $category => $values) {
+                            if (is_array($values)) {
+                              foreach ($values as $score) {
+                                echo "<th>" . htmlspecialchars($score) . "</th>";
+                              }
+                            } else {
+                              echo "<th>" . htmlspecialchars($values) . "</th>";
+                            }
+                          }
+                          ?>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                <tbody>
+          
+                <?php if (empty($performanceData)): ?>
+                  <tr>
+                    <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+                  </tr>
+                <?php else: ?>
                 <?php foreach ($performanceData as $data): ?>
                   <tr data-performance-id="<?php echo $data['performance_id']; ?>">
                     <td class="editable" data-field-name="score_date">
-                      <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
+                        <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
                     </td>
                     <?php for ($i = 1; $i <= 10; $i++): ?>
-                      <td class="editable" data-field-name="score<?php echo $i; ?>">
-                        <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
-                      </td>
-                    <?php endfor; ?>
-                    <td>
-                      <button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php endif; ?>
-            </tbody>
-          </table>
-          <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
-          <input type="text" id="newRowDate" style="display: none;">
-        </div>
-      </div>
-    </div>
-  </div>
+                        <td class="editable" data-field-name="score<?php echo $i; ?>">
+                            <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
+                        </td>
+                      <?php endfor; ?>
+                    <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
+</table>
+<button id="addDataRow" class="btn btn-primary">Add Data Row</button>
+<input type="text" id="newRowDate" style="display: none;">
+</div>
+</div>
+</div>
+</div>
 </section>
+
 
 <section class="content">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card card-outline card-info">
-        <div class="card-header">
-          <h3 class="card-title"></h3>
-          <!-- Existing checkboxes for column selection -->
-          <div id="columnSelector">
-            <label>Select Columns to Display:</label>
-            <?php
-            foreach ($scoreNames as $category => $scores) {
-              foreach ($scores as $index => $scoreName) {
-                $scoreColumnName = 'score' . ($index + 1);
-                $customColumnName = htmlspecialchars($scoreName); // Custom column name
-                echo '<label>';
-                echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '"';
-                echo ' data-column-name="' . $customColumnName . '">'; // Include custom name as data attribute
-                echo htmlspecialchars($scoreName);
-                echo '</label>';
-              }
-            }
-            ?>
-          </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+<!-- Existing checkboxes for column selection -->
+<div id="columnSelector">
+    <label>Select Columns to Display:</label>
+    <?php
+    foreach ($scoreNames as $category => $scores) {
+        foreach ($scores as $index => $scoreName) {
+            $scoreColumnName = 'score' . ($index + 1);
+            $customColumnName = htmlspecialchars($scoreName); // Custom column name
+            echo '<label>';
+            echo '<input type="checkbox" name="selectedColumns[]" value="' . htmlspecialchars($scoreColumnName) . '"';
+            echo ' data-column-name="' . $customColumnName . '">'; // Include custom name as data attribute
+            echo htmlspecialchars($scoreName);
+            echo '</label>';
+        }
+    }
+    ?>
+</div>
 
-          <div id="accordion">
-            <h3>Line Graph</h3>
-            <div>
-              <div id="chart" style="width: 1000px;"></div>
-            </div>
-            <h3>Bar Graph</h3>
-            <div>
-              <div id="barChart" style="width: 1000px;"></div>
-            </div>
-          </div>
+  <!--
+    <label>Enter Benchmark Value:</label>
+    <input type="text" id="benchmarkValue">
+    <button type ="button" id="updateBenchmark" class="btn btn-primary">Update Benchmark</button>
+  -->
 
-          <!-- Editable notes section placed outside and below the accordion -->
-          <div class="editable-notes-section">
-            <h3>Goal Notes</h3>
-            <textarea id="graphNotes" class="summernote"></textarea>
-            <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
-            <button id="printButton" class="btn btn-primary">Print</button>
-          </div>
-        </div>
-      </div>
+  <div id="accordion">
+    <h3>Line Graph</h3>
+    <div>
+        <div id="chart" style="width: 1000px;"></div>
     </div>
-  </div>
+    <h3>Bar Graph</h3>
+    <div>
+        <div id="barChart" style="width: 1000px;"></div>
+    </div>
+</div>
+
+<!-- Editable notes section placed outside and below the accordion -->
+<div class="editable-notes-section">
+    <h3>Goal Notes</h3>
+    <textarea id="graphNotes" class="summernote"></textarea>
+    <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
+    <button id="printButton" class="btn btn-primary">Print</button>
+</div>
+
+</div>
+</div>
+</div>
+</div>
 </section>
+<div class="content">
+      <div class="container-fluid">
+              <div class="card-body">
+                <h5 class="card-title"></h5>
 
-                  <div class="content">
-                    <div class="container-fluid">
-                      <div class="card-body">
-                        <h5 class="card-title"></h5>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
-                      </div>
-                    </div>
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+              </div>
+            </div>
+            
+            <!-- solid sales graph -->
+            <div class="card info">
+              <div class="card-header border-0">
+                <h3 class="card-title">
+                  <i class="fas fa-th mr-1"></i>
+                  Graph
+                </h3>
 
-                    <!-- solid sales graph -->
-                    <div class="card info">
-                      <div class="card-header border-0">
-                        <h3 class="card-title">
-                          <i class="fas fa-th mr-1"></i>
-                          Graph
-                        </h3>
-                        <div class="card-tools">
-                          <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <a href="#" class="card-link">Card link</a>
-                    <a href="#" class="card-link">Another link</a>
+                <div class="card-tools">
+                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-body -->
                   </div>
+                  <!-- ./col -->
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
 
-                  <footer class="main-footer">
-                    <div class="float-right d-none d-sm-inline">
-                      Anything you want
-                    </div>
-                    <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor</a>.</strong>
-                    All rights reserved.
-                  </footer>
-                  
-                  <!-- Bootstrap 4 -->
-                  <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-                  <!-- AdminLTE App -->
-                  <script src="./dist/js/adminlte.min.js"></script>
 
-                    <div class="content">
-                      <div class="container-fluid">
-                        <div class="card-body">
-                          <h5 class="card-title"></h5>
-                          <a href="#" class="card-link">Card link</a>
-                          <a href="#" class="card-link">Another link</a>
-                        </div>
-                      </div>
+                <a href="#" class="card-link">Card link</a>
+                <a href="#" class="card-link">Another link</a>
+              </div>
+            </div><!-- /.card -->
+          </div>
+          <!-- /.col-md-6 -->
 
-                      <!-- solid sales graph -->
-                      <div class="card info">
-                        <div class="card-header border-0">
-                          <h3 class="card-title">
-                            <i class="fas fa-th mr-1"></i>
-                            Graph
-                          </h3>
-                          <div class="card-tools">
-                            <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
-                              <i class="fas fa-minus"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 
-                      <a href="#" class="card-link">Card link</a>
-                      <a href="#" class="card-link">Another link</a>
-                    </div>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+    <div class="p-3">
+      <h5>Title</h5>
+      <p>Sidebar content</p>
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
 
-                    <footer class="main-footer">
-                      <div class="float-right d-none d-sm-inline">
-                        Anything you want
-                      </div>
-                      <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor</a>.</strong>
-                      All rights reserved.
-                    </footer>
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="float-right d-none d-sm-inline">
+      Anything you want
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor</a>.</strong> All rights reserved.
+  </footer>
+</div>
+<!-- ./wrapper -->
+<!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="./dist/js/adminlte.min.js"></script>
+<script>
+    $(document).ready(function() {
+      $('.goaltext').summernote({
+        toolbar: [
+          // Only include buttons for font type and basic styling
+          ['font', ['fontname']], // Font type
+          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
+        ],
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
+      });
 
-                    <!-- Bootstrap 4 -->
-                    <script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-                    <!-- AdminLTE App -->
-                    <script src="./dist/js/adminlte.min.js"></script>
+    // Initialize Summernote
+    $('#graphNotes').summernote({
+        height: 300,
+        toolbar: [
+            // Add your toolbar options here
+        ]
+    });
 
-                    <script>
-                      $(document).ready(function() {
-                        // Initialize date picker
-                        $('.datepicker').datepicker({
-                          format: 'yyyy-mm-dd',
-                          autoclose: true,
-                          todayHighlight: true
-                        });
+    // Disable the textbox initially
+    $('#graphNotes').summernote('disable');
 
-                        $('#startDate').datepicker({
-                          format: 'yyyy-mm-dd',
-                          autoclose: true,
-                          todayHighlight: true
-                        });
+    // Enable/Disable the textbox based on goal selection
+    $('.goal-checkbox').change(function() {
+        if ($(this).is(':checked')) {
+            $('#graphNotes').summernote('enable');
+        } else {
+            $('#graphNotes').summernote('disable');
+        }
+    });
 
-                        $('#endDate').datepicker({
-                          format: 'yyyy-mm-dd',
-                          autoclose: true,
-                          todayHighlight: true
-                        });
+    // Handle save button click
+    $('#saveGraphNotes').click(function() {
+    var notes = $('#graphNotes').summernote('code');
+    var goalId = $('.goal-checkbox:checked').data('goal-id');
+    var studentId = $('#currentStudentId').val(); // Assuming this is the correct way to get the student ID
+    var schoolId = $('#schoolIdInput').val();     // Assuming this is the correct way to get the school ID
+    var metadataId = urlParams.get('metadata_id'); // Assuming this is the correct way to get the metadata ID
 
-                        // Apply filter button click event
-                        $('#applyFilter').click(function() {
-                          var startDate = $('#startDate').val();
-                          var endDate = $('#endDate').val();
-                        });
+    // AJAX call to save the notes
+    $.post('./users/save_graph_notes.php', {
+        notes: notes,
+        goal_id: goalId,
+        student_id: studentId,
+        school_id: schoolId,
+        metadata_id: metadataId
+    }, function(response) {
+        // Handle response
+        console.log(response);
+    }).fail(function(error) {
+        console.log('Error: ', error);
+    });
+});
+    
+$('.goal-checkbox').change(function() {
+    var goalId = $(this).data('goal-id');
+    if (this.checked) {
+        $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
+            var data = JSON.parse(response);
+            if (data.status === 'success') {
+                $('#graphNotes').summernote('code', data.notes);
+            } else {
+                $('#graphNotes').summernote('code', '');
+                // Optionally alert the user if no notes were found
+                alert(data.message);
+            }
+        });
+    } else {
+        $('#graphNotes').summernote('code', ''); // Clear the notes when no goal is selected
+    }
+});
 
-                                                // Perform filtering based on selected dates
-                                                $('.data-row').each(function() {
-                          var date = $(this).find('.date').text();
-                          if (date >= startDate && date <= endDate) {
-                            $(this).show();
-                          } else {
-                            $(this).hide();
-                          }
-                        });
+$('#printButton').click(function() {
+    var currentChart = selectedChartType === 'bar' ? barChart : chart;
+    getGraphContentAsImage(currentChart, function(graphImage) {
+        if (graphImage) {
+            var notesContent = $('#graphNotes').summernote('code');
+            var selectedGoalContent = getSelectedGoalContent();
+            var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
+            contentToPrint += '<div><img src="' + graphImage + '"></div>';
+            contentToPrint += '<div>' + notesContent + '</div>';
+            printContent(contentToPrint);
+        } else {
+            console.error('Failed to receive graph image');
+        }
+    });
+});
 
-                        $('.goaltext').summernote({
-                          toolbar: [
-                            ['font', ['fontname']],
-                            ['style', ['bold', 'italic', 'underline']]
-                          ],
-                          fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
-                        });
+function getSelectedGoalContent() {
+    var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
+    if (checkedCheckbox) {
+        var goalContainer = checkedCheckbox.closest('.goal-container');
+        if (goalContainer) {
+            // Extract and return only the goal text
+            var goalTextElement = goalContainer.querySelector('.goaltext');
+            return goalTextElement ? goalTextElement.value : ''; // Using value to get the text content
+        }
+    }
+    return 'No goal selected';
+}
 
-                        // Initialize Summernote
-                        $('#graphNotes').summernote({
-                          height: 300,
-                          toolbar: []
-                        });
+function getGraphContentAsImage(chartVar, callback) {
+    if (chartVar) {
+        chartVar.dataURI().then(({ imgURI }) => {
+            callback(imgURI);
+        }).catch(error => {
+            console.error('Error in converting chart to image:', error);
+            callback(null);
+        });
+    } else {
+        console.error('Chart variable is null or undefined');
+        callback(null);
+    }
+}
 
-                        // Disable the textbox initially
-                        $('#graphNotes').summernote('disable');
+function printContent(content) {
+    var studentName = document.getElementById('studentName').value; // Fetch the student's name
 
-                        // Enable/Disable the textbox based on goal selection
-                        $('.goal-checkbox').change(function() {
-                          if ($(this).is(':checked')) {
-                            $('#graphNotes').summernote('enable');
-                          } else {
-                            $('#graphNotes').summernote('disable');
-                          }
-                        });
+    var printWindow = window.open('', '_blank');
+    var image = new Image();
+    image.onload = function() {
+        printWindow.document.write('<html><head><title>Print</title></head><body>');
+        printWindow.document.write('<h1>' + studentName + '</h1>'); // Include the student's name
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => printWindow.print(), 500);
+    };
+    image.onerror = function() {
+        console.error('Error loading the image');
+    };
+    image.src = content.match(/src="([^"]+)"/)[1];
+}
+    });
 
-                        // Handle save button click
-                        $('#saveGraphNotes').click(function() {
-                          var notes = $('#graphNotes').summernote('code');
-                          var goalId = $('.goal-checkbox:checked').data('goal-id');
-                          var studentId = $('#currentStudentId').val();
-                          var schoolId = $('#schoolIdInput').val();
-                          var metadataId = urlParams.get('metadata_id');
+  </script>
 
-                          // AJAX call to save the notes
-                          $.post('./users/save_graph_notes.php', {
-                            notes: notes,
-                            goal_id: goalId,
-                            student_id: studentId,
-                            school_id: schoolId,
-                            metadata_id: metadataId
-                          }, function(response) {
-                            console.log(response);
-                          }).fail(function(error) {
-                            console.log('Error: ', error);
-                          });
-                        });
-
-                        $('.goal-checkbox').change(function() {
-                          var goalId = $(this).data('goal-id');
-                          if (this.checked) {
-                            $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
-                              var data = JSON.parse(response);
-                              if (data.status === 'success') {
-                                $('#graphNotes').summernote('code', data.notes);
-                              } else {
-                                $('#graphNotes').summernote('code', '');
-                                alert(data.message);
-                              }
-                            });
-                          } else {
-                            $('#graphNotes').summernote('code', '');
-                          }
-                        });
-
-                        $('#printButton').click(function() {
-                          var currentChart = selectedChartType === 'bar' ? barChart : chart;
-                          getGraphContentAsImage(currentChart, function(graphImage) {
-                            if (graphImage) {
-                              var notesContent = $('#graphNotes').summernote('code');
-                              var selectedGoalContent = getSelectedGoalContent();
-                              var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
-                              contentToPrint += '<div><img src="' + graphImage + '"></div>';
-                              contentToPrint += '<div>' + notesContent + '</div>';
-                              printContent(contentToPrint);
-                            } else {
-                              console.error('Failed to receive graph image');
-                            }
-                          });
-                        });
-
-                        function getSelectedGoalContent() {
-                          var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
-                          if (checkedCheckbox) {
-                            var goalContainer = checkedCheckbox.closest('.goal-container');
-                            if (goalContainer) {
-                              var goalTextElement = goalContainer.querySelector('.goaltext');
-                              return goalTextElement ? goalTextElement.value : '';
-                            }
-                          }
-                          return 'No goal selected';
-                        }
-
-                        function getGraphContentAsImage(chartVar, callback) {
-                          if (chartVar) {
-                            chartVar.dataURI().then(({ imgURI }) => {
-                              callback(imgURI);
-                            }).catch(error => {
-                              console.error('Error in converting chart to image:', error);
-                              callback(null);
-                            });
-                          } else {
-                            console.error('Chart variable is null or undefined');
-                            callback(null);
-                          }
-                        }
-
-                        function printContent(content) {
-                          var studentName = document.getElementById('studentName').value;
-                          var printWindow = window.open('', '_blank');
-                          var image = new Image();
-                          image.onload = function() {
-                            printWindow.document.write('<html><head><title>Print</title></head><body>');
-                            printWindow.document.write('<h1>' + studentName + '</h1>');
-                            printWindow.document.write(content);
-                            printWindow.document.write('</body></html>');
-                            printWindow.document.close();
-                            printWindow.focus();
-                            setTimeout(() => printWindow.print(), 500);
-                          };
-                          image.onerror = function() {
-                            console.error('Error loading the image');
-                          };
-                          image.src = content.match(/src="([^"]+)"/)[1];
-                        }
-                      });
-                    </script>
-
-                  </body>
-                  </html>
+</body>
+</html>
