@@ -253,9 +253,7 @@ function extractLastName($fullName) {
             </select>
           </form>
         </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- Display filtered student list -->
   <?php if (!empty($students)): ?>
@@ -293,6 +291,9 @@ function extractLastName($fullName) {
   <?php else: ?>
     No students found for this teacher.
   <?php endif; ?>
+  </div>
+    </div>
+  </div>
 </section>
 
 <!-- Section 2: Student List for Admin -->
