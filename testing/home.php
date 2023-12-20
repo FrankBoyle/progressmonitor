@@ -274,6 +274,8 @@ function extractLastName($fullName) {
               <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
             </form>
           <?php endif; ?>
+
+
   </div>
   </div>
     </div>
