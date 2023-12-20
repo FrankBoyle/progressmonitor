@@ -232,25 +232,39 @@ function extractLastName($fullName) {
   </div>
 </section>
 
+<!-- Section 1: Student Groups Filter -->
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+          <h3 class="card-title">STUDENT GROUPS FILTER</h3><br>
+
+          <!-- Dropdown to select a group for filtering -->
+          <form method="post" id="group_filter_form">
+            <label for="selected_group_id">Sort Students by Group:</label>
+            <select name="selected_group_id" id="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
+              <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
+              <?php foreach ($groups as $group): ?>
+                <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
+                  <?= htmlspecialchars($group['group_name']) ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: Student List for Admin -->
 <section class="content">
   <div class="row">
     <div class="col-md-12">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">STUDENT LIST</h3><br>
-
-<!-- Dropdown to select a group for filtering -->
-<form method="post" id="group_filter_form">
-    <label for="selected_group_id">Sort Students by Group:</label>
-    <select name="selected_group_id" id="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
-        <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
-        <?php foreach ($groups as $group): ?>
-            <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
-                <?= htmlspecialchars($group['group_name']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</form>
 
           <!-- Add New Student Form -->
           <form method="post" action="">
@@ -259,41 +273,39 @@ function extractLastName($fullName) {
             <input type="submit" name="add_new_student" value="Add New Student">
           </form>
 
-<!-- Form to Assign Students to Group -->
-<form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
-    <div style="display: flex; align-items: center;">
-        <div style="margin-right: 10px;">
-            <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
-                <option disabled selected>Student name here</option>
-                <?php foreach ($students as $student): ?>
+          <!-- Form to Assign Students to Group -->
+          <form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
+            <div style="display: flex; align-items: center;">
+              <div style="margin-right: 10px;">
+                <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
+                  <option disabled selected>Student name here</option>
+                  <?php foreach ($students as $student): ?>
                     <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div style="margin-right: 10px;">
-            <select name="group_id" class="select2">
-                <?php foreach ($groups as $group): ?>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <div style="margin-right: 10px;">
+                <select name="group_id" class="select2">
+                  <?php foreach ($groups as $group): ?>
                     <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <button type="submit" name="assign_to_group">Assign to Group</button>
-    </div>
-</form>
-
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <button type="submit" name="assign_to_group">Assign to Group</button>
+            </div>
+          </form>
 
           <?php if ($isAdmin): ?>
-          <!-- Toggle Button -->
-          <form method="post">
-            <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
-            <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
-          </form>
+            <!-- Toggle Button -->
+            <form method="post">
+              <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
+              <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
+            </form>
           <?php endif; ?>
 
           <?php if (!empty($message)): ?>
-    <p><?= htmlspecialchars($message) ?></p>
-<?php endif; ?>
-
+            <p><?= htmlspecialchars($message) ?></p>
+          <?php endif; ?>
 
           <?php if (!empty($students)): ?>
             <div style="display: flex; flex-direction: column;">
@@ -305,27 +317,25 @@ function extractLastName($fullName) {
                       <?= htmlspecialchars($student['name']) ?>
                     </a>
                   </span>
-                  
-<!-- Red X Button to Remove Student from Group -->
-<?php if ($isGroupFilterActive): ?>
-    <form method="post" style="display: inline;">
-        <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
-        <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
-    </form>
-<?php endif; ?>
+
+                  <?php if ($isGroupFilterActive): ?>
+                    <!-- Red X Button to Remove Student from Group -->
+                    <form method="post" style="display: inline;">
+                      <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
+                      <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
+                    </form>
+                  <?php endif; ?>
 
                   <?php if ($isAdmin): ?>
-                  <?php if (!$isGroupFilterActive): ?>
-                    <form method="post" style="display: inline; margin-right: 10px;">
-    <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-    <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
-        <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-    </button>
-</form>
-
+                    <?php if (!$isGroupFilterActive): ?>
+                      <form method="post" style="display: inline; margin-right: 10px;">
+                        <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+                        <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
+                          <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+                        </button>
+                      </form>
                     <?php endif; ?>
-
-                    <?php endif; ?>
+                  <?php endif; ?>
                 </div>
               <?php endforeach; ?>
             </div>
