@@ -245,13 +245,10 @@ if (isset($_GET['metadata_id'])) {
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
-              </p>
-            </a>
+              <a href="./users/logout.php" class="nav-link">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>Sign Out<span class="right badge badge-danger"></span></p>
+              </a>
           </li>
         </ul>
       </nav>
@@ -299,44 +296,6 @@ if (isset($_GET['metadata_id'])) {
           </div>
         </div>
       </section>    
-
-
-<!-- Main content -->
-<section class="content">
-    <div class="card card-outline card-info">
-        <div class="card-header">
-            <h3 class="card-title">Goals</h3>
-        </div>
-        <div class="card-body">
-            <div class="row" id="goalsList">
-                <?php foreach ($goals as $index => $goal): ?>
-                <div class="col-md-4 col-sm-6 col-12">
-                    <div class="info-box">
-                        <div class="info-box-content goal-container">
-                            <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-                            <!-- Nest the checkbox inside the label -->
-                            <label class="goal-checkbox-label">
-                                <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
-                                Select
-                            </label>
-                            <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
-                                      data-goal-id="<?php echo $goal['goal_id']; ?>">
-                                <?php echo htmlspecialchars($goal['goal_description']); ?>
-                            </textarea>
-                            <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-            <div class="add-goal-form">
-                <input type="text" id="newGoalText" placeholder="Enter new goal description">
-                <button id="addNewGoalBtn">Add New Goal</button>
-            </div>
-        </div>
-    </div>
-</section>
-
 
 <div>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
@@ -442,20 +401,57 @@ if (isset($_GET['metadata_id'])) {
         <div id="barChart" style="width: 1000px;"></div>
     </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+</section>
 
-<!-- Editable notes section placed outside and below the accordion -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="card card-outline card-info">
+        <div class="card-header">
+            <h3 class="card-title">Goals</h3>
+        </div>
+        <div class="card-body">
+            <div class="row" id="goalsList">
+                <?php foreach ($goals as $index => $goal): ?>
+                <div class="col-md-4 col-sm-6 col-12">
+                    <div class="info-box">
+                        <div class="info-box-content goal-container">
+                            <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+                            <!-- Nest the checkbox inside the label -->
+                            <label class="goal-checkbox-label">
+                                <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>" />
+                                Select
+                            </label>
+                            <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true"
+                                      data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                <?php echo htmlspecialchars($goal['goal_description']); ?>
+                            </textarea>
+                            <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="add-goal-form">
+                <input type="text" id="newGoalText" placeholder="Enter new goal description">
+                <button id="addNewGoalBtn">Add New Goal</button>
+            </div>
+                <!-- Editable notes section placed outside and below the accordion -->
 <div class="editable-notes-section">
     <h3>Goal Notes</h3>
     <textarea id="graphNotes" class="summernote"></textarea>
     <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
     <button id="printButton" class="btn btn-primary">Print</button>
 </div>
+        </div>
+    </div>
 
-</div>
-</div>
-</div>
-</div>
 </section>
+
 <div class="content">
       <div class="container-fluid">
               <div class="card-body">
