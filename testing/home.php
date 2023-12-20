@@ -307,6 +307,8 @@ function extractLastName($fullName) {
             <p><?= htmlspecialchars($message) ?></p>
           <?php endif; ?>
 
+        </div>
+        <div class="card-body" style="display: none;">
           <?php if (!empty($students)): ?>
             <div style="display: flex; flex-direction: column;">
               <?php foreach ($students as $student): ?>
