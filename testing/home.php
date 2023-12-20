@@ -256,6 +256,43 @@ function extractLastName($fullName) {
       </div>
     </div>
   </div>
+
+  <!-- Display filtered student list -->
+  <?php if (!empty($students)): ?>
+    <div style="display: flex; flex-direction: column;">
+      <?php foreach ($students as $student): ?>
+        <?php $metadataId = getSmallestMetadataId($student['school_id']); ?>
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+          <span style="margin-right: 10px;">
+            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'>
+              <?= htmlspecialchars($student['name']) ?>
+            </a>
+          </span>
+
+          <?php if ($isGroupFilterActive): ?>
+            <!-- Red X Button to Remove Student from Group -->
+            <form method="post" style="display: inline;">
+              <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
+              <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
+            </form>
+          <?php endif; ?>
+
+          <?php if ($isAdmin): ?>
+            <?php if (!$isGroupFilterActive): ?>
+              <form method="post" style="display: inline; margin-right: 10px;">
+                <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+                <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
+                  <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+                </button>
+              </form>
+            <?php endif; ?>
+          <?php endif; ?>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  <?php else: ?>
+    No students found for this teacher.
+  <?php endif; ?>
 </section>
 
 <!-- Section 2: Student List for Admin -->
@@ -305,42 +342,6 @@ function extractLastName($fullName) {
 
           <?php if (!empty($message)): ?>
             <p><?= htmlspecialchars($message) ?></p>
-          <?php endif; ?>
-
-          <?php if (!empty($students)): ?>
-            <div style="display: flex; flex-direction: column;">
-              <?php foreach ($students as $student): ?>
-                <?php $metadataId = getSmallestMetadataId($student['school_id']); ?>
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                  <span style="margin-right: 10px;">
-                    <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'>
-                      <?= htmlspecialchars($student['name']) ?>
-                    </a>
-                  </span>
-
-                  <?php if ($isGroupFilterActive): ?>
-                    <!-- Red X Button to Remove Student from Group -->
-                    <form method="post" style="display: inline;">
-                      <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
-                      <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
-                    </form>
-                  <?php endif; ?>
-
-                  <?php if ($isAdmin): ?>
-                    <?php if (!$isGroupFilterActive): ?>
-                      <form method="post" style="display: inline; margin-right: 10px;">
-                        <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-                        <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
-                          <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-                        </button>
-                      </form>
-                    <?php endif; ?>
-                  <?php endif; ?>
-                </div>
-              <?php endforeach; ?>
-            </div>
-          <?php else: ?>
-            No students found for this teacher.
           <?php endif; ?>
         </div>
       </div>
