@@ -274,23 +274,6 @@ function extractLastName($fullName) {
               <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
             </form>
           <?php endif; ?>
-
-          <?php if ($isAdmin): ?>
-            <?php if (!$isGroupFilterActive): ?>
-              <form method="post" style="display: inline; margin-right: 10px;">
-                <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-                <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
-                  <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-                </button>
-              </form>
-            <?php endif; ?>
-          <?php endif; ?>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  <?php else: ?>
-    No students found for this teacher.
-  <?php endif; ?>
   </div>
   </div>
     </div>
@@ -345,6 +328,22 @@ function extractLastName($fullName) {
           <?php if (!empty($message)): ?>
             <p><?= htmlspecialchars($message) ?></p>
           <?php endif; ?>
+          <?php if ($isAdmin): ?>
+            <?php if (!$isGroupFilterActive): ?>
+              <form method="post" style="display: inline; margin-right: 10px;">
+                <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+                <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
+                  <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+                </button>
+              </form>
+            <?php endif; ?>
+          <?php endif; ?>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  <?php else: ?>
+    No students found for this teacher.
+  <?php endif; ?>
         </div>
       </div>
     </div>
