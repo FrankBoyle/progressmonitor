@@ -204,35 +204,6 @@ function extractLastName($fullName) {
       </div><!-- /.container-fluid -->
     </section>
 
-<section class="content">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card card-outline card-info">
-        <div class="card-header">
-
-          
-          <!-- Form to create a new group -->
-          <form method="post">
-            <input type="text" name="group_name" placeholder="Group Name">
-            <button type="submit" name="create_group">Create Group</button>
-          </form>
-
-<!-- List groups with edit and delete options -->
-<?php foreach ($groups as $group): ?>
-    <form method="post">
-        <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-        <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
-        <button type="submit" name="edit_group">Update</button>
-        <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
-    </form>
-<?php endforeach; ?>
-
-</div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Section 1: Student Groups Filter -->
 <section class="content">
   <div class="row">
@@ -253,7 +224,6 @@ function extractLastName($fullName) {
               <?php endforeach; ?>
             </select>
           </form>
-
 
 
   <!-- Display filtered student list -->
@@ -294,6 +264,35 @@ function extractLastName($fullName) {
   <?php endif; ?>
   </div>
   </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+
+          
+          <!-- Form to create a new group -->
+          <form method="post">
+            <input type="text" name="group_name" placeholder="Group Name">
+            <button type="submit" name="create_group">Create Group</button>
+          </form>
+
+<!-- List groups with edit and delete options -->
+<?php foreach ($groups as $group): ?>
+    <form method="post">
+        <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+        <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
+        <button type="submit" name="edit_group">Update</button>
+        <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
+    </form>
+<?php endforeach; ?>
+
+</div>
+      </div>
     </div>
   </div>
 </section>
