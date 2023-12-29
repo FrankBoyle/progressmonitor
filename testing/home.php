@@ -239,7 +239,7 @@ function extractLastName($fullName) {
     <div class="col-md-12">
       <div class="card card-outline card-info">
         <div class="card-header">
-          <h3 class="card-title">STUDENT GROUPS FILTER</h3><br>
+          <h3 class="card-title">Student Groups Filter</h3><br>
 
           <!-- Dropdown to select a group for filtering -->
           <form method="post" id="group_filter_form">
