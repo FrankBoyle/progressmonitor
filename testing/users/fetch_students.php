@@ -104,9 +104,15 @@ function shareGroupWithTeacher($groupId, $sharedTeacherId) {
 
 function fetchAllRelevantGroups($teacherId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT g.* FROM Groups g LEFT JOIN SharedGroups sg ON g.group_id = sg.group_id WHERE g.teacher_id = ? OR sg.shared_teacher_id = ?");
-    $stmt->execute([$teacherId, $teacherId]);
-    return $stmt->fetchAll();
+    // Select all groups where the teacher is the owner or the shared teacher.
+    $stmt = $connection->prepare("
+        SELECT DISTINCT g.* FROM Groups g
+        LEFT JOIN SharedGroups sg ON g.group_id = sg.group_id
+        WHERE g.teacher_id = :teacherId OR sg.shared_teacher_id = :teacherId
+    ");
+    $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 $groups = fetchAllRelevantGroups($teacherId);
