@@ -5,8 +5,6 @@ if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
 
-$teachers = fetchTeachersBySchool($schoolId);
-
 usort($students, function($a, $b) {
   $aLastName = extractLastName($a['name']);
   $bLastName = extractLastName($b['name']);
