@@ -48,7 +48,7 @@ function archiveStudent($studentId) {
 
 function fetchTeachersBySchool($schoolId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT teacher_id, teacher_name FROM Teachers WHERE school_id = ?");
+    $stmt = $connection->prepare("SELECT teacher_id, name FROM Teachers WHERE school_id = ?");
     $stmt->execute([$schoolId]);
     return $stmt->fetchAll();
 }
