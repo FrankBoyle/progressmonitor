@@ -216,34 +216,44 @@ function extractLastName($fullName) {
           </form>
 
           <!-- List groups with edit, delete, and share options -->
-          <table>
-            <?php foreach ($groups as $group): ?>
-              <tr>
-                <td>
-                  <form method="post">
-                    <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-                    <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
-                    <button type="submit" name="edit_group">Update</button>
-                  </form>
-                </td>
-                <td>
-                  <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
-                </td>
-                <td>
-                  <!-- Share Group Form for each group -->
-                  <form method="post">
-                    <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-                    <select name="shared_teacher_id">
-                        <?php foreach ($teachers as $teacher): ?>
-                            <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="submit" name="share_group">Share</button>
-                  </form>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </table>
+<!-- List groups with edit, delete, and share options -->
+<table>
+  <?php foreach ($groups as $group): ?>
+    <tr>
+      <td>
+        <!-- Add a star icon next to the default group -->
+        <?php if ($group['is_default']): ?>
+          <span>&#9733;</span> <!-- This is a filled star character -->
+        <?php else: ?>
+          <span>&#9734;</span> <!-- This is an empty star character -->
+        <?php endif; ?>
+      </td>
+      <td>
+        <form method="post">
+          <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+          <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
+          <button type="submit" name="edit_group">Update</button>
+        </form>
+      </td>
+      <td>
+        <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
+      </td>
+      <td>
+        <!-- Share Group Form for each group -->
+        <form method="post">
+          <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+          <select name="shared_teacher_id">
+              <?php foreach ($teachers as $teacher): ?>
+                  <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
+              <?php endforeach; ?>
+          </select>
+          <button type="submit" name="share_group">Share</button>
+        </form>
+      </td>
+    </tr>
+  <?php endforeach; ?>
+</table>
+
         </div>
       </div>
     </div>
