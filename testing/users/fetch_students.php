@@ -6,6 +6,9 @@ error_reporting(E_ALL);
 include('auth_session.php');
 include('db.php');
 
+$schoolId = $_SESSION['school_id'];
+$teacherId = $_SESSION['teacher_id'];
+
 function fetchStudentsByTeacher($teacherId, $archived = false) {
     global $connection;
     $archivedValue = $archived ? 1 : 0;
@@ -121,6 +124,8 @@ if (isset($_POST['share_group'])) {
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
+
+$teacherId = $_SESSION['teacher_id'];
 
 if (isset($_POST['archive_student'])) {
     if (isset($_POST['student_id_to_toggle'])) {
