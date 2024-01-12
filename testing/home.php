@@ -231,7 +231,7 @@ function extractLastName($fullName) {
                 <label for="shared_user_id">Share with User:</label>
                 <select name="shared_user_id" id="shared_user_id">
   <?php foreach ($teachers as $teacher): ?>
-    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['teacher_name']) ?></option>
+    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
   <?php endforeach; ?>
 </select>
                 <button type="submit" name="share_group">Share</button>
