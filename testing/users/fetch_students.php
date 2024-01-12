@@ -53,7 +53,7 @@ function fetchTeachersBySchool($schoolId) {
     return $stmt->fetchAll();
 }
 
-$teachers = fetchTeachersBySchool($schoolId);
+$teachers = fetchTeachersBySchool($school_id);
 
 function unarchiveStudent($studentId) {
     global $connection;
