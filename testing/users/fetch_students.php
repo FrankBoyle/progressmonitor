@@ -141,8 +141,6 @@ if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
 
-$teacherId = $_SESSION['teacher_id'];
-
 if (isset($_POST['archive_student'])) {
     if (isset($_POST['student_id_to_toggle'])) {
         $studentIdToArchive = $_POST['student_id_to_toggle'];
@@ -210,10 +208,6 @@ if (isset($_POST['selected_group_id'])) {
     $students = fetchStudentsByTeacher($teacherId, $showArchived);
 }
 
-$teacherId = $_SESSION['teacher_id'];
-$stmt = $connection->prepare("SELECT group_id, group_name FROM Groups WHERE teacher_id = ?");
-$stmt->execute([$teacherId]);
-$groups = $stmt->fetchAll();
 $isAdmin = false;
 
 $stmt = $connection->prepare("SELECT is_admin FROM Teachers WHERE teacher_id = ?");
