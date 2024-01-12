@@ -124,6 +124,7 @@ function fetchAllRelevantGroups($teacherId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+$teacherId = $_SESSION['teacher_id'];
 $groups = fetchAllRelevantGroups($teacherId);
 
 if (isset($_POST['share_group'])) {
