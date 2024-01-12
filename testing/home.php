@@ -5,6 +5,8 @@ if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
 
+$teachers = fetchTeachersBySchool($schoolId);
+
 usort($students, function($a, $b) {
   $aLastName = extractLastName($a['name']);
   $bLastName = extractLastName($b['name']);
@@ -228,10 +230,10 @@ function extractLastName($fullName) {
                 <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
                 <label for="shared_user_id">Share with User:</label>
                 <select name="shared_user_id" id="shared_user_id">
-                  <?php foreach ($users as $user): ?>
-                    <option value="<?= htmlspecialchars($user['user_id']) ?>"><?= htmlspecialchars($user['username']) ?></option>
-                  <?php endforeach; ?>
-                </select>
+  <?php foreach ($teachers as $teacher): ?>
+    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['teacher_name']) ?></option>
+  <?php endforeach; ?>
+</select>
                 <button type="submit" name="share_group">Share</button>
               </form>
             </form>
