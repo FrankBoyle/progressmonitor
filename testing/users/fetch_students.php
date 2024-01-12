@@ -53,7 +53,8 @@ function fetchTeachersBySchool($schoolId) {
     return $stmt->fetchAll();
 }
 
-$teachers = fetchTeachersBySchool($school_id);
+$schoolId = $_SESSION['school_id'];
+$teachers = fetchTeachersBySchool($schoolId);
 
 function unarchiveStudent($studentId) {
     global $connection;
