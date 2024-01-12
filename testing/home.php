@@ -205,46 +205,42 @@ function extractLastName($fullName) {
     </section>
 
     <section class="content">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-outline card-info">
-            <div class="card-header">
-              <!-- Form to create a new group -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+          <!-- Form to create a new group -->
+          <form method="post">
+            <input type="text" name="group_name" placeholder="Group Name">
+            <button type="submit" name="create_group">Create Group</button>
+          </form>
+
+          <!-- List groups with edit, delete, and share options -->
+          <?php foreach ($groups as $group): ?>
+            <form method="post">
+              <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+              <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
+              <button type="submit" name="edit_group">Update</button>
+              <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
+
+              <!-- Share Group Form -->
               <form method="post">
-                <input type="text" name="group_name" placeholder="Group Name">
-                <button type="submit" name="create_group">Create Group</button>
+                <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+                <label for="shared_user_id">Share with User:</label>
+                <select name="shared_user_id" id="shared_user_id">
+                  <?php foreach ($users as $user): ?>
+                    <option value="<?= htmlspecialchars($user['user_id']) ?>"><?= htmlspecialchars($user['username']) ?></option>
+                  <?php endforeach; ?>
+                </select>
+                <button type="submit" name="share_group">Share</button>
               </form>
-
-              <!-- List groups with edit, delete, and share options -->
-              <?php foreach ($groups as $group): ?>
-                <form method="post">
-                  <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-                  <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
-                  <button type="submit" name="edit_group">Update</button>
-                  <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
-
-                  <!-- Share Group Form -->
-                  <form method="post">
-                    <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-                    <label for="shared_user_id">Share with User:</label>
-                    <select name="shared_user_id" id="shared_user_id">
-                      <?php
-                      // Fetch teachers from the "Teachers" table with the same school_id
-                      $teachers = fetchTeachersBySchoolId($group['school_id']);
-                      foreach ($teachers as $teacher):
-                      ?>
-                        <option value="<?= htmlspecialchars($teacher['user_id']) ?>"><?= htmlspecialchars($teacher['username']) ?></option>
-                      <?php endforeach; ?>
-                    </select>
-                    <button type="submit" name="share_group">Share</button>
-                  </form>
-                </form>
-              <?php endforeach; ?>
-            </div>
-          </div>
+            </form>
+          <?php endforeach; ?>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
 <!-- Section 1: Student Groups Filter -->
 <section class="content">
