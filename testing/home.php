@@ -223,17 +223,17 @@ function extractLastName($fullName) {
               <button type="submit" name="edit_group">Update</button>
               <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
 
-              <!-- Share Group Form -->
-              <form method="post">
-                <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-                <label for="shared_user_id">Share with User:</label>
-                <select name="shared_user_id" id="shared_user_id">
-  <?php foreach ($teachers as $teacher): ?>
-    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
-  <?php endforeach; ?>
-</select>
-                <button type="submit" name="share_group">Share</button>
-              </form>
+<!-- Share Group Form -->
+<form method="post">
+    <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+    <label for="shared_user_id">Share with User:</label>
+    <select name="shared_user_id" id="shared_user_id">
+        <?php foreach ($teachers as $teacher): ?>
+            <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
+        <?php endforeach; ?>
+    </select>
+    <button type="submit" name="share_group">Share</button>
+</form>
             </form>
           <?php endforeach; ?>
         </div>
