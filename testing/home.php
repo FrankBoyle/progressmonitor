@@ -215,25 +215,27 @@ function extractLastName($fullName) {
             <button type="submit" name="create_group">Create Group</button>
           </form>
 
-          <!-- List groups with edit, delete, and share options -->
+          <!-- List groups with edit and delete options -->
           <?php foreach ($groups as $group): ?>
             <form method="post">
               <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
               <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
               <button type="submit" name="edit_group">Update</button>
               <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
+            </form>
+          <?php endforeach; ?>
 
-<!-- Share Group Form -->
-<form method="post">
-    <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-    <label for="shared_user_id">Share with User:</label>
-    <select name="shared_user_id" id="shared_user_id">
-        <?php foreach ($teachers as $teacher): ?>
-            <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
-        <?php endforeach; ?>
-    </select>
-    <button type="submit" name="share_group">Share</button>
-</form>
+          <!-- Share Group Form (Separate for each group) -->
+          <?php foreach ($groups as $group): ?>
+            <form method="post">
+              <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+              <label for="shared_user_id">Share with User:</label>
+              <select name="shared_teacher_id" id="shared_user_id">
+                  <?php foreach ($teachers as $teacher): ?>
+                      <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
+                  <?php endforeach; ?>
+              </select>
+              <button type="submit" name="share_group">Share</button>
             </form>
           <?php endforeach; ?>
         </div>
