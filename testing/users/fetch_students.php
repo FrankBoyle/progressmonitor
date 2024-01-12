@@ -92,6 +92,32 @@ function getSmallestMetadataId($schoolId) {
     }
 }
 
+function shareGroupWithTeacher($groupId, $sharedTeacherId) {
+    global $connection;
+    $stmt = $connection->prepare("INSERT INTO SharedGroups (group_id, shared_teacher_id) VALUES (?, ?)");
+    $stmt->execute([$groupId, $sharedTeacherId]);
+    return "Group shared successfully.";
+}
+
+function fetchAllRelevantGroups($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT g.* FROM Groups g LEFT JOIN SharedGroups sg ON g.group_id = sg.group_id WHERE g.teacher_id = ? OR sg.shared_teacher_id = ?");
+    $stmt->execute([$teacherId, $teacherId]);
+    return $stmt->fetchAll();
+}
+
+$groups = fetchAllRelevantGroups($teacherId);
+
+if (isset($_POST['share_group'])) {
+    if (isset($_POST['group_id']) && isset($_POST['shared_teacher_id'])) {
+        $groupId = $_POST['group_id'];
+        $sharedTeacherId = $_POST['shared_teacher_id'];
+        $message = shareGroupWithTeacher($groupId, $sharedTeacherId);
+    } else {
+        $message = "Group ID or Teacher ID not provided for sharing.";
+    }
+}
+
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
