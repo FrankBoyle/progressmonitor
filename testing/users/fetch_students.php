@@ -95,8 +95,14 @@ function getSmallestMetadataId($schoolId) {
     }
 }
 
-function shareGroupWithTeacher($groupId, $sharedTeacherId) {
-    global $connection;
+function shareGroupWithTeacher($connection, $groupId, $sharedTeacherId) {
+    // Check if the group is already shared with the teacher
+    $checkStmt = $connection->prepare("SELECT * FROM SharedGroups WHERE group_id = ? AND shared_teacher_id = ?");
+    $checkStmt->execute([$groupId, $sharedTeacherId]);
+    if ($checkStmt->fetch()) {
+        return "Group is already shared with this teacher.";
+    }
+    // Proceed with sharing
     $stmt = $connection->prepare("INSERT INTO SharedGroups (group_id, shared_teacher_id) VALUES (?, ?)");
     $stmt->execute([$groupId, $sharedTeacherId]);
     return "Group shared successfully.";
@@ -104,11 +110,14 @@ function shareGroupWithTeacher($groupId, $sharedTeacherId) {
 
 function fetchAllRelevantGroups($teacherId) {
     global $connection;
-    // Select all groups where the teacher is the owner or the shared teacher.
+    // This query selects both groups owned by the teacher and groups shared with the teacher
     $stmt = $connection->prepare("
-        SELECT DISTINCT g.* FROM Groups g
-        LEFT JOIN SharedGroups sg ON g.group_id = sg.group_id
-        WHERE g.teacher_id = :teacherId OR sg.shared_teacher_id = :teacherId
+        SELECT g.* FROM Groups g
+        WHERE g.teacher_id = :teacherId
+        UNION
+        SELECT g.* FROM Groups g
+        INNER JOIN SharedGroups sg ON g.group_id = sg.group_id
+        WHERE sg.shared_teacher_id = :teacherId
     ");
     $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
     $stmt->execute();
