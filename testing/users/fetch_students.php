@@ -122,8 +122,6 @@ if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
 
-$teacherId = $_SESSION['teacher_id'];
-
 if (isset($_POST['archive_student'])) {
     if (isset($_POST['student_id_to_toggle'])) {
         $studentIdToArchive = $_POST['student_id_to_toggle'];
