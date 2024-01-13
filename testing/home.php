@@ -458,7 +458,7 @@ function extractLastName($fullName) {
             var groupId = this.getAttribute('data-group-id');
 
             // Send AJAX request to update the default group
-            fetch('./users/set_default_group.php', {
+            fetch('.users/set_default_group.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
