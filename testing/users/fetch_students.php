@@ -203,16 +203,13 @@ if (isset($_POST['edit_group'])) {
     $groups = $stmt->fetchAll();
 }
 
-$isGroupFilterActive = isset($_POST['selected_group_id']) && $_POST['selected_group_id'] != "all_students";
+// Initialize $selectedGroupId with the default group ID or "all_students" if no POST data
+$selectedGroupId = $_POST['selected_group_id'] ?? $defaultGroupId ?? "all_students";
 
-if (isset($_POST['selected_group_id'])) {
-    $selectedGroupId = $_POST['selected_group_id'];
+$isGroupFilterActive = $selectedGroupId != "all_students";
 
-    if ($selectedGroupId != "all_students") {
-        $students = fetchStudentsByGroup($teacherId, $selectedGroupId);
-    } else {
-        $students = fetchStudentsByTeacher($teacherId, $showArchived);
-    }
+if ($isGroupFilterActive) {
+    $students = fetchStudentsByGroup($teacherId, $selectedGroupId);
 } else {
     $students = fetchStudentsByTeacher($teacherId, $showArchived);
 }
