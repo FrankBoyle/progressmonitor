@@ -455,7 +455,7 @@ function extractLastName($fullName) {
         item.addEventListener('click', function() {
             var groupId = this.getAttribute('data-group-id');
             // Send AJAX request to the server
-            fetch('set_default_group.php', {
+            fetch('./users/set_default_group.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -470,7 +470,7 @@ function extractLastName($fullName) {
             });
         });
     });
-    
+
 function confirmArchive(action) {
     var message = action === 'Archive' ? 'Are you sure you want to archive this student?' : 'Are you sure you want to unarchive this student?';
     return confirm(message);
