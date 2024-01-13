@@ -131,6 +131,10 @@ function fetchAllRelevantGroups($teacherId) {
 
 $teacherId = $_SESSION['teacher_id'];
 $groups = fetchAllRelevantGroups($teacherId);
+$defaultGroupStmt = $connection->prepare("SELECT default_group_id FROM Teachers WHERE teacher_id = ?");
+$defaultGroupStmt->execute([$teacherId]);
+$defaultGroupResult = $defaultGroupStmt->fetch(PDO::FETCH_ASSOC);
+$defaultGroupId = $defaultGroupResult ? $defaultGroupResult['default_group_id'] : null;
 
 if (isset($_POST['share_group'])) {
     if (isset($_POST['group_id']) && isset($_POST['shared_teacher_id'])) {
