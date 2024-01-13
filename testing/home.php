@@ -220,14 +220,12 @@ function extractLastName($fullName) {
 <table>
   <?php foreach ($groups as $group): ?>
     <tr>
-      <td>
-        <!-- Add a star icon next to the default group -->
-        <?php if ($group['is_default']): ?>
-          <span>&#9733;</span> <!-- This is a filled star character -->
-        <?php else: ?>
-          <span>&#9734;</span> <!-- This is an empty star character -->
-        <?php endif; ?>
-      </td>
+    <td>
+            <!-- Clickable star -->
+            <a href="javascript:void(0);" class="set-default-group" data-group-id="<?= $group['group_id'] ?>">
+                <?= $group['is_default'] ? '&#9733;' : '&#9734;' ?> <!-- Filled star for default group, empty otherwise -->
+            </a>
+        </td>
       <td>
         <form method="post">
           <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
@@ -453,7 +451,26 @@ function extractLastName($fullName) {
 <!-- AdminLTE App -->
 <script src="./dist/js/adminlte.min.js"></script>
   <script>
-
+    document.querySelectorAll('.set-default-group').forEach(item => {
+        item.addEventListener('click', function() {
+            var groupId = this.getAttribute('data-group-id');
+            // Send AJAX request to the server
+            fetch('set_default_group.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'group_id=' + groupId
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Handle the response from the server
+                console.log(data);
+                // Optionally, update the UI to reflect the new default group
+            });
+        });
+    });
+    
 function confirmArchive(action) {
     var message = action === 'Archive' ? 'Are you sure you want to archive this student?' : 'Are you sure you want to unarchive this student?';
     return confirm(message);
