@@ -221,9 +221,9 @@ function extractLastName($fullName) {
   <?php foreach ($groups as $group): ?>
     <tr>
     <td>
-            <!-- Clickable star -->
-            <a href="javascript:void(0);" class="set-default-group" data-group-id="<?= $group['group_id'] ?>">
-                <?= $group['is_default'] ? '&#9733;' : '&#9734;' ?> <!-- Filled star for default group, empty otherwise -->
+            <!-- Clickable star with class and data attribute -->
+            <a href="javascript:void(0);" class="set-default-group-star" data-group-id="<?= $group['group_id'] ?>">
+                <?= $group['is_default'] ? '&#9733;' : '&#9734;' ?> <!-- Star icon -->
             </a>
         </td>
       <td>
@@ -458,7 +458,7 @@ function extractLastName($fullName) {
             var groupId = this.getAttribute('data-group-id');
 
             // Send AJAX request to update the default group
-            fetch('.users/set_default_group.php', {
+            fetch('./users/set_default_group.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
