@@ -453,10 +453,11 @@ function extractLastName($fullName) {
 <!-- AdminLTE App -->
 <script src="./dist/js/adminlte.min.js"></script>
   <script>
-    document.querySelectorAll('.set-default-group').forEach(item => {
-        item.addEventListener('click', function() {
+    document.querySelectorAll('.set-default-group-star').forEach(star => {
+        star.addEventListener('click', function() {
             var groupId = this.getAttribute('data-group-id');
-            // Send AJAX request to the server
+
+            // Send AJAX request to update the default group
             fetch('./users/set_default_group.php', {
                 method: 'POST',
                 headers: {
@@ -466,9 +467,17 @@ function extractLastName($fullName) {
             })
             .then(response => response.text())
             .then(data => {
-                // Handle the response from the server
-                console.log(data);
-                // Optionally, update the UI to reflect the new default group
+                // Update the stars on the page
+                document.querySelectorAll('.set-default-group-star').forEach(otherStar => {
+                    if (otherStar.getAttribute('data-group-id') === groupId) {
+                        otherStar.innerHTML = '&#9733;'; // Filled star for the selected group
+                    } else {
+                        otherStar.innerHTML = '&#9734;'; // Empty star for other groups
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         });
     });
