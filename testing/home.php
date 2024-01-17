@@ -268,6 +268,28 @@ function extractLastName($fullName) {
       <div class="card card-outline card-info">
         <div class="card-header">
           <!--<h3 class="card-title">Student Groups Filter</h3><br>-->
+          
+          <!-- Form to Assign Students to Group -->
+          <form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
+            <div style="display: flex; align-items: center;">
+              <div style="margin-right: 10px;">
+                <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
+                  <option disabled selected>Student name here</option>
+                  <?php foreach ($students as $student): ?>
+                    <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <div style="margin-right: 10px;">
+                <select name="group_id" class="select2">
+                  <?php foreach ($groups as $group): ?>
+                    <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <button type="submit" name="assign_to_group">Assign to Group</button>
+            </div>
+          </form>
 
 <!-- Dropdown to select a group for filtering -->
 <form method="post" id="group_filter_form">
