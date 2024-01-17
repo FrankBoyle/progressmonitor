@@ -185,10 +185,17 @@ if (isset($_POST['create_group'])) {
     $schoolId = $_SESSION['school_id'];
     $teacherId = $_SESSION['teacher_id'];
 
-    $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
-    $stmt->execute([$groupName, $schoolId, $teacherId]);
-
-    $message = "New group created successfully.";
+    // Check if a group with the same name already exists for this teacher
+    $checkStmt = $connection->prepare("SELECT group_id FROM Groups WHERE group_name = ? AND teacher_id = ?");
+    $checkStmt->execute([$groupName, $teacherId]);
+    if ($checkStmt->fetch()) {
+        $message = "A group with this name already exists.";
+    } else {
+        // Group with the same name does not exist, proceed with creation
+        $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
+        $stmt->execute([$groupName, $schoolId, $teacherId]);
+        $message = "New group created successfully.";
+    }
 }
 
 if (isset($_POST['edit_group'])) {
