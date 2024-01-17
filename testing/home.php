@@ -193,6 +193,13 @@ function extractLastName($fullName) {
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>Students</h1>
+            <?php if ($isAdmin): ?>
+            <!-- Toggle Button -->
+            <form method="post">
+              <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
+              <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
+            </form>
+          <?php endif; ?>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -385,14 +392,6 @@ function extractLastName($fullName) {
               <button type="submit" name="assign_to_group">Assign to Group</button>
             </div>
           </form>
-
-          <?php if ($isAdmin): ?>
-            <!-- Toggle Button -->
-            <form method="post">
-              <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
-              <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
-            </form>
-          <?php endif; ?>
 
           <?php if (!empty($message)): ?>
             <p><?= htmlspecialchars($message) ?></p>

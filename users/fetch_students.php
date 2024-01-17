@@ -17,6 +17,8 @@ function fetchStudentsByTeacher($teacherId, $archived = false) {
     return $stmt->fetchAll();
 }
 
+$allStudents = fetchStudentsByTeacher($teacherId, false);
+
 function addNewStudent($studentName, $teacherId) {
     global $connection;
 
