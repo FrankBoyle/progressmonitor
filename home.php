@@ -112,8 +112,8 @@ function extractLastName($fullName) {
   </nav>
   <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index.php" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -176,6 +176,7 @@ function extractLastName($fullName) {
               <a href="./users/logout.php" class="nav-link">
                 <i class="nav-icon fas fa-sign-out-alt"></i>
                 <p>Sign Out<span class="right badge badge-danger"></span></p>
+              </a>
           </li>
         </ul>
       </nav>
@@ -203,54 +204,134 @@ function extractLastName($fullName) {
       </div><!-- /.container-fluid -->
     </section>
 
-<section class="content">
+    <section class="content">
   <div class="row">
     <div class="col-md-12">
       <div class="card card-outline card-info">
         <div class="card-header">
-
-          
           <!-- Form to create a new group -->
           <form method="post">
             <input type="text" name="group_name" placeholder="Group Name">
             <button type="submit" name="create_group">Create Group</button>
           </form>
 
-<!-- List groups with edit and delete options -->
-<?php foreach ($groups as $group): ?>
-    <form method="post">
-        <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-        <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
-        <button type="submit" name="edit_group">Update</button>
+          <!-- List groups with edit, delete, and share options -->
+<!-- List groups with edit, delete, and share options -->
+<table>
+  <?php foreach ($groups as $group): ?>
+    <tr>
+    <td>
+            <!-- Clickable star with class and data attribute -->
+            <a href="javascript:void(0);" class="set-default-group-star" data-group-id="<?= $group['group_id'] ?>">
+                <?= $group['is_default'] ? '&#9733;' : '&#9734;' ?> <!-- Star icon -->
+            </a>
+        </td>
+      <td>
+        <form method="post">
+          <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+          <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
+          <button type="submit" name="edit_group">Update</button>
+        </form>
+      </td>
+      <td>
         <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
-    </form>
-<?php endforeach; ?>
+      </td>
+      <td>
+        <!-- Share Group Form for each group -->
+        <form method="post">
+          <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
+          <select name="shared_teacher_id">
+              <?php foreach ($teachers as $teacher): ?>
+                  <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
+              <?php endforeach; ?>
+          </select>
+          <button type="submit" name="share_group">Share</button>
+        </form>
+      </td>
+    </tr>
+  <?php endforeach; ?>
+</table>
 
-</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
+
+<!-- Section 1: Student Groups Filter -->
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-outline card-info">
+        <div class="card-header">
+          <!--<h3 class="card-title">Student Groups Filter</h3><br>-->
+
+<!-- Dropdown to select a group for filtering -->
+<form method="post" id="group_filter_form">
+    <label for="selected_group_id">Sort Students by Group:</label>
+    <select name="selected_group_id" id="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
+        <option value="all_students" <?= (!isset($_POST['selected_group_id']) && $defaultGroupId === null) ? "selected" : "" ?>>All Students</option>
+        <?php foreach ($groups as $group): ?>
+            <option value="<?= htmlspecialchars($group['group_id']) ?>" 
+                <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) || (!isset($_POST['selected_group_id']) && $group['group_id'] == $defaultGroupId) ? "selected" : "" ?>>
+                <?= htmlspecialchars($group['group_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</form>
+
+
+
+  <!-- Display filtered student list -->
+  <?php if (!empty($students)): ?>
+    <div style="display: flex; flex-direction: column;">
+      <?php foreach ($students as $student): ?>
+        <?php $metadataId = getSmallestMetadataId($student['school_id']); ?>
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+          <span style="margin-right: 10px;">
+            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'>
+              <?= htmlspecialchars($student['name']) ?>
+            </a>
+          </span>
+
+          <?php if ($isGroupFilterActive): ?>
+            <!-- Red X Button to Remove Student from Group -->
+            <form method="post" style="display: inline;">
+              <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
+              <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
+            </form>
+          <?php endif; ?>
+
+          <?php if ($isAdmin): ?>
+            <?php if (!$isGroupFilterActive): ?>
+              <form method="post" style="display: inline; margin-right: 10px;">
+                <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
+                <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
+                  <?= $showArchived ? 'Unarchive' : 'Archive' ?>
+                </button>
+              </form>
+            <?php endif; ?>
+          <?php endif; ?>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  <?php else: ?>
+    No students found for this teacher.
+  <?php endif; ?>
+  </div>
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: Student List for Admin -->
 <section class="content">
   <div class="row">
     <div class="col-md-12">
       <div class="card card-outline card-info">
         <div class="card-header">
           <h3 class="card-title">STUDENT LIST</h3><br>
-
-<!-- Dropdown to select a group for filtering -->
-<form method="post" id="group_filter_form">
-    <label for="selected_group_id">Sort Students by Group:</label>
-    <select name="selected_group_id" id="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
-        <option value="all_students" <?= (!isset($_POST['selected_group_id']) || $_POST['selected_group_id'] == "all_students") ? "selected" : "" ?>>All Students</option>
-        <?php foreach ($groups as $group): ?>
-            <option value="<?= htmlspecialchars($group['group_id']) ?>" <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) ? "selected" : "" ?>>
-                <?= htmlspecialchars($group['group_name']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</form>
 
           <!-- Add New Student Form -->
           <form method="post" action="">
@@ -259,78 +340,38 @@ function extractLastName($fullName) {
             <input type="submit" name="add_new_student" value="Add New Student">
           </form>
 
-<!-- Form to Assign Students to Group -->
-<form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
-    <div style="display: flex; align-items: center;">
-        <div style="margin-right: 10px;">
-            <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
-                <option disabled selected>Student name here</option>
-                <?php foreach ($students as $student): ?>
+          <!-- Form to Assign Students to Group -->
+          <form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
+            <div style="display: flex; align-items: center;">
+              <div style="margin-right: 10px;">
+                <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
+                  <option disabled selected>Student name here</option>
+                  <?php foreach ($students as $student): ?>
                     <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div style="margin-right: 10px;">
-            <select name="group_id" class="select2">
-                <?php foreach ($groups as $group): ?>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <div style="margin-right: 10px;">
+                <select name="group_id" class="select2">
+                  <?php foreach ($groups as $group): ?>
                     <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <button type="submit" name="assign_to_group">Assign to Group</button>
-    </div>
-</form>
-
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <button type="submit" name="assign_to_group">Assign to Group</button>
+            </div>
+          </form>
 
           <?php if ($isAdmin): ?>
-          <!-- Toggle Button -->
-          <form method="post">
-            <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
-            <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
-          </form>
+            <!-- Toggle Button -->
+            <form method="post">
+              <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
+              <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
+            </form>
           <?php endif; ?>
 
           <?php if (!empty($message)): ?>
-    <p><?= htmlspecialchars($message) ?></p>
-<?php endif; ?>
-
-
-          <?php if (!empty($students)): ?>
-            <div style="display: flex; flex-direction: column;">
-              <?php foreach ($students as $student): ?>
-                <?php $metadataId = getSmallestMetadataId($student['school_id']); ?>
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                  <span style="margin-right: 10px;">
-                    <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'>
-                      <?= htmlspecialchars($student['name']) ?>
-                    </a>
-                  </span>
-                  
-<!-- Red X Button to Remove Student from Group -->
-<?php if ($isGroupFilterActive): ?>
-    <form method="post" style="display: inline;">
-        <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
-        <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
-    </form>
-<?php endif; ?>
-
-                  <?php if ($isAdmin): ?>
-                  <?php if (!$isGroupFilterActive): ?>
-                    <form method="post" style="display: inline; margin-right: 10px;">
-    <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-    <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
-        <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-    </button>
-</form>
-
-                    <?php endif; ?>
-
-                    <?php endif; ?>
-                </div>
-              <?php endforeach; ?>
-            </div>
-          <?php else: ?>
-            No students found for this teacher.
+            <p><?= htmlspecialchars($message) ?></p>
           <?php endif; ?>
         </div>
       </div>
@@ -407,8 +448,39 @@ function extractLastName($fullName) {
   </footer>
 </div>
 <!-- ./wrapper -->
-
+<!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="./dist/js/adminlte.min.js"></script>
   <script>
+    document.querySelectorAll('.set-default-group-star').forEach(star => {
+        star.addEventListener('click', function() {
+            var groupId = this.getAttribute('data-group-id');
+
+            // Send AJAX request to update the default group
+            fetch('./users/set_default_group.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'group_id=' + groupId
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Update the stars on the page
+                document.querySelectorAll('.set-default-group-star').forEach(otherStar => {
+                    if (otherStar.getAttribute('data-group-id') === groupId) {
+                        otherStar.innerHTML = '&#9733;'; // Filled star for the selected group
+                    } else {
+                        otherStar.innerHTML = '&#9734;'; // Empty star for other groups
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
 
 function confirmArchive(action) {
     var message = action === 'Archive' ? 'Are you sure you want to archive this student?' : 'Are you sure you want to unarchive this student?';

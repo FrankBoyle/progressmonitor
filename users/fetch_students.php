@@ -6,6 +6,9 @@ error_reporting(E_ALL);
 include('auth_session.php');
 include('db.php');
 
+$schoolId = $_SESSION['school_id'];
+$teacherId = $_SESSION['teacher_id'];
+
 function fetchStudentsByTeacher($teacherId, $archived = false) {
     global $connection;
     $archivedValue = $archived ? 1 : 0;
@@ -46,6 +49,16 @@ function archiveStudent($studentId) {
     }
 }
 
+function fetchTeachersBySchool($schoolId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT teacher_id, name FROM Teachers WHERE school_id = ?");
+    $stmt->execute([$schoolId]);
+    return $stmt->fetchAll();
+}
+
+$schoolId = $_SESSION['school_id'];
+$teachers = fetchTeachersBySchool($schoolId);
+
 function unarchiveStudent($studentId) {
     global $connection;
 
@@ -82,11 +95,60 @@ function getSmallestMetadataId($schoolId) {
     }
 }
 
-if (!isset($_SESSION['teacher_id'])) {
-    die("Teacher ID not set in session");
+function shareGroupWithTeacher($connection, $groupId, $sharedTeacherId) {
+    // Check if the group is already shared with the teacher
+    $checkStmt = $connection->prepare("SELECT * FROM SharedGroups WHERE group_id = ? AND shared_teacher_id = ?");
+    $checkStmt->execute([$groupId, $sharedTeacherId]);
+    if ($checkStmt->fetch()) {
+        return "Group is already shared with this teacher.";
+    }
+    // Proceed with sharing
+    $stmt = $connection->prepare("INSERT INTO SharedGroups (group_id, shared_teacher_id) VALUES (?, ?)");
+    $stmt->execute([$groupId, $sharedTeacherId]);
+    return "Group shared successfully.";
+}
+
+function fetchAllRelevantGroups($teacherId) {
+    global $connection;
+    // This query selects both groups owned by the teacher and groups shared with the teacher
+    // and also checks if the group is the default group for the teacher
+    $stmt = $connection->prepare("
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default 
+        FROM Groups g
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE g.teacher_id = :teacherId
+        UNION
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default
+        FROM Groups g
+        INNER JOIN SharedGroups sg ON g.group_id = sg.group_id
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE sg.shared_teacher_id = :teacherId
+    ");
+    $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 $teacherId = $_SESSION['teacher_id'];
+$groups = fetchAllRelevantGroups($teacherId);
+$defaultGroupStmt = $connection->prepare("SELECT default_group_id FROM Teachers WHERE teacher_id = ?");
+$defaultGroupStmt->execute([$teacherId]);
+$defaultGroupResult = $defaultGroupStmt->fetch(PDO::FETCH_ASSOC);
+$defaultGroupId = $defaultGroupResult ? $defaultGroupResult['default_group_id'] : null;
+
+if (isset($_POST['share_group'])) {
+    if (isset($_POST['group_id']) && isset($_POST['shared_teacher_id'])) {
+        $groupId = $_POST['group_id'];
+        $sharedTeacherId = $_POST['shared_teacher_id'];
+        $message = shareGroupWithTeacher($groupId, $sharedTeacherId);
+    } else {
+        $message = "Group ID or Teacher ID not provided for sharing.";
+    }
+}
+
+if (!isset($_SESSION['teacher_id'])) {
+    die("Teacher ID not set in session");
+}
 
 if (isset($_POST['archive_student'])) {
     if (isset($_POST['student_id_to_toggle'])) {
@@ -141,24 +203,17 @@ if (isset($_POST['edit_group'])) {
     $groups = $stmt->fetchAll();
 }
 
-$isGroupFilterActive = isset($_POST['selected_group_id']) && $_POST['selected_group_id'] != "all_students";
+// Initialize $selectedGroupId with the default group ID or "all_students" if no POST data
+$selectedGroupId = $_POST['selected_group_id'] ?? $defaultGroupId ?? "all_students";
 
-if (isset($_POST['selected_group_id'])) {
-    $selectedGroupId = $_POST['selected_group_id'];
+$isGroupFilterActive = $selectedGroupId != "all_students";
 
-    if ($selectedGroupId != "all_students") {
-        $students = fetchStudentsByGroup($teacherId, $selectedGroupId);
-    } else {
-        $students = fetchStudentsByTeacher($teacherId, $showArchived);
-    }
+if ($isGroupFilterActive) {
+    $students = fetchStudentsByGroup($teacherId, $selectedGroupId);
 } else {
     $students = fetchStudentsByTeacher($teacherId, $showArchived);
 }
 
-$teacherId = $_SESSION['teacher_id'];
-$stmt = $connection->prepare("SELECT group_id, group_name FROM Groups WHERE teacher_id = ?");
-$stmt->execute([$teacherId]);
-$groups = $stmt->fetchAll();
 $isAdmin = false;
 
 $stmt = $connection->prepare("SELECT is_admin FROM Teachers WHERE teacher_id = ?");
