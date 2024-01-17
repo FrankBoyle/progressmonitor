@@ -225,7 +225,7 @@ if (isset($_GET['metadata_id'])) {
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Starter Pages
+                Students
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
