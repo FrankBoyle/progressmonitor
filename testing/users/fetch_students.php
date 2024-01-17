@@ -140,7 +140,7 @@ if (isset($_POST['share_group'])) {
     if (isset($_POST['group_id']) && isset($_POST['shared_teacher_id'])) {
         $groupId = $_POST['group_id'];
         $sharedTeacherId = $_POST['shared_teacher_id'];
-        $message = shareGroupWithTeacher($groupId, $sharedTeacherId);
+        $message = shareGroupWithTeacher($connection, $groupId, $sharedTeacherId);
     } else {
         $message = "Group ID or Teacher ID not provided for sharing.";
     }
