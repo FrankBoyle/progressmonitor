@@ -222,6 +222,13 @@ function extractLastName($fullName) {
             <button type="submit" name="create_group">Create Group</button>
           </form>
 
+<?php if (!empty($message)): ?>
+    <div class="alert">
+        <?= htmlspecialchars($message) ?>
+    </div>
+<?php endif; ?>
+
+
 <!-- List groups with edit, delete, and share options -->
 <table>
   <?php foreach ($groups as $group): ?>
