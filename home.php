@@ -280,12 +280,13 @@ function extractLastName($fullName) {
 <form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
   <div style="display: flex; align-items: center;">
     <div style="margin-right: 10px;">
-      <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;">
-        <option disabled selected>Student name here</option>
-        <?php foreach ($allStudents as $student): ?>
-          <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
-        <?php endforeach; ?>
-      </select>
+    <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
+    <option></option> <!-- Empty option for placeholder -->
+    <?php foreach ($allStudents as $student): ?>
+        <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
+    <?php endforeach; ?>
+</select>
+
     </div>
               <div style="margin-right: 10px;">
                 <select name="group_id" class="select2">
