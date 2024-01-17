@@ -255,7 +255,6 @@ if (isset($_POST['assign_to_group'])) {
     }
 }
 
-$message = "";
 if (isset($_POST['add_new_student'])) {
     $newStudentName = $_POST['new_student_name'];
     if (!empty($newStudentName)) {
