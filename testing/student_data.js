@@ -769,29 +769,35 @@ $(document).ready(function() {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     onClose: function(selectedDate) {
-                        if (selectedDate) {
-                            input.val(selectedDate); // Update the input value
-                            saveCellValue(cell, input); // Save the cell value
+                        if (selectedDate && selectedDate !== originalValue) {
+                            saveEditedDate(cell, selectedDate);
                         } else {
-                            input.val(originalValue); // Revert to original value if no date selected
+                            cell.text(originalValue); // Revert to original value if no date selected or unchanged
                         }
                         cell.removeClass('editing');
                     }
                 }).datepicker('show'); // Show the datepicker immediately
             }
     
-    
             // Listen for Enter key press
             input.on('keydown', function(e) {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
-                    saveCellValue(cell, input);
+                    if (cell.data('field-name') !== 'score_date') {
+                        saveCellValue(cell, input);
+                    } else {
+                        cell.removeClass('editing').text(input.val());
+                    }
                 }
             });
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                saveCellValue(cell, input);
+                if (cell.data('field-name') !== 'score_date') {
+                    saveCellValue(cell, input);
+                } else {
+                    cell.removeClass('editing').text(input.val());
+                }
             });
         });
     }
