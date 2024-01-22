@@ -751,7 +751,7 @@ $(document).ready(function() {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     beforeShow: function() {
-                        datePickerActive = true;
+                        //datePickerActive = true;
                     },
                     onClose: function(selectedDate) {
                         if (isValidDate(new Date(selectedDate))) {
@@ -763,7 +763,7 @@ $(document).ready(function() {
                             }
                         }
                         toggleEditMode(cell, input);
-                        datePickerActive = false;
+                        //datePickerActive = false;
                     }
                 });
             }
@@ -1004,11 +1004,6 @@ $(document).ready(function() {
         tempInput.datepicker('show');
     });
     
-    // Attach event handler for the "Save" button outside the datepicker function
-    $(document).on('click', '.saveRow', function() {
-        const row = $(this).closest('tr');
-        saveRowData(row);
-    });
     
     async function saveRowData(row) {
         const performanceId = row.data('performance-id');
