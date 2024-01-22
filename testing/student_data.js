@@ -579,43 +579,6 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 }
 
 ////////////////////////////////////////////////
-// Function to attach datepicker to existing date cells
-function attachDatepickerToExistingCells() {
-    $('table').on('click', 'td[data-field-name="score_date"]', function () {
-        const cell = $(this);
-
-        // Check if the cell is already in edit mode
-        if (!cell.hasClass('editing')) {
-            const currentDate = cell.text();
-
-            // Initialize the datepicker with the correct options
-            cell.addClass('editing'); // Add a class to mark the cell as in edit mode
-            cell.datepicker({
-                dateFormat: 'mm/dd/yy',
-                onClose: function (dateText) {
-                    if (isDateDuplicate(dateText, cell.closest('tr').data('performance-id'))) {
-                        alert("An entry for this date already exists. Please choose a different date.");
-                        cell.datepicker('setDate', currentDate); // Reset to the original date
-                    } else {
-                        cell.text(dateText); // Update the cell text with the new date
-                        saveEditedDate(cell, dateText); // Save the edited date
-                        cell.datepicker('destroy'); // Destroy the datepicker after selection
-                        cell.removeClass('editing'); // Remove the editing class
-                    }
-                }
-            });
-
-            // Show the datepicker when clicking the cell
-            cell.datepicker('show');
-        }
-    });
-}
-
-// Remove any previous click event handlers for the same cells
-$('table').off('click', 'td[data-field-name="score_date"]');
-
-// Call the function to attach datepickers to existing date cells
-attachDatepickerToExistingCells();
 
 $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
@@ -793,22 +756,16 @@ $(document).ready(function() {
             if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
     
             // Store the original value in a variable
-            let originalValue;
-    
-            // Check if the cell contains an input element with a non-empty value
-            const inputElement = cell.find('input[type="text"]');
-            if (inputElement.length && inputElement.val().trim() !== '') {
-                originalValue = inputElement.val().trim();
-            } else {
-                originalValue = cell.text().trim();
-            }
+            let originalValue = cell.text().trim();
     
             // Create an input element and set its value to the original value
-            const input = $('<input type="text">');
-            input.val(originalValue);
+            const input = $('<input type="text">').val(originalValue);
     
-            let datePickerActive = false;
+            cell.addClass('editing');
+            cell.empty().append(input);
+            input.focus();
     
+            // Initialize datepicker for 'score_date' field
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
@@ -816,23 +773,19 @@ $(document).ready(function() {
                         datePickerActive = true;
                     },
                     onClose: function(selectedDate) {
-                        if (isValidDate(new Date(selectedDate))) {
+                        datePickerActive = false;
+                        if (selectedDate && isValidDate(new Date(selectedDate))) {
                             const currentPerformanceId = cell.closest('tr').data('performance-id');
-                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                input.val(originalValue);
-                            } else {
+                            if (!isDateDuplicate(selectedDate, currentPerformanceId)) {
                                 saveEditedDate(cell, selectedDate);
+                            } else {
+                                input.val(originalValue);
                             }
                         }
                         toggleEditMode(cell, input);
-                        datePickerActive = false;
                     }
                 });
             }
-    
-            cell.addClass('editing');
-            cell.empty().append(input);
-            input.focus();
     
             // Listen for Enter key press
             input.on('keydown', function(e) {
@@ -855,14 +808,6 @@ $(document).ready(function() {
         const originalValue = cell.text().trim();
         //console.log("Original Value:", originalValue);
         //console.log("New Value:", newValue);
-    
-        /*
-        if (newValue === originalValue) {
-            console.log("No change detected.");
-            toggleEditMode(cell, input);
-            return; // No change, exit without saving or making an AJAX request
-        }
-        */
 
         toggleEditMode(cell, input);
         cell.text(newValue);
