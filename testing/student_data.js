@@ -750,56 +750,45 @@ $(document).ready(function() {
         return isDuplicate;
     }
     
+    function initializeGlobalDatepicker() {
+        $('#newRowDate').datepicker({
+            dateFormat: 'mm/dd/yy',
+            onSelect: function(dateText) {
+                var targetCell = $(this).data('targetCell');
+                if (targetCell && targetCell.data('field-name') === 'score_date') {
+                    saveEditedDate(targetCell, dateText);
+                    targetCell.text(dateText);
+                }
+                $(this).hide();
+            }
+        });
+    }
+    initializeGlobalDatepicker();
+
     function attachEditableHandler() {
-        $('table').on('dblclick', '.editable', function() {
-            const cell = $(this);
+        $('#dataTable').on('dblclick', '.editable', function() {
+            var cell = $(this);
             if (cell.hasClass('editing')) return;
-    
-            let originalValue = cell.text().trim();
-    
-            // Remove any existing input to avoid conflicts
-            cell.find('input').remove();
-    
-            // Create a new input element
-            const input = $('<input type="text" class="datepicker-input">').val(originalValue);
-            cell.addClass('editing').empty().append(input);
-            input.focus();
+            cell.addClass('editing');
     
             if (cell.data('field-name') === 'score_date') {
-                // Initialize the datepicker
-                input.datepicker({
-                    dateFormat: 'mm/dd/yy',
-                    onClose: function(selectedDate) {
-                        if (selectedDate && selectedDate !== originalValue) {
-                            saveEditedDate(cell, selectedDate);
-                        } else {
-                            cell.text(originalValue);
-                        }
-                        cell.removeClass('editing');
-                    }
-                }).datepicker('show');
-            }
-    
-            // Listen for Enter key press
-            input.on('keydown', function(e) {
-                if (e.keyCode === 13) { // Enter key pressed
-                    e.preventDefault();
-                    if (cell.data('field-name') !== 'score_date') {
-                        saveCellValue(cell, input);
-                    } else {
-                        cell.removeClass('editing').text(input.val());
-                    }
-                }
-            });
-    
-            // Listen for blur event (clicking outside the input)
-            input.on('blur', function() {
-                if (cell.data('field-name') !== 'score_date') {
+                var offset = cell.offset();
+                $('#newRowDate')
+                    .css({
+                        position: 'absolute',
+                        top: offset.top,
+                        left: offset.left
+                    })
+                    .data('targetCell', cell)
+                    .datepicker('setDate', new Date(cell.text().trim()))
+                    .show();
+            } else {
+                var originalValue = cell.text().trim();
+                var input = $('<input type="text">').val(originalValue).appendTo(cell.empty()).focus();
+                input.on('blur', function() {
                     saveCellValue(cell, input);
-                } else {
-                    cell.removeClass('editing').text(input.val());
-                }
-            });
+                });
+            }
         });
     }
     
