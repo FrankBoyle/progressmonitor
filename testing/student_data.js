@@ -981,7 +981,7 @@ $(document).ready(function() {
         updateGoalText(goalId, newText);
     });
 
-    $('#addDataRow').off('click').click(function() {
+    $('#addDataRow').off('click').click(function () {
         const currentDate = getCurrentDate();
         if (isDateDuplicate(currentDate)) {
             alert("An entry for this date already exists. Please choose a different date.");
@@ -989,23 +989,19 @@ $(document).ready(function() {
         }
     
         // Create a temporary input to attach datepicker
-   // Adjusting the position of the temporary input
-   const tempInput = $("<input type='text'>").appendTo('body');
-   tempInput.css({
-       position: 'fixed',
-       top: '50%', // Adjust as needed
-       left: '50%', // Adjust as needed
-       transform: 'translate(-50%, -50%)',
-       zIndex: 1000 // To ensure it's above other elements
-   });
-       tempInput.datepicker({
-            dateFormat: 'mm/dd/yy',
-            onSelect: function(dateText) {
-                if (isDateDuplicate(dateText)) {
-                    alert("An entry for this date already exists. Please choose a different date.");
-                    return;
-                }
+        const tempInput = $("<input type='text'>").appendTo('body');
+        tempInput.css({
+            position: 'fixed',
+            top: '50%', // Adjust as needed
+            left: '50%', // Adjust as needed
+            transform: 'translate(-50%, -50%)',
+            zIndex: 1000 // To ensure it's above other elements
+        });
     
+        // Show the datepicker immediately
+        tempInput.datepicker({
+            dateFormat: 'mm/dd/yy',
+            onSelect: function (dateText) {
                 // Create the new row after date is selected
                 const newRow = $("<tr data-performance-id='new'>");
                 newRow.append(`<td class="editable" data-field-name="score_date">${dateText}</td>`);
@@ -1023,61 +1019,8 @@ $(document).ready(function() {
                 // Force a save immediately upon selecting a date
                 saveRowData(newRow);
             }
-        });
-    
-        // Show the datepicker immediately
-        tempInput.datepicker('show');
+        }).datepicker('show'); // Show the datepicker immediately
     });
-    
-    async function saveRowData(row) {
-        const performanceId = row.data('performance-id');
-        const school_id = $('#schoolIdInput').val();
-        const urlParams = new URLSearchParams(window.location.search);
-        const metadata_id = urlParams.get('metadata_id');
-    
-        // Disable the save button to prevent multiple clicks
-        row.find('.saveRow').prop('disabled', true);
-    
-        if (performanceId !== 'new') {
-            return;
-        }
-    
-        let scores = {};
-        for (let i = 1; i <= 10; i++) {
-            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
-            scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
-        }
-    
-        const postData = {
-            student_id: CURRENT_STUDENT_ID,
-            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
-            scores: scores,
-            metadata_id: metadata_id,
-            school_id: school_id,
-        };
-    
-        const response = await ajaxCall('POST', 'insert_performance.php', postData);
-        if (response && response.performance_id) {
-            row.attr('data-performance-id', response.performance_id);
-            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
-            row.find('.saveRow').prop('disabled', false);
-        } else {
-            if (response && response.error) {
-                alert("Error: " + response.error);
-            } else {
-                alert("There was an error saving the data.");
-            }
-        }
-    
-        // Reload the page to show the new row with a delete button
-        location.reload();
-    }    
-
-        $(document).on('keypress', '.saveRow', function(e) {
-            if (e.which === 13) {
-                e.preventDefault();
-            }
-        });
 
         // Initialization code
         $('#currentWeekStartDate').val(getCurrentDate());
@@ -1095,11 +1038,11 @@ $(document).ready(function() {
     // Define the DataTable and apply custom date filter
     let table = $('#dataTable').DataTable({
         "order": [[0, "asc"]],
-        "lengthChange": false,
+        "lengthChange": true,
         "searching": false,
         "paging": false,
         "info": false,
-        "sorting": false,
+        "sorting": true,
         "columns": [
             { "type": "date-us" },
             null, null, null, null, null, null, null, null, null, null, null
