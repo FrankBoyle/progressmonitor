@@ -152,7 +152,6 @@ $(document).ready(function() {
         return isDuplicate;
     }
     
-
     function attachEditableHandler() {
         //$('table').on('click', '.editable:not([data-field-name="score8"])', function() {
         $('table').on('dblclick', '.editable', function() {

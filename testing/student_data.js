@@ -661,8 +661,8 @@ $(document).ready(function() {
             school_id: school_id
 
         };
-        //console.log(postData);
-        //console.log("studentID:", student_id);
+        console.log(postData);
+        console.log("studentID:", student_id);
 
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
@@ -702,7 +702,7 @@ $(document).ready(function() {
     });   
 
     function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
-        //console.log("Checking for duplicate of:", dateString);
+        console.log("Checking for duplicate of:", dateString);
         let isDuplicate = false;
     
         $('table').find('td[data-field-name="score_date"]').each(function() {
@@ -789,10 +789,10 @@ $(document).ready(function() {
     
     function saveCellValue(cell, input) {
         const newValue = input.val();
-        //console.log("Cell contents:", cell.html()); // Log the entire HTML content of the cell
+        console.log("Cell contents:", cell.html()); // Log the entire HTML content of the cell
         const originalValue = cell.text().trim();
-        //console.log("Original Value:", originalValue);
-        //console.log("New Value:", newValue);
+        console.log("Original Value:", originalValue);
+        console.log("New Value:", newValue);
     
         /*
         if (newValue === originalValue) {
