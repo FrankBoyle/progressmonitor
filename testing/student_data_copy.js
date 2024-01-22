@@ -128,31 +128,6 @@ $(document).ready(function() {
         }, 'json');
     });
 
-    function updateScoreInDatabase(row, metadataFieldName, newValue) {
-        const performanceId = row.data('performance-id');
-        const studentId = CURRENT_STUDENT_ID;
-        const score_date = row.find('td[data-field-name="score_date"]').text();
-        
-        // Assuming that metadataFieldName would be something like "score1_name" and we'd need to update "score1"
-        const fieldNameToUpdate = metadataFieldName.replace('_name', '');
-    
-        const postData = {
-            performance_id: performanceId,
-            field_name: fieldNameToUpdate, // Use the extracted field name to update the appropriate score column
-            new_value: newValue,
-            student_id: studentId,
-            score_date: score_date
-            
-        };
-    
-        ajaxCall('POST', 'update_performance.php', postData).then(response => {
-            if (response && !response.success) {
-                console.error('Error updating the score in the database.');
-            }
-        });
-    }
-    
-
     function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
         //console.log("Checking for duplicate of:", dateString);
         let isDuplicate = false;
