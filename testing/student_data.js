@@ -661,8 +661,8 @@ $(document).ready(function() {
             school_id: school_id
 
         };
-        console.log(postData);
-        console.log("studentID:", student_id);
+        //console.log(postData);
+        //console.log("studentID:", student_id);
 
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
