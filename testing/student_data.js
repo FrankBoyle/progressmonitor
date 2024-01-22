@@ -758,25 +758,27 @@ $(document).ready(function() {
             let originalValue = cell.text().trim();
             const input = $('<input type="text">').val(originalValue);
     
-            cell.addClass('editing');
-            cell.empty().append(input);
+            cell.addClass('editing').empty().append(input);
             input.focus();
     
             if (cell.data('field-name') === 'score_date') {
-                if (input.data('datepicker')) {
-                    input.datepicker('destroy'); // Destroy existing datepicker if present
+                // Destroy any existing datepicker instance
+                if (input.hasClass('hasDatepicker')) {
+                    input.datepicker('destroy');
                 }
+    
+                // Initialize the datepicker
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     onClose: function(selectedDate) {
+                        cell.removeClass('editing');
                         if (selectedDate && selectedDate !== originalValue) {
                             saveEditedDate(cell, selectedDate);
                         } else {
                             cell.text(originalValue); // Revert to original value if no date selected or unchanged
                         }
-                        cell.removeClass('editing');
                     }
-                }).datepicker('show'); // Show the datepicker immediately
+                }).datepicker('show');
             }
     
             // Listen for Enter key press
