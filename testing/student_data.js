@@ -1028,8 +1028,13 @@ $(document).ready(function() {
         // Show the datepicker immediately
         tempInput.datepicker('show');
     });
-
-    /*
+    
+    // Attach event handler for the "Save" button outside the datepicker function
+    $(document).on('click', '.saveRow', function() {
+        const row = $(this).closest('tr');
+        saveRowData(row);
+    });
+    
     async function saveRowData(row) {
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
@@ -1072,16 +1077,14 @@ $(document).ready(function() {
     
         // Reload the page to show the new row with a delete button
         location.reload();
-    }  
- 
+    }    
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
             }
         });
-    */ 
-   
+
         // Initialization code
         $('#currentWeekStartDate').val(getCurrentDate());
         attachEditableHandler();
