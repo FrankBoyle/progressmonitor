@@ -581,14 +581,14 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 ////////////////////////////////////////////////
 // Function to attach datepicker to existing date cells
 function attachDatepickerToExistingCells() {
-    $('table').on('dblclick', 'td[data-field-name="score_date"]', function () {
+    $('table').on('click', 'td[data-field-name="score_date"]', function () {
         const cell = $(this);
         const currentDate = cell.text();
 
         // Initialize the datepicker with the correct options
         cell.datepicker({
             dateFormat: 'mm/dd/yy',
-            onSelect: function (dateText) {
+            onClose: function (dateText) {
                 if (isDateDuplicate(dateText, cell.closest('tr').data('performance-id'))) {
                     alert("An entry for this date already exists. Please choose a different date.");
                     cell.datepicker('setDate', currentDate); // Reset to the original date
@@ -600,7 +600,7 @@ function attachDatepickerToExistingCells() {
             }
         });
 
-        // Show the datepicker when double-clicking the cell
+        // Show the datepicker when clicking the cell
         cell.datepicker('show');
     });
 }
