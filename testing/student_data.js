@@ -579,6 +579,27 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 }
 
 ////////////////////////////////////////////////
+// Function to attach datepicker to existing date cells
+function attachDatepickerToExistingCells() {
+    $('table').find('td[data-field-name="score_date"]').each(function () {
+        const cell = $(this);
+
+        cell.datepicker({
+            dateFormat: 'mm/dd/yy',
+            onSelect: function (dateText) {
+                if (isDateDuplicate(dateText, cell.closest('tr').data('performance-id'))) {
+                    alert("An entry for this date already exists. Please choose a different date.");
+                    cell.datepicker('setDate', ''); // Clear the datepicker input if duplicate
+                } else {
+                    saveEditedDate(cell, dateText); // Save the edited date
+                }
+            }
+        });
+    });
+}
+
+// Call the function to attach datepickers to existing date cells
+attachDatepickerToExistingCells();
 
 $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
@@ -981,7 +1002,7 @@ $(document).ready(function() {
         updateGoalText(goalId, newText);
     });
 
-    $('#addDataRow').off('click').click(function () {
+    $('#addDataRow').off('click').click(function() {
         const currentDate = getCurrentDate();
         if (isDateDuplicate(currentDate)) {
             alert("An entry for this date already exists. Please choose a different date.");
@@ -989,19 +1010,23 @@ $(document).ready(function() {
         }
     
         // Create a temporary input to attach datepicker
-        const tempInput = $("<input type='text'>").appendTo('body');
-        tempInput.css({
-            position: 'fixed',
-            top: '50%', // Adjust as needed
-            left: '50%', // Adjust as needed
-            transform: 'translate(-50%, -50%)',
-            zIndex: 1000 // To ensure it's above other elements
-        });
-    
-        // Show the datepicker immediately
-        tempInput.datepicker({
+   // Adjusting the position of the temporary input
+   const tempInput = $("<input type='text'>").appendTo('body');
+   tempInput.css({
+       position: 'fixed',
+       top: '50%', // Adjust as needed
+       left: '50%', // Adjust as needed
+       transform: 'translate(-50%, -50%)',
+       zIndex: 1000 // To ensure it's above other elements
+   });
+       tempInput.datepicker({
             dateFormat: 'mm/dd/yy',
-            onSelect: function (dateText) {
+            onSelect: function(dateText) {
+                if (isDateDuplicate(dateText)) {
+                    alert("An entry for this date already exists. Please choose a different date.");
+                    return;
+                }
+    
                 // Create the new row after date is selected
                 const newRow = $("<tr data-performance-id='new'>");
                 newRow.append(`<td class="editable" data-field-name="score_date">${dateText}</td>`);
@@ -1019,7 +1044,10 @@ $(document).ready(function() {
                 // Force a save immediately upon selecting a date
                 saveRowData(newRow);
             }
-        }).datepicker('show'); // Show the datepicker immediately
+        });
+    
+        // Show the datepicker immediately
+        tempInput.datepicker('show');
     });
 
         // Initialization code
