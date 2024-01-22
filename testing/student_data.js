@@ -751,38 +751,23 @@ $(document).ready(function() {
     }
     
     function attachEditableHandler() {
-        $('table').on('dblclick', '.editable', function() {
+        $('table').on('dblclick', '.editable', function(e) {
+            e.preventDefault(); // Prevent any default action that might cause scrolling
+    
             const cell = $(this);
-            if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
+            if (cell.hasClass('editing')) return;
     
-            // Store the original value in a variable
-            let originalValue = cell.text().trim();
+            // ... existing code to initialize input ...
     
-            // Create an input element and set its value to the original value
-            const input = $('<input type="text">').val(originalValue);
-    
-            cell.addClass('editing');
-            cell.empty().append(input);
-            input.focus();
-    
-            // Initialize datepicker for 'score_date' field
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
-                    beforeShow: function() {
-                        datePickerActive = true;
+                    onSelect: function(selectedDate) {
+                        input.val(selectedDate); // Update the input value
+                        input.datepicker('hide'); // Explicitly hide the datepicker
                     },
-                    onClose: function(selectedDate) {
-                        datePickerActive = false;
-                        if (selectedDate && isValidDate(new Date(selectedDate))) {
-                            const currentPerformanceId = cell.closest('tr').data('performance-id');
-                            if (!isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                saveEditedDate(cell, selectedDate);
-                            } else {
-                                input.val(originalValue);
-                            }
-                        }
-                        toggleEditMode(cell, input);
+                    onClose: function() {
+                        saveCellValue(cell, input); // Save the cell value when datepicker is closed
                     }
                 });
             }
