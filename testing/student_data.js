@@ -1084,28 +1084,5 @@ $(document).ready(function() {
             return (date[2] + date[0] + date[1]) * 1;
         };
 
-    // Define the DataTable and apply custom date filter
-    let table = $('#dataTable').DataTable({
-        "order": [[0, "asc"]],
-        "lengthChange": false,
-        "searching": false,
-        "paging": false,
-        "info": false,
-        "sorting": false,
-        "columns": [
-            { "type": "date-us" },
-            null, null, null, null, null, null, null, null, null, null, null
-        ],
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
-        "columnDefs": [
-            {
-                "targets": [0], // Apply the date filter to the first column (date)
-                "type": "date-us",
-                "render": function (data) {
-                    return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
-                }
-            }
-        ]
-    });
 
 });
