@@ -583,27 +583,36 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 function attachDatepickerToExistingCells() {
     $('table').on('click', 'td[data-field-name="score_date"]', function () {
         const cell = $(this);
-        const currentDate = cell.text();
 
-        // Initialize the datepicker with the correct options
-        cell.datepicker({
-            dateFormat: 'mm/dd/yy',
-            onClose: function (dateText) {
-                if (isDateDuplicate(dateText, cell.closest('tr').data('performance-id'))) {
-                    alert("An entry for this date already exists. Please choose a different date.");
-                    cell.datepicker('setDate', currentDate); // Reset to the original date
-                } else {
-                    cell.text(dateText); // Update the cell text with the new date
-                    saveEditedDate(cell, dateText); // Save the edited date
-                    cell.datepicker('destroy'); // Destroy the datepicker after selection
+        // Check if the cell is already in edit mode
+        if (!cell.hasClass('editing')) {
+            const currentDate = cell.text();
+
+            // Initialize the datepicker with the correct options
+            cell.addClass('editing'); // Add a class to mark the cell as in edit mode
+            cell.datepicker({
+                dateFormat: 'mm/dd/yy',
+                onClose: function (dateText) {
+                    if (isDateDuplicate(dateText, cell.closest('tr').data('performance-id'))) {
+                        alert("An entry for this date already exists. Please choose a different date.");
+                        cell.datepicker('setDate', currentDate); // Reset to the original date
+                    } else {
+                        cell.text(dateText); // Update the cell text with the new date
+                        saveEditedDate(cell, dateText); // Save the edited date
+                        cell.datepicker('destroy'); // Destroy the datepicker after selection
+                        cell.removeClass('editing'); // Remove the editing class
+                    }
                 }
-            }
-        });
+            });
 
-        // Show the datepicker when clicking the cell
-        cell.datepicker('show');
+            // Show the datepicker when clicking the cell
+            cell.datepicker('show');
+        }
     });
 }
+
+// Remove any previous click event handlers for the same cells
+$('table').off('click', 'td[data-field-name="score_date"]');
 
 // Call the function to attach datepickers to existing date cells
 attachDatepickerToExistingCells();
