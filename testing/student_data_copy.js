@@ -155,9 +155,23 @@ $(document).ready(function() {
 
     function attachEditableHandler() {
         //$('table').on('click', '.editable:not([data-field-name="score8"])', function() {
-        $('table').on('click', '.editable', function() {
+        $('table').on('dblclick', '.editable', function() {
             const cell = $(this);
+            if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
+    
+            // Store the original value in a variable
+            let originalValue;
+    
+            // Check if the cell contains an input element with a non-empty value
+            const inputElement = cell.find('input[type="text"]');
+            if (inputElement.length && inputElement.val().trim() !== '') {
+                originalValue = inputElement.val().trim();
+            } else {
+                originalValue = cell.text().trim();
             const originalValue = cell.text();
+            }
+    
+            // Create an input element and set its value to the original value
             const input = $('<input type="text">');
             input.val(originalValue);
 
