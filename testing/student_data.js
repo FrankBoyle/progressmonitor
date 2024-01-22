@@ -970,26 +970,27 @@ $(document).ready(function() {
         }
     
         // Create a temporary input to attach datepicker
-   // Adjusting the position of the temporary input
-   const tempInput = $("<input type='text'>").appendTo('body');
-
-       tempInput.datepicker({
-            dateFormat: 'mm/dd/yy',
-                // Other datepicker options and event handlers can go here
-    beforeShow: function (input, inst) {
-        // Get the position of the button that triggered the datepicker
-        const buttonOffset = $(input).offset();
-
-        // Calculate the new position for the datepicker
-        const datePickerLeft = buttonOffset.left + $(input).outerWidth() + 10; // Adjust as needed
-        const datePickerTop = buttonOffset.top; // You can adjust the top position if needed
-
-        // Set the new position for the datepicker
-        inst.dpDiv.css({
-            left: datePickerLeft + 'px',
-            top: datePickerTop + 'px',
+        const tempInput = $("<input type='text'>").appendTo('body');
+        
+        // Position the temporary input to the top right of the button
+        const buttonPosition = $(this).offset();
+        const buttonWidth = $(this).outerWidth();
+        const buttonHeight = $(this).outerHeight();
+        const inputWidth = 120; // Adjust as needed, this is the width of the datepicker input
+        const inputHeight = 30; // Adjust as needed
+    
+        const tempInputLeft = buttonPosition.left + buttonWidth - inputWidth;
+        const tempInputTop = buttonPosition.top - inputHeight;
+    
+        tempInput.css({
+            position: 'absolute',
+            left: tempInputLeft + 'px',
+            top: tempInputTop + 'px',
+            zIndex: 1000 // To ensure it's above other elements
         });
-    },
+    
+        tempInput.datepicker({
+            dateFormat: 'mm/dd/yy',
             onSelect: function(dateText) {
                 if (isDateDuplicate(dateText)) {
                     alert("An entry for this date already exists. Please choose a different date.");
@@ -1017,7 +1018,7 @@ $(document).ready(function() {
     
         // Show the datepicker immediately
         tempInput.datepicker('show');
-    });
+    });    
     
     
     async function saveRowData(row) {
