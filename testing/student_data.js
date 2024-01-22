@@ -756,27 +756,26 @@ $(document).ready(function() {
             if (cell.hasClass('editing')) return;
     
             let originalValue = cell.text().trim();
-            const input = $('<input type="text">').val(originalValue);
     
+            // Remove any existing input to avoid conflicts
+            cell.find('input').remove();
+    
+            // Create a new input element
+            const input = $('<input type="text" class="datepicker-input">').val(originalValue);
             cell.addClass('editing').empty().append(input);
             input.focus();
     
             if (cell.data('field-name') === 'score_date') {
-                // Destroy any existing datepicker instance
-                if (input.hasClass('hasDatepicker')) {
-                    input.datepicker('destroy');
-                }
-    
                 // Initialize the datepicker
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     onClose: function(selectedDate) {
-                        cell.removeClass('editing');
                         if (selectedDate && selectedDate !== originalValue) {
                             saveEditedDate(cell, selectedDate);
                         } else {
-                            cell.text(originalValue); // Revert to original value if no date selected or unchanged
+                            cell.text(originalValue);
                         }
+                        cell.removeClass('editing');
                     }
                 }).datepicker('show');
             }
