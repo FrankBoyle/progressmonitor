@@ -763,7 +763,7 @@ $(document).ready(function() {
                                 input.val(originalValue);
                                 console.log(originalValue);
                             } else {
-                                saveEditedDate(cell, selectedDate);
+                                saveCellValue(cell, selectedDate);
                             }
                         }
                         toggleEditMode(cell, input);
