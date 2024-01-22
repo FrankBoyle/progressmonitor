@@ -751,26 +751,35 @@ $(document).ready(function() {
     }
     
     function attachEditableHandler() {
-        $('table').on('dblclick', '.editable', function(e) {
-            e.preventDefault(); // Prevent any default action that might cause scrolling
-    
+        $('table').on('dblclick', '.editable', function() {
             const cell = $(this);
             if (cell.hasClass('editing')) return;
     
-            // ... existing code to initialize input ...
+            let originalValue = cell.text().trim();
+            const input = $('<input type="text">').val(originalValue);
+    
+            cell.addClass('editing');
+            cell.empty().append(input);
+            input.focus();
     
             if (cell.data('field-name') === 'score_date') {
+                if (input.data('datepicker')) {
+                    input.datepicker('destroy'); // Destroy existing datepicker if present
+                }
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
-                    onSelect: function(selectedDate) {
-                        input.val(selectedDate); // Update the input value
-                        input.datepicker('hide'); // Explicitly hide the datepicker
-                    },
-                    onClose: function() {
-                        saveCellValue(cell, input); // Save the cell value when datepicker is closed
+                    onClose: function(selectedDate) {
+                        if (selectedDate) {
+                            input.val(selectedDate); // Update the input value
+                            saveCellValue(cell, input); // Save the cell value
+                        } else {
+                            input.val(originalValue); // Revert to original value if no date selected
+                        }
+                        cell.removeClass('editing');
                     }
-                });
+                }).datepicker('show'); // Show the datepicker immediately
             }
+    
     
             // Listen for Enter key press
             input.on('keydown', function(e) {
