@@ -972,17 +972,24 @@ $(document).ready(function() {
         // Create a temporary input to attach datepicker
    // Adjusting the position of the temporary input
    const tempInput = $("<input type='text'>").appendTo('body');
-   /*
-   tempInput.css({
-       position: 'fixed',
-       top: '50%', // Adjust as needed
-       left: '50%', // Adjust as needed
-       transform: 'translate(-50%, -50%)',
-       zIndex: 1000 // To ensure it's above other elements
-   });
-   */
+
        tempInput.datepicker({
             dateFormat: 'mm/dd/yy',
+                // Other datepicker options and event handlers can go here
+    beforeShow: function (input, inst) {
+        // Get the position of the button that triggered the datepicker
+        const buttonOffset = $(input).offset();
+
+        // Calculate the new position for the datepicker
+        const datePickerLeft = buttonOffset.left + $(input).outerWidth() + 10; // Adjust as needed
+        const datePickerTop = buttonOffset.top; // You can adjust the top position if needed
+
+        // Set the new position for the datepicker
+        inst.dpDiv.css({
+            left: datePickerLeft + 'px',
+            top: datePickerTop + 'px',
+        });
+    },
             onSelect: function(dateText) {
                 if (isDateDuplicate(dateText)) {
                     alert("An entry for this date already exists. Please choose a different date.");
