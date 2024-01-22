@@ -737,29 +737,37 @@ $(document).ready(function() {
             const inputElement = cell.find('input[type="text"]');
             if (inputElement.length && inputElement.val().trim() !== '') {
                 originalValue = inputElement.val().trim();
+                console.log(originalValue);
             } else {
                 originalValue = cell.text().trim();
+                console.log(originalValue);
             }
     
             // Create an input element and set its value to the original value
             const input = $('<input type="text">');
             input.val(originalValue);
+            console.log(originalValue);
+
+            //let datePickerActive = false;
     
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
+                    beforeShow: function() {
+                        //datePickerActive = true;
+                    },
                     onClose: function(selectedDate) {
                         if (isValidDate(new Date(selectedDate))) {
                             const currentPerformanceId = cell.closest('tr').data('performance-id');
                             if (isDateDuplicate(selectedDate, currentPerformanceId)) {
                                 input.val(originalValue);
-                                alert("Duplicate date not allowed!");
+                                console.log(originalValue);
                             } else {
-                                // Update the cell's text with the selected date
-                                cell.text(selectedDate);
+                                saveEditedDate(cell, selectedDate);
                             }
                         }
                         toggleEditMode(cell, input);
+                        //datePickerActive = false;
                     }
                 });
             }
@@ -781,7 +789,7 @@ $(document).ready(function() {
                 saveCellValue(cell, input);
             });
         });
-    }   
+    }
     
     function saveCellValue(cell, input) {
         const newValue = input.val();
