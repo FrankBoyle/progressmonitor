@@ -748,20 +748,27 @@ $(document).ready(function() {
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
+                    beforeShow: function() {
+                        datePickerActive = true;
+                    },
                     onClose: function(selectedDate) {
-                        if (isValidDate(new Date(selectedDate))) {
-                            const currentPerformanceId = cell.closest('tr').data('performance-id');
-                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                input.val(originalValue);
-                                alert("Duplicate date not allowed!");
-                            } else {
-                                // Update the cell's text with the selected date
-                                cell.text(selectedDate);
-                            }
-                        }
-                        toggleEditMode(cell, input);
-                    }
+    if (isValidDate(new Date(selectedDate))) {
+        const currentPerformanceId = cell.closest('tr').data('performance-id');
+        if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+            //alert("This date already exists. Please choose a different date.");
+            cell.html(originalValue); // Revert to the original value
+            return;
+        }
+        cell.text(selectedDate);  // Set the selected date
+        cell.append(input.hide());  // Hide the input to show the cell text
+        saveEditedDate(cell, selectedDate); // Save the edited date
+    }
+    datePickerActive = false;
+}
+
                 });
+                cell.html(input);
+                input.focus();
             }
     
             cell.addClass('editing');
