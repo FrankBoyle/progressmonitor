@@ -737,14 +737,17 @@ $(document).ready(function() {
             const inputElement = cell.find('input[type="text"]');
             if (inputElement.length && inputElement.val().trim() !== '') {
                 originalValue = inputElement.val().trim();
+                console.log(originalValue);
             } else {
                 originalValue = cell.text().trim();
+                console.log(originalValue);
             }
     
             // Create an input element and set its value to the original value
             const input = $('<input type="text">');
             input.val(originalValue);
-    
+            console.log(originalValue);
+
             //let datePickerActive = false;
     
             if (cell.data('field-name') === 'score_date') {
@@ -758,6 +761,7 @@ $(document).ready(function() {
                             const currentPerformanceId = cell.closest('tr').data('performance-id');
                             if (isDateDuplicate(selectedDate, currentPerformanceId)) {
                                 input.val(originalValue);
+                                console.log(originalValue);
                             } else {
                                 saveEditedDate(cell, selectedDate);
                             }
@@ -814,6 +818,8 @@ $(document).ready(function() {
             const parts = newValue.split('/');
             if (parts.length !== 3) {
                 cell.text(originalValue);
+                console.log(originalValue);
+
                 return;
             }
             const convertedValue = convertToDatabaseDate(newValue);
