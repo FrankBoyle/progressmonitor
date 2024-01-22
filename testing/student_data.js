@@ -793,23 +793,19 @@ $(document).ready(function() {
     
     function saveCellValue(cell, input) {
         const newValue = input.val();
-        console.log("Cell contents:", cell.html()); // Log the entire HTML content of the cell
         const originalValue = cell.text().trim();
-        console.log("Original Value:", originalValue);
-        console.log("New Value:", newValue);
     
-        /*
+        // Check if the value has changed
         if (newValue === originalValue) {
             console.log("No change detected.");
             toggleEditMode(cell, input);
             return; // No change, exit without saving or making an AJAX request
         }
-        */
-
+    
         toggleEditMode(cell, input);
-        cell.text(newValue);
     
         const performanceId = cell.closest('tr').data('performance-id');
+    
         if (performanceId === 'new') {
             return;
         }
@@ -819,9 +815,11 @@ $(document).ready(function() {
             if (parts.length !== 3) {
                 cell.text(originalValue);
                 console.log(originalValue);
-
                 return;
             }
+    
+            // Validate the date format here if needed
+    
             const convertedValue = convertToDatabaseDate(newValue);
             saveEditedDate(cell, convertedValue);
         } else {
@@ -851,23 +849,35 @@ $(document).ready(function() {
                 postData.scores = scores;
             }
     
+            // Perform the AJAX request
             $.ajax({
                 type: 'POST',
                 url: targetUrl,
                 data: postData,
                 success: function(response) {
-                    if (performanceId === 'new') {
-                        const newRow = $('tr[data-performance-id="new"]');
-                        newRow.attr('data-performance-id', response.performance_id);
-                        newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
-                    }
+                    handleSuccessResponse(response, cell);
                 },
                 error: function() {
-                    // Handle any error here
+                    handleError();
                 }
             });
         }
     }
+    
+    function handleSuccessResponse(response, cell) {
+        if (response && response.performance_id) {
+            const newRow = $('tr[data-performance-id="new"]');
+            newRow.attr('data-performance-id', response.performance_id);
+            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+        }
+        // Handle other success cases if needed
+    }
+    
+    function handleError() {
+        // Handle AJAX errors here, e.g., display an error message to the user
+        console.error("An error occurred during the AJAX request.");
+    }
+    
     
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
