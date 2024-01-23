@@ -781,13 +781,13 @@ $(document).ready(function() {
             input.on('keydown', function(e) {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
-                    saveCellValue(cell, inputElememnt);
+                    saveCellValue(cell, inputElement);
                 }
             });
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                saveCellValue(cell, inputElememnt);
+                saveCellValue(cell, inputElement);
             });
         });
     }
