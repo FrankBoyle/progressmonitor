@@ -794,6 +794,8 @@ $(document).ready(function() {
     function saveCellValue(cell, dateString) {
     const newValue = dateString; // Use the provided dateString
     const originalValue = cell.text().trim();
+    console.log("originalValue is:" + originalValue);
+    console.log("newValue is:" + newValue);
 
     // Check if the value has changed
     if (newValue === originalValue) {
