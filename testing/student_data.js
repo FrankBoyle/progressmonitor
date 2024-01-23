@@ -778,14 +778,16 @@ $(document).ready(function() {
         let postData = {
             performance_id: performanceId,
             field_name: fieldName,
-            new_value: newValue,
             student_id: CURRENT_STUDENT_ID,
             metadata_id: metadata_id,
             school_id: $('#schoolIdInput').val()
         };
     
         if (fieldName === 'score_date') {
+            // Convert to 'Y-m-d' format before sending
             postData.new_value = convertToDatabaseDate(newValue);
+        } else {
+            postData.new_value = newValue;
         }
     
         $.ajax({
@@ -807,6 +809,12 @@ $(document).ready(function() {
             }
         });
     }
+    
+    function convertToDatabaseDate(dateString) {
+        const [month, day, year] = dateString.split('/');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+    
        
     
     function toggleEditMode(cell, input) {
