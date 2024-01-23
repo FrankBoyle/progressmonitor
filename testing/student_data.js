@@ -784,7 +784,6 @@ $(document).ready(function() {
         };
     
         if (fieldName === 'score_date') {
-            // Convert to 'Y-m-d' format before sending
             postData.new_value = convertToDatabaseDate(newValue);
         } else {
             postData.new_value = newValue;
@@ -808,13 +807,7 @@ $(document).ready(function() {
                 alert('Error occurred while updating data.');
             }
         });
-    }
-    
-    function convertToDatabaseDate(dateString) {
-        const [month, day, year] = dateString.split('/');
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    }
-    
+    }  
        
     
     function toggleEditMode(cell, input) {
