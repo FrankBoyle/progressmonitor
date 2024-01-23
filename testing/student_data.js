@@ -813,7 +813,7 @@ $(document).ready(function() {
         }
 
         if (cell.data('field-name') === 'score_date') {
-            //console.log("new value is:" + newValue);
+            console.log("new value is:" + newValue);
 
             // Validate the date format here if needed
 
@@ -1016,7 +1016,7 @@ $(document).ready(function() {
     });    
     
     
-    async function saveRowData(row, convertedValue) {
+    async function saveRowData(row,) {
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
@@ -1037,7 +1037,7 @@ $(document).ready(function() {
     
         const postData = {
             student_id: CURRENT_STUDENT_ID,
-            score_date: convertedValue,
+            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
             scores: scores,
             metadata_id: metadata_id,
             school_id: school_id,
