@@ -644,6 +644,41 @@ $(document).ready(function() {
             }
         }   
     }
+    
+
+    async function saveEditedDate(cell, newDate) {
+        const performanceId = cell.closest('tr').data('performance-id');
+        const fieldName = cell.data('field-name');
+        const studentId = CURRENT_STUDENT_ID;
+        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+        const school_id = $('#schoolIdInput').val();
+
+        const postData = {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+            score_date: weekStartDate,
+            student_id: studentId,
+            metadata_id: metadata_id,
+            school_id: school_id
+
+        };
+        //console.log(postData);
+        //console.log("studentID:", student_id);
+
+
+        ajaxCall('POST', 'update_performance.php', postData).then(response => {
+            //console.log(response); // <-- This is the debug line. 
+        
+            if (response && response.error && response.error === 'Duplicate date not allowed!') {
+                alert("Duplicate date not allowed!");
+                cell.html(cell.data('saved-date') || '');  
+            } else if (response && response.saved_date) {
+                cell.data('saved-date', response.saved_date);
+            } else {
+            }
+        });  
+    }
 
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
