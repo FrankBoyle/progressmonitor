@@ -795,7 +795,7 @@ $(document).ready(function() {
         const newValue = dateString; // Use the provided dateString
         const originalValue = cell.text().trim();
         //console.log("originalValue is:" + originalValue);
-        //console.log("new value is:" + newValue);
+        console.log("new value is:" + newValue);
 
         // Check if the value has changed
         if (newValue === originalValue) {
