@@ -754,7 +754,7 @@ $(document).ready(function() {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     beforeShow: function() {
-                        //datePickerActive = true;
+                        datePickerActive = true;
                     },
                     onClose: function(selectedDate) {
                         if (isValidDate(new Date(selectedDate))) {
@@ -767,7 +767,7 @@ $(document).ready(function() {
                             }
                         }
                         toggleEditMode(cell, input);
-                        //datePickerActive = false;
+                        datePickerActive = false;
                     }
                 });
             }
