@@ -828,7 +828,7 @@ $(document).ready(function() {
             saveEditedDate(cell, convertedValue);
             } else {
                 const fieldName = cell.data('field-name');
-                const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+                const targetUrl = (performanceId === 'new') ? 'update_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
                 const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
                 const school_id = $('#schoolIdInput').val();
@@ -853,18 +853,18 @@ $(document).ready(function() {
                     postData.scores = scores;
                 }
 
-                // Perform the AJAX request
-                ajaxCall('POST', 'update_performance.php', postData).then(response => {
-                    //console.log(response); // <-- This is the debug line. 
-                
-                    if (response && response.error && response.error === 'Duplicate date not allowed!') {
-                        alert("Duplicate date not allowed!");
-                        cell.html(cell.data('saved-date') || '');  
-                    } else if (response && response.saved_date) {
-                        cell.data('saved-date', response.saved_date);
-                    } else {
-                    }
-                }); 
+        // Perform the AJAX request
+        $.ajax({
+            type: 'POST',
+            url: targetUrl,
+            data: postData,
+            success: function(response) {
+                handleSuccessResponse(response, cell);
+            },
+            error: function() {
+                handleError();
+            }
+        });
             }
         }
 
