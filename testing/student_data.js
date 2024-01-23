@@ -780,18 +780,18 @@ $(document).ready(function() {
             input.on('keydown', function(e) {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
-                    saveEditedDate(cell, convertedDate);
+                    saveCellValue(cell, dateString);
                 }
             });
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                saveEditedDate(cell, convertedDate);
+                saveCellValue(cell, dateString);
             });
         });
     }
 
-    function saveCellValue(cell, dateString, input) {
+    function saveCellValue(cell, dateString) {
         const newValue = dateString; // Use the provided dateString
         const originalValue = cell.text().trim();
         console.log("originalValue is:" + originalValue);
