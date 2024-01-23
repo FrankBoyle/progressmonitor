@@ -797,7 +797,7 @@ $(document).ready(function() {
         const newValue = dateString; // Use the provided dateString
         const originalValue = cell.text().trim();
         //console.log("originalValue is:" + originalValue);
-        console.log("new value is:" + newValue);
+        //console.log("new value is:" + newValue);
 
         // Check if the value has changed
         if (newValue === originalValue) {
@@ -813,12 +813,12 @@ $(document).ready(function() {
         }
 
         if (cell.data('field-name') === 'score_date') {
-            console.log("new value is:" + newValue);
+            //console.log("new value is:" + newValue);
 
             // Validate the date format here if needed
 
             const convertedValue = convertToDatabaseDate(newValue);
-            console.log("convertedValue is:" + convertedValue);
+            //console.log("convertedValue is:" + convertedValue);
             saveEditedDate(cell, convertedValue);
             } else {
                 const fieldName = cell.data('field-name');
@@ -830,7 +830,7 @@ $(document).ready(function() {
                 let postData = {
                     performance_id: performanceId,
                     field_name: fieldName,
-                    new_value: newValue,
+                    new_value: convertedValue,
                     student_id: studentId,
                     score_date: weekStartDate,
                     metadata_id: metadata_id,
