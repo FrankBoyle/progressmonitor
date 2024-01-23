@@ -646,7 +646,7 @@ $(document).ready(function() {
     }
     
 
-    async function saveEditedDate(cell, newDate) {
+    async function saveEditedDate(cell, convertedValue) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
@@ -656,7 +656,7 @@ $(document).ready(function() {
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
-            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+            new_value: convertedValue, // Convert to yyyy-mm-dd format before sending
             score_date: weekStartDate,
             student_id: studentId,
             metadata_id: metadata_id,
