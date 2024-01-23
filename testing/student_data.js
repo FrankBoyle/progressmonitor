@@ -790,78 +790,80 @@ $(document).ready(function() {
             });
         });
     }
-    function saveCellValue(cell, input) {
-        const newValue = input.val();
-        const originalValue = cell.text().trim();
-    
-        // Check if the value has changed
-        if (newValue === originalValue) {
-            console.log("No change detected.");
-            toggleEditMode(cell, input);
-            return; // No change, exit without saving or making an AJAX request
-        }
-    
+
+function saveCellValue(cell, input) {
+    const newValue = input.val();
+    const originalValue = cell.text().trim();
+
+    // Check if the value has changed
+    if (newValue === originalValue) {
+        console.log("No change detected.");
         toggleEditMode(cell, input);
-    
-        const performanceId = cell.closest('tr').data('performance-id');
-    
-        if (performanceId === 'new') {
+        return; // No change, exit without saving or making an AJAX request
+    }
+
+    toggleEditMode(cell, input);
+
+    const performanceId = cell.closest('tr').data('performance-id');
+
+    if (performanceId === 'new') {
+        return;
+    }
+
+    if (cell.data('field-name') === 'score_date') {
+        const parts = newValue.split('/');
+        if (parts.length !== 3) {
+            cell.text(originalValue);
+            console.log(originalValue);
             return;
         }
-    
-        if (cell.data('field-name') === 'score_date') {
-            const parts = newValue.split('/');
-            if (parts.length !== 3) {
-                cell.text(originalValue);
-                console.log(originalValue);
-                return;
+
+        // Validate the date format here if needed
+
+        const convertedValue = convertToDatabaseDate(newValue);
+        saveEditedDate(cell, convertedValue);
+    } else {
+        const fieldName = cell.data('field-name');
+        const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+        const studentId = $('#currentStudentId').val();
+        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+        const school_id = $('#schoolIdInput').val();
+
+        let postData = {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: newValue,
+            student_id: studentId,
+            score_date: weekStartDate,
+            metadata_id: metadata_id,
+            school_id: school_id,
+        };
+
+        if (performanceId === 'new') {
+            const row = cell.closest('tr');
+            let scores = {};
+            for (let i = 1; i <= 10; i++) {
+                const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+                scores['score' + i] = scoreValue ? scoreValue : null;
             }
-    
-            // Validate the date format here if needed
-    
-            const convertedValue = convertToDatabaseDate(newValue);
-            saveEditedDate(cell, convertedValue);
-        } else {
-            const fieldName = cell.data('field-name');
-            const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-            const studentId = $('#currentStudentId').val();
-            const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
-            const school_id = $('#schoolIdInput').val();
-    
-            let postData = {
-                performance_id: performanceId,
-                field_name: fieldName,
-                new_value: newValue,
-                student_id: studentId,
-                score_date: weekStartDate,
-                metadata_id: metadata_id,
-                school_id: school_id,
-            };
-    
-            if (performanceId === 'new') {
-                const row = cell.closest('tr');
-                let scores = {};
-                for (let i = 1; i <= 10; i++) {
-                    const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-                    scores['score' + i] = scoreValue ? scoreValue : null;
-                }
-                postData.scores = scores;
-            }
-    
-            // Perform the AJAX request
-            $.ajax({
-                type: 'POST',
-                url: targetUrl,
-                data: postData,
-                success: function(response) {
-                    handleSuccessResponse(response, cell);
-                },
-                error: function() {
-                    handleError();
-                }
-            });
+            postData.scores = scores;
         }
+
+        // Perform the AJAX request
+        $.ajax({
+            type: 'POST',
+            url: targetUrl,
+            data: postData,
+            success: function(response) {
+                handleSuccessResponse(response, cell);
+            },
+            error: function() {
+                handleError();
+            }
+        });
     }
+}
+
     
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
