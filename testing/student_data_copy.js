@@ -753,33 +753,49 @@ $(document).ready(function() {
     function attachEditableHandler() {
         $('table').on('dblclick', '.editable', function() {
             const cell = $(this);
-            if (cell.hasClass('editing')) return;
+            if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
     
-            let originalValue = cell.text().trim();
-            const input = $('<input type="text">').val(originalValue);
+            // Store the original value in a variable
+            let originalValue;
+    
+            // Check if the cell contains an input element with a non-empty value
+            const inputElement = cell.find('input[type="text"]');
+            if (inputElement.length && inputElement.val().trim() !== '') {
+                originalValue = inputElement.val().trim();
+            } else {
+                originalValue = cell.text().trim();
+            }
+    
+            // Create an input element and set its value to the original value
+            const input = $('<input type="text">');
+            input.val(originalValue);
+    
+            let datePickerActive = false;
+    
+            if (cell.data('field-name') === 'score_date') {
+                input.datepicker({
+                    dateFormat: 'mm/dd/yy',
+                    beforeShow: function() {
+                        datePickerActive = true;
+                    },
+                    onClose: function(selectedDate) {
+                        if (isValidDate(new Date(selectedDate))) {
+                            const currentPerformanceId = cell.closest('tr').data('performance-id');
+                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
+                                input.val(originalValue);
+                            } else {
+                                saveEditedDate(cell, selectedDate);
+                            }
+                        }
+                        toggleEditMode(cell, input);
+                        datePickerActive = false;
+                    }
+                });
+            }
     
             cell.addClass('editing');
             cell.empty().append(input);
             input.focus();
-    
-            if (cell.data('field-name') === 'score_date') {
-                if (input.data('datepicker')) {
-                    input.datepicker('destroy'); // Destroy existing datepicker if present
-                }
-                input.datepicker({
-                    dateFormat: 'mm/dd/yy',
-                    onClose: function(selectedDate) {
-                        if (selectedDate) {
-                            input.val(selectedDate); // Update the input value
-                            saveCellValue(cell, input); // Save the cell value
-                        } else {
-                            input.val(originalValue); // Revert to original value if no date selected
-                        }
-                        cell.removeClass('editing');
-                    }
-                }).datepicker('show'); // Show the datepicker immediately
-            }
-    
     
             // Listen for Enter key press
             input.on('keydown', function(e) {
@@ -802,6 +818,14 @@ $(document).ready(function() {
         const originalValue = cell.text().trim();
         //console.log("Original Value:", originalValue);
         //console.log("New Value:", newValue);
+    
+        /*
+        if (newValue === originalValue) {
+            console.log("No change detected.");
+            toggleEditMode(cell, input);
+            return; // No change, exit without saving or making an AJAX request
+        }
+        */
 
         toggleEditMode(cell, input);
         cell.text(newValue);
@@ -1004,6 +1028,62 @@ $(document).ready(function() {
         // Show the datepicker immediately
         tempInput.datepicker('show');
     });
+    
+    // Attach event handler for the "Save" button outside the datepicker function
+    $(document).on('click', '.saveRow', function() {
+        const row = $(this).closest('tr');
+        saveRowData(row);
+    });
+    
+    async function saveRowData(row) {
+        const performanceId = row.data('performance-id');
+        const school_id = $('#schoolIdInput').val();
+        const urlParams = new URLSearchParams(window.location.search);
+        const metadata_id = urlParams.get('metadata_id');
+    
+        // Disable the save button to prevent multiple clicks
+        row.find('.saveRow').prop('disabled', true);
+    
+        if (performanceId !== 'new') {
+            return;
+        }
+    
+        let scores = {};
+        for (let i = 1; i <= 10; i++) {
+            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
+            scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
+        }
+    
+        const postData = {
+            student_id: CURRENT_STUDENT_ID,
+            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+            scores: scores,
+            metadata_id: metadata_id,
+            school_id: school_id,
+        };
+    
+        const response = await ajaxCall('POST', 'insert_performance.php', postData);
+        if (response && response.performance_id) {
+            row.attr('data-performance-id', response.performance_id);
+            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
+            row.find('.saveRow').prop('disabled', false);
+        } else {
+            if (response && response.error) {
+                alert("Error: " + response.error);
+            } else {
+                alert("There was an error saving the data.");
+            }
+        }
+    
+        // Reload the page to show the new row with a delete button
+        location.reload();
+    }    
+
+        $(document).on('keypress', '.saveRow', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+            }
+        });
 
         // Initialization code
         $('#currentWeekStartDate').val(getCurrentDate());
@@ -1017,5 +1097,29 @@ $(document).ready(function() {
             var date = data.split('/');
             return (date[2] + date[0] + date[1]) * 1;
         };
+
+    // Define the DataTable and apply custom date filter
+    let table = $('#dataTable').DataTable({
+        "order": [[0, "asc"]],
+        "lengthChange": false,
+        "searching": false,
+        "paging": false,
+        "info": false,
+        "sorting": false,
+        "columns": [
+            { "type": "date-us" },
+            null, null, null, null, null, null, null, null, null, null, null
+        ],
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "columnDefs": [
+            {
+                "targets": [0], // Apply the date filter to the first column (date)
+                "type": "date-us",
+                "render": function (data) {
+                    return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
+                }
+            }
+        ]
+    });
 
 });
