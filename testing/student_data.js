@@ -606,9 +606,11 @@ $(document).ready(function() {
 
     function convertToDatabaseDate(dateString) {
         if (!dateString || dateString === "New Entry") return dateString;
+        console.log(dateString.split('/'));
+
         return dateString.split('/');
         //const [month, day, year] = dateString.split('/');
-        //console.log(dateString.split('/'));
+        console.log(dateString.split('/'));
         //console.log(`${year}-${month}-${day}`);
         //return `${year}-${month}-${day}`;
     }
