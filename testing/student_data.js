@@ -791,7 +791,7 @@ $(document).ready(function() {
         });
     }
 
-    function saveCellValue(cell, input, dateString) {
+    function saveCellValue(cell, dateString, input) {
         const newValue = dateString; // Use the provided dateString
         const originalValue = cell.text().trim();
         //console.log("originalValue is:" + originalValue);
