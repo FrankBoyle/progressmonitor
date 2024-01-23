@@ -832,7 +832,7 @@ $(document).ready(function() {
                 let postData = {
                     performance_id: performanceId,
                     field_name: fieldName,
-                    new_value: newValue,
+                    new_value: convertedValue,
                     student_id: studentId,
                     score_date: weekStartDate,
                     metadata_id: metadata_id,
