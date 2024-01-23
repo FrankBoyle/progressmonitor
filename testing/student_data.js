@@ -648,13 +648,13 @@ $(document).ready(function() {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
-        const weekStartDate = $('#currentWeekStartDate').val();
+        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
         const school_id = $('#schoolIdInput').val();
 
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
-            new_value: newDate, // Convert to yyyy-mm-dd format before sending
+            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
             score_date: weekStartDate,
             student_id: studentId,
             metadata_id: metadata_id,
@@ -792,73 +792,81 @@ $(document).ready(function() {
     }
 
     function saveCellValue(cell, dateString) {
-        const newValue = dateString; // Use the provided dateString
-        const originalValue = cell.text().trim();
-    
-        // Check if the value has changed
-        if (newValue === originalValue) {
-            console.log("No change detected.");
-            toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here if needed
-            return; // No change, exit without saving or making an AJAX request
-        }
-    
+    const newValue = dateString; // Use the provided dateString
+    const originalValue = cell.text().trim();
+
+    // Check if the value has changed
+    if (newValue === originalValue) {
+        console.log("No change detected.");
         toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here if needed
-    
-        console.log($('#ui-datepicker-div input')); // Add this line to inspect the 'input' variable
-    
-        const performanceId = cell.closest('tr').data('performance-id');
-    
-        if (performanceId === 'new') {
+        return; // No change, exit without saving or making an AJAX request
+    }
+
+    toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here if needed
+
+    console.log($('#ui-datepicker-div input')); // Add this line to inspect the 'input' variable
+
+    const performanceId = cell.closest('tr').data('performance-id');
+
+    if (performanceId === 'new') {
+        return;
+    }
+
+    if (cell.data('field-name') === 'score_date') {
+        console.log("new value is:" + newValue);
+        const parts = newValue.split('/');
+        if (parts.length !== 3) {
+            cell.text(originalValue);
+            console.log(originalValue);
             return;
         }
-    
-        if (cell.data('field-name') === 'score_date') {
-            console.log("new value is:" + newValue);
-   
-            // Validate the date format here if needed
-    
-            saveEditedDate(cell);
-        } else {
-            const fieldName = cell.data('field-name');
-            const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
-            const studentId = $('#currentStudentId').val();
-            const weekStartDate = $('#currentWeekStartDate').val();
-            const school_id = $('#schoolIdInput').val();
-    
-            let postData = {
-                performance_id: performanceId,
-                field_name: fieldName,
-                new_value: newValue,
-                student_id: studentId,
-                score_date: weekStartDate,
-                metadata_id: metadata_id,
-                school_id: school_id,
-            };
-    
-            if (performanceId === 'new') {
-                const row = cell.closest('tr');
-                let scores = {};
-                for (let i = 1; i <= 10; i++) {
-                    const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
-                    scores['score' + i] = scoreValue ? scoreValue : null;
-                }
-                postData.scores = scores;
+
+        // Validate the date format here if needed
+
+        const convertedValue = convertToDatabaseDate(newValue);
+        saveEditedDate(cell, convertedValue);
+    } else {
+        const fieldName = cell.data('field-name');
+        const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+        const studentId = $('#currentStudentId').val();
+        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+        const school_id = $('#schoolIdInput').val();
+
+        let postData = {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: newValue,
+            student_id: studentId,
+            score_date: weekStartDate,
+            metadata_id: metadata_id,
+            school_id: school_id,
+        };
+
+        if (performanceId === 'new') {
+            const row = cell.closest('tr');
+            let scores = {};
+            for (let i = 1; i <= 10; i++) {
+                const scoreValue = row.find(`td[data-field-name="score${i}"]`).text();
+                scores['score' + i] = scoreValue ? scoreValue : null;
             }
-    
-            // Perform the AJAX request
-            $.ajax({
-                type: 'POST',
-                url: targetUrl,
-                data: postData,
-                success: function(response) {
-                    handleSuccessResponse(response, cell);
-                },
-                error: function() {
-                    handleError();
-                }
-            });
+            postData.scores = scores;
         }
-    }    
+
+        // Perform the AJAX request
+        $.ajax({
+            type: 'POST',
+            url: targetUrl,
+            data: postData,
+            success: function(response) {
+                handleSuccessResponse(response, cell);
+            },
+            error: function() {
+                handleError();
+            }
+        });
+    }
+}
+
     
     
     function toggleEditMode(cell, input) {
@@ -1034,7 +1042,7 @@ $(document).ready(function() {
     
         const postData = {
             student_id: CURRENT_STUDENT_ID,
-            score_date: row.find('td[data-field-name="score_date"]').text(),
+            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
             scores: scores,
             metadata_id: metadata_id,
             school_id: school_id,
@@ -1064,7 +1072,7 @@ $(document).ready(function() {
         });
 
         // Initialization code
-        $('#currentWeekStartDate').val(getCurrentDate());
+        //$('#currentWeekStartDate').val(getCurrentDate());
         attachEditableHandler();
 
         $.fn.dataTable.ext.type.detect.unshift(function(value) {
