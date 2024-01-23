@@ -814,6 +814,7 @@ $(document).ready(function() {
         }
     
         if (cell.data('field-name') === 'score_date') {
+            console.log("new value is:" + newValue);
             const parts = newValue.split('/');
             if (parts.length !== 3) {
                 cell.text(originalValue);
