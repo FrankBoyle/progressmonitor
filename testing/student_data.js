@@ -791,8 +791,8 @@ $(document).ready(function() {
         });
     }
 
-    function saveCellValue(cell, input) {
-        const newValue = input.val().trim(); // Use the provided dateString
+    function saveCellValue(cell, input, dateString) {
+        const newValue = dateString; // Use the provided dateString
         const originalValue = cell.text().trim();
         //console.log("originalValue is:" + originalValue);
         //console.log("new value is:" + newValue);
@@ -826,13 +826,13 @@ $(document).ready(function() {
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'update_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
-                const weekStartDate = newValue;
+                const weekStartDate = convertedValue;
                 const school_id = $('#schoolIdInput').val();
 
                 let postData = {
                     performance_id: performanceId,
                     field_name: fieldName,
-                    new_value: newValue,
+                    new_value: convertedValue,
                     student_id: studentId,
                     score_date: weekStartDate,
                     metadata_id: metadata_id,
