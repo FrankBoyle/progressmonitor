@@ -765,7 +765,7 @@ $(document).ready(function() {
                                 input.val(originalValue);
                                 console.log(originalValue);
                             } else {
-                                //saveCellValue(cell, selectedDate);
+                                saveCellValue(cell, selectedDate);
                             }
                         }
                         toggleEditMode(cell, input);
@@ -782,13 +782,13 @@ $(document).ready(function() {
             input.on('keydown', function(e) {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
-                    saveCellValue(cell, input);
+                    //saveCellValue(cell, input);
                 }
             });
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                saveCellValue(cell, input);
+                //saveCellValue(cell, input);
             });
         });
     }
