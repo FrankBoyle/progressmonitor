@@ -803,6 +803,7 @@ function saveCellValue(cell, input) {
     }
 
     toggleEditMode(cell, input);
+    console.log(input); // Add this line to inspect the 'input' variable
 
     const performanceId = cell.closest('tr').data('performance-id');
 
