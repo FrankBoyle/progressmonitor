@@ -645,7 +645,6 @@ $(document).ready(function() {
         }   
     }
     
-
     async function saveEditedDate(cell, convertedValue) {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
@@ -665,7 +664,6 @@ $(document).ready(function() {
         };
         //console.log(postData);
         //console.log("studentID:", student_id);
-
 
         ajaxCall('POST', 'update_performance.php', postData).then(response => {
             //console.log(response); // <-- This is the debug line. 
@@ -1023,6 +1021,11 @@ $(document).ready(function() {
         tempInput.datepicker('show');
     });    
     
+        // Attach event handler for the "Save" button outside the datepicker function
+        $(document).on('click', '.saveRow', function() {
+            const row = $(this).closest('tr');
+            saveRowData(row);
+        });
     
     async function saveRowData(row) {
         const performanceId = row.data('performance-id');
