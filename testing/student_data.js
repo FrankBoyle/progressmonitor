@@ -792,8 +792,9 @@ $(document).ready(function() {
     }
 
     function saveCellValue(cell) {
-        const input = $('#ui-datepicker-div input'); // Select the datepicker input element
-        const newValue = input.val();
+        const selectedDate = $('#ui-datepicker-div input').datepicker('getDate');
+        const newValue = selectedDate ? $.datepicker.formatDate('mm/dd/yy', selectedDate) : '';
+        
         const originalValue = cell.text().trim();
     
         // Check if the value has changed
