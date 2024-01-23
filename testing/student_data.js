@@ -765,7 +765,7 @@ $(document).ready(function() {
                                 input.val(originalValue);
                                 console.log(originalValue);
                             } else {
-                                saveCellValue(cell, selectedDate);
+                                saveEditedDate(cell, selectedDate);
                             }
                         }
                         toggleEditMode(cell, input);
