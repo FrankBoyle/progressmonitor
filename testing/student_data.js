@@ -791,7 +791,7 @@ $(document).ready(function() {
         });
     }
     function saveCellValue(cell, input) {
-        const newValue = input.val().trim();
+        const newValue = input.val();
         const originalValue = cell.text().trim();
     
         // Check if the value has changed
