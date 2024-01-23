@@ -650,7 +650,7 @@ $(document).ready(function() {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
-        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+        const weekStartDate = convertedValue;
         const school_id = $('#schoolIdInput').val();
 
         const postData = {
