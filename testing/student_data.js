@@ -791,20 +791,18 @@ $(document).ready(function() {
         });
     }
 
-    function saveCellValue(cell) {
-        const selectedDate = $('#ui-datepicker-div input').datepicker('getDate');
-        const newValue = selectedDate ? $.datepicker.formatDate('mm/dd/yy', selectedDate) : '';
-        
+    function saveCellValue(cell, dateString) {
+        const newValue = dateString; // Use the provided dateString
         const originalValue = cell.text().trim();
     
         // Check if the value has changed
         if (newValue === originalValue) {
             console.log("No change detected.");
-            toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here
+            toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here if needed
             return; // No change, exit without saving or making an AJAX request
         }
     
-        toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here
+        toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here if needed
     
         console.log($('#ui-datepicker-div input')); // Add this line to inspect the 'input' variable
     
@@ -867,7 +865,7 @@ $(document).ready(function() {
                 }
             });
         }
-    }
+    }    
     
     
     function toggleEditMode(cell, input) {
