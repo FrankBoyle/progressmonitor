@@ -609,7 +609,7 @@ $(document).ready(function() {
         const [month, day, year] = dateString.split('/');
         console.log(dateString.split('/'));
         //console.log(`${year}-${month}-${day}`);
-        return dateString.split('/');
+        return `${year}-${month}-${day}`;
     }
 
     function convertToDisplayDate(databaseString) {
