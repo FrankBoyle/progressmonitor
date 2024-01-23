@@ -677,7 +677,7 @@ $(document).ready(function() {
                 cell.data('saved-date', response.saved_date);
             } else {
             }
-        });  
+        }); 
     }
 
     $(document).on('click', '.deleteRow', function() {
@@ -832,7 +832,7 @@ $(document).ready(function() {
             postData.scores = scores;
         }
     
-        const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
+        const targetUrl = (performanceId === 'new') ? 'update_performance.php' : 'update_performance.php';
     
         $.ajax({
             type: 'POST',
