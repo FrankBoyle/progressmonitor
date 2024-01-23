@@ -579,11 +579,6 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 }
 
 ////////////////////////////////////////////////
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-////////////////////////////////////////////////
 
 $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
@@ -658,6 +653,41 @@ $(document).ready(function() {
         }   
     }
     
+
+    async function saveEditedDate(cell, convertedValue) {
+        const performanceId = cell.closest('tr').data('performance-id');
+        const fieldName = cell.data('field-name');
+        const studentId = CURRENT_STUDENT_ID;
+        const weekStartDate = convertedValue;
+        const school_id = $('#schoolIdInput').val();
+
+        const postData = {
+            performance_id: performanceId,
+            field_name: fieldName,
+            new_value: convertedValue, // Convert to yyyy-mm-dd format before sending
+            score_date: weekStartDate,
+            student_id: studentId,
+            metadata_id: metadata_id,
+            school_id: school_id
+
+        };
+        //console.log(postData);
+        //console.log("studentID:", student_id);
+
+
+        ajaxCall('POST', 'update_performance.php', postData).then(response => {
+            //console.log(response); // <-- This is the debug line. 
+        
+            if (response && response.error && response.error === 'Duplicate date not allowed!') {
+                alert("Duplicate date not allowed!");
+                cell.html(cell.data('saved-date') || '');  
+            } else if (response && response.saved_date) {
+                cell.data('saved-date', response.saved_date);
+            } else {
+            }
+        }); 
+    }
+
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
         const performanceId = $(this).data('performance-id');
@@ -773,11 +803,9 @@ $(document).ready(function() {
             data: postData,
             success: function(response) {
                 if (response && response.saved_date) {
-                    // Update the cell with the saved date
                     cell.html(convertToDisplayDate(response.saved_date));
                 } else {
-                    // Update the cell with the new value
-                    cell.html(fieldName === 'score_date' ? convertToDisplayDate(newValue) : newValue);
+                    cell.html(originalValue);
                 }
                 cell.removeClass('editing');
             },
@@ -787,7 +815,23 @@ $(document).ready(function() {
                 alert('Error occurred while updating data.');
             }
         });
+    }  
+       
+    
+    function toggleEditMode(cell, input) {
+        if (cell.hasClass('editing')) {
+            cell.removeClass('editing');
+            if (input && input.length) {
+                input.hide(); // Only call hide if input is a valid jQuery object
+            }
+        } else {
+            cell.addClass('editing');
+            if (input && input.length) {
+                input.show(); // Only call show if input is a valid jQuery object
+            }
+        }
     }
+    
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
