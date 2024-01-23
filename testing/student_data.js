@@ -786,7 +786,7 @@ $(document).ready(function() {
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                saveCellValue(cell, convertedDate);
+                saveEditedDate(cell, convertedDate);
             });
         });
     }
