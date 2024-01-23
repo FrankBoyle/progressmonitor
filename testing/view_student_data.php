@@ -72,7 +72,7 @@ if (isset($_GET['metadata_id'])) {
     <!-- Daterange picker -->
     <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
-    <script src="student_data.js"  defer></script>
+    <script src="student_data_copy.js"  defer></script>
     
     <script>
     // Get the metadata_id from the URL parameter
