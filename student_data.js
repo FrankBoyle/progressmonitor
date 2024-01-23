@@ -1122,4 +1122,11 @@ $(document).ready(function() {
         ]
     });
 
+    // Apply date filter when date is selected
+    $("#startDateFilter").on("change", function() {
+        table.draw();
+    });
+
+    // Handle initial filtering when the page loads
+    table.draw();
 });
