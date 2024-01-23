@@ -826,7 +826,7 @@ $(document).ready(function() {
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'update_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
-                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());;
+                const weekStartDate = newValue;
                 const school_id = $('#schoolIdInput').val();
 
                 let postData = {
