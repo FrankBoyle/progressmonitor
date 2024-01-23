@@ -795,9 +795,9 @@ $(document).ready(function() {
 
     function saveCellValue(cell, dateString) {
         const newValue = dateString; // Use the provided dateString
-        const originalValue = cell.text().trim();
-        console.log("originalValue is:" + originalValue);
-        console.log("newValue is:" + newValue);
+        //const originalValue = cell.text().trim();
+        //console.log("originalValue is:" + originalValue);
+        console.log("new value is:" + newValue);
 
         // Check if the value has changed
         if (newValue === originalValue) {
@@ -814,12 +814,6 @@ $(document).ready(function() {
 
         if (cell.data('field-name') === 'score_date') {
             console.log("new value is:" + newValue);
-            const parts = newValue.split('/');
-            if (parts.length !== 3) {
-                cell.text(originalValue);
-                console.log(originalValue);
-                return;
-            }
 
             // Validate the date format here if needed
 
