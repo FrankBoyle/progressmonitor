@@ -750,13 +750,13 @@ $(document).ready(function() {
             input.val(originalValue);
             console.log(originalValue);
 
-            //let datePickerActive = false;
+            let datePickerActive = false;
     
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
                     beforeShow: function() {
-                        //datePickerActive = true;
+                        datePickerActive = true;
                     },
                     onClose: function(selectedDate) {
                         if (isValidDate(new Date(selectedDate))) {
@@ -769,7 +769,7 @@ $(document).ready(function() {
                             }
                         }
                         toggleEditMode(cell, input);
-                        //datePickerActive = false;
+                        datePickerActive = false;
                     }
                 });
             }
