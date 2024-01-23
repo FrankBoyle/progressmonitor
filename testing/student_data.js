@@ -804,7 +804,7 @@ $(document).ready(function() {
             return; // No change, exit without saving or making an AJAX request
         }
 
-        toggleEditMode(cell, input);
+        //toggleEditMode(cell, input);
         // Update the cell with the new value
         cell.text(newValue);
 
