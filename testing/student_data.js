@@ -863,16 +863,20 @@ $(document).ready(function() {
     }
     
     
-    
-    function toggleEditMode(cell, inputElement) {
+    function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
             cell.removeClass('editing');
-            input.hide();
+            if (input && input.length) {
+                input.hide(); // Only call hide if input is a valid jQuery object
+            }
         } else {
             cell.addClass('editing');
-            input.show();
+            if (input && input.length) {
+                input.show(); // Only call show if input is a valid jQuery object
+            }
         }
     }
+    
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
