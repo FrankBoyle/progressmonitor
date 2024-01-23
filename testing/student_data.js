@@ -606,13 +606,10 @@ $(document).ready(function() {
 
     function convertToDatabaseDate(dateString) {
         if (!dateString || dateString === "New Entry") return dateString;
-        const date = dateString.split('/');
-        console.log("date is:" + date);
-
-        return date;
-        //console.log(dateString.split('/'));
-        //console.log(`${year}-${month}-${day}`);
-        //return `${year}-${month}-${day}`;
+        const [month, day, year] = dateString.split('/');
+        console.log(dateString.split('/'));
+        console.log(`${year}-${month}-${day}`);
+        return `${year}-${month}-${day}`;
     }
 
     function convertToDisplayDate(databaseString) {
