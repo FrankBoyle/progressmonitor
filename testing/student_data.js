@@ -608,8 +608,8 @@ $(document).ready(function() {
         if (!dateString || dateString === "New Entry") return dateString;
         const [month, day, year] = dateString.split('/');
         console.log(dateString.split('/'));
-        console.log(`${year}-${month}-${day}`);
-        return `${year}-${month}-${day}`;
+        //console.log(`${year}-${month}-${day}`);
+        return dateString.split('/');
     }
 
     function convertToDisplayDate(databaseString) {
