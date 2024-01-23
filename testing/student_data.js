@@ -712,28 +712,33 @@ $(document).ready(function() {
     
             let originalValue = cell.text().trim();
             const input = $('<input type="text">').val(originalValue);
-    
-            // Add event handlers for the input
-            input.on('blur', function() {
-                cell.html(originalValue);
-                cell.removeClass('editing');
-            }).on('keydown', function(e) {
-                if (e.keyCode === 13) { // Enter key
-                    saveCellValue(cell, input);
-                }
-            });
-    
-            // Initialize datepicker for date fields
+            
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
-                    onClose: function() {
+                    onClose: function(selectedDate) {
+                        if (selectedDate) {
+                            if (!isDateDuplicate(selectedDate, cell.closest('tr').data('performance-id'))) {
+                                saveCellValue(cell, input);
+                            } else {
+                                cell.html(originalValue);
+                                alert("Duplicate date not allowed!");
+                            }
+                        }
                         cell.removeClass('editing');
                     }
-                });
+                }).focus();
+            } else {
+                input.on('blur', function() {
+                    saveCellValue(cell, input);
+                }).on('keydown', function(e) {
+                    if (e.keyCode === 13) {
+                        saveCellValue(cell, input);
+                    }
+                }).focus();
             }
     
-            cell.addClass('editing').empty().append(input).find('input').focus();
+            cell.addClass('editing').empty().append(input);
         });
     }
     
