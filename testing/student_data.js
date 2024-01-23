@@ -791,7 +791,8 @@ $(document).ready(function() {
         });
     }
 
-    function saveCellValue(cell, input) {
+    function saveCellValue(cell) {
+        const input = $('#dp1705968991529'); // Select the datepicker input element
         const newValue = input.val();
         const originalValue = cell.text().trim();
     
@@ -864,7 +865,8 @@ $(document).ready(function() {
                 }
             });
         }
-    }  
+    }
+    
 
     
     function toggleEditMode(cell, input) {
