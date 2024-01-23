@@ -817,7 +817,7 @@ $(document).ready(function() {
    
             // Validate the date format here if needed
     
-            saveEditedDate(cell, convertedValue);
+            saveEditedDate(cell);
         } else {
             const fieldName = cell.data('field-name');
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
