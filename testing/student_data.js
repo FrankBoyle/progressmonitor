@@ -806,10 +806,6 @@ $(document).ready(function() {
             return; // No change, exit without saving or making an AJAX request
         }
 
-        toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here if needed
-
-        console.log($("input variable :" +'#ui-datepicker-div input')); // Add this line to inspect the 'input' variable
-
         const performanceId = cell.closest('tr').data('performance-id');
 
         if (performanceId === 'new') {
