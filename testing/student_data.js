@@ -730,138 +730,84 @@ $(document).ready(function() {
     function attachEditableHandler() {
         $('table').on('dblclick', '.editable', function() {
             const cell = $(this);
-            if (cell.hasClass('editing')) return; // Prevent entering edit mode if already editing
+            if (cell.hasClass('editing')) return;
     
-            // Store the original value in a variable
-            let originalValue;
-    
-            // Check if the cell contains an input element with a non-empty value
-            const inputElement = cell.find('input[type="text"]');
-            if (inputElement.length && inputElement.val().trim() !== '') {
-                originalValue = inputElement.val().trim();
-            } else {
-                originalValue = cell.text().trim();
-            }
-    
-            // Create an input element and set its value to the original value
-            const input = $('<input type="text">');
-            input.val(originalValue);
-    
-            let datePickerActive = false;
-    
+            let originalValue = cell.text().trim();
+            const input = $('<input type="text">').val(originalValue);
+            
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
-                    beforeShow: function() {
-                        datePickerActive = true;
-                    },
                     onClose: function(selectedDate) {
-                        if (isValidDate(new Date(selectedDate))) {
-                            const currentPerformanceId = cell.closest('tr').data('performance-id');
-                            if (isDateDuplicate(selectedDate, currentPerformanceId)) {
-                                input.val(originalValue);
+                        if (selectedDate) {
+                            if (!isDateDuplicate(selectedDate, cell.closest('tr').data('performance-id'))) {
+                                saveCellValue(cell, input);
                             } else {
-                                saveEditedDate(cell, selectedDate);
+                                cell.html(originalValue);
+                                alert("Duplicate date not allowed!");
                             }
                         }
-                        toggleEditMode(cell, inputElement);
-                        datePickerActive = false;
+                        cell.removeClass('editing');
                     }
-                });                
+                }).focus();
+            } else {
+                input.on('blur', function() {
+                    saveCellValue(cell, input);
+                }).on('keydown', function(e) {
+                    if (e.keyCode === 13) {
+                        saveCellValue(cell, input);
+                    }
+                }).focus();
             }
     
-            cell.addClass('editing');
-            cell.empty().append(input);
-            input.focus();
-    
-            // Listen for Enter key press
-            input.on('keydown', function(e) {
-                if (e.keyCode === 13) { // Enter key pressed
-                    e.preventDefault();
-                    saveCellValue(cell, input); // Corrected the variable name here
-                }
-            });
-    
-            // Listen for blur event (clicking outside the input)
-            input.on('blur', function() {
-                saveCellValue(cell, input); // Corrected the variable name here
-            });
+            cell.addClass('editing').empty().append(input);
         });
     }
     
-
     function saveCellValue(cell, inputElement) {
         const newValue = inputElement.val().trim();
         const originalValue = cell.data('original-value') || cell.text().trim();
-    
         if (newValue === originalValue) {
-            console.log("No change detected.");
-            toggleEditMode(cell, inputElement);
-            return; // No change, exit without saving or making an AJAX request
+            cell.html(originalValue);
+            cell.removeClass('editing');
+            return;
         }
     
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
-    
         let postData = {
             performance_id: performanceId,
             field_name: fieldName,
-            student_id: $('#currentStudentId').val(),
-            score_date: $('#currentWeekStartDate').val(),
+            new_value: newValue,
+            student_id: CURRENT_STUDENT_ID,
             metadata_id: metadata_id,
             school_id: $('#schoolIdInput').val()
         };
     
         if (fieldName === 'score_date') {
-            const parts = newValue.split('/');
-            if (parts.length !== 3) {
-                cell.text(originalValue);
-                return;
-            }
             postData.new_value = convertToDatabaseDate(newValue);
-        } else {
-            postData.new_value = newValue;
         }
-    
-        if (performanceId === 'new') {
-            const row = cell.closest('tr');
-            let scores = {};
-            for (let i = 1; i <= 10; i++) {
-                scores['score' + i] = row.find(`td[data-field-name="score${i}"]`).text().trim() || null;
-            }
-            postData.scores = scores;
-        }
-    
-        const targetUrl = (performanceId === 'new') ? 'update_performance.php' : 'update_performance.php';
     
         $.ajax({
             type: 'POST',
-            url: targetUrl,
+            url: 'update_performance.php',
             data: postData,
             success: function(response) {
-                handleSuccessResponse(response, cell, performanceId);
+                if (response && response.saved_date) {
+                    cell.html(convertToDisplayDate(response.saved_date));
+                } else {
+                    cell.html(originalValue);
+                }
+                cell.removeClass('editing');
             },
             error: function() {
-                handleError(cell, originalValue);
+                cell.html(originalValue);
+                cell.removeClass('editing');
+                alert('Error occurred while updating data.');
             }
         });
     }
-    
-    function handleSuccessResponse(response, cell, performanceId) {
-        if (performanceId === 'new') {
-            const newRow = $('tr[data-performance-id="new"]');
-            newRow.attr('data-performance-id', response.performance_id);
-            newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
-        }
-        toggleEditMode(cell, null);
-    }
-    
-    function handleError(cell, originalValue) {
-        alert('Error occurred while updating data.');
-        cell.text(originalValue); // Revert to original value
-        toggleEditMode(cell, null);
-    }
-    
+       
     
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
