@@ -855,11 +855,8 @@ $(document).ready(function() {
             url: targetUrl,
             data: postData,
             success: function(response) {
-                if (performanceId === 'new') {
-                    const newRow = $('tr[data-performance-id="new"]');
-                    newRow.attr('data-performance-id', response.performance_id);
-                    newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
-                }
+                handleSuccessResponse(response, cell);
+
             },
             error: function() {
                 // Handle any error here
