@@ -739,17 +739,14 @@ $(document).ready(function() {
             const inputElement = cell.find('input[type="text"]');
             if (inputElement.length && inputElement.val().trim() !== '') {
                 originalValue = inputElement.val().trim();
-                console.log(originalValue);
             } else {
                 originalValue = cell.text().trim();
-                console.log(originalValue);
             }
     
             // Create an input element and set its value to the original value
             const input = $('<input type="text">');
             input.val(originalValue);
-            console.log(originalValue);
-
+    
             let datePickerActive = false;
     
             if (cell.data('field-name') === 'score_date') {
@@ -781,16 +778,17 @@ $(document).ready(function() {
             input.on('keydown', function(e) {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
-                    saveCellValue(cell, inputElement);
+                    saveCellValue(cell, input); // Corrected the variable name here
                 }
             });
     
             // Listen for blur event (clicking outside the input)
             input.on('blur', function() {
-                saveCellValue(cell, inputElement);
+                saveCellValue(cell, input); // Corrected the variable name here
             });
         });
     }
+    
 
     function saveCellValue(cell, inputElement) {
         const newValue = inputElement.val().trim();
