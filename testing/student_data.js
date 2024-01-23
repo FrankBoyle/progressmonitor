@@ -764,7 +764,7 @@ $(document).ready(function() {
                                 saveEditedDate(cell, selectedDate);
                             }
                         }
-                        toggleEditMode(cell, input);
+                        toggleEditMode(cell, inputElement);
                         datePickerActive = false;
                     }
                 });                
@@ -796,7 +796,7 @@ $(document).ready(function() {
     
         if (newValue === originalValue) {
             console.log("No change detected.");
-            toggleEditMode(cell, input);
+            toggleEditMode(cell, inputElement);
             return; // No change, exit without saving or making an AJAX request
         }
     
@@ -864,7 +864,7 @@ $(document).ready(function() {
     
     
     
-    function toggleEditMode(cell, input) {
+    function toggleEditMode(cell, inputElement) {
         if (cell.hasClass('editing')) {
             cell.removeClass('editing');
             input.hide();
