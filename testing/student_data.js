@@ -763,7 +763,7 @@ $(document).ready(function() {
                                 input.val(originalValue);
                                 console.log(originalValue);
                             } else {
-                                saveEditedDate(cell, selectedDate);
+                                saveEditedDate(cell, convertedDate);
                             }
                         }
                         toggleEditMode(cell, input);
@@ -780,7 +780,7 @@ $(document).ready(function() {
             input.on('keydown', function(e) {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
-                    saveEditedDate(cell, input);
+                    saveEditedDate(cell, convertedDate);
                 }
             });
     
