@@ -1016,7 +1016,7 @@ $(document).ready(function() {
     });    
     
     
-    async function saveRowData(row) {
+    async function saveRowData(row, convertedValue) {
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
@@ -1037,7 +1037,7 @@ $(document).ready(function() {
     
         const postData = {
             student_id: CURRENT_STUDENT_ID,
-            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+            score_date: convertedValue,
             scores: scores,
             metadata_id: metadata_id,
             school_id: school_id,
