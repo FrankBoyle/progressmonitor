@@ -473,7 +473,7 @@ function initializeBarChart() {
     // Pass headerNames to getBarChartOptions function
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData, headerNames));
     barChart.render();
-    console.log('Chart rendered:', $('#barChart').data('apexcharts'));
+    //console.log('Chart rendered:', $('#barChart').data('apexcharts'));
 
     // Add an event listener to update the bar chart when checkboxes change
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
@@ -490,13 +490,13 @@ function updateBarChart(selectedColumns) {
     headerNames = Array.from(document.querySelector('#dataTable thead tr').querySelectorAll('th'))
                          .map(th => th.innerText.trim());
 
-    console.log("Selected Columns (updateBarChart):", selectedColumns);
-    console.log("Header Names (updateBarChart):", headerNames);
+    //console.log("Selected Columns (updateBarChart):", selectedColumns);
+    //console.log("Header Names (updateBarChart):", headerNames);
 
     // Populate series data
     const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
-    console.log("New Series Data (updateBarChart):", newSeriesData);
+    //console.log("New Series Data (updateBarChart):", newSeriesData);
 
     // Update bar chart
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
@@ -607,7 +607,7 @@ $(document).ready(function() {
     function convertToDatabaseDate(dateString) {
         if (!dateString || dateString === "New Entry") return dateString;
         const [month, day, year] = dateString.split('/');
-        console.log(dateString.split('/'));
+        //console.log(dateString.split('/'));
         //console.log(`${year}-${month}-${day}`);
         return `${year}-${month}-${day}`;
     }
