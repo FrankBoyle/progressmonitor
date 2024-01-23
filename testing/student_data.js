@@ -607,10 +607,18 @@ $(document).ready(function() {
     function convertToDatabaseDate(dateString) {
         if (!dateString || dateString === "New Entry") return dateString;
         const [month, day, year] = dateString.split('/');
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }    
+
+    /*
+    function convertToDatabaseDate(dateString) {
+        if (!dateString || dateString === "New Entry") return dateString;
+        const [month, day, year] = dateString.split('/');
         console.log(month + day + year);
         //console.log(`${year}-${month}-${day}`);
         return `${year}-${month}-${day}`;
     }
+    */
 
     function convertToDisplayDate(databaseString) {
         if (!databaseString || databaseString === "New Entry") return databaseString;
