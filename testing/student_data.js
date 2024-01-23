@@ -820,6 +820,7 @@ $(document).ready(function() {
             // Validate the date format here if needed
 
             const convertedValue = convertToDatabaseDate(newValue);
+            console.log("convertedValue is:" + convertedValue);
             //console.log("convertedValue is:" + convertedValue);
             saveEditedDate(cell, convertedValue);
             } else {
@@ -870,10 +871,10 @@ $(document).ready(function() {
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
             cell.removeClass('editing');
-            //input.hide();
+            input.hide();
         } else {
             cell.addClass('editing');
-            //input.show();
+            input.show();
         }
     }
 
