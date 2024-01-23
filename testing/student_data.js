@@ -250,7 +250,7 @@ function initializeChart() {
     // Initialize the chart
     chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
     chart.render();    
-    console.log('Chart rendered:', $('#chart').data('apexcharts'));
+    //console.log('Chart rendered:', $('#chart').data('apexcharts'));
 
     // Update the chart on checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
