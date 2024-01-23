@@ -803,9 +803,11 @@ $(document).ready(function() {
             data: postData,
             success: function(response) {
                 if (response && response.saved_date) {
+                    // Update the cell with the saved date
                     cell.html(convertToDisplayDate(response.saved_date));
                 } else {
-                    cell.html(originalValue);
+                    // Update the cell with the new value
+                    cell.html(fieldName === 'score_date' ? convertToDisplayDate(newValue) : newValue);
                 }
                 cell.removeClass('editing');
             },
@@ -815,7 +817,8 @@ $(document).ready(function() {
                 alert('Error occurred while updating data.');
             }
         });
-    }  
+    }
+    
        
     
     function toggleEditMode(cell, input) {
