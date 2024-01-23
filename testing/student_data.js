@@ -857,14 +857,18 @@ $(document).ready(function() {
             url: targetUrl,
             data: postData,
             success: function(response) {
-                handleSuccessResponse(response, cell);
+                if (performanceId === 'new') {
+                    const newRow = $('tr[data-performance-id="new"]');
+                    newRow.attr('data-performance-id', response.performance_id);
+                    newRow.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.saved_date));
+                }
             },
             error: function() {
-                handleError();
+                // Handle any error here
             }
         });
-            }
-        }
+    }
+}
 
     
     
