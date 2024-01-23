@@ -1024,7 +1024,7 @@ $(document).ready(function() {
     });    
     
     
-    async function saveRowData(row,) {
+    async function saveRowData(row) {
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
         const urlParams = new URLSearchParams(window.location.search);
