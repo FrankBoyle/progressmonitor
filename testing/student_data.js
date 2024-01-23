@@ -648,13 +648,13 @@ $(document).ready(function() {
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         const studentId = CURRENT_STUDENT_ID;
-        const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+        const weekStartDate = $('#currentWeekStartDate').val();
         const school_id = $('#schoolIdInput').val();
 
         const postData = {
             performance_id: performanceId,
             field_name: fieldName,
-            new_value: convertToDatabaseDate(newDate), // Convert to yyyy-mm-dd format before sending
+            new_value: newDate, // Convert to yyyy-mm-dd format before sending
             score_date: weekStartDate,
             student_id: studentId,
             metadata_id: metadata_id,
@@ -817,13 +817,12 @@ $(document).ready(function() {
    
             // Validate the date format here if needed
     
-            const convertedValue = convertToDatabaseDate(newValue);
             saveEditedDate(cell, convertedValue);
         } else {
             const fieldName = cell.data('field-name');
             const targetUrl = (performanceId === 'new') ? 'insert_performance.php' : 'update_performance.php';
             const studentId = $('#currentStudentId').val();
-            const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());
+            const weekStartDate = $('#currentWeekStartDate').val();
             const school_id = $('#schoolIdInput').val();
     
             let postData = {
@@ -1035,7 +1034,7 @@ $(document).ready(function() {
     
         const postData = {
             student_id: CURRENT_STUDENT_ID,
-            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+            score_date: row.find('td[data-field-name="score_date"]').text(),
             scores: scores,
             metadata_id: metadata_id,
             school_id: school_id,
