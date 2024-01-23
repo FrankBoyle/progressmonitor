@@ -800,13 +800,13 @@ $(document).ready(function() {
         // Check if the value has changed
         if (newValue === originalValue) {
             console.log("No change detected.");
-            toggleEditMode(cell, input);
+            toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here
             return; // No change, exit without saving or making an AJAX request
         }
     
-        toggleEditMode(cell, input);
+        toggleEditMode(cell, $('#ui-datepicker-div input')); // Pass the input element here
     
-        console.log(input); // Add this line to inspect the 'input' variable
+        console.log($('#ui-datepicker-div input')); // Add this line to inspect the 'input' variable
     
         const performanceId = cell.closest('tr').data('performance-id');
     
@@ -868,6 +868,7 @@ $(document).ready(function() {
             });
         }
     }
+    
     
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
