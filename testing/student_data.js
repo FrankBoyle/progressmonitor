@@ -1064,7 +1064,7 @@ $(document).ready(function() {
         });
 
         // Initialization code
-        //$('#currentWeekStartDate').val(getCurrentDate());
+        $('#currentWeekStartDate').val(getCurrentDate());
         attachEditableHandler();
 
         $.fn.dataTable.ext.type.detect.unshift(function(value) {
