@@ -806,7 +806,8 @@ $(document).ready(function() {
             return; // No change, exit without saving or making an AJAX request
         }
 
-            // Update the cell with the new value
+        toggleEditMode(cell, input);
+        // Update the cell with the new value
         cell.text(newValue);
 
         const performanceId = cell.closest('tr').data('performance-id');
