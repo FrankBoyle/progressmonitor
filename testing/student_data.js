@@ -824,6 +824,7 @@ $(document).ready(function() {
             // Validate the date format here if needed
 
             const convertedValue = convertToDatabaseDate(newValue);
+            console.log("convertedValue is:" + convertedValue);
             saveEditedDate(cell, convertedValue);
             } else {
                 const fieldName = cell.data('field-name');
