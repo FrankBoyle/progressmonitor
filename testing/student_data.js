@@ -826,13 +826,13 @@ $(document).ready(function() {
                 const fieldName = cell.data('field-name');
                 const targetUrl = (performanceId === 'new') ? 'update_performance.php' : 'update_performance.php';
                 const studentId = $('#currentStudentId').val();
-                const weekStartDate = convertedValue;
+                const weekStartDate = convertToDatabaseDate($('#currentWeekStartDate').val());;
                 const school_id = $('#schoolIdInput').val();
 
                 let postData = {
                     performance_id: performanceId,
                     field_name: fieldName,
-                    new_value: convertedValue,
+                    new_value: newValue,
                     student_id: studentId,
                     score_date: weekStartDate,
                     metadata_id: metadata_id,
