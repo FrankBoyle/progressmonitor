@@ -780,7 +780,7 @@ $(document).ready(function() {
             input.on('keydown', function(e) {
                 if (e.keyCode === 13) { // Enter key pressed
                     e.preventDefault();
-                    saveCellValue(cell, input);
+                    saveEditedDate(cell, selectedDate);
                 }
             });
     
