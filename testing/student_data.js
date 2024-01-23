@@ -870,10 +870,10 @@ $(document).ready(function() {
     function toggleEditMode(cell, input) {
         if (cell.hasClass('editing')) {
             cell.removeClass('editing');
-            input.hide();
+            //input.hide();
         } else {
             cell.addClass('editing');
-            input.show();
+            //input.show();
         }
     }
 
