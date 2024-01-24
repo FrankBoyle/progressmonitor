@@ -703,59 +703,42 @@ $(document).ready(function() {
             let originalValue = cell.text().trim();
             const input = $('<input type="text">').val(originalValue);
             
+            input.on('blur', function() {
+                saveCellValue(cell, input);
+            }).on('keydown', function(e) {
+                if (e.keyCode === 13) { // Enter key
+                    saveCellValue(cell, input);
+                }
+            });
+    
             if (cell.data('field-name') === 'score_date') {
                 input.datepicker({
                     dateFormat: 'mm/dd/yy',
-                    onClose: function(selectedDate) {
-                        if (selectedDate) {
-                            if (!isDateDuplicate(selectedDate, cell.closest('tr').data('performance-id'))) {
-                                saveCellValue(cell, input);
-                            } else {
-                                cell.html(originalValue);
-                                alert("Duplicate date not allowed!");
-                            }
-                        }
+                    onClose: function() {
                         cell.removeClass('editing');
                     }
-                }).focus();
-            } else {
-                input.on('blur', function() {
-                    saveCellValue(cell, input);
-                }).on('keydown', function(e) {
-                    if (e.keyCode === 13) {
-                        saveCellValue(cell, input);
-                    }
-                }).focus();
+                });
             }
     
-            cell.addClass('editing').empty().append(input);
+            cell.addClass('editing').empty().append(input).find('input').focus();
         });
     }
+    
     
     function saveCellValue(cell, inputElement) {
         const newValue = inputElement.val().trim();
         const originalValue = cell.data('original-value') || cell.text().trim();
-        if (newValue === originalValue) {
-            cell.html(originalValue);
-            cell.removeClass('editing');
-            return;
-        }
     
         const performanceId = cell.closest('tr').data('performance-id');
         const fieldName = cell.data('field-name');
         let postData = {
             performance_id: performanceId,
             field_name: fieldName,
+            new_value: fieldName === 'score_date' ? convertToDatabaseDate(newValue) : newValue,
             student_id: CURRENT_STUDENT_ID,
             metadata_id: metadata_id,
             school_id: $('#schoolIdInput').val()
         };
-    
-        if (fieldName === 'score_date') {
-            postData.new_value = convertToDatabaseDate(newValue);
-        } else {
-            postData.new_value = newValue;
-        }
     
         $.ajax({
             type: 'POST',
@@ -776,6 +759,7 @@ $(document).ready(function() {
             }
         });
     }
+    
      
    
     // Function to update goal text
