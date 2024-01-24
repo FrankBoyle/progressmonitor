@@ -658,28 +658,32 @@ function attachEditableHandler() {
 function saveCellValue(cell, inputElement) {
     const newValue = inputElement.val().trim();
     const originalValue = cell.data('original-value') || cell.text().trim();
-
     const performanceId = cell.closest('tr').data('performance-id');
     const fieldName = cell.data('field-name');
-    let postData = {
-        performance_id: performanceId,
-        field_name: fieldName,
-        new_value: fieldName === 'score_date' ? convertToDatabaseDate(newValue) : newValue,
-        student_id: CURRENT_STUDENT_ID,
-        metadata_id: metadata_id,
-        school_id: $('#schoolIdInput').val()
-    };
+    const metadataId = $('#metadataIdInput').val();
 
-    // Check for duplicates when the date is changed
+    // If the field being edited is 'score_date', convert it to database format and check for duplicates.
     if (fieldName === 'score_date') {
         const dbDate = convertToDatabaseDate(newValue);
-        if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadata_id)) {
+        // Check for duplicates in the entire table, not just the current row being edited.
+        if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadataId)) {
             alert("Duplicate date not allowed!");
             inputElement.datepicker('setDate', originalValue); // Reset to the original value
-            return;
+            cell.removeClass('editing').html(originalValue); // Ensure the display is also reset
+            return; // Exit the function to prevent the AJAX call
         }
     }
 
+    let postData = {
+        performance_id: performanceId,
+        field_name: fieldName,
+        new_value: fieldName === 'score_date' ? dbDate : newValue,
+        student_id: CURRENT_STUDENT_ID,
+        metadata_id: metadataId,
+        school_id: $('#schoolIdInput').val()
+    };
+
+    // AJAX call to update the cell value on the server
     $.ajax({
         type: 'POST',
         url: 'update_performance.php',
@@ -699,6 +703,7 @@ function saveCellValue(cell, inputElement) {
         }
     });
 }
+
 
 $('#addDataRow').off('click').click(function() {
     const currentDate = getCurrentDate();
