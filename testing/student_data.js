@@ -593,7 +593,17 @@ function initializeDatepicker() {
         dateFormat: 'mm/dd/yy',
         onSelect: function(dateText, inst) {
             const cell = $(this).closest('td');
-            saveCellValue(cell, $(this));
+            const performanceId = cell.closest('tr').data('performance-id');
+            const studentId = CURRENT_STUDENT_ID;
+            const metadata_id = $('#metadataIdInput').val();
+    
+            if (isDateDuplicate(dateText, performanceId, studentId, metadata_id)) {
+                alert("Duplicate date not allowed!");
+                // Reset the datepicker to the original value if duplicate
+                $(this).datepicker('setDate', convertToDisplayDate(cell.data('original-value')));
+            } else {
+                saveCellValue(cell, $(this));
+            }
         }
     });
 }
@@ -714,23 +724,21 @@ async function ajaxCall(type, url, data) {
     }   
 }
 
-
-function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
+function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, currentMetadataId) {
     console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = $(this).text();
+        const cellDate = $(this).text().trim();
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
-        const studentId = $currentRow.data('student-id'); // Retrieve the student_id
-        const urlParams = new URLSearchParams(window.location.search);
-        const metadata_id = urlParams.get('metadata_id');    
+        const studentId = $currentRow.data('student-id');
+
         // Check if date, student_id, and metadata_id are the same, but not the same performance entry
-        if (cellDate === dateString 
-            && performanceId !== currentPerformanceId 
-            && studentId === currentStudentId 
-            && metadata_id === currentMetadataId) {
+        if (cellDate === dateString &&
+            performanceId !== currentPerformanceId &&
+            studentId === currentStudentId &&
+            currentMetadataId === currentMetadataId) {
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
