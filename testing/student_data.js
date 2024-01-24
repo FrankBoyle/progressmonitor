@@ -824,6 +824,13 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
     console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
 
+    // Validate the input date format (YYYY-MM-DD)
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (!datePattern.test(dateString)) {
+        console.log("Invalid date format:", dateString);
+        return false;
+    }
+
     // Convert the input dateString to a JavaScript Date object
     const inputDate = new Date(dateString);
 
@@ -852,8 +859,6 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
     console.log("isDuplicate:", isDuplicate);
     return isDuplicate;
 }
-
-
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
