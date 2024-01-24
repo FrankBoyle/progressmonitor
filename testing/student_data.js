@@ -822,12 +822,16 @@ async function ajaxCall(type, url, data) {
 
 function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, currentMetadataId) {
     let isDuplicate = false;
-    // Convert the input date to the database date format for comparison
     const inputDbDate = convertToDatabaseDate(dateString);
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
-        // Convert the cell date to the database date format as well
-        const cellDbDate = convertToDatabaseDate($(this).text().trim());
+        const cellText = $(this).text().trim();
+        // Skip cells with empty or invalid dates
+        if (!cellText) {
+            return; // Continue to the next iteration
+        }
+
+        const cellDbDate = convertToDatabaseDate(cellText);
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
@@ -845,6 +849,7 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
     console.log('isDuplicate:', isDuplicate);
     return isDuplicate;
 }
+
 
 
     // Function to update goal text
