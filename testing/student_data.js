@@ -655,8 +655,6 @@ function attachEditableHandler() {
     });
 }
 
-
-    
 function saveCellValue(cell, inputElement) {
     const newValue = inputElement.val().trim();
     const originalValue = cell.data('original-value') || cell.text().trim();
@@ -671,6 +669,16 @@ function saveCellValue(cell, inputElement) {
         metadata_id: metadata_id,
         school_id: $('#schoolIdInput').val()
     };
+
+    // Check for duplicates when the date is changed
+    if (fieldName === 'score_date') {
+        const dbDate = convertToDatabaseDate(newValue);
+        if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadata_id)) {
+            alert("Duplicate date not allowed!");
+            inputElement.datepicker('setDate', originalValue); // Reset to the original value
+            return;
+        }
+    }
 
     $.ajax({
         type: 'POST',
@@ -691,6 +699,66 @@ function saveCellValue(cell, inputElement) {
         }
     });
 }
+
+$('#addDataRow').off('click').click(function() {
+    const currentDate = getCurrentDate();
+    if (isDateDuplicate(currentDate)) {
+        alert("An entry for this date already exists. Please choose a different date.");
+        return;
+    }
+
+    // Create a temporary input to attach datepicker
+    const tempInput = $("<input type='text'>").appendTo('body');
+    
+    // Position the temporary input to the top right of the button
+    const buttonPosition = $(this).offset();
+    const buttonWidth = $(this).outerWidth();
+    const buttonHeight = $(this).outerHeight();
+    const inputWidth = 120; // Adjust as needed, this is the width of the datepicker input
+    const inputHeight = 30; // Adjust as needed
+
+    const tempInputLeft = buttonPosition.left + buttonWidth - inputWidth;
+    const tempInputTop = buttonPosition.top - inputHeight;
+
+    tempInput.css({
+        position: 'absolute',
+        left: tempInputLeft + 'px',
+        top: tempInputTop + 'px',
+        zIndex: 1000 // To ensure it's above other elements
+    });
+
+    tempInput.datepicker({
+        dateFormat: 'mm/dd/yy',
+        onSelect: function(dateText) {
+            if (isDateDuplicate(dateText)) {
+                alert("An entry for this date already exists. Please choose a different date.");
+                return;
+            }
+
+            // Create the new row after date is selected
+            const newRow = $("<tr data-performance-id='new'>");
+            newRow.append(`<td class="editable" data-field-name="score_date">${dateText}</td>`);
+
+            for (let i = 1; i <= 10; i++) {
+                newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
+            }
+
+            newRow.append('<td><button class="saveRow">Save</button></td>');
+            $("table").append(newRow);
+
+            // Cleanup temporary input
+            tempInput.remove();
+
+            // Force a save immediately upon selecting a date
+            saveRowData(newRow);
+        }
+    });
+
+    // Show the datepicker immediately
+    tempInput.datepicker('show');
+});    
+
+
 
 function convertToDatabaseDate(dateString) {
     if (!dateString || dateString === "New Entry") return dateString;
@@ -762,7 +830,6 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
     return isDuplicate;
 }
 
-
     // Function to update goal text
     function updateGoalText(goalId, newText) {
         const postData = {
@@ -787,6 +854,51 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
             }
         });
     }
+    
+    
+    async function saveRowData(row,) {
+        const performanceId = row.data('performance-id');
+        const school_id = $('#schoolIdInput').val();
+        const urlParams = new URLSearchParams(window.location.search);
+        const metadata_id = urlParams.get('metadata_id');
+    
+        // Disable the save button to prevent multiple clicks
+        row.find('.saveRow').prop('disabled', true);
+    
+        if (performanceId !== 'new') {
+            return;
+        }
+    
+        let scores = {};
+        for (let i = 1; i <= 10; i++) {
+            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
+            scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
+        }
+    
+        const postData = {
+            student_id: CURRENT_STUDENT_ID,
+            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+            scores: scores,
+            metadata_id: metadata_id,
+            school_id: school_id,
+        };
+    
+        const response = await ajaxCall('POST', 'insert_performance.php', postData);
+        if (response && response.performance_id) {
+            row.attr('data-performance-id', response.performance_id);
+            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
+            row.find('.saveRow').prop('disabled', false);
+        } else {
+            if (response && response.error) {
+                alert("Error: " + response.error);
+            } else {
+                alert("There was an error saving the data.");
+            }
+        }
+    
+        // Reload the page to show the new row with a delete button
+        location.reload();
+    }    
 
 $(document).ready(function() {
     initializeDatepicker();
@@ -881,109 +993,6 @@ $(document).ready(function() {
         alert('Goal Updated.');
         updateGoalText(goalId, newText);
     });
-
-    $('#addDataRow').off('click').click(function() {
-        const currentDate = getCurrentDate();
-        if (isDateDuplicate(currentDate)) {
-            alert("An entry for this date already exists. Please choose a different date.");
-            return;
-        }
-    
-        // Create a temporary input to attach datepicker
-        const tempInput = $("<input type='text'>").appendTo('body');
-        
-        // Position the temporary input to the top right of the button
-        const buttonPosition = $(this).offset();
-        const buttonWidth = $(this).outerWidth();
-        const buttonHeight = $(this).outerHeight();
-        const inputWidth = 120; // Adjust as needed, this is the width of the datepicker input
-        const inputHeight = 30; // Adjust as needed
-    
-        const tempInputLeft = buttonPosition.left + buttonWidth - inputWidth;
-        const tempInputTop = buttonPosition.top - inputHeight;
-    
-        tempInput.css({
-            position: 'absolute',
-            left: tempInputLeft + 'px',
-            top: tempInputTop + 'px',
-            zIndex: 1000 // To ensure it's above other elements
-        });
-    
-        tempInput.datepicker({
-            dateFormat: 'mm/dd/yy',
-            onSelect: function(dateText) {
-                if (isDateDuplicate(dateText)) {
-                    alert("An entry for this date already exists. Please choose a different date.");
-                    return;
-                }
-    
-                // Create the new row after date is selected
-                const newRow = $("<tr data-performance-id='new'>");
-                newRow.append(`<td class="editable" data-field-name="score_date">${dateText}</td>`);
-    
-                for (let i = 1; i <= 10; i++) {
-                    newRow.append(`<td class="editable" data-field-name="score${i}"></td>`);
-                }
-    
-                newRow.append('<td><button class="saveRow">Save</button></td>');
-                $("table").append(newRow);
-    
-                // Cleanup temporary input
-                tempInput.remove();
-    
-                // Force a save immediately upon selecting a date
-                saveRowData(newRow);
-            }
-        });
-    
-        // Show the datepicker immediately
-        tempInput.datepicker('show');
-    });    
-    
-    
-    async function saveRowData(row,) {
-        const performanceId = row.data('performance-id');
-        const school_id = $('#schoolIdInput').val();
-        const urlParams = new URLSearchParams(window.location.search);
-        const metadata_id = urlParams.get('metadata_id');
-    
-        // Disable the save button to prevent multiple clicks
-        row.find('.saveRow').prop('disabled', true);
-    
-        if (performanceId !== 'new') {
-            return;
-        }
-    
-        let scores = {};
-        for (let i = 1; i <= 10; i++) {
-            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
-            scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
-        }
-    
-        const postData = {
-            student_id: CURRENT_STUDENT_ID,
-            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
-            scores: scores,
-            metadata_id: metadata_id,
-            school_id: school_id,
-        };
-    
-        const response = await ajaxCall('POST', 'insert_performance.php', postData);
-        if (response && response.performance_id) {
-            row.attr('data-performance-id', response.performance_id);
-            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
-            row.find('.saveRow').prop('disabled', false);
-        } else {
-            if (response && response.error) {
-                alert("Error: " + response.error);
-            } else {
-                alert("There was an error saving the data.");
-            }
-        }
-    
-        // Reload the page to show the new row with a delete button
-        location.reload();
-    }    
 
         $(document).on('keypress', '.saveRow', function(e) {
             if (e.which === 13) {
