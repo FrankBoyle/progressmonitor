@@ -842,6 +842,7 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
         }
     });
 
+    console.log("isDuplicate:", isDuplicate);
     return isDuplicate;
 }
 
