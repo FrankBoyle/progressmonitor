@@ -825,15 +825,20 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
     //console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
 
+    // Convert the input dateString to a JavaScript Date object
+    const inputDate = new Date(dateString);
+
     $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = $(this).text();
+        const cellDateText = $(this).text();
+        const cellDate = new Date(cellDateText);
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
-        const studentId = $currentRow.data('student-id'); // Retrieve the student_id
+        const studentId = $currentRow.data('student-id');
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');    
-        // Check if date, student_id, and metadata_id are the same, but not the same performance entry
-        if (cellDate === dateString 
+        
+        // Check if dates, student_id, and metadata_id are the same, but not the same performance entry
+        if (cellDate.getTime() === inputDate.getTime() 
             && performanceId !== currentPerformanceId 
             && studentId === currentStudentId 
             && metadata_id === currentMetadataId) {
@@ -845,6 +850,7 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
     console.log("isDuplicate:", isDuplicate);
     return isDuplicate;
 }
+
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
