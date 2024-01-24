@@ -630,6 +630,7 @@ function attachEditableHandler() {
                     const performanceId = cell.closest('tr').data('performance-id');
                     const studentId = CURRENT_STUDENT_ID;
                     const metadataId = $('#metadataIdInput').val();
+                    console.log("metadataId is:"+ metadataId); // This should output the metadata ID
                     const dbDate = convertToDatabaseDate(dateText);
 
                     if (isDateDuplicate(dbDate, performanceId, studentId, metadataId)) {
