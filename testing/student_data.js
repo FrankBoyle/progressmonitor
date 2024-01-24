@@ -661,26 +661,24 @@ function saveCellValue(cell, inputElement) {
 
     const performanceId = cell.closest('tr').data('performance-id');
     const fieldName = cell.data('field-name');
-
-    // Check for duplicates when the date is being changed
-    if (fieldName === 'score_date') {
-        const dbDate = convertToDatabaseDate(newValue);
-        if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, $('#metadataIdInput').val())) {
-            alert("Duplicate date not allowed!");
-            inputElement.datepicker('setDate', originalValue); // Reset to the original value
-            cell.removeClass('editing').html(originalValue);
-            return;
-        }
-    }
-
     let postData = {
         performance_id: performanceId,
         field_name: fieldName,
-        new_value: fieldName === 'score_date' ? dbDate : newValue,
+        new_value: fieldName === 'score_date' ? convertToDatabaseDate(newValue) : newValue,
         student_id: CURRENT_STUDENT_ID,
-        metadata_id: $('#metadataIdInput').val(),
+        metadata_id: metadata_id,
         school_id: $('#schoolIdInput').val()
     };
+
+    // Check for duplicates when the date is changed
+    if (fieldName === 'score_date') {
+        const dbDate = convertToDatabaseDate(newValue);
+        if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadata_id)) {
+            alert("Duplicate date not allowed!");
+            inputElement.datepicker('setDate', originalValue); // Reset to the original value
+            return;
+        }
+    }
 
     $.ajax({
         type: 'POST',
@@ -701,7 +699,6 @@ function saveCellValue(cell, inputElement) {
         }
     });
 }
-
 
 $('#addDataRow').off('click').click(function() {
     const currentDate = getCurrentDate();
@@ -765,24 +762,14 @@ $('#addDataRow').off('click').click(function() {
 function convertToDatabaseDate(dateString) {
     if (!dateString || dateString === "New Entry") return dateString;
     
-    // Split the date string into components
     const components = dateString.split('/');
-    
-    // Ensure there are enough components to proceed
     if (components.length === 3) {
         const [month, day, year] = components;
-        
-        // Ensure month, day, and year are valid
-        if (month && day && year) {
-            // Use padStart for formatting
-            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-        }
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     }
     
-    // Handle invalid or incomplete date strings
     return dateString;
 }
-  
 
 function getCurrentDate() {
     const currentDate = new Date();
