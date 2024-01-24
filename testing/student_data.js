@@ -822,34 +822,30 @@ async function ajaxCall(type, url, data) {
 
 function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, currentMetadataId) {
     let isDuplicate = false;
-
-    // Convert the viewable date to the database date format for comparison
-    const dbDate = convertToDatabaseDate(dateString);
-    console.log("dbDate is:"+ dbDate); // This should output the database date
+    // Convert the input date to the database date format for comparison
+    const inputDbDate = convertToDatabaseDate(dateString);
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = $(this).text().trim();
-        //console.log("cellDate is:"+ cellDate); // This should output the cell date
+        // Convert the cell date to the database date format as well
+        const cellDbDate = convertToDatabaseDate($(this).text().trim());
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
 
-        console.log(`Checking: ${cellDate} against ${dbDate}`);
-
-        // Check if dates in the same format match and other conditions
-        if (cellDate === dbDate &&
-            performanceId !== currentPerformanceId &&
-            studentId == currentStudentId &&
-            metadataId == currentMetadataId) {
+        console.log(`Checking: ${cellDbDate} against ${inputDbDate}`);
+        if (cellDbDate === inputDbDate &&
+            (currentPerformanceId === undefined || performanceId !== currentPerformanceId) &&
+            studentId === currentStudentId) {
+            console.log('Duplicate found');
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
     });
 
     console.log('isDuplicate:', isDuplicate);
-
     return isDuplicate;
 }
+
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
