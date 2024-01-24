@@ -661,24 +661,26 @@ function saveCellValue(cell, inputElement) {
 
     const performanceId = cell.closest('tr').data('performance-id');
     const fieldName = cell.data('field-name');
-    let postData = {
-        performance_id: performanceId,
-        field_name: fieldName,
-        new_value: fieldName === 'score_date' ? convertToDatabaseDate(newValue) : newValue,
-        student_id: CURRENT_STUDENT_ID,
-        metadata_id: metadata_id,
-        school_id: $('#schoolIdInput').val()
-    };
 
-    // Check for duplicates when the date is changed
+    // Check for duplicates when the date is being changed
     if (fieldName === 'score_date') {
         const dbDate = convertToDatabaseDate(newValue);
-        if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadata_id)) {
+        if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, $('#metadataIdInput').val())) {
             alert("Duplicate date not allowed!");
             inputElement.datepicker('setDate', originalValue); // Reset to the original value
+            cell.removeClass('editing').html(originalValue);
             return;
         }
     }
+
+    let postData = {
+        performance_id: performanceId,
+        field_name: fieldName,
+        new_value: fieldName === 'score_date' ? dbDate : newValue,
+        student_id: CURRENT_STUDENT_ID,
+        metadata_id: $('#metadataIdInput').val(),
+        school_id: $('#schoolIdInput').val()
+    };
 
     $.ajax({
         type: 'POST',
@@ -699,6 +701,7 @@ function saveCellValue(cell, inputElement) {
         }
     });
 }
+
 
 $('#addDataRow').off('click').click(function() {
     const currentDate = getCurrentDate();
