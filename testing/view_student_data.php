@@ -225,7 +225,7 @@ if (isset($_GET['metadata_id'])) {
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Students
+                Starter Pages
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -336,23 +336,19 @@ if (isset($_GET['metadata_id'])) {
                     <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
                   </tr>
                 <?php else: ?>
-                  <?php foreach ($performanceData as $data): ?>
-    <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-        <td class="editable" data-field-name="score_date">
-            <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
-        </td>
-        <?php for ($i = 1; $i <= 10; $i++): ?>
-            <td class="editable" data-field-name="score<?php echo $i; ?>">
-                <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
-            </td>
-        <?php endfor; ?>
-        <td>
-            <!-- Add the input element for the datepicker -->
-            <input type="text" class="hasDatepicker" id="dp_<?php echo $data['performance_id']; ?>">
-        </td>
-    </tr>
-<?php endforeach; ?>
-
+                <?php foreach ($performanceData as $data): ?>
+                  <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                    <td class="editable" data-field-name="score_date">
+                        <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
+                    </td>
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <td class="editable" data-field-name="score<?php echo $i; ?>">
+                            <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
+                        </td>
+                      <?php endfor; ?>
+                    <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                </tr>
+            <?php endforeach; ?>
         <?php endif; ?>
     </tbody>
 </table>
