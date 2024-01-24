@@ -634,7 +634,8 @@ function attachEditableHandler() {
                     const studentId = CURRENT_STUDENT_ID;
                     console.log("metadataId is:"+ metadataId); // This should output the metadata ID
                     const dbDate = convertToDatabaseDate(dateText);
-
+                    console.log('dbDate:', dbDate); 
+                    console.log('dateText:', dateText);
                     if (isDateDuplicate(dbDate, performanceId, studentId, metadataId)) {
                         alert("Duplicate date not allowed!");
                         input.datepicker('setDate', originalValue); // Reset to the original value
