@@ -587,8 +587,8 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 ////////////////////////////////////////////////
 
     // Retrieve the metadata_id from the URL parameter
-    const url_Params = new URLSearchParams(window.location.search);
-    const metadata_id = url_Params.get('metadata_id');
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadata_id = urlParams.get('metadata_id');
     
     
     // Set the retrieved metadata_id as the value of the input field
@@ -883,8 +883,8 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
     async function saveRowData(row,) {
         const performanceId = row.data('performance-id');
         const school_id = $('#schoolIdInput').val();
-        const urlParams = new URLSearchParams(window.location.search);
-        const metadata_id = urlParams.get('metadata_id');
+        //const urlParams = new URLSearchParams(window.location.search);
+        //const metadata_id = urlParams.get('metadata_id');
     
         // Disable the save button to prevent multiple clicks
         row.find('.saveRow').prop('disabled', true);
