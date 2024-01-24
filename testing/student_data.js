@@ -825,6 +825,7 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
 
     // Convert the viewable date to the database date format for comparison
     const dbDate = convertToDatabaseDate(dateString);
+    console.log("dbDate is:"+ dbDate); // This should output the database date
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellDate = $(this).text().trim();
