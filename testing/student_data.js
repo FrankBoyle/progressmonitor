@@ -579,8 +579,90 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 }
 
 ////////////////////////////////////////////////
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+////////////////////////////////////////////////
 
+
+
+function initializeDatepicker() {
+    $(".datepicker").datepicker({
+        dateFormat: 'mm/dd/yy',
+        onSelect: function(dateText, inst) {
+            const cell = $(this).closest('td');
+            saveCellValue(cell, $(this));
+        }
+    });
+}
+
+function attachEditableHandler() {
+    $('table').on('dblclick', '.editable', function() {
+        const cell = $(this);
+        if (cell.hasClass('editing')) return;
+
+        let originalValue = cell.text().trim();
+        const input = $('<input type="text">').val(originalValue);
+
+        input.on('blur', function() {
+            saveCellValue(cell, input);
+        }).on('keydown', function(e) {
+            if (e.keyCode === 13) {
+                saveCellValue(cell, input);
+            }
+        });
+
+        if (cell.data('field-name') === 'score_date') {
+            input.addClass('datepicker');
+            cell.addClass('editing').empty().append(input);
+            initializeDatepicker();
+            input.focus();
+        } else {
+            cell.addClass('editing').empty().append(input).find('input').focus();
+        }
+    });
+}
+
+    
+function saveCellValue(cell, inputElement) {
+    const newValue = inputElement.val().trim();
+    const originalValue = cell.data('original-value') || cell.text().trim();
+
+    const performanceId = cell.closest('tr').data('performance-id');
+    const fieldName = cell.data('field-name');
+    let postData = {
+        performance_id: performanceId,
+        field_name: fieldName,
+        new_value: fieldName === 'score_date' ? convertToDatabaseDate(newValue) : newValue,
+        student_id: CURRENT_STUDENT_ID,
+        metadata_id: metadata_id,
+        school_id: $('#schoolIdInput').val()
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: 'update_performance.php',
+        data: postData,
+        success: function(response) {
+            if (fieldName === 'score_date' && response.saved_date) {
+                cell.html(convertToDisplayDate(response.saved_date));
+            } else {
+                cell.html(newValue);
+            }
+            cell.removeClass('editing');
+        },
+        error: function() {
+            cell.html(originalValue);
+            cell.removeClass('editing');
+            alert('Error occurred while updating data.');
+        }
+    });
+}
 $(document).ready(function() {
+    initializeDatepicker();
+
     // Retrieve the metadata_id from the URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
@@ -604,16 +686,6 @@ $(document).ready(function() {
         const [month, day, year] = dateString.split('/');
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     }    
-
-    /*
-    function convertToDatabaseDate(dateString) {
-        if (!dateString || dateString === "New Entry") return dateString;
-        const [month, day, year] = dateString.split('/');
-        console.log(month + day + year);
-        //console.log(`${year}-${month}-${day}`);
-        return `${year}-${month}-${day}`;
-    }
-    */
 
     function convertToDisplayDate(databaseString) {
         if (!databaseString || databaseString === "New Entry") return databaseString;
@@ -695,70 +767,7 @@ $(document).ready(function() {
         return isDuplicate;
     }
     
-    function attachEditableHandler() {
-        $('table').on('dblclick', '.editable', function() {
-            const cell = $(this);
-            if (cell.hasClass('editing')) return;
-    
-            let originalValue = cell.text().trim();
-            const input = $('<input type="text">').val(originalValue);
-            
-            input.on('blur', function() {
-                saveCellValue(cell, input);
-            }).on('keydown', function(e) {
-                if (e.keyCode === 13) { // Enter key
-                    saveCellValue(cell, input);
-                }
-            });
-    
-            if (cell.data('field-name') === 'score_date') {
-                input.datepicker({
-                    dateFormat: 'mm/dd/yy',
-                    onClose: function() {
-                        cell.removeClass('editing');
-                    }
-                });
-            }
-    
-            cell.addClass('editing').empty().append(input).find('input').focus();
-        });
-    }
-    
-    
-    function saveCellValue(cell, inputElement) {
-        const newValue = inputElement.val().trim();
-        const originalValue = cell.data('original-value') || cell.text().trim();
-    
-        const performanceId = cell.closest('tr').data('performance-id');
-        const fieldName = cell.data('field-name');
-        let postData = {
-            performance_id: performanceId,
-            field_name: fieldName,
-            new_value: fieldName === 'score_date' ? convertToDatabaseDate(newValue) : newValue,
-            student_id: CURRENT_STUDENT_ID,
-            metadata_id: metadata_id,
-            school_id: $('#schoolIdInput').val()
-        };
-    
-        $.ajax({
-            type: 'POST',
-            url: 'update_performance.php',
-            data: postData,
-            success: function(response) {
-                if (fieldName === 'score_date' && response.saved_date) {
-                    cell.html(convertToDisplayDate(response.saved_date));
-                } else {
-                    cell.html(newValue);
-                }
-                cell.removeClass('editing');
-            },
-            error: function() {
-                cell.html(originalValue);
-                cell.removeClass('editing');
-                alert('Error occurred while updating data.');
-            }
-        });
-    }
+
     
      
    
