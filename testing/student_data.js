@@ -834,6 +834,9 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, met
         const studentId = $currentRow.data('student-id');
         const metadataId = $currentRow.data('metadata-id');
 
+        console.log('inputDbDate:', inputDbDate);
+console.log('cellDbDate:', cellDbDate);
+
         console.log(`Checking: ${cellDbDate} against ${inputDbDate}`);
         if (cellDbDate === inputDbDate && studentId === currentStudentId && metadataId === currentMetadataId) {
             // If currentPerformanceId is defined, ensure it's not the same row
