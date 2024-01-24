@@ -585,7 +585,7 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
-
+const metadataId = urlParams.get('metadata_id');
 
 function initializeDatepicker() {
     $(".datepicker").datepicker({
@@ -684,7 +684,7 @@ function saveCellValue(cell, inputElement) {
         school_id: $('#schoolIdInput').val()
     };    
 
-    console.log(":metadataId is:" + metadataId); // This should output the metadata ID
+    console.log("metadataId is:" + metadataId); // This should output the metadata ID
 
     // AJAX call to update the cell value on the server
     $.ajax({
