@@ -836,29 +836,36 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellDateText = $(this).text();
-        const cellDate = new Date(cellDateText);
-        const $currentRow = $(this).closest('tr');
-        const performanceId = $currentRow.data('performance-id');
-        const studentId = $currentRow.data('student-id');
-        const urlParams = new URLSearchParams(window.location.search);
-        const metadata_id = urlParams.get('metadata_id');    
-
-        console.log("Comparing:", cellDate, "to", inputDate);
         
-        // Check if dates, student_id, and metadata_id are the same, but not the same performance entry
-        if (cellDate.getTime() === inputDate.getTime() 
-            && performanceId !== currentPerformanceId 
-            && studentId === currentStudentId 
-            && metadata_id === currentMetadataId) {
-            console.log("Duplicate found!");
-            isDuplicate = true;
-            return false; // Break out of the .each loop
+        // Check if cellDateText is a valid date string before creating cellDate
+        if (Date.parse(cellDateText)) {
+            const cellDate = new Date(cellDateText);
+            const $currentRow = $(this).closest('tr');
+            const performanceId = $currentRow.data('performance-id');
+            const studentId = $currentRow.data('student-id');
+            const urlParams = new URLSearchParams(window.location.search);
+            const metadata_id = urlParams.get('metadata_id');    
+
+            console.log("Comparing:", cellDate, "to", inputDate);
+            
+            // Check if dates, student_id, and metadata_id are the same, but not the same performance entry
+            if (cellDate.getTime() === inputDate.getTime() 
+                && performanceId !== currentPerformanceId 
+                && studentId === currentStudentId 
+                && metadata_id === currentMetadataId) {
+                console.log("Duplicate found!");
+                isDuplicate = true;
+                return false; // Break out of the .each loop
+            }
+        } else {
+            console.log("Invalid date:", cellDateText);
         }
     });
 
     console.log("isDuplicate:", isDuplicate);
     return isDuplicate;
 }
+
 
 
     // Function to update goal text
