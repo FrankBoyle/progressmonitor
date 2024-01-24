@@ -678,11 +678,13 @@ function saveCellValue(cell, inputElement) {
     let postData = {
         performance_id: performanceId,
         field_name: fieldName,
-        new_value: fieldName === 'score_date' ? dbDate : newValue, // dbDate is now defined
+        new_value: fieldName === 'score_date' ? dbDate : newValue,
         student_id: CURRENT_STUDENT_ID,
-        metadata_id: metadataId,
+        metadata_id: metadataId, // Ensure this line correctly retrieves the metadata_id
         school_id: $('#schoolIdInput').val()
-    };
+    };    
+
+    console.log(":metadataId is:" + metadataId); // This should output the metadata ID
 
     // AJAX call to update the cell value on the server
     $.ajax({
