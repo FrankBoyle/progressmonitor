@@ -596,7 +596,6 @@ function initializeDatepicker() {
             const cell = input.closest('td');
             const performanceId = cell.closest('tr').data('performance-id');
             const studentId = CURRENT_STUDENT_ID;
-            const metadataId = $('#metadataIdInput').val();
             console.log("metadataId is:"+ metadataId); // This should output the metadata ID
 
             const dbDate = convertToDatabaseDate(dateText);
@@ -631,7 +630,6 @@ function attachEditableHandler() {
                     // Perform the duplicate check when a date is selected
                     const performanceId = cell.closest('tr').data('performance-id');
                     const studentId = CURRENT_STUDENT_ID;
-                    const metadataId = $('#metadataIdInput').val();
                     console.log("metadataId is:"+ metadataId); // This should output the metadata ID
                     const dbDate = convertToDatabaseDate(dateText);
 
@@ -663,7 +661,6 @@ function saveCellValue(cell, inputElement) {
     const originalValue = cell.data('original-value') || cell.text().trim();
     const performanceId = cell.closest('tr').data('performance-id');
     const fieldName = cell.data('field-name');
-    const metadataId = $('#metadataIdInput').val();
     let dbDate; // Declare dbDate variable
 
     // If the field being edited is 'score_date', convert it to database format and check for duplicates.
@@ -834,7 +831,6 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
-        const metadataId = $('#metadataIdInput').val(); // Assuming metadata_id is constant for the page
 
         // Check if dates in the same format match and other conditions
         if (cellDate === dbDate &&
