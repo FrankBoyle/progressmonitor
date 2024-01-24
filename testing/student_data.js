@@ -611,6 +611,8 @@ function initializeDatepicker() {
 }
 
 function attachEditableHandler() {
+    console.log('attachEditableHandler called'); // Add this line for debugging
+
     $('table').off('dblclick', '.editable').on('dblclick', '.editable', function() {
         const cell = $(this);
         if (cell.hasClass('editing')) return;
@@ -845,9 +847,6 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
 
     return isDuplicate;
 }
-
-
-
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
