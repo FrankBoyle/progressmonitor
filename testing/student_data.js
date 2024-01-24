@@ -670,8 +670,8 @@ function saveCellValue(cell, inputElement) {
     if (fieldName === 'score_date') {
         dbDate = convertToDatabaseDate(newValue); // Define dbDate here
         // Check for duplicates in the entire table, not just the current row being edited.
-        console.log('dbDate:', dbDate);
-        console.log('newValue:', newValue);
+        //console.log('dbDate:', dbDate);
+        //console.log('newValue:', newValue);
         if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadataId)) {
             alert("Duplicate date not allowed!");
             inputElement.datepicker('setDate', originalValue); // Reset to the original value
@@ -689,7 +689,7 @@ function saveCellValue(cell, inputElement) {
         school_id: $('#schoolIdInput').val()
     };    
 
-    console.log("metadataId is:"+ metadataId); // This should output the metadata ID
+    //console.log("metadataId is:"+ metadataId); // This should output the metadata ID
 
     // AJAX call to update the cell value on the server
     $.ajax({
@@ -837,10 +837,10 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, met
         const studentId = $currentRow.data('student-id');
         const metadataId = $currentRow.data('metadata-id');
 
-        console.log('inputDbDate:', inputDbDate);
-console.log('cellDbDate:', cellDbDate);
+        //console.log('inputDbDate:', inputDbDate);
+//console.log('cellDbDate:', cellDbDate);
 
-        console.log(`Checking: ${cellDbDate} against ${inputDbDate}`);
+        //console.log(`Checking: ${cellDbDate} against ${inputDbDate}`);
         if (cellDbDate === inputDbDate && studentId === currentStudentId && metadataId === currentMetadataId) {
             // If currentPerformanceId is defined, ensure it's not the same row
             if (currentPerformanceId === undefined || performanceId !== currentPerformanceId) {
@@ -928,7 +928,7 @@ console.log('cellDbDate:', cellDbDate);
 $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
     metadataId = new URLSearchParams(window.location.search).get('metadata_id');
-    console.log('metadataId (global):', metadataId);
+    //console.log('metadataId (global):', metadataId);
    
     
     // Set the retrieved metadata_id as the value of the input field
@@ -937,7 +937,7 @@ $(document).ready(function() {
     initializeDatepicker();
 
 
-    console.log(metadata_id);
+    //console.log(metadata_id);
     
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
