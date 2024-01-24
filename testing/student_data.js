@@ -828,8 +828,9 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellText = $(this).text().trim();
+        // Skip cells with empty or invalid dates
         if (!cellText) {
-            return; // Skip empty cells
+            return; // Continue to the next iteration
         }
 
         const cellDbDate = convertToDatabaseDate(cellText);
@@ -837,16 +838,21 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
 
+        console.log(`Checking: ${cellDbDate} against ${inputDbDate}`);
         if (cellDbDate === inputDbDate && studentId === currentStudentId) {
+            // If currentPerformanceId is defined, ensure it's not the same row
             if (currentPerformanceId === undefined || performanceId !== currentPerformanceId) {
+                console.log('Duplicate found');
                 isDuplicate = true;
-                return false; // Break out of the loop
+                return false; // Break out of the .each loop
             }
         }
     });
 
+    console.log('isDuplicate:', isDuplicate);
     return isDuplicate;
 }
+
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
