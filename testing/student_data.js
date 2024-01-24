@@ -831,8 +831,8 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
         return false;
     }
 
-    // Convert the input dateString to a JavaScript Date object
-    const inputDate = new Date(dateString);
+    // Convert the input dateString to a JavaScript Date object in Eastern Standard Time (EST)
+    const inputDate = new Date(dateString + 'T00:00:00-05:00'); // Adjust timezone offset for EST
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellDateText = $(this).text();
@@ -859,6 +859,7 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
     console.log("isDuplicate:", isDuplicate);
     return isDuplicate;
 }
+
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
