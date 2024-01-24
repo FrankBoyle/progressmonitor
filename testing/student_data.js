@@ -759,12 +759,27 @@ $('#addDataRow').off('click').click(function() {
 });    
 
 
-
 function convertToDatabaseDate(dateString) {
     if (!dateString || dateString === "New Entry") return dateString;
-    const [month, day, year] = dateString.split('/');
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-}   
+    
+    // Split the date string into components
+    const components = dateString.split('/');
+    
+    // Ensure there are enough components to proceed
+    if (components.length === 3) {
+        const [month, day, year] = components;
+        
+        // Ensure month, day, and year are valid
+        if (month && day && year) {
+            // Use padStart for formatting
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        }
+    }
+    
+    // Handle invalid or incomplete date strings
+    return dateString;
+}
+  
 
 function getCurrentDate() {
     const currentDate = new Date();
