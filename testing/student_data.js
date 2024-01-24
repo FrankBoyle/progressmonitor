@@ -609,27 +609,44 @@ function initializeDatepicker() {
     });
 }
 
-
 function attachEditableHandler() {
     $('table').on('dblclick', '.editable', function() {
         const cell = $(this);
         if (cell.hasClass('editing')) return;
 
-        let originalValue = cell.text().trim();
-        cell.data('original-value', originalValue); // Store the original value for comparison
-
+        let originalValue = cell.text().trim(); // Get the original value to revert back if needed
         const input = $('<input type="text" class="cell-input">').val(originalValue);
+
+        // Store the original value in case we need to revert back to it
+        cell.data('original-value', originalValue);
 
         if (cell.data('field-name') === 'score_date') {
             input.addClass('datepicker');
             cell.addClass('editing').empty().append(input);
-            initializeDatepicker(); // Apply the datepicker with the check for duplicates
+            input.datepicker({
+                dateFormat: 'mm/dd/yy',
+                onSelect: function(dateText, inst) {
+                    // Perform the duplicate check when a date is selected
+                    const performanceId = cell.closest('tr').data('performance-id');
+                    const studentId = CURRENT_STUDENT_ID;
+                    const metadataId = $('#metadataIdInput').val();
+                    const dbDate = convertToDatabaseDate(dateText);
+
+                    if (isDateDuplicate(dbDate, performanceId, studentId, metadataId)) {
+                        alert("Duplicate date not allowed!");
+                        input.datepicker('setDate', originalValue); // Reset to the original value
+                    } else {
+                        cell.data('original-value', dbDate); // Update original value with new date
+                        saveCellValue(cell, input);
+                    }
+                }
+            });
             input.focus();
         } else {
             input.on('blur', function() {
                 saveCellValue(cell, input);
             }).on('keydown', function(e) {
-                if (e.keyCode === 13) {
+                if (e.keyCode === 13) { // Enter key pressed
                     saveCellValue(cell, input);
                 }
             });
