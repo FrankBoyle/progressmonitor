@@ -762,10 +762,10 @@ $(document).ready(function() {
             url: 'update_performance.php',
             data: postData,
             success: function(response) {
-                if (response && response.saved_date) {
+                if (fieldName === 'score_date' && response.saved_date) {
                     cell.html(convertToDisplayDate(response.saved_date));
                 } else {
-                    cell.html(originalValue);
+                    cell.html(newValue);
                 }
                 cell.removeClass('editing');
             },
@@ -775,9 +775,9 @@ $(document).ready(function() {
                 alert('Error occurred while updating data.');
             }
         });
-    }  
+    }
+     
    
-
     // Function to update goal text
     function updateGoalText(goalId, newText) {
         const postData = {
