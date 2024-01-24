@@ -606,20 +606,26 @@ function attachEditableHandler() {
         let originalValue = cell.text().trim();
         const input = $('<input type="text">').val(originalValue);
 
-        input.on('blur', function() {
-            saveCellValue(cell, input);
-        }).on('keydown', function(e) {
-            if (e.keyCode === 13) {
-                saveCellValue(cell, input);
-            }
-        });
-
         if (cell.data('field-name') === 'score_date') {
-            input.addClass('datepicker');
+            input.addClass('datepicker').datepicker({
+                dateFormat: 'mm/dd/yy',
+                onSelect: function(dateText, inst) {
+                    saveCellValue(cell, $(this));
+                },
+                onClose: function() {
+                    cell.removeClass('editing');
+                }
+            });
             cell.addClass('editing').empty().append(input);
-            initializeDatepicker();
             input.focus();
         } else {
+            input.on('blur', function() {
+                saveCellValue(cell, input);
+            }).on('keydown', function(e) {
+                if (e.keyCode === 13) {
+                    saveCellValue(cell, input);
+                }
+            });
             cell.addClass('editing').empty().append(input).find('input').focus();
         }
     });
