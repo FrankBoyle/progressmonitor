@@ -14,6 +14,8 @@ let trendlineSeriesData = []; // Declare both as global variables
 let scores = [];  // Declare scores globally
 // Define a flag to track whether the bar chart has been initialized
 let isBarChartInitialized = false;
+// Define global variable
+let metadataId;
 
 
 const seriesColors = [
@@ -586,9 +588,6 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
-    // Set the retrieved metadata_id as the value of the input field
-    $('#metadataIdInput').val(metadata_id);
-
 function initializeDatepicker() {
     $(".datepicker").datepicker({
         dateFormat: 'mm/dd/yy',
@@ -922,9 +921,12 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
 
 $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const metadata_id = urlParams.get('metadata_id');
+    metadataId = new URLSearchParams(window.location.search).get('metadata_id');
+    console.log('metadataId (global):', metadataId);
+   
     
+    // Set the retrieved metadata_id as the value of the input field
+    $('#metadataIdInput').val(metadata_id);
 
     initializeDatepicker();
 
