@@ -611,7 +611,7 @@ function initializeDatepicker() {
 }
 
 function attachEditableHandler() {
-    $('table').on('dblclick', '.editable', function() {
+    $('table').off('dblclick', '.editable').on('dblclick', '.editable', function() {
         const cell = $(this);
         if (cell.hasClass('editing')) return;
 
@@ -826,9 +826,8 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellText = $(this).text().trim();
-        // Skip cells with empty or invalid dates
         if (!cellText) {
-            return; // Continue to the next iteration
+            return; // Skip empty cells
         }
 
         const cellDbDate = convertToDatabaseDate(cellText);
@@ -836,21 +835,17 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
 
-        console.log(`Checking: ${cellDbDate} against ${inputDbDate}`);
         if (cellDbDate === inputDbDate && studentId === currentStudentId) {
-            // If currentPerformanceId is defined, ensure it's not the same row
             if (currentPerformanceId === undefined || performanceId !== currentPerformanceId) {
-                console.log('Duplicate found');
                 isDuplicate = true;
-                return false; // Break out of the .each loop
+                return false; // Break out of the loop
             }
         }
-        
     });
 
-    console.log('isDuplicate:', isDuplicate);
     return isDuplicate;
 }
+
 
 
 
