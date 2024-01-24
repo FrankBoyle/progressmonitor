@@ -824,7 +824,7 @@ async function ajaxCall(type, url, data) {
 
 function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, currentMetadataId) {
     let isDuplicate = false;
-    const inputDbDate = convertToDatabaseDate(dateString);
+    const inputDbDate = new Date(dateString);
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellText = $(this).text().trim();
@@ -833,14 +833,14 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
             return; // Continue to the next iteration
         }
 
-        const cellDbDate = convertToDatabaseDate(cellText);
+        const cellDbDate = new Date(cellText);
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
         const metadataId = $currentRow.data('metadata-id');
 
-        console.log(`Checking: ${cellDbDate} against ${inputDbDate}`);
-        if (cellDbDate === inputDbDate && studentId === currentStudentId && metadataId === currentMetadataId) {
+        console.log(`Checking: ${cellDbDate.toISOString().slice(0, 10)} against ${inputDbDate.toISOString().slice(0, 10)}`);
+        if (cellDbDate.toISOString().slice(0, 10) === inputDbDate.toISOString().slice(0, 10) && studentId === currentStudentId && metadataId === currentMetadataId) {
             // If currentPerformanceId is defined, ensure it's not the same row
             if (currentPerformanceId === undefined || performanceId !== currentPerformanceId) {
                 console.log('Duplicate found');
