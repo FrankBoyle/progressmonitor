@@ -822,24 +822,30 @@ async function ajaxCall(type, url, data) {
 
 function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, currentMetadataId) {
     let isDuplicate = false;
+
+    // Convert the viewable date to the database date format for comparison
     const dbDate = convertToDatabaseDate(dateString);
+    console.log("dbDate is:"+ dbDate); // This should output the database date
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
-        const cellDate = convertToDatabaseDate($(this).text().trim());
+        const cellDate = $(this).text().trim();
+        console.log("cellDate is:"+ cellDate); // This should output the cell date
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
-        // ... rest of the existing code ...
 
-        console.log(`Checking: ${cellDate} against ${dbDate}`);
-        if (cellDate === dbDate && performanceId !== currentPerformanceId && studentId === currentStudentId) {
-            console.log('Duplicate found');
+        // Check if dates in the same format match and other conditions
+        if (cellDate === dbDate &&
+            performanceId !== currentPerformanceId &&
+            studentId == currentStudentId &&
+            metadataId == currentMetadataId) {
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
     });
 
     console.log('isDuplicate:', isDuplicate);
+
     return isDuplicate;
 }
 
