@@ -671,6 +671,7 @@ function saveCellValue(cell, inputElement) {
         dbDate = convertToDatabaseDate(newValue); // Define dbDate here
         // Check for duplicates in the entire table, not just the current row being edited.
         console.log('dbDate:', dbDate);
+        console.log('newValue:', newValue);
         if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadataId)) {
             alert("Duplicate date not allowed!");
             inputElement.datepicker('setDate', originalValue); // Reset to the original value
