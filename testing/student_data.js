@@ -586,14 +586,6 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
-    // Retrieve the metadata_id from the URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const metadata_id = urlParams.get('metadata_id');
-    
-    
-    // Set the retrieved metadata_id as the value of the input field
-    $('#metadataIdInput').val(metadata_id);
-
 
 function initializeDatepicker() {
     $(".datepicker").datepicker({
@@ -925,10 +917,18 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
     }    
 
 $(document).ready(function() {
+    // Retrieve the metadata_id from the URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadata_id = urlParams.get('metadata_id');
+    
+    
+    // Set the retrieved metadata_id as the value of the input field
+    $('#metadataIdInput').val(metadata_id);
+
     initializeDatepicker();
 
 
-    //console.log(metadata_id);
+    console.log(metadata_id);
     
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
