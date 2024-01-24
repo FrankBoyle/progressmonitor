@@ -829,6 +829,7 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellDate = $(this).text().trim();
+        console.log("cellDate is:"+ cellDate); // This should output the cell date
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
