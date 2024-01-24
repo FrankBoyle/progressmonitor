@@ -661,10 +661,11 @@ function saveCellValue(cell, inputElement) {
     const performanceId = cell.closest('tr').data('performance-id');
     const fieldName = cell.data('field-name');
     const metadataId = $('#metadataIdInput').val();
+    let dbDate; // Declare dbDate variable
 
     // If the field being edited is 'score_date', convert it to database format and check for duplicates.
     if (fieldName === 'score_date') {
-        const dbDate = convertToDatabaseDate(newValue);
+        dbDate = convertToDatabaseDate(newValue); // Define dbDate here
         // Check for duplicates in the entire table, not just the current row being edited.
         if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadataId)) {
             alert("Duplicate date not allowed!");
@@ -677,7 +678,7 @@ function saveCellValue(cell, inputElement) {
     let postData = {
         performance_id: performanceId,
         field_name: fieldName,
-        new_value: fieldName === 'score_date' ? dbDate : newValue,
+        new_value: fieldName === 'score_date' ? dbDate : newValue, // dbDate is now defined
         student_id: CURRENT_STUDENT_ID,
         metadata_id: metadataId,
         school_id: $('#schoolIdInput').val()
