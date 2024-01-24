@@ -660,6 +660,13 @@ function saveCellValue(cell, inputElement) {
         }
     });
 }
+
+function convertToDatabaseDate(dateString) {
+    if (!dateString || dateString === "New Entry") return dateString;
+    const [month, day, year] = dateString.split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}   
+
 $(document).ready(function() {
     initializeDatepicker();
 
@@ -681,11 +688,7 @@ $(document).ready(function() {
     // Constants & Variables
     const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
-    function convertToDatabaseDate(dateString) {
-        if (!dateString || dateString === "New Entry") return dateString;
-        const [month, day, year] = dateString.split('/');
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    }    
+ 
 
     function convertToDisplayDate(databaseString) {
         if (!databaseString || databaseString === "New Entry") return databaseString;
