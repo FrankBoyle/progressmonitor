@@ -667,113 +667,72 @@ function convertToDatabaseDate(dateString) {
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
 }   
 
-$(document).ready(function() {
-    initializeDatepicker();
+function getCurrentDate() {
+    const currentDate = new Date();
+    return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+}
 
-    // Retrieve the metadata_id from the URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const metadata_id = urlParams.get('metadata_id');
-    
-    
-    // Set the retrieved metadata_id as the value of the input field
-    $('#metadataIdInput').val(metadata_id);
+// Constants & Variables
+const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
-    //console.log(metadata_id);
+function convertToDisplayDate(databaseString) {
+    if (!databaseString || databaseString === "New Entry") return databaseString;
+    const [year, month, day] = databaseString.split('-');
+    return `${month}/${day}/${year}`;
+}
 
-    function getCurrentDate() {
-        const currentDate = new Date();
-        return `${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getDate().toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
-    }
-
-    // Constants & Variables
-    const CURRENT_STUDENT_ID = $('#currentStudentId').val();
-
- 
-
-    function convertToDisplayDate(databaseString) {
-        if (!databaseString || databaseString === "New Entry") return databaseString;
-        const [year, month, day] = databaseString.split('-');
-        return `${month}/${day}/${year}`;
-    }
-
-    async function ajaxCall(type, url, data) {
-        try {
-            const response = await $.ajax({
-                type: type,
-                url: url,
-                data: data,
-                dataType: 'json',  // Expecting server to return JSON
-                cache: false,      // Don't cache results (especially important for POST requests)
-            });
-    
-            // Debugging: Log the response
-            //console.log('Response:', response);
-    
-            return response;
-        } catch (error) {
-            console.error('Error during AJAX call:', error);
-    
-            // Debugging: Log the error response (if available)
-            if (error.responseJSON) {
-                console.error('Error response:', error.responseJSON);
-                return error.responseJSON;  // Return the parsed JSON error message
-            } else {
-                //return { error: 'Unknown error occurred.' };  // Provide a generic error message
-            }
-        }   
-    }
-    
-    $(document).on('click', '.deleteRow', function() {
-        const row = $(this);  // Capture the button element for later use
-        const performanceId = $(this).data('performance-id');
-    
-        // Confirm before delete
-        if (!confirm('Are you sure you want to delete this row?')) {
-            return;
-        }
-    
-        // Send a request to delete the data from the server
-        $.post('delete_performance.php', {
-            performance_id: performanceId
-        }, function(response) {
-            // Handle the response, e.g., check if the deletion was successful
-            if (response.success) {
-                // Remove the corresponding row from the table
-                row.closest('tr').remove();
-            } else {
-                alert('Failed to delete data. Please try again.');
-            }
-        }, 'json');
-    });   
-
-    function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
-        console.log("Checking for duplicate of:", dateString);
-        let isDuplicate = false;
-    
-        $('table').find('td[data-field-name="score_date"]').each(function() {
-            const cellDate = $(this).text();
-            const $currentRow = $(this).closest('tr');
-            const performanceId = $currentRow.data('performance-id');
-            const studentId = $currentRow.data('student-id'); // Retrieve the student_id
-            const urlParams = new URLSearchParams(window.location.search);
-            const metadata_id = urlParams.get('metadata_id');    
-            // Check if date, student_id, and metadata_id are the same, but not the same performance entry
-            if (cellDate === dateString 
-                && performanceId !== currentPerformanceId 
-                && studentId === currentStudentId 
-                && metadata_id === currentMetadataId) {
-                isDuplicate = true;
-                return false; // Break out of the .each loop
-            }
+async function ajaxCall(type, url, data) {
+    try {
+        const response = await $.ajax({
+            type: type,
+            url: url,
+            data: data,
+            dataType: 'json',  // Expecting server to return JSON
+            cache: false,      // Don't cache results (especially important for POST requests)
         });
-    
-        return isDuplicate;
-    }
-    
 
-    
-     
-   
+        // Debugging: Log the response
+        //console.log('Response:', response);
+
+        return response;
+    } catch (error) {
+        console.error('Error during AJAX call:', error);
+
+        // Debugging: Log the error response (if available)
+        if (error.responseJSON) {
+            console.error('Error response:', error.responseJSON);
+            return error.responseJSON;  // Return the parsed JSON error message
+        } else {
+            //return { error: 'Unknown error occurred.' };  // Provide a generic error message
+        }
+    }   
+}
+
+
+function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
+    console.log("Checking for duplicate of:", dateString);
+    let isDuplicate = false;
+
+    $('table').find('td[data-field-name="score_date"]').each(function() {
+        const cellDate = $(this).text();
+        const $currentRow = $(this).closest('tr');
+        const performanceId = $currentRow.data('performance-id');
+        const studentId = $currentRow.data('student-id'); // Retrieve the student_id
+        const urlParams = new URLSearchParams(window.location.search);
+        const metadata_id = urlParams.get('metadata_id');    
+        // Check if date, student_id, and metadata_id are the same, but not the same performance entry
+        if (cellDate === dateString 
+            && performanceId !== currentPerformanceId 
+            && studentId === currentStudentId 
+            && metadata_id === currentMetadataId) {
+            isDuplicate = true;
+            return false; // Break out of the .each loop
+        }
+    });
+
+    return isDuplicate;
+}
+
     // Function to update goal text
     function updateGoalText(goalId, newText) {
         const postData = {
@@ -799,6 +758,42 @@ $(document).ready(function() {
         });
     }
 
+$(document).ready(function() {
+    initializeDatepicker();
+
+    // Retrieve the metadata_id from the URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadata_id = urlParams.get('metadata_id');
+    
+    
+    // Set the retrieved metadata_id as the value of the input field
+    $('#metadataIdInput').val(metadata_id);
+
+    //console.log(metadata_id);
+    
+    $(document).on('click', '.deleteRow', function() {
+        const row = $(this);  // Capture the button element for later use
+        const performanceId = $(this).data('performance-id');
+    
+        // Confirm before delete
+        if (!confirm('Are you sure you want to delete this row?')) {
+            return;
+        }
+    
+        // Send a request to delete the data from the server
+        $.post('delete_performance.php', {
+            performance_id: performanceId
+        }, function(response) {
+            // Handle the response, e.g., check if the deletion was successful
+            if (response.success) {
+                // Remove the corresponding row from the table
+                row.closest('tr').remove();
+            } else {
+                alert('Failed to delete data. Please try again.');
+            }
+        }, 'json');
+    });        
+   
     $('#addNewGoalBtn').on('click', function() {
         const newGoalText = $('#newGoalText').val().trim();
         const studentId = CURRENT_STUDENT_ID; // Assuming you've already retrieved this
