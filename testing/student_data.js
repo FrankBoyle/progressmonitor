@@ -604,7 +604,7 @@ function attachEditableHandler() {
         if (cell.hasClass('editing')) return;
 
         let originalValue = cell.text().trim();
-        const input = $('<input type="text">').val(originalValue);
+        const input = $('<input type="text" class="cell-input">').val(originalValue);
 
         if (cell.data('field-name') === 'score_date') {
             input.addClass('datepicker').datepicker({

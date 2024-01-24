@@ -129,6 +129,29 @@ if (isset($_GET['metadata_id'])) {
     background-color: #ffff99; /* Yellow background for highlighting */
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove space between borders */
+}
+
+td {
+    border: 1px solid #ccc;
+    padding: 8px; /* or any other value that fits your design */
+    min-width: 50px; /* or any other value that prevents the cell from being too small */
+    height: 25px; /* or any other value to maintain a consistent height */
+    box-sizing: border-box;
+}
+
+td .cell-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 8px;
+    margin: 0;
+    box-sizing: border-box;
+    background: transparent; /* To match the cell's background */
+}
+
 </style>
 
 </head>
