@@ -587,8 +587,8 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 ////////////////////////////////////////////////
 
     // Retrieve the metadata_id from the URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const metadata_id = urlParams.get('metadata_id');
+    const url_Params = new URLSearchParams(window.location.search);
+    const metadata_id = url_Params.get('metadata_id');
     
     
     // Set the retrieved metadata_id as the value of the input field
