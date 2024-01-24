@@ -810,6 +810,9 @@ async function ajaxCall(type, url, data) {
 function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, currentMetadataId) {
     let isDuplicate = false;
 
+    // Convert the viewable date to the database date format for comparison
+    const dbDate = convertToDatabaseDate(dateString);
+
     $('table').find('td[data-field-name="score_date"]').each(function() {
         const cellDate = $(this).text().trim();
         const $currentRow = $(this).closest('tr');
@@ -817,8 +820,8 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
         const studentId = $currentRow.data('student-id');
         const metadataId = $('#metadataIdInput').val(); // Assuming metadata_id is constant for the page
 
-        // Check if date, student_id, and metadata_id are the same, and not the same row (performance entry)
-        if (cellDate === dateString &&
+        // Check if dates in the same format match and other conditions
+        if (cellDate === dbDate &&
             performanceId !== currentPerformanceId &&
             studentId == currentStudentId &&
             metadataId == currentMetadataId) {
