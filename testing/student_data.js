@@ -586,6 +586,8 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 ////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
+    // Set the retrieved metadata_id as the value of the input field
+    $('#metadataIdInput').val(metadata_id);
 
 function initializeDatepicker() {
     $(".datepicker").datepicker({
@@ -596,6 +598,7 @@ function initializeDatepicker() {
             const performanceId = cell.closest('tr').data('performance-id');
             const studentId = CURRENT_STUDENT_ID;
             const metadataId = $('#metadataIdInput').val();
+            console.log("metadataId is:"+ metadataId); // This should output the metadata ID
 
             const dbDate = convertToDatabaseDate(dateText);
             if (isDateDuplicate(dbDate, performanceId, studentId, metadataId)) {
@@ -922,9 +925,6 @@ $(document).ready(function() {
     const urlParams = new URLSearchParams(window.location.search);
     const metadata_id = urlParams.get('metadata_id');
     
-    
-    // Set the retrieved metadata_id as the value of the input field
-    $('#metadataIdInput').val(metadata_id);
 
     initializeDatepicker();
 
