@@ -600,8 +600,9 @@ function initializeDatepicker() {
             if (isDateDuplicate(dateText, performanceId, studentId, metadata_id)) {
                 alert("Duplicate date not allowed!");
                 // Reset the datepicker to the original value if duplicate
-                $(this).datepicker('setDate', convertToDisplayDate(cell.data('original-value')));
+                $(this).datepicker('setDate', cell.data('original-value'));
             } else {
+                // Only proceed with saving if the date is not a duplicate
                 saveCellValue(cell, $(this));
             }
         }
@@ -620,13 +621,25 @@ function attachEditableHandler() {
             input.addClass('datepicker').datepicker({
                 dateFormat: 'mm/dd/yy',
                 onSelect: function(dateText, inst) {
-                    saveCellValue(cell, $(this));
+                    const performanceId = cell.closest('tr').data('performance-id');
+                    const studentId = CURRENT_STUDENT_ID;
+                    const metadata_id = $('#metadataIdInput').val();
+                    
+                    if (isDateDuplicate(dateText, performanceId, studentId, metadata_id)) {
+                        alert("Duplicate date not allowed!");
+                        // Reset the datepicker to the original value if duplicate
+                        $(this).datepicker('setDate', originalValue);
+                    } else {
+                        // Only proceed with saving if the date is not a duplicate
+                        saveCellValue(cell, $(this));
+                    }
                 },
                 onClose: function() {
                     cell.removeClass('editing');
                 }
             });
             cell.addClass('editing').empty().append(input);
+            input.data('original-value', originalValue); // Store the original value for reset
             input.focus();
         } else {
             input.on('blur', function() {
@@ -640,6 +653,7 @@ function attachEditableHandler() {
         }
     });
 }
+
 
     
 function saveCellValue(cell, inputElement) {
