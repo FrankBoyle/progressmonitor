@@ -587,7 +587,6 @@ function getBarChartOptions(dates, seriesData, headerNames) {
 ////////////////////////////////////////////////
 
 
-
 function initializeDatepicker() {
     $(".datepicker").datepicker({
         dateFormat: 'mm/dd/yy',
@@ -595,19 +594,23 @@ function initializeDatepicker() {
             const cell = $(this).closest('td');
             const performanceId = cell.closest('tr').data('performance-id');
             const studentId = CURRENT_STUDENT_ID;
-            const metadata_id = $('#metadataIdInput').val();
+            const metadataId = $('#metadataIdInput').val();
     
-            if (isDateDuplicate(dateText, performanceId, studentId, metadata_id)) {
+            // Assuming convertToDatabaseDate returns a date in 'yyyy-mm-dd' format
+            const dbDate = convertToDatabaseDate(dateText);
+
+            if (isDateDuplicate(dbDate, performanceId, studentId, metadataId)) {
                 alert("Duplicate date not allowed!");
-                // Reset the datepicker to the original value if duplicate
+                // Optionally, reset the datepicker to the original value if a duplicate is found
                 $(this).datepicker('setDate', cell.data('original-value'));
             } else {
-                // Only proceed with saving if the date is not a duplicate
+                // If not a duplicate, proceed to save
                 saveCellValue(cell, $(this));
             }
         }
     });
 }
+
 
 function attachEditableHandler() {
     $('table').on('dblclick', '.editable', function() {
@@ -739,7 +742,6 @@ async function ajaxCall(type, url, data) {
 }
 
 function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, currentMetadataId) {
-    console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
 
     $('table').find('td[data-field-name="score_date"]').each(function() {
@@ -747,12 +749,13 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
         const $currentRow = $(this).closest('tr');
         const performanceId = $currentRow.data('performance-id');
         const studentId = $currentRow.data('student-id');
+        const metadataId = $('#metadataIdInput').val(); // Assuming metadata_id is constant for the page
 
-        // Check if date, student_id, and metadata_id are the same, but not the same performance entry
+        // Check if date, student_id, and metadata_id are the same, and not the same row (performance entry)
         if (cellDate === dateString &&
             performanceId !== currentPerformanceId &&
-            studentId === currentStudentId &&
-            currentMetadataId === currentMetadataId) {
+            studentId == currentStudentId &&
+            metadataId == currentMetadataId) {
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
@@ -760,6 +763,7 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
 
     return isDuplicate;
 }
+
 
     // Function to update goal text
     function updateGoalText(goalId, newText) {
