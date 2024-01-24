@@ -927,13 +927,6 @@ function isDateDuplicate(dateString, currentPerformanceId, currentStudentId, cur
 $(document).ready(function() {
     initializeDatepicker();
 
-    // Retrieve the metadata_id from the URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const metadata_id = urlParams.get('metadata_id');
-    
-    
-    // Set the retrieved metadata_id as the value of the input field
-    $('#metadataIdInput').val(metadata_id);
 
     //console.log(metadata_id);
     
