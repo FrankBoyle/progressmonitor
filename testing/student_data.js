@@ -820,9 +820,8 @@ async function ajaxCall(type, url, data) {
     }   
 }
 
-
 function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
-    //console.log("Checking for duplicate of:", dateString);
+    console.log("Checking for duplicate of:", dateString);
     let isDuplicate = false;
 
     // Convert the input dateString to a JavaScript Date object
@@ -836,12 +835,15 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
         const studentId = $currentRow.data('student-id');
         const urlParams = new URLSearchParams(window.location.search);
         const metadata_id = urlParams.get('metadata_id');    
+
+        console.log("Comparing:", cellDate, "to", inputDate);
         
         // Check if dates, student_id, and metadata_id are the same, but not the same performance entry
         if (cellDate.getTime() === inputDate.getTime() 
             && performanceId !== currentPerformanceId 
             && studentId === currentStudentId 
             && metadata_id === currentMetadataId) {
+            console.log("Duplicate found!");
             isDuplicate = true;
             return false; // Break out of the .each loop
         }
@@ -850,6 +852,7 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
     console.log("isDuplicate:", isDuplicate);
     return isDuplicate;
 }
+
 
 
     // Function to update goal text
