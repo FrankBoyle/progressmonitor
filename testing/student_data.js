@@ -847,6 +847,9 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
             const metadata_id = urlParams.get('metadata_id');    
 
             console.log("Comparing:", cellDate, "to", inputDate);
+            console.log("performanceId:", performanceId);
+            console.log("studentId:", studentId);
+            console.log("metadata_id:", metadata_id);
             
             // Check if dates, student_id, and metadata_id are the same, but not the same performance entry
             if (cellDate.getTime() === inputDate.getTime() 
@@ -865,6 +868,7 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
     console.log("isDuplicate:", isDuplicate);
     return isDuplicate;
 }
+
 
 
 
