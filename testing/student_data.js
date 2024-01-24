@@ -591,21 +591,19 @@ function initializeDatepicker() {
     $(".datepicker").datepicker({
         dateFormat: 'mm/dd/yy',
         onSelect: function(dateText, inst) {
-            const cell = $(this).closest('td');
+            const input = $(this);
+            const cell = input.closest('td');
             const performanceId = cell.closest('tr').data('performance-id');
             const studentId = CURRENT_STUDENT_ID;
             const metadataId = $('#metadataIdInput').val();
-    
-            // Assuming convertToDatabaseDate returns a date in 'yyyy-mm-dd' format
-            const dbDate = convertToDatabaseDate(dateText);
 
+            const dbDate = convertToDatabaseDate(dateText);
             if (isDateDuplicate(dbDate, performanceId, studentId, metadataId)) {
                 alert("Duplicate date not allowed!");
-                // Optionally, reset the datepicker to the original value if a duplicate is found
-                $(this).datepicker('setDate', cell.data('original-value'));
+                input.datepicker('setDate', cell.data('original-value')); // Reset to the original value
             } else {
-                // If not a duplicate, proceed to save
-                saveCellValue(cell, $(this));
+                saveCellValue(cell, input);
+                cell.data('original-value', dbDate); // Update the original value to the new date
             }
         }
     });
@@ -618,31 +616,14 @@ function attachEditableHandler() {
         if (cell.hasClass('editing')) return;
 
         let originalValue = cell.text().trim();
+        cell.data('original-value', originalValue); // Store the original value for comparison
+
         const input = $('<input type="text" class="cell-input">').val(originalValue);
 
         if (cell.data('field-name') === 'score_date') {
-            input.addClass('datepicker').datepicker({
-                dateFormat: 'mm/dd/yy',
-                onSelect: function(dateText, inst) {
-                    const performanceId = cell.closest('tr').data('performance-id');
-                    const studentId = CURRENT_STUDENT_ID;
-                    const metadata_id = $('#metadataIdInput').val();
-                    
-                    if (isDateDuplicate(dateText, performanceId, studentId, metadata_id)) {
-                        alert("Duplicate date not allowed!");
-                        // Reset the datepicker to the original value if duplicate
-                        $(this).datepicker('setDate', originalValue);
-                    } else {
-                        // Only proceed with saving if the date is not a duplicate
-                        saveCellValue(cell, $(this));
-                    }
-                },
-                onClose: function() {
-                    cell.removeClass('editing');
-                }
-            });
+            input.addClass('datepicker');
             cell.addClass('editing').empty().append(input);
-            input.data('original-value', originalValue); // Store the original value for reset
+            initializeDatepicker(); // Apply the datepicker with the check for duplicates
             input.focus();
         } else {
             input.on('blur', function() {
