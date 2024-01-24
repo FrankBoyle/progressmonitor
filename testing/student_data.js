@@ -842,7 +842,7 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
             const cellDate = new Date(cellDateText);
             const $currentRow = $(this).closest('tr');
             const performanceId = $currentRow.data('performance-id');
-            const studentId = $currentRow.data('student-id');
+            const studentId = CURRENT_STUDENT_ID;
             const urlParams = new URLSearchParams(window.location.search);
             const metadata_id = urlParams.get('metadata_id');    
 
