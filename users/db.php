@@ -2,7 +2,7 @@
 
     define('USER', 'AndersonSchool');
     define('PASSWORD', 'SpecialEd69$');
-    define('HOST', 'localhost');
+    define('HOST', '127.0.0.1');
     define('DATABASE', 'bFactor-test');
 
     try {
