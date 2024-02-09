@@ -327,30 +327,6 @@ td .cell-input {
 <input type="hidden" id="studentName" name="studentName" value="<?php echo htmlspecialchars($studentName); ?>">
 </div>   
 
-<h2>Student Information</h2>
-    <form id="studentForm">
-        <label for="studentName">Name:</label><br>
-        <input type="text" id="studentName" name="studentName"><br>
-        <label for="studentAge">Age:</label><br>
-        <input type="number" id="studentAge" name="studentAge"><br>
-        <label for="studentGrade">Grade:</label><br>
-        <input type="number" id="studentGrade" name="studentGrade"><br>
-        <input type="submit" value="Submit">
-    </form>
-
-    <h2>Break Timer</h2>
-    <button onclick="clockIn()">Clock In</button>
-    <button onclick="clockOut()">Clock Out</button>
-    <p id="timerStatus"></p>
-
-    <h2>Rubric Rating</h2>
-    <label for="rubricScore">Score (1-5):</label><br>
-    <input type="number" id="rubricScore" min="1" max="5" name="rubricScore">
-    <button onclick="submitRubric()">Submit Score</button>
-
-    <h2>Activity Counter</h2>
-    <button onclick="incrementCounter()">Increment</button>
-    <p id="counter">0</p>
 
 
 <section class="content">
@@ -709,41 +685,6 @@ function printContent(content) {
     image.src = content.match(/src="([^"]+)"/)[1];
 }
     });
-
-
-    let inTime;
-let outTime;
-let counter = 0;
-
-function clockIn() {
-    inTime = new Date();
-    document.getElementById("timerStatus").innerText = "Clocked in at " + inTime.toLocaleTimeString();
-}
-
-function clockOut() {
-    outTime = new Date();
-    const duration = (outTime - inTime) / 60000; // Convert to minutes
-    document.getElementById("timerStatus").innerText = "Clocked out at " + outTime.toLocaleTimeString() + ". Total break duration: " + duration.toFixed(2) + " minutes.";
-}
-
-function submitRubric() {
-    const score = document.getElementById("rubricScore").value;
-    alert("Rubric score submitted: " + score);
-}
-
-function incrementCounter() {
-    counter++;
-    document.getElementById("counter").innerText = counter;
-}
-
-// Example for handling form submission
-document.getElementById('studentForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent actual form submission
-    const name = document.getElementById('studentName').value;
-    const age = document.getElementById('studentAge').value;
-    const grade = document.getElementById('studentGrade').value;
-    alert('Student Info Submitted:\nName: ' + name + '\nAge: ' + age + '\nGrade: ' + grade);
-});
 
   </script>
 
