@@ -172,7 +172,6 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -185,36 +184,20 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
-              <li class="breadcrumb-item active">Student List</li>
+              <li class="breadcrumb-item active"></li>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
 
-    <section class="content">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card card-outline card-info">
-        <div class="card-header">
-          <!-- Form to create a new group -->
-          <form method="post">
-            <input type="text" name="group_name" placeholder="Group Name">
-            <button type="submit" name="create_group">Create Group</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- Section 1: Student Groups Filter -->
+<!-- Section 1: Links to content filtered by choice -->
 <section class="content">
   <div class="row">
     <div class="col-md-12">
       <div class="card card-outline card-info">
         <div class="card-header">
+        <h3 class="card-title">Choices</h3><br>
           <!--<h3 class="card-title">Student Groups Filter</h3><br>-->
   <!-- Display filtered student list -->
   </div>
