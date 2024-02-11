@@ -172,24 +172,46 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  
+  <div class="content-wrapper" style="min-height: 1518.06px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>View by:</h1>
+            <h1>Icons</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
-              <li class="breadcrumb-item active"></li>
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Icons</li>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card card-primary card-outline">
+          <div class="card-header">
+            <h3 class="card-title">Icons</h3>
+          </div> <!-- /.card-body -->
+          <div class="card-body">
+            <p>You can use any font library you like with AdminLTE 3.</p>
+            <strong>Recommendations</strong>
+            <div>
+              <a href="https://fontawesome.com/">Font Awesome</a><br>
+              <a href="https://useiconic.com/open/">Iconic Icons</a><br>
+              <a href="https://ionicons.com/">Ion Icons</a><br>
+            </div>
+          </div><!-- /.card-body -->
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
 
 <!-- Section 1: Links to content filtered by choice -->
 <section class="content">
@@ -220,7 +242,7 @@
   </div>
 </section>
  -->
- 
+
     <div class="content">
       <div class="container-fluid">
               <div class="card-body">
@@ -295,98 +317,6 @@
 <!-- AdminLTE App -->
 <script src="./dist/js/adminlte.min.js"></script>
   <script>
-    document.querySelectorAll('.set-default-group-star').forEach(star => {
-        star.addEventListener('click', function() {
-            var groupId = this.getAttribute('data-group-id');
-
-            // Send AJAX request to update the default group
-            fetch('./users/set_default_group.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'group_id=' + groupId
-            })
-            .then(response => response.text())
-            .then(data => {
-                // Update the stars on the page
-                document.querySelectorAll('.set-default-group-star').forEach(otherStar => {
-                    if (otherStar.getAttribute('data-group-id') === groupId) {
-                        otherStar.innerHTML = '&#9733;'; // Filled star for the selected group
-                    } else {
-                        otherStar.innerHTML = '&#9734;'; // Empty star for other groups
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    });
-
-function confirmArchive(action) {
-    var message = action === 'Archive' ? 'Are you sure you want to archive this student?' : 'Are you sure you want to unarchive this student?';
-    return confirm(message);
-}
-    $(document).ready(function() {
-        $('.select2').select2();
-    });
-
-    
-    $(".delete-group").click(function() {
-        var groupId = $(this).data("group-id");
-        console.log(groupId); // Debugging line
-        var confirmation = confirm("Are you sure you want to delete this group?");
-        if (confirmation) {
-            // Send an AJAX request to delete the group
-            $.ajax({
-                method: "POST",
-                url: "./users/delete_group.php", // Replace with the actual path to delete_group.php
-                data: { group_id: groupId },
-                success: function(response) {
-                    // Handle the response (e.g., refresh the group list)
-                    location.reload();
-                },
-                error: function() {
-                    alert("Error deleting group.");
-                }
-            });
-        }
-    });    
-
-    $(document).ready(function() {
-    $(document).off('click', '.remove-student').on('click', '.remove-student', function() {
-        var studentId = $(this).data("student-id");
-        var groupId = $("#selected_group_id").val(); // or another logic to get the correct groupId
-        var $thisButton = $(this); // Store the reference to the button
-
-        if (groupId === 'all_students') {
-            alert("Please select a group first.");
-            return;
-        }
-
-        if (confirm("Are you sure you want to remove this student from the group?")) {
-            $.ajax({
-                method: "POST",
-                url: "./users/remove_student_from_group.php",
-                data: { student_id: studentId, group_id: groupId },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        $thisButton.closest('div').remove(); // Remove the closest div that wraps student info
-                    } else {
-                        alert(data.message);
-                    }
-                },
-                error: function() {
-                    alert("Error removing student from the group.");
-                }
-            });
-        }
-    });
-});
-
-
-</script>
+  </script>
 </body>
 </html>
