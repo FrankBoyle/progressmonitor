@@ -1,21 +1,7 @@
 <?php
-include './users/fetch_students.php';
-
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
-
-usort($students, function($a, $b) {
-  $aLastName = extractLastName($a['name']);
-  $bLastName = extractLastName($b['name']);
-  return strcmp($aLastName, $bLastName);
-});
-
-function extractLastName($fullName) {
-  $parts = explode(' ', $fullName);
-  return end($parts); // Assumes the last word is the last name
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -153,7 +139,7 @@ function extractLastName($fullName) {
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Students
+                Home
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -161,7 +147,7 @@ function extractLastName($fullName) {
             <li class="nav-item">
                 <a href="./home.php" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Students</p>
+                  <p>Home</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -192,14 +178,15 @@ function extractLastName($fullName) {
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Students</h1>
-            <?php if ($isAdmin): ?>
-            <!-- Toggle Button -->
-            <form method="post">
-              <button type="submit" name="toggle_view"><?= $showArchived ? 'Show Active Students' : 'Show Archived Students' ?></button>
-              <input type="hidden" name="show_archived" value="<?= $showArchived ? '0' : '1' ?>">
-            </form>
-          <?php endif; ?>
+            <h1>View by:</h1>
+            <select name="view_by" id="view_by" onchange="document.getElementById('view_by_form').submit();">
+                <option value="all_students" <?= (!isset($_POST['view_by']) && $defaultGroupId === null) ? "selected" : "" ?>>All Students</option>
+                <?php foreach ($groups as $group): ?>
+                    <option value="<?= htmlspecialchars($group['group_id']) ?>" 
+                        <?= (isset($_POST['view_by']) && $_POST['view_by'] == $group['group_id']) || (!isset($_POST['view_by']) && $group['group_id'] == $defaultGroupId) ? "selected" : "" ?>>
+                        <?= htmlspecialchars($group['group_name']) ?>
+                    </option>
+                <?php endforeach; ?>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
