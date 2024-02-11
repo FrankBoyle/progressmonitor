@@ -131,7 +131,6 @@ function fetchAllRelevantGroups($teacherId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$teacherId = $_SESSION['teacher_id'];
 $groups = fetchAllRelevantGroups($teacherId);
 $defaultGroupStmt = $connection->prepare("SELECT default_group_id FROM Teachers WHERE teacher_id = ?");
 $defaultGroupStmt->execute([$teacherId]);
@@ -177,8 +176,6 @@ if (isset($_POST['toggle_view'])) {
 $showArchived = $_SESSION['show_archived'] ?? false;
 
 $students = fetchStudentsByTeacher($teacherId, $showArchived);
-
-$teacherId = $_SESSION['teacher_id'];
 
 if (isset($_POST['create_group'])) {
     $groupName = $_POST['group_name'];
