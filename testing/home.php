@@ -181,14 +181,6 @@
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>View by:</h1>
-            <select name="view_by" id="view_by" onchange="document.getElementById('view_by_form').submit();">
-                <option value="all_students" <?= (!isset($_POST['view_by']) && $defaultGroupId === null) ? "selected" : "" ?>>All Students</option>
-                <?php foreach ($groups as $group): ?>
-                    <option value="<?= htmlspecialchars($group['group_id']) ?>" 
-                        <?= (isset($_POST['view_by']) && $_POST['view_by'] == $group['group_id']) || (!isset($_POST['view_by']) && $group['group_id'] == $defaultGroupId) ? "selected" : "" ?>>
-                        <?= htmlspecialchars($group['group_name']) ?>
-                    </option>
-                <?php endforeach; ?>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
