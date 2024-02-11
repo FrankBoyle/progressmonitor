@@ -206,7 +206,7 @@
   </div>
 </section>
 
-<!-- Section 2: Student List for Admin -->
+<!-- Section 2: Student List for Admin
 <section class="content">
   <div class="row">
     <div class="col-md-12">
@@ -219,7 +219,8 @@
     </div>
   </div>
 </section>
-
+ -->
+ 
     <div class="content">
       <div class="container-fluid">
               <div class="card-body">
