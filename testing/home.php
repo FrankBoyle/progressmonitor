@@ -3,7 +3,7 @@ include('auth_session.php');
 include('db.php');
 
 $schoolId = $_SESSION['school_id'];
-$teacherId = $_SESSION['teacher_id'];
+$teacher_id = $_SESSION['teacher_id'];
 
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
