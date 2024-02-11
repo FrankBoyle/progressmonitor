@@ -210,52 +210,6 @@
             <input type="text" name="group_name" placeholder="Group Name">
             <button type="submit" name="create_group">Create Group</button>
           </form>
-
-<?php if (!empty($message)): ?>
-    <div class="alert">
-        <?= htmlspecialchars($message) ?>
-    </div>
-<?php endif; ?>
-
-
-<!-- List groups with edit, delete, and share options -->
-<table>
-  <?php foreach ($groups as $group): ?>
-    <tr>
-    <td>
-            <!-- Clickable star with class and data attribute -->
-            <a href="javascript:void(0);" class="set-default-group-star" data-group-id="<?= $group['group_id'] ?>">
-                <?= $group['is_default'] ? '&#9733;' : '&#9734;' ?> <!-- Star icon -->
-            </a>
-        </td>
-      <td>
-        <form method="post">
-          <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-          <input type="text" name="edited_group_name" value="<?= htmlspecialchars($group['group_name']) ?>">
-          <button type="submit" name="edit_group">Update</button>
-        </form>
-      </td>
-      <td>
-        <button type="button" class="delete-group" data-group-id="<?= htmlspecialchars($group['group_id']) ?>">Delete Group</button>
-      </td>
-      <td>
-<!-- Share Group Form for each group -->
-<form method="post">
-    <input type="hidden" name="group_id" value="<?= htmlspecialchars($group['group_id']) ?>">
-    <select name="shared_teacher_id">
-        <option value="">Select staff here</option>
-        <?php foreach ($teachers as $teacher): ?>
-            <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
-        <?php endforeach; ?>
-    </select>
-    <button type="submit" name="share_group">Share</button>
-</form>
-
-      </td>
-    </tr>
-  <?php endforeach; ?>
-</table>
-
         </div>
       </div>
     </div>
@@ -270,82 +224,7 @@
       <div class="card card-outline card-info">
         <div class="card-header">
           <!--<h3 class="card-title">Student Groups Filter</h3><br>-->
-
-<!-- Form to Assign Students to Group -->
-<form method="post" id="assign_multiple_students_form" style="margin-bottom: 20px;">
-  <div style="display: flex; align-items: center;">
-    <div style="margin-right: 10px;">
-    <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
-    <option></option> <!-- Empty option for placeholder -->
-    <?php foreach ($allStudents as $student): ?>
-        <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
-    <?php endforeach; ?>
-</select>
-
-    </div>
-              <div style="margin-right: 10px;">
-                <select name="group_id" class="select2">
-                  <?php foreach ($groups as $group): ?>
-                    <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-              <button type="submit" name="assign_to_group">Assign to Group</button>
-            </div>
-          </form>
-
-<!-- Dropdown to select a group for filtering -->
-<form method="post" id="group_filter_form">
-    <label for="selected_group_id">Sort Students by Group:</label>
-    <select name="selected_group_id" id="selected_group_id" onchange="document.getElementById('group_filter_form').submit();">
-        <option value="all_students" <?= (!isset($_POST['selected_group_id']) && $defaultGroupId === null) ? "selected" : "" ?>>All Students</option>
-        <?php foreach ($groups as $group): ?>
-            <option value="<?= htmlspecialchars($group['group_id']) ?>" 
-                <?= (isset($_POST['selected_group_id']) && $_POST['selected_group_id'] == $group['group_id']) || (!isset($_POST['selected_group_id']) && $group['group_id'] == $defaultGroupId) ? "selected" : "" ?>>
-                <?= htmlspecialchars($group['group_name']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</form>
-
-
-
   <!-- Display filtered student list -->
-  <?php if (!empty($students)): ?>
-    <div style="display: flex; flex-direction: column;">
-      <?php foreach ($students as $student): ?>
-        <?php $metadataId = getSmallestMetadataId($student['school_id']); ?>
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-          <span style="margin-right: 10px;">
-            <a href='view_student_data.php?student_id=<?= $student['student_id'] ?>&metadata_id=<?= htmlspecialchars($metadataId) ?>'>
-              <?= htmlspecialchars($student['name']) ?>
-            </a>
-          </span>
-
-          <?php if ($isGroupFilterActive): ?>
-            <!-- Red X Button to Remove Student from Group -->
-            <form method="post" style="display: inline;">
-              <input type="hidden" name="student_id_to_remove" value="<?= $student['student_id'] ?>">
-              <button type="button" class="remove-student" data-student-id="<?= $student['student_id'] ?>" name="remove_from_group" style="color: red; background: none; border: none; cursor: pointer; font-size: 16px; line-height: 1;">&times;</button>
-            </form>
-          <?php endif; ?>
-
-          <?php if ($isAdmin): ?>
-            <?php if (!$isGroupFilterActive): ?>
-              <form method="post" style="display: inline; margin-right: 10px;">
-                <input type="hidden" name="student_id_to_toggle" value="<?= $student['student_id'] ?>">
-                <button type="submit" name="<?= $showArchived ? 'unarchive_student' : 'archive_student' ?>" onclick="return confirmArchive('<?= $showArchived ? 'Unarchive' : 'Archive' ?>');">
-                  <?= $showArchived ? 'Unarchive' : 'Archive' ?>
-                </button>
-              </form>
-            <?php endif; ?>
-          <?php endif; ?>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  <?php else: ?>
-    No students found for this teacher.
-  <?php endif; ?>
   </div>
   </div>
     </div>
@@ -360,16 +239,6 @@
         <div class="card-header">
           <h3 class="card-title">STUDENT LIST</h3><br>
 
-          <!-- Add New Student Form -->
-          <form method="post" action="">
-            <label for="new_student_name">New Student Name:</label>
-            <input type="text" id="new_student_name" name="new_student_name">
-            <input type="submit" name="add_new_student" value="Add New Student">
-          </form>
-
-          <?php if (!empty($message)): ?>
-            <p><?= htmlspecialchars($message) ?></p>
-          <?php endif; ?>
         </div>
       </div>
     </div>
