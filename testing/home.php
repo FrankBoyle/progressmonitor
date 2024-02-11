@@ -179,7 +179,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Icons</h1>
+            <h1>View by:</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -195,15 +195,13 @@
       <div class="container-fluid">
         <div class="card card-primary card-outline">
           <div class="card-header">
-            <h3 class="card-title">Icons</h3>
+            <h3 class="card-title"><strong>Choices</strong></h3>
           </div> <!-- /.card-body -->
           <div class="card-body">
-            <p>You can use any font library you like with AdminLTE 3.</p>
-            <strong>Recommendations</strong>
-            <div>
-              <a href="https://fontawesome.com/">Font Awesome</a><br>
+          <a href="https://fontawesome.com/">Font Awesome</a><br>
               <a href="https://useiconic.com/open/">Iconic Icons</a><br>
               <a href="https://ionicons.com/">Ion Icons</a><br>
+            <div>
             </div>
           </div><!-- /.card-body -->
         </div>
