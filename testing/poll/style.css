@@ -1,0 +1,18 @@
+/* style.css */
+#medals img {
+    width: 50px;
+    cursor: grab;
+}
+
+.item {
+    border: 1px solid #ccc;
+    margin: 10px;
+    padding: 10px;
+    position: relative; /* For medal positioning */
+}
+
+.medal {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
