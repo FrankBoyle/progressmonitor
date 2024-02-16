@@ -1,3 +1,4 @@
+//script.js
 $(document).ready(function() {
     // Function to fetch items and display them in the form
     function displayItems() {
