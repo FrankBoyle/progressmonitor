@@ -1,33 +1,35 @@
 $(document).ready(function() {
     // Function to fetch items and display them in the form
     function displayItems() {
-        $.get('getItems.php', function(items) {
-            items = JSON.parse(items);
-            let formHtml = '';
+        $.get('getItems.php', function(data) {
+            var items = JSON.parse(data);
+            var itemsHtml = '';
             items.forEach(function(item) {
-                formHtml += `
+                itemsHtml += `
                     <div class="item" data-id="${item.id}">
                         <h3>${item.name}</h3>
-                        <label><input type="radio" name="gold" value="${item.id}"> 1st</label>
-                        <label><input type="radio" name="silver" value="${item.id}"> 2nd</label>
-                        <label><input type="radio" name="bronze" value="${item.id}"> 2nd</label>
+                        <label><input type="radio" name="first" value="${item.id}"> 1st Place</label>
+                        <label><input type="radio" name="second" value="${item.id}"> 2nd Place</label>
+                        <label><input type="radio" name="third" value="${item.id}"> 3rd Place</label>
                     </div>
                 `;
             });
-            $('#itemsList').html(formHtml);
+            $('#itemsList').html(itemsHtml);
         });
     }
 
+    // Call displayItems when the page loads
     displayItems();
 
     // Handle form submission
     $('#votingForm').on('submit', function(event) {
         event.preventDefault();
-        let formData = $(this).serialize();
-
+        var formData = $(this).serialize();
+        
         $.post('vote.php', formData, function(response) {
             alert("Votes submitted successfully!");
-            displayItems(); // Re-fetch and display items to show updated vote counts
+            // Optionally, you can refresh the items list here if you want to show the updated vote counts
+            displayItems();
         });
     });
 });

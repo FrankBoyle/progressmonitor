@@ -8,7 +8,12 @@
 <body>
     <div id="itemsList"></div>
 
-    <!-- Add more items as needed -->
+<!-- Assume your items will be dynamically loaded here -->
+<form id="votingForm">
+    <div id="itemsList"></div>
+    <input type="submit" value="Submit Votes">
+</form>
+
     <input type="submit" value="Submit Vote">
 </form>
 
