@@ -1,8 +1,20 @@
-/* style.css */
-#medals img {
-    height: 50px; /* Set your desired height, maintain aspect ratio manually */
-    cursor: grab;
+.custom-radio input[type="radio"] {
+    display: none;
 }
+
+.custom-radio label {
+    cursor: pointer;
+}
+
+.custom-radio label i {
+    font-size: 24px;
+    color: #ccc;
+}
+
+.custom-radio input[type="radio"]:checked + label i {
+    color: #f8c71c; /* Change color for checked radio */
+}
+
 
 /* Apply this style to medals when they are inside an item box */
 .item .medal {
@@ -18,10 +30,4 @@
     margin: 10px;
     padding: 10px;
     position: relative; /* For medal positioning */
-}
-
-.medal {
-    position: absolute;
-    top: 5px;
-    right: 5px;
 }

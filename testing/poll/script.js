@@ -5,13 +5,23 @@ $(document).ready(function() {
             var itemsHtml = '';
             items.forEach(function(item) {
                 itemsHtml += `
-                    <div class="item" data-id="${item.id}">
-                        <h3>${item.name}</h3>
-                        <label><input type="radio" name="first" value="${item.id}"> 1st Place</label>
-                        <label><input type="radio" name="second" value="${item.id}"> 2nd Place</label>
-                        <label><input type="radio" name="third" value="${item.id}"> 3rd Place</label>
+                <div class="item" data-id="${item.id}">
+                    <h3>${item.name}</h3>
+                    <div class="custom-radio">
+                        <input type="radio" id="first${item.id}" name="first" value="${item.id}">
+                        <label for="first${item.id}"><i class="far fa-star"></i></label>
                     </div>
-                `;
+                    <div class="custom-radio">
+                        <input type="radio" id="second${item.id}" name="second" value="${item.id}">
+                        <label for="second${item.id}"><i class="far fa-star"></i></label>
+                    </div>
+                    <div class="custom-radio">
+                        <input type="radio" id="third${item.id}" name="third" value="${item.id}">
+                        <label for="third${item.id}"><i class="far fa-star"></i></label>
+                    </div>
+                </div>
+            `;
+            
             });
             $('#itemsList').html(itemsHtml);
         });
