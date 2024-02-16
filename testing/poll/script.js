@@ -8,9 +8,9 @@ $(document).ready(function() {
                 formHtml += `
                     <div class="item" data-id="${item.id}">
                         <h3>${item.name}</h3>
-                        <label><input type="radio" name="gold" value="${item.id}"> Gold</label>
-                        <label><input type="radio" name="silver" value="${item.id}"> Silver</label>
-                        <label><input type="radio" name="bronze" value="${item.id}"> Bronze</label>
+                        <label><input type="radio" name="gold" value="${item.id}"> 1st</label>
+                        <label><input type="radio" name="silver" value="${item.id}"> 2nd</label>
+                        <label><input type="radio" name="bronze" value="${item.id}"> 2nd</label>
                     </div>
                 `;
             });
