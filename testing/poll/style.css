@@ -1,8 +1,10 @@
 /* style.css */
 #medals img {
-    width: 50px;
+    width: 50px; /* Set your desired width */
+    height: 50px; /* Set your desired height, maintain aspect ratio manually */
     cursor: grab;
 }
+
 
 .item {
     border: 1px solid #ccc;
