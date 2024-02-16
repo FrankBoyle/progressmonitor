@@ -4,6 +4,7 @@
 
 .toggle-button label i {
     margin-right: 5px;
+    font-size: 20px; /* Adjust icon size as needed */
 }
 
 .toggle-button input[type="radio"]:checked + label i.fa-square {
@@ -11,9 +12,15 @@
     font-weight: bold; /* Make the icon bold for better visibility */
 }
 
-.toggle-button input[type="radio"]:checked + label i.fa-square::before {
-    content: "\f14a"; /* Change to FontAwesome checkmark icon when selected */
+.toggle-button input[type="radio"] {
+    display: none; /* Hide radio buttons */
 }
+
+.toggle-button input[type="radio"]:checked + label i.fa-check-square {
+    color: #28a745; /* Change color for checked toggle button */
+    font-weight: bold; /* Make the icon bold for better visibility */
+}
+
 
 /* Apply this style to medals when they are inside an item box */
 .item .medal {
