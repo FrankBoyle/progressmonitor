@@ -12,41 +12,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->begin_transaction();
     
     try {
-        // Initialize $affectedItems as an empty array to avoid undefined variable errors
-        $affectedItems = [];
-
         // Assuming you've received the item IDs for the 1st, 2nd, and 3rd place votes
         $firstPlaceVote = $_POST['first'] ?? null;
         $secondPlaceVote = $_POST['second'] ?? null;
         $thirdPlaceVote = $_POST['third'] ?? null;
 
-        // Add received votes to $affectedItems only if they are not null
-        if ($firstPlaceVote !== null) {
-            $affectedItems[] = $firstPlaceVote;
-        }
-        if ($secondPlaceVote !== null) {
-            $affectedItems[] = $secondPlaceVote;
-        }
-        if ($thirdPlaceVote !== null) {
-            $affectedItems[] = $thirdPlaceVote;
+        // Update first_place_votes
+        if (!empty($firstPlaceVote)) {
+            $sql = "UPDATE items SET first_place_votes = first_place_votes + 1 WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $firstPlaceVote);
+            $stmt->execute();
         }
 
-        // Now $affectedItems is guaranteed to be an array, so array_unique() will work
-        foreach (array_unique($affectedItems) as $itemId) {
-            // Update total_votes for each affected item
-            // Ensure $itemId is not null before attempting to update
-            if ($itemId) {
-                $sql = "UPDATE items SET total_votes = (first_place_votes * 3 + second_place_votes * 2 + third_place_votes) WHERE id = ?";
-                $stmt = $conn->prepare($sql);
-                if ($stmt === false) {
-                    error_log("Prepare error: " . $conn->error);
-                } else {
-                    $stmt->bind_param("i", $itemId);
-                    if (!$stmt->execute()) {
-                        error_log("Execute error: " . $stmt->error);
-                    }
-                }
-            }
+        // Update second_place_votes
+        if (!empty($secondPlaceVote)) {
+            $sql = "UPDATE items SET second_place_votes = second_place_votes + 1 WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $secondPlaceVote);
+            $stmt->execute();
+        }
+
+        // Update third_place_votes
+        if (!empty($thirdPlaceVote)) {
+            $sql = "UPDATE items SET third_place_votes = third_place_votes + 1 WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $thirdPlaceVote);
+            $stmt->execute();
         }
 
         $conn->commit();
@@ -61,6 +53,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
 
 
