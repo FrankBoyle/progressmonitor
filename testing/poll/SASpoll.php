@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="itemsList"></div>
 
 <!-- Assume your items will be dynamically loaded here -->
 <form id="votingForm">
