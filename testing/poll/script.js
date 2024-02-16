@@ -21,6 +21,18 @@ $(document).ready(function() {
     $('#votingForm').on('submit', function(event) {
         event.preventDefault();
         var formData = $(this).serialize();
+        console.log("Form data being sent:", formData); // Debug log
+        
+        $.post('vote.php', formData, function(response) {
+            console.log("Response from server:", response); // Debug log
+            alert("Votes submitted successfully!");
+            displayItems(); // Refresh the items list
+        });
+    });
+
+    $('#votingForm').on('submit', function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
         
         $.post('vote.php', formData, function(response) {
             alert("Votes submitted successfully!");

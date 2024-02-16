@@ -4,6 +4,8 @@ include 'db.php';
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+// Log POST data
+error_log("Received POST data: " . print_r($_POST, true));
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->begin_transaction();
