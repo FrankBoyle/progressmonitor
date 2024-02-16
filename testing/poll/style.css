@@ -1,7 +1,3 @@
-.toggle-button input[type="radio"] {
-    display: none;
-}
-
 .toggle-button label {
     cursor: pointer;
 }
@@ -11,7 +7,7 @@
 }
 
 .toggle-button input[type="radio"]:checked + label i {
-    color: #007bff; /* Change color for checked radio */
+    color: #007bff; /* Change color for checked toggle button */
     font-weight: bold; /* Make the icon bold for better visibility */
 }
 
