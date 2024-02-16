@@ -1,4 +1,44 @@
 $(document).ready(function() {
+    let currentDraggedMedal;
+
+    // Initialize draggable medals
+    $('#medals img').on('dragstart', function(event) {
+        currentDraggedMedal = event.target; // Store the entire element for more control
+    });
+
+    // Ensure items are displayed and set up for drop events
+    displayItems();
+
+    // Enable dropping on items
+    $(document).on('dragover', '.item', function(event) {
+        event.preventDefault(); // This is crucial for allowing a drop
+    });
+
+    $(document).on('drop', '.item', function(event) {
+        event.preventDefault(); // Prevent default to allow custom drop behavior
+        let itemId = $(this).data('id');
+        let itemElement = this; // The item element being dropped on
+        placeMedal(currentDraggedMedal, itemId, itemElement);
+    });
+});
+
+function displayItems() {
+    // This function should fetch items and render them in #itemsList
+    // For demonstration, let's manually create some items
+    const items = [{id: 1, name: "Issue 1"}, {id: 2, name: "Issue 2"}];
+    let itemsHtml = items.map(item => `<div class="item" data-id="${item.id}" style="border: 1px solid #ccc; margin: 10px; padding: 10px; position: relative;">${item.name}</div>`).join('');
+    $('#itemsList').html(itemsHtml);
+}
+
+function placeMedal(draggedMedal, itemId, itemElement) {
+    // Handle the logic to visually place the medal and send the vote to the server
+    console.log(`Dropped medal ${draggedMedal.id} on item ${itemId}`);
+    // Example: append a copy of the medal image to the item
+    let medalClone = $(draggedMedal).clone().removeAttr('id').addClass('medal');
+    $(itemElement).append(medalClone); // Modify as needed for your layout
+}
+
+$(document).ready(function() {
     function fetchAndDisplayItems() {
         $.get('getItems.php', function(items) {
             $('#itemsList').empty(); // Clear current list
@@ -26,47 +66,6 @@ $(document).ready(function() {
 });
 
 
-// script.js
-$(document).ready(function() {
-    let currentDraggedMedal;
 
-    // Example function to display items (this should be dynamically fetching the items)
-    function displayItems() {
-        const items = [
-            {id: 1, name: "Issue 1"},
-            {id: 2, name: "Issue 2"},
-            {id: 3, name: "Issue 3"},
-            // Add more items as necessary
-        ];
-        
-        $('#itemsList').empty(); // Clear current list
-        items.forEach(function(item) {
-            $('#itemsList').append(`<div class="item" data-id="${item.id}" style="border: 1px solid #ccc; margin: 10px; padding: 10px; position: relative;">${item.name}</div>`);
-        });
-    }
 
-    displayItems(); // Call this to initially display items
-
-    $('img[draggable=true]').on('dragstart', function(event) {
-        currentDraggedMedal = event.target.id; // Track the medal being dragged
-    });
-
-    $(document).on('dragover', '.item', function(event) {
-        event.preventDefault(); // Allow dropping by preventing default behavior
-    });
-
-    $(document).on('drop', '.item', function(event) {
-        event.preventDefault(); // Prevent default action
-        let itemId = $(this).data('id'); // Get the item's ID
-        placeMedal(currentDraggedMedal, itemId, this); // Pass the item element too
-    });
-
-    function placeMedal(medal, itemId, itemElement) {
-        // Example of updating UI: append a medal image to the item
-        let medalImageSrc = $('#' + medal).attr('src'); // Get the src of the medal
-        $(itemElement).find('.medal').remove(); // Remove existing medal
-        $(itemElement).append(`<img src="${medalImageSrc}" class="medal" style="width: 30px; position: absolute; top: 5px; right: 5px;">`); // Append new medal
-        // Additionally, send vote to server here...
-    }
-});
 
