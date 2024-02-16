@@ -14,9 +14,6 @@
     <input type="submit" value="Submit Votes">
 </form>
 
-    <input type="submit" value="Submit Vote">
-</form>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
 </body>
