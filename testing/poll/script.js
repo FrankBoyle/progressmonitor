@@ -20,7 +20,7 @@ $(document).ready(function() {
                         <label for="third${item.id}"><i class="far fa-square"></i> 3rd Place</label>
                     </div>
                 </div>
-            `;
+            `;         
             
             
             
