@@ -12,46 +12,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->begin_transaction();
     
     try {
-        $firstPlaceVote = $_POST['first'] ?? null;
-        $secondPlaceVote = $_POST['second'] ?? null;
-        $thirdPlaceVote = $_POST['third'] ?? null;
+// Initialize $affectedItems as an empty array to avoid undefined variable errors
+$affectedItems = [];
 
-        // Log the IDs for debugging
-        error_log("Voting IDs - First: $firstPlaceVote, Second: $secondPlaceVote, Third: $thirdPlaceVote");
-        
-        // Update first_place_votes
-        if ($firstPlaceVote) {
-            $sql = "UPDATE items SET first_place_votes = first_place_votes + 1 WHERE id = ?";
-            if ($stmt = $conn->prepare($sql)) {
-                $stmt->bind_param("i", $firstPlaceVote);
-                if (!$stmt->execute()) {
-                    // Log SQL execution error
-                    error_log("Execute error for first_place_votes: " . $stmt->error);
-                }
-            } else {
-                // Log SQL preparation error
-                error_log("Prepare error for first_place_votes: " . $conn->error);
+// Assuming you've received the item IDs for the 1st, 2nd, and 3rd place votes
+$firstPlaceVote = $_POST['first'] ?? null;
+$secondPlaceVote = $_POST['second'] ?? null;
+$thirdPlaceVote = $_POST['third'] ?? null;
+
+// Add received votes to $affectedItems only if they are not null
+if ($firstPlaceVote !== null) {
+    $affectedItems[] = $firstPlaceVote;
+}
+if ($secondPlaceVote !== null) {
+    $affectedItems[] = $secondPlaceVote;
+}
+if ($thirdPlaceVote !== null) {
+    $affectedItems[] = $thirdPlaceVote;
+}
+
+// Now $affectedItems is guaranteed to be an array, so array_unique() will work
+foreach (array_unique($affectedItems) as $itemId) {
+    // Update total_votes for each affected item
+    // Ensure $itemId is not null before attempting to update
+    if ($itemId) {
+        $sql = "UPDATE items SET total_votes = (first_place_votes * 3 + second_place_votes * 2 + third_place_votes) WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            error_log("Prepare error: " . $conn->error);
+        } else {
+            $stmt->bind_param("i", $itemId);
+            if (!$stmt->execute()) {
+                error_log("Execute error: " . $stmt->error);
             }
         }
-        
-        // Similar blocks for secondPlaceVote and thirdPlaceVote...
+    }
+}
 
-        // Update total_votes for affected items
-        foreach (array_unique($affectedItems) as $itemId) {
-            if ($itemId) {
-                $sql = "UPDATE items SET total_votes = (first_place_votes * 3 + second_place_votes * 2 + third_place_votes) WHERE id = ?";
-                if ($stmt = $conn->prepare($sql)) {
-                    $stmt->bind_param("i", $itemId);
-                    if (!$stmt->execute()) {
-                        // Log SQL execution error for total_votes
-                        error_log("Execute error for total_votes: " . $stmt->error);
-                    }
-                } else {
-                    // Log SQL preparation error for total_votes
-                    error_log("Prepare error for total_votes: " . $conn->error);
-                }
-            }
-        }
 
         $conn->commit();
         echo "Votes updated successfully";
