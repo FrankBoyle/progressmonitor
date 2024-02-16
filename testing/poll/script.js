@@ -27,11 +27,13 @@ $(document).ready(function() {
         var secondVote = $('input[name="second"]:checked').val();
         var thirdVote = $('input[name="third"]:checked').val();
         if (firstVote && (firstVote === secondVote || firstVote === thirdVote)) {
-            alert("Please select different items for 1st, 2nd, and 3rd place votes.");
+            $('#message').text("Please select different items for 1st, 2nd, and 3rd place votes.");
+            $('#message').show();
             return;
         }
         if (secondVote && secondVote === thirdVote) {
-            alert("Please select different items for 1st, 2nd, and 3rd place votes.");
+            $('#message').text("Please select different items for 1st, 2nd, and 3rd place votes.");
+            $('#message').show();
             return;
         }
         
@@ -41,9 +43,13 @@ $(document).ready(function() {
         });
     });
 
+    // Hide the message when the mouse moves
+    $(document).mousemove(function(event) {
+        $('#message').hide();
+    });
+
     displayItems(); // Initial display
 });
-
 
 
 
