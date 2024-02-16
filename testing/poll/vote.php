@@ -9,6 +9,7 @@ error_reporting(E_ALL);
 error_log("Received POST data: " . print_r($_POST, true));
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Begin transaction
     $conn->begin_transaction();
     
     try {
@@ -41,17 +42,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
         }
 
+        // Commit the transaction
         $conn->commit();
         echo "Votes updated successfully";
     } catch (Exception $e) {
+        // Rollback the transaction in case of an error
         $conn->rollback();
         echo "Error: " . $e->getMessage();
         // Log exception message
         error_log("Transaction rollback due to exception: " . $e->getMessage());
     }
 
-    $conn->close();
+    $conn->close(); // Close the database connection
 }
 ?>
+
 
 
