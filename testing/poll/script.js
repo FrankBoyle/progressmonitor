@@ -1,5 +1,6 @@
 $(document).ready(function() {
     let medalsAssigned = { 'gold': null, 'silver': null, 'bronze': null };
+    let itemsPoints = { /* To store the points for each item */ };
 
     // Initialize draggable medals
     $('#medals img').on('dragstart', function(event) {
@@ -19,62 +20,55 @@ $(document).ready(function() {
         let itemId = $(this).data('id');
         const medal = event.originalEvent.dataTransfer.getData("text");
 
-        // Check if the medal is already assigned to another item
-        if (medalsAssigned[medal] !== null && medalsAssigned[medal] !== itemId) {
-            // Remove the medal from the previous item
-            $(`.item[data-id=${medalsAssigned[medal]}]`).data(medal, null);
-            $(`.item[data-id=${medalsAssigned[medal]}] .medal[data-medal=${medal}]`).remove();
+        // If the medal is already assigned to another item, subtract points from that item
+        if (medalsAssigned[medal] !== null) {
+            itemsPoints[medalsAssigned[medal]] -= getMedalPoints(medal);
         }
 
-        // Assign the medal to the new item and update the display
+        // Assign the medal to the new item and add points
         medalsAssigned[medal] = itemId;
-        $(this).data(medal, 'true'); // Store which medals the item has
+        itemsPoints[itemId] = (itemsPoints[itemId] || 0) + getMedalPoints(medal);
         placeMedal(medal, itemId, this);
 
-        // Update the order of items based on votes
-        updateItemsOrder();
+        // After updating points, reorder the items
+        reorderItems();
     });
 
     function displayItems() {
-        // This function should ideally fetch items from the server
-        // For demonstration, let's manually create some items
+        // Fetch items from server and populate itemsPoints with initial points
         const items = [{id: 1, name: "Issue 1"}, {id: 2, name: "Issue 2"}, {id: 3, name: "Issue 3"}];
-        let itemsHtml = items.map(item => `<div class="item" data-id="${item.id}" data-gold="false" data-silver="false" data-bronze="false" style="border: 1px solid #ccc; margin: 10px; padding: 10px; position: relative;">${item.name}</div>`).join('');
+        items.forEach(item => {
+            itemsPoints[item.id] = 0; // Initialize points to 0
+        });
+        // Now display the items in the DOM
+        renderItems(items);
+    }
+
+    function renderItems(items) {
+        let itemsHtml = items.map(item => `<div class="item" data-id="${item.id}" data-points="${itemsPoints[item.id]}" style="border: 1px solid #ccc; margin: 10px; padding: 10px; position: relative;">${item.name}</div>`).join('');
         $('#itemsList').html(itemsHtml);
     }
 
     function placeMedal(medal, itemId, itemElement) {
-        // Append a clone of the medal to the item
-        let medalClone = $(`#${medal}`).clone().removeAttr('id').attr('data-medal', medal).addClass('medal');
-        $(itemElement).append(medalClone);
-        
-        // Send the updated vote to the server here...
-        console.log(`Placed ${medal} on item ${itemId}`);
+        // ... same as before ...
     }
 
-    function updateItemsOrder() {
-        // Calculate scores and reorder the items
+    function getMedalPoints(medal) {
+        // Define the points for each medal
+        const points = { 'gold': 3, 'silver': 2, 'bronze': 1 };
+        return points[medal] || 0;
+    }
+
+    function reorderItems() {
+        // Get the array of item elements, sort them by points, and re-append them to the list
         let itemsArray = $('.item').toArray();
-        itemsArray.sort(function(a, b) {
-            let scoreA = calculateScore($(a));
-            let scoreB = calculateScore($(b));
-            return scoreB - scoreA; // Sort in descending order of score
+        itemsArray.sort((a, b) => {
+            let pointsA = $(a).data('points');
+            let pointsB = $(b).data('points');
+            return pointsB - pointsA; // Sort in descending order
         });
-
-        // Re-append items to the container in the new order
-        $('#itemsList').empty();
-        itemsArray.forEach(function(item) {
-            $('#itemsList').append(item);
-        });
-    }
-
-    function calculateScore(item) {
-        // Assign points for gold, silver, and bronze
-        let score = 0;
-        score += item.data('gold') === 'true' ? 3 : 0;
-        score += item.data('silver') === 'true' ? 2 : 0;
-        score += item.data('bronze') === 'true' ? 1 : 0;
-        return score;
+        // Re-append items to the list in the new order
+        itemsArray.forEach(item => $('#itemsList').append(item));
     }
 });
 
