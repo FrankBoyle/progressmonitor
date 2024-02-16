@@ -7,9 +7,11 @@ $(document).ready(function() {
                 itemsHtml += `
                     <div class="item" data-id="${item.id}">
                         <h3>${item.name}</h3>
-                        <label><input type="radio" name="first" value="${item.id}"> 1st Place</label>
-                        <label><input type="radio" name="second" value="${item.id}"> 2nd Place</label>
-                        <label><input type="radio" name="third" value="${item.id}"> 3rd Place</label>
+                        <div class="vote-buttons">
+                            <button class="first-place" data-id="${item.id}">1st</button>
+                            <button class="second-place" data-id="${item.id}">2nd</button>
+                            <button class="third-place" data-id="${item.id}">3rd</button>
+                        </div>
                     </div>
                 `;
             });
@@ -27,6 +29,11 @@ $(document).ready(function() {
             alert("Votes submitted successfully!");
             displayItems(); // Refresh the items list
         });
+    });
+
+    // Toggle button functionality
+    $(document).on('click', '.vote-buttons button', function() {
+        $(this).toggleClass('selected').siblings().removeClass('selected');
     });
 
     displayItems(); // Initial display
