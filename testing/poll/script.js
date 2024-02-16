@@ -29,16 +29,6 @@ $(document).ready(function() {
         });
     });
 
-    $('#votingForm').on('submit', function(event) {
-        event.preventDefault();
-        var formData = $(this).serialize();
-        
-        $.post('vote.php', formData, function(response) {
-            alert("Votes submitted successfully!");
-            displayItems(); // Refresh the items list
-        });
-    });
-
     displayItems(); // Initial display
 });
 
