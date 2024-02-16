@@ -1,39 +1,34 @@
-.toggle-button label {
+.item {
+    margin-bottom: 20px;
+}
+
+.item h3 {
+    margin-bottom: 10px;
+}
+
+.toggle-button {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.toggle-label {
     cursor: pointer;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.toggle-button label i {
-    margin-right: 5px;
-    font-size: 20px; /* Adjust icon size as needed */
-}
-
-.toggle-button input[type="radio"]:checked + label i.fa-square {
-    color: #007bff; /* Change color for checked toggle button */
-    font-weight: bold; /* Make the icon bold for better visibility */
+.toggle-label:hover {
+    background-color: #f0f0f0;
 }
 
 .toggle-button input[type="radio"] {
-    display: none; /* Hide radio buttons */
+    display: none;
 }
 
-.toggle-button input[type="radio"]:checked + label i.fa-check-square {
-    color: #28a745; /* Change color for checked toggle button */
-    font-weight: bold; /* Make the icon bold for better visibility */
-}
-
-
-/* Apply this style to medals when they are inside an item box */
-.item .medal {
-    width: 30px; /* Adjust this value to the size you want after dropping */
-    height: auto; /* This will maintain the aspect ratio */
-    position: absolute;
-    top: 5px;
-    right: 5px;
-}
-
-.item {
-    border: 1px solid #ccc;
-    margin: 10px;
-    padding: 10px;
-    position: relative; /* For medal positioning */
+.toggle-button input[type="radio"]:checked + .toggle-label {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
 }
