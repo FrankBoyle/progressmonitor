@@ -1,4 +1,3 @@
-//getitems.php
 <?php
 include 'db.php';
 

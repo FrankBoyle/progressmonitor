@@ -1,4 +1,3 @@
-//db.php
 <?php
 $servername = "localhost";
 $username = "AndersonSchool";
