@@ -40,11 +40,11 @@ $(document).ready(function() {
     function placeMedal(medal, itemId, itemElement) {
         // Remove any existing medal of the same type from the item
         $(itemElement).find(`.medal[data-medal=${medal}]`).remove();
-        
+    
         // Append a clone of the medal to the item
         let medalClone = $(`#${medal}`).clone().removeAttr('id').attr('data-medal', medal).addClass('medal');
         $(itemElement).append(medalClone);
-        
+        // Ensure the 'medal' class is being added to the cloned medal    
         // Send the updated vote to the server here...
         console.log(`Placed ${medal} on item ${itemId}`);
     }
