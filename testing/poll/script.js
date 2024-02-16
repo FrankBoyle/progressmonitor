@@ -48,6 +48,12 @@ $(document).ready(function() {
         $('#message').hide();
     });
 
+    // Disable the radio buttons when clicking on them
+    $('input[type="radio"]').on('click', function() {
+        var name = $(this).attr('name');
+        $('input[type="radio"][name="' + name + '"]').not(this).prop('disabled', true);
+    });
+
     displayItems(); // Initial display
 });
 
