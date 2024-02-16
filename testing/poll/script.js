@@ -14,7 +14,7 @@ $(document).ready(function() {
                     </div>
                 `;
             });
-            $('#itemsList').html(formHtml);
+            //$('#itemsList').html(formHtml);
         });
     }
 
