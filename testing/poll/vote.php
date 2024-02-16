@@ -1,6 +1,9 @@
 <?php
 include 'db.php';
 
+// Temporary debugging to log the POST data
+error_log(print_r($_POST, true)); // Check your PHP error log to see the output
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Extract the item IDs for the 1st, 2nd, and 3rd place votes from the POST data
     $firstPlaceVote = $_POST['first'] ?? null;
