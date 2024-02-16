@@ -6,11 +6,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="medals">
-        <img src="goldmedal.png" id="gold" draggable="true">
-        <img src="silvermedal.png" id="silver" draggable="true">
-        <img src="bronzemedal.png" id="bronze" draggable="true">
-    </div>
     <div id="itemsList"></div>
     <form id="votingForm">
     <div class="item" data-id="1">
