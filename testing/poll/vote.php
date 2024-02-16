@@ -2,42 +2,31 @@
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $newItemId = $_POST['newItemId']; // The ID of the item receiving the new vote
-    $medalType = $_POST['medalType']; // 'first', 'second', or 'third'
+    // Extract the votes from the POST data
+    $goldVote = $_POST['gold'];
+    $silverVote = $_POST['silver'];
+    $bronzeVote = $_POST['bronze'];
 
-    // Begin transaction to ensure atomicity
+    // Start transaction
     $conn->begin_transaction();
 
     try {
-        // Update the vote count for the new item
-        $voteColumn = $medalType . "_place_votes";
-        $sql = "UPDATE items SET $voteColumn = $voteColumn + 1 WHERE id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $newItemId);
-        $stmt->execute();
+        // Update vote counts in a single transaction
+        $conn->query("UPDATE items SET first_place_votes = first_place_votes + 1 WHERE id = $goldVote");
+        $conn->query("UPDATE items SET second_place_votes = second_place_votes + 1 WHERE id = $silverVote");
+        $conn->query("UPDATE items SET third_place_votes = third_place_votes + 1 WHERE id = $bronzeVote");
 
         // Commit the transaction
         $conn->commit();
-        echo "Vote recorded successfully";
-    } catch (Exception $e) {
-        // Rollback the transaction in case of error
+        echo "Votes updated successfully";
+    } catch (mysqli_sql_exception $exception) {
+        // Rollback the transaction in case of an error
         $conn->rollback();
-        echo "Error: " . $e->getMessage();
+        echo "Error updating votes: " . $exception->getMessage();
     }
-
-    // Fetch and output the updated list of items
-    $sql = "SELECT id, name, first_place_votes, second_place_votes, third_place_votes FROM items ORDER BY (3*first_place_votes + 2*second_place_votes + third_place_votes) DESC";
-    $result = $conn->query($sql);
-
-    $items = array();
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            $items[] = $row;
-        }
-    }
-    echo json_encode($items);
 
     $conn->close();
 }
 ?>
+
 
