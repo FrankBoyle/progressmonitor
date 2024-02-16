@@ -1,18 +1,18 @@
-.custom-radio input[type="radio"] {
+.toggle-button input[type="radio"] {
     display: none;
 }
 
-.custom-radio label {
+.toggle-button label {
     cursor: pointer;
 }
 
-.custom-radio label i {
-    font-size: 24px;
-    color: #ccc;
+.toggle-button label i {
+    margin-right: 5px;
 }
 
-.custom-radio input[type="radio"]:checked + label i {
-    color: #f8c71c; /* Change color for checked radio */
+.toggle-button input[type="radio"]:checked + label i {
+    color: #007bff; /* Change color for checked radio */
+    font-weight: bold; /* Make the icon bold for better visibility */
 }
 
 

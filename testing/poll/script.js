@@ -7,20 +7,21 @@ $(document).ready(function() {
                 itemsHtml += `
                 <div class="item" data-id="${item.id}">
                     <h3>${item.name}</h3>
-                    <div class="custom-radio">
+                    <div class="toggle-button">
                         <input type="radio" id="first${item.id}" name="first" value="${item.id}">
-                        <label for="first${item.id}"><i class="far fa-star"></i></label>
+                        <label for="first${item.id}"><i class="far fa-square"></i> 1st Place</label>
                     </div>
-                    <div class="custom-radio">
+                    <div class="toggle-button">
                         <input type="radio" id="second${item.id}" name="second" value="${item.id}">
-                        <label for="second${item.id}"><i class="far fa-star"></i></label>
+                        <label for="second${item.id}"><i class="far fa-square"></i> 2nd Place</label>
                     </div>
-                    <div class="custom-radio">
+                    <div class="toggle-button">
                         <input type="radio" id="third${item.id}" name="third" value="${item.id}">
-                        <label for="third${item.id}"><i class="far fa-star"></i></label>
+                        <label for="third${item.id}"><i class="far fa-square"></i> 3rd Place</label>
                     </div>
                 </div>
             `;
+            
             
             });
             $('#itemsList').html(itemsHtml);
