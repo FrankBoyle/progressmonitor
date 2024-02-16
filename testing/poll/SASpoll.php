@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<!-- Assume your items will be dynamically loaded here -->
-<form id="votingForm">
     <div id="itemsList"></div>
-    <input type="submit" value="Submit Votes">
-</form>
+
+    <form id="votingForm">
+        <div id="itemsList"></div>
+        <div id="message" style="display: none;"></div> <!-- Message element -->
+        <input type="submit" value="Submit Votes">
+    </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="script.js"></script>
