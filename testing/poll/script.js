@@ -7,7 +7,6 @@ $(document).ready(function() {
                 itemsHtml += `
                     <div class="item" data-id="${item.id}">
                         <h3>${item.name}</h3>
-                        <p>Total Votes: ${item.total_votes}</p>
                         <label><input type="radio" name="first" value="${item.id}"> 1st Place</label>
                         <label><input type="radio" name="second" value="${item.id}"> 2nd Place</label>
                         <label><input type="radio" name="third" value="${item.id}"> 3rd Place</label>
