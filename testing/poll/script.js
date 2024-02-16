@@ -22,40 +22,23 @@ $(document).ready(function() {
         event.preventDefault();
         var formData = $(this).serialize();
         
-        // Check if the same item is selected in multiple positions
-        var firstVote = $('input[name="first"]:checked').val();
-        var secondVote = $('input[name="second"]:checked').val();
-        var thirdVote = $('input[name="third"]:checked').val();
-        if (firstVote && (firstVote === secondVote || firstVote === thirdVote)) {
-            $('#message').text("Please select different items for 1st, 2nd, and 3rd place votes.");
-            $('#message').show();
-            return;
-        }
-        if (secondVote && secondVote === thirdVote) {
-            $('#message').text("Please select different items for 1st, 2nd, and 3rd place votes.");
-            $('#message').show();
-            return;
-        }
-        
         $.post('vote.php', formData, function(response) {
             alert("Votes submitted successfully!");
             displayItems(); // Refresh the items list
         });
     });
 
-    // Hide the message when the mouse moves
-    $(document).mousemove(function(event) {
-        $('#message').hide();
-    });
-
-    // Disable the radio buttons when clicking on them
-    $('input[type="radio"]').on('click', function() {
-        var name = $(this).attr('name');
-        $('input[type="radio"][name="' + name + '"]').not(this).prop('disabled', true);
-    });
-
     displayItems(); // Initial display
-});
 
+    // Event listener for second-place radio buttons
+    $('input[name="second"]').on('click', function() {
+        var secondValue = $(this).val();
+        var firstValue = $('input[name="first"]:checked').val();
+        if (secondValue && firstValue && secondValue === firstValue) {
+            alert("Please select a different item for 2nd place.");
+            $(this).prop('checked', false);
+        }
+    });
+});
 
 
