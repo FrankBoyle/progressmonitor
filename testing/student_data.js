@@ -363,6 +363,7 @@ function calculateTrendline(data, xValues) {
     }).filter(point => point.y !== null && !isNaN(point.y));
 
     if (validDataPoints.length === 0) {
+        console.log("No valid data points found.");
         return { slope: 0, intercept: 0 };
     }
 
@@ -382,8 +383,14 @@ function calculateTrendline(data, xValues) {
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
+    // Logging the calculated slope and intercept
+    console.log("Slope:", slope, "Intercept:", intercept);
+
     return function (x) {
-        return slope * x + intercept;
+        // Log each calculation of y based on x
+        const y = slope * x + intercept;
+        console.log(`For x = ${x}, y = ${y}`);
+        return y;
     };
 }
 
