@@ -353,7 +353,6 @@ const trendlineOptions = {
 };
 
 function calculateTrendline(data) {
-    // Filter out null or non-numeric values
     const nonNullData = data.filter(value => value !== null && !isNaN(value));
 
     if (nonNullData.length === 0) {
@@ -367,8 +366,7 @@ function calculateTrendline(data) {
     let sumXX = 0;
 
     for (let i = 0; i < nonNullData.length; i++) {
-        // If x values are dates or other non-linear sequences, they should be adjusted accordingly
-        const x = i + 1; // Adjust this if x is not 1-based index
+        const x = i + 1; // X values are 1-based
         const y = nonNullData[i];
 
         sumX += x;
@@ -382,19 +380,20 @@ function calculateTrendline(data) {
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    // Return the function to calculate y for a given x using the trendline equation
+    //console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
+
+    // Debugging print statements
+    //console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
+    //console.log("slope:", slope, "intercept:", intercept);
+
     return function (x) {
         return slope * x + intercept;
     };
 }
 
-function getTrendlineData(seriesData, originalXValues) {
-    // Calculate the trendline function
+function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
-
-    // Map the trendline function over the original x values
-    // Ensure originalXValues array has the same x values as the seriesData array
-    return originalXValues.map(x => trendlineFunction(x));
+    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
 }
 
 ////////////////////////////////////////////////
