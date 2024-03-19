@@ -93,29 +93,22 @@ function extractDataFromTable() {
 
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
-        const dateString = dateCell ? dateCell.textContent.trim() : "";
-        const date = new Date(dateString);  // Convert to Date object
+        const date = dateCell ? dateCell.textContent.trim() : "";
 
-        const scoreCells = row.querySelectorAll("td:not(:first-child)");
+        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
         const rowScores = Array.from(scoreCells, cell => parseInt(cell.textContent || '0', 10));
 
         data.push({ date, scores: rowScores });
     });
 
     // Sort the data by date in ascending order
-    data.sort((a, b) => a.date - b.date);
+    data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    // Convert dates to a numerical scale (e.g., days since the first date)
-    const startDate = data[0].date; // Assuming data is not empty
-    const dateNumbers = data.map(item => Math.floor((item.date - startDate) / (24 * 60 * 60 * 1000)));
-
-    // Extract scores into separate arrays
+    // Extract dates and scores into separate arrays
+    const dates = data.map(item => item.date);
     const scores = data.map(item => item.scores);
 
-    // Convert dates to ISO strings for x-axis labeling
-    const isoDates = data.map(item => item.date.toISOString().split('T')[0]);
-
-    return { dates: isoDates, scores, xValues: dateNumbers };
+    return { dates, scores };
 }
 
 // Populates the series data based on selected columns, header map, and scores.
@@ -198,35 +191,48 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart() {
-    const { dates, scores, xValues } = extractDataFromTable();
+function updateChart(selectedColumns) { // Update function signature
+    // Clear existing series data
+    chart.updateSeries([]);
 
-    // Assuming you have a function that prepares your chart's series data
-    finalSeriesData = prepareSeriesData(scores); // Implement this according to your needs
+    // Create a new series array based on selected columns
+    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
-    trendlineSeriesData = scores.map((series, index) => {
-        return {
-            name: `Trendline ${index}`,
-            data: getTrendlineData(series, xValues),
-            // ... other properties ...
-        };
+    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
+    const trendlineSeriesData = [];
+    newSeriesData.forEach((series, index) => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
+            name: series.name + ' Trendline',
+            data: trendlineData,
+            type: 'line',
+            width: '85%', // Set the width to 1000 pixels
+            color: series.color,  // Ensure trendline has same color as series
+            ...trendlineOptions,
+        });
     });
+    
+    // Add trendline data to series
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    //console.log("New series data based on selected columns:", newSeriesData);
+    //console.log("Trendline series data:", trendlineSeriesData);
+    //console.log("Final series data for updating the chart:", finalSeriesData);
 
-    // Combine your chart data with the trendline data
-    const combinedSeriesData = finalSeriesData.concat(trendlineSeriesData);
+    // Update the chart with the new series data and updated names
+    chart.updateSeries(finalSeriesData);
 
-    // Update the chart with the new series data
+    // Update series names in the legend
     chart.updateOptions({
-        series: combinedSeriesData,
-        xaxis: {
-            categories: dates
-        }
+        stroke: {
+            width: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.width : 5
+            ),
+            dashArray: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+            ),
+        },
     });
 }
-
-// Call this function to update your chart with the correct data and trendline
-updateChart();
-
 
 // Initializes the chart with default settings.
 function initializeChart() {
@@ -346,25 +352,48 @@ const trendlineOptions = {
     width: 2                  // Line width
 };
 
-function calculateTrendline(data, xValues) {
-    const validDataPoints = data.map((y, index) => {
-        return { x: xValues[index], y };
-    }).filter(point => point.y !== null && !isNaN(point.y));
+function calculateTrendline(data) {
+    const nonNullData = data.filter(value => value !== null && !isNaN(value));
 
-    const n = validDataPoints.length;
-    const sumX = validDataPoints.reduce((acc, point) => acc + point.x, 0);
-    const sumY = validDataPoints.reduce((acc, point) => acc + point.y, 0);
-    const sumXY = validDataPoints.reduce((acc, point) => acc + point.x * point.y, 0);
-    const sumXX = validDataPoints.reduce((acc, point) => acc + point.x * point.x, 0);
+    if (nonNullData.length === 0) {
+        // Handle the case where there are no valid data points
+        return { slope: 0, intercept: 0 };
+    }
+
+    let sumX = 0;
+    let sumY = 0;
+    let sumXY = 0;
+    let sumXX = 0;
+
+    for (let i = 0; i < nonNullData.length; i++) {
+        const x = i + 1; // X values are 1-based
+        const y = nonNullData[i];
+
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXX += x * x;
+    }
+
+    const n = nonNullData.length;
+
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    return x => slope * x + intercept;
+    //console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
+
+    // Debugging print statements
+    //console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
+    //console.log("slope:", slope, "intercept:", intercept);
+
+    return function (x) {
+        return slope * x + intercept;
+    };
 }
 
-function getTrendlineData(seriesData, xValues) {
-    const trendlineFunction = calculateTrendline(seriesData, xValues);
-    return xValues.map(x => trendlineFunction(x));
+function getTrendlineData(seriesData) {
+    const trendlineFunction = calculateTrendline(seriesData);
+    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
 }
 
 ////////////////////////////////////////////////
