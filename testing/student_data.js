@@ -383,12 +383,6 @@ function getTrendlineData(data) {
     });
 }
 
-
-function getTrendlineData(seriesData) {
-    const trendlineFunction = calculateTrendline(seriesData);
-    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
-}
-
 ////////////////////////////////////////////////
 function generateStackedBarChartData(scores, headerNames, customNames = []) {
     const seriesList = [];
