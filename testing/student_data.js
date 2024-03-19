@@ -352,18 +352,12 @@ const trendlineOptions = {
     width: 2                  // Line width
 };
 
-function calculateTrendline(data, xValues) {
-    // Ensure that there are x values provided and they match the data length
-    if (!xValues || xValues.length !== data.length) {
-        throw new Error('xValues array is required and must match the data array length.');
-    }
+function calculateTrendline(data) {
+    // Filter out null or non-numeric values
+    const nonNullData = data.filter(value => value !== null && !isNaN(value));
 
-    const validDataPoints = data.map((y, index) => {
-        return { x: xValues[index], y };
-    }).filter(point => point.y !== null && !isNaN(point.y));
-
-    if (validDataPoints.length === 0) {
-        console.log("No valid data points found.");
+    if (nonNullData.length === 0) {
+        // Handle the case where there are no valid data points
         return { slope: 0, intercept: 0 };
     }
 
@@ -372,31 +366,35 @@ function calculateTrendline(data, xValues) {
     let sumXY = 0;
     let sumXX = 0;
 
-    validDataPoints.forEach(point => {
-        sumX += point.x;
-        sumY += point.y;
-        sumXY += point.x * point.y;
-        sumXX += point.x * point.x;
-    });
+    for (let i = 0; i < nonNullData.length; i++) {
+        // If x values are dates or other non-linear sequences, they should be adjusted accordingly
+        const x = i + 1; // Adjust this if x is not 1-based index
+        const y = nonNullData[i];
 
-    const n = validDataPoints.length;
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXX += x * x;
+    }
+
+    const n = nonNullData.length;
+
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    // Logging the calculated slope and intercept
-    console.log("Slope:", slope, "Intercept:", intercept);
-
+    // Return the function to calculate y for a given x using the trendline equation
     return function (x) {
-        // Log each calculation of y based on x
-        const y = slope * x + intercept;
-        console.log(`For x = ${x}, y = ${y}`);
-        return y;
+        return slope * x + intercept;
     };
 }
 
-function getTrendlineData(seriesData, xValues) {
-    const trendlineFunction = calculateTrendline(seriesData, xValues);
-    return xValues.map(x => trendlineFunction(x));
+function getTrendlineData(seriesData, originalXValues) {
+    // Calculate the trendline function
+    const trendlineFunction = calculateTrendline(seriesData);
+
+    // Map the trendline function over the original x values
+    // Ensure originalXValues array has the same x values as the seriesData array
+    return originalXValues.map(x => trendlineFunction(x));
 }
 
 ////////////////////////////////////////////////
