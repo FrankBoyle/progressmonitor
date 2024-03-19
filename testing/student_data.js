@@ -353,43 +353,36 @@ const trendlineOptions = {
 };
 
 function calculateTrendline(data) {
-    const nonNullData = data.filter(value => value !== null && !isNaN(value));
-
-    if (nonNullData.length === 0) {
-        // Handle the case where there are no valid data points
+    const validDataPoints = data.map((val, idx) => ({ x: idx + 1, y: val })).filter(point => point.y !== null && !isNaN(point.y));
+    
+    if (validDataPoints.length === 0) {
         return { slope: 0, intercept: 0 };
     }
 
-    let sumX = 0;
-    let sumY = 0;
-    let sumXY = 0;
-    let sumXX = 0;
-
-    for (let i = 0; i < nonNullData.length; i++) {
-        const x = i + 1; // X values are 1-based
-        const y = nonNullData[i];
-
-        sumX += x;
-        sumY += y;
-        sumXY += x * y;
-        sumXX += x * x;
-    }
-
-    const n = nonNullData.length;
-
+    const n = validDataPoints.length;
+    const sumX = validDataPoints.reduce((acc, point) => acc + point.x, 0);
+    const sumY = validDataPoints.reduce((acc, point) => acc + point.y, 0);
+    const sumXY = validDataPoints.reduce((acc, point) => acc + point.x * point.y, 0);
+    const sumXX = validDataPoints.reduce((acc, point) => acc + point.x * point.x, 0);
+    
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
-
-    //console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
-
-    // Debugging print statements
-    //console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
-    //console.log("slope:", slope, "intercept:", intercept);
-
+    
     return function (x) {
         return slope * x + intercept;
     };
 }
+
+function getTrendlineData(data) {
+    const trendlineFunction = calculateTrendline(data);
+    return data.map((_, idx) => {
+        // Call the trendline function with the sequential index starting at 1
+        const x = idx + 1;
+        const y = trendlineFunction(x);
+        return y !== null && !isNaN(y) ? y : null;
+    });
+}
+
 
 function getTrendlineData(seriesData) {
     const trendlineFunction = calculateTrendline(seriesData);
