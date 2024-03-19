@@ -93,23 +93,28 @@ function extractDataFromTable() {
 
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
-        const date = dateCell ? dateCell.textContent.trim() : "";
+        const dateString = dateCell ? dateCell.textContent.trim() : "";
+        const date = new Date(dateString);  // Convert to Date object
 
-        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
+        const scoreCells = row.querySelectorAll("td:not(:first-child)");
         const rowScores = Array.from(scoreCells, cell => parseInt(cell.textContent || '0', 10));
 
         data.push({ date, scores: rowScores });
     });
 
     // Sort the data by date in ascending order
-    data.sort((a, b) => new Date(a.date) - new Date(b.date));
+    data.sort((a, b) => a.date - b.date);
 
-    // Extract dates and scores into separate arrays
-    const dates = data.map(item => item.date);
+    // Convert dates to a numerical scale (e.g., days since the first date)
+    const startDate = data[0].date; // Assuming data is not empty
+    const dateNumbers = data.map(item => Math.floor((item.date - startDate) / (24 * 60 * 60 * 1000)));
+
+    // Extract scores into separate arrays
     const scores = data.map(item => item.scores);
 
-    return { dates, scores };
+    return { dates: data.map(item => item.date.toISOString().split('T')[0]), scores, dateNumbers };
 }
+
 
 // Populates the series data based on selected columns, header map, and scores.
 function populateSeriesData(selectedColumns, headerMap, scores) {
