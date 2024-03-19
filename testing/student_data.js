@@ -230,6 +230,9 @@ function updateChart(selectedColumns) { // Update function signature
             dashArray: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
             ),
+            curve: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? 'straight' : 'smooth'
+            ),
         },
     });
 }
