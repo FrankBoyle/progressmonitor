@@ -16,6 +16,7 @@ let scores = [];  // Declare scores globally
 let isBarChartInitialized = false;
 // Define global variable
 let metadataId;
+let dateNumbers;
 
 
 const seriesColors = [
@@ -93,7 +94,8 @@ function extractDataFromTable() {
 
     tableRows.forEach((row) => {
         const dateCell = row.querySelector("td:first-child");
-        const date = dateCell ? dateCell.textContent.trim() : "";
+        const dateText = dateCell ? dateCell.textContent.trim() : "";
+        const date = new Date(dateText);
 
         const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
         const rowScores = Array.from(scoreCells, cell => parseInt(cell.textContent || '0', 10));
@@ -102,14 +104,19 @@ function extractDataFromTable() {
     });
 
     // Sort the data by date in ascending order
-    data.sort((a, b) => new Date(a.date) - new Date(b.date));
+    data.sort((a, b) => a.date - b.date);
+
+    // Convert dates to a numerical scale (e.g., days since the first date)
+    const startDate = data[0].date; // Assuming data is not empty
+    const dateNumbers = data.map(item => Math.floor((item.date - startDate) / (24 * 60 * 60 * 1000)));
 
     // Extract dates and scores into separate arrays
     const dates = data.map(item => item.date);
     const scores = data.map(item => item.scores);
 
-    return { dates, scores };
+    return { dates, scores, dateNumbers }; // Include dateNumbers in the returned object
 }
+
 
 // Populates the series data based on selected columns, header map, and scores.
 function populateSeriesData(selectedColumns, headerMap, scores) {
@@ -239,7 +246,7 @@ function initializeChart() {
     // Extract headers and data
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    const { dates, scores } = extractDataFromTable();
+    const { dates, scores , dateNumbers} = extractDataFromTable();
     allSeries = generateSeriesData(scores, headerNames);
 
     // Get selected columns
