@@ -20,7 +20,7 @@
             echo '<p class="error">The email address is already registered!</p>';
         }
         if ($query->rowCount() == 0) {
-          $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password,school_id) VALUES (:fname,:lname,:email,:password_hash,:school_id)");
+          $query = $connection->prepare("INSERT INTO accounts(fname,lname,email,password,schoolId) VALUES (:fname,:lname,:email,:password_hash,:school_id)");
           $query->bindParam("fname", $fname, PDO::PARAM_STR);
             $query->bindParam("lname", $lname, PDO::PARAM_STR);
             $query->bindParam("school_id", $school_id, PDO::PARAM_INT);  // Assuming school_id is an integer
