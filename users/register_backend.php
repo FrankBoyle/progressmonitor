@@ -20,13 +20,14 @@
             echo '<p class="error">The email address is already registered!</p>';
         }
         if ($query->rowCount() == 0) {
-          $query = $connection->prepare("INSERT INTO accounts(fname, lname, email, password, SchoolID) VALUES (:fname, :lname, :email, :password_hash, :school_id)");
-          $query->bindParam("fname", $fname, PDO::PARAM_STR);
-          $query->bindParam("lname", $lname, PDO::PARAM_STR);
-          $query->bindParam("email", $email, PDO::PARAM_STR);
-          $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
-          $query->bindParam("school_id", $school_id, PDO::PARAM_INT); // Assuming SchoolID is an INT. Adjust if necessary.
+          $query = $connection->prepare("INSERT INTO accounts(SchoolID, fname, lname, email, password) VALUES (:school_id, :fname, :lname, :email, :password_hash)");
+          $query->bindParam(":school_id", $school_id, PDO::PARAM_INT);
+          $query->bindParam(":fname", $fname, PDO::PARAM_STR);
+          $query->bindParam(":lname", $lname, PDO::PARAM_STR);
+          $query->bindParam(":email", $email, PDO::PARAM_STR);
+          $query->bindParam(":password_hash", $password_hash, PDO::PARAM_STR);
           $result = $query->execute();
+         
           
             if ($result) {
               header("Location: ../login.php");
