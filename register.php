@@ -1,7 +1,3 @@
-<?php
-    include('./users/register_backend.php');
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
