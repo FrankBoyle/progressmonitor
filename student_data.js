@@ -200,28 +200,33 @@ function generateFinalSeriesData(data, selectedColumns) {
 
 // Update the chart based on selected columns.
 function updateChart(selectedColumns) {
-    // Filter out blank columns and retrieve their data
-    const newSeriesData = allSeries
-        .filter((series, index) => selectedColumns.includes(headerNames[index + 1]))
-        .filter(series => series.data.some(value => value !== null));
-
-    const trendlineSeriesData = [];
+    // Retrieve series data for selected columns
+    const newSeriesData = selectedColumns.map(columnName => {
+        const columnIndex = headerNames.indexOf(columnName);
+        if (columnIndex !== -1) {
+            return {
+                name: columnName,
+                data: allSeries[columnIndex].data, // Use data from allSeries
+                color: seriesColors[columnIndex] || undefined, // Use color from seriesColors if available
+            };
+        } else {
+            console.error(`Column ${columnName} not found in header names`);
+            return null;
+        }
+    }).filter(series => series !== null);
 
     // Generate trendline data for non-blank columns
-    newSeriesData.forEach(series => {
-        const trendlineData = getTrendlineData(series.data);
-        trendlineSeriesData.push({
-            name: series.name + ' Trendline',
-            data: trendlineData,
-            type: 'line',
-            width: '85%',
-            color: series.color,
-            ...trendlineOptions,
-        });
-    });
+    const trendlineSeriesData = newSeriesData.map(series => ({
+        name: series.name + ' Trendline',
+        data: getTrendlineData(series.data),
+        type: 'line',
+        width: '85%',
+        color: series.color,
+        ...trendlineOptions,
+    }));
 
-    // If no valid data series are selected, keep the existing series data on the chart
-    const finalSeriesData = newSeriesData.length > 0 ? [...newSeriesData, ...trendlineSeriesData] : [...allSeries];
+    // Combine series data and trendline data
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
 
     // Update the chart
     chart.updateSeries(finalSeriesData);
@@ -235,8 +240,6 @@ function updateChart(selectedColumns) {
         },
     });
 }
-
-
 
 // Modify the initializeChart function to use extractDataFromTable
 function initializeChart() {
