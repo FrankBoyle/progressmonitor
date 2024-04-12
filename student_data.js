@@ -221,7 +221,7 @@ function updateChart(selectedColumns) {
     });
 
     // If no valid data series are selected, keep the existing series data on the chart
-    const finalSeriesData = newSeriesData.length > 0 ? [...newSeriesData, ...trendlineSeriesData] : allSeries;
+    const finalSeriesData = newSeriesData.length > 0 ? [...newSeriesData, ...trendlineSeriesData] : [...allSeries];
 
     // Update the chart
     chart.updateSeries(finalSeriesData);
@@ -235,6 +235,7 @@ function updateChart(selectedColumns) {
         },
     });
 }
+
 
 
 // Modify the initializeChart function to use extractDataFromTable
