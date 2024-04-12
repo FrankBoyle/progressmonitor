@@ -220,26 +220,21 @@ function updateChart(selectedColumns) {
         });
     });
 
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    // Combine existing series data with new series data
+    const finalSeriesData = [...allSeries, ...trendlineSeriesData];
 
-    // Update the chart only if there's data to display
-    if (finalSeriesData.length > 0) {
-        chart.updateSeries(finalSeriesData);
+    // Update the chart
+    chart.updateSeries(finalSeriesData);
 
-        chart.updateOptions({
-            stroke: {
-                width: finalSeriesData.map(series =>
-                    series.name.includes('Trendline') ? trendlineOptions.width : 6
-                ),
-                curve: 'smooth'
-            },
-        });
-    } else {
-        // Optionally handle the case where no valid data is available
-        console.warn('No valid data to display on the chart.');
-    }
+    chart.updateOptions({
+        stroke: {
+            width: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.width : 6
+            ),
+            curve: 'smooth'
+        },
+    });
 }
-
 
 
 // Modify the initializeChart function to use extractDataFromTable
