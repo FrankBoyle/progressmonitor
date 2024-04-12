@@ -86,45 +86,53 @@ $("#accordion").accordion({
     }
 });
 
-// Extracts dates and scores data from the provided HTML table.
-function extractDataFromTable() {
-    const tableRows = document.querySelectorAll("table tbody tr");
-    let data = [];
+// Generic function to extract data from HTML table
+function extractDataFromTable(options) {
+    const { tableSelector, dateCellSelector, scoreCellSelector } = options;
+    const tableRows = document.querySelectorAll(`${tableSelector} tbody tr`);
+    const dates = [];
+    const scores = [];
 
     tableRows.forEach((row) => {
-        const dateCell = row.querySelector("td:first-child");
-        const date = dateCell ? dateCell.textContent.trim() : "";
+        const dateCell = row.querySelector(dateCellSelector);
+        if (dateCell) {
+            dates.push(dateCell.textContent.trim());
+        } else {
+            dates.push(""); // or some default date or error handling
+        }
 
-        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
-        const rowScores = Array.from(scoreCells, cell => parseInt(cell.textContent || '0', 10));
+        const scoreCells = row.querySelectorAll(scoreCellSelector);
+        const rowScores = [];
 
-        data.push({ date, scores: rowScores });
+        scoreCells.forEach((cell) => {
+            rowScores.push(parseInt(cell.textContent || '0', 10));
+        });
+
+        scores.push(rowScores);
     });
-
-    // Sort the data by date in ascending order
-    data.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    // Extract dates and scores into separate arrays
-    const dates = data.map(item => item.date);
-    const scores = data.map(item => item.scores);
 
     return { dates, scores };
 }
 
-// Populates the series data based on selected columns, header map, and scores.
-function populateSeriesData(selectedColumns, headerMap, scores) {
+// Function to populate series data
+function populateSeriesData(selectedColumns, scores, headerNames, customNames = []) {
     const seriesData = [];
-    for (const col of selectedColumns) {
-      const headerName = headerMap[col];
-      const headerIndex = headerNames.indexOf(headerName);
-      if (headerIndex !== -1) {
-        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
-      }
-    }
-    //console.log("Populated series data:", seriesData);
+
+    selectedColumns.forEach(columnName => {
+        const columnIndex = headerNames.indexOf(columnName);
+        if (columnIndex !== -1) {
+            const data = scores.map(row => row[columnIndex - 1] || 0);
+            seriesData.push({ 
+                name: customNames[columnIndex - 1] || columnName, // Modify the naming convention if needed
+                data: data 
+            });
+        } else {
+            console.error(`Column ${columnName} not found in header names`);
+        }
+    });
 
     return seriesData;
-  }
+}
 
 // Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
@@ -234,25 +242,29 @@ function updateChart(selectedColumns) { // Update function signature
     });
 }
 
-// Initializes the chart with default settings.
+// Modify the initializeChart function to use extractDataFromTable
 function initializeChart() {
     // Extract headers and data
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-    const { dates, scores } = extractDataFromTable();
-    allSeries = generateSeriesData(scores, headerNames);
+
+    // Extract data using generic function
+    const { dates, scores } = extractDataFromTable({
+        tableSelector: "#dataTable",
+        dateCellSelector: "td:first-child",
+        scoreCellSelector: "td:not(:first-child):not(:last-child)"
+    });
 
     // Get selected columns
     selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    // Update series names
-    allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
+    // Populate series data
+    allSeries = populateSeriesData(selectedColumns, scores, headerNames);
 
     // Initialize the chart
     chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
     chart.render();    
-    //console.log('Chart rendered:', $('#chart').data('apexcharts'));
 
     // Update the chart on checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -261,7 +273,7 @@ function initializeChart() {
 
         updateChart(selectedColumns);
     }, 250));
-};
+}
 
 // The debounce function
 function debounce(func, wait) {
@@ -414,35 +426,6 @@ function generateStackedBarChartData(scores, headerNames, customNames = []) {
     return seriesList;
 }
 
-// Modify the extractDataForBarChart function to extract data.
-function extractDataForBarChart() {
-    const tableRows = document.querySelectorAll("table tbody tr");
-    const dates = [];
-    const scores = [];
-
-    tableRows.forEach((row) => {
-        const dateCell = row.querySelector("td:first-child");
-        if (dateCell) {
-            dates.push(dateCell.textContent.trim());
-        } else {
-            dates.push(""); // or some default date or error handling
-        }
-
-        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
-        const rowScores = [];
-
-        scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0', 10));
-        });
-
-        scores.push(rowScores);
-    });
-    //console.log("Extracted dates:", dates);
-    //console.log("Extracted scores:", scores);
-
-    return { dates, scores };
-}
-
 // Populate the stacked bar chart series data.
 function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames) {
     const seriesData = [];
@@ -465,17 +448,22 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
 // Initialize the bar chart
 function initializeBarChart() {
     // Ensure headerNames is populated correctly before calling getBarChartOptions
-    const { dates, scores } = extractDataForBarChart();
+    const { dates, scores } = extractDataFromTable({
+        tableSelector: "#dataTable",
+        dateCellSelector: "td:first-child",
+        scoreCellSelector: "td:not(:first-child):not(:last-child)"
+    });
+
+    // Get selected columns
     selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    // Pass headerNames explicitly to getBarChartOptions
-    const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
+    // Pass headerNames explicitly to populateSeriesData
+    const seriesData = populateSeriesData(selectedColumns, scores, headerNames);
 
     // Pass headerNames to getBarChartOptions function
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData, headerNames));
     barChart.render();
-    //console.log('Chart rendered:', $('#barChart').data('apexcharts'));
 
     // Add an event listener to update the bar chart when checkboxes change
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
@@ -488,21 +476,17 @@ function initializeBarChart() {
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
     // Re-extract the data
-    const { dates, scores } = extractDataForBarChart();
-    headerNames = Array.from(document.querySelector('#dataTable thead tr').querySelectorAll('th'))
-                         .map(th => th.innerText.trim());
-
-    //console.log("Selected Columns (updateBarChart):", selectedColumns);
-    //console.log("Header Names (updateBarChart):", headerNames);
+    const { dates, scores } = extractDataFromTable({
+        tableSelector: "#dataTable",
+        dateCellSelector: "td:first-child",
+        scoreCellSelector: "td:not(:first-child):not(:last-child)"
+    });
 
     // Populate series data
-    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
-
-    //console.log("New Series Data (updateBarChart):", newSeriesData);
+    const newSeriesData = populateSeriesData(selectedColumns, scores, headerNames);
 
     // Update bar chart
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
-    
 }
 
 function getBarChartOptions(dates, seriesData, headerNames) {
