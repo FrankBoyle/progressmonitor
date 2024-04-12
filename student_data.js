@@ -259,7 +259,7 @@ function initializeChart() {
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
         updateChart(selectedColumns);
-    }, 250));
+    }, 0));
 }
 
 // The debounce function
@@ -457,7 +457,7 @@ function initializeBarChart() {
         selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
         updateBarChart(selectedColumns);
-    }, 250));
+    }, 0));
 }
 
 // Update the bar chart with new data based on selected columns
