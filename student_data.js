@@ -220,8 +220,8 @@ function updateChart(selectedColumns) {
         });
     });
 
-    // Combine existing series data with new series data
-    const finalSeriesData = [...allSeries, ...trendlineSeriesData];
+    // If no valid data series are selected, keep the existing series data on the chart
+    const finalSeriesData = newSeriesData.length > 0 ? [...newSeriesData, ...trendlineSeriesData] : allSeries;
 
     // Update the chart
     chart.updateSeries(finalSeriesData);
