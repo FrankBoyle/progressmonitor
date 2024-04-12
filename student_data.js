@@ -200,32 +200,28 @@ function generateFinalSeriesData(data, selectedColumns) {
 
 // Update the chart based on selected columns.
 function updateChart(selectedColumns) {
-    // Retrieve series data for selected columns
-    const newSeriesData = selectedColumns.map(columnName => {
-        const columnIndex = headerNames.indexOf(columnName);
-        if (columnIndex !== -1) {
-            return {
-                name: columnName,
-                data: allSeries[columnIndex].data, // Use data from allSeries
-                color: seriesColors[columnIndex] || undefined, // Use color from seriesColors if available
-            };
-        } else {
-            console.error(`Column ${columnName} not found in header names`);
-            return null;
+    // Filter out selected columns but include those that are blank
+    const newSeriesData = allSeries
+        .filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
+
+    const trendlineSeriesData = [];
+
+    // Generate trendline data only for columns that have valid data
+    newSeriesData.forEach(series => {
+        if (series.data.some(value => value !== null)) {  // Check for at least some non-null data
+            const trendlineData = getTrendlineData(series.data);
+            trendlineSeriesData.push({
+                name: series.name + ' Trendline',
+                data: trendlineData,
+                type: 'line',
+                width: '85%',
+                color: series.color,
+                ...trendlineOptions,
+            });
         }
-    }).filter(series => series !== null);
+    });
 
-    // Generate trendline data for non-blank columns
-    const trendlineSeriesData = newSeriesData.map(series => ({
-        name: series.name + ' Trendline',
-        data: getTrendlineData(series.data),
-        type: 'line',
-        width: '85%',
-        color: series.color,
-        ...trendlineOptions,
-    }));
-
-    // Combine series data and trendline data
+    // Combine all selected series with or without trendline data
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
 
     // Update the chart
