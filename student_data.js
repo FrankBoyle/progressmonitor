@@ -199,48 +199,35 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns) { // Update function signature
-    // Clear existing series data
-    chart.updateSeries([]);
-
-    // Create a new series array based on selected columns
+function updateChart(selectedColumns) {
     const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
-
-    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
-    newSeriesData.forEach((series, index) => {
+
+    newSeriesData.forEach(series => {
         const trendlineData = getTrendlineData(series.data);
         trendlineSeriesData.push({
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            width: '85%', // Set the width to 1000 pixels
-            color: series.color,  // Ensure trendline has same color as series
+            width: '85%',
+            color: series.color,
             ...trendlineOptions,
         });
     });
-    
-    // Add trendline data to series
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    //console.log("New series data based on selected columns:", newSeriesData);
-    //console.log("Trendline series data:", trendlineSeriesData);
-    //console.log("Final series data for updating the chart:", finalSeriesData);
 
-    // Update the chart with the new series data and updated names
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
     chart.updateSeries(finalSeriesData);
 
-    // Update series names in the legend
     chart.updateOptions({
         stroke: {
             width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.width : 5
+                series.name.includes('Trendline') ? trendlineOptions.width : 6
             ),
-            dashArray: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
-            ),
+            curve: 'smooth'
         },
     });
 }
+
 
 // Modify the initializeChart function to use extractDataFromTable
 function initializeChart() {
