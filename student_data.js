@@ -86,53 +86,45 @@ $("#accordion").accordion({
     }
 });
 
-// Generic function to extract data from HTML table
-function extractDataFromTable(options) {
-    const { tableSelector, dateCellSelector, scoreCellSelector } = options;
-    const tableRows = document.querySelectorAll(`${tableSelector} tbody tr`);
-    const dates = [];
-    const scores = [];
+// Extracts dates and scores data from the provided HTML table.
+function extractDataFromTable() {
+    const tableRows = document.querySelectorAll("table tbody tr");
+    let data = [];
 
     tableRows.forEach((row) => {
-        const dateCell = row.querySelector(dateCellSelector);
-        if (dateCell) {
-            dates.push(dateCell.textContent.trim());
-        } else {
-            dates.push(""); // or some default date or error handling
-        }
+        const dateCell = row.querySelector("td:first-child");
+        const date = dateCell ? dateCell.textContent.trim() : "";
 
-        const scoreCells = row.querySelectorAll(scoreCellSelector);
-        const rowScores = [];
+        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
+        const rowScores = Array.from(scoreCells, cell => parseInt(cell.textContent || '0', 10));
 
-        scoreCells.forEach((cell) => {
-            rowScores.push(parseInt(cell.textContent || '0', 10));
-        });
-
-        scores.push(rowScores);
+        data.push({ date, scores: rowScores });
     });
+
+    // Sort the data by date in ascending order
+    data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // Extract dates and scores into separate arrays
+    const dates = data.map(item => item.date);
+    const scores = data.map(item => item.scores);
 
     return { dates, scores };
 }
 
-// Function to populate series data
-function populateSeriesData(selectedColumns, scores, headerNames, customNames = []) {
+// Populates the series data based on selected columns, header map, and scores.
+function populateSeriesData(selectedColumns, headerMap, scores) {
     const seriesData = [];
-
-    selectedColumns.forEach(columnName => {
-        const columnIndex = headerNames.indexOf(columnName);
-        if (columnIndex !== -1) {
-            const data = scores.map(row => row[columnIndex - 1] || 0);
-            seriesData.push({ 
-                name: customNames[columnIndex - 1] || columnName, // Modify the naming convention if needed
-                data: data 
-            });
-        } else {
-            console.error(`Column ${columnName} not found in header names`);
-        }
-    });
+    for (const col of selectedColumns) {
+      const headerName = headerMap[col];
+      const headerIndex = headerNames.indexOf(headerName);
+      if (headerIndex !== -1) {
+        seriesData.push(scores.map(scoreRow => scoreRow[headerIndex]));
+      }
+    }
+    //console.log("Populated series data:", seriesData);
 
     return seriesData;
-}
+  }
 
 // Modify generateSeriesData to skip dates with missing values
 function generateSeriesData(scores, headerNames, customNames = []) {
@@ -199,67 +191,71 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns) {
-    // Filter out selected columns but include those that are blank
-    const newSeriesData = allSeries
-        .filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
+function updateChart(selectedColumns) { // Update function signature
+    // Clear existing series data
+    chart.updateSeries([]);
 
+    // Create a new series array based on selected columns
+    const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
+
+    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
     const trendlineSeriesData = [];
-
-    // Generate trendline data only for columns that have valid data
-    newSeriesData.forEach(series => {
-        if (series.data.some(value => value !== null)) {  // Check for at least some non-null data
-            const trendlineData = getTrendlineData(series.data);
-            trendlineSeriesData.push({
-                name: series.name + ' Trendline',
-                data: trendlineData,
-                type: 'line',
-                width: '85%',
-                color: series.color,
-                ...trendlineOptions,
-            });
-        }
+    newSeriesData.forEach((series, index) => {
+        const trendlineData = getTrendlineData(series.data);
+        trendlineSeriesData.push({
+            name: series.name + ' Trendline',
+            data: trendlineData,
+            type: 'line',
+            width: '85%', // Set the width to 1000 pixels
+            color: series.color,  // Ensure trendline has same color as series
+            ...trendlineOptions,
+        });
     });
-
-    // Combine all selected series with or without trendline data
+    
+    // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    //console.log("New series data based on selected columns:", newSeriesData);
+    //console.log("Trendline series data:", trendlineSeriesData);
+    //console.log("Final series data for updating the chart:", finalSeriesData);
 
-    // Update the chart
+    // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
+    // Update series names in the legend
     chart.updateOptions({
         stroke: {
             width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.width : 6
+                series.name.includes('Trendline') ? trendlineOptions.width : 5
             ),
-            curve: 'smooth'
+            dashArray: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
+            ),
+            curve: finalSeriesData.map(series =>
+                series.name.includes('Trendline') ? 'straight' : 'smooth'
+            ),
         },
     });
 }
 
-// Modify the initializeChart function to use extractDataFromTable
+// Initializes the chart with default settings.
 function initializeChart() {
     // Extract headers and data
     const headerRow = document.querySelector('#dataTable thead tr');
     headerNames = Array.from(headerRow.querySelectorAll('th')).map(th => th.innerText.trim());
-
-    // Extract data using generic function
-    const { dates, scores } = extractDataFromTable({
-        tableSelector: "#dataTable",
-        dateCellSelector: "td:first-child",
-        scoreCellSelector: "td:not(:first-child):not(:last-child)"
-    });
+    const { dates, scores } = extractDataFromTable();
+    allSeries = generateSeriesData(scores, headerNames);
 
     // Get selected columns
     selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    // Populate series data
-    allSeries = populateSeriesData(selectedColumns, scores, headerNames);
+    // Update series names
+    allSeries = getUpdatedSeriesNames(allSeries, selectedColumns);
 
     // Initialize the chart
     chart = new ApexCharts(document.querySelector("#chart"), getChartOptions(dates));
     chart.render();    
+    //console.log('Chart rendered:', $('#chart').data('apexcharts'));
 
     // Update the chart on checkbox changes
     document.getElementById("columnSelector").addEventListener("change", debounce(function() {
@@ -267,8 +263,8 @@ function initializeChart() {
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
         updateChart(selectedColumns);
-    }, 0));
-}
+    }, 250));
+};
 
 // The debounce function
 function debounce(func, wait) {
@@ -360,47 +356,34 @@ const trendlineOptions = {
 };
 
 function calculateTrendline(data) {
-    const nonNullData = data.filter(value => value !== null && !isNaN(value));
-
-    if (nonNullData.length === 0) {
-        // Handle the case where there are no valid data points
+    const validDataPoints = data.map((val, idx) => ({ x: idx + 1, y: val })).filter(point => point.y !== null && !isNaN(point.y));
+    
+    if (validDataPoints.length === 0) {
         return { slope: 0, intercept: 0 };
     }
 
-    let sumX = 0;
-    let sumY = 0;
-    let sumXY = 0;
-    let sumXX = 0;
-
-    for (let i = 0; i < nonNullData.length; i++) {
-        const x = i + 1; // X values are 1-based
-        const y = nonNullData[i];
-
-        sumX += x;
-        sumY += y;
-        sumXY += x * y;
-        sumXX += x * x;
-    }
-
-    const n = nonNullData.length;
-
+    const n = validDataPoints.length;
+    const sumX = validDataPoints.reduce((acc, point) => acc + point.x, 0);
+    const sumY = validDataPoints.reduce((acc, point) => acc + point.y, 0);
+    const sumXY = validDataPoints.reduce((acc, point) => acc + point.x * point.y, 0);
+    const sumXX = validDataPoints.reduce((acc, point) => acc + point.x * point.x, 0);
+    
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
-
-    //console.log("Trendline calculations - slope:", slope, "intercept:", intercept);
-
-    // Debugging print statements
-    //console.log("sumX:", sumX, "sumY:", sumY, "sumXY:", sumXY, "sumXX:", sumXX);
-    //console.log("slope:", slope, "intercept:", intercept);
-
+    
     return function (x) {
         return slope * x + intercept;
     };
 }
 
-function getTrendlineData(seriesData) {
-    const trendlineFunction = calculateTrendline(seriesData);
-    return seriesData.map((y, x) => trendlineFunction(x)); // Adjusted this line as well
+function getTrendlineData(data) {
+    const trendlineFunction = calculateTrendline(data);
+    return data.map((_, idx) => {
+        // Call the trendline function with the sequential index starting at 1
+        const x = idx + 1;
+        const y = trendlineFunction(x);
+        return y !== null && !isNaN(y) ? y : null;
+    });
 }
 
 ////////////////////////////////////////////////
@@ -419,6 +402,35 @@ function generateStackedBarChartData(scores, headerNames, customNames = []) {
         });
     }
     return seriesList;
+}
+
+// Modify the extractDataForBarChart function to extract data.
+function extractDataForBarChart() {
+    const tableRows = document.querySelectorAll("table tbody tr");
+    const dates = [];
+    const scores = [];
+
+    tableRows.forEach((row) => {
+        const dateCell = row.querySelector("td:first-child");
+        if (dateCell) {
+            dates.push(dateCell.textContent.trim());
+        } else {
+            dates.push(""); // or some default date or error handling
+        }
+
+        const scoreCells = row.querySelectorAll("td:not(:first-child):not(:last-child)");
+        const rowScores = [];
+
+        scoreCells.forEach((cell) => {
+            rowScores.push(parseInt(cell.textContent || '0', 10));
+        });
+
+        scores.push(rowScores);
+    });
+    //console.log("Extracted dates:", dates);
+    //console.log("Extracted scores:", scores);
+
+    return { dates, scores };
 }
 
 // Populate the stacked bar chart series data.
@@ -443,45 +455,44 @@ function populateStackedBarChartSeriesData(selectedColumns, scores, headerNames)
 // Initialize the bar chart
 function initializeBarChart() {
     // Ensure headerNames is populated correctly before calling getBarChartOptions
-    const { dates, scores } = extractDataFromTable({
-        tableSelector: "#dataTable",
-        dateCellSelector: "td:first-child",
-        scoreCellSelector: "td:not(:first-child):not(:last-child)"
-    });
-
-    // Get selected columns
+    const { dates, scores } = extractDataForBarChart();
     selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    // Pass headerNames explicitly to populateSeriesData
-    const seriesData = populateSeriesData(selectedColumns, scores, headerNames);
+    // Pass headerNames explicitly to getBarChartOptions
+    const seriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
 
     // Pass headerNames to getBarChartOptions function
     barChart = new ApexCharts(document.querySelector("#barChart"), getBarChartOptions(dates, seriesData, headerNames));
     barChart.render();
+    //console.log('Chart rendered:', $('#barChart').data('apexcharts'));
 
     // Add an event listener to update the bar chart when checkboxes change
     document.getElementById("columnSelector").addEventListener("change", debounce(function () {
         selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
             .map(checkbox => checkbox.getAttribute("data-column-name") || '');
         updateBarChart(selectedColumns);
-    }, 0));
+    }, 250));
 }
 
 // Update the bar chart with new data based on selected columns
 function updateBarChart(selectedColumns) {
     // Re-extract the data
-    const { dates, scores } = extractDataFromTable({
-        tableSelector: "#dataTable",
-        dateCellSelector: "td:first-child",
-        scoreCellSelector: "td:not(:first-child):not(:last-child)"
-    });
+    const { dates, scores } = extractDataForBarChart();
+    headerNames = Array.from(document.querySelector('#dataTable thead tr').querySelectorAll('th'))
+                         .map(th => th.innerText.trim());
+
+    //console.log("Selected Columns (updateBarChart):", selectedColumns);
+    //console.log("Header Names (updateBarChart):", headerNames);
 
     // Populate series data
-    const newSeriesData = populateSeriesData(selectedColumns, scores, headerNames);
+    const newSeriesData = populateStackedBarChartSeriesData(selectedColumns, scores, headerNames);
+
+    //console.log("New Series Data (updateBarChart):", newSeriesData);
 
     // Update bar chart
     barChart.updateOptions(getBarChartOptions(dates, newSeriesData, headerNames));
+    
 }
 
 function getBarChartOptions(dates, seriesData, headerNames) {
