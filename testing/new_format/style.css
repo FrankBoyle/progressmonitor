@@ -1,88 +1,85 @@
+/* Basic Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body, html {
-    height: 100%;
-    font-family: 'Arial', sans-serif;
-}
-
-.dashboard-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
+    font-family: 'Arial', sans-serif; /* You may choose a font that matches the design */
+  }
+  
+  body {
+    background-color: #E0E5EC; /* Match the background color to your design */
+  }
+  
+  /* Navigation Bar */
+  .navbar {
+    background-color: #ffffff;
     padding: 1rem;
-    background-color: #333;
-    color: white;
-}
-
-.dashboard-header {
-    background-color: #555;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-}
-
-.main-content {
-    flex-grow: 1;
-    display: flex;
-    padding: 1rem;
-}
-
-.sidebar {
-    background-color: #777;
-    color: white;
-    padding: 1rem;
-    width: 20%;
-}
-
-.group-section {
-    flex-grow: 1;
-    background-color: #999;
-    padding: 1rem;
-    margin-left: 1rem;
-}
-
-.create-group-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-}
-
-.button-create-group {
-    padding: 0.5rem 1rem;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.student-list {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header Section */
+  .header {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  /* Main Content */
+  .main-content {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    background-color: #ffffff;
+    padding: 1rem;
+    width: 300px; /* Adjust as necessary */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Group Section */
+  .group-section {
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Student List */
+  .student-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(4, 1fr); /* Adjust based on the number of columns */
     gap: 1rem;
-}
-
-.student-item {
-    background-color: #bbb;
+    padding: 1rem;
+  }
+  
+  .student-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
     padding: 1rem;
     text-align: center;
-}
-
-.student-item img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 50%;
-}
-
-.student-name {
-    margin-top: 0.5rem;
-}
+  }
+  
+  /* Buttons */
+  .button {
+    background-color: #4C5B5C; /* Adjust color as needed */
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #394e4f; /* Darker shade for hover effect */
+  }
+  
+  /* Add more styles as needed for other elements */
+  
