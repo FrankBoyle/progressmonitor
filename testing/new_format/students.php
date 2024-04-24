@@ -8,43 +8,43 @@
 </head>
 <body>
 
-    <nav class="navbar">
-        <!-- Navigation content goes here -->
-        <div>Logo</div>
-        <div>User Icon</div>
-    </nav>
+    <div class="dashboard-container">
 
-    <header class="header">
-        <!-- Main header content like page title -->
-        <h1>Dashboard</h1>
-    </header>
+        <nav class="navbar">
+            <div class="logo">Logo</div>
+            <div class="user-icon">User Icon</div>
+        </nav>
 
-    <div class="main-content">
-        
-        <aside class="sidebar">
-            <!-- Sidebar content like navigation links or user info -->
-            <h2>Existing Group</h2>
-            <div class="existing-group">Group Name</div>
-            <div class="student-list">Student List</div>
-        </aside>
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+        </div>
 
-        <section class="group-section">
-            <!-- Group content like details and buttons -->
-            <h2>Create Group</h2>
-            <button class="button">Create Group</button>
+        <div class="main-content">
 
-            <!-- More sections as needed -->
-            <div class="student-list">
-                <!-- Repeat for each student -->
-                <div class="student-item">
-                    <div>Student Avatar</div>
-                    <div>Student Name</div>
+            <aside class="sidebar">
+                <h2>Existing Group</h2>
+                <div class="group-name">Group Name</div>
+                <div class="student-list-title">Student List</div>
+            </aside>
+
+            <section class="group-section">
+                <div class="create-group-header">
+                    <h2>Create Group</h2>
+                    <button class="button-create-group">Create Group</button>
                 </div>
-                <!-- ... other students ... -->
-            </div>
-        </section>
+                <div class="student-list">
+                    <!-- Repeat this div for each student -->
+                    <div class="student-item">
+                        <img src="student-avatar.png" alt="Student Avatar">
+                        <div class="student-name">Student Name</div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
     </div>
 
-    <script src="script.js"></script>
 </body>
 </html>
+
