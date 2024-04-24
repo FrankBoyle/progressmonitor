@@ -15,7 +15,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #333333;
+  background-color: #0f16e8;
   color: white;
 }
 
@@ -30,15 +30,11 @@ body {
 }
 
 .content {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
   padding: 1rem;
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  width: 48%; /* Adjust the width for spacing */
+  align-items: start;
 }
 
 .box {
@@ -46,21 +42,26 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  margin-bottom: 1rem;
+  /* Use min-height to ensure boxes have a uniform height */
+  min-height: 150px;
 }
 
 /* Additional styles for buttons, lists, etc. */
 button {
-  background-color: #1d7ac6;
+  background-color: #178feb;
   color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  display: block; /* Make buttons block to fill the container */
+  width: 100%; /* Optional: Set a max-width if the buttons are too wide */
+  margin-top: 10px; /* Add some space between the title and the button */
 }
 
 ul {
   list-style-type: none;
+  padding-left: 0; /* Remove padding to align the list to the left */
 }
 
 ul li {
@@ -77,9 +78,6 @@ h2 {
 /* Responsive adjustments if necessary */
 @media (max-width: 768px) {
   .content {
-      flex-direction: column;
-  }
-  .column {
-      width: 100%;
+      grid-template-columns: 1fr; /* Stack the boxes in one column on small screens */
   }
 }
