@@ -46,12 +46,12 @@ body {
 .groups-list h2,
 .students h2,
 .details h2 {
-  color: #333; /* Adjust color to match design */
+  color: #1d22a0; /* Adjust color to match design */
   margin-bottom: 15px;
 }
 
 .btn {
-  background-color: #555; /* Adjust button color to match design */
+  background-color: #2692e0; /* Adjust button color to match design */
   color: white;
   border: none;
   padding: 10px 20px;
