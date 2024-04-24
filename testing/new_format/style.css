@@ -1,0 +1,85 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif; /* You may choose a font that matches the design */
+  }
+  
+  body {
+    background-color: #E0E5EC; /* Match the background color to your design */
+  }
+  
+  /* Navigation Bar */
+  .navbar {
+    background-color: #ffffff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header Section */
+  .header {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  /* Main Content */
+  .main-content {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    background-color: #ffffff;
+    padding: 1rem;
+    width: 300px; /* Adjust as necessary */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Group Section */
+  .group-section {
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Student List */
+  .student-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Adjust based on the number of columns */
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .student-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  /* Buttons */
+  .button {
+    background-color: #4C5B5C; /* Adjust color as needed */
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #394e4f; /* Darker shade for hover effect */
+  }
+  
+  /* Add more styles as needed for other elements */
+  
