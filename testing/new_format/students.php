@@ -3,52 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <header class="top-nav">
-        <div class="logo">Logo</div>
-        <div class="top-nav-icons">
-            <!-- Assuming these are buttons or icons -->
-            <div class="icon">Icon 1</div>
-            <div class="icon">Icon 2</div>
-            <!-- ... more icons ... -->
-            <div class="icon">Icon 3</div>
-        </div>
-    </header>
+    <div class="dashboard">
+        <!-- Top Bar -->
+        <header class="dashboard-header">
+            <div class="logo">Logo</div>
+            <div class="header-icons">
+                <span>Icon 1</span>
+                <span>Icon 2</span>
+                <span>Icon 3</span>
+            </div>
+        </header>
 
-    <main class="dashboard">
-        <section class="create-group">
-            <h1>Create Group</h1>
-            <button class="btn">CREATE GROUP</button>
-        </section>
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Create Group Box -->
+            <section class="box create-group">
+                <h2>Create Group</h2>
+                <button>Create Group</button>
+            </section>
 
-        <section class="groups-list">
-            <h2>Existing Group</h2>
-            <div class="group">Group 1</div>
-            <div class="group">Group 2</div>
-            <!-- ... more groups ... -->
-        </section>
+            <!-- Existing Groups List -->
+            <section class="box existing-groups">
+                <h2>Existing Group</h2>
+                <ul>
+                    <li>Group 1</li>
+                    <li>Group 2</li>
+                    <!-- ... more groups ... -->
+                </ul>
+            </section>
 
-        <section class="students">
-            <h2>Student</h2>
-            <div class="student">Student 1</div>
-            <div class="student">Student 2</div>
-            <!-- ... more students ... -->
-        </section>
+            <!-- Students List -->
+            <section class="box students-list">
+                <h2>Student</h2>
+                <ul>
+                    <li>Student 1</li>
+                    <li>Student 2</li>
+                    <!-- ... more students ... -->
+                </ul>
+            </section>
 
-        <section class="details">
-            <h2>Details</h2>
-            <div class="detail">Detail 1</div>
-            <div class="detail">Detail 2</div>
-            <!-- ... more details ... -->
-        </section>
-    </main>
+            <!-- Details Section -->
+            <section class="box details">
+                <h2>Details</h2>
+                <ul>
+                    <li>Detail 1</li>
+                    <li>Detail 2</li>
+                    <!-- ... more details ... -->
+                </ul>
+            </section>
+        </main>
+    </div>
 
 </body>
 </html>
-
-
-

@@ -1,70 +1,88 @@
-/* General Styles */
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #E5E5E5; /* Adjust background color to match design */
+/* Basic Reset */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-.top-nav {
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #E5E5E5;
+}
+
+.dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color:  #1d22a0; /* Adjust color to match design */
-  padding: 10px;
+  padding: 1rem;
+  background-color: #333;
   color: white;
 }
 
-.top-nav .logo {
+.logo {
   font-weight: bold;
 }
 
-.top-nav-icons .icon {
-  display: inline-block;
-  margin-left: 10px;
-  /* Use SVGs or font-icons for actual icons */
+.header-icons span {
+  margin-right: 10px;
+  cursor: pointer;
+  /* Icon styles here */
 }
 
-.dashboard {
+.content {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1rem;
+  padding: 1rem;
 }
 
-.create-group,
-.groups-list,
-.students,
-.details {
-  background-color: #FFF;
+.box {
+  background-color: white;
+  padding: 20px;
   border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.create-group h1,
-.groups-list h2,
-.students h2,
-.details h2 {
-  color: #1d22a0; /* Adjust color to match design */
-  margin-bottom: 15px;
+/* Adjust the grid span to match the layout in your design */
+.create-group {
+  grid-column: span 3;
 }
 
-.btn {
-  background-color: #2692e0; /* Adjust button color to match design */
+.existing-groups {
+  grid-column: span 3;
+}
+
+.students-list {
+  grid-column: span 3;
+}
+
+.details {
+  grid-column: span 3;
+}
+
+/* You can adjust grid-column span for different screen sizes using media queries */
+
+/* Additional styles for buttons, lists, etc. */
+button {
+  background-color: #555;
   color: white;
+  padding: 10px 15px;
   border: none;
-  padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-/* Add specific styles for groups, students, details ... */
-.group, .student, .detail {
-  background-color: #EFEFEF; /* Light grey background */
+ul {
+  list-style-type: none;
+}
+
+ul li {
+  background-color: #EEE;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 8px;
   border-radius: 5px;
 }
 
-/* ... Additional styling ... */
+h2 {
+  margin-bottom: 1rem;
+}
