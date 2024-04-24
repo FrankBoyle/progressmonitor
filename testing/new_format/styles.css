@@ -15,7 +15,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #333;
+  background-color: #1f26f0;
   color: white;
 }
 
@@ -30,10 +30,15 @@ body {
 }
 
 .content {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 1rem;
+  display: flex;
+  justify-content: space-between;
   padding: 1rem;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 48%; /* Adjust the width for spacing */
 }
 
 .box {
@@ -41,30 +46,12 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
 }
-
-/* Adjust the grid span to match the layout in your design */
-.create-group {
-  grid-column: span 3;
-}
-
-.existing-groups {
-  grid-column: span 3;
-}
-
-.students-list {
-  grid-column: span 3;
-}
-
-.details {
-  grid-column: span 3;
-}
-
-/* You can adjust grid-column span for different screen sizes using media queries */
 
 /* Additional styles for buttons, lists, etc. */
 button {
-  background-color: #555;
+  background-color: #1d7ac6;
   color: white;
   padding: 10px 15px;
   border: none;
@@ -85,4 +72,14 @@ ul li {
 
 h2 {
   margin-bottom: 1rem;
+}
+
+/* Responsive adjustments if necessary */
+@media (max-width: 768px) {
+  .content {
+      flex-direction: column;
+  }
+  .column {
+      width: 100%;
+  }
 }
