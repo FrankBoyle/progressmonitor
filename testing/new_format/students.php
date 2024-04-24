@@ -3,54 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <div class="dashboard-container">
-
-        <nav class="navbar">
-            <!-- Add your icons here -->
-            <div class="nav-item">🏠 Home</div>
-            <div class="nav-item right">8:00</div>
-        </nav>
-
-        <div class="main-content">
-
-            <section class="create-group-section">
-                <div class="create-group-header">
-                    <div class="header-content">
-                        <h2>Create Group</h2>
-                        <p>Some description if needed</p>
-                        <button class="button-create-group">CREATE GROUP</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="existing-group-section">
-                <h2>Existing Group</h2>
-                <div class="group-name">Group 1</div>
-                <div class="student-list-title">Student List</div>
-            </section>
-
-            <section class="student-section">
-                <h2>Students</h2>
-                <!-- This would be repeated for each student, potentially generated via JS -->
-                <div class="student-card">
-                    <div class="student-avatar">👤</div>
-                    <div class="student-info">
-                        <div class="student-name">Student Name</div>
-                        <div class="student-details">More info</div>
-                    </div>
-                </div>
-            </section>
-
+    <header class="top-nav">
+        <div class="logo">Logo</div>
+        <div class="top-nav-icons">
+            <!-- Assuming these are buttons or icons -->
+            <div class="icon">Icon 1</div>
+            <div class="icon">Icon 2</div>
+            <!-- ... more icons ... -->
+            <div class="icon">Icon 3</div>
         </div>
+    </header>
 
-    </div>
+    <main class="dashboard">
+        <section class="create-group">
+            <h1>Create Group</h1>
+            <button class="btn">CREATE GROUP</button>
+        </section>
+
+        <section class="groups-list">
+            <h2>Existing Group</h2>
+            <div class="group">Group 1</div>
+            <div class="group">Group 2</div>
+            <!-- ... more groups ... -->
+        </section>
+
+        <section class="students">
+            <h2>Student</h2>
+            <div class="student">Student 1</div>
+            <div class="student">Student 2</div>
+            <!-- ... more students ... -->
+        </section>
+
+        <section class="details">
+            <h2>Details</h2>
+            <div class="detail">Detail 1</div>
+            <div class="detail">Detail 2</div>
+            <!-- ... more details ... -->
+        </section>
+    </main>
 
 </body>
 </html>
+
 
 
