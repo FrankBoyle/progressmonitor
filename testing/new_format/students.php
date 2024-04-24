@@ -3,40 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Page</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <div class="dashboard-container">
 
         <nav class="navbar">
-            <div class="logo">Logo</div>
-            <div class="user-icon">User Icon</div>
+            <!-- Add your icons here -->
+            <div class="nav-item">🏠 Home</div>
+            <div class="nav-item right">8:00</div>
         </nav>
-
-        <div class="dashboard-header">
-            <h1>Dashboard</h1>
-        </div>
 
         <div class="main-content">
 
-            <aside class="sidebar">
-                <h2>Existing Group</h2>
-                <div class="group-name">Group Name</div>
-                <div class="student-list-title">Student List</div>
-            </aside>
-
-            <section class="group-section">
+            <section class="create-group-section">
                 <div class="create-group-header">
-                    <h2>Create Group</h2>
-                    <button class="button-create-group">Create Group</button>
+                    <div class="header-content">
+                        <h2>Create Group</h2>
+                        <p>Some description if needed</p>
+                        <button class="button-create-group">CREATE GROUP</button>
+                    </div>
                 </div>
-                <div class="student-list">
-                    <!-- Repeat this div for each student -->
-                    <div class="student-item">
-                        <img src="student-avatar.png" alt="Student Avatar">
+            </section>
+
+            <section class="existing-group-section">
+                <h2>Existing Group</h2>
+                <div class="group-name">Group 1</div>
+                <div class="student-list-title">Student List</div>
+            </section>
+
+            <section class="student-section">
+                <h2>Students</h2>
+                <!-- This would be repeated for each student, potentially generated via JS -->
+                <div class="student-card">
+                    <div class="student-avatar">👤</div>
+                    <div class="student-info">
                         <div class="student-name">Student Name</div>
+                        <div class="student-details">More info</div>
                     </div>
                 </div>
             </section>
@@ -47,4 +52,5 @@
 
 </body>
 </html>
+
 
