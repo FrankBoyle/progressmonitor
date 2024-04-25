@@ -12,6 +12,7 @@
         <!-- Top Bar -->
         <header class="dashboard-header">
             <div class="logo">Logo</div>
+            <button class="create-group-btn">Create Group</button>
             <nav class="top-nav-menu">
                 <!-- Other navigation items can go here -->
                 <button class="create-group-btn">Create Group</button>
