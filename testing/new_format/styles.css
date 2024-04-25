@@ -1,3 +1,5 @@
+/* ... other styles ... */
+
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -12,20 +14,29 @@
   align-items: center;
 }
 
-.section-header h2 {
-  display: flex; /* This makes the title and button align on the same line */
-  justify-content: space-between;
-  align-items: center; /* This vertically centers the button with the title */
-  width: 100%; /* Ensures the header takes the full width */
+.logo {
+  margin-right: 20px; /* Add some space between the logo and the button */
+}
+
+.create-group-btn {
+  background-color: #555;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  /* This margin ensures that the button is aligned with the logo */
+  margin-right: auto;
 }
 
 .add-group-btn {
-  padding: 0 0.5em; /* Adjust the padding as needed */
-  margin: 0 0 0 0.5em; /* Gives a little space between the title and the button */
-  font-size: 1.5rem; /* Adjust the font size as needed */
-  /* Other styles can remain the same */
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 5px; /* Adjust as needed */
 }
-
 
 .right-nav-icons {
   display: flex;
