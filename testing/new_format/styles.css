@@ -1,98 +1,58 @@
-/* Basic Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #E5E5E5;
-}
+/* ... other styles ... */
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #2629da;
+  background-color: #333;
   color: white;
 }
 
-.top-nav-menu {
+.left-nav {
   display: flex;
   align-items: center;
 }
 
-.create-group-btn {
-  background-color: #4db6ee;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 10px; /* Add space between the button and other nav items */
-}
-
 .logo {
-  font-weight: bold;
+  margin-right: 20px; /* Add some space between the logo and the button */
 }
 
-.header-icons span {
-  margin-right: 10px;
-  cursor: pointer;
-  /* Icon styles here */
-}
-
-.content {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-  align-items: start;
-}
-
-.box {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  /* Use min-height to ensure boxes have a uniform height */
-  min-height: 150px;
-}
-
-/* Additional styles for buttons, lists, etc. */
-button {
-  background-color: #178feb;
+.create-group-btn {
+  background-color: #555;
   color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  display: block; /* Make buttons block to fill the container */
-  width: 100%; /* Optional: Set a max-width if the buttons are too wide */
-  margin-top: 10px; /* Add some space between the title and the button */
+  /* This margin ensures that the button is aligned with the logo */
+  margin-right: auto;
 }
 
-ul {
-  list-style-type: none;
-  padding-left: 0; /* Remove padding to align the list to the left */
+.right-nav-icons {
+  display: flex;
+  align-items: center;
 }
 
-ul li {
-  background-color: #EEE;
-  margin-bottom: 10px;
-  padding: 8px;
-  border-radius: 5px;
-}
-
-h2 {
-  margin-bottom: 1rem;
+.right-nav-icons span {
+  margin-left: 10px;
+  cursor: pointer;
+  /* Style for icons here */
 }
 
 /* Responsive adjustments if necessary */
 @media (max-width: 768px) {
-  .content {
-      grid-template-columns: 1fr; /* Stack the boxes in one column on small screens */
+  .dashboard-header {
+      flex-wrap: wrap;
+  }
+  .left-nav,
+  .right-nav-icons {
+      width: 100%;
+      justify-content: space-between;
+      margin-bottom: 10px;
+  }
+  .right-nav-icons span {
+      margin: 0; /* Reset margin for mobile view */
   }
 }
+

@@ -11,11 +11,11 @@
     <div class="dashboard">
         <!-- Top Bar -->
         <header class="dashboard-header">
-            <div class="logo">Logo</div>
-            <button class="create-group-btn">Create Group</button>
-            <nav class="top-nav-menu">
-                <!-- Other navigation items can go here -->
+            <div class="left-nav">
+                <div class="logo">Logo</div>
                 <button class="create-group-btn">Create Group</button>
+            </div>
+            <nav class="right-nav-icons">
                 <span>Icon 1</span>
                 <span>Icon 2</span>
                 <span>Icon 3</span>
