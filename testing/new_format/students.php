@@ -12,11 +12,13 @@
         <!-- Top Bar -->
         <header class="dashboard-header">
             <div class="logo">Logo</div>
-            <div class="header-icons">
+            <nav class="top-nav-menu">
+                <!-- Other navigation items can go here -->
+                <button class="create-group-btn">Create Group</button>
                 <span>Icon 1</span>
                 <span>Icon 2</span>
                 <span>Icon 3</span>
-            </div>
+            </nav>
         </header>
 
         <!-- Main Content -->

@@ -15,8 +15,23 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #0f16e8;
+  background-color: #2629da;
   color: white;
+}
+
+.top-nav-menu {
+  display: flex;
+  align-items: center;
+}
+
+.create-group-btn {
+  background-color: #4db6ee;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px; /* Add space between the button and other nav items */
 }
 
 .logo {
