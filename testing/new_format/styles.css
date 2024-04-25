@@ -13,16 +13,10 @@
 }
 
 .section-header h2 {
-  display: flex; /* Keeps title and button in a row */
+  display: flex; /* Aligns the title and button in a row */
   align-items: center; /* Centers them vertically */
-  gap: 10px; /* Adds space between the title and the button */
-  /* Remove justify-content or set it to 'flex-start' to align items to the start */
-}
-
-.add-group-btn {
-  padding: 0 0.5em; /* Adjust padding as needed */
-  font-size: 1.5rem; /* Keep the font size large for the button */
-  /* Rest of your styles for .add-group-btn */
+  justify-content: space-between; /* Puts space between title and button if needed */
+  padding-right: 1rem; /* Ensures padding inside the header */
 }
 
 .section-header .add-group-btn {
