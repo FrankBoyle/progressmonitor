@@ -18,15 +18,13 @@
   margin-right: 20px; /* Add some space between the logo and the button */
 }
 
-.create-group-btn {
-  background-color: #555;
+.add-group-btn {
+  background-color: transparent;
   color: white;
-  padding: 10px 15px;
   border: none;
-  border-radius: 5px;
+  font-size: 1.2rem;
   cursor: pointer;
-  /* This margin ensures that the button is aligned with the logo */
-  margin-right: auto;
+  margin-left: 5px; /* Adjust as needed */
 }
 
 .right-nav-icons {
