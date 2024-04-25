@@ -26,7 +26,8 @@
             <!-- Existing Groups Section -->
             <section class="box existing-groups">
                 <div class="section-header">
-                    <h2>Existing Groups <button class="add-group-btn">+</button></h2>
+                    <h2>Existing Groups</h2>
+                    <button class="add-group-btn">+</button>
                 </div>
                 <ul>
                     <li>Group 1</li>
