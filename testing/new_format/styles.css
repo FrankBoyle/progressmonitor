@@ -18,14 +18,20 @@
   margin-right: 20px; /* Add some space between the logo and the button */
 }
 
-.add-group-btn {
-  background-color: transparent;
-  color: white;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  margin-left: 5px; /* Adjust as needed */
+.group-box .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+.plus-button {
+  background: none;
+  border: none;
+  font-size: 1.5em; /* adjust as needed */
+  cursor: pointer;
+  /* additional styling */
+}
+
 
 .right-nav-icons {
   display: flex;

@@ -24,9 +24,9 @@
             <!-- Create Group Box -->
 
             <!-- Existing Groups Section -->
-            <section class="box existing-groups">
+            <section class="group-box">
                 <div class="section-header">
-                    <h2>Existing Groups <button class="add-group-btn">+</button></h2>
+                    <h2>Existing Groups <button class="plus-button">+</button></h2>
                 </div>
                 <ul>
                     <li>Group 1</li>
