@@ -23,8 +23,7 @@
         <main class="content">
             <!-- First Row -->
             <section class="box create-group">
-                <h2>Create Group</h2>
-                <button>Create Group</button>
+            <h2>Create Group <button class="add-group-btn">+</button></h2>
             </section>
 
             <section class="box students-list">
