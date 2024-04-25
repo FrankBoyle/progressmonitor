@@ -26,13 +26,13 @@
             <!-- Existing Groups Section -->
             <section class="box existing-groups">
                 <div class="section-header">
-                    <h2>Existing Group</h2>
-                    <button class="plus-button">+</button>
+                    <h2>Existing Groups</h2>
+                    <button class="add-group-btn">+</button>
                 </div>
                 <ul>
                     <li>Group 1</li>
                     <li>Group 2</li>
-                    <!-- ... more groups ... -->
+                    <!-- More groups... -->
                 </ul>
             </section>
 
