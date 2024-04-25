@@ -24,10 +24,6 @@
         <!-- Main Content -->
         <main class="content">
             <!-- Create Group Box -->
-            <section class="box create-group">
-                <h2>Create Group</h2>
-                <button>Create Group</button>
-            </section>
 
             <!-- Existing Groups List -->
             <section class="box existing-groups">
