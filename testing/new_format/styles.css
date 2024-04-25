@@ -18,14 +18,20 @@
   margin-right: 20px; /* Add some space between the logo and the button */
 }
 
-.add-group-btn {
-  background-color: transparent;
-  color: white;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  margin-left: 5px; /* Adjust as needed */
+.section-header h2 {
+  display: flex; /* This makes the title and button align on the same line */
+  justify-content: space-between;
+  align-items: center; /* This vertically centers the button with the title */
+  width: 100%; /* Ensures the header takes the full width */
 }
+
+.add-group-btn {
+  padding: 0 0.5em; /* Adjust the padding as needed */
+  margin: 0 0 0 0.5em; /* Gives a little space between the title and the button */
+  font-size: 1.5rem; /* Adjust the font size as needed */
+  /* Other styles can remain the same */
+}
+
 
 .right-nav-icons {
   display: flex;
