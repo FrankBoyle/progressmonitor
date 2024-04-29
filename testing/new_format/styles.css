@@ -75,7 +75,7 @@ ul li {
   border: none; /* Removes border */
   color: inherit; /* Inherits the text color from the parent, which is white */
   cursor: pointer;
-  font-size: 1.5rem; /* Makes the '+' sign larger */
+  font-size: 1.0rem; /* Makes the '+' sign larger */
   margin-left: 10px; /* Adds some space between the title and the button */
 }
 
