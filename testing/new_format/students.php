@@ -23,11 +23,11 @@
         <main class="content">
             <!-- First Row -->
             <section class="box create-group">
-            <h2>Create Group <button class="add-group-btn">+</button></h2>
+            <h2>Groups <button class="add-group-btn">+</button></h2>
             </section>
 
             <section class="box students-list">
-                <h2>Student</h2>
+                <h3>Students</h3>
                 <ul>
                     <li>Student 1</li>
                     <li>Student 2</li>
@@ -36,7 +36,7 @@
 
             <!-- Second Row -->
             <section class="box existing-groups">
-                <h2>Existing Group</h2>
+                <h3>Goals</h3>
                 <ul>
                     <li>Group 1</li>
                     <li>Group 2</li>
@@ -44,7 +44,7 @@
             </section>
 
             <section class="box details">
-                <h2>Details</h2>
+                <h3>Details</h3>
                 <ul>
                     <li>Detail 1</li>
                     <li>Detail 2</li>
