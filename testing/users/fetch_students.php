@@ -12,14 +12,14 @@ $teacherId = $_SESSION['teacher_id'];
 function fetchStudentsByTeacher($teacherId, $archived = false) {
     global $connection;
     $archivedValue = $archived ? 1 : 0;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = ?");
+    $stmt = $connection->prepare("SELECT s.* FROM Students_new s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = ?");
     $stmt->execute([$teacherId, $archivedValue]);
     return $stmt->fetchAll();
 }
 
 $allStudents = fetchStudentsByTeacher($teacherId, false);
 
-function addNewStudent($studentName, $teacherId) {
+function addNewStudent($firstName, $lastName, $teacherId) {
     global $connection;
 
     $stmt = $connection->prepare("SELECT school_id FROM Teachers WHERE teacher_id = ?");
@@ -27,23 +27,23 @@ function addNewStudent($studentName, $teacherId) {
     $teacherInfo = $stmt->fetch();
     $teacherSchoolId = $teacherInfo['school_id'];
 
-    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND school_id = ?");
-    $stmt->execute([$studentName, $teacherSchoolId]);
+    $stmt = $connection->prepare("SELECT student_id_new FROM Students_new WHERE first_name = ? AND last_name = ? AND school_id = ?");
+    $stmt->execute([$firstName, $lastName, $teacherSchoolId]);
     $duplicateStudent = $stmt->fetch();
 
     if ($duplicateStudent) {
         return "Student with the same name already exists.";
     } 
 
-    $stmt = $connection->prepare("INSERT INTO Students (name, school_id) VALUES (?, ?)");
-    $stmt->execute([$studentName, $teacherSchoolId]);
+    $stmt = $connection->prepare("INSERT INTO Students_new (first_name, last_name, school_id) VALUES (?, ?, ?)");
+    $stmt->execute([$firstName, $lastName, $teacherSchoolId]);
     return "New student added successfully.";
 }
 
 function archiveStudent($studentId) {
     global $connection;
     if ($_SESSION['is_admin']) {
-        $stmt = $connection->prepare("UPDATE Students SET archived = TRUE WHERE student_id = ?");
+        $stmt = $connection->prepare("UPDATE Students_new SET archived = TRUE WHERE student_id_new = ?");
         $stmt->execute([$studentId]);
         return "Student archived successfully.";
     } else {
@@ -64,7 +64,7 @@ $teachers = fetchTeachersBySchool($schoolId);
 function unarchiveStudent($studentId) {
     global $connection;
 
-    $stmt = $connection->prepare("UPDATE Students SET archived = FALSE WHERE student_id = ?");
+    $stmt = $connection->prepare("UPDATE Students_new SET archived = FALSE WHERE student_id_new = ?");
     $stmt->execute([$studentId]);
 
     return "Student unarchived successfully.";
@@ -72,8 +72,8 @@ function unarchiveStudent($studentId) {
 
 function fetchStudentsByGroup($teacherId, $groupId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s 
-                                   INNER JOIN StudentGroup sg ON s.student_id = sg.student_id 
+    $stmt = $connection->prepare("SELECT s.* FROM Students_new s 
+                                   INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id 
                                    WHERE sg.group_id = ? AND s.school_id IN 
                                    (SELECT school_id FROM Teachers WHERE teacher_id = ?)");
     $stmt->execute([$groupId, $teacherId]);
@@ -131,6 +131,7 @@ function fetchAllRelevantGroups($teacherId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+$teacherId = $_SESSION['teacher_id'];
 $groups = fetchAllRelevantGroups($teacherId);
 $defaultGroupStmt = $connection->prepare("SELECT default_group_id FROM Teachers WHERE teacher_id = ?");
 $defaultGroupStmt->execute([$teacherId]);
@@ -177,22 +178,17 @@ $showArchived = $_SESSION['show_archived'] ?? false;
 
 $students = fetchStudentsByTeacher($teacherId, $showArchived);
 
+$teacherId = $_SESSION['teacher_id'];
+
 if (isset($_POST['create_group'])) {
     $groupName = $_POST['group_name'];
     $schoolId = $_SESSION['school_id'];
     $teacherId = $_SESSION['teacher_id'];
 
-    // Check if a group with the same name already exists for this teacher
-    $checkStmt = $connection->prepare("SELECT group_id FROM Groups WHERE group_name = ? AND teacher_id = ?");
-    $checkStmt->execute([$groupName, $teacherId]);
-    if ($checkStmt->fetch()) {
-        $message = "A group with this name already exists.";
-    } else {
-        // Group with the same name does not exist, proceed with creation
-        $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
-        $stmt->execute([$groupName, $schoolId, $teacherId]);
-        $message = "New group created successfully.";
-    }
+    $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
+    $stmt->execute([$groupName, $schoolId, $teacherId]);
+
+    $message = "New group created successfully.";
 }
 
 if (isset($_POST['edit_group'])) {
@@ -252,10 +248,12 @@ if (isset($_POST['assign_to_group'])) {
     }
 }
 
+$message = "";
 if (isset($_POST['add_new_student'])) {
-    $newStudentName = $_POST['new_student_name'];
-    if (!empty($newStudentName)) {
-        $message = addNewStudent($newStudentName, $teacherId);
+    $newFirstName = $_POST['new_first_name'];
+    $newLastName = $_POST['new_last_name'];
+    if (!empty($newFirstName) && !empty($newLastName)) {
+        $message = addNewStudent($newFirstName, $newLastName, $teacherId);
     }
 }
 
