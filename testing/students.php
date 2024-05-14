@@ -53,33 +53,13 @@ function fetchStudentsByGroup($groupId) {
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
-    <!-- Include Summernote JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
+
     <style>
-        .selected-group {
-            background-color: #D3D3D3; /* Light gray background */
-            color: #000; /* Black text color */
-            font-weight: bold; /* Bold text */
-        }
-        .group-options {
-            position: absolute;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-        .group-options button {
-            display: block;
-            margin: 5px 0;
-        }
     </style>
 </head>
 <body>
 
     <div class="dashboard">
-        <!-- Top Bar -->
         <header class="dashboard-header">
             <div class="logo">Logo</div>
             <div class="header-icons">
@@ -89,9 +69,7 @@ function fetchStudentsByGroup($groupId) {
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="content">
-            <!-- First Row -->
             <section class="box create-group">
                 <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
                 <div id="group-list">
@@ -108,17 +86,23 @@ function fetchStudentsByGroup($groupId) {
                 </ul>
             </section>
 
-            <!-- Second Row -->
             <section class="box existing-groups">
                 <h3>Goals</h3>
                 <ul id="goal-list">
                     <!-- Goals will be loaded here -->
                 </ul>
             </section>
+
+            <section class="box details">
+                <h3>Details</h3>
+                <ul>
+                    <li>Detail 1</li>
+                    <li>Detail 2</li>
+                </ul>
+            </section>
         </main>
     </div>
 
-    <!-- Add Group Modal -->
     <div id="add-group-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="hideAddGroupModal()">&times;</span>
@@ -131,60 +115,65 @@ function fetchStudentsByGroup($groupId) {
         </div>
     </div>
 
-    <!-- Group Options Menu -->
     <div id="group-options" class="group-options">
         <button onclick="editGroup()">Edit Group</button>
         <button onclick="shareGroup()">Share Group</button>
     </div>
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
     <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             loadGroups();
-            $(document).click(function(event) {
-                const optionsMenu = $('#group-options');
-                if (!optionsMenu.is(event.target) && optionsMenu.has(event.target).length === 0) {
-                    optionsMenu.hide();
+            document.addEventListener('click', function(event) {
+                const optionsMenu = document.getElementById('group-options');
+                if (!optionsMenu.contains(event.target)) {
+                    optionsMenu.style.display = 'none';
                 }
             });
         });
 
         function loadGroups() {
             fetch('users/fetch_groups.php')
-            .then(response => response.json())
-            .then(data => {
-                const groupList = $('#group-list ul');
-                groupList.empty();
-                data.forEach(group => {
-                    const listItem = $('<li></li>').text(group.group_name).attr('data-group-id', group.group_id).click(function() {
-                        selectGroup($(this));
-                    });
+                .then(response => response.json())
+                .then(data => {
+                    const groupList = document.getElementById('group-list').querySelector('ul');
+                    groupList.innerHTML = '';
+                    data.forEach(group => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = group.group_name;
+                        listItem.setAttribute('data-group-id', group.group_id);
+                        listItem.addEventListener('click', function() {
+                            selectGroup(this);
+                        });
 
-                    const optionsBtn = $('<button></button>').text('⋮').addClass('options-btn').click(function(event) {
-                        showGroupOptions(event, group.group_id);
-                    });
+                        const optionsBtn = document.createElement('button');
+                        optionsBtn.textContent = '⋮';
+                        optionsBtn.className = 'options-btn';
+                        optionsBtn.addEventListener('click', function(event) {
+                            showGroupOptions(event, group.group_id);
+                        });
 
-                    listItem.append(optionsBtn);
-                    groupList.append(listItem);
+                        listItem.appendChild(optionsBtn);
+                        groupList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error loading groups. Please try again.');
                 });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error loading groups. Please try again.');
-            });
         }
 
         function showAddGroupModal() {
-            $('#add-group-modal').show();
+            document.getElementById('add-group-modal').style.display = 'block';
         }
 
         function hideAddGroupModal() {
-            $('#add-group-modal').hide();
+            document.getElementById('add-group-modal').style.display = 'none';
         }
 
         function addGroup(event) {
             event.preventDefault();
-            const groupName = $('#group-name').val();
+            const groupName = document.getElementById('group-name').value;
 
             fetch('students.php', {
                 method: 'POST',
@@ -193,27 +182,26 @@ function fetchStudentsByGroup($groupId) {
                 },
                 body: 'create_group=1&group_name=' + encodeURIComponent(groupName)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.text();
-            })
-            .then(data => {
-                console.log('Group added successfully:', data);
-                loadGroups(); // Reload groups after adding
-                hideAddGroupModal();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error adding the group. Please try again.');
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Group added successfully:', data);
+                    loadGroups();
+                    hideAddGroupModal();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error adding the group. Please try again.');
+                });
         }
 
         function selectGroup(element) {
-            const groupId = element.attr('data-group-id');
+            const groupId = element.getAttribute('data-group-id');
 
-            // Fetch students by group
             fetch('users/fetch_students_by_group.php', {
                 method: 'POST',
                 headers: {
@@ -221,81 +209,85 @@ function fetchStudentsByGroup($groupId) {
                 },
                 body: 'group_id=' + encodeURIComponent(groupId)
             })
-            .then(response => response.json())
-            .then(data => {
-                // Update the student list
-                const studentList = $('#student-list');
-                studentList.empty();
-                data.forEach(student => {
-                    const listItem = $('<li></li>').text(student.first_name + ' ' + student.last_name).attr('data-student-id', student.student_id_new).click(function() {
-                        selectStudent($(this));
-                    });
-                    studentList.append(listItem);
-                });
-
-                // Update the selected group
-                $('#group-list li').removeClass('selected-group');
-                element.addClass('selected-group');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error fetching students. Please try again.');
-            });
-        }
-
-        function selectStudent(element) {
-            const studentId = element.attr('data-student-id');
-            const selectedGroup = $('.selected-group');
-
-            if (selectedGroup.length) {
-                const metadataId = selectedGroup.attr('data-group-id');
-
-                // Fetch goals by student and metadata
-                fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(metadataId)}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Update the goals list
-                    const goalList = $('#goal-list');
-                    goalList.empty();
-                    data.forEach(goal => {
-                        const listItem = $('<li></li>').html(goal.goal_description); // Use .html() to display rich text
-                        goalList.append(listItem);
+                    const studentList = document.getElementById('student-list');
+                    studentList.innerHTML = '';
+                    data.forEach(student => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = student.first_name + ' ' + student.last_name;
+                        listItem.setAttribute('data-student-id', student.student_id_new);
+                        listItem.addEventListener('click', function() {
+                            selectStudent(this);
+                        });
+                        studentList.appendChild(listItem);
                     });
 
-                    // Initialize Summernote on goal items
-                    $('#goal-list li').summernote({
-                        toolbar: false, // Disable toolbar
-                        airMode: true, // Enable air mode for inline editing
-                        disableDragAndDrop: true, // Disable drag and drop functionality
-                        popover: false, // Disable popover
-                        height: null, // Adjust height as needed
-                        minHeight: null, // Adjust min height as needed
-                        maxHeight: null, // Adjust max height as needed
-                    });
+                    const groupItems = document.getElementById('group-list').querySelectorAll('li');
+                    groupItems.forEach(group => group.classList.remove('selected-group'));
+                    element.classList.add('selected-group');
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('There was an error fetching goals. Please try again.');
+                    alert('There was an error fetching students. Please try again.');
                 });
+        }
+
+        function selectStudent(element) {
+            const studentId = element.getAttribute('data-student-id');
+            const selectedGroup = document.querySelector('.selected-group');
+
+            if (selectedGroup) {
+                const metadataId = selectedGroup.getAttribute('data-group-id');
+
+                fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(metadataId)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const goalList = document.getElementById('goal-list');
+                        goalList.innerHTML = '';
+                        data.forEach(goal => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = goal.goal_description;
+                            goalList.appendChild(listItem);
+                        });
+
+                        document.querySelectorAll('#goal-list li').forEach(li => {
+                            // Initialize Summernote on each goal item
+                            $(li).summernote({
+                                toolbar: false,
+                                airMode: true,
+                                disableDragAndDrop: true,
+                                popover: false,
+                                height: null,
+                                minHeight: null,
+                                maxHeight: null,
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('There was an error fetching goals. Please try again.');
+                    });
             }
         }
 
         function showGroupOptions(event, groupId) {
             event.stopPropagation();
-            const optionsMenu = $('#group-options');
-            optionsMenu.show();
-            optionsMenu.css({ left: event.pageX + 'px', top: event.pageY + 'px' });
-            optionsMenu.attr('data-group-id', groupId);
+            const optionsMenu = document.getElementById('group-options');
+            optionsMenu.style.display = 'block';
+            optionsMenu.style.left = event.pageX + 'px';
+            optionsMenu.style.top = event.pageY + 'px';
+            optionsMenu.setAttribute('data-group-id', groupId);
         }
 
         function editGroup() {
-            const groupId = $('#group-options').attr('data-group-id');
+            const groupId = document.getElementById('group-options').getAttribute('data-group-id');
             alert('Edit group: ' + groupId);
             // Implement edit group functionality
         }
 
         function shareGroup() {
-            const groupId = $('#group-options').attr('data-group-id');
+            const groupId = document.getElementById('group-options').getAttribute('data-group-id');
             alert('Share group: ' + groupId);
             // Implement share group functionality
         }

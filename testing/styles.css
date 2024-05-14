@@ -57,8 +57,10 @@
       }
 
       .selected-group {
-          font-weight: bold; /* Bold text */
-      }
+        background-color: #D3D3D3; /* Light gray background */
+        color: #000; /* Black text color */
+        font-weight: bold; /* Bold text */
+    }
 
       .options-btn {
           background: none;
