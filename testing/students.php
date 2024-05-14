@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
         });
 
         function loadGroups() {
-            fetch('fetch_groups.php')
+            fetch('users/fetch_groups.php')
             .then(response => response.json())
             .then(data => {
                 const groupList = document.getElementById('group-list').querySelector('ul');
