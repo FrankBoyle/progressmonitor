@@ -107,9 +107,8 @@ function fetchStudentsByGroup($groupId) {
             <!-- Second Row -->
             <section class="box existing-groups">
                 <h3>Goals</h3>
-                <ul>
-                    <li>Goal 1</li>
-                    <li>Goal 2</li>
+                <ul id="goal-list">
+                    <!-- Goals will be loaded here -->
                 </ul>
             </section>
 
@@ -235,6 +234,8 @@ function fetchStudentsByGroup($groupId) {
                 data.forEach(student => {
                     const listItem = document.createElement('li');
                     listItem.textContent = student.first_name + ' ' + student.last_name;
+                    listItem.setAttribute('data-student-id', student.student_id_new);
+                    listItem.onclick = () => selectStudent(listItem);
                     studentList.appendChild(listItem);
                 });
 
@@ -247,6 +248,33 @@ function fetchStudentsByGroup($groupId) {
                 console.error('Error:', error);
                 alert('There was an error fetching students. Please try again.');
             });
+        }
+
+        function selectStudent(element) {
+            const studentId = element.getAttribute('data-student-id');
+            const selectedGroup = document.querySelector('.selected-group');
+
+            if (selectedGroup) {
+                const groupId = selectedGroup.getAttribute('data-group-id');
+
+                // Fetch goals by student and group
+                fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(groupId)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the goals list
+                    const goalList = document.getElementById('goal-list');
+                    goalList.innerHTML = '';
+                    data.forEach(goal => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = goal.goal_description; // Adjust this line based on your goals table structure
+                        goalList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error fetching goals. Please try again.');
+                });
+            }
         }
 
         function showGroupOptions(event, groupId) {
