@@ -74,6 +74,7 @@ body {
   cursor: pointer;
   margin-left: 10px;
 }
+
 .group-options {
   position: absolute;
   background: white;
@@ -83,6 +84,7 @@ body {
   display: none;
   z-index: 1000;
 }
+
 .group-options button {
   display: block;
   width: 100%;
@@ -91,7 +93,10 @@ body {
   padding: 10px;
   text-align: left;
   cursor: pointer;
+  font-size: 14px;
+  color: #333;
 }
+
 .group-options button:hover {
   background-color: #f0f0f0;
 }
