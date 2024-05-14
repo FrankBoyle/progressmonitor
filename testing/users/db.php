@@ -7,9 +7,10 @@
 
     try {
         $connection = new PDO("mysql:host=".HOST.";dbname=".DATABASE, USER, PASSWORD);
+        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        error_log("Database connection established successfully.");
     } catch (PDOException $e) {
+        error_log("Database connection failed: " . $e->getMessage());
         exit("Error: " . $e->getMessage());
-
     }
-
-?>
+    ?>
