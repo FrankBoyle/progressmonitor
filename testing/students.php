@@ -147,7 +147,7 @@ function fetchStudentsByGroup($groupId) {
             loadGroups();
             document.addEventListener('click', function(event) {
                 const optionsMenu = document.getElementById('group-options');
-                if (!optionsMenu.contains(event.target) && !event.target.classList.contains('group-options-btn')) {
+                if (!optionsMenu.contains(event.target) && !event.target.classList.contains('options-btn')) {
                     optionsMenu.style.display = 'none';
                 }
             });
@@ -164,10 +164,12 @@ function fetchStudentsByGroup($groupId) {
                     listItem.textContent = group.group_name;
                     listItem.setAttribute('data-group-id', group.group_id);
                     listItem.onclick = () => selectGroup(listItem);
+
                     const optionsBtn = document.createElement('button');
-                    optionsBtn.textContent = '+';
-                    optionsBtn.classList.add('group-options-btn');
+                    optionsBtn.textContent = '⋮';
+                    optionsBtn.classList.add('options-btn');
                     optionsBtn.onclick = (event) => showGroupOptions(event, group.group_id);
+
                     listItem.appendChild(optionsBtn);
                     groupList.appendChild(listItem);
                 });
