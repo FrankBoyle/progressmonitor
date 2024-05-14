@@ -12,7 +12,7 @@ $teacherId = $_SESSION['teacher_id'];
 function fetchStudentsByTeacher($teacherId, $archived = false) {
     global $connection;
     $archivedValue = $archived ? 1 : 0;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = ?");
+    $stmt = $connection->prepare("SELECT s.* FROM Students_new s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = ?");
     $stmt->execute([$teacherId, $archivedValue]);
     return $stmt->fetchAll();
 }
@@ -27,7 +27,7 @@ function addNewStudent($studentName, $teacherId) {
     $teacherInfo = $stmt->fetch();
     $teacherSchoolId = $teacherInfo['school_id'];
 
-    $stmt = $connection->prepare("SELECT student_id FROM Students WHERE name = ? AND school_id = ?");
+    $stmt = $connection->prepare("SELECT student_id FROM Students_new WHERE name = ? AND school_id = ?");
     $stmt->execute([$studentName, $teacherSchoolId]);
     $duplicateStudent = $stmt->fetch();
 
@@ -35,7 +35,7 @@ function addNewStudent($studentName, $teacherId) {
         return "Student with the same name already exists.";
     } 
 
-    $stmt = $connection->prepare("INSERT INTO Students (name, school_id) VALUES (?, ?)");
+    $stmt = $connection->prepare("INSERT INTO Students_new (name, school_id) VALUES (?, ?)");
     $stmt->execute([$studentName, $teacherSchoolId]);
     return "New student added successfully.";
 }
@@ -43,7 +43,7 @@ function addNewStudent($studentName, $teacherId) {
 function archiveStudent($studentId) {
     global $connection;
     if ($_SESSION['is_admin']) {
-        $stmt = $connection->prepare("UPDATE Students SET archived = TRUE WHERE student_id = ?");
+        $stmt = $connection->prepare("UPDATE Students_new SET archived = TRUE WHERE student_id = ?");
         $stmt->execute([$studentId]);
         return "Student archived successfully.";
     } else {
@@ -64,7 +64,7 @@ $teachers = fetchTeachersBySchool($schoolId);
 function unarchiveStudent($studentId) {
     global $connection;
 
-    $stmt = $connection->prepare("UPDATE Students SET archived = FALSE WHERE student_id = ?");
+    $stmt = $connection->prepare("UPDATE Students_new SET archived = FALSE WHERE student_id = ?");
     $stmt->execute([$studentId]);
 
     return "Student unarchived successfully.";
@@ -72,7 +72,7 @@ function unarchiveStudent($studentId) {
 
 function fetchStudentsByGroup($teacherId, $groupId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s 
+    $stmt = $connection->prepare("SELECT s.* FROM Students_new s 
                                    INNER JOIN StudentGroup sg ON s.student_id = sg.student_id 
                                    WHERE sg.group_id = ? AND s.school_id IN 
                                    (SELECT school_id FROM Teachers WHERE teacher_id = ?)");
