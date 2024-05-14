@@ -55,7 +55,23 @@ function fetchStudentsByGroup($groupId) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
 
     <style>
-
+        .selected-group {
+            background-color: #D3D3D3; /* Light gray background */
+            color: #000; /* Black text color */
+            font-weight: bold; /* Bold text */
+        }
+        .group-options {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .group-options button {
+            display: block;
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -98,6 +114,13 @@ function fetchStudentsByGroup($groupId) {
                 </ul>
             </section>
 
+            <section class="box details">
+                <h3>Details</h3>
+                <ul>
+                    <li>Detail 1</li>
+                    <li>Detail 2</li>
+                </ul>
+            </section>
         </main>
     </div>
 
