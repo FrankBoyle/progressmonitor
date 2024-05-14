@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('./users/auth_session.php');
-include('./users/db.php');
+include('/users/auth_session.php');
+include('/users/db.php');
 
 // Enable PHP error logging
 ini_set('display_errors', 1);
