@@ -22,7 +22,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #333;
+  background-color: #6b6b6b;
   color: white;
 }
 
@@ -94,7 +94,7 @@ body {
   text-align: left;
   cursor: pointer;
   font-size: 14px;
-  color: #333;
+  color: #6b6b6b;
 }
 
 .group-options button:hover {
@@ -183,7 +183,7 @@ h3 {
 }
 
 .group-options button:hover {
-  background-color: #333;
+  background-color: #6b6b6b;
 }
 
 /* Responsive adjustments if necessary */
