@@ -1,7 +1,7 @@
 <?php
 
-include('users/auth_session.php');
-include('users/db.php');
+include('auth_session.php');
+include('db.php');
 
 header('Content-Type: application/json');
 
