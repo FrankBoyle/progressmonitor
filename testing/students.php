@@ -198,7 +198,8 @@ function fetchStudentsByGroup($groupId) {
         function selectGroup(element) {
             const groupId = element.getAttribute('data-group-id');
 
-            fetch('users/fetch_students_by_group.php', {
+            // Fetch students by group
+            fetch('fetch_students_by_group.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -207,6 +208,7 @@ function fetchStudentsByGroup($groupId) {
             })
             .then(response => response.json())
             .then(data => {
+                // Update the student list
                 const studentList = document.getElementById('student-list');
                 studentList.innerHTML = '';
                 data.forEach(student => {
@@ -214,6 +216,11 @@ function fetchStudentsByGroup($groupId) {
                     listItem.textContent = student.first_name + ' ' + student.last_name;
                     studentList.appendChild(listItem);
                 });
+
+                // Update the selected group
+                const groupList = document.getElementById('group-list').querySelectorAll('li');
+                groupList.forEach(group => group.classList.remove('selected-group'));
+                element.classList.add('selected-group');
             })
             .catch(error => {
                 console.error('Error:', error);

@@ -51,6 +51,13 @@ body {
   grid-row: span 2; /* Each of these boxes takes two rows height */
 }
 
+.selected-group {
+  background-color: #D3D3D3; /* Light gray background */
+  color: #000; /* Black text color */
+  font-weight: bold; /* Bold text */
+}
+
+
 button {
   background-color: #555;
   color: white;
