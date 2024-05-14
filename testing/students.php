@@ -198,7 +198,7 @@ function fetchStudentsByGroup($groupId) {
         function selectGroup(element) {
             const groupId = element.getAttribute('data-group-id');
 
-            fetch('fetch_students_by_group.php', {
+            fetch('users/fetch_students_by_group.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
