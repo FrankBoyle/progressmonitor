@@ -7,6 +7,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Function to fetch the school ID for a student
+function fetchSchoolIdForStudent($studentId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT school_id FROM Students_new WHERE student_id_new = ?");
+    $stmt->execute([$studentId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['school_id'] : null;
+}
+
 // Fetch goals for a specific student
 function fetchGoals($studentId, $metadataId, $schoolId) {
     global $connection;

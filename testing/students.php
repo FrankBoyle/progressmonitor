@@ -251,31 +251,31 @@ function fetchStudentsByGroup($groupId) {
         }
 
         function selectStudent(element) {
-            const studentId = element.getAttribute('data-student-id');
-            const selectedGroup = document.querySelector('.selected-group');
+        const studentId = element.getAttribute('data-student-id');
+        const selectedGroup = document.querySelector('.selected-group');
 
-            if (selectedGroup) {
-                const groupId = selectedGroup.getAttribute('data-group-id');
+        if (selectedGroup) {
+            const metadataId = selectedGroup.getAttribute('data-group-id');
 
-                // Fetch goals by student and group
-                fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(groupId)}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Update the goals list
-                    const goalList = document.getElementById('goal-list');
-                    goalList.innerHTML = '';
-                    data.forEach(goal => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = goal.goal_description; // Adjust this line based on your goals table structure
-                        goalList.appendChild(listItem);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error fetching goals. Please try again.');
+            // Fetch goals by student and metadata
+            fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(metadataId)}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update the goals list
+                const goalList = document.getElementById('goal-list');
+                goalList.innerHTML = '';
+                data.forEach(goal => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = goal.goal_description; // Adjust this line based on your goals table structure
+                    goalList.appendChild(listItem);
                 });
-            }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error fetching goals. Please try again.');
+            });
         }
+    }
 
         function showGroupOptions(event, groupId) {
             event.stopPropagation();
