@@ -1,71 +1,3 @@
-<?php
-session_start();
-include('users/auth_session.php');
-include('users/db.php');
-
-// Enable PHP error logging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
-
-// Check if the connection is properly set
-if (!isset($connection)) {
-    error_log("Database connection is not set.");
-    die("Database connection is not set.");
-}
-
-error_log("Database connection is set.");
-
-// Function to fetch students by group ID
-function fetchStudentsByGroup($groupId) {
-    global $connection;
-    $stmt = $connection->prepare("
-        SELECT s.* FROM Students_new s
-        INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id
-        WHERE sg.group_id = ?
-    ");
-    $stmt->execute([$groupId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// Function to fetch all relevant groups for a teacher
-function fetchAllRelevantGroups($teacherId) {
-    global $connection;
-    $stmt = $connection->prepare("
-        SELECT g.*, (g.group_id = t.default_group_id) AS is_default 
-        FROM Groups g
-        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
-        WHERE g.teacher_id = :teacherId
-        UNION
-        SELECT g.*, (g.group_id = t.default_group_id) AS is_default
-        FROM Groups g
-        INNER JOIN SharedGroups sg ON g.group_id = sg.group_id
-        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
-        WHERE sg.shared_teacher_id = :teacherId
-    ");
-    $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// Handle group creation
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
-    $groupName = $_POST['group_name'];
-    try {
-        $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
-        $stmt->execute([$groupName, $_SESSION['school_id'], $_SESSION['teacher_id']]);
-        echo "Group created successfully.";
-    } catch (PDOException $e) {
-        error_log($e->getMessage());
-        echo "Error creating group: " . $e->getMessage();
-    }
-    exit;
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,6 +5,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .selected-group {
+            background-color: #D3D3D3; /* Light gray background */
+            color: #000; /* Black text color */
+            font-weight: bold; /* Bold text */
+        }
+    </style>
 </head>
 <body>
 
@@ -94,9 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
                 <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
                 <div id="group-list">
                     <ul>
-                        <?php foreach ($groups as $group): ?>
-                            <li data-group-id="<?php echo htmlspecialchars($group['group_id']); ?>" onclick="selectGroup(this)"><?php echo htmlspecialchars($group['group_name']); ?></li>
-                        <?php endforeach; ?>
+                        <!-- Groups will be loaded here -->
                     </ul>
                 </div>
             </section>
@@ -104,9 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
             <section class="box students-list">
                 <h3>Students</h3>
                 <ul id="student-list">
-                    <?php foreach ($students as $student): ?>
-                        <li><?php echo htmlspecialchars($student['first_name'] . ' ' . $student['last_name']); ?></li>
-                    <?php endforeach; ?>
+                    <!-- Students will be loaded here -->
                 </ul>
             </section>
 
@@ -143,6 +78,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGroups();
+        });
+
+        function loadGroups() {
+            fetch('fetch_groups.php')
+            .then(response => response.json())
+            .then(data => {
+                const groupList = document.getElementById('group-list').querySelector('ul');
+                groupList.innerHTML = '';
+                data.forEach(group => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = group.group_name;
+                    listItem.setAttribute('data-group-id', group.group_id);
+                    listItem.onclick = () => selectGroup(listItem);
+                    groupList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error loading groups. Please try again.');
+            });
+        }
+
         function showAddGroupModal() {
             document.getElementById('add-group-modal').style.display = 'block';
         }
@@ -170,10 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
             })
             .then(data => {
                 console.log('Group added successfully:', data);
-                const groupList = document.getElementById('group-list').querySelector('ul');
-                const newGroupItem = document.createElement('li');
-                newGroupItem.textContent = groupName;
-                groupList.appendChild(newGroupItem);
+                loadGroups(); // Reload groups after adding
                 hideAddGroupModal();
             })
             .catch(error => {
