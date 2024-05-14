@@ -124,14 +124,14 @@ function fetchStudentsByGroup($groupId) {
     </div>
 
     <!-- Add Group Modal -->
-    <div id="add-group-modal" style="display:none;">
-        <div>
+    <div id="add-group-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideAddGroupModal()">&times;</span>
             <h2>Add New Group</h2>
             <form id="add-group-form" onsubmit="addGroup(event)">
                 <label for="group-name">Group Name:</label>
                 <input type="text" id="group-name" name="group_name" required>
                 <button type="submit">Add Group</button>
-                <button type="button" onclick="hideAddGroupModal()">Cancel</button>
             </form>
         </div>
     </div>
