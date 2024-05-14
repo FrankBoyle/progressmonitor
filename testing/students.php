@@ -1,3 +1,73 @@
+<?php
+session_start();
+include('users/auth_session.php');
+include('users/db.php');
+
+// Enable PHP error logging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
+
+// Check if the connection is properly set
+if (!isset($connection)) {
+    error_log("Database connection is not set.");
+    die("Database connection is not set.");
+}
+
+error_log("Database connection is set.");
+
+// Fetch necessary data
+$schoolId = $_SESSION['school_id'];
+$teacherId = $_SESSION['teacher_id'];
+
+function fetchStudentsByTeacher($teacherId, $archived = false) {
+    global $connection;  // Ensure $connection is global
+    $archivedValue = $archived ? 1 : 0;
+    $stmt = $connection->prepare("SELECT * FROM Students_new WHERE school_id = (SELECT school_id FROM Teachers WHERE teacher_id = ?) AND archived = ?");
+    $stmt->execute([$teacherId, $archivedValue]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function fetchAllRelevantGroups($teacherId) {
+    global $connection;  // Ensure $connection is global
+    $stmt = $connection->prepare("
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default 
+        FROM Groups g
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE g.teacher_id = :teacherId
+        UNION
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default
+        FROM Groups g
+        INNER JOIN SharedGroups sg ON g.group_id = sg.group_id
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE sg.shared_teacher_id = :teacherId
+    ");
+    $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$students = fetchStudentsByTeacher($teacherId);
+$groups = fetchAllRelevantGroups($teacherId);
+
+// Handle group creation
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
+    global $connection;  // Ensure $connection is global
+    $groupName = $_POST['group_name'];
+    try {
+        $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
+        $stmt->execute([$groupName, $schoolId, $teacherId]);
+        echo "Group created successfully.";
+    } catch (PDOException $e) {
+        error_log($e->getMessage());
+        echo "Error creating group: " . $e->getMessage();
+    }
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,8 +96,9 @@
                 <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
                 <div id="group-list">
                     <ul>
-                        <li>Math</li>
-                        <li>Boyle's Homeroom</li>
+                        <?php foreach ($groups as $group): ?>
+                            <li><?php echo htmlspecialchars($group['group_name']); ?></li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
             </section>
@@ -35,9 +106,9 @@
             <section class="box students-list">
                 <h3>Students</h3>
                 <ul id="student-list">
-                    <li>Ryan Amole</li>
-                    <li>Jayla Brazzle</li>
-                    <!-- Other students here -->
+                    <?php foreach ($students as $student): ?>
+                        <li><?php echo htmlspecialchars($student['first_name'] . ' ' . $student['last_name']); ?></li>
+                    <?php endforeach; ?>
                 </ul>
             </section>
 

@@ -8,7 +8,7 @@
 body {
   font-family: 'Arial', sans-serif;
   background-color: #E5E5E5;
-  margin: 0; /* Remove default margin */
+  margin: 0;
 }
 
 .dashboard-header {
@@ -102,5 +102,3 @@ h3 {
     grid-row: auto;
   }
 }
-
-
