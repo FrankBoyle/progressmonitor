@@ -3,6 +3,13 @@ session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
 
+// Enable PHP error logging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
+
 // Fetch necessary data
 $schoolId = $_SESSION['school_id'];
 $teacherId = $_SESSION['teacher_id'];
@@ -36,6 +43,20 @@ function fetchAllRelevantGroups($teacherId) {
 
 $students = fetchStudentsByTeacher($teacherId);
 $groups = fetchAllRelevantGroups($teacherId);
+
+// Handle group creation
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
+    $groupName = $_POST['group_name'];
+    try {
+        $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
+        $stmt->execute([$groupName, $schoolId, $teacherId]);
+        echo "Group created successfully.";
+    } catch (PDOException $e) {
+        error_log($e->getMessage());
+        echo "Error creating group: " . $e->getMessage();
+    }
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -148,7 +169,10 @@ $groups = fetchAllRelevantGroups($teacherId);
                 groupList.appendChild(newGroupItem);
                 hideAddGroupModal();
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error adding the group. Please try again.');
+            });
         }
     </script>
 
