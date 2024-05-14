@@ -1,15 +1,11 @@
 <?php
-
+session_start();
 include('auth_session.php');
 include('db.php');
 
 header('Content-Type: application/json');
 
-// Fetch all relevant groups for a teacher
 $teacherId = $_SESSION['teacher_id'];
-$groups = fetchAllRelevantGroups($teacherId);
-
-echo json_encode($groups);
 
 function fetchAllRelevantGroups($teacherId) {
     global $connection;
@@ -29,4 +25,8 @@ function fetchAllRelevantGroups($teacherId) {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+$groups = fetchAllRelevantGroups($teacherId);
+
+echo json_encode($groups);
 ?>

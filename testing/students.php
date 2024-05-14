@@ -18,38 +18,6 @@ if (!isset($connection)) {
 
 error_log("Database connection is set.");
 
-// Function to fetch students by group ID
-function fetchStudentsByGroup($groupId) {
-    global $connection;
-    $stmt = $connection->prepare("
-        SELECT s.* FROM Students_new s
-        INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id
-        WHERE sg.group_id = ?
-    ");
-    $stmt->execute([$groupId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// Function to fetch all relevant groups for a teacher
-function fetchAllRelevantGroups($teacherId) {
-    global $connection;
-    $stmt = $connection->prepare("
-        SELECT g.*, (g.group_id = t.default_group_id) AS is_default 
-        FROM Groups g
-        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
-        WHERE g.teacher_id = :teacherId
-        UNION
-        SELECT g.*, (g.group_id = t.default_group_id) AS is_default
-        FROM Groups g
-        INNER JOIN SharedGroups sg ON g.group_id = sg.group_id
-        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
-        WHERE sg.shared_teacher_id = :teacherId
-    ");
-    $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
 // Handle group creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
     $groupName = $_POST['group_name'];
@@ -63,8 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
     }
     exit;
 }
-?>
 
+// Function to fetch students by group ID
+function fetchStudentsByGroup($groupId) {
+    global $connection;
+    $stmt = $connection->prepare("
+        SELECT s.* FROM Students_new s
+        INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id
+        WHERE sg.group_id = ?
+    ");
+    $stmt->execute([$groupId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
