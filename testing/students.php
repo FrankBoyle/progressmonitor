@@ -58,6 +58,18 @@ function fetchStudentsByGroup($groupId) {
             color: #000; /* Black text color */
             font-weight: bold; /* Bold text */
         }
+        .group-options {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .group-options button {
+            display: block;
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -124,9 +136,21 @@ function fetchStudentsByGroup($groupId) {
         </div>
     </div>
 
+    <!-- Group Options Menu -->
+    <div id="group-options" class="group-options">
+        <button onclick="editGroup()">Edit Group</button>
+        <button onclick="shareGroup()">Share Group</button>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             loadGroups();
+            document.addEventListener('click', function(event) {
+                const optionsMenu = document.getElementById('group-options');
+                if (!optionsMenu.contains(event.target) && !event.target.classList.contains('group-options-btn')) {
+                    optionsMenu.style.display = 'none';
+                }
+            });
         });
 
         function loadGroups() {
@@ -140,6 +164,11 @@ function fetchStudentsByGroup($groupId) {
                     listItem.textContent = group.group_name;
                     listItem.setAttribute('data-group-id', group.group_id);
                     listItem.onclick = () => selectGroup(listItem);
+                    const optionsBtn = document.createElement('button');
+                    optionsBtn.textContent = '+';
+                    optionsBtn.classList.add('group-options-btn');
+                    optionsBtn.onclick = (event) => showGroupOptions(event, group.group_id);
+                    listItem.appendChild(optionsBtn);
                     groupList.appendChild(listItem);
                 });
             })
@@ -216,6 +245,27 @@ function fetchStudentsByGroup($groupId) {
                 console.error('Error:', error);
                 alert('There was an error fetching students. Please try again.');
             });
+        }
+
+        function showGroupOptions(event, groupId) {
+            event.stopPropagation();
+            const optionsMenu = document.getElementById('group-options');
+            optionsMenu.style.display = 'block';
+            optionsMenu.style.left = event.pageX + 'px';
+            optionsMenu.style.top = event.pageY + 'px';
+            optionsMenu.setAttribute('data-group-id', groupId);
+        }
+
+        function editGroup() {
+            const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+            alert('Edit group: ' + groupId);
+            // Implement edit group functionality
+        }
+
+        function shareGroup() {
+            const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+            alert('Share group: ' + groupId);
+            // Implement share group functionality
         }
     </script>
 
