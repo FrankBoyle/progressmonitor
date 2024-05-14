@@ -52,7 +52,7 @@ function fetchStudentsByGroup($groupId) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
     <style>
     </style>
@@ -93,6 +93,13 @@ function fetchStudentsByGroup($groupId) {
                 </ul>
             </section>
 
+            <section class="box details">
+                <h3>Details</h3>
+                <ul>
+                    <li>Detail 1</li>
+                    <li>Detail 2</li>
+                </ul>
+            </section>
         </main>
     </div>
 
@@ -113,7 +120,6 @@ function fetchStudentsByGroup($groupId) {
         <button onclick="shareGroup()">Share Group</button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             loadGroups();
@@ -244,17 +250,17 @@ function fetchStudentsByGroup($groupId) {
                             goalList.appendChild(listItem);
                         });
 
-                        document.querySelectorAll('#goal-list li').forEach(li => {
-                            // Initialize Summernote on each goal item
-                            $(li).summernote({
-                                toolbar: false,
-                                airMode: true,
-                                disableDragAndDrop: true,
-                                popover: false,
-                                height: null,
-                                minHeight: null,
-                                maxHeight: null,
-                            });
+                        // Initialize TinyMCE on each goal item
+                        tinymce.init({
+                            selector: '#goal-list li',
+                            menubar: false,
+                            inline: true,
+                            plugins: [
+                                'advlist autolink lists link image charmap print preview anchor',
+                                'searchreplace visualblocks code fullscreen',
+                                'insertdatetime media table paste code help wordcount'
+                            ],
+                            toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat'
                         });
                     })
                     .catch(error => {
