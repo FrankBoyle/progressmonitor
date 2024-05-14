@@ -166,7 +166,7 @@ function fetchStudentsByGroup($groupId) {
                     listItem.onclick = () => selectGroup(listItem);
 
                     const optionsBtn = document.createElement('button');
-                    optionsBtn.textContent = '+';
+                    optionsBtn.textContent = '⋮';
                     optionsBtn.classList.add('options-btn');
                     optionsBtn.onclick = (event) => showGroupOptions(event, group.group_id);
 
