@@ -52,7 +52,7 @@ function fetchStudentsByGroup($groupId) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <style>
     </style>
@@ -120,6 +120,7 @@ function fetchStudentsByGroup($groupId) {
         <button onclick="shareGroup()">Share Group</button>
     </div>
 
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             loadGroups();
@@ -246,21 +247,19 @@ function fetchStudentsByGroup($groupId) {
                         goalList.innerHTML = '';
                         data.forEach(goal => {
                             const listItem = document.createElement('li');
-                            listItem.innerHTML = goal.goal_description;
+                            listItem.innerHTML = `<div class="quill-editor">${goal.goal_description}</div>`;
                             goalList.appendChild(listItem);
                         });
 
-                        // Initialize TinyMCE on each goal item
-                        tinymce.init({
-                            selector: '#goal-list li',
-                            menubar: false,
-                            inline: true,
-                            plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                            toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat'
+                        // Initialize Quill on each goal item
+                        document.querySelectorAll('.quill-editor').forEach(editor => {
+                            new Quill(editor, {
+                                theme: 'snow',
+                                readOnly: true,
+                                modules: {
+                                    toolbar: false
+                                }
+                            });
                         });
                     })
                     .catch(error => {
