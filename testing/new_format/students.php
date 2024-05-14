@@ -134,9 +134,14 @@ $groups = fetchAllRelevantGroups($teacherId);
                 },
                 body: 'create_group=1&group_name=' + encodeURIComponent(groupName)
             })
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.text();
+            })
             .then(data => {
-                // Assuming the backend returns the updated group list
+                console.log('Group added successfully:', data);
                 const groupList = document.getElementById('group-list').querySelector('ul');
                 const newGroupItem = document.createElement('li');
                 newGroupItem.textContent = groupName;
@@ -149,4 +154,3 @@ $groups = fetchAllRelevantGroups($teacherId);
 
 </body>
 </html>
-
