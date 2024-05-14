@@ -87,7 +87,7 @@
           text-align: left;
           cursor: pointer;
           font-size: 14px;
-          color: #333;
+          color: #555;
       }
 
       .group-options button:hover {
@@ -95,7 +95,7 @@
       }
 
       button {
-          background-color: #888;
+          background-color: #f0f0f0;
 
           padding: 8px 12px; /* Reduce padding */
           border: none;
