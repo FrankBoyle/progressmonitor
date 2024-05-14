@@ -66,6 +66,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
     }
     exit;
 }
+
+function fetchStudentsByGroup($groupId) {
+    global $connection;
+    $stmt = $connection->prepare("
+        SELECT s.* FROM Students_new s
+        INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id
+        WHERE sg.group_id = ?
+    ");
+    $stmt->execute([$groupId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 <!DOCTYPE html>
@@ -97,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
                 <div id="group-list">
                     <ul>
                         <?php foreach ($groups as $group): ?>
-                            <li><?php echo htmlspecialchars($group['group_name']); ?></li>
+                            <li data-group-id="<?php echo htmlspecialchars($group['group_id']); ?>" onclick="selectGroup(this)"><?php echo htmlspecialchars($group['group_name']); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -183,8 +194,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
                 alert('There was an error adding the group. Please try again.');
             });
         }
+
+        function selectGroup(element) {
+            const groupId = element.getAttribute('data-group-id');
+
+            fetch('fetch_students_by_group.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'group_id=' + encodeURIComponent(groupId)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const studentList = document.getElementById('student-list');
+                studentList.innerHTML = '';
+                data.forEach(student => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = student.first_name + ' ' + student.last_name;
+                    studentList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error fetching students. Please try again.');
+            });
+        }
     </script>
 
 </body>
 </html>
-
