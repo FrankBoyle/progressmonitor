@@ -52,24 +52,10 @@ function fetchStudentsByGroup($groupId) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
+
     <style>
-        .selected-group {
-            background-color: #D3D3D3; /* Light gray background */
-            color: #000; /* Black text color */
-            font-weight: bold; /* Bold text */
-        }
-        .group-options {
-            position: absolute;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-        .group-options button {
-            display: block;
-            margin: 5px 0;
-        }
+
     </style>
 </head>
 <body>
@@ -112,6 +98,13 @@ function fetchStudentsByGroup($groupId) {
                 </ul>
             </section>
 
+            <section class="box details">
+                <h3>Details</h3>
+                <ul>
+                    <li>Detail 1</li>
+                    <li>Detail 2</li>
+                </ul>
+            </section>
         </main>
     </div>
 
@@ -134,13 +127,16 @@ function fetchStudentsByGroup($groupId) {
         <button onclick="shareGroup()">Share Group</button>
     </div>
 
+    <!-- Include Summernote JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        $(document).ready(function() {
             loadGroups();
-            document.addEventListener('click', function(event) {
-                const optionsMenu = document.getElementById('group-options');
-                if (!optionsMenu.contains(event.target) && !event.target.classList.contains('options-btn')) {
-                    optionsMenu.style.display = 'none';
+            $(document).click(function(event) {
+                const optionsMenu = $('#group-options');
+                if (!optionsMenu.is(event.target) && optionsMenu.has(event.target).length === 0) {
+                    optionsMenu.hide();
                 }
             });
         });
@@ -149,21 +145,19 @@ function fetchStudentsByGroup($groupId) {
             fetch('users/fetch_groups.php')
             .then(response => response.json())
             .then(data => {
-                const groupList = document.getElementById('group-list').querySelector('ul');
-                groupList.innerHTML = '';
+                const groupList = $('#group-list ul');
+                groupList.empty();
                 data.forEach(group => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = group.group_name;
-                    listItem.setAttribute('data-group-id', group.group_id);
-                    listItem.onclick = () => selectGroup(listItem);
+                    const listItem = $('<li></li>').text(group.group_name).attr('data-group-id', group.group_id).click(function() {
+                        selectGroup($(this));
+                    });
 
-                    const optionsBtn = document.createElement('button');
-                    optionsBtn.textContent = '⋮';
-                    optionsBtn.classList.add('options-btn');
-                    optionsBtn.onclick = (event) => showGroupOptions(event, group.group_id);
+                    const optionsBtn = $('<button></button>').text('⋮').addClass('options-btn').click(function(event) {
+                        showGroupOptions(event, group.group_id);
+                    });
 
-                    listItem.appendChild(optionsBtn);
-                    groupList.appendChild(listItem);
+                    listItem.append(optionsBtn);
+                    groupList.append(listItem);
                 });
             })
             .catch(error => {
@@ -173,16 +167,16 @@ function fetchStudentsByGroup($groupId) {
         }
 
         function showAddGroupModal() {
-            document.getElementById('add-group-modal').style.display = 'block';
+            $('#add-group-modal').show();
         }
 
         function hideAddGroupModal() {
-            document.getElementById('add-group-modal').style.display = 'none';
+            $('#add-group-modal').hide();
         }
 
         function addGroup(event) {
             event.preventDefault();
-            const groupName = document.getElementById('group-name').value;
+            const groupName = $('#group-name').val();
 
             fetch('students.php', {
                 method: 'POST',
@@ -209,7 +203,7 @@ function fetchStudentsByGroup($groupId) {
         }
 
         function selectGroup(element) {
-            const groupId = element.getAttribute('data-group-id');
+            const groupId = element.attr('data-group-id');
 
             // Fetch students by group
             fetch('users/fetch_students_by_group.php', {
@@ -222,20 +216,18 @@ function fetchStudentsByGroup($groupId) {
             .then(response => response.json())
             .then(data => {
                 // Update the student list
-                const studentList = document.getElementById('student-list');
-                studentList.innerHTML = '';
+                const studentList = $('#student-list');
+                studentList.empty();
                 data.forEach(student => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = student.first_name + ' ' + student.last_name;
-                    listItem.setAttribute('data-student-id', student.student_id_new);
-                    listItem.onclick = () => selectStudent(listItem);
-                    studentList.appendChild(listItem);
+                    const listItem = $('<li></li>').text(student.first_name + ' ' + student.last_name).attr('data-student-id', student.student_id_new).click(function() {
+                        selectStudent($(this));
+                    });
+                    studentList.append(listItem);
                 });
 
                 // Update the selected group
-                const groupList = document.getElementById('group-list').querySelectorAll('li');
-                groupList.forEach(group => group.classList.remove('selected-group'));
-                element.classList.add('selected-group');
+                $('#group-list li').removeClass('selected-group');
+                element.addClass('selected-group');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -244,49 +236,58 @@ function fetchStudentsByGroup($groupId) {
         }
 
         function selectStudent(element) {
-        const studentId = element.getAttribute('data-student-id');
-        const selectedGroup = document.querySelector('.selected-group');
+            const studentId = element.attr('data-student-id');
+            const selectedGroup = $('.selected-group');
 
-        if (selectedGroup) {
-            const metadataId = selectedGroup.getAttribute('data-group-id');
+            if (selectedGroup.length) {
+                const metadataId = selectedGroup.attr('data-group-id');
 
-            // Fetch goals by student and metadata
-            fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(metadataId)}`)
-            .then(response => response.json())
-            .then(data => {
-                // Update the goals list
-                const goalList = document.getElementById('goal-list');
-                goalList.innerHTML = '';
-                data.forEach(goal => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = goal.goal_description; // Adjust this line based on your goals table structure
-                    goalList.appendChild(listItem);
+                // Fetch goals by student and metadata
+                fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(metadataId)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the goals list
+                    const goalList = $('#goal-list');
+                    goalList.empty();
+                    data.forEach(goal => {
+                        const listItem = $('<li></li>').html(goal.goal_description); // Use .html() to display rich text
+                        goalList.append(listItem);
+                    });
+
+                    // Initialize Summernote on goal items
+                    $('#goal-list li').summernote({
+                        toolbar: false, // Disable toolbar
+                        airMode: true, // Enable air mode for inline editing
+                        disableDragAndDrop: true, // Disable drag and drop functionality
+                        popover: false, // Disable popover
+                        height: null, // Adjust height as needed
+                        minHeight: null, // Adjust min height as needed
+                        maxHeight: null, // Adjust max height as needed
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error fetching goals. Please try again.');
                 });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error fetching goals. Please try again.');
-            });
+            }
         }
-    }
 
         function showGroupOptions(event, groupId) {
             event.stopPropagation();
-            const optionsMenu = document.getElementById('group-options');
-            optionsMenu.style.display = 'block';
-            optionsMenu.style.left = event.pageX + 'px';
-            optionsMenu.style.top = event.pageY + 'px';
-            optionsMenu.setAttribute('data-group-id', groupId);
+            const optionsMenu = $('#group-options');
+            optionsMenu.show();
+            optionsMenu.css({ left: event.pageX + 'px', top: event.pageY + 'px' });
+            optionsMenu.attr('data-group-id', groupId);
         }
 
         function editGroup() {
-            const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+            const groupId = $('#group-options').attr('data-group-id');
             alert('Edit group: ' + groupId);
             // Implement edit group functionality
         }
 
         function shareGroup() {
-            const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+            const groupId = $('#group-options').attr('data-group-id');
             alert('Share group: ' + groupId);
             // Implement share group functionality
         }
