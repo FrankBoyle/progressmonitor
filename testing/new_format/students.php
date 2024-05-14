@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('auth_session.php');
-include('db.php');
+include('./users/auth_session.php');
+include('./users/db.php');
 
 // Fetch necessary data
 $schoolId = $_SESSION['school_id'];
