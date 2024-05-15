@@ -88,11 +88,10 @@ function fetchStudentsByGroup($groupId) {
 
             <section class="box existing-groups">
                 <h3>Goals</h3>
-                <ul id="goal-list">
-                    <!-- Goals will be loaded here -->
-                </ul>
+                <div id="goal-list">
+                    <!-- Goals will be loaded here and grouped by metadata_id -->
+                </div>
             </section>
-
 
         </main>
     </div>
@@ -114,6 +113,7 @@ function fetchStudentsByGroup($groupId) {
         <button onclick="shareGroup()">Share Group</button>
     </div>
 
+    <!-- Include Quill JavaScript -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -229,47 +229,63 @@ function fetchStudentsByGroup($groupId) {
 
         function selectStudent(element) {
             const studentId = element.getAttribute('data-student-id');
-            const selectedGroup = document.querySelector('.selected-group');
 
-            if (selectedGroup) {
-                const metadataId = selectedGroup.getAttribute('data-group-id');
+            fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const goalList = document.getElementById('goal-list');
+                    goalList.innerHTML = '';
 
-                fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(metadataId)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const goalList = document.getElementById('goal-list');
-                        goalList.innerHTML = '';
-                        data.forEach(goal => {
-                            const listItem = document.createElement('li');
-                            listItem.innerHTML = `<div class="quill-editor">${goal.goal_description}</div>`;
-                            goalList.appendChild(listItem);
+                    // Group goals by metadata_id
+                    const goalsByMetadata = data.reduce((acc, goal) => {
+                        if (!acc[goal.metadata_id]) {
+                            acc[goal.metadata_id] = [];
+                        }
+                        acc[goal.metadata_id].push(goal);
+                        return acc;
+                    }, {});
+
+                    // Render goals by group
+                    for (const metadataId in goalsByMetadata) {
+                        const metadataGoals = goalsByMetadata[metadataId];
+
+                        const metadataContainer = document.createElement('div');
+                        metadataContainer.innerHTML = `<h4>Metadata ID: ${metadataId}</h4>`;
+
+                        metadataGoals.forEach(goal => {
+                            const listItem = document.createElement('div');
+                            listItem.classList.add('quill-editor');
+                            listItem.innerHTML = goal.goal_description;
+                            metadataContainer.appendChild(listItem);
                         });
 
-                        // Use MutationObserver to detect when the goal list items are added to the DOM
-                        const goalListObserver = new MutationObserver((mutations) => {
-                            mutations.forEach((mutation) => {
-                                mutation.addedNodes.forEach((node) => {
-                                    if (node.nodeType === 1 && node.classList.contains('quill-editor')) {
-                                        new Quill(node, {
-                                            theme: 'snow',
-                                            readOnly: true,
-                                            modules: {
-                                                toolbar: false
-                                            }
-                                        });
-                                    }
-                                });
+                        goalList.appendChild(metadataContainer);
+                    }
+
+                    // Use MutationObserver to detect when the goal list items are added to the DOM
+                    const goalListObserver = new MutationObserver((mutations) => {
+                        mutations.forEach((mutation) => {
+                            mutation.addedNodes.forEach((node) => {
+                                if (node.nodeType === 1 && node.classList.contains('quill-editor')) {
+                                    new Quill(node, {
+                                        theme: 'snow',
+                                        readOnly: true,
+                                        modules: {
+                                            toolbar: false
+                                        }
+                                    });
+                                }
                             });
                         });
-
-                        // Observe the goal list for child nodes being added
-                        goalListObserver.observe(goalList, { childList: true });
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('There was an error fetching goals. Please try again.');
                     });
-            }
+
+                    // Observe the goal list for child nodes being added
+                    goalListObserver.observe(goalList, { childList: true });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error fetching goals. Please try again.');
+                });
         }
 
         function showGroupOptions(event, groupId) {
