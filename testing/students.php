@@ -120,235 +120,233 @@ function fetchStudentsByGroup($groupId) {
         let quillInstances = {};
 
         document.addEventListener('DOMContentLoaded', function() {
-            loadGroups();
-            document.addEventListener('click', function(event) {
-                const optionsMenu = document.getElementById('group-options');
-                if (!optionsMenu.contains(event.target)) {
-                    optionsMenu.style.display = 'none';
-                }
+    loadGroups();
+    document.addEventListener('click', function(event) {
+        const optionsMenu = document.getElementById('group-options');
+        if (optionsMenu && !optionsMenu.contains(event.target)) {
+            optionsMenu.style.display = 'none';
+        }
+    });
+});
+
+function loadGroups() {
+    fetch('users/fetch_groups.php')
+        .then(response => response.json())
+        .then(data => {
+            const groupList = document.getElementById('group-list').querySelector('ul');
+            groupList.innerHTML = '';
+            data.forEach(group => {
+                const listItem = document.createElement('li');
+                listItem.textContent = group.group_name;
+                listItem.setAttribute('data-group-id', group.group_id);
+                listItem.addEventListener('click', function() {
+                    selectGroup(this);
+                });
+
+                const optionsBtn = document.createElement('button');
+                optionsBtn.className = 'options-btn';
+                optionsBtn.addEventListener('click', function(event) {
+                    showGroupOptions(event, group.group_id);
+                });
+
+                listItem.appendChild(optionsBtn);
+                groupList.appendChild(listItem);
             });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error loading groups. Please try again.');
         });
+}
 
-        function loadGroups() {
-            fetch('users/fetch_groups.php')
-                .then(response => response.json())
-                .then(data => {
-                    const groupList = document.getElementById('group-list').querySelector('ul');
-                    groupList.innerHTML = '';
-                    data.forEach(group => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = group.group_name;
-                        listItem.setAttribute('data-group-id', group.group_id);
-                        listItem.addEventListener('click', function() {
-                            selectGroup(this);
-                        });
+function showAddGroupModal() {
+    document.getElementById('add-group-modal').style.display = 'block';
+}
 
-                        const optionsBtn = document.createElement('button');
-                        optionsBtn.className = 'options-btn';
-                        optionsBtn.addEventListener('click', function(event) {
-                            showGroupOptions(event, group.group_id);
-                        });
+function hideAddGroupModal() {
+    document.getElementById('add-group-modal').style.display = 'none';
+}
 
-                        listItem.appendChild(optionsBtn);
-                        groupList.appendChild(listItem);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error loading groups. Please try again.');
+function addGroup(event) {
+    event.preventDefault();
+    const groupName = document.getElementById('group-name').value;
+
+    fetch('students.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'create_group=1&group_name=' + encodeURIComponent(groupName)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log('Group added successfully:', data);
+            loadGroups();
+            hideAddGroupModal();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error adding the group. Please try again.');
+        });
+}
+
+function selectGroup(element) {
+    const groupId = element.getAttribute('data-group-id');
+
+    fetch('users/fetch_students_by_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'group_id=' + encodeURIComponent(groupId)
+    })
+        .then(response => response.json())
+        .then(data => {
+            const studentList = document.getElementById('student-list');
+            studentList.innerHTML = '';
+            data.forEach(student => {
+                const listItem = document.createElement('li');
+                listItem.textContent = student.first_name + ' ' + student.last_name;
+                listItem.setAttribute('data-student-id', student.student_id_new);
+                listItem.addEventListener('click', function() {
+                    selectStudent(this);
                 });
-        }
+                studentList.appendChild(listItem);
+            });
 
-        function showAddGroupModal() {
-            document.getElementById('add-group-modal').style.display = 'block';
-        }
+            const groupItems = document.getElementById('group-list').querySelectorAll('li');
+            groupItems.forEach(group => group.classList.remove('selected-group'));
+            element.classList.add('selected-group');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error fetching students. Please try again.');
+        });
+}
 
-        function hideAddGroupModal() {
-            document.getElementById('add-group-modal').style.display = 'none';
-        }
+function selectStudent(element) {
+    const studentId = element.getAttribute('data-student-id');
 
-        function addGroup(event) {
-            event.preventDefault();
-            const groupName = document.getElementById('group-name').value;
+    fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
+        .then(response => response.json())
+        .then(data => {
+            const goalList = document.getElementById('goal-list');
+            goalList.innerHTML = '';
 
-            fetch('students.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'create_group=1&group_name=' + encodeURIComponent(groupName)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
+            const goalsByMetadata = data.reduce((acc, goal) => {
+                if (!acc[goal.metadata_id]) {
+                    acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
+                }
+                acc[goal.metadata_id].goals.push(goal);
+                return acc;
+            }, {});
+
+            for (const metadataId in goalsByMetadata) {
+                const metadataGoals = goalsByMetadata[metadataId];
+
+                const metadataContainer = document.createElement('div');
+                metadataContainer.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
+
+                metadataGoals.goals.forEach(goal => {
+                    const listItem = document.createElement('div');
+                    listItem.classList.add('goal-item');
+                    listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
+                    listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
+                    metadataContainer.appendChild(listItem);
+                });
+
+                goalList.appendChild(metadataContainer);
+            }
+
+            document.querySelectorAll('.quill-editor').forEach((editor) => {
+                const goalId = editor.getAttribute('data-goal-id');
+                quillInstances[goalId] = new Quill(editor, {
+                    theme: 'snow',
+                    readOnly: true,
+                    modules: {
+                        toolbar: false
                     }
-                    return response.text();
-                })
-                .then(data => {
-                    console.log('Group added successfully:', data);
-                    loadGroups();
-                    hideAddGroupModal();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error adding the group. Please try again.');
                 });
-        }
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error fetching goals. Please try again.');
+        });
+}
 
-        function selectGroup(element) {
-            const groupId = element.getAttribute('data-group-id');
+function editGoal(goalId) {
+    const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
+    const quill = quillInstances[goalId];
+    quill.enable(true);
+    quill.root.setAttribute('contenteditable', true);
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save';
+    saveBtn.className = 'save-btn';
+    saveBtn.onclick = function() {
+        saveGoal(goalId, quill.root.innerHTML);
+    };
+    editor.parentNode.appendChild(saveBtn);
+}
 
-            fetch('users/fetch_students_by_group.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'group_id=' + encodeURIComponent(groupId)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const studentList = document.getElementById('student-list');
-                    studentList.innerHTML = '';
-                    data.forEach(student => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = student.first_name + ' ' + student.last_name;
-                        listItem.setAttribute('data-student-id', student.student_id_new);
-                        listItem.addEventListener('click', function() {
-                            selectStudent(this);
-                        });
-                        studentList.appendChild(listItem);
-                    });
+function saveGoal(goalId, goalDescription) {
+    fetch('users/fetch_goals.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `goal_id=${encodeURIComponent(goalId)}&goal_description=${encodeURIComponent(goalDescription)}`
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                const quill = quillInstances[goalId];
+                quill.enable(false);
+                quill.root.setAttribute('contenteditable', false);
+                const saveBtn = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn');
+                saveBtn.remove();
+                alert('Goal updated successfully.');
+            } else {
+                alert('There was an error updating the goal. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error updating the goal. Please try again.');
+        });
+}
 
-                    const groupItems = document.getElementById('group-list').querySelectorAll('li');
-                    groupItems.forEach(group => group.classList.remove('selected-group'));
-                    element.classList.add('selected-group');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error fetching students. Please try again.');
-                });
-        }
+function showGroupOptions(event, groupId) {
+    event.stopPropagation();
+    const optionsMenu = document.getElementById('group-options');
+    optionsMenu.style.display = 'block';
+    optionsMenu.style.left = event.pageX + 'px';
+    optionsMenu.style.top = event.pageY + 'px';
+    optionsMenu.setAttribute('data-group-id', groupId);
+}
 
-        function selectStudent(element) {
-            const studentId = element.getAttribute('data-student-id');
+function editGroup() {
+    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+    alert('Edit group: ' + groupId);
+    // Implement edit group functionality
+}
 
-            fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
-                .then(response => response.json())
-                .then(data => {
-                    const goalList = document.getElementById('goal-list');
-                    goalList.innerHTML = '';
+function shareGroup() {
+    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+    alert('Share group: ' + groupId);
+    // Implement share group functionality
+}
 
-                    // Group goals by metadata_id and category_name
-                    const goalsByMetadata = data.reduce((acc, goal) => {
-                        if (!acc[goal.metadata_id]) {
-                            acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
-                        }
-                        acc[goal.metadata_id].goals.push(goal);
-                        return acc;
-                    }, {});
-
-                    // Render goals by group
-                    for (const metadataId in goalsByMetadata) {
-                        const metadataGoals = goalsByMetadata[metadataId];
-
-                        const metadataContainer = document.createElement('div');
-                        metadataContainer.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
-
-                        metadataGoals.goals.forEach(goal => {
-                            const listItem = document.createElement('div');
-                            listItem.classList.add('goal-item');
-                            listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
-                            listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
-                            metadataContainer.appendChild(listItem);
-                        });
-
-                        goalList.appendChild(metadataContainer);
-                    }
-
-                    // Initialize Quill editors
-                    document.querySelectorAll('.quill-editor').forEach((editor) => {
-                        const goalId = editor.getAttribute('data-goal-id');
-                        quillInstances[goalId] = new Quill(editor, {
-                            theme: 'snow',
-                            readOnly: true,
-                            modules: {
-                                toolbar: false
-                            }
-                        });
-                    });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error fetching goals. Please try again.');
-                });
-        }
-
-        function editGoal(goalId) {
-            const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
-            const quill = quillInstances[goalId];
-            quill.enable(true);
-            quill.root.setAttribute('contenteditable', true);
-            const saveBtn = document.createElement('button');
-            saveBtn.textContent = 'Save';
-            saveBtn.className = 'save-btn';
-            saveBtn.onclick = function() {
-                saveGoal(goalId, quill.root.innerHTML);
-            };
-            editor.parentNode.appendChild(saveBtn);
-        }
-
-        function saveGoal(goalId, goalDescription) {
-            fetch('users/fetch_goals.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `goal_id=${encodeURIComponent(goalId)}&goal_description=${encodeURIComponent(goalDescription)}`
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.status === 'success') {
-                        const quill = quillInstances[goalId];
-                        quill.enable(false);
-                        quill.root.setAttribute('contenteditable', false);
-                        const saveBtn = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn');
-                        saveBtn.remove();
-                        alert('Goal updated successfully.');
-                    } else {
-                        alert('There was an error updating the goal. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error updating the goal. Please try again.');
-                });
-        }
-
-        function showGroupOptions(event, groupId) {
-            event.stopPropagation();
-            const optionsMenu = document.getElementById('group-options');
-            optionsMenu.style.display = 'block';
-            optionsMenu.style.left = event.pageX + 'px';
-            optionsMenu.style.top = event.pageY + 'px';
-            optionsMenu.setAttribute('data-group-id', groupId);
-        }
-
-        function editGroup() {
-            const groupId = document.getElementById('group-options').getAttribute('data-group-id');
-            alert('Edit group: ' + groupId);
-            // Implement edit group functionality
-        }
-
-        function shareGroup() {
-            const groupId = document.getElementById('group-options').getAttribute('data-group-id');
-            alert('Share group: ' + groupId);
-            // Implement share group functionality
-        }
     </script>
 
 </body>
