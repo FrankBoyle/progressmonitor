@@ -285,6 +285,10 @@ function editGoal(goalId) {
     const quill = quillInstances[goalId];
     quill.enable(true);
     quill.root.setAttribute('contenteditable', true);
+    
+    // Remove any existing save buttons
+    document.querySelectorAll('.save-btn').forEach(btn => btn.remove());
+
     const saveBtn = document.createElement('button');
     saveBtn.textContent = 'Save';
     saveBtn.className = 'save-btn';
@@ -313,8 +317,7 @@ function saveGoal(goalId, goalDescription) {
                 const quill = quillInstances[goalId];
                 quill.enable(false);
                 quill.root.setAttribute('contenteditable', false);
-                const saveBtn = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn');
-                saveBtn.remove();
+                document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').remove();
                 alert('Goal updated successfully.');
             } else {
                 alert('There was an error updating the goal. Please try again.');
