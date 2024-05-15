@@ -94,6 +94,13 @@ function fetchStudentsByGroup($groupId) {
                 </div>
             </section>
 
+            <section class="box details">
+                <h3>Details</h3>
+                <ul>
+                    <li>Detail 1</li>
+                    <li>Detail 2</li>
+                </ul>
+            </section>
         </main>
     </div>
 
@@ -117,6 +124,8 @@ function fetchStudentsByGroup($groupId) {
     <!-- Include Quill JavaScript -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
+        let quillInstances = {};
+
         document.addEventListener('DOMContentLoaded', function() {
             loadGroups();
             document.addEventListener('click', function(event) {
@@ -255,37 +264,76 @@ function fetchStudentsByGroup($groupId) {
 
                         metadataGoals.goals.forEach(goal => {
                             const listItem = document.createElement('div');
-                            listItem.classList.add('goal-item', 'quill-editor');
-                            listItem.innerHTML = goal.goal_description;
+                            listItem.classList.add('goal-item');
+                            listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
+                            listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
                             metadataContainer.appendChild(listItem);
                         });
 
                         goalList.appendChild(metadataContainer);
                     }
 
-                    // Use MutationObserver to detect when the goal list items are added to the DOM
-                    const goalListObserver = new MutationObserver((mutations) => {
-                        mutations.forEach((mutation) => {
-                            mutation.addedNodes.forEach((node) => {
-                                if (node.nodeType === 1 && node.classList.contains('quill-editor')) {
-                                    new Quill(node, {
-                                        theme: 'snow',
-                                        readOnly: true,
-                                        modules: {
-                                            toolbar: false
-                                        }
-                                    });
-                                }
-                            });
+                    // Initialize Quill editors
+                    document.querySelectorAll('.quill-editor').forEach((editor) => {
+                        const goalId = editor.getAttribute('data-goal-id');
+                        quillInstances[goalId] = new Quill(editor, {
+                            theme: 'snow',
+                            readOnly: true,
+                            modules: {
+                                toolbar: false
+                            }
                         });
                     });
-
-                    // Observe the goal list for child nodes being added
-                    goalListObserver.observe(goalList, { childList: true });
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('There was an error fetching goals. Please try again.');
+                });
+        }
+
+        function editGoal(goalId) {
+            const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
+            const quill = quillInstances[goalId];
+            quill.enable(true);
+            quill.root.setAttribute('contenteditable', true);
+            const saveBtn = document.createElement('button');
+            saveBtn.textContent = 'Save';
+            saveBtn.className = 'save-btn';
+            saveBtn.onclick = function() {
+                saveGoal(goalId, quill.root.innerHTML);
+            };
+            editor.parentNode.appendChild(saveBtn);
+        }
+
+        function saveGoal(goalId, goalDescription) {
+            fetch('users/fetch_goals.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `goal_id=${encodeURIComponent(goalId)}&goal_description=${encodeURIComponent(goalDescription)}`
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        const quill = quillInstances[goalId];
+                        quill.enable(false);
+                        quill.root.setAttribute('contenteditable', false);
+                        const saveBtn = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn');
+                        saveBtn.remove();
+                        alert('Goal updated successfully.');
+                    } else {
+                        alert('There was an error updating the goal. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error updating the goal. Please try again.');
                 });
         }
 
