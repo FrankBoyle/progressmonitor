@@ -17,11 +17,13 @@ if (isset($_GET['student_id'])) {
 function fetchGoals($studentId) {
     global $connection;
     $stmt = $connection->prepare("
-        SELECT g.goal_description, g.metadata_id
+        SELECT g.goal_description, g.metadata_id, m.category_name
         FROM Goals g
+        JOIN Metadata m ON g.metadata_id = m.metadata_id
         WHERE g.student_id = ?
     ");
     $stmt->execute([$studentId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
+
