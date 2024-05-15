@@ -86,7 +86,6 @@ body {
 
 .options-btn:hover {
   color: #999;
-  font-weight: bold;
 }
 
 .options-btn::before {
@@ -120,8 +119,6 @@ body {
 
 .group-options button:hover {
   background-color: #ccc;
-  font-weight: bold;
-
 }
 
 button {
@@ -135,8 +132,6 @@ button {
 
 button:hover {
   background-color: #333;
-  font-weight: bold;
-
 }
 
 ul {
@@ -157,8 +152,6 @@ ul li {
 
 ul li:hover {
   background-color: #ccc;
-  font-weight: bold;
-
 }
 
 .add-group-btn {
@@ -251,8 +244,8 @@ h3 {
 }
 
 .goal-item .save-btn {
-  background-color: #e0e0e0;
-  color: black;
+  background-color: #555;
+  color: white;
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
@@ -261,9 +254,7 @@ h3 {
 }
 
 .goal-item .save-btn:hover {
-  background-color: #ccc;
-  font-weight: bold;
-
+  background-color: #333;
 }
 
 @media (max-width: 768px) {
