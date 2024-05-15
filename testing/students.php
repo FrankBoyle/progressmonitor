@@ -342,13 +342,6 @@ Copy code
                 </div>
             </section>
 
-            <section class="box details">
-                <h3>Details</h3>
-                <ul>
-                    <li>Detail 1</li>
-                    <li>Detail 2</li>
-                </ul>
-            </section>
         </main>
     </div>
 
@@ -506,11 +499,11 @@ Copy code
                         const metadataGoals = goalsByMetadata[metadataId];
 
                         const metadataContainer = document.createElement('div');
-                        metadataContainer.innerHTML = `<h4>${metadataGoals.category_name}</h4>`;
+                        metadataContainer.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
 
                         metadataGoals.goals.forEach(goal => {
                             const listItem = document.createElement('div');
-                            listItem.classList.add('quill-editor');
+                            listItem.classList.add('goal-item', 'quill-editor');
                             listItem.innerHTML = goal.goal_description;
                             metadataContainer.appendChild(listItem);
                         });
