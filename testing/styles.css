@@ -91,6 +91,7 @@
   .options-btn::before {
     content: '⋮';
     font-size: 30px;
+    color: #111;
   }
   
   .group-options {
