@@ -100,6 +100,7 @@
             text-align: left;
             cursor: pointer;
             font-size: 14px;
+            color: #111;
         }
 
         .group-options button:hover {
