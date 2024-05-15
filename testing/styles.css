@@ -72,7 +72,7 @@
           }
           
           .options-btn:hover {
-            color: #333; /* Even darker color on hover */
+            color: #777; /* Even darker color on hover */
           }
           
           .options-btn::before {
@@ -100,7 +100,7 @@
             text-align: left;
             cursor: pointer;
             font-size: 14px;
-            color: #333;
+            color: #777;
         }
 
         .group-options button:hover {
