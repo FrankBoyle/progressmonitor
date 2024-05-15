@@ -94,6 +94,13 @@ function fetchStudentsByGroup($groupId) {
                 </div>
             </section>
 
+            <section class="box details">
+                <h3>Details</h3>
+                <ul>
+                    <li>Detail 1</li>
+                    <li>Detail 2</li>
+                </ul>
+            </section>
         </main>
     </div>
 
@@ -144,7 +151,6 @@ function fetchStudentsByGroup($groupId) {
                         });
 
                         const optionsBtn = document.createElement('button');
-                        optionsBtn.textContent = '⋮';
                         optionsBtn.className = 'options-btn';
                         optionsBtn.addEventListener('click', function(event) {
                             showGroupOptions(event, group.group_id);
