@@ -93,13 +93,7 @@ function fetchStudentsByGroup($groupId) {
                 </ul>
             </section>
 
-            <section class="box details">
-                <h3>Details</h3>
-                <ul>
-                    <li>Detail 1</li>
-                    <li>Detail 2</li>
-                </ul>
-            </section>
+
         </main>
     </div>
 
