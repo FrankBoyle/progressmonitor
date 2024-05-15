@@ -64,8 +64,22 @@
             border: none;
             font-size: 20px;
             cursor: pointer;
+            color: #555; /* Darker color for better visibility */
             margin-left: 10px;
-        }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .options-btn:hover {
+            color: #333; /* Even darker color on hover */
+          }
+          
+          .options-btn::before {
+            content: '⋮'; /* Unicode for vertical ellipsis */
+            font-size: 20px; /* Adjust size as needed */
+          }
+          
 
         .group-options {
             position: absolute;
