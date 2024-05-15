@@ -251,16 +251,25 @@ function fetchStudentsByGroup($groupId) {
                             goalList.appendChild(listItem);
                         });
 
-                        // Initialize Quill on each goal item
-                        document.querySelectorAll('.quill-editor').forEach(editor => {
-                            new Quill(editor, {
-                                theme: 'snow',
-                                readOnly: true,
-                                modules: {
-                                    toolbar: false
-                                }
+                        // Use MutationObserver to detect when the goal list items are added to the DOM
+                        const goalListObserver = new MutationObserver((mutations) => {
+                            mutations.forEach((mutation) => {
+                                mutation.addedNodes.forEach((node) => {
+                                    if (node.nodeType === 1 && node.classList.contains('quill-editor')) {
+                                        new Quill(node, {
+                                            theme: 'snow',
+                                            readOnly: true,
+                                            modules: {
+                                                toolbar: false
+                                            }
+                                        });
+                                    }
+                                });
                             });
                         });
+
+                        // Observe the goal list for child nodes being added
+                        goalListObserver.observe(goalList, { childList: true });
                     })
                     .catch(error => {
                         console.error('Error:', error);
