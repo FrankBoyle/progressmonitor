@@ -94,7 +94,7 @@
         .group-options button {
             display: block;
             width: 100%;
-            border: none;
+            border: #555;
             background-color: #e0e0e0;
             padding: 10px;
             text-align: left;
