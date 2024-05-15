@@ -273,6 +273,10 @@ function selectStudent(element) {
                     }
                 });
             });
+
+            const studentItems = document.getElementById('student-list').querySelectorAll('li');
+            studentItems.forEach(student => student.classList.remove('selected-student'));
+            element.classList.add('selected-student');
         })
         .catch(error => {
             console.error('Error:', error);
