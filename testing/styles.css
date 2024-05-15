@@ -86,6 +86,7 @@ body {
 
 .options-btn:hover {
   color: #999;
+  font-weight: bold;
 }
 
 .options-btn::before {
@@ -119,6 +120,8 @@ body {
 
 .group-options button:hover {
   background-color: #ccc;
+  font-weight: bold;
+
 }
 
 button {
@@ -132,6 +135,8 @@ button {
 
 button:hover {
   background-color: #333;
+  font-weight: bold;
+
 }
 
 ul {
@@ -152,6 +157,8 @@ ul li {
 
 ul li:hover {
   background-color: #ccc;
+  font-weight: bold;
+
 }
 
 .add-group-btn {
@@ -255,6 +262,8 @@ h3 {
 
 .goal-item .save-btn:hover {
   background-color: #ccc;
+  font-weight: bold;
+
 }
 
 @media (max-width: 768px) {
