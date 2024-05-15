@@ -184,6 +184,21 @@
             cursor: pointer;
         }
 
+        .goal-category {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .goal-item {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
         @media (max-width: 768px) {
             .content {
                 grid-template-columns: 1fr;
