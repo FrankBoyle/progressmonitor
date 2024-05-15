@@ -61,7 +61,7 @@
 
         .options-btn {
             background: none;
-            border: none;
+            border: #555;
             font-size: 20px;
             cursor: pointer;
             color: #555; /* Darker color for better visibility */
