@@ -107,16 +107,16 @@
     display: block;
     width: 100%;
     border: none;
-    background: #999;
+    background: #ccc;
     padding: 10px;
     text-align: left;
     cursor: pointer;
     font-size: 14px;
-    color: #333;
+    color: #111;
   }
   
   .group-options button:hover {
-    background-color: #f0f0f0;
+    background-color: #e0e0e0;
   }
   
   button {
