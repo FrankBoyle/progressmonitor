@@ -249,8 +249,8 @@ h3 {
 }
 
 .goal-item .save-btn {
-  background-color: #555;
-  color: white;
+  background-color: #f9f9f9;
+  color: black;
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
@@ -259,7 +259,7 @@ h3 {
 }
 
 .goal-item .save-btn:hover {
-  background-color: #333;
+  background-color: #ccc;
   font-weight: bold;
 }
 
