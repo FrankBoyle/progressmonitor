@@ -250,13 +250,15 @@ function selectStudent(element) {
                 const metadataGoals = goalsByMetadata[metadataId];
 
                 const metadataContainer = document.createElement('div');
-                metadataContainer.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
+                metadataContainer.classList.add('goal-category');
+                metadataContainer.innerHTML = `<h4>${metadataGoals.category_name}</h4>`;
 
                 metadataGoals.goals.forEach(goal => {
                     const listItem = document.createElement('div');
                     listItem.classList.add('goal-item');
                     listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
                     listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
+                    listItem.innerHTML += `<button class="save-btn" style="display: none;">Save</button>`;
                     metadataContainer.appendChild(listItem);
                 });
 
@@ -291,15 +293,13 @@ function editGoal(goalId) {
     quill.root.setAttribute('contenteditable', true);
     
     // Remove any existing save buttons
-    document.querySelectorAll('.save-btn').forEach(btn => btn.remove());
+    document.querySelectorAll('.save-btn').forEach(btn => btn.style.display = 'none');
 
-    const saveBtn = document.createElement('button');
-    saveBtn.textContent = 'Save';
-    saveBtn.className = 'save-btn';
+    const saveBtn = editor.parentNode.querySelector('.save-btn');
+    saveBtn.style.display = 'inline-block';
     saveBtn.onclick = function() {
         saveGoal(goalId, quill.root.innerHTML);
     };
-    editor.parentNode.appendChild(saveBtn);
 }
 
 function saveGoal(goalId, goalDescription) {
@@ -321,7 +321,7 @@ function saveGoal(goalId, goalDescription) {
                 const quill = quillInstances[goalId];
                 quill.enable(false);
                 quill.root.setAttribute('contenteditable', false);
-                document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').remove();
+                document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').style.display = 'none';
                 alert('Goal updated successfully.');
             } else {
                 alert('There was an error updating the goal. Please try again.');

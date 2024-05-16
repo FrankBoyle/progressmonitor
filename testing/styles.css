@@ -245,6 +245,7 @@ h3 {
   border: none;
   font-size: 16px;
   cursor: pointer;
+  display: inline-block;
 }
 
 .goal-item .save-btn {
