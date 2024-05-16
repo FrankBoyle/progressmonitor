@@ -134,15 +134,18 @@ document.addEventListener('DOMContentLoaded', function() {
         mutations.forEach(function(mutation) {
             if (mutation.addedNodes.length) {
                 mutation.addedNodes.forEach(function(node) {
-                    if (node.classList && node.classList.contains('quill-editor')) {
-                        const goalId = node.getAttribute('data-goal-id');
-                        quillInstances[goalId] = new Quill(node, {
-                            theme: 'snow',
-                            readOnly: true,
-                            modules: {
-                                toolbar: false
-                            }
-                        });
+                    if (node.classList && node.classList.contains('goal-item')) {
+                        const quillEditor = node.querySelector('.quill-editor');
+                        if (quillEditor) {
+                            const goalId = quillEditor.getAttribute('data-goal-id');
+                            quillInstances[goalId] = new Quill(quillEditor, {
+                                theme: 'snow',
+                                readOnly: true,
+                                modules: {
+                                    toolbar: false
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -285,17 +288,6 @@ function selectStudent(element) {
 
                 goalList.appendChild(metadataContainer);
             }
-
-            document.querySelectorAll('.quill-editor').forEach((editor) => {
-                const goalId = editor.getAttribute('data-goal-id');
-                quillInstances[goalId] = new Quill(editor, {
-                    theme: 'snow',
-                    readOnly: true,
-                    modules: {
-                        toolbar: false
-                    }
-                });
-            });
 
             const studentItems = document.getElementById('student-list').querySelectorAll('li');
             studentItems.forEach(student => student.classList.remove('selected-student'));
