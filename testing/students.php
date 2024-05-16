@@ -117,9 +117,7 @@ function fetchStudentsByGroup($groupId) {
     <!-- Include Quill JavaScript -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
-        let quillInstances = {};
-
-        document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('group-options');
@@ -127,6 +125,29 @@ function fetchStudentsByGroup($groupId) {
             optionsMenu.style.display = 'none';
         }
     });
+
+    // Set up the MutationObserver to watch for added nodes
+    const goalList = document.getElementById('goal-list');
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.classList && node.classList.contains('quill-editor')) {
+                        const goalId = node.getAttribute('data-goal-id');
+                        quillInstances[goalId] = new Quill(node, {
+                            theme: 'snow',
+                            readOnly: true,
+                            modules: {
+                                toolbar: false
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    observer.observe(goalList, { childList: true, subtree: true });
 });
 
 function loadGroups() {
@@ -264,17 +285,6 @@ function selectStudent(element) {
 
                 goalList.appendChild(metadataContainer);
             }
-
-            document.querySelectorAll('.quill-editor').forEach((editor) => {
-                const goalId = editor.getAttribute('data-goal-id');
-                quillInstances[goalId] = new Quill(editor, {
-                    theme: 'snow',
-                    readOnly: true,
-                    modules: {
-                        toolbar: false
-                    }
-                });
-            });
 
             const studentItems = document.getElementById('student-list').querySelectorAll('li');
             studentItems.forEach(student => student.classList.remove('selected-student'));
