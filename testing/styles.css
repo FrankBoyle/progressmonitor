@@ -264,16 +264,16 @@ h3 {
 
 @media (max-width: 768px) {
   .content {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   .create-group,
   .students-list {
-      max-width: none;
-      width: 100%;
+    max-width: none;
+    width: 100%;
   }
 
   .existing-groups, .details {
-      width: 100%;
+    width: 100%;
   }
 }
