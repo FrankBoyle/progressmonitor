@@ -259,7 +259,7 @@ h3 {
 }
 
 .save-btn {
-  background-color: #fefefe;
+  background: #ccc;
   color: black;
   padding: 8px 12px;
   border: none;
@@ -269,7 +269,7 @@ h3 {
 }
 
 .goal-item .save-btn:hover {
-  background-color: #ccc;
+  background-color: #999;
   font-weight: bold;
 }
 
