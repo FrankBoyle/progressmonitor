@@ -248,7 +248,7 @@ h3 {
 }
 
 .goal-item .edit-btn::after {
-  content: '✏️';
+  content: '';
   font-size: 16px;
 }
 
