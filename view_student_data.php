@@ -676,6 +676,7 @@ function filterData(iepDate) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var dataTableBody = document.getElementById('dataTableBody');
             if (dataTableBody) {
+                console.log("Element with ID 'dataTableBody' found.");
                 dataTableBody.innerHTML = xhr.responseText;
                 attachEditableHandler(); // Reattach editable handler to new table rows
             } else {
