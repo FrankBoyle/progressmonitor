@@ -9,14 +9,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($iep_date && $student_id) {
         $stmt = $connection->prepare("UPDATE Students SET IEP_Date = ? WHERE student_id = ?");
         if ($stmt->execute([$iep_date, $student_id])) {
-            echo "IEP date saved successfully.";
+            echo json_encode(["success" => true, "message" => "IEP date saved successfully."]);
         } else {
-            echo "Error saving IEP date.";
+            echo json_encode(["success" => false, "message" => "Error saving IEP date."]);
         }
     } else {
-        echo "Invalid data.";
+        echo json_encode(["success" => false, "message" => "Invalid data."]);
     }
 } else {
-    echo "Invalid request method.";
+    echo json_encode(["success" => false, "message" => "Invalid request method."]);
 }
 ?>
