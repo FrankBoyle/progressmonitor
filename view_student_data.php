@@ -317,6 +317,13 @@ td .cell-input {
                   </a><br>
                 <?php endforeach; ?>
               </div>
+              <!-- Add this HTML to your form where appropriate -->
+<div class="form-group">
+    <label for="iep_date">IEP Date:</label>
+    <input type="date" id="iep_date" name="iep_date" class="form-control">
+</div>
+<button id="filterData" class="btn btn-primary">Filter Data</button>
+
             </div>
           </div>
         </div>
@@ -329,12 +336,6 @@ td .cell-input {
 <input type="hidden" id="studentName" name="studentName" value="<?php echo htmlspecialchars($studentName); ?>">
 </div>   
 
-<!-- Add this HTML to your form where appropriate -->
-<div class="form-group">
-    <label for="iep_date">IEP Date:</label>
-    <input type="date" id="iep_date" name="iep_date" class="form-control">
-</div>
-<button id="filterData" class="btn btn-primary">Filter Data</button>
 
 
 <section class="content">
