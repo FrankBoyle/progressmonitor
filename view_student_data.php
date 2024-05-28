@@ -649,13 +649,13 @@ document.getElementById('filterData').addEventListener('click', function() {
     if (iepDate) {
         // Send the IEP date to the server to save in the database
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "./users/save_iep_date.php", true);
+        xhr.open("POST", "save_iep_date.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
                 if (response.success) {
-                    // If successful, you can proceed to filter the data
+                    // If successful, proceed to filter the data
                     filterData(iepDate);
                 } else {
                     alert(response.message);
@@ -671,11 +671,16 @@ function filterData(iepDate) {
     var metadataId = <?php echo json_encode($metadataId); ?>; // Pass the metadataId from PHP to JavaScript
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "./users/fetch_filtered_data.php?student_id=" + encodeURIComponent(studentId) + "&metadata_id=" + encodeURIComponent(metadataId) + "&iep_date=" + encodeURIComponent(iepDate), true);
+    xhr.open("GET", "fetch_filtered_data.php?student_id=" + encodeURIComponent(studentId) + "&metadata_id=" + encodeURIComponent(metadataId) + "&iep_date=" + encodeURIComponent(iepDate), true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            document.getElementById('dataTableBody').innerHTML = xhr.responseText;
-            attachEditableHandler(); // Reattach editable handler to new table rows
+            var dataTableBody = document.getElementById('dataTableBody');
+            if (dataTableBody) {
+                dataTableBody.innerHTML = xhr.responseText;
+                attachEditableHandler(); // Reattach editable handler to new table rows
+            } else {
+                console.error("Element with ID 'dataTableBody' not found.");
+            }
         }
     };
     xhr.send();
