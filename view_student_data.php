@@ -654,7 +654,7 @@ document.getElementById('filterData').addEventListener('click', function() {
     if (iepDate) {
         // Send the IEP date to the server to save in the database
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "save_iep_date.php", true);
+        xhr.open("POST", "./users/save_iep_date.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
