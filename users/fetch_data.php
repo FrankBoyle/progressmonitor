@@ -7,6 +7,14 @@ error_reporting(E_ALL);
 
 include('db.php');
 
+function fetchIepDate($studentId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT IEP_Date FROM Students WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['IEP_Date'] : null;
+}
+
 function fetchPerformanceData($studentId, $metadata_id, $iep_date = null) {
     global $connection;
     if ($iep_date) {
