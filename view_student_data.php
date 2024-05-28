@@ -317,12 +317,6 @@ td .cell-input {
                   </a><br>
                 <?php endforeach; ?>
               </div>
-              <!-- Add this HTML to your form where appropriate -->
-<div class="form-group">
-    <label for="iep_date">IEP Date:</label>
-    <input type="date" id="iep_date" name="iep_date" class="form-control" value="<?php echo htmlspecialchars($iep_date); ?>">
-</div>
-<button id="filterData" class="btn btn-primary">Filter Data</button>
             </div>
           </div>
         </div>
@@ -335,61 +329,70 @@ td .cell-input {
 <input type="hidden" id="studentName" name="studentName" value="<?php echo htmlspecialchars($studentName); ?>">
 </div>   
 
+<!-- Add this HTML to your form where appropriate -->
+<div class="form-group">
+    <label for="iep_date">IEP Date:</label>
+    <input type="date" id="iep_date" name="iep_date" class="form-control">
+</div>
+<button id="filterData" class="btn btn-primary">Filter Data</button>
 
 
 <section class="content">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card card-outline card-info">
-        <div class="card-header">
-          <h3 class="card-title"></h3>
-          <table border="1" id="dataTable">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <?php 
-                foreach ($scoreNames as $category => $values) {
-                  if (is_array($values)) {
-                    foreach ($values as $score) {
-                      echo "<th>" . htmlspecialchars($score) . "</th>";
-                    }
-                  } else {
-                    echo "<th>" . htmlspecialchars($values) . "</th>";
-                  }
-                }
-                ?>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="dataTableBody">
-              <?php if (empty($performanceData)): ?>
-                <tr>
-                  <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+
+                <table border="1" id="dataTable">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                        <?php 
+                          foreach ($scoreNames as $category => $values) {
+                            if (is_array($values)) {
+                              foreach ($values as $score) {
+                                echo "<th>" . htmlspecialchars($score) . "</th>";
+                              }
+                            } else {
+                              echo "<th>" . htmlspecialchars($values) . "</th>";
+                            }
+                          }
+                          ?>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                <tbody>
+          
+                <?php if (empty($performanceData)): ?>
+                  <tr>
+                    <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+                  </tr>
+                <?php else: ?>
+                <?php foreach ($performanceData as $data): ?>
+                  <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                    <td class="editable" data-field-name="score_date">
+                        <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
+                    </td>
+                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                        <td class="editable" data-field-name="score<?php echo $i; ?>">
+                            <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
+                        </td>
+                      <?php endfor; ?>
+                    <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
                 </tr>
-              <?php else: ?>
-              <?php foreach ($performanceData as $data): ?>
-                <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                  <td class="editable" data-field-name="score_date">
-                      <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
-                  </td>
-                  <?php for ($i = 1; $i <= 10; $i++): ?>
-                      <td class="editable" data-field-name="score<?php echo $i; ?>">
-                          <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
-                      </td>
-                    <?php endfor; ?>
-                  <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
-              </tr>
-              <?php endforeach; ?>
-              <?php endif; ?>
-            </tbody>
-          </table>
-          <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
-          <input type="text" id="newRowDate" style="display: none;">
-        </div>
-      </div>
-    </div>
-  </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
+</table>
+<button id="addDataRow" class="btn btn-primary">Add Data Row</button>
+<input type="text" id="newRowDate" style="display: none;">
+</div>
+</div>
+</div>
+</div>
 </section>
+
 
 <section class="content">
       <div class="row">
@@ -648,13 +651,18 @@ document.getElementById('filterData').addEventListener('click', function() {
     var studentId = <?php echo json_encode($studentId); ?>; // Pass the studentId from PHP to JavaScript
     
     if (iepDate) {
-        // Send the IEP date to the server to save in the database and fetch filtered data
+        // Update the URL for filtering
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('iep_date', iepDate);
+        window.location.search = urlParams.toString();
+
+        // Send the IEP date to the server to save in the database
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "./users/save_iep_date.php", true);
+        xhr.open("POST", "save_iep_date.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                document.getElementById('dataTableBody').innerHTML = xhr.responseText;
+                console.log(xhr.responseText); // Handle response if needed
             }
         };
         xhr.send("iep_date=" + iepDate + "&student_id=" + studentId);
