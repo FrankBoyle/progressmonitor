@@ -300,6 +300,8 @@ td .cell-input {
       </div><!-- /.container-fluid -->
     </section>
 
+    
+
 
     <section class="content">
       <div class="row">
@@ -327,6 +329,12 @@ td .cell-input {
 <input type="hidden" id="studentName" name="studentName" value="<?php echo htmlspecialchars($studentName); ?>">
 </div>   
 
+<!-- IEP Date Input Field -->
+<div class="form-group">
+    <label for="iep_date">IEP Date:</label>
+    <input type="date" id="iep_date" name="iep_date" class="form-control">
+</div>
+<button id="filterData" class="btn btn-primary">Filter Data</button>
 
 
 <section class="content">
@@ -636,6 +644,13 @@ $('#printButton').click(function() {
             console.error('Failed to receive graph image');
         }
     });
+});
+
+document.getElementById('filterData').addEventListener('click', function() {
+    var iepDate = document.getElementById('iep_date').value;
+    var urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('iep_date', iepDate);
+    window.location.search = urlParams.toString();
 });
 
 function getSelectedGoalContent() {

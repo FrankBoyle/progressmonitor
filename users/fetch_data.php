@@ -129,6 +129,7 @@ if (!isset($_GET['student_id'])) {
 }
 
 if (isset($_GET['student_id'], $_GET['metadata_id'])) {
+
     $studentId = $_GET['student_id'];
     $metadataId = $_GET['metadata_id'];
     $schoolId = fetchSchoolIdForStudent($studentId); // Assuming you have this function as shown in your script
@@ -136,6 +137,8 @@ if (isset($_GET['student_id'], $_GET['metadata_id'])) {
     // Fetch the goals
     $goals = fetchGoals($studentId, $metadataId, $schoolId);
 }
+
+$iep_date = isset($_GET['iep_date']) ? $_GET['iep_date'] : null;
 
 $studentId = $_GET['student_id'];
 $school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
@@ -154,6 +157,15 @@ $message = "";  // Initialize an empty message variable
 
 $students = fetchStudentsByTeacher($teacherId);
 // Fetch performance data and score names
+
+if ($iep_date) {
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? AND score_date >= ? ORDER BY score_date DESC LIMIT 41");
+    $stmt->execute([$studentId, $metadata_id, $iep_date]);
+} else {
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
+    $stmt->execute([$studentId, $metadata_id]);
+}
+
 $performanceData = fetchPerformanceData($studentId, $metadata_id);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);
 
