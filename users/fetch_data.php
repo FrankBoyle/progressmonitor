@@ -7,21 +7,13 @@ error_reporting(E_ALL);
 
 include('db.php');
 
-function fetchIepDate($studentId) {
-    global $connection;
-    $stmt = $connection->prepare("SELECT IEP_Date FROM Students WHERE student_id = ?");
-    $stmt->execute([$studentId]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result ? $result['IEP_Date'] : null;
-}
-
 function fetchPerformanceData($studentId, $metadata_id, $iep_date = null) {
     global $connection;
     if ($iep_date) {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? AND score_date >= ? ORDER BY score_date DESC LIMIT 41");
+        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? AND score_date >= ? ORDER BY score_date ASC LIMIT 41");
         $stmt->execute([$studentId, $metadata_id, $iep_date]);
     } else {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
+        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date ASC LIMIT 41");
         $stmt->execute([$studentId, $metadata_id]);
     }
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -85,6 +77,14 @@ function fetchScoreNames($school_id, $metadata_id) {
     return $scoreNames;
 }
 
+function fetchIepDate($studentId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT IEP_Date FROM Students WHERE student_id = ?");
+    $stmt->execute([$studentId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['IEP_Date'] : null;
+}
+
 function getSmallestMetadataId($schoolId) {
     global $connection;
 
@@ -115,7 +115,7 @@ if (!isset($_GET['student_id']) || !isset($_GET['metadata_id'])) {
 
 $studentId = $_GET['student_id'];
 $metadataId = $_GET['metadata_id'];
-$iep_date = isset($_GET['iep_date']) ? $_GET['iep_date'] : null;
+$iep_date = isset($_GET['iep_date']) ? $_GET['iep_date'] : fetchIepDate($studentId);
 
 $schoolId = fetchSchoolIdForStudent($studentId);
 
