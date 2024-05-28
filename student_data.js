@@ -660,6 +660,8 @@ function saveCellValue(cell, inputElement) {
     if (fieldName === 'score_date') {
         dbDate = convertToDatabaseDate(newValue); // Define dbDate here
         // Check for duplicates in the entire table, not just the current row being edited.
+        //console.log('dbDate:', dbDate);
+        //console.log('newValue:', newValue);
         if (isDateDuplicate(dbDate, performanceId, CURRENT_STUDENT_ID, metadataId)) {
             alert("Duplicate date not allowed!");
             inputElement.datepicker('setDate', originalValue); // Reset to the original value
@@ -675,7 +677,9 @@ function saveCellValue(cell, inputElement) {
         student_id: CURRENT_STUDENT_ID,
         metadata_id: metadataId, // Ensure this line correctly retrieves the metadata_id
         school_id: $('#schoolIdInput').val()
-    };
+    };    
+
+    //console.log("metadataId is:"+ metadataId); // This should output the metadata ID
 
     // AJAX call to update the cell value on the server
     $.ajax({
@@ -697,7 +701,6 @@ function saveCellValue(cell, inputElement) {
         }
     });
 }
-
 
 
 $('#addDataRow').off('click').click(function() {

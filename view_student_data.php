@@ -300,8 +300,6 @@ td .cell-input {
       </div><!-- /.container-fluid -->
     </section>
 
-    
-
 
     <section class="content">
       <div class="row">
@@ -317,13 +315,6 @@ td .cell-input {
                   </a><br>
                 <?php endforeach; ?>
               </div>
-              <!-- Add this HTML to your form where appropriate -->
-<div class="form-group">
-    <label for="iep_date">IEP Date:</label>
-    <input type="date" id="iep_date" name="iep_date" class="form-control">
-</div>
-<button id="filterData" class="btn btn-primary">Filter Data</button>
-
             </div>
           </div>
         </div>
@@ -645,29 +636,6 @@ $('#printButton').click(function() {
             console.error('Failed to receive graph image');
         }
     });
-});
-
-document.getElementById('filterData').addEventListener('click', function() {
-    var iepDate = document.getElementById('iep_date').value;
-    var studentId = <?php echo json_encode($studentId); ?>; // Pass the studentId from PHP to JavaScript
-    
-    if (iepDate) {
-        // Update the URL for filtering
-        var urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('iep_date', iepDate);
-        window.location.search = urlParams.toString();
-
-        // Send the IEP date to the server to save in the database
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "save_iep_date.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log(xhr.responseText); // Handle response if needed
-            }
-        };
-        xhr.send("iep_date=" + iepDate + "&student_id=" + studentId);
-    }
 });
 
 function getSelectedGoalContent() {
