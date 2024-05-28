@@ -648,10 +648,24 @@ $('#printButton').click(function() {
 
 document.getElementById('filterData').addEventListener('click', function() {
     var iepDate = document.getElementById('iep_date').value;
+    var studentId = <?php echo json_encode($studentId); ?>; // Pass the studentId from PHP to JavaScript
+    
     if (iepDate) {
+        // Update the URL for filtering
         var urlParams = new URLSearchParams(window.location.search);
         urlParams.set('iep_date', iepDate);
         window.location.search = urlParams.toString();
+
+        // Send the IEP date to the server to save in the database
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "save_iep_date.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log(xhr.responseText); // Handle response if needed
+            }
+        };
+        xhr.send("iep_date=" + iepDate + "&student_id=" + studentId);
     }
 });
 
