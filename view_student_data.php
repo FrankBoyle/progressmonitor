@@ -676,7 +676,7 @@ function filterData(iepDate) {
     var metadataId = <?php echo json_encode($metadataId); ?>; // Pass the metadataId from PHP to JavaScript
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "fetch_filtered_data.php?student_id=" + encodeURIComponent(studentId) + "&metadata_id=" + encodeURIComponent(metadataId) + "&iep_date=" + encodeURIComponent(iepDate), true);
+    xhr.open("GET", "./users/fetch_filtered_data.php?student_id=" + encodeURIComponent(studentId) + "&metadata_id=" + encodeURIComponent(metadataId) + "&iep_date=" + encodeURIComponent(iepDate), true);
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             document.getElementById('dataTableBody').innerHTML = xhr.responseText;
