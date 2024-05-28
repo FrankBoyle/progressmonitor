@@ -7,24 +7,11 @@ error_reporting(E_ALL);
 
 include('db.php');
 
-function fetchIepDate($studentId) {
+function fetchPerformanceData($studentId, $metadata_id) {
     global $connection;
-    $stmt = $connection->prepare("SELECT IEP_Date FROM Students WHERE student_id = ?");
-    $stmt->execute([$studentId]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result ? $result['IEP_Date'] : null;
-}
-
-function fetchPerformanceData($studentId, $metadata_id, $iep_date = null) {
-    global $connection;
-    if ($iep_date) {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? AND score_date >= ? ORDER BY score_date ASC LIMIT 41");
-        $stmt->execute([$studentId, $metadata_id, $iep_date]);
-    } else {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date ASC LIMIT 41");
-        $stmt->execute([$studentId, $metadata_id]);
-    }
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date DESC LIMIT 41");
+    $stmt->execute([$studentId, $metadata_id]);
+    return $stmt->fetchAll();
 }
 
 function fetchStudentsByTeacher($teacherId) {
