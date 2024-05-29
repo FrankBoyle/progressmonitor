@@ -34,6 +34,7 @@ if (isset($_GET['metadata_id'])) {
     <meta charset="UTF-8">
     <title><?php echo $studentName; ?></title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
