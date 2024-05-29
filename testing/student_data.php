@@ -78,120 +78,111 @@ if (isset($_GET['metadata_id'])) {
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <h1><?php echo $studentName; ?> Performance Data - <?php echo $selectedCategoryName; ?></h1>
-                            <a href="students.php" class="btn btn-primary">Home</a>
+                            <a href="home.php" class="btn btn-primary">Home</a>
                         </div>
-                        <div class="col-sm-12">
-
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
+                                <li class="breadcrumb-item active">Performance Data</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
             </section>
 
-
             <section class="content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Categories</h3>
-                                <?php foreach ($metadataEntries as $metadataEntry): ?>
-                                    <a href="?student_id=<?php echo $studentId; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
-                                        <?php echo $metadataEntry['category_name']; ?>
-                                    </a><br>
-                                <?php endforeach; ?>
-                            </div>
-                            <div class="form-group" style="text-align: center;">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Categories</h3><br>
+                        <?php foreach ($metadataEntries as $metadataEntry): ?>
+                            <a href="?student_id=<?php echo $studentId; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
+                                <?php echo $metadataEntry['category_name']; ?>
+                            </a><br>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </section>
+
+            <div class="form-group" style="text-align: center;">
                 <label for="iep_date" style="display: block;">IEP Date:</label>
                 <input type="date" id="iep_date" name="iep_date" class="form-control" value="<?php echo htmlspecialchars($iep_date); ?>">
             </div>
             <button id="filterData" class="btn btn-primary">Filter Data</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <section class="content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Performance Data</h3>
-                                <table border="1" id="dataTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <?php foreach ($scoreNames as $category => $values): ?>
-                                                <?php if (is_array($values)): ?>
-                                                    <?php foreach ($values as $score): ?>
-                                                        <th><?php echo htmlspecialchars($score); ?></th>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <th><?php echo htmlspecialchars($values); ?></th>
-                                                <?php endif; ?>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"></h3>
+                        <table border="1" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <?php foreach ($scoreNames as $category => $values): ?>
+                                        <?php if (is_array($values)): ?>
+                                            <?php foreach ($values as $score): ?>
+                                                <th><?php echo htmlspecialchars($score); ?></th>
                                             <?php endforeach; ?>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="dataTableBody">
-                                        <?php if (empty($performanceData)): ?>
-                                            <tr>
-                                                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-                                            </tr>
                                         <?php else: ?>
-                                            <?php foreach ($performanceData as $data): ?>
-                                                <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                                                    <td class="editable" data-field-name="score_date">
-                                                        <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
-                                                    </td>
-                                                    <?php for ($i = 1; $i <= 10; $i++): ?>
-                                                        <td class="editable" data-field-name="score<?php echo $i; ?>">
-                                                            <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
-                                                        </td>
-                                                    <?php endfor; ?>
-                                                    <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
-                                                </tr>
-                                            <?php endforeach; ?>
+                                            <th><?php echo htmlspecialchars($values); ?></th>
                                         <?php endif; ?>
-                                    </tbody>
-                                </table>
-                                <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
-                                <input type="text" id="newRowDate" style="display: none;">
-                            </div>
-                        </div>
+                                    <?php endforeach; ?>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTableBody">
+                                <?php if (empty($performanceData)): ?>
+                                    <tr>
+                                        <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+                                    </tr>
+                                <?php else: ?>
+                                    <?php foreach ($performanceData as $data): ?>
+                                        <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                                            <td class="editable" data-field-name="score_date">
+                                                <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
+                                            </td>
+                                            <?php for ($i = 1; $i <= 10; $i++): ?>
+                                                <td class="editable" data-field-name="score<?php echo $i; ?>">
+                                                    <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
+                                                </td>
+                                            <?php endfor; ?>
+                                            <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                        <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
+                        <input type="text" id="newRowDate" style="display: none;">
                     </div>
                 </div>
             </section>
 
             <section class="content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Column Selector</h3>
-                                <div id="columnSelector">
-                                    <label>Select Columns to Display:</label>
-                                    <?php foreach ($scoreNames as $category => $scores): ?>
-                                        <?php foreach ($scores as $index => $scoreName): ?>
-                                            <label>
-                                                <input type="checkbox" name="selectedColumns[]" value="<?php echo htmlspecialchars('score'.($index + 1)); ?>" data-column-name="<?php echo htmlspecialchars($scoreName); ?>">
-                                                <?php echo htmlspecialchars($scoreName); ?>
-                                            </label>
-                                        <?php endforeach; ?>
-                                    <?php endforeach; ?>
-                                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"></h3>
+                        <div id="columnSelector">
+                            <label>Select Columns to Display:</label>
+                            <?php foreach ($scoreNames as $category => $scores): ?>
+                                <?php foreach ($scores as $index => $scoreName): ?>
+                                    <label>
+                                        <input type="checkbox" name="selectedColumns[]" value="<?php echo htmlspecialchars('score'.($index + 1)); ?>" data-column-name="<?php echo htmlspecialchars($scoreName); ?>">
+                                        <?php echo htmlspecialchars($scoreName); ?>
+                                    </label>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </div>
 
-                                <div id="accordion">
-                                    <h3>Line Graph</h3>
-                                    <div>
-                                        <div id="chart" style="width: 1000px;"></div>
-                                    </div>
-                                    <h3>Bar Graph</h3>
-                                    <div>
-                                        <div id="barChart" style="width: 1000px;"></div>
-                                    </div>
-                                </div>
+                        <div id="accordion">
+                            <h3>Line Graph</h3>
+                            <div>
+                                <div id="chart" style="width: 1000px;"></div>
+                            </div>
+                            <h3>Bar Graph</h3>
+                            <div>
+                                <div id="barChart" style="width: 1000px;"></div>
                             </div>
                         </div>
                     </div>
@@ -240,173 +231,188 @@ if (isset($_GET['metadata_id'])) {
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="student_data.js" defer></script>
     <script>
-        $(document).ready(function() {
-            $('.goaltext').summernote({
-                toolbar: [
-                    ['font', ['fontname']],
-                    ['style', ['bold', 'italic', 'underline']]
-                ],
-                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
-            });
+            $(document).ready(function() {
+      $('.goaltext').summernote({
+        toolbar: [
+          // Only include buttons for font type and basic styling
+          ['font', ['fontname']], // Font type
+          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
+        ],
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
+      });
 
-            $('#graphNotes').summernote({
-                height: 300,
-                toolbar: []
-            });
+    // Initialize Summernote
+    $('#graphNotes').summernote({
+        height: 300,
+        toolbar: [
+            // Add your toolbar options here
+        ]
+    });
 
+    // Disable the textbox initially
+    $('#graphNotes').summernote('disable');
+
+    // Enable/Disable the textbox based on goal selection
+    $('.goal-checkbox').change(function() {
+        if ($(this).is(':checked')) {
+            $('#graphNotes').summernote('enable');
+        } else {
             $('#graphNotes').summernote('disable');
+        }
+    });
 
-            $('.goal-checkbox').change(function() {
-                if ($(this).is(':checked')) {
-                    $('#graphNotes').summernote('enable');
-                } else {
-                    $('#graphNotes').summernote('disable');
-                }
-            });
+    // Handle save button click
+    $('#saveGraphNotes').click(function() {
+    var notes = $('#graphNotes').summernote('code');
+    var goalId = $('.goal-checkbox:checked').data('goal-id');
+    var studentId = $('#currentStudentId').val(); // Assuming this is the correct way to get the student ID
+    var schoolId = $('#schoolIdInput').val();     // Assuming this is the correct way to get the school ID
+    var metadataId = urlParams.get('metadata_id'); // Assuming this is the correct way to get the metadata ID
 
-            $('#saveGraphNotes').click(function() {
-                var notes = $('#graphNotes').summernote('code');
-                var goalId = $('.goal-checkbox:checked').data('goal-id');
-                var studentId = $('#currentStudentId').val();
-                var schoolId = $('#schoolIdInput').val();
-                var metadataId = urlParams.get('metadata_id');
-
-                $.post('./users/save_graph_notes.php', {
-                    notes: notes,
-                    goal_id: goalId,
-                    student_id: studentId,
-                    school_id: schoolId,
-                    metadata_id: metadataId
-                }, function(response) {
-                    console.log(response);
-                }).fail(function(error) {
-                    console.log('Error: ', error);
-                });
-            });
-
-            $('.goal-checkbox').change(function() {
-                var goalId = $(this).data('goal-id');
-                if (this.checked) {
-                    $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
-                        var data = JSON.parse(response);
-                        if (data.status === 'success') {
-                            $('#graphNotes').summernote('code', data.notes);
-                        } else {
-                            $('#graphNotes').summernote('code', '');
-                            alert(data.message);
-                        }
-                    });
-                } else {
-                    $('#graphNotes').summernote('code', '');
-                }
-            });
-
-            $('#printButton').click(function() {
-                var currentChart = selectedChartType === 'bar' ? barChart : chart;
-                getGraphContentAsImage(currentChart, function(graphImage) {
-                    if (graphImage) {
-                        var notesContent = $('#graphNotes').summernote('code');
-                        var selectedGoalContent = getSelectedGoalContent();
-                        var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
-                        contentToPrint += '<div><img src="' + graphImage + '"></div>';
-                        contentToPrint += '<div>' + notesContent + '</div>';
-                        printContent(contentToPrint);
-                    } else {
-                        console.error('Failed to receive graph image');
-                    }
-                });
-            });
-
-            document.getElementById('filterData').addEventListener('click', function() {
-                var iepDate = document.getElementById('iep_date').value;
-                var studentId = <?php echo json_encode($studentId); ?>;
-                
-                if (iepDate) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "./users/save_iep_date.php", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            var response = JSON.parse(xhr.responseText);
-                            if (response.success) {
-                                filterData(iepDate);
-                            } else {
-                                alert(response.message);
-                            }
-                        }
-                    };
-                    xhr.send("iep_date=" + encodeURIComponent(iepDate) + "&student_id=" + encodeURIComponent(studentId));
-                }
-            });
-
-            function filterData(iepDate) {
-                var studentId = <?php echo json_encode($studentId); ?>;
-                var metadataId = <?php echo json_encode($metadataId); ?>;
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", "./users/fetch_filtered_data.php?student_id=" + encodeURIComponent(studentId) + "&metadata_id=" + encodeURIComponent(metadataId) + "&iep_date=" + encodeURIComponent(iepDate), true);
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        var dataTableBody = document.getElementById('dataTableBody');
-                        if (dataTableBody) {
-                            console.log("Element with ID 'dataTableBody' found.");
-                            dataTableBody.innerHTML = xhr.responseText;
-                            attachEditableHandler();
-                        } else {
-                            console.error("Element with ID 'dataTableBody' not found.");
-                        }
-                    }
-                };
-                xhr.send();
-            }
-
-            function getSelectedGoalContent() {
-                var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
-                if (checkedCheckbox) {
-                    var goalContainer = checkedCheckbox.closest('.goal-container');
-                    if (goalContainer) {
-                        var goalTextElement = goalContainer.querySelector('.goaltext');
-                        return goalTextElement ? goalTextElement.value : '';
-                    }
-                }
-                return 'No goal selected';
-            }
-
-            function getGraphContentAsImage(chartVar, callback) {
-                if (chartVar) {
-                    chartVar.dataURI().then(({ imgURI }) => {
-                        callback(imgURI);
-                    }).catch(error => {
-                        console.error('Error in converting chart to image:', error);
-                        callback(null);
-                    });
-                } else {
-                    console.error('Chart variable is null or undefined');
-                    callback(null);
-                }
-            }
-
-            function printContent(content) {
-                var studentName = document.getElementById('studentName').value;
-
-                var printWindow = window.open('', '_blank');
-                var image = new Image();
-                image.onload = function() {
-                    printWindow.document.write('<html><head><title>Print</title></head><body>');
-                    printWindow.document.write('<h1>' + studentName + '</h1>');
-                    printWindow.document.write(content);
-                    printWindow.document.write('</body></html>');
-                    printWindow.document.close();
-                    printWindow.focus();
-                    setTimeout(() => printWindow.print(), 500);
-                };
-                image.onerror = function() {
-                    console.error('Error loading the image');
-                };
-                image.src = content.match(/src="([^"]+)"/)[1];
+    // AJAX call to save the notes
+    $.post('./users/save_graph_notes.php', {
+        notes: notes,
+        goal_id: goalId,
+        student_id: studentId,
+        school_id: schoolId,
+        metadata_id: metadataId
+    }, function(response) {
+        // Handle response
+        console.log(response);
+    }).fail(function(error) {
+        console.log('Error: ', error);
+    });
+});
+    
+$('.goal-checkbox').change(function() {
+    var goalId = $(this).data('goal-id');
+    if (this.checked) {
+        $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
+            var data = JSON.parse(response);
+            if (data.status === 'success') {
+                $('#graphNotes').summernote('code', data.notes);
+            } else {
+                $('#graphNotes').summernote('code', '');
+                // Optionally alert the user if no notes were found
+                alert(data.message);
             }
         });
+    } else {
+        $('#graphNotes').summernote('code', ''); // Clear the notes when no goal is selected
+    }
+});
+
+$('#printButton').click(function() {
+    var currentChart = selectedChartType === 'bar' ? barChart : chart;
+    getGraphContentAsImage(currentChart, function(graphImage) {
+        if (graphImage) {
+            var notesContent = $('#graphNotes').summernote('code');
+            var selectedGoalContent = getSelectedGoalContent();
+            var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
+            contentToPrint += '<div><img src="' + graphImage + '"></div>';
+            contentToPrint += '<div>' + notesContent + '</div>';
+            printContent(contentToPrint);
+        } else {
+            console.error('Failed to receive graph image');
+        }
+    });
+});
+
+document.getElementById('filterData').addEventListener('click', function() {
+    var iepDate = document.getElementById('iep_date').value;
+    var studentId = <?php echo json_encode($studentId); ?>; // Pass the studentId from PHP to JavaScript
+    
+    if (iepDate) {
+        // Send the IEP date to the server to save in the database
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "./users/save_iep_date.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    // If successful, proceed to filter the data
+                    filterData(iepDate);
+                } else {
+                    alert(response.message);
+                }
+            }
+        };
+        xhr.send("iep_date=" + encodeURIComponent(iepDate) + "&student_id=" + encodeURIComponent(studentId));
+    }
+});
+
+function filterData(iepDate) {
+    var studentId = <?php echo json_encode($studentId); ?>; // Pass the studentId from PHP to JavaScript
+    var metadataId = <?php echo json_encode($metadataId); ?>; // Pass the metadataId from PHP to JavaScript
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "./users/fetch_filtered_data.php?student_id=" + encodeURIComponent(studentId) + "&metadata_id=" + encodeURIComponent(metadataId) + "&iep_date=" + encodeURIComponent(iepDate), true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var dataTableBody = document.getElementById('dataTableBody');
+            if (dataTableBody) {
+                console.log("Element with ID 'dataTableBody' found.");
+                dataTableBody.innerHTML = xhr.responseText;
+                attachEditableHandler(); // Reattach editable handler to new table rows
+            } else {
+                console.error("Element with ID 'dataTableBody' not found.");
+            }
+        }
+    };
+    xhr.send();
+}
+
+function getSelectedGoalContent() {
+    var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
+    if (checkedCheckbox) {
+        var goalContainer = checkedCheckbox.closest('.goal-container');
+        if (goalContainer) {
+            // Extract and return only the goal text
+            var goalTextElement = goalContainer.querySelector('.goaltext');
+            return goalTextElement ? goalTextElement.value : ''; // Using value to get the text content
+        }
+    }
+    return 'No goal selected';
+}
+
+function getGraphContentAsImage(chartVar, callback) {
+    if (chartVar) {
+        chartVar.dataURI().then(({ imgURI }) => {
+            callback(imgURI);
+        }).catch(error => {
+            console.error('Error in converting chart to image:', error);
+            callback(null);
+        });
+    } else {
+        console.error('Chart variable is null or undefined');
+        callback(null);
+    }
+}
+
+function printContent(content) {
+    var studentName = document.getElementById('studentName').value; // Fetch the student's name
+
+    var printWindow = window.open('', '_blank');
+    var image = new Image();
+    image.onload = function() {
+        printWindow.document.write('<html><head><title>Print</title></head><body>');
+        printWindow.document.write('<h1>' + studentName + '</h1>'); // Include the student's name
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => printWindow.print(), 500);
+    };
+    image.onerror = function() {
+        console.error('Error loading the image');
+    };
+    image.src = content.match(/src="([^"]+)"/)[1];
+}
+    });
     </script>
+    
 </body>
 </html>
