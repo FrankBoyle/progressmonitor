@@ -664,13 +664,17 @@ function saveCellValue(cell, inputElement) {
             }
             cell.removeClass('editing');
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error('Error status:', status);
+            console.error('Error message:', error);
+            console.error('Response text:', xhr.responseText);
             cell.html(originalValue);
             cell.removeClass('editing');
             alert('Error occurred while updating data.');
         }
     });
 }
+
 
 $('#addDataRow').off('click').click(function() {
     // Create a temporary input to attach datepicker
@@ -760,7 +764,7 @@ async function ajaxCall(type, url, data) {
         });
 
         // Debugging: Log the response
-        //console.log('Response:', response);
+        console.log('Response:', response);
 
         return response;
     } catch (error) {
@@ -770,11 +774,15 @@ async function ajaxCall(type, url, data) {
         if (error.responseJSON) {
             console.error('Error response:', error.responseJSON);
             return error.responseJSON;  // Return the parsed JSON error message
+        } else if (error.responseText) {
+            console.error('Error responseText:', error.responseText);
+            return { error: error.responseText };  // Provide the response text as error message
         } else {
-            //return { error: 'Unknown error occurred.' };  // Provide a generic error message
+            return { error: 'Unknown error occurred.' };  // Provide a generic error message
         }
     }   
 }
+
 
 function isDateDuplicate(dateString, currentPerformanceId = null, currentStudentId = null, currentMetadataId = null) {
     console.log("Checking for duplicate of:", dateString);
@@ -853,6 +861,12 @@ function updateGoalText(goalId, newText) {
 async function saveRowData(row) {
     const performanceId = row.data('performance-id');
     const school_id = $('#schoolIdInput').val();
+    const metadata_id = new URLSearchParams(window.location.search).get('metadata_id');
+
+    console.log('Saving row data:', row);
+    console.log('Performance ID:', performanceId);
+    console.log('School ID:', school_id);
+    console.log('Metadata ID:', metadata_id);
 
     // Disable the save button to prevent multiple clicks
     row.find('.saveRow').prop('disabled', true);
@@ -871,9 +885,11 @@ async function saveRowData(row) {
         student_id: CURRENT_STUDENT_ID,
         score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
         scores: scores,
-        metadata_id: metadataId,
+        metadata_id: metadata_id,
         school_id: school_id,
     };
+
+    console.log('Post data:', postData);
 
     const response = await ajaxCall('POST', './users/insert_performance.php', postData);
     if (response && response.performance_id) {
@@ -891,6 +907,7 @@ async function saveRowData(row) {
     // Reload the page to show the new row with a delete button
     location.reload();
 }
+
 
 $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
