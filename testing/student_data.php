@@ -21,8 +21,6 @@ if (isset($_GET['metadata_id'])) {
             break;
         }
     }
-} else {
-    // Optional: Handle cases where no metadata_id is specified, if needed
 }
 ?>
 
@@ -35,7 +33,10 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote/dist/summernote-bs4.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/summernote/dist/summernote-bs4.min.js"></script>
     <link rel="stylesheet" href="styles.css">
     <script src="student_data.js" defer></script>
     <script>
