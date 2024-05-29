@@ -8,7 +8,7 @@
       .logo img {
         max-height: 50px; /* Adjust as needed */
     }
-    
+
       body {
           font-family: 'Arial', sans-serif;
           background-color: #E5E5E5;
@@ -451,4 +451,29 @@
 
         .forgot-password input[type="email"] {
             margin-bottom: 1rem;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-icons span, .header-icons .nav-link {
+            margin-right: 20px;
+            font-size: 1.2rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .header-icons .nav-link i {
+            margin-right: 5px;
+        }
+
+        .header-icons .nav-link:hover {
+            color: #f0f0f0;
+        }
+
+        .header-icons .nav-link {
+            display: flex;
+            align-items: center;
         }
