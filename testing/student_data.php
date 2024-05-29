@@ -54,6 +54,7 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="student_data.js" defer></script>
     <script>
         var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
