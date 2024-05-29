@@ -250,62 +250,61 @@ if (isset($_GET['metadata_id'])) {
 
     $(document).ready(function() {
         $('.goaltext').summernote({
-            toolbar: [
-                ['font', ['fontname']],
-                ['style', ['bold', 'italic', 'underline']]
-            ],
-            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
-        });
+        toolbar: [
+            ['font', ['fontname']],
+            ['style', ['bold', 'italic', 'underline']]
+        ],
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
+    });
 
-        $('#graphNotes').summernote({
-            height: 300,
-            toolbar: []
-        });
+    $('#graphNotes').summernote({
+        height: 300,
+        toolbar: []
+    });
 
-        $('#graphNotes').summernote('disable');
+    $('#graphNotes').summernote('disable');
 
-        $('.goal-checkbox').change(function() {
-            if ($(this).is(':checked')) {
-                $('#graphNotes').summernote('enable');
-            } else {
-                $('#graphNotes').summernote('disable');
+    $('.goal-checkbox').change(function() {
+        if ($(this).is(':checked')) {
+            $('#graphNotes').summernote('enable');
+        } else {
+            $('#graphNotes').summernote('disable');
+        }
+    });
+
+    $('#saveGraphNotes').click(function() {
+        var notes = $('#graphNotes').summernote('code');
+        var goalId = $('.goal-checkbox:checked').data('goal-id');
+        var studentId = $('#currentStudentId').val();
+        var schoolId = $('#schoolIdInput').val();
+        var metadataId = urlParams.get('metadata_id');
+
+        $.ajax({
+            url: './users/save_graph_notes.php',
+            type: 'POST',
+            data: {
+                notes: notes,
+                goal_id: goalId,
+                student_id: studentId,
+                school_id: schoolId,
+                metadata_id: metadataId
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response.status === 'success') {
+                    alert('Notes saved successfully');
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error occurred while updating goal:', textStatus, '-', errorThrown);
+                console.error('Response text:', jqXHR.responseText);
+                alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
             }
         });
-
-        $('#saveGraphNotes').click(function() {
-            var notes = $('#graphNotes').summernote('code');
-            var goalId = $('.goal-checkbox:checked').data('goal-id');
-            var studentId = $('#currentStudentId').val();
-            var schoolId = $('#schoolIdInput').val();
-            var metadataId = urlParams.get('metadata_id');
-
-            $.ajax({
-                url: './users/save_graph_notes.php',
-                type: 'POST',
-                data: {
-                    notes: notes,
-                    goal_id: goalId,
-                    student_id: studentId,
-                    school_id: schoolId,
-                    metadata_id: metadataId
-                },
-                dataType: 'json',
-                success: function(response) {
-                    console.log(response);
-                    if (response.success) {
-                        alert('Notes saved successfully');
-                    } else {
-                        alert('Error: ' + response.error);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error occurred while updating goal:', textStatus, '-', errorThrown);
-                    console.error('Response text:', jqXHR.responseText);
-                    alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
-                }
-            });
-        });
-
+    });
         $('.goal-checkbox').change(function() {
             var goalId = $(this).data('goal-id');
             if (this.checked) {
