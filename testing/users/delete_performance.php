@@ -3,7 +3,7 @@ file_put_contents('post_log.txt', print_r($_POST, true));
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include('./users/db.php');
+include('db.php');
 
 $response = ['success' => false];
 
