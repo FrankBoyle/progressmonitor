@@ -93,7 +93,7 @@ if (isset($_GET['metadata_id'])) {
             </section>
 
             <section class="content">
-                <div class="row">
+                <div class="">
                     <div class="col-md-4 col-sm-6 col-12">
                         <div class="card card-outline card-info">
                             <div class="card-header">
