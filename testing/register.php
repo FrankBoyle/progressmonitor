@@ -19,7 +19,7 @@
           </div>
 
           <div class="header-icons">
-            <a href="./users/students.php" class="nav-link">
+            <a href="students.php" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>Home</p>
             </a>             
