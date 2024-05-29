@@ -5,15 +5,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bfactor | Registration Page</title>
-
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Layout</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <style>
+    </style>
 </head>
-<body class="">
-  <div class="">
+
+<body>
+
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="logo">Logo</div>
+            <div class="header-icons">
+                <span>Icon 1</span>
+                <span>Icon 2</span>
+                <span>Icon 3</span>
+            </div>
+        </header>
 
   <!-- /.login-logo -->
   <div class="card">
