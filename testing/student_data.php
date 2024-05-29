@@ -80,12 +80,10 @@ if (isset($_GET['metadata_id'])) {
                     <div class="row mb-2">
                         <div class="col-sm-12">
                             <h1><?php echo $studentName; ?> Performance Data - <?php echo $selectedCategoryName; ?></h1>
+                            <a href="students.php" class="btn btn-primary">Home</a>
                         </div>
                         <div class="col-sm-12">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
-                                <li class="breadcrumb-item active">Performance Data</li>
-                            </ol>
+
                         </div>
                     </div>
                 </div>
@@ -109,6 +107,11 @@ if (isset($_GET['metadata_id'])) {
                                     </a><br>
                                 <?php endforeach; ?>
                             </div>
+                            <div class="form-group" style="text-align: center;">
+                <label for="iep_date" style="display: block;">IEP Date:</label>
+                <input type="date" id="iep_date" name="iep_date" class="form-control" value="<?php echo htmlspecialchars($iep_date); ?>">
+            </div>
+            <button id="filterData" class="btn btn-primary">Filter Data</button>
                         </div>
                     </div>
                 </div>
