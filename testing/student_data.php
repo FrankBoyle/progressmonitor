@@ -5,9 +5,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$studentId = $_GET['student_id'];
-$metadataId = $_GET['metadata_id'];
-
 foreach ($students as $student) {
     if ($student['student_id'] == $studentId) { // If the IDs match
         $studentName = $student['name']; // Get the student name
@@ -15,11 +12,19 @@ foreach ($students as $student) {
     }
 }
 
-foreach ($metadataEntries as $metadataEntry) {
-    if ($metadataEntry['metadata_id'] == $metadataId) {
-        $selectedCategoryName = $metadataEntry['category_name'];
-        break; // We found our category, no need to continue the loop
+if (isset($_GET['metadata_id'])) {
+    $selectedMetadataId = $_GET['metadata_id'];
+
+    // Now fetch the corresponding category name based on this metadata_id
+    foreach ($metadataEntries as $metadataEntry) {
+        if ($metadataEntry['metadata_id'] == $selectedMetadataId) {
+            $selectedCategoryName = $metadataEntry['category_name'];
+            break; // We found our category, no need to continue the loop
+        }
     }
+} else {
+    // Optional: Handle cases where no metadata_id is specified, if needed
+    // $selectedCategoryName = "Default Category or message"; // for example
 }
 ?>
 
@@ -236,37 +241,28 @@ foreach ($metadataEntries as $metadataEntry) {
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="student_data.js" defer></script>
     <script>
-// Ensure metadata_id is defined before using it
-const urlParams = new URLSearchParams(window.location.search);
-const metadata_id = urlParams.get('metadata_id');
-const studentId = urlParams.get('student_id');
-
-// Verify if metadata_id is obtained
-if (!metadata_id) {
-    console.error("metadata_id is not defined");
-}
-
-// Ensure variables are not declared multiple times
-let barChart;
-let chart;
-
-// Document Ready Function
-$(document).ready(function() {
-    $('.goaltext').summernote({
+            $(document).ready(function() {
+      $('.goaltext').summernote({
         toolbar: [
-            ['font', ['fontname']],
-            ['style', ['bold', 'italic', 'underline']]
+          // Only include buttons for font type and basic styling
+          ['font', ['fontname']], // Font type
+          ['style', ['bold', 'italic', 'underline']] // Bold, italic, underline
         ],
-        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
-    });
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'] // Add custom font types if needed
+      });
 
+    // Initialize Summernote
     $('#graphNotes').summernote({
         height: 300,
-        toolbar: []
+        toolbar: [
+            // Add your toolbar options here
+        ]
     });
 
+    // Disable the textbox initially
     $('#graphNotes').summernote('disable');
 
+    // Enable/Disable the textbox based on goal selection
     $('.goal-checkbox').change(function() {
         if ($(this).is(':checked')) {
             $('#graphNotes').summernote('enable');
@@ -275,152 +271,156 @@ $(document).ready(function() {
         }
     });
 
+    // Handle save button click
     $('#saveGraphNotes').click(function() {
-        var notes = $('#graphNotes').summernote('code');
-        var goalId = $('.goal-checkbox:checked').data('goal-id');
-        var studentId = $('#currentStudentId').val();
-        var schoolId = $('#schoolIdInput').val();
-        
-        if (metadata_id) {
-            $.post('./users/save_graph_notes.php', {
-                notes: notes,
-                goal_id: goalId,
-                student_id: studentId,
-                school_id: schoolId,
-                metadata_id: metadata_id
-            }, function(response) {
-                console.log(response);
-            }).fail(function(error) {
-                console.error('Error: ', error);
-            });
-        } else {
-            console.error("metadata_id is not defined");
-        }
-    });
+    var notes = $('#graphNotes').summernote('code');
+    var goalId = $('.goal-checkbox:checked').data('goal-id');
+    var studentId = $('#currentStudentId').val(); // Assuming this is the correct way to get the student ID
+    var schoolId = $('#schoolIdInput').val();     // Assuming this is the correct way to get the school ID
+    var metadataId = urlParams.get('metadata_id'); // Assuming this is the correct way to get the metadata ID
 
-    $('.goal-checkbox').change(function() {
-        var goalId = $(this).data('goal-id');
-        if (this.checked) {
-            $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
-                var data = JSON.parse(response);
-                if (data.status === 'success') {
-                    $('#graphNotes').summernote('code', data.notes);
-                } else {
-                    $('#graphNotes').summernote('code', '');
-                    alert(data.message);
-                }
-            });
-        } else {
-            $('#graphNotes').summernote('code', '');
-        }
+    // AJAX call to save the notes
+    $.post('./users/save_graph_notes.php', {
+        notes: notes,
+        goal_id: goalId,
+        student_id: studentId,
+        school_id: schoolId,
+        metadata_id: metadataId
+    }, function(response) {
+        // Handle response
+        console.log(response);
+    }).fail(function(error) {
+        console.log('Error: ', error);
     });
-
-    $('#printButton').click(function() {
-        var currentChart = selectedChartType === 'bar' ? barChart : chart;
-        getGraphContentAsImage(currentChart, function(graphImage) {
-            if (graphImage) {
-                var notesContent = $('#graphNotes').summernote('code');
-                var selectedGoalContent = getSelectedGoalContent();
-                var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
-                contentToPrint += '<div><img src="' + graphImage + '"></div>';
-                contentToPrint += '<div>' + notesContent + '</div>';
-                printContent(contentToPrint);
+});
+    
+$('.goal-checkbox').change(function() {
+    var goalId = $(this).data('goal-id');
+    if (this.checked) {
+        $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
+            var data = JSON.parse(response);
+            if (data.status === 'success') {
+                $('#graphNotes').summernote('code', data.notes);
             } else {
-                console.error('Failed to receive graph image');
+                $('#graphNotes').summernote('code', '');
+                // Optionally alert the user if no notes were found
+                alert(data.message);
             }
         });
-    });
-
-    document.getElementById('filterData').addEventListener('click', function() {
-        var iepDate = document.getElementById('iep_date').value;
-        var studentId = <?php echo json_encode($studentId); ?>;
-
-        if (iepDate) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "./users/save_iep_date.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        filterData(iepDate);
-                    } else {
-                        alert(response.message);
-                    }
-                }
-            };
-            xhr.send("iep_date=" + encodeURIComponent(iepDate) + "&student_id=" + encodeURIComponent(studentId));
-        }
-    });
-
-    function filterData(iepDate) {
-        var studentId = <?php echo json_encode($studentId); ?>;
-        var metadataId = <?php echo json_encode($metadataId); ?>;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "./users/fetch_filtered_data.php?student_id=" + encodeURIComponent(studentId) + "&metadata_id=" + encodeURIComponent(metadataId) + "&iep_date=" + encodeURIComponent(iepDate), true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var dataTableBody = document.getElementById('dataTableBody');
-                if (dataTableBody) {
-                    console.log("Element with ID 'dataTableBody' found.");
-                    dataTableBody.innerHTML = xhr.responseText;
-                    attachEditableHandler();
-                } else {
-                    console.error("Element with ID 'dataTableBody' not found.");
-                }
-            }
-        };
-        xhr.send();
-    }
-
-    function getSelectedGoalContent() {
-        var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
-        if (checkedCheckbox) {
-            var goalContainer = checkedCheckbox.closest('.goal-container');
-            if (goalContainer) {
-                var goalTextElement = goalContainer.querySelector('.goaltext');
-                return goalTextElement ? goalTextElement.value : '';
-            }
-        }
-        return 'No goal selected';
-    }
-
-    function getGraphContentAsImage(chartVar, callback) {
-        if (chartVar) {
-            chartVar.dataURI().then(({ imgURI }) => {
-                callback(imgURI);
-            }).catch(error => {
-                console.error('Error in converting chart to image:', error);
-                callback(null);
-            });
-        } else {
-            console.error('Chart variable is null or undefined');
-            callback(null);
-        }
-    }
-
-    function printContent(content) {
-        var studentName = document.getElementById('studentName').value;
-        var printWindow = window.open('', '_blank');
-        var image = new Image();
-        image.onload = function() {
-            printWindow.document.write('<html><head><title>Print</title></head><body>');
-            printWindow.document.write('<h1>' + studentName + '</h1>');
-            printWindow.document.write(content);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.focus();
-            setTimeout(() => printWindow.print(), 500);
-        };
-        image.onerror = function() {
-            console.error('Error loading the image');
-        };
-        image.src = content.match(/src="([^"]+)"/)[1];
+    } else {
+        $('#graphNotes').summernote('code', ''); // Clear the notes when no goal is selected
     }
 });
 
-    </script>
+$('#printButton').click(function() {
+    var currentChart = selectedChartType === 'bar' ? barChart : chart;
+    getGraphContentAsImage(currentChart, function(graphImage) {
+        if (graphImage) {
+            var notesContent = $('#graphNotes').summernote('code');
+            var selectedGoalContent = getSelectedGoalContent();
+            var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
+            contentToPrint += '<div><img src="' + graphImage + '"></div>';
+            contentToPrint += '<div>' + notesContent + '</div>';
+            printContent(contentToPrint);
+        } else {
+            console.error('Failed to receive graph image');
+        }
+    });
+});
 
+document.getElementById('filterData').addEventListener('click', function() {
+    var iepDate = document.getElementById('iep_date').value;
+    var studentId = <?php echo json_encode($studentId); ?>; // Pass the studentId from PHP to JavaScript
+    
+    if (iepDate) {
+        // Send the IEP date to the server to save in the database
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "./users/save_iep_date.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    // If successful, proceed to filter the data
+                    filterData(iepDate);
+                } else {
+                    alert(response.message);
+                }
+            }
+        };
+        xhr.send("iep_date=" + encodeURIComponent(iepDate) + "&student_id=" + encodeURIComponent(studentId));
+    }
+});
+
+function filterData(iepDate) {
+    var studentId = <?php echo json_encode($studentId); ?>; // Pass the studentId from PHP to JavaScript
+    var metadataId = <?php echo json_encode($metadataId); ?>; // Pass the metadataId from PHP to JavaScript
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "./users/fetch_filtered_data.php?student_id=" + encodeURIComponent(studentId) + "&metadata_id=" + encodeURIComponent(metadataId) + "&iep_date=" + encodeURIComponent(iepDate), true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var dataTableBody = document.getElementById('dataTableBody');
+            if (dataTableBody) {
+                console.log("Element with ID 'dataTableBody' found.");
+                dataTableBody.innerHTML = xhr.responseText;
+                attachEditableHandler(); // Reattach editable handler to new table rows
+            } else {
+                console.error("Element with ID 'dataTableBody' not found.");
+            }
+        }
+    };
+    xhr.send();
+}
+
+function getSelectedGoalContent() {
+    var checkedCheckbox = document.querySelector('.goal-checkbox:checked');
+    if (checkedCheckbox) {
+        var goalContainer = checkedCheckbox.closest('.goal-container');
+        if (goalContainer) {
+            // Extract and return only the goal text
+            var goalTextElement = goalContainer.querySelector('.goaltext');
+            return goalTextElement ? goalTextElement.value : ''; // Using value to get the text content
+        }
+    }
+    return 'No goal selected';
+}
+
+function getGraphContentAsImage(chartVar, callback) {
+    if (chartVar) {
+        chartVar.dataURI().then(({ imgURI }) => {
+            callback(imgURI);
+        }).catch(error => {
+            console.error('Error in converting chart to image:', error);
+            callback(null);
+        });
+    } else {
+        console.error('Chart variable is null or undefined');
+        callback(null);
+    }
+}
+
+function printContent(content) {
+    var studentName = document.getElementById('studentName').value; // Fetch the student's name
+
+    var printWindow = window.open('', '_blank');
+    var image = new Image();
+    image.onload = function() {
+        printWindow.document.write('<html><head><title>Print</title></head><body>');
+        printWindow.document.write('<h1>' + studentName + '</h1>'); // Include the student's name
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => printWindow.print(), 500);
+    };
+    image.onerror = function() {
+        console.error('Error loading the image');
+    };
+    image.src = content.match(/src="([^"]+)"/)[1];
+}
+    });
+    </script>
+    
 </body>
 </html>
