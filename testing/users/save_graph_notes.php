@@ -26,6 +26,7 @@ function addNotes($goalId, $studentId, $schoolId, $metadataId, $notes) {
         echo json_encode(['status' => 'success', 'message' => 'Notes added successfully.']);
     } catch (PDOException $e) {
         // Handle any database errors
+        http_response_code(500);
         echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
     }
 }
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goal_id'], $_POST['st
     // Call the function to add notes
     addNotes($goalId, $studentId, $schoolId, $metadataId, $notes);
 } else {
+    http_response_code(400);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request or missing parameters.']);
 }
 ?>
