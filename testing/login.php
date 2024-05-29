@@ -23,8 +23,10 @@
           <div class="header-icons">
             <span>Icon 1</span>
             <span>Icon 2</span>
-            <span>Icon 3</span>
-          </div>
+            <a href="./users/logout.php" class="nav-link">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>Sign Out<span class="right badge badge-danger"></span></p>
+              </a>          </div>
         </header>
 
         <div class="center-content">
