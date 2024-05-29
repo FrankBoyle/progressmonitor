@@ -54,13 +54,194 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" href="styles.css">
     <script src="student_data.js" defer></script>
     <script>
         var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
     </script>
     <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #E5E5E5;
+            margin: 0;
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #333;
+            color: white;
+        }
+
+        .logo {
+            font-weight: bold;
+        }
+
+        .header-icons span {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding: 1rem;
+        }
+
+        .card {
+            background-color: white;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        h1, h3 {
+            color: #333;
+        }
+
+        .breadcrumb {
+            background: none;
+            padding: 0;
+        }
+
+        .breadcrumb-item a {
+            color: #007bff;
+        }
+
+        .breadcrumb-item.active {
+            color: #6c757d;
+        }
+
+        .goal-category {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 1rem 0;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .goal-item {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+
+        .goal-item .edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .goal-item .save-btn {
+            background-color: #555;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .goal-item .save-btn:hover {
+            background-color: #333;
+            font-weight: bold;
+        }
+
+        .editable {
+            cursor: pointer;
+        }
+
+        .editable.editing {
+            background-color: #f4f4f4;
+        }
+
+        .editable input {
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            background-color: transparent;
+            outline: none;
+        }
+
+        .goal-container {
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .goal-container.selected {
+            background-color: #e0e0e0;
+            border: 1px solid #007bff;
+        }
+
+        .highlighted {
+            background-color: #ffff99;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            min-width: 50px;
+            height: 25px;
+            box-sizing: border-box;
+        }
+
+        td .cell-input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 8px;
+            margin: 0;
+            box-sizing: border-box;
+            background: transparent;
+        }
+
+        #columnSelector label {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -74,36 +255,19 @@ if (isset($_GET['metadata_id'])) {
             </div>
         </header>
 
-        <main class="content-wrapper">
+        <div class="content-wrapper">
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <h1><?php echo $studentName; ?> Performance Data - <?php echo $selectedCategoryName; ?></h1>
                             <a href="home.php" class="btn btn-primary">Home</a>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="./home.php">Home</a></li>
                                 <li class="breadcrumb-item active">Performance Data</li>
                             </ol>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="content">
-                <div class="row">
-                    <div class="col-md-4 col-sm-6 col-12">
-                        <div class="">
-                            <div class="card-header">
-                                <h3 class="card-title">Categories</h3><br>
-                                <?php foreach ($metadataEntries as $metadataEntry): ?>
-                                    <a href="?student_id=<?php echo $studentId; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
-                                        <?php echo $metadataEntry['category_name']; ?>
-                                    </a><br>
-                                <?php endforeach; ?>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -118,9 +282,26 @@ if (isset($_GET['metadata_id'])) {
             <section class="content">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card card-outline card-info">
+                        <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title"></h3>
+                                <h3 class="card-title">Categories</h3>
+                                <?php foreach ($metadataEntries as $metadataEntry): ?>
+                                    <a href="?student_id=<?php echo $studentId; ?>&metadata_id=<?php echo $metadataEntry['metadata_id']; ?>">
+                                        <?php echo $metadataEntry['category_name']; ?>
+                                    </a><br>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Performance Data</h3>
                                 <table border="1" id="dataTable">
                                     <thead>
                                         <tr>
@@ -170,9 +351,9 @@ if (isset($_GET['metadata_id'])) {
             <section class="content">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card card-outline card-info">
+                        <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title"></h3>
+                                <h3 class="card-title">Column Selector</h3>
                                 <div id="columnSelector">
                                     <label>Select Columns to Display:</label>
                                     <?php foreach ($scoreNames as $category => $scores): ?>
@@ -202,7 +383,7 @@ if (isset($_GET['metadata_id'])) {
             </section>
 
             <section class="content">
-                <div class="card card-outline card-info">
+                <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Goals</h3>
                     </div>
@@ -239,7 +420,7 @@ if (isset($_GET['metadata_id'])) {
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
