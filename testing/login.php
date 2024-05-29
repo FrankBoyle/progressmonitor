@@ -24,14 +24,14 @@
 
           <div class="header-icons">
             <a href="students.php" class="nav-link">
-              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <i class="nav-icon"></i>
               <p>Home</p>
             </a>             
             
             <!--<span>Icon 2</span>-->
 
             <a href="./users/logout.php" class="nav-link">
-              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <i class="nav-icon"></i>
               <p>Sign Out</p>
             </a> 
 
