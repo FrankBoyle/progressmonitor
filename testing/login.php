@@ -38,24 +38,24 @@
                 <label for="remember">Remember Me</label>
                 <button type="submit" value="login" name="login" class="btn btn-primary btn-block">Sign In</button>
               </form>
-              <p class="mb-1">
-      <?php
-    if (isset($_GET['reset']) && $_GET['reset'] == 1) {
-        echo '<p class="info">If this email exists in our system, a reset link has been sent. Please check your inbox (and spam folder).</p>';
-    }
-    ?>
-      <form action="forgot_password.php" method="post">
-    <label for="email">Email:</label>
-    <input type="email" name="email" required>
-    <input type="submit" name="forgot_password" value="Request Password Reset">
-</form>
-      </p>
-      <p class="mb-0">
-        <a href="register.php" class="text-center">Register a new membership</a>
-      </p>
+            <p class="mb-1">
+              <?php
+                if (isset($_GET['reset']) && $_GET['reset'] == 1) {
+                  echo '<p class="info">If this email exists in our system, a reset link has been sent. Please check your inbox (and spam folder).</p>';
+                }
+              ?>
+              <form action="forgot_password.php" method="post">
+                <label for="email">Email:</label>
+                <input type="email" name="email" required>
+                <input type="submit" name="forgot_password" value="Request Password Reset">
+              </form>
+            </p>
+            <p class="mb-0">
+              <a href="register.php" class="text-center">Register a new membership</a>
+            </p>
           </section>
         </main>
-    </div>
+      </div>
 
 
       <!--

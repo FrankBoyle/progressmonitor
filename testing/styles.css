@@ -348,3 +348,103 @@
           box-sizing: border-box;
           background: transparent;
       }
+
+      
+        /* Additional styles for login form */
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .box {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-box-msg {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn-block:hover {
+            background-color: #0056b3;
+        }
+
+        .fas {
+            position: absolute;
+            margin-left: -25px;
+            margin-top: 15px;
+            color: #999;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
+        }
+
+        .remember-me label {
+            margin: 0;
+        }
+
+        .info, .text-center {
+            text-align: center;
+            color: #007bff;
+        }
+
+        .info {
+            margin: 1rem 0;
+        }
+
+        .mb-1, .mb-0 {
+            margin-bottom: 1rem;
+        }
+
+        .forgot-password {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .forgot-password form {
+            width: 100%;
+        }
+
+        .forgot-password input[type="email"] {
+            margin-bottom: 1rem;
+        }
