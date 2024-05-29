@@ -93,9 +93,9 @@ if (isset($_GET['metadata_id'])) {
             </section>
 
             <section class="content">
-                <div class="">
+                <div class="row">
                     <div class="col-md-4 col-sm-6 col-12">
-                        <div class="card card-outline card-info">
+                        <div class="">
                             <div class="card-header">
                                 <h3 class="card-title">Categories</h3><br>
                                 <?php foreach ($metadataEntries as $metadataEntry): ?>
