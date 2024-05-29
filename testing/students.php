@@ -61,14 +61,25 @@ function fetchStudentsByGroup($groupId) {
 <body>
 
     <div class="dashboard">
+      
         <header class="dashboard-header">
           <div class="logo">
             <img src="bFactor_logo.png" alt="Logo">
           </div>
+
           <div class="header-icons">
-            <span>Icon 1</span>
-            <span>Icon 2</span>
-            <span>Icon 3</span>
+            <a href="./users/students.php" class="nav-link">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <p>Sign Out</p>
+            </a>             
+            
+            <!--<span>Icon 2</span>-->
+
+            <a href="./users/logout.php" class="nav-link">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <p>Sign Out</p>
+            </a> 
+
           </div>
         </header>
 

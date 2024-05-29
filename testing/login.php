@@ -16,9 +16,8 @@
 </head>
 <body>
     <div class="dashboard">
-
+      
        <header class="dashboard-header">
-
           <div class="logo">
             <img src="bFactor_logo.png" alt="Logo">
           </div>
@@ -37,7 +36,6 @@
             </a> 
 
           </div>
-
         </header>
 
         <div class="center-content">
