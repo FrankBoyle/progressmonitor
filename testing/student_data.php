@@ -74,7 +74,7 @@ if (isset($_GET['metadata_id'])) {
             </div>
         </header>
 
-        <div class="content-wrapper">
+        <div class="">
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
