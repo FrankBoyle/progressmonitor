@@ -245,8 +245,10 @@ if (isset($_GET['metadata_id'])) {
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <script>
-            $(document).ready(function() {
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+
+    $(document).ready(function() {
       $('.goaltext').summernote({
         toolbar: [
           // Only include buttons for font type and basic styling
@@ -288,9 +290,9 @@ if (isset($_GET['metadata_id'])) {
         $.post('./users/save_graph_notes.php', {
             notes: notes,
             goal_id: goalId,
-           student_id: studentId,
+            student_id: studentId,
             school_id: schoolId,
-           metadata_id: metadataId
+            metadata_id: metadataId
         }, function(response) {
             // Handle response
             console.log(response);
