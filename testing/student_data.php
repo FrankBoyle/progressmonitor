@@ -80,7 +80,6 @@ if (isset($_GET['metadata_id'])) {
                     <div class="row mb-2">
                         <div class="col-sm-12">
                             <h1><?php echo $studentName; ?> Performance Data - <?php echo $selectedCategoryName; ?></h1>
-                            <a href="home.php" class="btn btn-primary">Home</a>
                         </div>
                         <div class="col-sm-12">
                             <ol class="breadcrumb float-sm-right">
