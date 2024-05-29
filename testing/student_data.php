@@ -277,7 +277,7 @@ if (isset($_GET['metadata_id'])) {
         var goalId = $('.goal-checkbox:checked').data('goal-id');
         var studentId = $('#currentStudentId').val();
         var schoolId = $('#schoolIdInput').val();
-        var metadataId = urlParams.get('metadata_id');
+        var metadataId = new URLSearchParams(window.location.search).get('metadata_id');
 
         $.ajax({
             url: './users/save_graph_notes.php',
@@ -305,6 +305,7 @@ if (isset($_GET['metadata_id'])) {
             }
         });
     });
+    
         $('.goal-checkbox').change(function() {
             var goalId = $(this).data('goal-id');
             if (this.checked) {
