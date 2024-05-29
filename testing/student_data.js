@@ -1,6 +1,6 @@
 // Defining global variables for the script.
-//let barChart = null;
-//let benchmark = null;
+let barChart = null;
+let benchmark = null;
 let benchmarkSeriesIndex = null;
 let selectedColumns = [];
 let selectedChartType = 'bar';

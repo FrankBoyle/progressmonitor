@@ -240,7 +240,6 @@ if (isset($_GET['metadata_id'])) {
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <script src="student_data.js" defer></script>
     <script>
         $(document).ready(function() {
             $('.goaltext').summernote({
