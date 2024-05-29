@@ -680,7 +680,7 @@ function saveCellValue(cell, inputElement) {
     // AJAX call to update the cell value on the server
     $.ajax({
         type: 'POST',
-        url: 'update_performance.php',
+        url: './users/update_performance.php',
         data: postData,
         success: function(response) {
             if (fieldName === 'score_date' && response.saved_date) {
@@ -868,7 +868,7 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
 
         $.ajax({
             type: 'POST',
-            url: 'update_goal.php', // Ensure this is the correct endpoint
+            url: './users/update_goal.php', // Ensure this is the correct endpoint
             data: postData,
             dataType: 'json',
             success: function(response) {
@@ -912,7 +912,7 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
             school_id: school_id,
         };
     
-        const response = await ajaxCall('POST', 'insert_performance.php', postData);
+        const response = await ajaxCall('POST', './users/insert_performance.php', postData);
         if (response && response.performance_id) {
             row.attr('data-performance-id', response.performance_id);
             row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
@@ -989,7 +989,7 @@ $(document).ready(function() {
     // Perform the AJAX request
     $.ajax({
         type: 'POST',
-        url: 'add_new_goal.php', // Adjust if necessary
+        url: './users/add_new_goal.php', // Adjust if necessary
         data: postData,
         dataType: 'json',
         success: function(response) {
