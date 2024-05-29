@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="dashboard">
-      
+
        <header class="dashboard-header">
           <div class="logo">
             <img src="bFactor_logo.png" alt="Logo">
@@ -25,7 +25,7 @@
           <div class="header-icons">
             <a href="./users/students.php" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
-              <p>Sign Out</p>
+              <p>Home</p>
             </a>             
             
             <!--<span>Icon 2</span>-->

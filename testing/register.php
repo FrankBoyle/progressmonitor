@@ -21,7 +21,7 @@
           <div class="header-icons">
             <a href="./users/students.php" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
-              <p>Sign Out</p>
+              <p>Home</p>
             </a>             
             
             <!--<span>Icon 2</span>-->
