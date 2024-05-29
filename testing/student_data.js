@@ -1,48 +1,25 @@
 // Defining global variables for the script.
-let barChart = null;  // Declare barChart variable at the global level
+let barChart = null;
 let benchmark = null;
-let benchmarkSeriesIndex = null; // It's null initially because the series index is not determined yet.
+let benchmarkSeriesIndex = null;
 let selectedColumns = [];
-let selectedChartType = 'bar';  // Default chart type
+let selectedChartType = 'bar';
 let xCategories = [];
-let chart = null;  // This makes the chart variable accessible throughout the script.
-let headerNames = [];  // Will store header names extracted from the table.
-let allSeries = [];  // Will store all data series.
-let dates = [];  // To store extracted dates from table rows.
+let chart = null;
+let headerNames = [];
+let allSeries = [];
+let dates = [];
 let finalSeriesData = [];
-let trendlineSeriesData = []; // Declare both as global variables
-let scores = [];  // Declare scores globally
-// Define a flag to track whether the bar chart has been initialized
+let trendlineSeriesData = [];
+let scores = [];
 let isBarChartInitialized = false;
-// Define global variable
-let metadataId;
-
+let metadataId;  // Ensure this is declared at the global level
 
 const seriesColors = [
-    '#082645',  // dark blue
-    '#FF8C00',  // dark orange
-    '#388E3C',  // dark green
-    '#D32F2F',  // dark red
-    '#7B1FA2',  // dark purple
-    '#1976D2',  // dark blue
-    '#C2185B',  // pink
-    '#0288D1',  // light blue
-    '#7C4DFF',  // deep purple
-    '#C21807'   // deep red
+    '#082645', '#FF8C00', '#388E3C', '#D32F2F', '#7B1FA2', '#1976D2', '#C2185B', '#0288D1', '#7C4DFF', '#C21807'
 ];
 
-const barChartSeriesColors = [
-    '#082645',  // dark blue
-    '#FF8C00',  // dark orange
-    '#388E3C',  // dark green
-    '#D32F2F',  // dark red
-    '#7B1FA2',  // dark purple
-    '#1976D2',  // dark blue
-    '#C2185B',  // pink
-    '#0288D1',  // light blue
-    '#7C4DFF',  // deep purple
-    '#C21807'   // deep red
-];
+const barChartSeriesColors = seriesColors.slice();  // Use the same colors for bar chart
 
 // Initialization
 $(document).ready(function() {
@@ -586,7 +563,7 @@ function initializeDatepicker() {
             const cell = input.closest('td');
             const performanceId = cell.closest('tr').data('performance-id');
             const studentId = CURRENT_STUDENT_ID;
-            console.log("metadataId is:"+ metadataId); // This should output the metadata ID
+            console.log("metadataId is: " + metadataId); // This should output the metadata ID
 
             const dbDate = convertToDatabaseDate(dateText);
             if (isDateDuplicate(dbDate, performanceId, studentId, metadataId)) {
@@ -622,10 +599,7 @@ function attachEditableHandler() {
                     // Perform the duplicate check when a date is selected
                     const performanceId = cell.closest('tr').data('performance-id');
                     const studentId = CURRENT_STUDENT_ID;
-                    //console.log("metadataId is:"+ metadataId); // This should output the metadata ID
                     const dbDate = convertToDatabaseDate(dateText);
-                    //console.log('dbDate:', dbDate); 
-                    //console.log('dateText:', dateText);
                     if (isDateDuplicate(dbDate, performanceId, studentId, metadataId)) {
                         alert("Duplicate date not allowed!");
                         input.datepicker('setDate', originalValue); // Reset to the original value
@@ -698,17 +672,13 @@ function saveCellValue(cell, inputElement) {
     });
 }
 
-
-
 $('#addDataRow').off('click').click(function() {
-
     // Create a temporary input to attach datepicker
     const tempInput = $("<input type='text'>").appendTo('body');
     
     // Position the temporary input to the top right of the button
     const buttonPosition = $(this).offset();
     const buttonWidth = $(this).outerWidth();
-    const buttonHeight = $(this).outerHeight();
     const inputWidth = 120; // Adjust as needed, this is the width of the datepicker input
     const inputHeight = 30; // Adjust as needed
 
@@ -751,8 +721,7 @@ $('#addDataRow').off('click').click(function() {
 
     // Show the datepicker immediately
     tempInput.datepicker('show');
-});    
-
+});
 
 function convertToDatabaseDate(dateString) {
     if (!dateString || dateString === "New Entry") return dateString;
@@ -856,102 +825,92 @@ function isDateDuplicate(dateString, currentPerformanceId = null, currentStudent
     return isDuplicate;
 }
 
+// Function to update goal text
+function updateGoalText(goalId, newText) {
+    const postData = {
+        goal_id: goalId,
+        new_text: newText
+    };
 
-
-
-    // Function to update goal text
-    function updateGoalText(goalId, newText) {
-        const postData = {
-            goal_id: goalId,
-            new_text: newText
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: './users/update_goal.php', // Ensure this is the correct endpoint
-            data: postData,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    //alert('Goal updated successfully.');
-                } else {
-                    alert(response.message || 'Failed to update goal.');
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
-            }
-        });
-    }
-    
-    
-    async function saveRowData(row,) {
-        const performanceId = row.data('performance-id');
-        const school_id = $('#schoolIdInput').val();
-        //const urlParams = new URLSearchParams(window.location.search);
-        //const metadata_id = urlParams.get('metadata_id');
-    
-        // Disable the save button to prevent multiple clicks
-        row.find('.saveRow').prop('disabled', true);
-    
-        if (performanceId !== 'new') {
-            return;
-        }
-    
-        let scores = {};
-        for (let i = 1; i <= 10; i++) {
-            const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
-            scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
-        }
-    
-        const postData = {
-            student_id: CURRENT_STUDENT_ID,
-            score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
-            scores: scores,
-            metadata_id: metadata_id,
-            school_id: school_id,
-        };
-    
-        const response = await ajaxCall('POST', './users/insert_performance.php', postData);
-        if (response && response.performance_id) {
-            row.attr('data-performance-id', response.performance_id);
-            row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
-            row.find('.saveRow').prop('disabled', false);
-        } else {
-            if (response && response.error) {
-                alert("Error: " + response.error);
+    $.ajax({
+        type: 'POST',
+        url: './users/update_goal.php', // Ensure this is the correct endpoint
+        data: postData,
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                //alert('Goal updated successfully.');
             } else {
-                alert("There was an error saving the data.");
+                alert(response.message || 'Failed to update goal.');
             }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
         }
-    
-        // Reload the page to show the new row with a delete button
-        location.reload();
-    }    
+    });
+}
+
+async function saveRowData(row) {
+    const performanceId = row.data('performance-id');
+    const school_id = $('#schoolIdInput').val();
+
+    // Disable the save button to prevent multiple clicks
+    row.find('.saveRow').prop('disabled', true);
+
+    if (performanceId !== 'new') {
+        return;
+    }
+
+    let scores = {};
+    for (let i = 1; i <= 10; i++) {
+        const scoreValue = row.find(`td[data-field-name="score${i}"]`).text().trim();
+        scores[`score${i}`] = scoreValue === '' ? null : scoreValue;
+    }
+
+    const postData = {
+        student_id: CURRENT_STUDENT_ID,
+        score_date: convertToDatabaseDate(row.find('td[data-field-name="score_date"]').text()),
+        scores: scores,
+        metadata_id: metadataId,
+        school_id: school_id,
+    };
+
+    const response = await ajaxCall('POST', './users/insert_performance.php', postData);
+    if (response && response.performance_id) {
+        row.attr('data-performance-id', response.performance_id);
+        row.find('td[data-field-name="score_date"]').text(convertToDisplayDate(response.score_date));
+        row.find('.saveRow').prop('disabled', false);
+    } else {
+        if (response && response.error) {
+            alert("Error: " + response.error);
+        } else {
+            alert("There was an error saving the data.");
+        }
+    }
+
+    // Reload the page to show the new row with a delete button
+    location.reload();
+}
 
 $(document).ready(function() {
     // Retrieve the metadata_id from the URL parameter
     metadataId = new URLSearchParams(window.location.search).get('metadata_id');
     //console.log('metadataId (global):', metadataId);
-   
-    
+
     // Set the retrieved metadata_id as the value of the input field
-    $('#metadataIdInput').val(metadata_id);
+    $('#metadataIdInput').val(metadataId);
 
     initializeDatepicker();
-
-
-    //console.log(metadata_id);
     
     $(document).on('click', '.deleteRow', function() {
         const row = $(this);  // Capture the button element for later use
         const performanceId = $(this).data('performance-id');
-    
+
         // Confirm before delete
         if (!confirm('Are you sure you want to delete this row?')) {
             return;
         }
-    
+
         // Send a request to delete the data from the server
         $.post('delete_performance.php', {
             performance_id: performanceId
@@ -964,47 +923,44 @@ $(document).ready(function() {
                 alert('Failed to delete data. Please try again.');
             }
         }, 'json');
-    });        
-   
+    });
+
     $('#addNewGoalBtn').on('click', function() {
         const newGoalText = $('#newGoalText').val().trim();
         const studentId = CURRENT_STUDENT_ID; // Assuming you've already retrieved this
         const schoolId = $('#schoolIdInput').val(); // Make sure this input exists and holds the school_id
-        const metadataId = urlParams.get('metadata_id'); // Retrieved from URL as in your example
-        //const goalDate = getCurrentDate(); // Gets the current date in the format you need
-    
+        const metadataId = new URLSearchParams(window.location.search).get('metadata_id'); // Retrieved from URL as in your example
+
         if (newGoalText === '') {
             alert('Please enter a goal description.');
             return;
         }
-    
+
         const postData = {
             goal_description: newGoalText,
             student_id: studentId,
             metadata_id: metadataId,
             school_id: schoolId,
-            //goal_date: goalDate // Optional, depending on if your DB allows null for this field
         };
-    
-    // Perform the AJAX request
-    $.ajax({
-        type: 'POST',
-        url: './users/add_new_goal.php', // Adjust if necessary
-        data: postData,
-        dataType: 'json',
-        success: function(response) {
-            if (response.success) {
-                //alert('New goal added successfully.');
-                // Refresh the page after a short delay to allow the alert to be read by the user
-                setTimeout(function() {
-                    window.location.reload();
-                }, 1000); // Adjust the delay as needed
-            } else {
-                //alert(response.message || 'Failed to add new goal.');
-            }
-        },      
+
+        // Perform the AJAX request
+        $.ajax({
+            type: 'POST',
+            url: './users/add_new_goal.php', // Adjust if necessary
+            data: postData,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Refresh the page after a short delay to allow the alert to be read by the user
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000); // Adjust the delay as needed
+                } else {
+                    alert(response.message || 'Failed to add new goal.');
+                }
+            },
+        });
     });
-});
 
     // Event listener for goal checkbox change
     $(document).on('change', '.goal-checkbox', function() {
@@ -1024,24 +980,23 @@ $(document).ready(function() {
         updateGoalText(goalId, newText);
     });
 
-        $(document).on('keypress', '.saveRow', function(e) {
-            if (e.which === 13) {
-                e.preventDefault();
-            }
-        });
+    $(document).on('keypress', '.saveRow', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+        }
+    });
 
-        // Initialization code
-        //$('#currentWeekStartDate').val(getCurrentDate());
-        attachEditableHandler();
+    // Initialization code
+    attachEditableHandler();
 
-        $.fn.dataTable.ext.type.detect.unshift(function(value) {
-            return value && value.match(/^(\d{1,2}\/\d{1,2}\/\d{4})$/) ? 'date-us' : null;
-        });
+    $.fn.dataTable.ext.type.detect.unshift(function(value) {
+        return value && value.match(/^(\d{1,2}\/\d{1,2}\/\d{4})$/) ? 'date-us' : null;
+    });
 
-        $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
-            var date = data.split('/');
-            return (date[2] + date[0] + date[1]) * 1;
-        };
+    $.fn.dataTable.ext.type.order['date-us-pre'] = function(data) {
+        var date = data.split('/');
+        return (date[2] + date[0] + date[1]) * 1;
+    };
 
     // Define the DataTable and apply custom date filter
     let table = $('#dataTable').DataTable({
@@ -1066,5 +1021,4 @@ $(document).ready(function() {
             }
         ]
     });
-
 });
