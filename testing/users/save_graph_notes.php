@@ -30,7 +30,7 @@ function addNotes($goalId, $studentId, $schoolId, $metadataId, $notes) {
     }
 }
 
-// Handling the POST request
+// Ensure the request method is POST and required parameters are set
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goal_id'], $_POST['student_id'], $_POST['school_id'], $_POST['metadata_id'], $_POST['notes'])) {
     $goalId = $_POST['goal_id'];
     $studentId = $_POST['student_id'];
@@ -40,5 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goal_id'], $_POST['st
 
     // Call the function to add notes
     addNotes($goalId, $studentId, $schoolId, $metadataId, $notes);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request or missing parameters.']);
 }
 ?>
