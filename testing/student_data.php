@@ -246,8 +246,7 @@ if (isset($_GET['metadata_id'])) {
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-
+    
     $(document).ready(function() {
       $('.goaltext').summernote({
         toolbar: [
