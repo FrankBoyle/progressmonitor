@@ -5,6 +5,10 @@
           box-sizing: border-box;
       }
 
+      .logo img {
+        max-height: 50px; /* Adjust as needed */
+    }
+    
       body {
           font-family: 'Arial', sans-serif;
           background-color: #E5E5E5;
