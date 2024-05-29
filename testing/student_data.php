@@ -54,7 +54,6 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" href="styles.css">
     <script src="student_data.js" defer></script>
     <script>
         var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
@@ -74,7 +73,7 @@ if (isset($_GET['metadata_id'])) {
             </div>
         </header>
 
-        <main class="content-wrapper">
+        <div class="content-wrapper">
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
@@ -95,7 +94,7 @@ if (isset($_GET['metadata_id'])) {
             <section class="content">
                 <div class="row">
                     <div class="col-md-4 col-sm-6 col-12">
-                        <div class="">
+                        <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Categories</h3><br>
                                 <?php foreach ($metadataEntries as $metadataEntry): ?>
@@ -118,7 +117,7 @@ if (isset($_GET['metadata_id'])) {
             <section class="content">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card card-outline card-info">
+                        <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title"></h3>
                                 <table border="1" id="dataTable">
@@ -170,7 +169,7 @@ if (isset($_GET['metadata_id'])) {
             <section class="content">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card card-outline card-info">
+                        <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title"></h3>
                                 <div id="columnSelector">
@@ -202,44 +201,43 @@ if (isset($_GET['metadata_id'])) {
             </section>
 
             <section class="content">
-                <div class="card card-outline card-info">
+                <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Goals</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row" id="goalsList">
-                            <?php foreach ($goals as $index => $goal): ?>
-                                <div class="col-md-4 col-sm-6 col-12">
-                                    <div class="info-box">
-                                        <div class="info-box-content goal-container">
-                                            <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-                                            <label class="goal-checkbox-label">
-                                                <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>">
-                                                Select
-                                            </label>
-                                            <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true" data-goal-id="<?php echo $goal['goal_id']; ?>">
-                                                <?php echo htmlspecialchars($goal['goal_description']); ?>
-                                            </textarea>
-                                            <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
+                        <h3 class="card-title">Goals</                        <div class="card-body">
+                            <div class="row" id="goalsList">
+                                <?php foreach ($goals as $index => $goal): ?>
+                                    <div class="col-md-4 col-sm-6 col-12">
+                                        <div class="info-box">
+                                            <div class="info-box-content goal-container">
+                                                <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+                                                <label class="goal-checkbox-label">
+                                                    <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                                    Select
+                                                </label>
+                                                <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                                    <?php echo htmlspecialchars($goal['goal_description']); ?>
+                                                </textarea>
+                                                <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                        <div class="add-goal-form">
-                            <input type="text" id="newGoalText" placeholder="Enter new goal description">
-                            <button id="addNewGoalBtn">Add New Goal</button>
-                        </div>
-                        <div class="editable-notes-section">
-                            <h3>Goal Notes</h3>
-                            <textarea id="graphNotes" class="summernote"></textarea>
-                            <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
-                            <button id="printButton" class="btn btn-primary">Print</button>
+                                <?php endforeach; ?>
+                            </div>
+                            <div class="add-goal-form">
+                                <input type="text" id="newGoalText" placeholder="Enter new goal description">
+                                <button id="addNewGoalBtn">Add New Goal</button>
+                            </div>
+                            <div class="editable-notes-section">
+                                <h3>Goal Notes</h3>
+                                <textarea id="graphNotes" class="summernote"></textarea>
+                                <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
+                                <button id="printButton" class="btn btn-primary">Print</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
