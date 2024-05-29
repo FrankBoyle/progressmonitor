@@ -38,20 +38,7 @@
                 <label for="remember">Remember Me</label>
                 <button type="submit" value="login" name="login" class="btn btn-primary btn-block">Sign In</button>
               </form>
-          </section>
-        </main>
-    </div>
-
-
-      <!--
-      <div class="social-auth-links text-center mb-3">
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a>
-      </div>
-        /.social-auth-links -->
-
-      <p class="mb-1">
+              <p class="mb-1">
       <?php
     if (isset($_GET['reset']) && $_GET['reset'] == 1) {
         echo '<p class="info">If this email exists in our system, a reset link has been sent. Please check your inbox (and spam folder).</p>';
@@ -66,19 +53,21 @@
       <p class="mb-0">
         <a href="register.php" class="text-center">Register a new membership</a>
       </p>
+          </section>
+        </main>
     </div>
-    <!-- /.login-card-body -->
-  </div>
-</div>
-<!-- /.login-box -->
-</section>
-  <!-- /.content-wrapper -->
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
+
+
+      <!--
+      <div class="social-auth-links text-center mb-3">
+        <a href="#" class="btn btn-block btn-danger">
+          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+        </a>
+      </div>
+        /.social-auth-links -->
+
+
+
   <footer class="main-footer">
     <strong>Copyright &copy; 2023 <a href="https://bfactor.org">Bfactor.org</a>.</strong>
     All rights reserved.
