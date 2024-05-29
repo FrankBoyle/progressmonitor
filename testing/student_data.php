@@ -71,12 +71,14 @@ if (isset($_GET['metadata_id'])) {
 <body>
     <div class="dashboard">
         <header class="dashboard-header">
-            <div class="logo">Logo</div>
-            <div class="header-icons">
-                <span>Icon 1</span>
-                <span>Icon 2</span>
-                <span>Icon 3</span>
-            </div>
+          <div class="logo">
+            <img src="bFactor_logo.png" alt="Logo">
+          </div>
+          <div class="header-icons">
+            <span>Icon 1</span>
+            <span>Icon 2</span>
+            <span>Icon 3</span>
+          </div>
         </header>
 
         <div class="content-wrapper">
