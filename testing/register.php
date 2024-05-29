@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Layout</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <style>
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="logo">Logo</div>
+            <div class="header-icons">
+                <span>Icon 1</span>
+                <span>Icon 2</span>
+                <span>Icon 3</span>
+            </div>
+        </header>
+
+        <div class="center-content">
+            <div class="login-box">
+                <h1 class="login-box-msg">Register</h1>
+                <form method="post" action="./users/register_backend.php" name="registration">
+
+                    <div style="position: relative;">
+                      <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+
+                    <div style="position: relative;">
+                      <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name">
+                      <span class="fas fa-user"></span>
+                    </div>
+
+                    <div style="position: relative;">
+                      <input type="text" class="form-control" name="school_id" id="school_id" placeholder="School ID">
+                      <span class="fas fa-school"></span>
+                    </div>
+
+                    <div style="position: relative;">
+                      <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                      <span class="fas fa-envelope"></span>
+                    </div>
+
+                    <div style="position: relative;">
+                      <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                      <span class="fas fa-lock"></span>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-8">
+                        <div class="icheck-primary">
+                          <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+                          <label for="agreeTerms">
+                            I agree to the <a href="#">terms</a>
+                          </label>
+                        </div>
+                      </div>
+                    <div class="col-4">
+                      <button type="submit" name="register" id="register" value="Register" class="btn btn-primary btn-block">Register</button>
+                    </div>
+                  </div>
+              <a href="login.php" class="text-center">I already have a membership</a>
+            </div>
+          </div>
+        </div>
+        </form>
+
+
+</body>
+</html>
