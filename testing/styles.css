@@ -278,3 +278,74 @@ h3 {
     width: 100%;
   }
 }
+
+
+#dataTable_wrapper .col-md-6:eq(0) {
+  position: relative;
+  z-index: 1000;
+}
+
+.editable {
+  cursor: pointer;
+}
+
+.editable.editing {
+  background-color: #f4f4f4;
+}
+
+.editable input {
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+  outline: none;
+}
+
+.fixed-width {
+  width: 100px; /* Set your desired width here */
+}
+
+.fixed-width-cell {
+  width: 100px; /* Set your desired width here */
+  white-space: nowrap; /* Prevent text from wrapping */
+  padding: 0;
+  margin: 0;
+}
+
+.goal-container {
+cursor: pointer; /* Change cursor to indicate it's clickable */
+transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+.goal-container.selected {
+background-color: #e0e0e0; /* Light grey background for selected goals */
+border: 1px solid #007bff; /* Blue border for selected goals */
+}
+
+.highlighted {
+background-color: #ffff99; /* Yellow background for highlighting */
+}
+
+table {
+width: 100%;
+border-collapse: collapse; /* Remove space between borders */
+}
+
+td {
+border: 1px solid #ccc;
+padding: 8px; /* or any other value that fits your design */
+min-width: 50px; /* or any other value that prevents the cell from being too small */
+height: 25px; /* or any other value to maintain a consistent height */
+box-sizing: border-box;
+}
+
+td .cell-input {
+width: 100%;
+height: 100%;
+border: none;
+padding: 8px;
+margin: 0;
+box-sizing: border-box;
+background: transparent; /* To match the cell's background */
+}
