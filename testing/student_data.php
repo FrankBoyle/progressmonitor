@@ -89,11 +89,6 @@ if (isset($_GET['metadata_id'])) {
                 </div>
             </section>
 
-            <div class="form-group" style="text-align: center;">
-                <label for="iep_date" style="display: block;">IEP Date:</label>
-                <input type="date" id="iep_date" name="iep_date" class="form-control" value="<?php echo htmlspecialchars($iep_date); ?>">
-            </div>
-            <button id="filterData" class="btn btn-primary">Filter Data</button>
 
             <section class="content">
                 <div class="row">
