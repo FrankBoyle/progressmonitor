@@ -53,14 +53,14 @@ function fetchStudentsByTeacher($teacherId, $archived = false) {
     $archivedValue = $archived ? 1 : 0;
     $stmt = $connection->prepare("SELECT s.* FROM Students_new s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = ?");
     $stmt->execute([$teacherId, $archivedValue]);
-    return $stmt->fetchAll();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function fetchTeachersBySchool($schoolId) {
     global $connection;
     $stmt = $connection->prepare("SELECT teacher_id, name FROM Teachers WHERE school_id = ?");
     $stmt->execute([$schoolId]);
-    return $stmt->fetchAll();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 $allStudents = fetchStudentsByTeacher($teacherId, false);
@@ -335,10 +335,13 @@ function addGroup(event) {
 
 function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-id').value = groupId;
-    document.getElementById('edit-group-name').value = groupName;
+    document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('share-group-id').value = groupId;
     document.getElementById('edit-group-modal').style.display = 'block';
     document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
+
+    // Ensure the select2 is properly refreshed
+    $('.select2').select2();
 }
 
 function hideEditGroupModal() {
