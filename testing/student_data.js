@@ -354,7 +354,7 @@ function calculateTrendline(data) {
 }
 
 function getTrendlineData(data) {
-    const trendlineFunction = calculateTrendline(data);
+    let trendlineFunction = calculateTrendline(data);
     return data.map((_, idx) => {
         // Call the trendline function with the sequential index starting at 1
         const x = idx + 1;
