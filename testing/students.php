@@ -235,6 +235,8 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
+    loadStudents(); // Load students initially
+
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('group-options');
         if (optionsMenu && !optionsMenu.contains(event.target)) {
@@ -302,12 +304,23 @@ function loadGroups() {
         });
 }
 
-function showAddGroupModal() {
-    document.getElementById('add-group-modal').style.display = 'block';
-}
-
-function hideAddGroupModal() {
-    document.getElementById('add-group-modal').style.display = 'none';
+function loadStudents() {
+    fetch('users/fetch_students.php') // Adjust the endpoint if necessary
+        .then(response => response.json())
+        .then(data => {
+            const studentList = document.getElementById('student-list');
+            studentList.innerHTML = '';
+            data.forEach(student => {
+                const listItem = document.createElement('li');
+                listItem.textContent = student.first_name + ' ' + student.last_name;
+                listItem.setAttribute('data-student-id', student.student_id);
+                studentList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error loading students. Please try again.');
+        });
 }
 
 function addGroup(event) {
@@ -559,6 +572,7 @@ function assignStudentsToGroup(event) {
         alert(data);
         hideEditGroupModal();
         loadGroups();
+        loadStudents(); // Reload students to ensure all students are still there
     })
     .catch(error => {
         console.error('Error:', error);
@@ -592,3 +606,4 @@ function shareGroup(event) {
 </script>
 </body>
 </html>
+
