@@ -205,19 +205,33 @@ function loadStudents() {
         .then(response => response.json())
         .then(data => {
             const studentList = document.getElementById('student-list');
+            const studentSelect = document.querySelector('[name="student_ids[]"]');
             studentList.innerHTML = '';
+            studentSelect.innerHTML = '<option></option>'; // Clear previous options
+
             data.forEach(student => {
+                // Populate student list
                 const listItem = document.createElement('li');
                 listItem.textContent = student.first_name + ' ' + student.last_name;
-                listItem.setAttribute('data-student-id', student.student_id);
+                listItem.setAttribute('data-student-id', student.student_id_new);
                 studentList.appendChild(listItem);
+
+                // Populate select options
+                const option = document.createElement('option');
+                option.value = student.student_id_new;
+                option.textContent = student.first_name + ' ' + student.last_name;
+                studentSelect.appendChild(option);
             });
+
+            // Reinitialize the select2 element
+            $('.select2').select2();
         })
         .catch(error => {
             console.error('Error:', error);
             alert('There was an error loading students. Please try again.');
         });
 }
+
 
 function addGroup(event) {
     event.preventDefault();
