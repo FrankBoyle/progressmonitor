@@ -606,4 +606,3 @@ function shareGroup(event) {
 </script>
 </body>
 </html>
-
