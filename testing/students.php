@@ -406,79 +406,25 @@ function saveGoal(goalId, goalDescription) {
         });
 }
 
-document.querySelectorAll('.delete-group').forEach(button => {
-        button.addEventListener('click', function() {
-            const groupId = this.getAttribute('data-group-id');
-            if (confirm('Are you sure you want to delete this group?')) {
-                deleteGroup(groupId);
-            }
-        });
-    });
-
-    document.querySelectorAll('.edit-group-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const groupId = this.getAttribute('data-group-id');
-            const groupName = this.getAttribute('data-group-name');
-            showEditGroupModal(groupId, groupName);
-        });
-    });
-
-    $('.select2').select2();
-});
-
-function showEditGroupModal(groupId, groupName) {
-    document.getElementById('edit-group-id').value = groupId;
-    document.getElementById('edit-group-name').value = groupName;
-    document.getElementById('share-group-id').value = groupId;
-    document.getElementById('edit-group-modal').style.display = 'block';
-    document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
+function showGroupOptions(event, groupId) {
+    event.stopPropagation();
+    const optionsMenu = document.getElementById('group-options');
+    optionsMenu.style.display = 'block';
+    optionsMenu.style.left = event.pageX + 'px';
+    optionsMenu.style.top = event.pageY + 'px';
+    optionsMenu.setAttribute('data-group-id', groupId);
 }
 
-function hideEditGroupModal() {
-    document.getElementById('edit-group-modal').style.display = 'none';
+function editGroup() {
+    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+    alert('Edit group: ' + groupId);
+    // Implement edit group functionality
 }
 
-function updateGroup(event) {
-    event.preventDefault();
-    const groupId = document.getElementById('edit-group-id').value;
-    const groupName = document.getElementById('edit-group-name').value;
-
-    fetch('users/update_group.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `group_id=${encodeURIComponent(groupId)}&group_name=${encodeURIComponent(groupName)}`
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-        hideEditGroupModal();
-        loadGroups();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error updating the group. Please try again.');
-    });
-}
-
-function deleteGroup(groupId) {
-    fetch('users/delete_group.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `group_id=${encodeURIComponent(groupId)}`
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-        loadGroups();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error deleting the group. Please try again.');
-    });
+function shareGroup() {
+    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+    alert('Share group: ' + groupId);
+    // Implement share group functionality
 }
 
 function assignStudentsToGroup(event) {
@@ -505,28 +451,32 @@ function assignStudentsToGroup(event) {
     });
 }
 
-function shareGroup(event) {
-    event.preventDefault();
-    const groupId = document.getElementById('share-group-id').value;
-    const teacherId = document.getElementById('share-teacher-id').value;
+function showGroupOptions(event, groupId, groupName) {
+    event.stopPropagation();
+    const optionsMenu = document.getElementById('group-options');
+    optionsMenu.style.display = 'block';
+    optionsMenu.style.left = event.pageX + 'px';
+    optionsMenu.style.top = event.pageY + 'px';
+    optionsMenu.setAttribute('data-group-id', groupId);
+    optionsMenu.setAttribute('data-group-name', groupName);
+}
 
-    fetch('users/share_group.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `group_id=${encodeURIComponent(groupId)}&shared_teacher_id=${encodeURIComponent(teacherId)}`
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-        hideEditGroupModal();
-        loadGroups();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error sharing the group. Please try again.');
-    });
+function editGroup() {
+    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+    const groupName = document.getElementById('group-options').getAttribute('data-group-name');
+    showEditGroupModal(groupId, groupName);
+}
+
+function showEditGroupModal(groupId, groupName) {
+    document.getElementById('edit-group-id').value = groupId;
+    document.getElementById('edit-group-name').value = groupName;
+    document.getElementById('edit-group-modal').style.display = 'block';
+    // Clear previous selections in the assign students form
+    document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
+}
+
+function hideEditGroupModal() {
+    document.getElementById('edit-group-modal').style.display = 'none';
 }
 
     </script>
