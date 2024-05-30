@@ -32,6 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
     exit;
 }
 
+// Handle adding new student
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_new_student'])) {
+    $newFirstName = $_POST['new_first_name'];
+    $newLastName = $_POST['new_last_name'];
+    if (!empty($newFirstName) && !empty($newLastName)) {
+        $message = addNewStudent($newFirstName, $newLastName, $_SESSION['teacher_id']);
+    }
+}
+
 // Function to fetch students by group ID
 function fetchStudentsByGroup($groupId) {
     global $connection;
@@ -141,7 +150,9 @@ $groups = fetchAllRelevantGroups($teacherId);
         <section class="box students-list">
             <h3>Students</h3>
             <ul id="student-list">
-                <!-- Students will be loaded here -->
+                <?php foreach ($allStudents as $student): ?>
+                    <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
+                <?php endforeach; ?>
             </ul>
         </section>
 
@@ -170,6 +181,7 @@ $groups = fetchAllRelevantGroups($teacherId);
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
+    <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
 </div>
 
 <!-- Edit Group Modal -->
