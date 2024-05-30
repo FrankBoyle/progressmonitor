@@ -51,7 +51,12 @@ $teacherId = $_SESSION['teacher_id'];
 function fetchStudentsByTeacher($teacherId, $archived = false) {
     global $connection;
     $archivedValue = $archived ? 1 : 0;
-    $stmt = $connection->prepare("SELECT s.* FROM Students_new s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = ?");
+    $stmt = $connection->prepare("
+        SELECT s.student_id_new AS student_id, s.first_name, s.last_name 
+        FROM Students_new s 
+        INNER JOIN Teachers t ON s.school_id = t.school_id 
+        WHERE t.teacher_id = ? AND s.archived = ?
+    ");
     $stmt->execute([$teacherId, $archivedValue]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
