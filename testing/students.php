@@ -168,6 +168,44 @@ document.addEventListener('DOMContentLoaded', function() {
     observer.observe(goalList, { childList: true, subtree: true });
 });
 
+function loadStudentsByGroup(groupId) {
+    fetch('users/fetch_students_by_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        const studentList = document.getElementById('student-list');
+        const studentSelect = document.querySelector('[name="student_ids[]"]');
+        studentList.innerHTML = '';
+        studentSelect.innerHTML = '<option></option>'; // Clear previous options
+
+        data.forEach(student => {
+            // Populate student list
+            const listItem = document.createElement('li');
+            listItem.textContent = student.first_name + ' ' + student.last_name;
+            listItem.setAttribute('data-student-id', student.student_id_new);
+            studentList.appendChild(listItem);
+
+            // Populate select options
+            const option = document.createElement('option');
+            option.value = student.student_id_new;
+            option.textContent = student.first_name + ' ' + student.last_name;
+            studentSelect.appendChild(option);
+        });
+
+        // Reinitialize the select2 element
+        $('.select2').select2();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error loading students. Please try again.');
+    });
+}
+
 function loadGroups() {
     fetch('users/fetch_groups.php')
         .then(response => response.json())
@@ -270,9 +308,10 @@ function showEditGroupModal(groupId, groupName) {
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
 
-    // Load students to ensure they are populated in the select2
-    loadStudents();
+    // Load students for the selected group
+    loadStudentsByGroup(groupId);
 }
+
 
 
 function hideEditGroupModal() {
@@ -325,36 +364,14 @@ function deleteGroup(groupId) {
 function selectGroup(element) {
     const groupId = element.getAttribute('data-group-id');
 
-    fetch('users/fetch_students_by_group.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'group_id=' + encodeURIComponent(groupId)
-    })
-        .then(response => response.json())
-        .then(data => {
-            const studentList = document.getElementById('student-list');
-            studentList.innerHTML = '';
-            data.forEach(student => {
-                const listItem = document.createElement('li');
-                listItem.textContent = student.first_name + ' ' + student.last_name;
-                listItem.setAttribute('data-student-id', student.student_id_new);
-                listItem.addEventListener('click', function() {
-                    selectStudent(this);
-                });
-                studentList.appendChild(listItem);
-            });
+    // Load students for the selected group
+    loadStudentsByGroup(groupId);
 
-            const groupItems = document.getElementById('group-list').querySelectorAll('li');
-            groupItems.forEach(group => group.classList.remove('selected-group'));
-            element.classList.add('selected-group');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error fetching students. Please try again.');
-        });
+    const groupItems = document.getElementById('group-list').querySelectorAll('li');
+    groupItems.forEach(group => group.classList.remove('selected-group'));
+    element.classList.add('selected-group');
 }
+
 
 function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
