@@ -188,6 +188,9 @@ function loadStudentsByGroup(groupId) {
             const listItem = document.createElement('li');
             listItem.textContent = student.first_name + ' ' + student.last_name;
             listItem.setAttribute('data-student-id', student.student_id_new);
+            listItem.addEventListener('click', function() {
+                selectStudent(this);
+            });
             studentList.appendChild(listItem);
 
             // Populate select options
@@ -205,6 +208,7 @@ function loadStudentsByGroup(groupId) {
         alert('There was an error loading students. Please try again.');
     });
 }
+
 
 function loadGroups() {
     fetch('users/fetch_groups.php')
@@ -377,48 +381,49 @@ function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
 
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
-    .then(response => response.json())
-    .then(data => {
-        const goalList = document.getElementById('goal-list');
-        goalList.innerHTML = '';
+        .then(response => response.json())
+        .then(data => {
+            const goalList = document.getElementById('goal-list');
+            goalList.innerHTML = '';
 
-        const goalsByMetadata = data.reduce((acc, goal) => {
-            if (!acc[goal.metadata_id]) {
-                acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
+            const goalsByMetadata = data.reduce((acc, goal) => {
+                if (!acc[goal.metadata_id]) {
+                    acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
+                }
+                acc[goal.metadata_id].goals.push(goal);
+                return acc;
+            }, {});
+
+            for (const metadataId in goalsByMetadata) {
+                const metadataGoals = goalsByMetadata[metadataId];
+
+                const metadataContainer = document.createElement('div');
+                const metadataLink = document.createElement('a');
+                metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
+                metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
+                metadataContainer.appendChild(metadataLink);
+
+                metadataGoals.goals.forEach(goal => {
+                    const listItem = document.createElement('div');
+                    listItem.classList.add('goal-item');
+                    listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
+                    listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
+                    metadataContainer.appendChild(listItem);
+                });
+
+                goalList.appendChild(metadataContainer);
             }
-            acc[goal.metadata_id].goals.push(goal);
-            return acc;
-        }, {});
 
-        for (const metadataId in goalsByMetadata) {
-            const metadataGoals = goalsByMetadata[metadataId];
-
-            const metadataContainer = document.createElement('div');
-            const metadataLink = document.createElement('a');
-            metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
-            metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
-            metadataContainer.appendChild(metadataLink);
-
-            metadataGoals.goals.forEach(goal => {
-                const listItem = document.createElement('div');
-                listItem.classList.add('goal-item');
-                listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
-                listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
-                metadataContainer.appendChild(listItem);
-            });
-
-            goalList.appendChild(metadataContainer);
-        }
-
-        const studentItems = document.getElementById('student-list').querySelectorAll('li');
-        studentItems.forEach(student => student.classList.remove('selected-student'));
-        element.classList.add('selected-student');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error fetching goals. Please try again.');
-    });
+            const studentItems = document.getElementById('student-list').querySelectorAll('li');
+            studentItems.forEach(student => student.classList.remove('selected-student'));
+            element.classList.add('selected-student');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error fetching goals. Please try again.');
+        });
 }
+
 
 function editGoal(goalId) {
     const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
@@ -502,7 +507,7 @@ function assignStudentsToGroup(event) {
         alert(data);
         hideEditGroupModal();
         loadGroups();
-        loadStudents(); // Reload students to ensure all students are still there
+        //loadStudents(); // Reload students to ensure all students are still there
     })
     .catch(error => {
         console.error('Error:', error);
