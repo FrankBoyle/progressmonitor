@@ -1,3 +1,99 @@
+<?php
+session_start();
+include('users/auth_session.php');
+include('users/db.php');
+
+// Enable PHP error logging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
+
+// Check if the connection is properly set
+if (!isset($connection)) {
+    error_log("Database connection is not set.");
+    die("Database connection is not set.");
+}
+
+error_log("Database connection is set.");
+
+// Handle group creation
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
+    $groupName = $_POST['group_name'];
+    try {
+        $stmt = $connection->prepare("INSERT INTO Groups (group_name, school_id, teacher_id) VALUES (?, ?, ?)");
+        $stmt->execute([$groupName, $_SESSION['school_id'], $_SESSION['teacher_id']]);
+        echo "Group created successfully.";
+    } catch (PDOException $e) {
+        error_log($e->getMessage());
+        echo "Error creating group: " . $e->getMessage();
+    }
+    exit;
+}
+
+// Function to fetch students by group ID
+function fetchStudentsByGroup($groupId) {
+    global $connection;
+    $stmt = $connection->prepare("
+        SELECT s.* FROM Students_new s
+        INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id
+        WHERE sg.group_id = ?
+    ");
+    $stmt->execute([$groupId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$schoolId = $_SESSION['school_id'];
+$teacherId = $_SESSION['teacher_id'];
+
+// Fetch students and teachers for assigning and sharing groups
+function fetchStudentsByTeacher($teacherId, $archived = false) {
+    global $connection;
+    $archivedValue = $archived ? 1 : 0;
+    $stmt = $connection->prepare("
+        SELECT s.student_id_new AS student_id, s.first_name, s.last_name 
+        FROM Students_new s 
+        INNER JOIN Teachers t ON s.school_id = t.school_id 
+        WHERE t.teacher_id = ? AND s.archived = ?
+    ");
+    $stmt->execute([$teacherId, $archivedValue]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function fetchTeachersBySchool($schoolId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT teacher_id, name FROM Teachers WHERE school_id = ?");
+    $stmt->execute([$schoolId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$allStudents = fetchStudentsByTeacher($teacherId, false);
+$teachers = fetchTeachersBySchool($schoolId);
+
+// Fetch groups for the teacher
+function fetchAllRelevantGroups($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default 
+        FROM Groups g
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE g.teacher_id = :teacherId
+        UNION
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default
+        FROM Groups g
+        INNER JOIN SharedGroups sg ON g.group_id = sg.group_id
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE sg.shared_teacher_id = :teacherId
+    ");
+    $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$groups = fetchAllRelevantGroups($teacherId);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,7 +170,6 @@
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
-    <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
 </div>
 
 <!-- Edit Group Modal -->
@@ -433,10 +528,6 @@ function editGroup() {
     const groupId = document.getElementById('group-options').getAttribute('data-group-id');
     const groupName = document.getElementById('group-options').getAttribute('data-group-name');
     showEditGroupModal(groupId, groupName);
-}
-
-function assignStudentsToGroupModal() {
-    // Logic to show the assign students form in the modal
 }
 
 function assignStudentsToGroup(event) {
