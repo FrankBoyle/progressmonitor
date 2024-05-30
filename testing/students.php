@@ -77,7 +77,6 @@
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
-    <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
 </div>
 
 <!-- Edit Group Modal -->
