@@ -336,7 +336,10 @@ function calculateTrendline(data) {
     const validDataPoints = data.map((val, idx) => ({ x: idx + 1, y: val })).filter(point => point.y !== null && !isNaN(point.y));
     
     if (validDataPoints.length === 0) {
-        return { slope: 0, intercept: 0 };
+        // Return a constant function that always returns 0 if there are no valid data points
+        return function(x) {
+            return 0;
+        };
     }
 
     const n = validDataPoints.length;
