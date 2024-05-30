@@ -36,3 +36,4 @@ if ($groupId) {
     echo json_encode([]);
 }
 ?>
+
