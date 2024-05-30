@@ -528,20 +528,19 @@ function saveGoal(goalId, goalDescription) {
         });
 }
 
-function showGroupOptions(event, groupId, groupName) {
-    event.stopPropagation();
-    const optionsMenu = document.getElementById('group-options');
-    optionsMenu.style.display = 'block';
-    optionsMenu.style.left = event.pageX + 'px';
-    optionsMenu.style.top = event.pageY + 'px';
-    optionsMenu.setAttribute('data-group-id', groupId);
-    optionsMenu.setAttribute('data-group-name', groupName);
+function showEditGroupModal(groupId, groupName) {
+    document.getElementById('edit-group-id').value = groupId;
+    document.getElementById('edit-group-name').value = groupName || '';
+    document.getElementById('share-group-id').value = groupId;
+    document.getElementById('edit-group-modal').style.display = 'block';
+    document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
+
+    // Ensure the select2 is properly refreshed
+    $('.select2').select2();
 }
 
-function editGroup() {
-    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
-    const groupName = document.getElementById('group-options').getAttribute('data-group-name');
-    showEditGroupModal(groupId, groupName);
+function hideEditGroupModal() {
+    document.getElementById('edit-group-modal').style.display = 'none';
 }
 
 function assignStudentsToGroupModal() {
