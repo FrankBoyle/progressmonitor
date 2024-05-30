@@ -183,7 +183,7 @@ $groups = fetchAllRelevantGroups($teacherId);
                     <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
                         <option></option>
                         <?php foreach ($allStudents as $student): ?>
-                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
+                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name']) . ' ' . htmlspecialchars($student['last_name']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -204,6 +204,7 @@ $groups = fetchAllRelevantGroups($teacherId);
         </form>
     </div>
 </div>
+
 
 <!-- Include Quill and Select2 JavaScript -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
