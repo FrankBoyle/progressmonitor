@@ -106,6 +106,7 @@ $groups = fetchAllRelevantGroups($teacherId);
 </head>
 <body>
 
+
 <div class="dashboard">
     <header class="dashboard-header">
         <div class="logo">
@@ -128,7 +129,12 @@ $groups = fetchAllRelevantGroups($teacherId);
             <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
             <div id="group-list">
                 <ul>
-                    <!-- Groups will be loaded here -->
+                    <?php foreach ($groups as $group): ?>
+                        <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
+                            <?= htmlspecialchars($group['group_name']) ?>
+                            <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
         </section>
@@ -165,6 +171,7 @@ $groups = fetchAllRelevantGroups($teacherId);
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
+    <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
 </div>
 
 <!-- Edit Group Modal -->
@@ -187,7 +194,7 @@ $groups = fetchAllRelevantGroups($teacherId);
                     <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
                         <option></option>
                         <?php foreach ($allStudents as $student): ?>
-                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name']) . ' ' . htmlspecialchars($student['last_name']) ?></option>
+                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
