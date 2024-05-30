@@ -270,7 +270,11 @@ function showEditGroupModal(groupId, groupName) {
 
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
+
+    // Load students to ensure they are populated in the select2
+    loadStudents();
 }
+
 
 function hideEditGroupModal() {
     document.getElementById('edit-group-modal').style.display = 'none';
