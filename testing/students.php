@@ -43,6 +43,50 @@ function fetchStudentsByGroup($groupId) {
     $stmt->execute([$groupId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+$schoolId = $_SESSION['school_id'];
+$teacherId = $_SESSION['teacher_id'];
+
+// Fetch students and teachers for assigning and sharing groups
+function fetchStudentsByTeacher($teacherId, $archived = false) {
+    global $connection;
+    $archivedValue = $archived ? 1 : 0;
+    $stmt = $connection->prepare("SELECT s.* FROM Students_new s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ? AND s.archived = ?");
+    $stmt->execute([$teacherId, $archivedValue]);
+    return $stmt->fetchAll();
+}
+
+function fetchTeachersBySchool($schoolId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT teacher_id, name FROM Teachers WHERE school_id = ?");
+    $stmt->execute([$schoolId]);
+    return $stmt->fetchAll();
+}
+
+$allStudents = fetchStudentsByTeacher($teacherId, false);
+$teachers = fetchTeachersBySchool($schoolId);
+
+// Fetch groups for the teacher
+function fetchAllRelevantGroups($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default 
+        FROM Groups g
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE g.teacher_id = :teacherId
+        UNION
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default
+        FROM Groups g
+        INNER JOIN SharedGroups sg ON g.group_id = sg.group_id
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE sg.shared_teacher_id = :teacherId
+    ");
+    $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$groups = fetchAllRelevantGroups($teacherId);
 ?>
 
 <!DOCTYPE html>
@@ -53,102 +97,96 @@ function fetchStudentsByGroup($groupId) {
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-    <style>
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
-
 <body>
 
-    <div class="dashboard">
-      
-        <header class="dashboard-header">
-          <div class="logo">
+<div class="dashboard">
+    <header class="dashboard-header">
+        <div class="logo">
             <img src="bFactor_logo.png" alt="Logo">
-          </div>
-
-          <div class="header-icons">
-            <a href="students.php" class="nav-link">
-              <i class="nav-icon"></i>
-              <p>Home</p>
-            </a>             
-            
-            <!--<span>Icon 2</span>-->
-
-            <a href="./users/logout.php" class="nav-link">
-              <i class="nav-icon"></i>
-              <p>Sign Out</p>
-            </a> 
-
-          </div>
-        </header>
-
-        <main class="content">
-            <section class="box create-group">
-                <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
-                <div id="group-list">
-                    <ul>
-                        <!-- Groups will be loaded here -->
-                    </ul>
-                </div>
-            </section>
-
-            <section class="box students-list">
-                <h3>Students</h3>
-                <ul id="student-list">
-                    <!-- Students will be loaded here -->
-                </ul>
-            </section>
-
-            <section class="box existing-groups">
-                <h3>Goals</h3>
-                <div id="goal-list">
-                    <!-- Goals will be loaded here and grouped by metadata_id -->
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-    <div id="add-group-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="hideAddGroupModal()">&times;</span>
-            <h2>Add New Group</h2>
-            <form id="add-group-form" onsubmit="addGroup(event)">
-                <label for="group-name">Group Name:</label>
-                <input type="text" id="group-name" name="group_name" required>
-                <button type="submit">Add Group</button>
-            </form>
         </div>
-    </div>
+        <div class="header-icons">
+            <a href="students.php" class="nav-link">
+                <i class="nav-icon"></i>
+                <p>Home</p>
+            </a>
+            <a href="./users/logout.php" class="nav-link">
+                <i class="nav-icon"></i>
+                <p>Sign Out</p>
+            </a>
+        </div>
+    </header>
 
-    <div id="group-options" class="group-options">
-        <button onclick="editGroup()">Edit Group</button>
-        <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
-    </div>
+    <main class="content">
+        <section class="box create-group">
+            <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
+            <div id="group-list">
+                <ul>
+                    <!-- Groups will be loaded here -->
+                </ul>
+            </div>
+        </section>
 
-    <div id="edit-group-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="hideEditGroupModal()">&times;</span>
-            <h2>Edit Group</h2>
-                <form id="edit-group-form" onsubmit="updateGroup(event)">
-                    <input type="hidden" id="edit-group-id">
-                    <label for="edit-group-name">Group Name:</label>
-                    <input type="text" id="edit-group-name" name="group_name" required>
-                    <button type="submit">Save Changes</button>
-                </form>
-            <button onclick="deleteGroup()">Delete Group</button>
-            <h3>Assign Students to Group</h3>
-            <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
-                <div style="display: flex; align-items: center;">
-                    <div style="margin-right: 10px;">
-                        <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
-                            <option></option>
-                            <?php foreach ($allStudents as $student): ?>
-                                <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+        <section class="box students-list">
+            <h3>Students</h3>
+            <ul id="student-list">
+                <!-- Students will be loaded here -->
+            </ul>
+        </section>
+
+        <section class="box existing-groups">
+            <h3>Goals</h3>
+            <div id="goal-list">
+                <!-- Goals will be loaded here and grouped by metadata_id -->
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Add Group Modal -->
+<div id="add-group-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="hideAddGroupModal()">&times;</span>
+        <h2>Add New Group</h2>
+        <form id="add-group-form" onsubmit="addGroup(event)">
+            <label for="group-name">Group Name:</label>
+            <input type="text" id="group-name" name="group_name" required>
+            <button type="submit">Add Group</button>
+        </form>
+    </div>
+</div>
+
+<!-- Group Options -->
+<div id="group-options" class="group-options">
+    <button onclick="editGroup()">Edit Group</button>
+    <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
+</div>
+
+<!-- Edit Group Modal -->
+<div id="edit-group-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="hideEditGroupModal()">&times;</span>
+        <h2>Edit Group</h2>
+        <form id="edit-group-form" onsubmit="updateGroup(event)">
+            <input type="hidden" id="edit-group-id">
+            <label for="edit-group-name">Group Name:</label>
+            <input type="text" id="edit-group-name" name="group_name" required>
+            <button type="submit">Save Changes</button>
+        </form>
+        <button onclick="deleteGroup()">Delete Group</button>
+
+        <h3>Assign Students to Group</h3>
+        <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
+            <div style="display: flex; align-items: center;">
+                <div style="margin-right: 10px;">
+                    <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
+                        <option></option>
+                        <?php foreach ($allStudents as $student): ?>
+                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <button type="submit" name="assign_to_group">Assign to Group</button>
             </div>
         </form>
@@ -167,10 +205,10 @@ function fetchStudentsByGroup($groupId) {
     </div>
 </div>
 
-
-    <!-- Include Quill JavaScript -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <script>
+<!-- Include Quill and Select2 JavaScript -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -258,6 +296,42 @@ function loadGroups() {
         });
 }
 
+function showAddGroupModal() {
+    document.getElementById('add-group-modal').style.display = 'block';
+}
+
+function hideAddGroupModal() {
+    document.getElementById('add-group-modal').style.display = 'none';
+}
+
+function addGroup(event) {
+    event.preventDefault();
+    const groupName = document.getElementById('group-name').value;
+
+    fetch('students.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'create_group=1&group_name=' + encodeURIComponent(groupName)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log('Group added successfully:', data);
+            loadGroups();
+            hideAddGroupModal();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error adding the group. Please try again.');
+        });
+}
+
 function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-id').value = groupId;
     document.getElementById('edit-group-name').value = groupName;
@@ -311,34 +385,6 @@ function deleteGroup(groupId) {
         console.error('Error:', error);
         alert('There was an error deleting the group. Please try again.');
     });
-}
-
-function addGroup(event) {
-    event.preventDefault();
-    const groupName = document.getElementById('group-name').value;
-
-    fetch('students.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'create_group=1&group_name=' + encodeURIComponent(groupName)
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log('Group added successfully:', data);
-            loadGroups();
-            hideAddGroupModal();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error adding the group. Please try again.');
-        });
 }
 
 function selectGroup(element) {
@@ -420,7 +466,6 @@ function selectStudent(element) {
         console.error('Error:', error);
         alert('There was an error fetching goals. Please try again.');
     });
-
 }
 
 function editGoal(goalId) {
@@ -472,43 +517,24 @@ function saveGoal(goalId, goalDescription) {
         });
 }
 
-function showGroupOptions(event, groupId) {
+function showGroupOptions(event, groupId, groupName) {
     event.stopPropagation();
     const optionsMenu = document.getElementById('group-options');
     optionsMenu.style.display = 'block';
     optionsMenu.style.left = event.pageX + 'px';
     optionsMenu.style.top = event.pageY + 'px';
     optionsMenu.setAttribute('data-group-id', groupId);
+    optionsMenu.setAttribute('data-group-name', groupName);
 }
 
 function editGroup() {
     const groupId = document.getElementById('group-options').getAttribute('data-group-id');
-    alert('Edit group: ' + groupId);
-    // Implement edit group functionality
+    const groupName = document.getElementById('group-options').getAttribute('data-group-name');
+    showEditGroupModal(groupId, groupName);
 }
 
-function shareGroup(event) {
-    event.preventDefault();
-    const groupId = document.getElementById('share-group-id').value;
-    const teacherId = document.getElementById('share-teacher-id').value;
-
-    fetch('users/share_group.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `group_id=${encodeURIComponent(groupId)}&shared_teacher_id=${encodeURIComponent(teacherId)}`
-    })
-    .then(response => response.text())
-    .then(data => {
-        alert(data);
-        hideEditGroupModal();
-        loadGroups();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error sharing the group. Please try again.');
-    });
+function assignStudentsToGroupModal() {
+    // Logic to show the assign students form in the modal
 }
 
 function assignStudentsToGroup(event) {
@@ -535,35 +561,29 @@ function assignStudentsToGroup(event) {
     });
 }
 
-function showGroupOptions(event, groupId, groupName) {
-    event.stopPropagation();
-    const optionsMenu = document.getElementById('group-options');
-    optionsMenu.style.display = 'block';
-    optionsMenu.style.left = event.pageX + 'px';
-    optionsMenu.style.top = event.pageY + 'px';
-    optionsMenu.setAttribute('data-group-id', groupId);
-    optionsMenu.setAttribute('data-group-name', groupName);
+function shareGroup(event) {
+    event.preventDefault();
+    const groupId = document.getElementById('share-group-id').value;
+    const teacherId = document.getElementById('share-teacher-id').value;
+
+    fetch('users/share_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}&shared_teacher_id=${encodeURIComponent(teacherId)}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        hideEditGroupModal();
+        loadGroups();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error sharing the group. Please try again.');
+    });
 }
-
-function editGroup() {
-    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
-    const groupName = document.getElementById('group-options').getAttribute('data-group-name');
-    showEditGroupModal(groupId, groupName);
-}
-
-function showEditGroupModal(groupId, groupName) {
-    document.getElementById('edit-group-id').value = groupId;
-    document.getElementById('edit-group-name').value = groupName;
-    document.getElementById('edit-group-modal').style.display = 'block';
-    // Clear previous selections in the assign students form
-    document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
-}
-
-function hideEditGroupModal() {
-    document.getElementById('edit-group-modal').style.display = 'none';
-}
-
-    </script>
-
+</script>
 </body>
 </html>
