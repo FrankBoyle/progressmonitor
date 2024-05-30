@@ -171,7 +171,6 @@ $groups = fetchAllRelevantGroups($teacherId);
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
-    <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
 </div>
 
 <!-- Edit Group Modal -->
@@ -549,10 +548,6 @@ function editGroup() {
     const groupId = document.getElementById('group-options').getAttribute('data-group-id');
     const groupName = document.getElementById('group-options').getAttribute('data-group-name');
     showEditGroupModal(groupId, groupName);
-}
-
-function assignStudentsToGroupModal() {
-    // Logic to show the assign students form in the modal
 }
 
 function assignStudentsToGroup(event) {
