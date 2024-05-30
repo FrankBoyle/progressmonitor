@@ -1,33 +1,37 @@
 <?php
 session_start();
-include('users/auth_session.php');
-include('users/db.php');
+include('auth_session.php');
+include('db.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['group_id']) && isset($_POST['student_ids'])) {
-        $groupId = $_POST['group_id'];
-        $studentIds = explode(',', $_POST['student_ids']);
-        
-        try {
-            foreach ($studentIds as $studentId) {
-                // Check if the student is already in the group
-                $checkStmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id = ? AND group_id = ?");
-                $checkStmt->execute([$studentId, $groupId]);
+// Enable PHP error logging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
 
-                if ($checkStmt->rowCount() == 0) {
-                    // If not, insert the student into the group
-                    $insertStmt = $connection->prepare("INSERT INTO StudentGroup (student_id, group_id) VALUES (?, ?)");
-                    $insertStmt->execute([$studentId, $groupId]);
-                }
-            }
-            echo "Selected students assigned to group successfully.";
-        } catch (PDOException $e) {
-            error_log($e->getMessage());
-            echo "Error assigning students to group: " . $e->getMessage();
+if (!isset($connection)) {
+    error_log("Database connection is not set.");
+    die("Database connection is not set.");
+}
+
+$teacherId = $_SESSION['teacher_id'];
+$groupId = $_POST['group_id'] ?? '';
+$studentIds = isset($_POST['student_ids']) ? explode(',', $_POST['student_ids']) : [];
+
+if ($groupId && !empty($studentIds)) {
+    foreach ($studentIds as $studentId) {
+        $checkStmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id = ? AND group_id = ?");
+        $checkStmt->execute([$studentId, $groupId]);
+
+        if ($checkStmt->rowCount() == 0) {
+            $insertStmt = $connection->prepare("INSERT INTO StudentGroup (student_id, group_id) VALUES (?, ?)");
+            $insertStmt->execute([$studentId, $groupId]);
         }
-    } else {
-        echo "Group ID or Student IDs not provided.";
     }
+    echo "Selected students assigned to group successfully.";
+} else {
+    echo "Group ID or Student IDs not provided.";
 }
 ?>
 
