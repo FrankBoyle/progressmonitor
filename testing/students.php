@@ -124,8 +124,38 @@ function fetchStudentsByGroup($groupId) {
 
     <div id="group-options" class="group-options">
         <button onclick="editGroup()">Edit Group</button>
-        <button onclick="shareGroup()">Share Group</button>
+        <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
     </div>
+
+
+    <div id="edit-group-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="hideEditGroupModal()">&times;</span>
+        <h2>Edit Group</h2>
+        <form id="edit-group-form" onsubmit="updateGroup(event)">
+            <input type="hidden" id="edit-group-id">
+            <label for="edit-group-name">Group Name:</label>
+            <input type="text" id="edit-group-name" name="group_name" required>
+            <button type="submit">Save Changes</button>
+        </form>
+        <button onclick="deleteGroup()">Delete Group</button>
+
+        <h3>Assign Students to Group</h3>
+        <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
+            <div style="display: flex; align-items: center;">
+                <div style="margin-right: 10px;">
+                    <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
+                        <option></option> <!-- Empty option for placeholder -->
+                        <?php foreach ($allStudents as $student): ?>
+                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="submit" name="assign_to_group">Assign to Group</button>
+            </div>
+        </form>
+    </div>
+</div>
 
     <!-- Include Quill JavaScript -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -384,6 +414,58 @@ function shareGroup() {
     const groupId = document.getElementById('group-options').getAttribute('data-group-id');
     alert('Share group: ' + groupId);
     // Implement share group functionality
+}
+
+function assignStudentsToGroup(event) {
+    event.preventDefault();
+    const groupId = document.getElementById('edit-group-id').value;
+    const studentIds = Array.from(document.querySelector('[name="student_ids[]"]').selectedOptions).map(option => option.value);
+
+    fetch('users/assign_students_to_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}&student_ids=${encodeURIComponent(studentIds.join(','))}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        hideEditGroupModal();
+        loadGroups();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error assigning students to the group. Please try again.');
+    });
+}
+
+function showGroupOptions(event, groupId, groupName) {
+    event.stopPropagation();
+    const optionsMenu = document.getElementById('group-options');
+    optionsMenu.style.display = 'block';
+    optionsMenu.style.left = event.pageX + 'px';
+    optionsMenu.style.top = event.pageY + 'px';
+    optionsMenu.setAttribute('data-group-id', groupId);
+    optionsMenu.setAttribute('data-group-name', groupName);
+}
+
+function editGroup() {
+    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
+    const groupName = document.getElementById('group-options').getAttribute('data-group-name');
+    showEditGroupModal(groupId, groupName);
+}
+
+function showEditGroupModal(groupId, groupName) {
+    document.getElementById('edit-group-id').value = groupId;
+    document.getElementById('edit-group-name').value = groupName;
+    document.getElementById('edit-group-modal').style.display = 'block';
+    // Clear previous selections in the assign students form
+    document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
+}
+
+function hideEditGroupModal() {
+    document.getElementById('edit-group-modal').style.display = 'none';
 }
 
     </script>
