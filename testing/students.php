@@ -127,35 +127,46 @@ function fetchStudentsByGroup($groupId) {
         <button onclick="assignStudentsToGroupModal()">Assign to Group</button>
     </div>
 
-
     <div id="edit-group-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="hideEditGroupModal()">&times;</span>
-        <h2>Edit Group</h2>
-        <form id="edit-group-form" onsubmit="updateGroup(event)">
-            <input type="hidden" id="edit-group-id">
-            <label for="edit-group-name">Group Name:</label>
-            <input type="text" id="edit-group-name" name="group_name" required>
-            <button type="submit">Save Changes</button>
-        </form>
-        <button onclick="deleteGroup()">Delete Group</button>
-
-        <h3>Assign Students to Group</h3>
-        <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
-            <div style="display: flex; align-items: center;">
-                <div style="margin-right: 10px;">
-                    <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
-                        <option></option> <!-- Empty option for placeholder -->
-                        <?php foreach ($allStudents as $student): ?>
-                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+        <div class="modal-content">
+            <span class="close" onclick="hideEditGroupModal()">&times;</span>
+            <h2>Edit Group</h2>
+                <form id="edit-group-form" onsubmit="updateGroup(event)">
+                    <input type="hidden" id="edit-group-id">
+                    <label for="edit-group-name">Group Name:</label>
+                    <input type="text" id="edit-group-name" name="group_name" required>
+                    <button type="submit">Save Changes</button>
+                </form>
+            <button onclick="deleteGroup()">Delete Group</button>
+            <h3>Assign Students to Group</h3>
+            <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
+                <div style="display: flex; align-items: center;">
+                    <div style="margin-right: 10px;">
+                        <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
+                            <option></option>
+                            <?php foreach ($allStudents as $student): ?>
+                                <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 <button type="submit" name="assign_to_group">Assign to Group</button>
             </div>
         </form>
+
+        <h3>Share Group</h3>
+        <form id="share-group-form" onsubmit="shareGroup(event)">
+            <input type="hidden" id="share-group-id">
+            <select id="share-teacher-id" name="shared_teacher_id">
+                <option value="">Select staff here</option>
+                <?php foreach ($teachers as $teacher): ?>
+                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit">Share</button>
+        </form>
     </div>
 </div>
+
 
     <!-- Include Quill JavaScript -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -395,25 +406,79 @@ function saveGoal(goalId, goalDescription) {
         });
 }
 
-function showGroupOptions(event, groupId) {
-    event.stopPropagation();
-    const optionsMenu = document.getElementById('group-options');
-    optionsMenu.style.display = 'block';
-    optionsMenu.style.left = event.pageX + 'px';
-    optionsMenu.style.top = event.pageY + 'px';
-    optionsMenu.setAttribute('data-group-id', groupId);
+document.querySelectorAll('.delete-group').forEach(button => {
+        button.addEventListener('click', function() {
+            const groupId = this.getAttribute('data-group-id');
+            if (confirm('Are you sure you want to delete this group?')) {
+                deleteGroup(groupId);
+            }
+        });
+    });
+
+    document.querySelectorAll('.edit-group-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const groupId = this.getAttribute('data-group-id');
+            const groupName = this.getAttribute('data-group-name');
+            showEditGroupModal(groupId, groupName);
+        });
+    });
+
+    $('.select2').select2();
+});
+
+function showEditGroupModal(groupId, groupName) {
+    document.getElementById('edit-group-id').value = groupId;
+    document.getElementById('edit-group-name').value = groupName;
+    document.getElementById('share-group-id').value = groupId;
+    document.getElementById('edit-group-modal').style.display = 'block';
+    document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
 }
 
-function editGroup() {
-    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
-    alert('Edit group: ' + groupId);
-    // Implement edit group functionality
+function hideEditGroupModal() {
+    document.getElementById('edit-group-modal').style.display = 'none';
 }
 
-function shareGroup() {
-    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
-    alert('Share group: ' + groupId);
-    // Implement share group functionality
+function updateGroup(event) {
+    event.preventDefault();
+    const groupId = document.getElementById('edit-group-id').value;
+    const groupName = document.getElementById('edit-group-name').value;
+
+    fetch('users/update_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}&group_name=${encodeURIComponent(groupName)}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        hideEditGroupModal();
+        loadGroups();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error updating the group. Please try again.');
+    });
+}
+
+function deleteGroup(groupId) {
+    fetch('users/delete_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        loadGroups();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error deleting the group. Please try again.');
+    });
 }
 
 function assignStudentsToGroup(event) {
@@ -440,32 +505,28 @@ function assignStudentsToGroup(event) {
     });
 }
 
-function showGroupOptions(event, groupId, groupName) {
-    event.stopPropagation();
-    const optionsMenu = document.getElementById('group-options');
-    optionsMenu.style.display = 'block';
-    optionsMenu.style.left = event.pageX + 'px';
-    optionsMenu.style.top = event.pageY + 'px';
-    optionsMenu.setAttribute('data-group-id', groupId);
-    optionsMenu.setAttribute('data-group-name', groupName);
-}
+function shareGroup(event) {
+    event.preventDefault();
+    const groupId = document.getElementById('share-group-id').value;
+    const teacherId = document.getElementById('share-teacher-id').value;
 
-function editGroup() {
-    const groupId = document.getElementById('group-options').getAttribute('data-group-id');
-    const groupName = document.getElementById('group-options').getAttribute('data-group-name');
-    showEditGroupModal(groupId, groupName);
-}
-
-function showEditGroupModal(groupId, groupName) {
-    document.getElementById('edit-group-id').value = groupId;
-    document.getElementById('edit-group-name').value = groupName;
-    document.getElementById('edit-group-modal').style.display = 'block';
-    // Clear previous selections in the assign students form
-    document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
-}
-
-function hideEditGroupModal() {
-    document.getElementById('edit-group-modal').style.display = 'none';
+    fetch('users/share_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}&shared_teacher_id=${encodeURIComponent(teacherId)}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data);
+        hideEditGroupModal();
+        loadGroups();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error sharing the group. Please try again.');
+    });
 }
 
     </script>
