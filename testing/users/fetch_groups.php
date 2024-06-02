@@ -1,7 +1,7 @@
 <?php
 include('auth_session.php');
 
-include 'db.php';
+include ('db.php');
 
 $sql = "SELECT group_id, group_name FROM groups";
 $result = $connection->query($sql);
