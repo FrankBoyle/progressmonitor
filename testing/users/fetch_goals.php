@@ -12,7 +12,7 @@ try {
             $stmt = $connection->prepare("
                 SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name
                 FROM Goals g
-                INNER JOIN GoalMetadata gm ON g.metadata_id = gm.metadata_id
+                INNER JOIN Metadata gm ON g.metadata_id = gm.metadata_id
                 WHERE g.student_id = ?
             ");
             $stmt->execute([$studentId]);
