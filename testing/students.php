@@ -543,16 +543,20 @@ function shareGroup(event) {
     const groupId = document.getElementById('share-group-id').value;
     const teacherId = document.getElementById('share-teacher-id').value;
 
-    fetch('./users/share_group.php', {
+    fetch('users/share_group.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: `group_id=${encodeURIComponent(groupId)}&shared_teacher_id=${encodeURIComponent(teacherId)}`
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        alert(data);
+        if (data.error) {
+            alert(data.error);
+        } else {
+            alert(data.message);
+        }
         hideEditGroupModal();
         loadGroups();
     })
@@ -561,6 +565,7 @@ function shareGroup(event) {
         alert('There was an error sharing the group. Please try again.');
     });
 }
+
 </script>
 </body>
 </html>
