@@ -423,6 +423,11 @@ function selectStudent(element) {
         .then(data => {
             console.log('Fetched goals:', data); // Log the response data
 
+            if (data.error) {
+                alert(data.message);
+                return;
+            }
+
             const goalList = document.getElementById('goal-list');
             goalList.innerHTML = '';
 
