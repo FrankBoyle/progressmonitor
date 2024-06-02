@@ -493,7 +493,7 @@ function editGoal(goalId) {
 }
 
 function saveGoal(goalId, goalDescription) {
-    fetch('users/update_goal.php', {
+    fetch('users/fetch_goals.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -522,7 +522,6 @@ function saveGoal(goalId, goalDescription) {
         alert('There was an error updating the goal. Please try again.');
     });
 }
-
 
 function showGroupOptions(event, groupId, groupName) {
     event.stopPropagation();
