@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,9 +97,7 @@
                 <div style="margin-right: 10px;">
                     <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
                         <option></option>
-                        <?php foreach ($allStudents as $student): ?>
-                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></option>
-                        <?php endforeach; ?>
+                        <!-- Students will be dynamically loaded here -->
                     </select>
                 </div>
                 <button type="submit" name="assign_to_group">Assign to Group</button>
@@ -112,9 +109,7 @@
             <input type="hidden" id="share-group-id">
             <select id="share-teacher-id" name="shared_teacher_id">
                 <option value="">Select staff here</option>
-                <?php foreach ($teachers as $teacher): ?>
-                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
-                <?php endforeach; ?>
+                <!-- Teachers will be dynamically loaded here -->
             </select>
             <button type="submit">Share</button>
         </form>
@@ -130,7 +125,8 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
-    //loadStudents(); // Load students initially
+    loadAllStudents(); // Load all students initially
+    loadAllTeachers(); // Load all teachers initially
 
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('group-options');
@@ -209,54 +205,14 @@ function loadStudentsByGroup(groupId) {
     });
 }
 
-
-function loadGroups() {
-    fetch('users/fetch_groups.php')
+function loadAllStudents() {
+    fetch('users/fetch_all_students.php') // Adjust the endpoint if necessary
         .then(response => response.json())
         .then(data => {
-            const groupList = document.getElementById('group-list').querySelector('ul');
-            groupList.innerHTML = '';
-            data.forEach(group => {
-                const listItem = document.createElement('li');
-                listItem.textContent = group.group_name;
-                listItem.setAttribute('data-group-id', group.group_id);
-                listItem.setAttribute('data-group-name', group.group_name); // Ensure this is set
-                listItem.addEventListener('click', function() {
-                    selectGroup(this);
-                });
-
-                const optionsBtn = document.createElement('button');
-                optionsBtn.className = 'options-btn';
-                optionsBtn.addEventListener('click', function(event) {
-                    showGroupOptions(event, group.group_id, group.group_name); // Pass group name here
-                });
-
-                listItem.appendChild(optionsBtn);
-                groupList.appendChild(listItem);
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error loading groups. Please try again.');
-        });
-}
-
-function loadStudents() {
-    fetch('users/fetch_students.php') // Adjust the endpoint if necessary
-        .then(response => response.json())
-        .then(data => {
-            const studentList = document.getElementById('student-list');
             const studentSelect = document.querySelector('[name="student_ids[]"]');
-            studentList.innerHTML = '';
             studentSelect.innerHTML = '<option></option>'; // Clear previous options
 
             data.forEach(student => {
-                // Populate student list
-                const listItem = document.createElement('li');
-                listItem.textContent = student.first_name + ' ' + student.last_name;
-                listItem.setAttribute('data-student-id', student.student_id_new);
-                studentList.appendChild(listItem);
-
                 // Populate select options
                 const option = document.createElement('option');
                 option.value = student.student_id_new;
@@ -273,33 +229,56 @@ function loadStudents() {
         });
 }
 
+function loadAllTeachers() {
+    fetch('users/fetch_all_teachers.php') // Adjust the endpoint if necessary
+        .then(response => response.json())
+        .then(data => {
+            const teacherSelect = document.getElementById('share-teacher-id');
+            teacherSelect.innerHTML = '<option value="">Select staff here</option>'; // Clear previous options
+
+            data.forEach(teacher => {
+                // Populate select options
+                const option = document.createElement('option');
+                option.value = teacher.teacher_id;
+                option.textContent = teacher.name;
+                teacherSelect.appendChild(option);
+            });
+
+            // Reinitialize the select2 element
+            $('.select2').select2();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error loading teachers. Please try again.');
+        });
+}
 
 function addGroup(event) {
     event.preventDefault();
     const groupName = document.getElementById('group-name').value;
 
-    fetch('students.php', {
+    fetch('users/create_group.php', { // Update the endpoint to the correct one
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: 'create_group=1&group_name=' + encodeURIComponent(groupName)
+        body: 'group_name=' + encodeURIComponent(groupName)
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log('Group added successfully:', data);
-            loadGroups();
-            hideAddGroupModal();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error adding the group. Please try again.');
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.text();
+    })
+    .then(data => {
+        console.log('Group added successfully:', data);
+        loadGroups();
+        hideAddGroupModal();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error adding the group. Please try again.');
+    });
 }
 
 function showEditGroupModal(groupId, groupName) {
@@ -315,8 +294,6 @@ function showEditGroupModal(groupId, groupName) {
     // Load students for the selected group
     loadStudentsByGroup(groupId);
 }
-
-
 
 function hideEditGroupModal() {
     document.getElementById('edit-group-modal').style.display = 'none';
@@ -376,7 +353,6 @@ function selectGroup(element) {
     element.classList.add('selected-group');
 }
 
-
 function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
 
@@ -424,7 +400,6 @@ function selectStudent(element) {
         });
 }
 
-
 function editGoal(goalId) {
     const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
     const quill = quillInstances[goalId];
@@ -451,27 +426,27 @@ function saveGoal(goalId, goalDescription) {
         },
         body: `goal_id=${encodeURIComponent(goalId)}&goal_description=${encodeURIComponent(goalDescription)}`
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                const quill = quillInstances[goalId];
-                quill.enable(false);
-                quill.root.setAttribute('contenteditable', false);
-                document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').remove();
-                alert('Goal updated successfully.');
-            } else {
-                alert('There was an error updating the goal. Please try again.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            const quill = quillInstances[goalId];
+            quill.enable(false);
+            quill.root.setAttribute('contenteditable', false);
+            document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').remove();
+            alert('Goal updated successfully.');
+        } else {
             alert('There was an error updating the goal. Please try again.');
-        });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error updating the goal. Please try again.');
+    });
 }
 
 function showGroupOptions(event, groupId, groupName) {
@@ -507,7 +482,6 @@ function assignStudentsToGroup(event) {
         alert(data);
         hideEditGroupModal();
         loadGroups();
-        //loadStudents(); // Reload students to ensure all students are still there
     })
     .catch(error => {
         console.error('Error:', error);
