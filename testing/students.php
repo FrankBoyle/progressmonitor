@@ -130,7 +130,7 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
-    //loadStudents(); // Load students initially
+    loadStudents(); // Load students initially
 
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('group-options');
