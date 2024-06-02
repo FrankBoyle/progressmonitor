@@ -209,7 +209,6 @@ function loadStudentsByGroup(groupId) {
     });
 }
 
-
 function loadGroups() {
     fetch('users/fetch_groups.php')
         .then(response => response.json())
@@ -273,7 +272,6 @@ function loadStudents() {
         });
 }
 
-
 function addGroup(event) {
     event.preventDefault();
     const groupName = document.getElementById('group-name').value;
@@ -312,8 +310,8 @@ function showEditGroupModal(groupId, groupName) {
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
 
-    // Load students for the selected group
-    loadStudentsByGroup(groupId);
+    // Load all students for the selected group
+    loadStudents();
 }
 
 
@@ -507,7 +505,6 @@ function assignStudentsToGroup(event) {
         alert(data);
         hideEditGroupModal();
         loadGroups();
-        //loadStudents(); // Reload students to ensure all students are still there
     })
     .catch(error => {
         console.error('Error:', error);
