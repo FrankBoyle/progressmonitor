@@ -419,6 +419,8 @@ function selectStudent(element) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.json())
         .then(data => {
+            console.log('Fetched goals:', data); // Log the response data
+
             const goalList = document.getElementById('goal-list');
             goalList.innerHTML = '';
 
