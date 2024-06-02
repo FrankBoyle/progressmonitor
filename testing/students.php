@@ -131,6 +131,7 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStudents(); // Load students initially
+    loadStaff(); // Load all staff initially
 
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('group-options');
@@ -272,6 +273,30 @@ function loadStudents() {
         });
 }
 
+function loadStaff() {
+    fetch('users/fetch_staff.php') // Adjust the endpoint if necessary
+        .then(response => response.json())
+        .then(data => {
+            const staffSelect = document.getElementById('share-teacher-id');
+            staffSelect.innerHTML = '<option value="">Select staff here</option>'; // Clear previous options
+
+            data.forEach(staff => {
+                // Populate select options
+                const option = document.createElement('option');
+                option.value = staff.teacher_id;
+                option.textContent = staff.name;
+                staffSelect.appendChild(option);
+            });
+
+            // Reinitialize the select2 element
+            $('.select2').select2();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error loading staff. Please try again.');
+        });
+}
+
 function addGroup(event) {
     event.preventDefault();
     const groupName = document.getElementById('group-name').value;
@@ -310,8 +335,9 @@ function showEditGroupModal(groupId, groupName) {
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
 
-    // Load all students for the selected group
+    // Load all students and staff for the selected group
     loadStudents();
+    loadStaff();
 }
 
 
