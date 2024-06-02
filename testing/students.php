@@ -413,7 +413,6 @@ function selectGroup(element) {
     element.classList.add('selected-group');
 }
 
-
 function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
 
@@ -451,6 +450,20 @@ function selectStudent(element) {
                 goalList.appendChild(metadataContainer);
             }
 
+            // Reinitialize the quill editors
+            document.querySelectorAll('.quill-editor').forEach(editor => {
+                const goalId = editor.getAttribute('data-goal-id');
+                if (!quillInstances[goalId]) {
+                    quillInstances[goalId] = new Quill(editor, {
+                        theme: 'snow',
+                        readOnly: true,
+                        modules: {
+                            toolbar: false
+                        }
+                    });
+                }
+            });
+
             const studentItems = document.getElementById('student-list').querySelectorAll('li');
             studentItems.forEach(student => student.classList.remove('selected-student'));
             element.classList.add('selected-student');
@@ -460,7 +473,6 @@ function selectStudent(element) {
             alert('There was an error fetching goals. Please try again.');
         });
 }
-
 
 function editGoal(goalId) {
     const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
@@ -481,35 +493,36 @@ function editGoal(goalId) {
 }
 
 function saveGoal(goalId, goalDescription) {
-    fetch('./users/fetch_goals.php', {
+    fetch('users/fetch_goals.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: `goal_id=${encodeURIComponent(goalId)}&goal_description=${encodeURIComponent(goalDescription)}`
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                const quill = quillInstances[goalId];
-                quill.enable(false);
-                quill.root.setAttribute('contenteditable', false);
-                document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').remove();
-                alert('Goal updated successfully.');
-            } else {
-                alert('There was an error updating the goal. Please try again.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            const quill = quillInstances[goalId];
+            quill.enable(false);
+            quill.root.setAttribute('contenteditable', false);
+            document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').remove();
+            alert('Goal updated successfully.');
+        } else {
             alert('There was an error updating the goal. Please try again.');
-        });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error updating the goal. Please try again.');
+    });
 }
+
 
 function showGroupOptions(event, groupId, groupName) {
     event.stopPropagation();
