@@ -493,7 +493,7 @@ function editGoal(goalId) {
 }
 
 function saveGoal(goalId, goalDescription) {
-    fetch('users/fetch_goals.php', {
+    fetch('users/update_goal.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
