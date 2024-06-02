@@ -370,7 +370,14 @@ function updateGroup(event) {
     });
 }
 
-function deleteGroup(groupId) {
+function deleteGroup() {
+    const groupId = document.getElementById('edit-group-id').value;
+
+    if (!groupId) {
+        alert('Group ID is not defined.');
+        return;
+    }
+
     fetch('users/delete_group.php', {
         method: 'POST',
         headers: {
@@ -378,16 +385,22 @@ function deleteGroup(groupId) {
         },
         body: `group_id=${encodeURIComponent(groupId)}`
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        alert(data);
-        loadGroups();
+        if (data.status === 'success') {
+            alert(data.message);
+            hideEditGroupModal();
+            loadGroups();
+        } else {
+            alert(data.message);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
         alert('There was an error deleting the group. Please try again.');
     });
 }
+
 
 function selectGroup(element) {
     const groupId = element.getAttribute('data-group-id');
