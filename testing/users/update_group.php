@@ -1,19 +1,18 @@
 <?php
-include 'db.php';
+include('db.php');
+include('auth_session.php');
 
-$group_id = $_POST['group_id'];
-$group_name = $_POST['group_name'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $groupId = $_POST['group_id'];
+    $groupName = $_POST['group_name'];
 
-$sql = "UPDATE groups SET group_name = ? WHERE group_id = ?";
-$stmt = $connection->prepare($sql);
-$stmt->bind_param("si", $group_name, $group_id);
-
-if ($stmt->execute()) {
-    echo "Group updated successfully.";
-} else {
-    echo "Error updating group: " . $stmt->error;
+    try {
+        $stmt = $connection->prepare("UPDATE Groups SET group_name = ? WHERE group_id = ?");
+        $stmt->execute([$groupName, $groupId]);
+        echo "Group updated successfully.";
+    } catch (PDOException $e) {
+        error_log($e->getMessage());
+        echo "Error updating group: " . $e->getMessage();
+    }
 }
-
-$stmt->close();
-$connection->close();
 ?>

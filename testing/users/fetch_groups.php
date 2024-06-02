@@ -1,19 +1,32 @@
 <?php
+session_start();
 include('auth_session.php');
+include('db.php');
 
-include ('db.php');
+header('Content-Type: application/json');
 
-$sql = "SELECT group_id, group_name FROM groups";
-$result = $connection->query($sql);
+$teacherId = $_SESSION['teacher_id'];
 
-$groups = [];
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $groups[] = $row;
-    }
+function fetchAllRelevantGroups($teacherId) {
+    global $connection;
+    $stmt = $connection->prepare("
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default 
+        FROM Groups g
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE g.teacher_id = :teacherId
+        UNION
+        SELECT g.*, (g.group_id = t.default_group_id) AS is_default
+        FROM Groups g
+        INNER JOIN SharedGroups sg ON g.group_id = sg.group_id
+        LEFT JOIN Teachers t ON t.teacher_id = :teacherId
+        WHERE sg.shared_teacher_id = :teacherId
+    ");
+    $stmt->bindParam(':teacherId', $teacherId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-echo json_encode($groups);
+$groups = fetchAllRelevantGroups($teacherId);
 
-$connection->close();
+echo json_encode($groups);
 ?>
