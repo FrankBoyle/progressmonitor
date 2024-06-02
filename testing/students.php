@@ -32,6 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_group'])) {
     exit;
 }
 
+// Function to fetch students by group ID
+function fetchStudentsByGroup($groupId) {
+    global $connection;
+    $stmt = $connection->prepare("
+        SELECT s.* FROM Students_new s
+        INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id
+        WHERE sg.group_id = ?
+    ");
+    $stmt->execute([$groupId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 
