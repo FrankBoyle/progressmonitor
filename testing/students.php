@@ -274,7 +274,7 @@ function loadStudents() {
 }
 
 function loadStaff() {
-    fetch('users/fetch_staff.php') // Adjust the endpoint if necessary
+    fetch('users/fetch_staff.php')
         .then(response => response.json())
         .then(data => {
             const staffSelect = document.getElementById('share-teacher-id');
