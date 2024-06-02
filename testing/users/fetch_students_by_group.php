@@ -1,39 +1,28 @@
 <?php
-session_start();
 include('auth_session.php');
-include('db.php');
+include 'db.php';
 
-// Enable PHP error logging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
+$group_id = $_POST['group_id'];
 
-if (!isset($connection)) {
-    error_log("Database connection is not set.");
-    die("Database connection is not set.");
-}
+$sql = "SELECT students.student_id AS student_id_new, first_name, last_name 
+        FROM students 
+        JOIN group_students ON students.student_id = group_students.student_id 
+        WHERE group_students.group_id = ?";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("i", $group_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-$teacherId = $_SESSION['teacher_id'];
-$groupId = $_POST['group_id'] ?? '';
-
-if ($groupId) {
-    function fetchStudentsByGroup($groupId) {
-        global $connection;
-        $stmt = $connection->prepare("
-            SELECT s.* FROM Students_new s
-            INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id
-            WHERE sg.group_id = ?
-        ");
-        $stmt->execute([$groupId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+$students = [];
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $students[] = $row;
     }
-
-    $students = fetchStudentsByGroup($groupId);
-    echo json_encode($students);
-} else {
-    echo json_encode([]);
 }
+
+echo json_encode($students);
+
+$stmt->close();
+$connection->close();
 ?>
 
