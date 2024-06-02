@@ -130,7 +130,7 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
-    loadStudents(); // Load students initially
+    loadStudents(); // Load all students initially
     loadStaff(); // Load all staff initially
 
     document.addEventListener('click', function(event) {
@@ -152,13 +152,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         const quillEditor = node.querySelector('.quill-editor');
                         if (quillEditor) {
                             const goalId = quillEditor.getAttribute('data-goal-id');
-                            quillInstances[goalId] = new Quill(quillEditor, {
-                                theme: 'snow',
-                                readOnly: true,
-                                modules: {
-                                    toolbar: false
-                                }
-                            });
+                            if (!quillInstances[goalId]) {
+                                quillInstances[goalId] = new Quill(quillEditor, {
+                                    theme: 'snow',
+                                    readOnly: true,
+                                    modules: {
+                                        toolbar: false
+                                    }
+                                });
+                            }
                         }
                     }
                 });
