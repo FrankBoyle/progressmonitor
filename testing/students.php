@@ -468,7 +468,7 @@ function editGoal(goalId) {
 }
 
 function saveGoal(goalId, goalDescription) {
-    fetch('users/fetch_goals.php', {
+    fetch('./users/fetch_goals.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -519,7 +519,7 @@ function assignStudentsToGroup(event) {
     const groupId = document.getElementById('edit-group-id').value;
     const studentIds = Array.from(document.querySelector('[name="student_ids[]"]').selectedOptions).map(option => option.value);
 
-    fetch('users/assign_students_to_group.php', {
+    fetch('./users/assign_students_to_group.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -543,7 +543,7 @@ function shareGroup(event) {
     const groupId = document.getElementById('share-group-id').value;
     const teacherId = document.getElementById('share-teacher-id').value;
 
-    fetch('users/share_group.php', {
+    fetch('./users/share_group.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
