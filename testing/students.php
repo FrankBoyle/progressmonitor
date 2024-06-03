@@ -343,7 +343,7 @@ function showEditGroupModal(groupId, groupName) {
     $('.select2').select2();
 
     // Load all students for the selected group
-    loadStudents();
+    //loadStudents();
     loadGroupStudents(groupId);
     loadStaff();
 }
