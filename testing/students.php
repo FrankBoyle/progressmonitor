@@ -189,6 +189,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     observer.observe(goalList, { childList: true, subtree: true });
+            // Call the function to check and populate students and goals
+            populateStudentsAndGoals();
 });
 
 function loadStudentsByGroup(groupId) {
@@ -751,6 +753,24 @@ function shareGroup(event) {
         alert('There was an error sharing the group. Please try again.');
     });
 }
+
+        // Function to populate students and goals
+        function populateStudentsAndGoals() {
+            const studentList = document.getElementById('student-list');
+            const studentsMessage = document.getElementById('students-message');
+            if (studentList.children.length > 0) {
+                studentsMessage.style.display = 'none';
+                studentList.style.display = 'block';
+            }
+
+            const goalList = document.getElementById('goal-list');
+            const goalsMessage = document.getElementById('goals-message');
+            if (goalList.children.length > 0) {
+                goalsMessage.style.display = 'none';
+                goalList.style.display = 'block';
+            }
+        }
+
 
 </script>
 </body>
