@@ -13,23 +13,7 @@ include('./users/db.php');
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        .message {
-            font-size: 16px;
-            color: #333;
-            margin-top: 20px;
-        }
-        .column {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin: 10px;
-            width: 45%;
-            float: left;
-        }
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
+
     </style>
 </head>
 <body>
