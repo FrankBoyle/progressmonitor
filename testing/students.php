@@ -169,8 +169,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.addedNodes.length) {
-                populateStudentsAndGoals();
-
                 mutation.addedNodes.forEach(function(node) {
                     if (node.classList && node.classList.contains('goal-item')) {
                         const quillEditor = node.querySelector('.quill-editor');
