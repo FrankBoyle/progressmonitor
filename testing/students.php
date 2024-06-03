@@ -135,7 +135,6 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
-    //loadStudents(); // Load all students initially
     loadStaff(); // Load all staff initially
 
     document.addEventListener('click', function(event) {
@@ -332,6 +331,7 @@ function addGroup(event) {
         });
 }
 
+
 function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-id').value = groupId;
     document.getElementById('edit-group-name').value = groupName || '';
@@ -345,7 +345,7 @@ function showEditGroupModal(groupId, groupName) {
     loadGroupStudents(groupId);
     
     // Load all students for assignment
-    loadStudents();
+    loadAllStudentsForAssignment();
     loadStaff();
 }
 
@@ -399,6 +399,28 @@ function loadGroupStudents(groupId) {
         });
 }
 
+function loadAllStudentsForAssignment() {
+    fetch('users/fetch_all_students.php') // Adjust the endpoint if necessary
+        .then(response => response.json())
+        .then(data => {
+            const studentSelect = document.querySelector('[name="student_ids[]"]');
+            studentSelect.innerHTML = '<option></option>'; // Clear previous options
+
+            data.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.student_id_new;
+                option.textContent = student.first_name + ' ' + student.last_name;
+                studentSelect.appendChild(option);
+            });
+
+            // Reinitialize the select2 element
+            $('.select2').select2();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error loading students. Please try again.');
+        });
+}
 
 function removeStudentFromGroup(studentId, groupId) {
     if (!confirm('Are you sure you want to remove this student from the group?')) {
