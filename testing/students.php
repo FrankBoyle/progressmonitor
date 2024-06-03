@@ -337,14 +337,15 @@ function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('share-group-id').value = groupId;
     document.getElementById('edit-group-modal').style.display = 'block';
-    document.querySelector('[name="student_ids[]"]').selectedIndex = -1;
 
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
 
-    // Load all students for the selected group
-    //loadStudents();
+    // Load students for the selected group
     loadGroupStudents(groupId);
+    
+    // Load all students for assignment
+    loadAllStudents();
     loadStaff();
 }
 
