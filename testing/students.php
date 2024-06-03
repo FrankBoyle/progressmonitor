@@ -427,8 +427,22 @@ function removeStudentFromGroup(studentId, groupId) {
     });
 }
 
+
 function hideEditGroupModal() {
     document.getElementById('edit-group-modal').style.display = 'none';
+    resetStudentList();
+}
+
+function resetStudentList() {
+    const studentList = document.getElementById('student-list');
+    const selectedGroup = document.querySelector('.selected-group');
+
+    if (selectedGroup) {
+        const groupId = selectedGroup.getAttribute('data-group-id');
+        loadStudentsByGroup(groupId);
+    } else {
+        studentList.innerHTML = '<p>Please select a group to view students.</p>';
+    }
 }
 
 function updateGroup(event) {
