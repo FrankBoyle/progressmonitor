@@ -10,9 +10,9 @@ try {
         $groupId = $_GET['group_id'];
 
         $stmt = $connection->prepare("
-            SELECT s.student_id, s.first_name, s.last_name, CONCAT(s.first_name, ' ', s.last_name) AS name 
-            FROM Students s 
-            INNER JOIN StudentGroup sg ON s.student_id = sg.student_id 
+            SELECT s.student_id_new AS student_id, s.first_name, s.last_name, CONCAT(s.first_name, ' ', s.last_name) AS name 
+            FROM Students_new s 
+            INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id 
             WHERE sg.group_id = ?
         ");
         $stmt->execute([$groupId]);

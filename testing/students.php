@@ -349,7 +349,7 @@ function showEditGroupModal(groupId, groupName) {
 }
 
 function loadGroupStudents(groupId) {
-    fetch(`users/fetch_students_by_group.php?group_id=${encodeURIComponent(groupId)}`)
+    fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
             console.log('Fetched group students:', data); // Log the response data
