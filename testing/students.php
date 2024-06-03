@@ -146,6 +146,8 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff(); // Load all staff initially
+    // Call the function to check and populate students and goals
+    populateStudentsAndGoals();
 
             // Add event listener to the add group button
             document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
@@ -167,6 +169,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.addedNodes.length) {
+                populateStudentsAndGoals();
+
                 mutation.addedNodes.forEach(function(node) {
                     if (node.classList && node.classList.contains('goal-item')) {
                         const quillEditor = node.querySelector('.quill-editor');
@@ -188,8 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-        // Call the function to check and populate students and goals
-        populateStudentsAndGoals();
+
     observer.observe(goalList, { childList: true, subtree: true });
 });
 
