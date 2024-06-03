@@ -1,6 +1,5 @@
 <?php
-include('./users/auth_session.php');
-include('./users/db.php');
+
 include ('./users/fetch_data.php');
 
 ini_set('display_errors', 1);
