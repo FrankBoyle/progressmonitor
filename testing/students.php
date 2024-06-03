@@ -188,9 +188,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+        // Call the function to check and populate students and goals
+        populateStudentsAndGoals();
     observer.observe(goalList, { childList: true, subtree: true });
-            // Call the function to check and populate students and goals
-            populateStudentsAndGoals();
 });
 
 function loadStudentsByGroup(groupId) {
@@ -770,7 +770,6 @@ function shareGroup(event) {
                 goalList.style.display = 'block';
             }
         }
-
 
 </script>
 </body>
