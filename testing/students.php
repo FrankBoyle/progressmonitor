@@ -400,7 +400,7 @@ function loadGroupStudents(groupId) {
 }
 
 function loadAllStudentsForAssignment() {
-    fetch('users/fetch_all_students.php') // Adjust the endpoint if necessary
+    fetch('users/fetch_students.php') // Adjust the endpoint if necessary
         .then(response => response.json())
         .then(data => {
             const studentSelect = document.querySelector('[name="student_ids[]"]');
