@@ -194,6 +194,34 @@ function populateStudentsAndGoals() {
     }
 }
 
+function addGroup(event) {
+    event.preventDefault();
+    const groupName = document.getElementById('group-name').value;
+
+    fetch('./users/add_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'create_group=1&group_name=' + encodeURIComponent(groupName)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log('Group added successfully:', data);
+            loadGroups();
+            hideAddGroupModal();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error adding the group. Please try again.');
+        });
+}
+
 function loadStaff() {
     fetch('users/fetch_staff.php')
         .then(response => response.json())
