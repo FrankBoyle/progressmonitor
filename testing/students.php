@@ -12,6 +12,25 @@ include('./users/db.php');
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .message {
+            font-size: 16px;
+            color: #333;
+            margin-top: 20px;
+        }
+        .column {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            width: 45%;
+            float: left;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
 </head>
 <body>
 
@@ -49,6 +68,9 @@ include('./users/db.php');
 
         <section class="box students-list">
             <h3>Students</h3>
+            <div class="message">Please use groups to see students.</div>
+            <!-- Uncomment the following block when you have students to display-->
+
             <ul id="student-list">
                 <?php foreach ($allStudents as $student): ?>
                     <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
@@ -58,6 +80,7 @@ include('./users/db.php');
 
         <section class="box existing-groups">
             <h3>Goals</h3>
+            <div class="message">Click a student to see their goals.</div>
             <div id="goal-list">
                 <!-- Goals will be loaded here and grouped by metadata_id -->
             </div>
@@ -129,7 +152,6 @@ include('./users/db.php');
         </form>
     </div>
 </div>
-
 <!-- Include jQuery and Select2 JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
