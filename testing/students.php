@@ -107,6 +107,11 @@
             </div>
         </form>
 
+        <h3>Remove Students from Group</h3>
+        <div id="group-students-list">
+            <!-- Students will be loaded here dynamically -->
+        </div>
+
         <h3>Share Group</h3>
         <form id="share-group-form" onsubmit="shareGroup(event)">
             <input type="hidden" id="share-group-id">
@@ -337,12 +342,81 @@ function showEditGroupModal(groupId, groupName) {
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
 
-    // Load all students and staff for the selected group
+    // Load all students for the selected group
     loadStudents();
+    loadGroupStudents(groupId);
     loadStaff();
 }
 
+function loadGroupStudents(groupId) {
+    fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
+        .then(response => response.json())
+        .then(data => {
+            const groupStudentsList = document.getElementById('group-students-list');
+            groupStudentsList.innerHTML = '';
 
+            if (data.length === 0) {
+                groupStudentsList.innerHTML = '<p>No students in this group.</p>';
+                return;
+            }
+
+            data.forEach(student => {
+                const studentItem = document.createElement('div');
+                studentItem.style.display = 'flex';
+                studentItem.style.alignItems = 'center';
+                studentItem.style.marginBottom = '10px';
+
+                const studentName = document.createElement('span');
+                studentName.style.marginRight = '10px';
+                studentName.textContent = student.name;
+
+                const removeButton = document.createElement('button');
+                removeButton.style.color = 'red';
+                removeButton.style.background = 'none';
+                removeButton.style.border = 'none';
+                removeButton.style.cursor = 'pointer';
+                removeButton.style.fontSize = '16px';
+                removeButton.style.lineHeight = '1';
+                removeButton.textContent = '×';
+                removeButton.onclick = () => removeStudentFromGroup(student.student_id, groupId);
+
+                studentItem.appendChild(studentName);
+                studentItem.appendChild(removeButton);
+                groupStudentsList.appendChild(studentItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching group students:', error);
+            alert('There was an error loading the students for this group. Please try again.');
+        });
+}
+
+function removeStudentFromGroup(studentId, groupId) {
+    if (!confirm('Are you sure you want to remove this student from the group?')) {
+        return;
+    }
+
+    fetch('users/remove_student_from_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `student_id=${encodeURIComponent(studentId)}&group_id=${encodeURIComponent(groupId)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Student removed from group successfully.');
+            loadGroupStudents(groupId);
+        } else {
+            alert('There was an error removing the student from the group. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error removing student from group:', error);
+        alert('There was an error removing the student from the group. Please try again.');
+    });
+}
 
 function hideEditGroupModal() {
     document.getElementById('edit-group-modal').style.display = 'none';
