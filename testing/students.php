@@ -313,7 +313,7 @@ function addGroup(event) {
     event.preventDefault();
     const groupName = document.getElementById('group-name').value;
 
-    fetch('students.php', {
+    fetch('./users/add_group.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
