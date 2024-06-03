@@ -345,7 +345,7 @@ function showEditGroupModal(groupId, groupName) {
     loadGroupStudents(groupId);
     
     // Load all students for assignment
-    loadAllStudents();
+    loadStudents();
     loadStaff();
 }
 
