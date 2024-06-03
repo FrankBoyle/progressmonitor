@@ -137,6 +137,12 @@ document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff(); // Load all staff initially
 
+            // Add event listener to the add group button
+            document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
+
+            // Expose functions to global scope for inline event handlers
+            window.hideAddGroupModal = hideAddGroupModal;
+
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('group-options');
         if (optionsMenu && !optionsMenu.contains(event.target)) {
@@ -331,6 +337,23 @@ function addGroup(event) {
         });
 }
 
+    // Function to show the modal
+    function showAddGroupModal() {
+        const modal = document.getElementById('add-group-modal');
+        if (modal) {
+            modal.style.display = 'block';
+        } else {
+            console.error("Modal element not found");
+        }
+    }
+
+        // Function to hide the modal
+        function hideAddGroupModal() {
+        const modal = document.getElementById('add-group-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
 
 function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-id').value = groupId;
