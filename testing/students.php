@@ -511,11 +511,21 @@ function saveGoal(goalId, goalDescription) {
     });
 }
 
-function hideAddGroupModal() {
-    const modal = document.getElementById('add-group-modal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+function showEditGroupModal(groupId, groupName) {
+    document.getElementById('edit-group-id').value = groupId;
+    document.getElementById('edit-group-name').value = groupName || '';
+    document.getElementById('share-group-id').value = groupId;
+    document.getElementById('edit-group-modal').style.display = 'block';
+
+    // Ensure the select2 is properly refreshed
+    $('.select2').select2();
+
+    // Load students for the selected group
+    loadGroupStudents(groupId);
+    
+    // Load all students for assignment
+    loadAllStudentsForAssignment();
+    loadStaff();
 }
 
 function hideEditGroupModal() {
