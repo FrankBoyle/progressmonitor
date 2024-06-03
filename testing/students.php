@@ -135,7 +135,7 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
-    loadStudents(); // Load all students initially
+    //loadStudents(); // Load all students initially
     loadStaff(); // Load all staff initially
 
     document.addEventListener('click', function(event) {
