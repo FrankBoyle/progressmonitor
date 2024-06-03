@@ -146,8 +146,6 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff(); // Load all staff initially
-    // Call the function to check and populate students and goals
-    populateStudentsAndGoals();
 
             // Add event listener to the add group button
             document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
@@ -259,6 +257,8 @@ function loadGroups() {
                 listItem.appendChild(optionsBtn);
                 groupList.appendChild(listItem);
             });
+            populateStudentsAndGoals();
+
         })
         .catch(error => {
             console.error('Error:', error);
