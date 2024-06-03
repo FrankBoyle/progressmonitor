@@ -533,6 +533,56 @@ function hideEditGroupModal() {
     resetStudentList();
 }
 
+function loadGroupStudents(groupId) {
+    fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched group students:', data); // Log the response data
+
+            const groupStudentsList = document.getElementById('group-students-list');
+            groupStudentsList.innerHTML = '';
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            if (data.length === 0) {
+                groupStudentsList.innerHTML = '<p>No students in this group.</p>';
+                return;
+            }
+
+            data.forEach(student => {
+                const studentItem = document.createElement('div');
+                studentItem.style.display = 'flex';
+                studentItem.style.alignItems = 'center';
+                studentItem.style.marginBottom = '10px';
+
+                const studentName = document.createElement('span');
+                studentName.style.marginRight = '10px';
+                studentName.textContent = student.name;
+
+                const removeButton = document.createElement('button');
+                removeButton.style.color = 'red';
+                removeButton.style.background = 'none';
+                removeButton.style.border = 'none';
+                removeButton.style.cursor = 'pointer';
+                removeButton.style.fontSize = '16px';
+                removeButton.style.lineHeight = '1';
+                removeButton.textContent = '×';
+                removeButton.onclick = () => removeStudentFromGroup(student.student_id, groupId);
+
+                studentItem.appendChild(studentName);
+                studentItem.appendChild(removeButton);
+                groupStudentsList.appendChild(studentItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching group students:', error);
+            alert('There was an error loading the students for this group. Please try again.');
+        });
+}
+
 function resetStudentList() {
     const studentList = document.getElementById('student-list');
     const selectedGroup = document.querySelector('.selected-group');
