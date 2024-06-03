@@ -477,3 +477,21 @@
             display: flex;
             align-items: center;
         }
+
+        .message {
+            font-size: 16px;
+            color: #333;
+            margin-top: 20px;
+        }
+        .column {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            width: 45%;
+            float: left;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
