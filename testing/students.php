@@ -606,6 +606,37 @@ function loadAllStudentsForAssignment() {
         });
 }
 
+function deleteGroup() {
+    const groupId = document.getElementById('edit-group-id').value;
+
+    if (!groupId) {
+        alert('Group ID is not defined.');
+        return;
+    }
+
+    fetch('users/delete_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            hideEditGroupModal();
+            loadGroups();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error deleting the group. Please try again.');
+    });
+}
+
 function resetStudentList() {
     const studentList = document.getElementById('student-list');
     const selectedGroup = document.querySelector('.selected-group');
