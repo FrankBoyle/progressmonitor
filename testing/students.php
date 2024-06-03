@@ -218,6 +218,24 @@ function loadStaff() {
         });
 }
 
+    // Function to show the modal
+    function showAddGroupModal() {
+        const modal = document.getElementById('add-group-modal');
+        if (modal) {
+            modal.style.display = 'block';
+        } else {
+            console.error("Modal element not found");
+        }
+    }
+
+        // Function to hide the modal
+        function hideAddGroupModal() {
+        const modal = document.getElementById('add-group-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
 function loadStudentsByGroup(groupId) {
     fetch('users/fetch_students_by_group.php', {
         method: 'POST',
