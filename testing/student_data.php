@@ -1,5 +1,4 @@
 <?php
-
 include ('./users/fetch_data.php');
 
 ini_set('display_errors', 1);
@@ -206,26 +205,25 @@ if (isset($_GET['metadata_id'])) {
                         <h3 class="card-title">Goals</h3>
                     </div>
                     <div class="card-body">
-                    <div class="row" id="goalsList">
-                        <?php foreach ($goals as $index => $goal): ?>
-                            <div class="col-md-4 col-sm-6 col-12">
-                                <div class="info-box">
-                                    <div class="info-box-content goal-container">
-                                        <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-                                        <label class="goal-checkbox-label">
-                                            <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>">
-                                            Select
-                                        </label>
-                                        <div id="quill-editor-<?php echo $goal['goal_id']; ?>" class="quill-editor" data-goal-id="<?php echo $goal['goal_id']; ?>">
-                                            <?php echo htmlspecialchars($goal['goal_description']); ?>
+                        <div class="row" id="goalsList">
+                            <?php foreach ($goals as $index => $goal): ?>
+                                <div class="col-md-4 col-sm-6 col-12">
+                                    <div class="info-box">
+                                        <div class="info-box-content goal-container">
+                                            <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+                                            <label class="goal-checkbox-label">
+                                                <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                                Select
+                                            </label>
+                                            <div id="quill-editor-<?php echo $goal['goal_id']; ?>" class="quill-editor" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                                <?php echo htmlspecialchars($goal['goal_description']); ?>
+                                            </div>
+                                            <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
                                         </div>
-                                        <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
                                     </div>
                                 </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-
+                            <?php endforeach; ?>
+                        </div>
                         <div class="add-goal-form">
                             <input type="text" id="newGoalText" placeholder="Enter new goal description">
                             <button id="addNewGoalBtn">Add New Goal</button>
@@ -244,188 +242,186 @@ if (isset($_GET['metadata_id'])) {
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
-const urlParams = new URLSearchParams(window.location.search);
-let quillEditors = {};
+    const urlParams = new URLSearchParams(window.location.search);
+    let quillEditors = {};
 
-$(document).ready(function() {
-    // Initialize Quill editors for each goal
-    $('.quill-editor').each(function() {
-        const goalId = $(this).data('goal-id');
-        const goalContent = $(this).html(); // Get the initial content
-        quillEditors[goalId] = new Quill(`#quill-editor-${goalId}`, {
+    $(document).ready(function() {
+        // Initialize Quill editors for each goal
+        $('.quill-editor').each(function() {
+            const goalId = $(this).data('goal-id');
+            const goalContent = $(this).html(); // Get the initial content
+            quillEditors[goalId] = new Quill(`#quill-editor-${goalId}`, {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['clean']
+                    ]
+                }
+            });
+            quillEditors[goalId].clipboard.dangerouslyPasteHTML(goalContent); // Set the initial content
+        });
+
+        // Initialize Quill editor for goal notes
+        const graphNotesEditor = new Quill('#graphNotesEditor', {
             theme: 'snow',
             modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['clean']
-                ]
-            }
-        });
-        quillEditors[goalId].clipboard.dangerouslyPasteHTML(goalContent); // Set the initial content
-    });
-
-    // Initialize Quill editor for goal notes
-    const graphNotesEditor = new Quill('#graphNotesEditor', {
-        theme: 'snow',
-        modules: {
-            toolbar: false
-        },
-        readOnly: true
-    });
-
-    $('.goal-checkbox').change(function() {
-        if ($(this).is(':checked')) {
-            graphNotesEditor.enable();
-        } else {
-            graphNotesEditor.disable();
-        }
-    });
-
-    $('#saveGraphNotes').click(function() {
-        const notes = graphNotesEditor.root.innerHTML;
-        const goalId = $('.goal-checkbox:checked').data('goal-id');
-        const studentId = $('#currentStudentId').val();
-        const schoolId = $('#schoolIdInput').val();
-        const metadataId = urlParams.get('metadata_id');
-
-        $.ajax({
-            url: './users/save_graph_notes.php',
-            type: 'POST',
-            data: {
-                notes: notes,
-                goal_id: goalId,
-                student_id: studentId,
-                school_id: schoolId,
-                metadata_id: metadataId
+                toolbar: false
             },
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                if (response.status === 'success') {
-                    alert('Notes saved successfully');
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error occurred while updating goal:', textStatus, '-', errorThrown);
-                console.error('Response text:', jqXHR.responseText);
-                alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
-            }
+            readOnly: true
         });
-    });
 
-    $('.goal-checkbox').change(function() {
-        const goalId = $(this).data('goal-id');
-        if (this.checked) {
-            $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
-                const data = JSON.parse(response);
-                if (data.status === 'success') {
-                    graphNotesEditor.root.innerHTML = data.notes;
-                } else {
-                    graphNotesEditor.root.innerHTML = '';
-                    alert(data.message);
-                }
-            });
-        } else {
-            graphNotesEditor.root.innerHTML = '';
-        }
-    });
-
-    $('#printButton').click(function() {
-        var currentChart = selectedChartType === 'bar' ? barChart : chart;
-        getGraphContentAsImage(currentChart, function(graphImage) {
-            if (graphImage) {
-                var notesContent = graphNotesEditor.root.innerHTML;
-                var selectedGoalContent = getSelectedGoalContent();
-                var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
-                contentToPrint += '<div><img src="' + graphImage + '"></div>';
-                contentToPrint += '<div>' + notesContent + '</div>';
-                printContent(contentToPrint);
+        $('.goal-checkbox').change(function() {
+            if ($(this).is(':checked')) {
+                graphNotesEditor.enable();
             } else {
-                console.error('Failed to receive graph image');
+                graphNotesEditor.disable();
             }
         });
-    });
 
-    $('#filterData').click(function() {
-        var iepDate = $('#iep_date').val();
-        var studentId = $('#currentStudentId').val();
-        var metadataId = urlParams.get('metadata_id');
+        $('#saveGraphNotes').click(function() {
+            const notes = graphNotesEditor.root.innerHTML;
+            const goalId = $('.goal-checkbox:checked').data('goal-id');
+            const studentId = $('#currentStudentId').val();
+            const schoolId = $('#schoolIdInput').val();
+            const metadataId = urlParams.get('metadata_id');
 
-        if (iepDate) {
-            $.post('./users/save_iep_date.php', {
-                iep_date: iepDate,
-                student_id: studentId
-            }, function(response) {
-                var data = JSON.parse(response);
-                if (data.success) {
-                    filterData(iepDate);
-                } else {
-                    alert(data.message);
+            $.ajax({
+                url: './users/save_graph_notes.php',
+                type: 'POST',
+                data: {
+                    notes: notes,
+                    goal_id: goalId,
+                    student_id: studentId,
+                    school_id: schoolId,
+                    metadata_id: metadataId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    if (response.status === 'success') {
+                        alert('Notes saved successfully');
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error occurred while updating goal:', textStatus, '-', errorThrown);
+                    console.error('Response text:', jqXHR.responseText);
+                    alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
                 }
-            }).fail(function(error) {
-                console.log('Error: ', error);
             });
+        });
+
+        $('.goal-checkbox').change(function() {
+            const goalId = $(this).data('goal-id');
+            if (this.checked) {
+                $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
+                    const data = JSON.parse(response);
+                    if (data.status === 'success') {
+                        graphNotesEditor.root.innerHTML = data.notes;
+                    } else {
+                        graphNotesEditor.root.innerHTML = '';
+                        alert(data.message);
+                    }
+                });
+            } else {
+                graphNotesEditor.root.innerHTML = '';
+            }
+        });
+
+        $('#printButton').click(function() {
+            var currentChart = selectedChartType === 'bar' ? barChart : chart;
+            getGraphContentAsImage(currentChart, function(graphImage) {
+                if (graphImage) {
+                    var notesContent = graphNotesEditor.root.innerHTML;
+                    var selectedGoalContent = getSelectedGoalContent();
+                    var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
+                    contentToPrint += '<div><img src="' + graphImage + '"></div>';
+                    contentToPrint += '<div>' + notesContent + '</div>';
+                    printContent(contentToPrint);
+                } else {
+                    console.error('Failed to receive graph image');
+                }
+            });
+        });
+
+        $('#filterData').click(function() {
+            var iepDate = $('#iep_date').val();
+            var studentId = $('#currentStudentId').val();
+            var metadataId = urlParams.get('metadata_id');
+
+            if (iepDate) {
+                $.post('./users/save_iep_date.php', {
+                    iep_date: iepDate,
+                    student_id: studentId
+                }, function(response) {
+                    var data = JSON.parse(response);
+                    if (data.success) {
+                        filterData(iepDate);
+                    } else {
+                        alert(data.message);
+                    }
+                }).fail(function(error) {
+                    console.log('Error: ', error);
+                });
+            }
+        });
+
+        function filterData(iepDate) {
+            var studentId = $('#currentStudentId').val();
+            var metadataId = urlParams.get('metadata_id');
+
+            $.get('./users/fetch_filtered_data.php', {
+                student_id: studentId,
+                metadata_id: metadataId,
+                iep_date: iepDate
+            }, function(response) {
+                $('#dataTableBody').html(response);
+                attachEditableHandler();
+            }).fail(function(error) {
+                console.error('Error: ', error);
+            });
+        }
+
+        function getSelectedGoalContent() {
+            var checkedCheckbox = $('.goal-checkbox:checked');
+            if (checkedCheckbox.length) {
+                var goalContainer = checkedCheckbox.closest('.goal-container');
+                var goalTextElement = goalContainer.find('.quill-editor');
+                return goalTextElement ? goalTextElement[0].innerHTML : '';
+            }
+            return 'No goal selected';
+        }
+
+        function getGraphContentAsImage(chartVar, callback) {
+            if (chartVar) {
+                chartVar.dataURI().then(({ imgURI }) => {
+                    callback(imgURI);
+                }).catch(error => {
+                    console.error('Error in converting chart to image:', error);
+                    callback(null);
+                });
+            } else {
+                console.error('Chart variable is null or undefined');
+                callback(null);
+            }
+        }
+
+        function printContent(content) {
+            var studentName = $('#studentName').val();
+            var printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Print</title></head><body>');
+            printWindow.document.write('<h1>' + studentName + '</h1>');
+            printWindow.document.write(content);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => printWindow.print(), 500);
         }
     });
-
-    function filterData(iepDate) {
-        var studentId = $('#currentStudentId').val();
-        var metadataId = urlParams.get('metadata_id');
-
-        $.get('./users/fetch_filtered_data.php', {
-            student_id: studentId,
-            metadata_id: metadataId,
-            iep_date: iepDate
-        }, function(response) {
-            $('#dataTableBody').html(response);
-            attachEditableHandler();
-        }).fail(function(error) {
-            console.error('Error: ', error);
-        });
-    }
-
-    function getSelectedGoalContent() {
-        var checkedCheckbox = $('.goal-checkbox:checked');
-        if (checkedCheckbox.length) {
-            var goalContainer = checkedCheckbox.closest('.goal-container');
-            var goalTextElement = goalContainer.find('.quill-editor');
-            return goalTextElement ? goalTextElement[0].innerHTML : '';
-        }
-        return 'No goal selected';
-    }
-
-    function getGraphContentAsImage(chartVar, callback) {
-        if (chartVar) {
-            chartVar.dataURI().then(({ imgURI }) => {
-                callback(imgURI);
-            }).catch(error => {
-                console.error('Error in converting chart to image:', error);
-                callback(null);
-            });
-        } else {
-            console.error('Chart variable is null or undefined');
-            callback(null);
-        }
-    }
-
-    function printContent(content) {
-        var studentName = $('#studentName').val();
-        var printWindow = window.open('', '_blank');
-        printWindow.document.write('<html><head><title>Print</title></head><body>');
-        printWindow.document.write('<h1>' + studentName + '</h1>');
-        printWindow.document.write(content);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => printWindow.print(), 500);
-    }
-});
 </script>
-
-
 
     
 </body>
