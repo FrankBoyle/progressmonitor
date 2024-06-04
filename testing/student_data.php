@@ -206,25 +206,26 @@ if (isset($_GET['metadata_id'])) {
                         <h3 class="card-title">Goals</h3>
                     </div>
                     <div class="card-body">
-                        <div class="row" id="goalsList">
-                            <?php foreach ($goals as $index => $goal): ?>
-                                <div class="col-md-4 col-sm-6 col-12">
-                                    <div class="info-box">
-                                        <div class="info-box-content goal-container">
-                                            <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
-                                            <label class="goal-checkbox-label">
-                                                <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>">
-                                                Select
-                                            </label>
-                                            <div id="quill-editor-<?php echo $goal['goal_id']; ?>" class="quill-editor" data-goal-id="<?php echo $goal['goal_id']; ?>">
-                                                <?php echo htmlspecialchars($goal['goal_description']); ?>
-                                            </div>
-                                            <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
+                    <div class="row" id="goalsList">
+                        <?php foreach ($goals as $index => $goal): ?>
+                            <div class="col-md-4 col-sm-6 col-12">
+                                <div class="info-box">
+                                    <div class="info-box-content goal-container">
+                                        <span class="info-box-text">Goal <?php echo $index + 1; ?></span>
+                                        <label class="goal-checkbox-label">
+                                            <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                            Select
+                                        </label>
+                                        <div id="quill-editor-<?php echo $goal['goal_id']; ?>" class="quill-editor" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                            <?php echo htmlspecialchars($goal['goal_description']); ?>
                                         </div>
+                                        <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
-                        </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
                         <div class="add-goal-form">
                             <input type="text" id="newGoalText" placeholder="Enter new goal description">
                             <button id="addNewGoalBtn">Add New Goal</button>
@@ -261,7 +262,7 @@ $(document).ready(function() {
                 ]
             }
         });
-        quillEditors[goalId].root.innerHTML = goalContent; // Set the initial content
+        quillEditors[goalId].clipboard.dangerouslyPasteHTML(goalContent); // Set the initial content
     });
 
     // Initialize Quill editor for goal notes
@@ -423,6 +424,7 @@ $(document).ready(function() {
     }
 });
 </script>
+
 
 
     
