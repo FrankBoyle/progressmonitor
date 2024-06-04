@@ -1,4 +1,5 @@
 <?php
+
 include ('./users/fetch_data.php');
 
 ini_set('display_errors', 1);
@@ -37,10 +38,14 @@ if (isset($_GET['metadata_id'])) {
     <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.1/dist/apexcharts.min.css">
+    <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
@@ -49,14 +54,12 @@ if (isset($_GET['metadata_id'])) {
     <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
     <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="student_data.js" defer></script>
     <script>
         var scoreNamesFromPHP = <?php echo json_encode($scoreNames); ?>;
     </script>
     <style>
-        /* Add any custom styles here */
+
     </style>
     <div>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
@@ -215,9 +218,9 @@ if (isset($_GET['metadata_id'])) {
                                                 <input type="checkbox" class="goal-checkbox" data-goal-id="<?php echo $goal['goal_id']; ?>">
                                                 Select
                                             </label>
-                                            <div id="quill-editor-<?php echo $goal['goal_id']; ?>" class="quill-editor" data-goal-id="<?php echo $goal['goal_id']; ?>">
+                                            <textarea id="summernote<?php echo $index + 1; ?>" class="goaltext" contenteditable="true" data-goal-id="<?php echo $goal['goal_id']; ?>">
                                                 <?php echo htmlspecialchars($goal['goal_description']); ?>
-                                            </div>
+                                            </textarea>
                                             <button class="save-goal-btn" data-goal-id="<?php echo $goal['goal_id']; ?>">✔</button>
                                         </div>
                                     </div>
@@ -230,7 +233,7 @@ if (isset($_GET['metadata_id'])) {
                         </div>
                         <div class="editable-notes-section">
                             <h3>Goal Notes</h3>
-                            <div id="graphNotesEditor" class="quill-editor"></div>
+                            <textarea id="graphNotes" class="summernote"></textarea>
                             <button id="saveGraphNotes" class="btn btn-primary">Save Notes</button>
                             <button id="printButton" class="btn btn-primary">Print</button>
                         </div>
@@ -243,91 +246,79 @@ if (isset($_GET['metadata_id'])) {
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
     const urlParams = new URLSearchParams(window.location.search);
-    let quillEditors = {};
 
     $(document).ready(function() {
-        // Initialize Quill editors for each goal
-        $('.quill-editor').each(function() {
-            const goalId = $(this).data('goal-id');
-            const goalContent = $(this).html(); // Get the initial content
-            quillEditors[goalId] = new Quill(`#quill-editor-${goalId}`, {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['clean']
-                    ]
-                }
-            });
-            quillEditors[goalId].clipboard.dangerouslyPasteHTML(goalContent); // Set the initial content
-        });
+        $('.goaltext').summernote({
+        toolbar: [
+            ['font', ['fontname']],
+            ['style', ['bold', 'italic', 'underline']]
+        ],
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather']
+    });
 
-        // Initialize Quill editor for goal notes
-        const graphNotesEditor = new Quill('#graphNotesEditor', {
-            theme: 'snow',
-            modules: {
-                toolbar: false
+    $('#graphNotes').summernote({
+        height: 300,
+        toolbar: []
+    });
+
+    $('#graphNotes').summernote('disable');
+
+    $('.goal-checkbox').change(function() {
+        if ($(this).is(':checked')) {
+            $('#graphNotes').summernote('enable');
+        } else {
+            $('#graphNotes').summernote('disable');
+        }
+    });
+
+    $('#saveGraphNotes').click(function() {
+        var notes = $('#graphNotes').summernote('code');
+        var goalId = $('.goal-checkbox:checked').data('goal-id');
+        var studentId = $('#currentStudentId').val();
+        var schoolId = $('#schoolIdInput').val();
+        var metadataId = new URLSearchParams(window.location.search).get('metadata_id');
+
+        $.ajax({
+            url: './users/save_graph_notes.php',
+            type: 'POST',
+            data: {
+                notes: notes,
+                goal_id: goalId,
+                student_id: studentId,
+                school_id: schoolId,
+                metadata_id: metadataId
             },
-            readOnly: true
-        });
-
-        $('.goal-checkbox').change(function() {
-            if ($(this).is(':checked')) {
-                graphNotesEditor.enable();
-            } else {
-                graphNotesEditor.disable();
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response.status === 'success') {
+                    alert('Notes saved successfully');
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error occurred while updating goal:', textStatus, '-', errorThrown);
+                console.error('Response text:', jqXHR.responseText);
+                alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
             }
         });
-
-        $('#saveGraphNotes').click(function() {
-            const notes = graphNotesEditor.root.innerHTML;
-            const goalId = $('.goal-checkbox:checked').data('goal-id');
-            const studentId = $('#currentStudentId').val();
-            const schoolId = $('#schoolIdInput').val();
-            const metadataId = urlParams.get('metadata_id');
-
-            $.ajax({
-                url: './users/save_graph_notes.php',
-                type: 'POST',
-                data: {
-                    notes: notes,
-                    goal_id: goalId,
-                    student_id: studentId,
-                    school_id: schoolId,
-                    metadata_id: metadataId
-                },
-                dataType: 'json',
-                success: function(response) {
-                    console.log(response);
-                    if (response.status === 'success') {
-                        alert('Notes saved successfully');
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error occurred while updating goal:', textStatus, '-', errorThrown);
-                    console.error('Response text:', jqXHR.responseText);
-                    alert('Error occurred while updating goal: ' + textStatus + ' - ' + errorThrown);
-                }
-            });
-        });
-
+    });
+    
         $('.goal-checkbox').change(function() {
-            const goalId = $(this).data('goal-id');
+            var goalId = $(this).data('goal-id');
             if (this.checked) {
                 $.get('./users/get_goal_notes.php', { goal_id: goalId }, function(response) {
-                    const data = JSON.parse(response);
+                    var data = JSON.parse(response);
                     if (data.status === 'success') {
-                        graphNotesEditor.root.innerHTML = data.notes;
+                        $('#graphNotes').summernote('code', data.notes);
                     } else {
-                        graphNotesEditor.root.innerHTML = '';
+                        $('#graphNotes').summernote('code', '');
                         alert(data.message);
                     }
                 });
             } else {
-                graphNotesEditor.root.innerHTML = '';
+                $('#graphNotes').summernote('code', '');
             }
         });
 
@@ -335,7 +326,7 @@ if (isset($_GET['metadata_id'])) {
             var currentChart = selectedChartType === 'bar' ? barChart : chart;
             getGraphContentAsImage(currentChart, function(graphImage) {
                 if (graphImage) {
-                    var notesContent = graphNotesEditor.root.innerHTML;
+                    var notesContent = $('#graphNotes').summernote('code');
                     var selectedGoalContent = getSelectedGoalContent();
                     var contentToPrint = '<div><strong>Selected Goal:</strong><br>' + selectedGoalContent + '</div>';
                     contentToPrint += '<div><img src="' + graphImage + '"></div>';
@@ -389,8 +380,8 @@ if (isset($_GET['metadata_id'])) {
             var checkedCheckbox = $('.goal-checkbox:checked');
             if (checkedCheckbox.length) {
                 var goalContainer = checkedCheckbox.closest('.goal-container');
-                var goalTextElement = goalContainer.find('.quill-editor');
-                return goalTextElement ? goalTextElement[0].innerHTML : '';
+                var goalTextElement = goalContainer.find('.goaltext');
+                return goalTextElement ? goalTextElement.val() : '';
             }
             return 'No goal selected';
         }
