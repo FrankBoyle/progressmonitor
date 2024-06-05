@@ -850,7 +850,10 @@ function hideAddGoalModal() {
 
 function addGoal(event) {
     event.preventDefault();
-
+    console.log('Student ID Element:', studentIdElement);
+console.log('Goal Description Element:', goalDescriptionElement);
+console.log('Goal Date Element:', goalDateElement);
+console.log('Metadata ID Element:', metadataIdElement);
     const studentId = document.getElementById('selected-student-id').value;
     const goalDescription = document.getElementById('goal-description').value;
     const goalDate = document.getElementById('goal-date').value;
