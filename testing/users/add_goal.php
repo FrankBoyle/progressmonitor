@@ -6,23 +6,23 @@ include('db.php');
 header('Content-Type: application/json');
 
 try {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['student_id'], $_POST['goal_description'], $_POST['goal_date'], $_POST['metadata_id'])) {
         $studentId = $_POST['student_id'];
         $goalDescription = $_POST['goal_description'];
         $goalDate = $_POST['goal_date'];
         $metadataId = $_POST['metadata_id'];
-        $schoolId = $_POST['school_id'];
+        $schoolId = $_SESSION['school_id'];
 
-        // Insert the new goal into the Goals table
+        // Prepare and execute the insert statement
         $stmt = $connection->prepare("
-            INSERT INTO Goals (student_id, goal_description, goal_date, school_id, metadata_id)
+            INSERT INTO Goals (student_id, goal_description, goal_date, school_id, metadata_id) 
             VALUES (?, ?, ?, ?, ?)
         ");
         $stmt->execute([$studentId, $goalDescription, $goalDate, $schoolId, $metadataId]);
 
         echo json_encode(["message" => "Goal added successfully."]);
     } else {
-        echo json_encode(["error" => "Invalid request method."]);
+        echo json_encode(["error" => "Invalid request, missing required parameters."]);
     }
 } catch (Exception $e) {
     error_log("Error adding goal: " . $e->getMessage());
