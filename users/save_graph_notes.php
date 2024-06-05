@@ -23,14 +23,18 @@ function addNotes($goalId, $studentId, $schoolId, $metadataId, $notes) {
             $stmt->execute([$goalId, $studentId, $schoolId, $metadataId, $notes]);
         }
 
+        // Ensure no additional output is sent
+        header('Content-Type: application/json');
         echo json_encode(['status' => 'success', 'message' => 'Notes added successfully.']);
     } catch (PDOException $e) {
         // Handle any database errors
+        header('Content-Type: application/json');
+        http_response_code(500);
         echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
     }
 }
 
-// Handling the POST request
+// Ensure the request method is POST and required parameters are set
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goal_id'], $_POST['student_id'], $_POST['school_id'], $_POST['metadata_id'], $_POST['notes'])) {
     $goalId = $_POST['goal_id'];
     $studentId = $_POST['student_id'];
@@ -40,5 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goal_id'], $_POST['st
 
     // Call the function to add notes
     addNotes($goalId, $studentId, $schoolId, $metadataId, $notes);
+} else {
+    header('Content-Type: application/json');
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request or missing parameters.']);
 }
+
+// Ensure no additional output is sent
+exit;
 ?>
+
