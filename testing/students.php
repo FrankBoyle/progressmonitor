@@ -528,6 +528,7 @@ function selectStudent(element) {
                     listItem.classList.add('goal-item');
                     listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
                     listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
+                    listItem.innerHTML += '<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>';
                     metadataContainer.appendChild(listItem);
                 });
 
