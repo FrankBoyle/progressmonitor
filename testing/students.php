@@ -125,7 +125,6 @@
     </div>
 </div>
 
-
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
@@ -835,23 +834,28 @@ function loadMetadata() {
 }
 
 function showAddGoalModal() {
-    const modal = document.getElementById('add-goal-modal');
-    if (modal) {
-        modal.style.display = 'block';
-    } else {
-        console.error("Modal element not found");
+    const selectedStudent = document.querySelector('.selected-student');
+    if (!selectedStudent) {
+        alert('Please select a student first.');
+        return;
     }
+    const modal = document.getElementById('add-goal-modal');
+    modal.style.display = 'block';
 }
 
 function hideAddGoalModal() {
     const modal = document.getElementById('add-goal-modal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    modal.style.display = 'none';
 }
 
 function addGoal(event) {
     event.preventDefault();
+    const selectedStudent = document.querySelector('.selected-student');
+    if (!selectedStudent) {
+        alert('Please select a student first.');
+        return;
+    }
+    const studentId = selectedStudent.getAttribute('data-student-id');
     const goalDescription = document.getElementById('goal-description').value;
     const goalDate = document.getElementById('goal-date').value;
     const metadataId = document.getElementById('metadata-id').value;
@@ -861,7 +865,7 @@ function addGoal(event) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}`
+        body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}`
     })
     .then(response => response.text())
     .then(data => {
