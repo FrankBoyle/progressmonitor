@@ -25,7 +25,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem; /* Adjust the padding to reduce height */
+    padding: 0.5rem 1rem; /* Adjust the padding to reduce height */
     background-color: #333;
     color: white;
     position: fixed; /* Make the navbar fixed */
