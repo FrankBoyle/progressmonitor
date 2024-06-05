@@ -21,11 +21,11 @@ $studentIds = isset($_POST['student_ids']) ? explode(',', $_POST['student_ids'])
 
 if ($groupId && !empty($studentIds)) {
     foreach ($studentIds as $studentId) {
-        $checkStmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id = ? AND group_id = ?");
+        $checkStmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id_new = ? AND group_id = ?");
         $checkStmt->execute([$studentId, $groupId]);
 
         if ($checkStmt->rowCount() == 0) {
-            $insertStmt = $connection->prepare("INSERT INTO StudentGroup (student_id, group_id) VALUES (?, ?)");
+            $insertStmt = $connection->prepare("INSERT INTO StudentGroup (student_id_new, group_id) VALUES (?, ?)");
             $insertStmt->execute([$studentId, $groupId]);
         }
     }
