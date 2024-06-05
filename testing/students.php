@@ -926,7 +926,7 @@ function loadGoals(studentId) {
         });
 }
 
-function archiveGoal(goalId) {
+function archiveGoal() {
     if (!confirm('Are you sure you want to archive this goal?')) {
         return;
     }
