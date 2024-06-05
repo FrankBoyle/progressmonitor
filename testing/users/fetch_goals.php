@@ -13,7 +13,7 @@ try {
                 SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name
                 FROM Goals g
                 INNER JOIN Metadata gm ON g.metadata_id = gm.metadata_id
-                WHERE g.student_id = ?
+                WHERE g.student_id_new = ?
             ");
             $stmt->execute([$studentId]);
             $goals = $stmt->fetchAll(PDO::FETCH_ASSOC);
