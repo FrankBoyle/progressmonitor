@@ -1,6 +1,5 @@
 <?php
 session_start();
-include('db.php');
 include('auth_session.php');
 // Error Reporting
 ini_set('display_errors', 1);
