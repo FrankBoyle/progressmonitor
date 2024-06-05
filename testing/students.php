@@ -931,7 +931,7 @@ function archiveGoal(goalId) {
         return;
     }
 
-    fetch('users/archive_goal.php', {
+    fetch('./users/archive_goal.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -941,16 +941,18 @@ function archiveGoal(goalId) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            loadGoals(document.getElementById('selected-student-id').value);
+            alert('Goal archived successfully.');
+            loadGoals(); // Reload the goals to reflect the change
         } else {
-            alert('Error archiving goal: ' + data.message);
+            alert('Error archiving goal: ' + (data.message || 'Unknown error'));
         }
     })
     .catch(error => {
         console.error('Error archiving goal:', error);
-        alert('There was an error archiving the goal. Please try again.');
+        alert('Error archiving goal: ' + error.message);
     });
 }
+
 
 </script>
 </body>
