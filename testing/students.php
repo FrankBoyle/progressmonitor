@@ -851,10 +851,15 @@ function hideAddGoalModal() {
 function addGoal(event) {
     event.preventDefault();
 
-    const studentId = element.getAttribute('data-student-id');
+    const studentId = document.getElementById('selected-student-id').value;
     const goalDescription = document.getElementById('goal-description').value;
     const goalDate = document.getElementById('goal-date').value;
     const metadataId = document.getElementById('metadata-id').value;
+
+    if (!studentId) {
+        alert('Please select a student first.');
+        return;
+    }
 
     // Ensure school_id is passed
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
@@ -881,6 +886,7 @@ function addGoal(event) {
         alert('There was an error adding the goal. Please try again.');
     });
 }
+
 
 
 </script>
