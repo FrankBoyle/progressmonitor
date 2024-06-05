@@ -98,10 +98,25 @@ function getSmallestMetadataId($schoolId) {
 }
 
 function fetchGoals($studentId, $metadataId, $schoolId) {
-    global $connection;
-    $stmt = $connection->prepare("SELECT * FROM Goals WHERE student_id_new = ? AND metadata_id = ? AND school_id = ? ORDER BY goal_date DESC");
-    $stmt->execute([$studentId, $metadataId, $schoolId]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $url = "fetch_goals.php?student_id={$studentId}&metadata_id={$metadataId}&school_id={$schoolId}";
+    
+    // Use file_get_contents to fetch the content from the URL
+    $response = file_get_contents($url);
+
+    // Decode the JSON response
+    $goals = json_decode($response, true);
+
+    // Check for errors
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        return ["error" => "Error parsing JSON response"];
+    }
+
+    // Check for API errors
+    if (isset($goals['error'])) {
+        return ["error" => $goals['error']];
+    }
+
+    return $goals;
 }
 
 // Initialize empty arrays and variables
