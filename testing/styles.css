@@ -458,3 +458,8 @@ button[type="submit"]:hover {
     display: flex;
     align-items: center;
 }
+
+.header-icons {
+    display: flex;
+    align-items: center;
+}
