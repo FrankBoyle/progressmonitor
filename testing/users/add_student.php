@@ -1,4 +1,6 @@
 <?php
+session_start();
+include('auth_session.php');
 include('db.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
