@@ -6,7 +6,7 @@
 }
 
 .logo img {
-    max-height: 50px; /* Adjust as needed */
+    max-height: 40px; /* Adjust as needed */
 }
 
 body {
@@ -25,9 +25,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 0.5rem 1rem; /* Adjust the padding to reduce height */
     background-color: #333;
     color: white;
+    position: fixed; /* Make the navbar fixed */
+    width: 100%;
+    top: 0;
+    z-index: 1000; /* Ensure it stays above other content */
 }
 
 .logo {
@@ -42,7 +46,8 @@ body {
 .content {
     display: flex;
     flex-grow: 1;
-    padding: 1rem;
+    padding: 5rem 1rem 1rem; /* Add top padding to compensate for the navbar height */
+    margin-top: 3rem; /* Adjust this value to match the height of the navbar */
 }
 
 .box {
