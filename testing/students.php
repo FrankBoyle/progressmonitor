@@ -263,8 +263,12 @@ function addStudent(event) {
     .then(response => response.text())
     .then(data => {
         console.log('Student added successfully:', data);
-        loadStudents();
-        hideAddStudentModal();
+        if (data.includes("Student added successfully.")) {
+            loadStudents();
+            hideAddStudentModal();
+        } else {
+            alert('Error adding student: ' + data);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
