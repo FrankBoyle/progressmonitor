@@ -856,6 +856,12 @@ function addGoal(event) {
     const goalDate = document.getElementById('goal-date').value;
     const metadataId = document.getElementById('metadata-id').value;
 
+
+    console.log('Student ID Element:', studentIdElement);
+console.log('Goal Description Element:', goalDescriptionElement);
+console.log('Goal Date Element:', goalDateElement);
+console.log('Metadata ID Element:', metadataIdElement);
+
     // Ensure school_id is passed
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
