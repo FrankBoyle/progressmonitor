@@ -811,6 +811,9 @@ function loadAllStudentsForAssignment() {
 }
 
 function deleteGroup() {
+    if (!confirm('Are you sure you want to delete this the group?')) {
+        return;
+    }
     const groupId = document.getElementById('edit-group-id').value;
 
     if (!groupId) {
