@@ -46,7 +46,8 @@ body {
 .content {
     display: flex;
     flex-grow: 1;
-    padding: 1rem;
+    padding: 2rem 1rem 1rem; /* Add top padding to compensate for the navbar height */
+    margin-top: 3rem; /* Adjust this value to match the height of the navbar */
 }
 
 .box {
