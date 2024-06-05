@@ -35,7 +35,7 @@ function fetchMetadataCategories($school_id) {
 
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT school_id_new FROM Students_new WHERE student_id_new = ?");
+    $stmt = $connection->prepare("SELECT school_id FROM Students_new WHERE student_id_new = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['school_id'] : null;
