@@ -53,7 +53,7 @@
         </section>
 
         <section class="box existing-groups">
-            <h3>Goalsclass="add-student-btn" onclick="showAddStudentModal()">+</button></h3>
+            <h3>Goals <button class="add-goal-btn" onclick="showAddStudentModal()">+</button></h3>
             <div class="message" id="goals-message">Click a student to see their goals.</div>
             <div id="goal-list" style="display: none;">
                 <!-- Goals will be loaded here and grouped by metadata_id -->
