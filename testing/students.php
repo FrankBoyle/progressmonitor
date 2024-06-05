@@ -850,11 +850,13 @@ function hideAddGoalModal() {
 
 function addGoal(event) {
     event.preventDefault();
+
     const selectedStudent = document.querySelector('.selected-student');
     if (!selectedStudent) {
         alert('Please select a student first.');
         return;
     }
+
     const studentId = selectedStudent.getAttribute('data-student-id');
     const goalDescription = document.getElementById('goal-description').value;
     const goalDate = document.getElementById('goal-date').value;
@@ -869,7 +871,7 @@ function addGoal(event) {
     })
     .then(response => response.text())
     .then(data => {
-        console.log('Goal added successfully:', data);
+        console.log('Response from server:', data);
         if (data.includes("Goal added successfully.")) {
             loadGoals(); // Update the goal list
             hideAddGoalModal();
@@ -878,10 +880,11 @@ function addGoal(event) {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Error occurred:', error);
         alert('There was an error adding the goal. Please try again.');
     });
 }
+
 </script>
 </body>
 </html>
