@@ -869,7 +869,6 @@ function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched goals data:', data); // Debugging log
             const goalList = document.getElementById('goal-list');
             goalList.innerHTML = '';
 
@@ -896,12 +895,14 @@ function loadGoals(studentId) {
                 metadataContainer.appendChild(metadataLink);
 
                 metadataGoals.goals.forEach(goal => {
-                    const listItem = document.createElement('div');
-                    listItem.classList.add('goal-item');
-                    listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
-                    listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
-                    listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
-                    metadataContainer.appendChild(listItem);
+                    if (!goal.archived) {  // Ensure the goal is not archived
+                        const listItem = document.createElement('div');
+                        listItem.classList.add('goal-item');
+                        listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
+                        listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
+                        listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
+                        metadataContainer.appendChild(listItem);
+                    }
                 });
 
                 goalList.appendChild(metadataContainer);
@@ -927,7 +928,6 @@ function loadGoals(studentId) {
         });
 }
 
-
 function archiveGoal(goalId) {
     if (!confirm('Are you sure you want to archive this goal?')) {
         return;
@@ -944,7 +944,7 @@ function archiveGoal(goalId) {
     .then(data => {
         if (data.status === 'success') {
             alert('Goal archived successfully.');
-            loadGoals(); // Reload the goals to reflect the change
+            loadGoals(document.getElementById('selected-student-id').value); // Reload the goals to reflect the change
         } else {
             alert('Error archiving goal: ' + (data.message || 'Unknown error'));
         }
@@ -954,6 +954,7 @@ function archiveGoal(goalId) {
         alert('Error archiving goal: ' + error.message);
     });
 }
+
 
 </script>
 </body>
