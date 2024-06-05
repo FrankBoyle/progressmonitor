@@ -495,13 +495,12 @@ function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
     document.getElementById('selected-student-id').value = studentId;
 
-    loadGoals(studentId); // Call loadGoals with the selected student ID
+    loadGoals(studentId);
 
     const studentItems = document.getElementById('student-list').querySelectorAll('li');
     studentItems.forEach(student => student.classList.remove('selected-student'));
     element.classList.add('selected-student');
 }
-
 
 function showGroupOptions(event, groupId, groupName) {
     event.stopPropagation();
@@ -867,96 +866,91 @@ function addGoal(event) {
 
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
-        fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
-            .then(response => response.json())
-            .then(data => {
-                const goalList = document.getElementById('goal-list');
-                goalList.innerHTML = '';
-
-                if (data.error) {
-                    alert(data.message);
-                    return;
-                }
-
-                const goalsByMetadata = data.reduce((acc, goal) => {
-                    if (!acc[goal.metadata_id]) {
-                        acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
-                    }
-                    acc[goal.metadata_id].goals.push(goal);
-                    return acc;
-                }, {});
-
-                for (const metadataId in goalsByMetadata) {
-                    const metadataGoals = goalsByMetadata[metadataId];
-
-                    const metadataContainer = document.createElement('div');
-                    const metadataLink = document.createElement('a');
-                    metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
-                    metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
-                    metadataContainer.appendChild(metadataLink);
-
-                    metadataGoals.goals.forEach(goal => {
-                        const listItem = document.createElement('div');
-                        listItem.classList.add('goal-item');
-                        listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
-                        listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
-                        listItem.innerHTML += '<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>';
-                        metadataContainer.appendChild(listItem);
-                    });
-
-                    goalList.appendChild(metadataContainer);
-                }
-
-                // Reinitialize the quill editors
-                document.querySelectorAll('.quill-editor').forEach(editor => {
-                    const goalId = editor.getAttribute('data-goal-id');
-                    if (!quillInstances[goalId]) {
-                        quillInstances[goalId] = new Quill(editor, {
-                            theme: 'snow',
-                            readOnly: true,
-                            modules: {
-                                toolbar: false
-                            }
-                        });
-                    }
-                });
-
-                const studentItems = document.getElementById('student-list').querySelectorAll('li');
-                studentItems.forEach(student => student.classList.remove('selected-student'));
-                document.querySelector(`li[data-student-id="${studentId}"]`).classList.add('selected-student');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('There was an error fetching goals. Please try again.');
-            });
-    }
-
-function archiveGoal(goalId) {
-        if (!confirm('Are you sure you want to archive this goal?')) {
-            return;
-        }
-
-        fetch('./users/archive_goal.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `goal_id=${encodeURIComponent(goalId)}`
-        })
+    fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.json())
         .then(data => {
-            if (data.status === 'success') {
-                alert('Goal archived successfully.');
-                loadGoals(document.getElementById('selected-student-id').value);
-            } else {
-                alert('Error archiving goal: ' + (data.error || 'Unknown error'));
+            const goalList = document.getElementById('goal-list');
+            goalList.innerHTML = '';
+
+            if (data.error) {
+                alert(data.message);
+                return;
             }
+
+            const goalsByMetadata = data.reduce((acc, goal) => {
+                if (!acc[goal.metadata_id]) {
+                    acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
+                }
+                acc[goal.metadata_id].goals.push(goal);
+                return acc;
+            }, {});
+
+            for (const metadataId in goalsByMetadata) {
+                const metadataGoals = goalsByMetadata[metadataId];
+
+                const metadataContainer = document.createElement('div');
+                const metadataLink = document.createElement('a');
+                metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
+                metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
+                metadataContainer.appendChild(metadataLink);
+
+                metadataGoals.goals.forEach(goal => {
+                    const listItem = document.createElement('div');
+                    listItem.classList.add('goal-item');
+                    listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
+                    listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
+                    listItem.innerHTML += '<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>';
+                    metadataContainer.appendChild(listItem);
+                });
+
+                goalList.appendChild(metadataContainer);
+            }
+
+            // Reinitialize the quill editors
+            document.querySelectorAll('.quill-editor').forEach(editor => {
+                const goalId = editor.getAttribute('data-goal-id');
+                if (!quillInstances[goalId]) {
+                    quillInstances[goalId] = new Quill(editor, {
+                        theme: 'snow',
+                        readOnly: true,
+                        modules: {
+                            toolbar: false
+                        }
+                    });
+                }
+            });
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('There was an error archiving the goal. Please try again.');
+            alert('There was an error fetching goals. Please try again.');
         });
+}
+
+function archiveGoal(goalId) {
+    if (!confirm('Are you sure you want to archive this goal?')) {
+        return;
     }
+
+    fetch('users/archive_goal.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `goal_id=${encodeURIComponent(goalId)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            loadGoals(document.getElementById('selected-student-id').value);
+        } else {
+            alert('Error archiving goal: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error archiving goal:', error);
+        alert('There was an error archiving the goal. Please try again.');
+    });
+}
 
 </script>
 </body>
