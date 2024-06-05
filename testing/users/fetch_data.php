@@ -21,7 +21,7 @@ function fetchPerformanceData($studentId, $metadata_id, $iep_date = null) {
 
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
+    $stmt = $connection->prepare("SELECT s.* FROM Students_new s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
