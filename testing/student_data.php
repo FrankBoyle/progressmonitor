@@ -6,12 +6,14 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+/*
 foreach ($students as $student) {
     if ($student['student_id'] == $studentId) { // If the IDs match
         $studentName = $student['name']; // Get the student name
         break;
     }
 }
+*/
 
 if (isset($_GET['metadata_id'])) {
     $selectedMetadataId = $_GET['metadata_id'];
