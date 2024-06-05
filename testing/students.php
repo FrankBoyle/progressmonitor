@@ -811,9 +811,11 @@ function loadAllStudentsForAssignment() {
 }
 
 function deleteGroup() {
-    if (!confirm('Are you sure you want to delete this the group?')) {
+    const confirmDeletion = confirm('Are you sure you want to delete this group?');
+    if (!confirmDeletion) {
         return;
     }
+
     const groupId = document.getElementById('edit-group-id').value;
 
     if (!groupId) {
@@ -843,6 +845,7 @@ function deleteGroup() {
         alert('There was an error deleting the group. Please try again.');
     });
 }
+
 
 function resetStudentList() {
     const studentList = document.getElementById('student-list');
