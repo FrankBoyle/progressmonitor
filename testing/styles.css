@@ -239,27 +239,12 @@ h3 {
 .goal-item .edit-btn {
     position: absolute;
     top: 10px;
-    right: 50px; /* Adjusted to make room for the archive button */
+    right: 70px; /* Adjusted to make room for the archive button */
     background: none;
     border: none;
     font-size: 16px;
     cursor: pointer;
     display: inline-block;
-}
-
-.goal-item .save-btn {
-    background-color: #555;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.goal-item .save-btn:hover {
-    background-color: #333;
-    font-weight: bold;
 }
 
 .archive-btn {
@@ -270,8 +255,12 @@ h3 {
     cursor: pointer;
     position: absolute;
     right: 10px; /* Position the button to the right */
-    top: 50%; /* Center vertically */
-    transform: translateY(-50%);
+    top: 10px; /* Align to the top */
+}
+
+.goal-item .save-btn:hover {
+    background-color: #333;
+    font-weight: bold;
 }
 
 .archive-btn:hover {
