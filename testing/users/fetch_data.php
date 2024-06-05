@@ -10,10 +10,10 @@ include('db.php');
 function fetchPerformanceData($studentId, $metadata_id, $iep_date = null) {
     global $connection;
     if ($iep_date) {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? AND score_date >= ? ORDER BY score_date ASC LIMIT 41");
+        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id_new = ? AND metadata_id = ? AND score_date >= ? ORDER BY score_date ASC LIMIT 41");
         $stmt->execute([$studentId, $metadata_id, $iep_date]);
     } else {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date ASC LIMIT 41");
+        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id_new = ? AND metadata_id = ? ORDER BY score_date ASC LIMIT 41");
         $stmt->execute([$studentId, $metadata_id]);
     }
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -35,7 +35,7 @@ function fetchMetadataCategories($school_id) {
 
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
+    $stmt = $connection->prepare("SELECT school_id_new FROM Students_new WHERE student_id_new = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['school_id'] : null;
@@ -78,7 +78,7 @@ function fetchScoreNames($school_id, $metadata_id) {
 
 function fetchIepDate($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT IEP_Date FROM Students WHERE student_id = ?");
+    $stmt = $connection->prepare("SELECT IEP_Date FROM Students_new WHERE student_id_new = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['IEP_Date'] : null;
@@ -97,7 +97,7 @@ function getSmallestMetadataId($schoolId) {
 
 function fetchGoals($studentId, $metadataId, $schoolId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT * FROM Goals WHERE student_id = ? AND metadata_id = ? AND school_id = ? ORDER BY goal_date DESC");
+    $stmt = $connection->prepare("SELECT * FROM Goals WHERE student_id_new = ? AND metadata_id = ? AND school_id = ? ORDER BY goal_date DESC");
     $stmt->execute([$studentId, $metadataId, $schoolId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }

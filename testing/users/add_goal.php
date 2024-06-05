@@ -19,7 +19,7 @@ try {
 
         // Prepare and execute the insert statement
         $stmt = $connection->prepare("
-            INSERT INTO Goals (student_id, goal_description, goal_date, school_id, metadata_id) 
+            INSERT INTO Goals (student_id_new, goal_description, goal_date, school_id, metadata_id) 
             VALUES (?, ?, ?, ?, ?)
         ");
         $stmt->execute([$studentId, $goalDescription, $goalDate, $schoolId, $metadataId]);
