@@ -872,21 +872,22 @@ function addGoal(event) {
         },
         body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        console.log('Goal added successfully:', data);
-        if (data.includes("Goal added successfully.")) {
+        if (data.message && data.message.includes("Goal added successfully.")) {
             loadGoals();
             hideAddGoalModal();
         } else {
-            alert('Error adding goal: ' + data);
+            console.error('Error adding goal:', data);
+            alert('Error adding goal: ' + (data.error || 'Unknown error'));
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error adding the goal. Please try again.');
+        console.error('Network or parsing error:', error);
+        alert('There was a network or parsing error. Please try again.');
     });
 }
+
 
 
 
