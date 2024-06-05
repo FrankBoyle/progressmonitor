@@ -904,7 +904,12 @@ function addGoal(event) {
         },
         body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.message && data.message.includes("Goal added successfully.")) {
             loadGoals();
@@ -919,8 +924,6 @@ function addGoal(event) {
         alert('There was a network or parsing error. Please try again.');
     });
 }
-
-
 
 
 
