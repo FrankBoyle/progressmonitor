@@ -925,7 +925,80 @@ function addGoal(event) {
     });
 }
 
+// Add the loadGoals function definition somewhere in your script
+function loadGoals() {
+    const studentId = document.getElementById('selected-student-id').value;
+    const metadataId = document.getElementById('metadata-id').value;
 
+    if (!studentId) {
+        console.error('No student selected.');
+        return;
+    }
+
+    fetch(`./users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(metadataId)}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            console.error('Error fetching goals:', data.error);
+            alert('Error fetching goals: ' + data.error);
+            return;
+        }
+
+        const goalList = document.getElementById('goal-list');
+        goalList.innerHTML = '';
+
+        const goalsByMetadata = data.reduce((acc, goal) => {
+            if (!acc[goal.metadata_id]) {
+                acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
+            }
+            acc[goal.metadata_id].goals.push(goal);
+            return acc;
+        }, {});
+
+        for (const metadataId in goalsByMetadata) {
+            const metadataGoals = goalsByMetadata[metadataId];
+
+            const metadataContainer = document.createElement('div');
+            const metadataLink = document.createElement('a');
+            metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
+            metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
+            metadataContainer.appendChild(metadataLink);
+
+            metadataGoals.goals.forEach(goal => {
+                const listItem = document.createElement('div');
+                listItem.classList.add('goal-item');
+                listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
+                listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
+                metadataContainer.appendChild(listItem);
+            });
+
+            goalList.appendChild(metadataContainer);
+        }
+
+        // Reinitialize the quill editors
+        document.querySelectorAll('.quill-editor').forEach(editor => {
+            const goalId = editor.getAttribute('data-goal-id');
+            if (!quillInstances[goalId]) {
+                quillInstances[goalId] = new Quill(editor, {
+                    theme: 'snow',
+                    readOnly: true,
+                    modules: {
+                        toolbar: false
+                    }
+                });
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Network or parsing error:', error);
+        alert('There was a network or parsing error while loading goals. Please try again.');
+    });
+}
 
 </script>
 </body>
