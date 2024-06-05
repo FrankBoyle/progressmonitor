@@ -493,25 +493,18 @@ function selectGroup(element) {
 
 function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
+    document.getElementById('selected-student-id').value = studentId;
 
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched goals:', data); // Log the response data
+            const goalList = document.getElementById('goal-list');
+            goalList.innerHTML = '';
 
             if (data.error) {
                 alert(data.message);
                 return;
             }
-
-            if (!Array.isArray(data)) {
-                console.error('Expected an array but got:', data);
-                alert('There was an error fetching goals. Please try again.');
-                return;
-            }
-
-            const goalList = document.getElementById('goal-list');
-            goalList.innerHTML = '';
 
             const goalsByMetadata = data.reduce((acc, goal) => {
                 if (!acc[goal.metadata_id]) {
@@ -558,17 +551,12 @@ function selectStudent(element) {
             const studentItems = document.getElementById('student-list').querySelectorAll('li');
             studentItems.forEach(student => student.classList.remove('selected-student'));
             element.classList.add('selected-student');
-
-            // Call populateStudentsAndGoals after updating the goal list
-            populateStudentsAndGoals();
         })
         .catch(error => {
             console.error('Error:', error);
             alert('There was an error fetching goals. Please try again.');
         });
 }
-
-
 
 function showGroupOptions(event, groupId, groupName) {
     event.stopPropagation();
