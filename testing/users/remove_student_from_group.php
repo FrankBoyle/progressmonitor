@@ -15,14 +15,14 @@ function removeStudentFromGroup($studentId, $groupId) {
 
     try {
         // Check if the student is in the group
-        $stmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id = ? AND group_id = ?");
+        $stmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id_new = ? AND group_id = ?");
         $stmt->execute([$studentId, $groupId]);
 
         error_log("Query executed. Row count: " . $stmt->rowCount());
 
         if ($stmt->rowCount() > 0) {
             // Student is in the group, proceed with removal
-            $deleteStmt = $connection->prepare("DELETE FROM StudentGroup WHERE student_id = ? AND group_id = ?");
+            $deleteStmt = $connection->prepare("DELETE FROM StudentGroup WHERE student_id_new = ? AND group_id = ?");
             $deleteStmt->execute([$studentId, $groupId]);
 
             echo json_encode(['status' => 'success', 'message' => 'Student removed from the group successfully.']);

@@ -24,7 +24,7 @@ if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) 
         SELECT COUNT(*) 
         FROM Performance 
         WHERE 
-            student_id = ? AND 
+            student_id_new = ? AND 
             score_date = ? AND 
             metadata_id = ? AND 
             performance_id != ?

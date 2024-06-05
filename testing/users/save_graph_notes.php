@@ -19,7 +19,7 @@ function addNotes($goalId, $studentId, $schoolId, $metadataId, $notes) {
             $stmt->execute([$notes, $goalId]);
         } else {
             // Insert new notes
-            $stmt = $connection->prepare("INSERT INTO Goal_notes (goal_id, student_id, school_id, metadata_id, notes) VALUES (?, ?, ?, ?, ?)");
+            $stmt = $connection->prepare("INSERT INTO Goal_notes (goal_id, student_id_new, school_id, metadata_id, notes) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([$goalId, $studentId, $schoolId, $metadataId, $notes]);
         }
 
