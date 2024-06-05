@@ -28,6 +28,8 @@
     </header>
 
     <main class="content">
+    <input type="hidden" id="selected-student-id" value="">
+
         <section class="box create-group">
             <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
             <div id="group-list">
@@ -861,7 +863,6 @@ function addGoal(event) {
         return;
     }
 
-    // Ensure school_id is passed
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
     fetch('./users/add_goal.php', {
@@ -886,6 +887,7 @@ function addGoal(event) {
         alert('There was an error adding the goal. Please try again.');
     });
 }
+
 
 
 
