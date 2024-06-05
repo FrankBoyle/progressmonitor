@@ -248,33 +248,28 @@ function addGroup(event) {
 
 function addStudent(event) {
     event.preventDefault();
-    const firstName = document.getElementById('student-first-name').value;
-    const lastName = document.getElementById('student-last-name').value;
-    const dob = document.getElementById('student-dob').value;
-    const grade = document.getElementById('student-grade').value;
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const dateOfBirth = document.getElementById('date-of-birth').value;
+    const gradeLevel = document.getElementById('grade-level').value;
 
     fetch('./users/add_student.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dob)}&grade_level=${encodeURIComponent(grade)}`
+        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}`
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log('Student added successfully:', data);
-            loadStudents(); // Refresh the student list
-            hideAddStudentModal();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error adding the student. Please try again.');
-        });
+    .then(response => response.text())
+    .then(data => {
+        console.log('Student added successfully:', data);
+        loadStudents();
+        hideAddStudentModal();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error adding the student. Please try again.');
+    });
 }
 
 function loadStaff() {
