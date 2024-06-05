@@ -1,188 +1,169 @@
-        /* Basic Reset */
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-      }
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-      .logo img {
-        max-height: 50px; /* Adjust as needed */
-    }
+.logo img {
+    max-height: 50px; /* Adjust as needed */
+}
 
-      body {
-          font-family: 'Arial', sans-serif;
-          background-color: #E5E5E5;
-          margin: 0;
-      }
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #E5E5E5;
+    margin: 0;
+}
 
-      .dashboard {
-          display: flex;
-          flex-direction: column;
-          height: 100vh;
-      }
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
 
-      .dashboard-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem;
-          background-color: #333;
-          color: white;
-      }
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+}
 
-      .logo {
-          font-weight: bold;
-      }
+.logo {
+    font-weight: bold;
+}
 
-      .header-icons span {
-          margin-right: 10px;
-          cursor: pointer;
-      }
+.header-icons span {
+    margin-right: 10px;
+    cursor: pointer;
+}
 
-      .content {
-          display: flex;
-          flex-grow: 1;
-          padding: 1rem;
-      }
+.content {
+    display: flex;
+    flex-grow: 1;
+    padding: 1rem;
+}
 
-      .box {
-          background-color: white;
-          padding: 1rem;
-          margin: 0.5rem;
-          border-radius: 8px;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
+.box {
+    background-color: white;
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-      .create-group, .students-list {
-          flex-basis: auto;
-          flex-shrink: 0;
-      }
+.create-group, .students-list {
+    flex-basis: auto;
+    flex-shrink: 0;
+}
 
-      .create-group {
-          width: auto;
-          max-width: 20%;
-      }
+.create-group {
+    width: auto;
+    max-width: 20%;
+}
 
-      .students-list {
-          width: auto;
-          max-width: 20%;
-      }
+.students-list {
+    width: auto;
+    max-width: 20%;
+}
 
-      .existing-groups, .details {
-          flex: 1;
-      }
+.existing-groups, .details {
+    flex: 1;
+}
 
-      .selected-group, .selected-student {
-          font-weight: bold;
-          background-color: #ccc;
-      }
+.selected-group, .selected-student {
+    font-weight: bold;
+    background-color: #ccc;
+}
 
-      .options-btn {
-          background: none;
-          border: none;
-          font-size: 20px;
-          cursor: pointer;
-          color: #999;
-          margin-left: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-      }
+.options-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-      .options-btn:hover {
-          color: #999;
-          font-weight: bold;
-      }
+.options-btn:hover {
+    color: #999;
+    font-weight: bold;
+}
 
-      .options-btn::before {
-          content: '⋮';
-          font-size: 30px;
-          color: #111;
-      }
+.options-btn::before {
+    content: '⋮';
+    font-size: 30px;
+    color: #111;
+}
 
-      .group-options {
-          position: absolute;
-          background: white;
-          border: 1px solid #ccc;
-          padding: 10px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          display: none;
-          z-index: 1000;
-      }
+.group-options {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+}
 
-      .group-options button {
-          display: block;
-          width: 100%;
-          border: none;
-          background: #ccc;
-          background-color: #e0e0e0;
-          padding: 10px;
-          text-align: left;
-          cursor: pointer;
-          font-size: 14px;
-          color: #111;
-      }
+.group-options button {
+    display: block;
+    width: 100%;
+    border: none;
+    background: #ccc;
+    background-color: #e0e0e0;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    color: #111;
+}
 
-      .group-options button:hover {
-          background-color: #555;
-          font-weight: bold;
-      }
+.group-options button:hover {
+    background-color: #555;
+    font-weight: bold;
+}
 
-      button {
-          background-color: #555;
-          color: white;
-          padding: 8px 12px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-      }
+button {
+    background-color: #555;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-      button:hover {
-          background-color: #333;
-          font-weight: bold;
-      }
+button:hover {
+    background-color: #333;
+    font-weight: bold;
+}
 
-      ul {
-          list-style-type: none;
-          padding: 0;
-      }
+ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-      ul li {
-          background-color: #e0e0e0;
-          margin: 0.5rem 0;
-          padding: 0.5rem;
-          border-radius: 5px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          cursor: pointer;
-      }
+ul li {
+    background-color: #e0e0e0;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
 
-      ul li:hover, ul li.selected-student {
-          background-color: #ccc;
-          font-weight: bold;
-      }
+ul li:hover, ul li.selected-student {
+    background-color: #ccc;
+    font-weight: bold;
+}
 
-      .add-group-btn {
-          background-color: transparent;
-          border: none;
-          color: inherit;
-          cursor: pointer;
-          font-size: 1.2rem;
-          margin-left: 5px;
-      }
-
-
-      .add-student-btn {  
-      background-color: transparent;
-      border: none;
-      color: inherit;
-      cursor: pointer;
-      font-size: 1.2rem;
-      margin-left: 5px;
-  }
-
-  .add-goal-btn {  
+.add-group-btn {
     background-color: transparent;
     border: none;
     color: inherit;
@@ -191,387 +172,403 @@
     margin-left: 5px;
 }
 
-      h2 {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 0.5rem;
-      }
 
-      h3 {
-          margin-bottom: 0.5rem;
-      }
+.add-student-btn {  
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 5px;
+}
+
+.add-goal-btn {  
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: 5px;
+}
+
+h2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+h3 {
+    margin-bottom: 0.5rem;
+}
 
 
-      .close {
-          color: #aaa;
-          float: right;
-          font-size: 28px;
-          font-weight: bold;
-      }
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
 
-      .close:hover,
-      .close:focus {
-          color: black;
-          text-decoration: none;
-          cursor: pointer;
-      }
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
 
-      .goal-category {
-          font-size: 1.5rem;
-          font-weight: bold;
-          text-align: center;
-          margin: 1rem 0;
-          background-color: #f0f0f0;
-          padding: 10px;
-          border-radius: 8px;
-          border: 1px solid #ccc;
-      }
+.goal-category {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 1rem 0;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
 
-      .goal-item {
-          margin-bottom: 2rem;
-          padding: 1rem;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          background-color: #f9f9f9;
-          position: relative;
-          padding-right: 50px; /* Adjust the padding to fit the button */
-      }
+.goal-item {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    position: relative;
+    padding-right: 50px; /* Adjust the padding to fit the button */
+}
 
-      .goal-item .edit-btn {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background: none;
-          border: none;
-          font-size: 16px;
-          cursor: pointer;
-          display: inline-block;
-      }
+.goal-item .edit-btn {
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+}
 
-      .goal-item .save-btn {
-          background-color: #555;
-          color: white;
-          padding: 8px 12px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 10px;
-      }
+.goal-item .archive-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px 10px;
+}
 
-      .goal-item .save-btn:hover {
-          background-color: #333;
-          font-weight: bold;
-      }
+.goal-item .save-btn {
+    background-color: #555;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
 
-      @media (max-width: 768px) {
-          .content {
-              flex-direction: column;
-          }
+.goal-item .save-btn:hover {
+    background-color: #333;
+    font-weight: bold;
+}
 
-          .create-group,
-          .students-list {
-              max-width: none;
-              width: 100%;
-          }
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
 
-          .existing-groups, .details {
-              width: 100%;
-          }
-      }
+    .create-group,
+    .students-list {
+        max-width: none;
+        width: 100%;
+    }
 
-      #dataTable_wrapper .col-md-6:eq(0) {
-          position: relative;
-          z-index: 1000;
-      }
+    .existing-groups, .details {
+        width: 100%;
+    }
+}
 
-      .editable {
-          cursor: pointer;
-      }
+#dataTable_wrapper .col-md-6:eq(0) {
+    position: relative;
+    z-index: 1000;
+}
 
-      .editable.editing {
-          background-color: #f4f4f4;
-      }
+.editable {
+    cursor: pointer;
+}
 
-      .editable input {
-          border: none;
-          padding: 0;
-          margin: 0;
-          box-sizing: border-box;
-          background-color: transparent;
-          outline: none;
-      }
+.editable.editing {
+    background-color: #f4f4f4;
+}
 
-      .fixed-width {
-          width: 100px;
-      }
+.editable input {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: transparent;
+    outline: none;
+}
 
-      .fixed-width-cell {
-          width: 100px;
-          white-space: nowrap;
-          padding: 0;
-          margin: 0;
-      }
+.fixed-width {
+    width: 100px;
+}
 
-      .goal-container {
-          cursor: pointer;
-          transition: background-color 0.3s;
-      }
+.fixed-width-cell {
+    width: 100px;
+    white-space: nowrap;
+    padding: 0;
+    margin: 0;
+}
 
-      .goal-container.selected {
-          background-color: #e0e0e0;
-          border: 1px solid #007bff;
-      }
+.goal-container {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-      .highlighted {
-          background-color: #ffff99;
-      }
+.goal-container.selected {
+    background-color: #e0e0e0;
+    border: 1px solid #007bff;
+}
 
-      table {
-          width: 100%;
-          border-collapse: collapse;
-      }
+.highlighted {
+    background-color: #ffff99;
+}
 
-      td {
-          border: 1px solid #ccc;
-          padding: 8px;
-          min-width: 50px;
-          height: 25px;
-          box-sizing: border-box;
-      }
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-      td .cell-input {
-          width: 100%;
-          height: 100%;
-          border: none;
-          padding: 8px;
-          margin: 0;
-          box-sizing: border-box;
-          background: transparent;
-      }
+td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    min-width: 50px;
+    height: 25px;
+    box-sizing: border-box;
+}
 
-      
-        /* Additional styles for login form */
-        /* Centering the content */
-        .center-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
+td .cell-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 8px;
+    margin: 0;
+    box-sizing: border-box;
+    background: transparent;
+}
 
-        .login-box {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-        }
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
 
-        .login-box-msg {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #333;
-            text-align: center;
-        }
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+}
 
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
 
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            color: white;
-            padding: 0.75rem;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-        }
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
 
-        .fas {
-            position: absolute;
-            margin-left: -25px;
-            margin-top: 15px;
-            color: #999;
-        }
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-        }
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
 
-        .remember-me input {
-            margin-right: 0.5rem;
-        }
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+}
 
-        .remember-me label {
-            margin: 0;
-        }
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
 
-        .info, .text-center {
-            text-align: center;
-            color: #007bff;
-        }
+/* Additional styles for login form */
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
 
-        .info {
-            margin: 1rem 0;
-        }
+.login-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
 
-        .mb-1, .mb-0 {
-            margin-bottom: 1rem;
-        }
+.login-box-msg {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+    text-align: center;
+}
 
-        .forgot-password {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
 
-        .forgot-password form {
-            width: 100%;
-        }
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
 
-        .forgot-password input[type="email"] {
-            margin-bottom: 1rem;
-        }
+.btn-primary:hover {
+    background-color: #0056b3;
+}
 
-        .header-icons {
-            display: flex;
-            align-items: center;
-        }
+.fas {
+    position: absolute;
+    margin-left: -25px;
+    margin-top: 15px;
+    color: #999;
+}
 
-        .header-icons span, .header-icons .nav-link {
-            margin-right: 20px;
-            font-size: 1.2rem;
-            color: white;
-            text-decoration: none;
-        }
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
 
-        .header-icons .nav-link i {
-            margin-right: 5px;
-        }
+.remember-me input {
+    margin-right: 0.5rem;
+}
 
-        .header-icons .nav-link:hover {
-            color: #f0f0f0;
-        }
+.remember-me label {
+    margin: 0;
+}
 
-        .header-icons .nav-link {
-            display: flex;
-            align-items: center;
-        }
+.info, .text-center {
+    text-align: center;
+    color: #007bff;
+}
 
-        .message {
-            font-size: 16px;
-            color: #333;
-            margin-top: 20px;
-        }
-        .column {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin: 10px;
-            width: 45%;
-            float: left;
-        }
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
+.info {
+    margin: 1rem 0;
+}
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            padding-top: 60px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 400px;
-        }
-        
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        
-        button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
-        }
-        
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
+.mb-1, .mb-0 {
+    margin-bottom: 1rem;
+}
 
-        .archive-btn {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            position: absolute;
-            right: 10px; /* Position the button to the right */
-            top: 50%; /* Center vertically */
-            transform: translateY(-50%);
-        }
-        
-        .archive-btn:hover {
-            background-color: darkred;
-        }
+.forgot-password {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.forgot-password form {
+    width: 100%;
+}
+
+.forgot-password input[type="email"] {
+    margin-bottom: 1rem;
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+}
+
+.header-icons span, .header-icons .nav-link {
+    margin-right: 20px;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+}
+
+.header-icons .nav-link i {
+    margin-right: 5px;
+}
+
+.header-icons .nav-link:hover {
+    color: #f0f0f0;
+}
+
+.header-icons .nav-link {
+    display: flex;
+    align-items: center;
+}
+
+.message {
+    font-size: 16px;
+    color: #333;
+    margin-top: 20px;
+}
+
+.column {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px;
+    width: 45%;
+    float: left;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
