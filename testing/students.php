@@ -491,6 +491,7 @@ function selectGroup(element) {
 
 function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
+    document.getElementById('selected-student-id').value = studentId;
 
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.json())
@@ -531,7 +532,6 @@ function selectStudent(element) {
                 goalList.appendChild(metadataContainer);
             }
 
-            // Reinitialize the quill editors
             document.querySelectorAll('.quill-editor').forEach(editor => {
                 const goalId = editor.getAttribute('data-goal-id');
                 if (!quillInstances[goalId]) {
@@ -549,7 +549,6 @@ function selectStudent(element) {
             studentItems.forEach(student => student.classList.remove('selected-student'));
             element.classList.add('selected-student');
 
-            // Call populateStudentsAndGoals after updating the goal list
             populateStudentsAndGoals();
         })
         .catch(error => {
@@ -557,6 +556,7 @@ function selectStudent(element) {
             alert('There was an error fetching goals. Please try again.');
         });
 }
+
 
 function showGroupOptions(event, groupId, groupName) {
     event.stopPropagation();
