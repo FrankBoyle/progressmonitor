@@ -13,6 +13,10 @@ try {
         $metadataId = $_POST['metadata_id'];
         $schoolId = $_SESSION['school_id'];
 
+        if (empty($studentId) || empty($goalDescription) || empty($goalDate) || empty($metadataId) || empty($schoolId)) {
+            throw new Exception('Missing required parameters.');
+        }
+
         // Prepare and execute the insert statement
         $stmt = $connection->prepare("
             INSERT INTO Goals (student_id, goal_description, goal_date, school_id, metadata_id) 
@@ -22,7 +26,7 @@ try {
 
         echo json_encode(["message" => "Goal added successfully."]);
     } else {
-        echo json_encode(["error" => "Invalid request, missing required parameters."]);
+        throw new Exception('Invalid request, missing required parameters.');
     }
 } catch (Exception $e) {
     error_log("Error adding goal: " . $e->getMessage());
