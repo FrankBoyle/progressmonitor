@@ -25,14 +25,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1rem; /* Adjust the padding to reduce height */
+    padding: 0.5rem 1rem; /* Adjusted padding to reduce height */
     background-color: #333;
     color: white;
     position: fixed; /* Make the navbar fixed */
     width: 100%;
     top: 0;
     z-index: 1000; /* Ensure it stays above other content */
-}
+  }
 
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
@@ -56,7 +56,7 @@ body {
 .content {
     display: flex;
     flex-grow: 1;
-    padding: 2rem 1rem 1rem; /* Add top padding to compensate for the navbar height */
+    padding: 1rem; /* Add top padding to compensate for the navbar height */
     margin-top: 3rem; /* Adjust this value to match the height of the navbar */
 }
 
