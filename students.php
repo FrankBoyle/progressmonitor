@@ -1,3 +1,8 @@
+<?php
+include('./users/auth_session.php');
+include('./users/db.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +48,7 @@
         </section>
 
         <section class="box students-list">
-            <h3>Students <button class="add-student-btn" onclick="showAddStudentModal()">+</button></h3>
+            <h3>Students</h3>
             <div class="message" id="students-message">Please use groups to see students.</div>
             <ul id="student-list" style="display: none;">
                 <?php foreach ($allStudents as $student): ?>
@@ -74,6 +79,7 @@
         </form>
     </div>
 </div>
+
 
 <!-- Add Student Modal -->
 <div id="add-student-modal" class="modal">
@@ -158,11 +164,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add event listener to the add group button
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
-    document.querySelector('.add-student-btn').addEventListener('click', showAddStudentModal);
 
     // Expose functions to global scope for inline event handlers
     window.hideAddGroupModal = hideAddGroupModal;
-    window.hideAddStudentModal = hideAddStudentModal;
 
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('group-options');
@@ -238,37 +242,6 @@ function addGroup(event) {
         });
 }
 
-function addStudent(event) {
-    event.preventDefault();
-    const firstName = document.getElementById('student-first-name').value;
-    const lastName = document.getElementById('student-last-name').value;
-    const dob = document.getElementById('student-dob').value;
-    const grade = document.getElementById('student-grade').value;
-
-    fetch('./users/add_student.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dob)}&grade_level=${encodeURIComponent(grade)}`
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log('Student added successfully:', data);
-            loadStudents(); // Refresh the student list
-            hideAddStudentModal();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error adding the student. Please try again.');
-        });
-}
-
 function loadStaff() {
     fetch('users/fetch_staff.php')
         .then(response => response.json())
@@ -303,25 +276,9 @@ function loadStaff() {
         }
     }
 
-    function showAddStudentModal() {
-        const modal = document.getElementById('add-student-modal');
-        if (modal) {
-            modal.style.display = 'block';
-        } else {
-            console.error("Modal element not found");
-        }
-    }
-
         // Function to hide the modal
         function hideAddGroupModal() {
         const modal = document.getElementById('add-group-modal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
-    }
-
-    function hideAddStudentModal() {
-        const modal = document.getElementById('add-student-modal');
         if (modal) {
             modal.style.display = 'none';
         }
@@ -402,41 +359,6 @@ function loadGroups() {
         .catch(error => {
             console.error('Error:', error);
             alert('There was an error loading groups. Please try again.');
-        });
-}
-
-function loadStudents() {
-    fetch('users/fetch_students.php') // Adjust the endpoint if necessary
-        .then(response => response.json())
-        .then(data => {
-            const studentList = document.getElementById('student-list');
-            const studentSelect = document.querySelector('[name="student_ids[]"]');
-            studentList.innerHTML = '';
-            studentSelect.innerHTML = '<option></option>'; // Clear previous options
-
-            data.forEach(student => {
-                // Populate student list
-                const listItem = document.createElement('li');
-                listItem.textContent = student.first_name + ' ' + student.last_name;
-                listItem.setAttribute('data-student-id', student.student_id_new);
-                studentList.appendChild(listItem);
-
-                // Populate select options
-                const option = document.createElement('option');
-                option.value = student.student_id_new;
-                option.textContent = student.first_name + ' ' + student.last_name;
-                studentSelect.appendChild(option);
-            });
-
-            // Reinitialize the select2 element
-            $('.select2').select2();
-
-            // Call populateStudentsAndGoals after updating the student list
-            populateStudentsAndGoals();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error loading students. Please try again.');
         });
 }
 
