@@ -88,7 +88,7 @@ foreach ($scores as $key => $score) {
 // Check for duplicate date entry
 $checkStmt = $connection->prepare(
     "SELECT COUNT(*) FROM Performance 
-     WHERE student_id = ? AND score_date = ? AND metadata_id = ?"
+     WHERE student_id_new = ? AND score_date = ? AND metadata_id = ?"
 );
 
 // Execute the prepared statement with the variables. Ensure these variables are already set with the appropriate values.
@@ -104,7 +104,7 @@ if ($duplicateCount > 0) {
     exit; // Terminate the script here, so no further processing happens.
 }
 
-$stmt = $connection->prepare("INSERT INTO Performance (student_id, metadata_id, school_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt = $connection->prepare("INSERT INTO Performance (student_id_new, metadata_id, school_id, score_date, score1, score2, score3, score4, score5, score6, score7, score8, score9, score10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 if ($stmt->execute([$studentId, $metadata_id, $schoolId, $weekStartDate, $score1, $score2, $score3, $score4, $score5, $score6, $score7, $score8, $score9, $score10])) {
     // Successful insertion

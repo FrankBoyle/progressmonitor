@@ -12,7 +12,7 @@ try {
         $stmt = $connection->prepare("
             SELECT s.student_id_new AS student_id, s.first_name, s.last_name, CONCAT(s.first_name, ' ', s.last_name) AS name 
             FROM Students_new s 
-            INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id 
+            INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id_new 
             WHERE sg.group_id = ?
         ");
         $stmt->execute([$groupId]);

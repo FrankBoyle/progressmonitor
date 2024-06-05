@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('auth_session.php');
 // Error Reporting
 ini_set('display_errors', 1);
@@ -9,19 +10,20 @@ include('db.php');
 
 function fetchPerformanceData($studentId, $metadata_id, $iep_date = null) {
     global $connection;
-    if ($iep_date) {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? AND score_date >= ? ORDER BY score_date ASC LIMIT 41");
-        $stmt->execute([$studentId, $metadata_id, $iep_date]);
-    } else {
-        $stmt = $connection->prepare("SELECT * FROM Performance WHERE student_id = ? AND metadata_id = ? ORDER BY score_date ASC LIMIT 41");
-        $stmt->execute([$studentId, $metadata_id]);
-    }
+    $query = "SELECT * FROM Performance WHERE student_id_new = ? AND metadata_id = ? ";
+    $query .= $iep_date ? "AND score_date >= ? " : "";
+    $query .= "ORDER BY score_date ASC LIMIT 41";
+    
+    $stmt = $connection->prepare($query);
+    $params = $iep_date ? [$studentId, $metadata_id, $iep_date] : [$studentId, $metadata_id];
+    $stmt->execute($params);
+    
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function fetchStudentsByTeacher($teacherId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT s.* FROM Students s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
+    $stmt = $connection->prepare("SELECT s.* FROM Students_new s INNER JOIN Teachers t ON s.school_id = t.school_id WHERE t.teacher_id = ?");
     $stmt->execute([$teacherId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -35,7 +37,7 @@ function fetchMetadataCategories($school_id) {
 
 function fetchSchoolIdForStudent($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT school_id FROM Students WHERE student_id = ?");
+    $stmt = $connection->prepare("SELECT school_id FROM Students_new WHERE student_id_new = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['school_id'] : null;
@@ -78,7 +80,7 @@ function fetchScoreNames($school_id, $metadata_id) {
 
 function fetchIepDate($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT IEP_Date FROM Students WHERE student_id = ?");
+    $stmt = $connection->prepare("SELECT IEP_Date FROM Students_new WHERE student_id_new = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['IEP_Date'] : null;
@@ -97,7 +99,7 @@ function getSmallestMetadataId($schoolId) {
 
 function fetchGoals($studentId, $metadataId, $schoolId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT * FROM Goals WHERE student_id = ? AND metadata_id = ? AND school_id = ? ORDER BY goal_date DESC");
+    $stmt = $connection->prepare("SELECT * FROM Goals WHERE student_id_new = ? AND metadata_id = ? AND school_id = ? ORDER BY goal_date DESC");
     $stmt->execute([$studentId, $metadataId, $schoolId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -107,69 +109,61 @@ $performanceData = [];
 $scoreNames = [];
 $chartDates = [];
 $chartScores = [];
+$goals = [];
+$metadataEntries = [];
+$message = "";  // Initialize an empty message variable
+
+// Check if student_id and metadata_id are set
+if (!isset($_GET['student_id']) || !isset($_GET['metadata_id'])) {
+    die("Student ID and Metadata ID are required.");
+}
+
 $studentId = $_GET['student_id'];
 $metadata_id = $_GET['metadata_id'];
 
 // Fetch the stored IEP date
 $iep_date = fetchIepDate($studentId);
 
-// If student_id is not set, exit early
-if (!isset($_GET['student_id'])) {
-    return;
-}
-
-if (isset($_GET['student_id'], $_GET['metadata_id'])) {
-    $studentId = $_GET['student_id'];
-    $metadataId = $_GET['metadata_id'];
-    $schoolId = fetchSchoolIdForStudent($studentId); // Assuming you have this function as shown in your script
-
-    // Fetch the goals
-    $goals = fetchGoals($studentId, $metadataId, $schoolId);
-}
-
-$studentId = $_GET['student_id'];
-$school_id = fetchSchoolIdForStudent($studentId);  // Fetch school_id
+// Fetch school_id for the student
+$school_id = fetchSchoolIdForStudent($studentId);  
 
 if (!$school_id) {
-    return;  // If there's no school_id, exit early
+    die("School ID not found for the student.");
 }
 
+// Ensure teacher ID is set in session
 if (!isset($_SESSION['teacher_id'])) {
     die("Teacher ID not set in session");
 }
 
 $teacherId = $_SESSION['teacher_id'];
-$message = "";  // Initialize an empty message variable
 
+// Fetch students, performance data, and score names
 $students = fetchStudentsByTeacher($teacherId);
-// Fetch performance data and score names
 $performanceData = fetchPerformanceData($studentId, $metadata_id, $iep_date);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);
 
 // Preparing the data for the chart
 foreach ($performanceData as $record) {
     $chartDates[] = $record['score_date'];
-    // You can add more logic here if needed
 }
 
 // Fetch metadata entries from the Metadata table for the specified school_id
-$stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = ?");
-$stmt->execute([$school_id]);
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $metadataEntries[] = $row;
+$metadataEntries = fetchMetadataCategories($school_id);
+
+// Fetch the goals
+$goals = fetchGoals($studentId, $metadata_id, $school_id);
+
+// Checking and setting the $studentName
+$studentName = null;
+foreach ($students as $student) {
+    if ($student['student_id_new'] == $studentId) {
+        $studentName = $student['first_name'] . ' ' . $student['last_name'];
+        break;
+    }
 }
 
-// Checking and setting the $student_id
-if (isset($_GET['student_id'])) {
-    $student_id = $_GET['student_id'];
-} else {
-    $student_id = null; // or set a default value appropriate for your context
-}
-
-// Output the links to tables for each metadata entry
-foreach ($metadataEntries as $metadataEntry) {
-    $metadata_id = $metadataEntry['metadata_id'];
-    $categoryName = $metadataEntry['category_name'];
-    // Generate a link to the table for this metadata entry
+if ($studentName === null) {
+    die("Student not found.");
 }
 ?>

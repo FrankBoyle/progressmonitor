@@ -3,35 +3,38 @@ session_start();
 include('auth_session.php');
 include('db.php');
 
-// Enable PHP error logging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
+header('Content-Type: application/json');
 
-if (!isset($connection)) {
-    error_log("Database connection is not set.");
-    die("Database connection is not set.");
-}
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
-$teacherId = $_SESSION['teacher_id'];
-$groupId = $_POST['group_id'] ?? '';
-$studentIds = isset($_POST['student_ids']) ? explode(',', $_POST['student_ids']) : [];
+try {
+    if (isset($_POST['group_id']) && isset($_POST['student_ids'])) {
+        $groupId = $_POST['group_id'];
+        $studentIds = explode(',', $_POST['student_ids']); // Assuming student_ids is a comma-separated string
 
-if ($groupId && !empty($studentIds)) {
-    foreach ($studentIds as $studentId) {
-        $checkStmt = $connection->prepare("SELECT * FROM StudentGroup WHERE student_id = ? AND group_id = ?");
-        $checkStmt->execute([$studentId, $groupId]);
+        // Prepare statement to insert each student into the group
+        $stmt = $connection->prepare("INSERT INTO StudentGroup (group_id, student_id_new) VALUES (?, ?)");
 
-        if ($checkStmt->rowCount() == 0) {
-            $insertStmt = $connection->prepare("INSERT INTO StudentGroup (student_id, group_id) VALUES (?, ?)");
-            $insertStmt->execute([$studentId, $groupId]);
+        foreach ($studentIds as $studentId) {
+            // Verify the student_id_new exists in Students_new
+            $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Students_new WHERE student_id_new = ?");
+            $checkStmt->execute([$studentId]);
+            if ($checkStmt->fetchColumn() == 0) {
+                throw new Exception("Student ID $studentId does not exist in Students_new.");
+            }
+
+            // Insert the student into the group
+            $stmt->execute([$groupId, $studentId]);
         }
+
+        echo json_encode(["status" => "success", "message" => "Students assigned to group successfully."]);
+    } else {
+        echo json_encode(["error" => "Invalid request, group_id or student_ids not set"]);
     }
-    echo "Selected students assigned to group successfully.";
-} else {
-    echo "Group ID or Student IDs not provided.";
+} catch (Exception $e) {
+    error_log("Error assigning students to group: " . $e->getMessage());
+    echo json_encode(["error" => "Error assigning students to group: " . $e->getMessage()]);
 }
 ?>
-

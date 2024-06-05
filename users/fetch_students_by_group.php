@@ -23,7 +23,7 @@ if ($groupId) {
         global $connection;
         $stmt = $connection->prepare("
             SELECT s.* FROM Students_new s
-            INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id
+            INNER JOIN StudentGroup sg ON s.student_id_new = sg.student_id_new
             WHERE sg.group_id = ?
         ");
         $stmt->execute([$groupId]);
