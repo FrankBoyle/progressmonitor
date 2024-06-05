@@ -81,14 +81,22 @@
         <span class="close" onclick="hideAddStudentModal()">&times;</span>
         <h2>Add New Student</h2>
         <form id="add-student-form" onsubmit="addStudent(event)">
-            <label for="student-first-name">First Name:</label>
-            <input type="text" id="student-first-name" name="first_name" required>
-            <label for="student-last-name">Last Name:</label>
-            <input type="text" id="student-last-name" name="last_name" required>
-            <label for="student-dob">Date of Birth:</label>
-            <input type="date" id="student-dob" name="date_of_birth">
-            <label for="student-grade">Grade Level:</label>
-            <input type="text" id="student-grade" name="grade_level">
+            <div class="form-group">
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="date-of-birth">Date of Birth:</label>
+                <input type="date" id="date-of-birth" name="date_of_birth" required>
+            </div>
+            <div class="form-group">
+                <label for="grade-level">Grade Level:</label>
+                <input type="text" id="grade-level" name="grade_level" required>
+            </div>
             <button type="submit">Add Student</button>
         </form>
     </div>
