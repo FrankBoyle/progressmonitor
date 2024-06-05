@@ -14,7 +14,12 @@ include('./users/db.php');
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
-
+<div>
+<input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($student_id); ?>" />
+<input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
+<input type="hidden" id="studentName" name="studentName" value="<?php echo htmlspecialchars($studentName); ?>">
+</div> 
 <div class="dashboard">
     <header class="dashboard-header">
         <div class="logo">
