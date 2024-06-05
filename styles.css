@@ -34,6 +34,16 @@ body {
     z-index: 1000; /* Ensure it stays above other content */
 }
 
+/* Adjust content-wrapper and content-header to account for the fixed header */
+.content-wrapper {
+    padding-top: 3rem; /* Adjust this value to match the height of the fixed header */
+}
+
+.content-header {
+    margin-top: 1rem; /* Optional: add additional margin if needed */
+}
+
+
 .logo {
     font-weight: bold;
 }
