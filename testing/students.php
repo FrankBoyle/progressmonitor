@@ -869,6 +869,7 @@ function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.json())
         .then(data => {
+            console.log('Fetched goals data:', data); // Debugging log
             const goalList = document.getElementById('goal-list');
             goalList.innerHTML = '';
 
@@ -899,7 +900,7 @@ function loadGoals(studentId) {
                     listItem.classList.add('goal-item');
                     listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
                     listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
-                    listItem.innerHTML += '<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>';
+                    listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
                     metadataContainer.appendChild(listItem);
                 });
 
@@ -925,6 +926,7 @@ function loadGoals(studentId) {
             alert('There was an error fetching goals. Please try again.');
         });
 }
+
 
 function archiveGoal(goalId) {
     if (!confirm('Are you sure you want to archive this goal?')) {
@@ -952,7 +954,6 @@ function archiveGoal(goalId) {
         alert('Error archiving goal: ' + error.message);
     });
 }
-
 
 </script>
 </body>
