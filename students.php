@@ -916,8 +916,7 @@ function loadGoals(studentId) {
                         theme: 'snow',
                         readOnly: true,
                         modules: {
-                            toolbar: false
-                        }
+                            toolbar: true                        }
                     });
                 }
             });
