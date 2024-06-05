@@ -5,9 +5,9 @@ include('db.php');
 
 header('Content-Type: application/json');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 try {
     if (isset($_POST['group_id']) && isset($_POST['student_ids'])) {

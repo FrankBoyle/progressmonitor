@@ -851,39 +851,37 @@ function hideAddGoalModal() {
 function addGoal(event) {
     event.preventDefault();
 
-    const selectedStudent = document.querySelector('.selected-student');
-    if (!selectedStudent) {
-        alert('Please select a student first.');
-        return;
-    }
-
-    const studentId = selectedStudent.getAttribute('data-student-id');
+    const studentId = document.getElementById('selected-student-id').value;
     const goalDescription = document.getElementById('goal-description').value;
     const goalDate = document.getElementById('goal-date').value;
     const metadataId = document.getElementById('metadata-id').value;
 
-    fetch('users/add_goal.php', {
+    // Ensure school_id is passed
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+
+    fetch('./users/add_goal.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}`
+        body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
     })
     .then(response => response.text())
     .then(data => {
-        console.log('Response from server:', data);
+        console.log('Goal added successfully:', data);
         if (data.includes("Goal added successfully.")) {
-            loadGoals(); // Update the goal list
+            loadGoals();
             hideAddGoalModal();
         } else {
             alert('Error adding goal: ' + data);
         }
     })
     .catch(error => {
-        console.error('Error occurred:', error);
+        console.error('Error:', error);
         alert('There was an error adding the goal. Please try again.');
     });
 }
+
 
 </script>
 </body>
