@@ -125,6 +125,7 @@
     </div>
 </div>
 
+
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
@@ -186,7 +187,7 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff(); // Load all staff initially
-    loadCategories();
+    loadMetadata(); // Load metadata for the add goal form
 
     // Expose functions to global scope for inline event handlers
     window.showAddGoalModal = showAddGoalModal;
@@ -813,23 +814,23 @@ function resetStudentList() {
     }
 }
 
-function loadCategories() {
-    fetch('users/fetch_categories.php')
+function loadMetadata() {
+    fetch('users/fetch_metadata.php')
         .then(response => response.json())
         .then(data => {
-            const categorySelect = document.getElementById('metadata-id');
-            categorySelect.innerHTML = '<option value="">Select a category</option>'; // Clear previous options
+            const metadataSelect = document.getElementById('metadata-id');
+            metadataSelect.innerHTML = ''; // Clear previous options
 
-            data.forEach(category => {
+            data.forEach(metadata => {
                 const option = document.createElement('option');
-                option.value = category.metadata_id;
-                option.textContent = category.category_name;
-                categorySelect.appendChild(option);
+                option.value = metadata.metadata_id;
+                option.textContent = metadata.category_name;
+                metadataSelect.appendChild(option);
             });
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error loading categories. Please try again.');
+            console.error('Error loading metadata:', error);
+            alert('There was an error loading metadata. Please try again.');
         });
 }
 
@@ -854,20 +855,19 @@ function addGoal(event) {
     const goalDescription = document.getElementById('goal-description').value;
     const goalDate = document.getElementById('goal-date').value;
     const metadataId = document.getElementById('metadata-id').value;
-    const studentId = document.querySelector('.selected-student').getAttribute('data-student-id');
 
     fetch('users/add_goal.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}&student_id=${encodeURIComponent(studentId)}&school_id=${encodeURIComponent(schoolId)}`
+        body: `goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}`
     })
     .then(response => response.text())
     .then(data => {
         console.log('Goal added successfully:', data);
         if (data.includes("Goal added successfully.")) {
-            loadGoals(studentId); // Function to reload the goals
+            loadGoals(); // Update the goal list
             hideAddGoalModal();
         } else {
             alert('Error adding goal: ' + data);
