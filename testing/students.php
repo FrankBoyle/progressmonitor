@@ -855,7 +855,6 @@ function addGoal(event) {
     const goalDate = document.getElementById('goal-date').value;
     const metadataId = document.getElementById('metadata-id').value;
     const studentId = document.querySelector('.selected-student').getAttribute('data-student-id');
-    const schoolId = <?= $_SESSION['school_id'] ?>; // Adjust to match your session handling
 
     fetch('users/add_goal.php', {
         method: 'POST',
