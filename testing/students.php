@@ -759,6 +759,34 @@ function loadGroupStudents(groupId) {
         });
 }
 
+function removeStudentFromGroup(studentId, groupId) {
+    if (!confirm('Are you sure you want to remove this student from the group?')) {
+        return;
+    }
+
+    fetch('users/remove_student_from_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `student_id=${encodeURIComponent(studentId)}&group_id=${encodeURIComponent(groupId)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Student removed from group successfully.');
+            loadGroupStudents(groupId); // Refresh the group students list
+        } else {
+            alert('There was an error removing the student from the group. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error removing student from group:', error);
+        alert('There was an error removing the student from the group. Please try again.');
+    });
+}
+
+
 function loadAllStudentsForAssignment() {
     fetch('users/fetch_students.php') // Adjust the endpoint if necessary
         .then(response => response.json())
