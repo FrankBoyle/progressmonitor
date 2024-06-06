@@ -1,4 +1,6 @@
 <?php
+session_start();
+include('auth_session.php');
 include('db.php');
 
 // Assuming school_id comes from a session or a direct variable definition
