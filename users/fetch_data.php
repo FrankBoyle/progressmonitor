@@ -171,4 +171,12 @@ foreach ($students as $student) {
 if ($studentName === null) {
     die("Student not found.");
 }
+
+// Ensure that $student_id is defined
+if (!isset($studentId)) {
+    die("Error: Student ID is not set");
+}
+
+// Debugging information
+echo "Student ID: " . $studentId;
 ?>
