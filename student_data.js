@@ -748,7 +748,7 @@ function getCurrentDate() {
 }
 
 // Constants & Variables
-const CURRENT_STUDENT_ID = document.getElementById('currentStudentId').value;
+const CURRENT_STUDENT_ID = $('#currentStudentId').val();
 
 function convertToDisplayDate(databaseString) {
     if (!databaseString || databaseString === "New Entry") return databaseString;

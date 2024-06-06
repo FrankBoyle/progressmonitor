@@ -65,7 +65,7 @@ if (isset($_GET['metadata_id'])) {
     </style>
     <div>
 <input type="hidden" id="schoolIdInput" name="school_id" value="<?php echo htmlspecialchars($school_id); ?>">
-<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($student_id); ?>" />
+<input type="hidden" id="currentStudentId" value="<?php echo htmlspecialchars($studentId); ?>" />
 <input type="hidden" id="currentWeekStartDate" value="<?php echo htmlspecialchars($currentWeekStartDate); ?>" />
 <input type="hidden" id="studentName" name="studentName" value="<?php echo htmlspecialchars($studentName); ?>">
 </div>   
