@@ -1,3 +1,8 @@
+<?php
+include('./users/db.php');
+include('./users/auth_session.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
