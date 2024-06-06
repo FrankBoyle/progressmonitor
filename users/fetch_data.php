@@ -123,10 +123,11 @@ if (!isset($_GET['student_id']) || !isset($_GET['metadata_id'])) {
     die("Student ID and Metadata ID are required.");
 }
 
-// Ensure that $student_id is defined
+/* Ensure that $student_id is defined
 if (!isset($studentId)) {
     die("Error: Student ID is not set");
 }
+*/
 
 // Debugging information
 echo "Student ID: " . $studentId;
