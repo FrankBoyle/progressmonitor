@@ -1022,27 +1022,27 @@ $(document).ready(function() {
         return (date[2] + date[0] + date[1]) * 1;
     };
 
-    // Initialize DataTable
-    $('#dataTable').DataTable({
-        "order": [[1, "asc"]], // Order by the second column (Date)
+    // Define the DataTable and apply custom date filter
+    let table = $('#dataTable').DataTable({
+        "order": [[0, "asc"]],
         "lengthChange": false,
         "searching": false,
         "paging": false,
         "info": false,
+        "sorting": false,
         "columns": [
-            { "orderable": false }, // Exclude column
-            { "type": "date-us" }, // Date column
-            { "orderable": true }, // Score1
-            { "orderable": true }, // Score2
-            { "orderable": true }, // Score3
-            { "orderable": true }, // Score4
-            { "orderable": true }, // Score5
-            { "orderable": true }, // Score6
-            { "orderable": true }, // Score7
-            { "orderable": true }, // Score8
-            { "orderable": true }, // Score9
-            { "orderable": true }, // Score10
-            { "orderable": false } // Action column
+            { "type": "date-us" },
+            null, null, null, null, null, null, null, null, null, null, null, null
+        ],
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "columnDefs": [
+            {
+                "targets": [0], // Apply the date filter to the first column (date)
+                "type": "date-us",
+                "render": function (data) {
+                    return data ? $.datepicker.formatDate('mm/dd/yy', new Date(data)) : '';
+                }
+            }
         ]
     });
 });
