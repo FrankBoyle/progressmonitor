@@ -99,7 +99,12 @@ function getSmallestMetadataId($schoolId) {
 
 function fetchGoals($studentId, $metadataId, $schoolId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT * FROM Goals WHERE student_id_new = ? AND metadata_id = ? AND school_id = ? ORDER BY goal_date DESC");
+    $stmt = $connection->prepare("
+        SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name
+        FROM Goals g
+        INNER JOIN Metadata gm ON g.metadata_id = gm.metadata_id
+        WHERE g.student_id_new = ? AND g.metadata_id = ? AND g.school_id = ? AND g.archived = 0
+    ");
     $stmt->execute([$studentId, $metadataId, $schoolId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -117,6 +122,15 @@ $message = "";  // Initialize an empty message variable
 if (!isset($_GET['student_id']) || !isset($_GET['metadata_id'])) {
     die("Student ID and Metadata ID are required.");
 }
+
+/* Ensure that $student_id is defined
+if (!isset($studentId)) {
+    die("Error: Student ID is not set");
+}
+*/
+
+// Debugging information
+echo "Student ID: " . $studentId;
 
 $studentId = $_GET['student_id'];
 $metadata_id = $_GET['metadata_id'];
@@ -166,4 +180,6 @@ foreach ($students as $student) {
 if ($studentName === null) {
     die("Student not found.");
 }
+
+
 ?>
