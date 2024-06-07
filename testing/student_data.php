@@ -130,47 +130,44 @@ if (isset($_GET['metadata_id'])) {
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title"></h3>
-                        <table id="dataTable">
-    <thead>
-        <tr>
-            <th>Exclude</th>
-            <th>Date</th>
-            <?php foreach ($scoreNames as $category => $values): ?>
-                <?php if (is_array($values)): ?>
-                    <?php foreach ($values as $score): ?>
-                        <th><?php echo htmlspecialchars($score); ?></th>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <th><?php echo htmlspecialchars($values); ?></th>
-                <?php endif; ?>
-            <?php endforeach; ?>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="dataTableBody">
-        <?php if (empty($performanceData)): ?>
-            <tr>
-                <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
-            </tr>
-        <?php else: ?>
-            <?php foreach ($performanceData as $data): ?>
-                <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                    <td><input type="checkbox" class="exclude-row-checkbox" data-performance-id="<?php echo $data['performance_id']; ?>"></td>
-                    <td class="editable" data-field-name="score_date">
-                        <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
-                    </td>
-                    <?php for ($i = 1; $i <= 10; $i++): ?>
-                        <td class="editable" data-field-name="score<?php echo $i; ?>">
-                            <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
-                        </td>
-                    <?php endfor; ?>
-                    <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
-                </tr>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </tbody>
-</table>
-
+                        <table border="1" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <?php foreach ($scoreNames as $category => $values): ?>
+                                        <?php if (is_array($values)): ?>
+                                            <?php foreach ($values as $score): ?>
+                                                <th><?php echo htmlspecialchars($score); ?></th>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <th><?php echo htmlspecialchars($values); ?></th>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTableBody">
+                                <?php if (empty($performanceData)): ?>
+                                    <tr>
+                                        <td colspan="11">No Data Found. Click "Add Data Row" to add new data.</td>
+                                    </tr>
+                                <?php else: ?>
+                                    <?php foreach ($performanceData as $data): ?>
+                                        <tr data-performance-id="<?php echo $data['performance_id']; ?>">
+                                            <td class="editable" data-field-name="score_date">
+                                                <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
+                                            </td>
+                                            <?php for ($i = 1; $i <= 10; $i++): ?>
+                                                <td class="editable" data-field-name="score<?php echo $i; ?>">
+                                                    <?php echo isset($data['score'.$i]) ? $data['score'.$i] : ""; ?>
+                                                </td>
+                                            <?php endfor; ?>
+                                            <td><button class="deleteRow btn btn-block btn-primary" data-performance-id="<?php echo $data['performance_id']; ?>">Delete</button></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
                         <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
                         <input type="text" id="newRowDate" style="display: none;">
                     </div>
