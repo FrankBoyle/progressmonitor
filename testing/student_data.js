@@ -678,10 +678,6 @@ function saveCellValue(cell, inputElement) {
     });
 }
 
-    // Event listener for exclude checkboxes
-    $('.exclude-row-checkbox').change(function() {
-        updateChart(selectedColumns);
-    });
 
 $('#addDataRow').off('click').click(function() {
     // Create a temporary input to attach datepicker
@@ -1032,7 +1028,7 @@ $(document).ready(function() {
         "sorting": false,
         "columns": [
             { "type": "date-us" },
-            null, null, null, null, null, null, null, null, null, null, null, null
+            null, null, null, null, null, null, null, null, null, null, null
         ],
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
         "columnDefs": [
