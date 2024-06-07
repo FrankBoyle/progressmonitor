@@ -133,7 +133,6 @@ if (isset($_GET['metadata_id'])) {
                         <table border="1" id="dataTable">
                             <thead>
                                 <tr>
-                                    <th>Exclude</th>
                                     <th>Date</th>
                                     <?php foreach ($scoreNames as $category => $values): ?>
                                         <?php if (is_array($values)): ?>
@@ -155,7 +154,6 @@ if (isset($_GET['metadata_id'])) {
                                 <?php else: ?>
                                     <?php foreach ($performanceData as $data): ?>
                                         <tr data-performance-id="<?php echo $data['performance_id']; ?>">
-                                            <td><input type="checkbox" class="exclude-row-checkbox" data-performance-id="<?php echo $data['performance_id']; ?>"></td>
                                             <td class="editable" data-field-name="score_date">
                                                 <?php echo isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : ""; ?>
                                             </td>
@@ -169,7 +167,6 @@ if (isset($_GET['metadata_id'])) {
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </tbody>
-
                         </table>
                         <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
                         <input type="text" id="newRowDate" style="display: none;">
@@ -416,8 +413,6 @@ if (isset($_GET['metadata_id'])) {
             printWindow.focus();
             setTimeout(() => printWindow.print(), 500);
         }
-
-
     });
 </script>
 
