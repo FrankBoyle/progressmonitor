@@ -932,7 +932,7 @@ $(document).ready(function() {
         }
 
         // Send a request to delete the data from the server
-        $.post('delete_performance.php', {
+        $.post('./users/delete_performance.php', {
             performance_id: performanceId
         }, function(response) {
             // Handle the response, e.g., check if the deletion was successful

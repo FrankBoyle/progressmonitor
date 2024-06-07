@@ -1,4 +1,7 @@
-
+<?php
+include('./users/db.php');
+include('./users/auth_session.php');
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -918,8 +921,7 @@ function loadGoals(studentId) {
                         theme: 'snow',
                         readOnly: true,
                         modules: {
-                            toolbar: false
-                        }
+                            toolbar: true                        }
                     });
                 }
             });
