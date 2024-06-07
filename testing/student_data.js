@@ -168,38 +168,36 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns) { // Update function signature
-    // Clear existing series data
-    chart.updateSeries([]);
+function updateChart(selectedColumns) {
+    // Extract filtered data from the table
+    const { dates, scores } = extractDataFromTable();
 
-    // Create a new series array based on selected columns
+    // Filter the series based on selected columns
     const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    const trendlineSeriesData = [];
-    newSeriesData.forEach((series, index) => {
+    const trendlineSeriesData = newSeriesData.map((series) => {
         const trendlineData = getTrendlineData(series.data);
-        trendlineSeriesData.push({
+        return {
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            width: '85%', // Set the width to 1000 pixels
-            color: series.color,  // Ensure trendline has same color as series
+            color: series.color,
             ...trendlineOptions,
-        });
+        };
     });
-    
-    // Add trendline data to series
-    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    //console.log("New series data based on selected columns:", newSeriesData);
-    //console.log("Trendline series data:", trendlineSeriesData);
-    //console.log("Final series data for updating the chart:", finalSeriesData);
 
-    // Update the chart with the new series data and updated names
+    // Prepare final series data
+    const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+
+    // Update the chart with the new series data
     chart.updateSeries(finalSeriesData);
 
-    // Update series names in the legend
+    // Update series options in the chart
     chart.updateOptions({
+        xaxis: {
+            categories: dates,
+        },
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 5
@@ -213,6 +211,7 @@ function updateChart(selectedColumns) { // Update function signature
         },
     });
 }
+
 
 // Initializes the chart with default settings.
 function initializeChart() {
