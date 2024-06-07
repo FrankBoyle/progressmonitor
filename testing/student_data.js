@@ -63,6 +63,10 @@ $("#accordion").accordion({
     }
 });
 
+$('.exclude-row-checkbox').change(function() {
+    updateGraph();
+});
+
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
