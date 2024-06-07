@@ -417,66 +417,7 @@ if (isset($_GET['metadata_id'])) {
             setTimeout(() => printWindow.print(), 500);
         }
 
-            // Add event listener for checkboxes
-    $('.exclude-row-checkbox').change(function() {
-        updateGraph();
-    });
 
-    function updateGraph() {
-        var includedData = [];
-        $('#dataTableBody tr').each(function() {
-            var row = $(this);
-            var checkbox = row.find('.exclude-row-checkbox');
-            if (!checkbox.is(':checked')) {
-                var rowData = {};
-                rowData.date = row.find('[data-field-name="score_date"]').text();
-                for (var i = 1; i <= 10; i++) {
-                    rowData['score' + i] = row.find('[data-field-name="score' + i + '"]').text();
-                }
-                includedData.push(rowData);
-            }
-        });
-
-        // Update the graph with includedData
-        renderGraph(includedData);
-    }
-    function renderGraph(data) {
-        // Clear existing graph
-        $('#chart').html('');
-        $('#barChart').html('');
-
-        // Prepare data for the graph
-        var categories = [];
-        var seriesData = [];
-        data.forEach(function(row) {
-            categories.push(row.date);
-            for (var i = 1; i <= 10; i++) {
-                if (!seriesData[i - 1]) {
-                    seriesData[i - 1] = { name: 'Score ' + i, data: [] };
-                }
-                seriesData[i - 1].data.push(parseFloat(row['score' + i]) || 0);
-            }
-        });
-
-        // Render the line graph
-        var chart = new ApexCharts(document.querySelector("#chart"), {
-            chart: { type: 'line' },
-            series: seriesData,
-            xaxis: { categories: categories }
-        });
-        chart.render();
-
-        // Render the bar graph
-        var barChart = new ApexCharts(document.querySelector("#barChart"), {
-            chart: { type: 'bar' },
-            series: seriesData,
-            xaxis: { categories: categories }
-        });
-        barChart.render();
-    }
-
-    // Initial graph render
-    updateGraph();
     });
 </script>
 
