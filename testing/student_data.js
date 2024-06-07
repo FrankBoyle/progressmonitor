@@ -283,7 +283,8 @@ var dataLabelsSettings = {
         return val;
     }
 };
-function getChartOptions(dates, finalSeriesData) {
+
+function getChartOptions(dates, trendlineSeriesData) {
     return {
         series: finalSeriesData.map(series => {
             return series;  // Return the series as-is for trendlines
@@ -305,25 +306,26 @@ function getChartOptions(dates, finalSeriesData) {
         yaxis: {
             labels: {
                 formatter: function(val) {
-                    return parseFloat(val).toFixed(2);  // Show two decimal places
+                    return parseFloat(val).toFixed(0);
                 }
             }
         },
         xaxis: {
             categories: dates
         },
+
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 6
             ),
             curve: 'smooth'
         },
+
         markers: {
             size: 4
         },
     };
 }
-
 
 const trendlineOptions = {
     dashArray: 5,             // Makes the line dashed
