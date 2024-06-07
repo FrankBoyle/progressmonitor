@@ -35,19 +35,26 @@ $("#accordion").accordion({
     activate: function(event, ui) {
         if (ui.newPanel.has('#chart').length) {
             selectedChartType = 'line';
+            //console.log("Line Graph activated");
+
+            // Update the selected columns based on the current state of the checkboxes
             selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
                 .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
             if (!chart) {
                 initializeChart();
             } else {
-                updateChart(selectedColumns);
+                // Update the line chart with the selected columns
+                updateChart(selectedColumns); // Assuming updateChart is the function to update the line chart
             }
         } else if (ui.newPanel.has('#barChart').length) {
             selectedChartType = 'bar';
+            //console.log("Bar Graph activated");
+
             if (barChart === null) {
-                initializeBarChart();
+                initializeBarChart(); // Initialize the bar chart
             } else {
+                // Update the bar chart with the selected columns
                 selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
                     .map(checkbox => checkbox.getAttribute("data-column-name") || '');
                 updateBarChart(selectedColumns);
@@ -161,36 +168,38 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns) {
-    // Extract filtered data from the table
-    const { dates, scores } = extractDataFromTable();
+function updateChart(selectedColumns) { // Update function signature
+    // Clear existing series data
+    chart.updateSeries([]);
 
-    // Filter the series based on selected columns
+    // Create a new series array based on selected columns
     const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
 
     // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    const trendlineSeriesData = newSeriesData.map((series) => {
+    const trendlineSeriesData = [];
+    newSeriesData.forEach((series, index) => {
         const trendlineData = getTrendlineData(series.data);
-        return {
+        trendlineSeriesData.push({
             name: series.name + ' Trendline',
             data: trendlineData,
             type: 'line',
-            color: series.color,
+            width: '85%', // Set the width to 1000 pixels
+            color: series.color,  // Ensure trendline has same color as series
             ...trendlineOptions,
-        };
+        });
     });
-
-    // Prepare final series data
+    
+    // Add trendline data to series
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
+    //console.log("New series data based on selected columns:", newSeriesData);
+    //console.log("Trendline series data:", trendlineSeriesData);
+    //console.log("Final series data for updating the chart:", finalSeriesData);
 
-    // Update the chart with the new series data
+    // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
 
-    // Update series options in the chart
+    // Update series names in the legend
     chart.updateOptions({
-        xaxis: {
-            categories: dates,
-        },
         stroke: {
             width: finalSeriesData.map(series =>
                 series.name.includes('Trendline') ? trendlineOptions.width : 5
@@ -204,7 +213,6 @@ function updateChart(selectedColumns) {
         },
     });
 }
-
 
 // Initializes the chart with default settings.
 function initializeChart() {
