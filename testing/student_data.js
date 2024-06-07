@@ -67,26 +67,6 @@ $('.exclude-row-checkbox').change(function() {
     updateGraph();
 });
 
-function updateGraph() {
-    const { dates, scores } = extractDataFromTable();
-    const filteredData = filterExcludedData(dates, scores);
-
-    if (selectedChartType === 'line') {
-        updateChart(selectedColumns, filteredData);
-    } else if (selectedChartType === 'bar') {
-        updateBarChart(selectedColumns, filteredData);
-    }
-}
-
-function filterExcludedData(dates, scores) {
-    const excludedIndices = Array.from(document.querySelectorAll('.exclude-row-checkbox:checked'))
-        .map(checkbox => $(checkbox).closest('tr').index());
-
-    const filteredDates = dates.filter((_, index) => !excludedIndices.includes(index));
-    const filteredScores = scores.filter((_, index) => !excludedIndices.includes(index));
-
-    return { dates: filteredDates, scores: filteredScores };
-}
 
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
