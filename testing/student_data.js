@@ -678,6 +678,10 @@ function saveCellValue(cell, inputElement) {
     });
 }
 
+    // Event listener for exclude checkboxes
+    $('.exclude-row-checkbox').change(function() {
+        updateChart(selectedColumns);
+    });
 
 $('#addDataRow').off('click').click(function() {
     // Create a temporary input to attach datepicker
