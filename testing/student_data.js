@@ -67,6 +67,27 @@ $('.exclude-row-checkbox').change(function() {
     updateGraph();
 });
 
+function updateGraph() {
+    const { dates, scores } = extractDataFromTable();
+    const filteredData = filterExcludedData(dates, scores);
+
+    if (selectedChartType === 'line') {
+        updateChart(selectedColumns, filteredData);
+    } else if (selectedChartType === 'bar') {
+        updateBarChart(selectedColumns, filteredData);
+    }
+}
+
+function filterExcludedData(dates, scores) {
+    const excludedIndices = Array.from(document.querySelectorAll('.exclude-row-checkbox:checked'))
+        .map(checkbox => $(checkbox).closest('tr').index());
+
+    const filteredDates = dates.filter((_, index) => !excludedIndices.includes(index));
+    const filteredScores = scores.filter((_, index) => !excludedIndices.includes(index));
+
+    return { dates: filteredDates, scores: filteredScores };
+}
+
 // Extracts dates and scores data from the provided HTML table.
 function extractDataFromTable() {
     const tableRows = document.querySelectorAll("table tbody tr");
@@ -172,49 +193,22 @@ function generateFinalSeriesData(data, selectedColumns) {
 }
 
 // Update the chart based on selected columns.
-function updateChart(selectedColumns) { // Update function signature
-    // Clear existing series data
+function updateChart(selectedColumns, { dates, scores }) {
     chart.updateSeries([]);
-
-    // Create a new series array based on selected columns
     const newSeriesData = allSeries.filter((series, index) => selectedColumns.includes(headerNames[index + 1]));
-
-    // For each series in newSeriesData, calculate its trendline and add it to trendlineSeriesData
-    const trendlineSeriesData = [];
-    newSeriesData.forEach((series, index) => {
-        const trendlineData = getTrendlineData(series.data);
-        trendlineSeriesData.push({
-            name: series.name + ' Trendline',
-            data: trendlineData,
-            type: 'line',
-            width: '85%', // Set the width to 1000 pixels
-            color: series.color,  // Ensure trendline has same color as series
-            ...trendlineOptions,
-        });
-    });
-    
-    // Add trendline data to series
+    const trendlineSeriesData = newSeriesData.map(series => ({
+        ...series,
+        data: getTrendlineData(series.data)
+    }));
     const finalSeriesData = [...newSeriesData, ...trendlineSeriesData];
-    //console.log("New series data based on selected columns:", newSeriesData);
-    //console.log("Trendline series data:", trendlineSeriesData);
-    //console.log("Final series data for updating the chart:", finalSeriesData);
 
-    // Update the chart with the new series data and updated names
     chart.updateSeries(finalSeriesData);
-
-    // Update series names in the legend
     chart.updateOptions({
         stroke: {
-            width: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.width : 5
-            ),
-            dashArray: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? trendlineOptions.dashArray : 0
-            ),
-            curve: finalSeriesData.map(series =>
-                series.name.includes('Trendline') ? 'straight' : 'smooth'
-            ),
-        },
+            width: finalSeriesData.map(series => series.name.includes('Trendline') ? trendlineOptions.width : 5),
+            dashArray: finalSeriesData.map(series => series.name.includes('Trendline') ? trendlineOptions.dashArray : 0),
+            curve: finalSeriesData.map(series => series.name.includes('Trendline') ? 'straight' : 'smooth')
+        }
     });
 }
 
