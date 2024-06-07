@@ -133,7 +133,8 @@ if (isset($_GET['metadata_id'])) {
                         <table border="1" id="dataTable">
                             <thead>
                                 <tr>
-                                    <th>Date</th>
+                                <th>Exclude</th>
+                                  <th>Date</th>
                                     <?php foreach ($scoreNames as $category => $values): ?>
                                         <?php if (is_array($values)): ?>
                                             <?php foreach ($values as $score): ?>
