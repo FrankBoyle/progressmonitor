@@ -69,3 +69,7 @@ TODO
 test.html
 ad.js
 /.cache/
+
+# Database Files
+/users/db.php
+/testing/users/db.php
