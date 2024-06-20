@@ -88,8 +88,9 @@ body {
     font-size: 1rem; /* Adjusted font size */
   }
 
-.box {
-    background-color: white;
+.box, .card {
+    background-color: #f9f9f9; /* Lighter shade for panels */
+    border: 1px solid #D6E4F0; /* Soft blue border from the palette */
     padding: 1rem;
     margin: 0.5rem;
     border-radius: 8px;
