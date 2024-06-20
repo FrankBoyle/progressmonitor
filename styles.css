@@ -26,13 +26,19 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem; /* Adjusted padding to reduce height */
-    background-color: #333;
+    background-color: #1A3E55; /* Very dark blue for more prominent navbar */
     color: white;
     position: fixed; /* Make the navbar fixed */
     width: 100%;
     top: 0;
     z-index: 1000; /* Ensure it stays above other content */
   }
+
+/*
+  .dashboard-header:hover {
+    background-color: #45A0DD;
+    }
+*/
 
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
@@ -57,21 +63,13 @@ body {
     display: flex;
     flex-grow: 1;
     padding: 1rem; /* Add top padding to compensate for the navbar height */
-    margin-top: 3rem; /* Adjust this value to match the height of the navbar */
+    margin-top: 3.1rem; /* Adjust this value to match the height of the navbar */
 }
-
-/* Card styles for compact layout */
-.card {
-    background-color: white;
-    padding: 1rem;
-    margin: 0.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
   
-  .card-header {
+  .card-header, .box-header {
     font-size: 1.25rem; /* Adjusted font size */
     margin-bottom: 0.5rem;
+    background-color: #47A6E6; /* Light blue for headers */
   }
   
   .card-title {
@@ -82,12 +80,18 @@ body {
     font-size: 1rem; /* Adjusted font size */
   }
 
-.box {
-    background-color: white;
+.box, .card {
+    background-color: #f9f9f9; /* Lighter shade for panels */
+    border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
     padding: 1rem;
     margin: 0.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effects on interactive elements */
+.box:hover, .card:hover {
+    border-color: #45A0DD; /* Slightly darker blue for hover */
 }
 
 .create-group, .students-list {
@@ -128,6 +132,7 @@ body {
 
 .options-btn:hover {
     color: #999;
+    background-color: #2F6F99; /* Medium blue */
     font-weight: bold;
 }
 
@@ -147,6 +152,21 @@ body {
     z-index: 1000;
 }
 
+/* Buttons */
+button {
+    background-color: #0F77BD; /* Bright blue for buttons */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2F6F99; /* Medium blue for button hover */
+    font-weight: bold;
+}
+
 .group-options button {
     display: block;
     width: 100%;
@@ -161,23 +181,11 @@ body {
 }
 
 .group-options button:hover {
-    background-color: #555;
+    background-color: #255677; /* Deep blue */
     font-weight: bold;
 }
 
-button {
-    background-color: #555;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
-button:hover {
-    background-color: #333;
-    font-weight: bold;
-}
 
 ul {
     list-style-type: none;
@@ -185,7 +193,7 @@ ul {
 }
 
 ul li {
-    background-color: #e0e0e0;
+    background-color: #f0f0f0; /* Very light grey for list items */
     margin: 0.5rem 0;
     padding: 0.5rem;
     border-radius: 5px;
@@ -193,11 +201,13 @@ ul li {
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    border-bottom: 1px solid #D6E4F0; /* Soft blue line separator */
 }
 
-ul li:hover, ul li.selected-student {
-    background-color: #ccc;
+ul li:hover, ul li.selected-student, ul li.selected-group{
+    background-color: #D6E4F0; /* Soft blue for selected item */
     font-weight: bold;
+    color: #333;
 }
 
 .add-group-btn {
@@ -247,7 +257,7 @@ h3 {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #45A0DD; /* Lighter blue to match hover state of navbar */
     text-decoration: none;
     cursor: pointer;
 }
@@ -423,12 +433,13 @@ td .cell-input {
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #fff; /* Bright white for modal content background */
     margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 400px;
+    border-color: #D6E4F0; /* Soft blue border */
 }
 
 .close {
@@ -462,6 +473,8 @@ td .cell-input {
     box-sizing: border-box;
 }
 
+
+/*
 button[type="submit"] {
     background-color: #4CAF50;
     color: white;
@@ -475,16 +488,26 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #45a049;
 }
+*/
 
 .header-icons span, .header-icons .nav-link {
     margin-right: 20px;
     font-size: 1.2rem;
     color: white;
     text-decoration: none;
+    padding: 10px; /* Padding for spacing and better hover effect */
+    border-radius: 5px; /* Rounded corners */
 }
 
 .header-icons .nav-link i {
     margin-right: 5px;
+}
+
+/* Navbar link hover effect */
+.header-icons span:hover, .header-icons .nav-link:hover {
+    background-color: #45A0DD; /* Lighter blue for hover */
+    padding: 10px; /* Add padding to increase the hover area */
+    border-radius: 5px; /* Optional: adds rounded corners */
 }
 
 .header-icons .nav-link:hover {
@@ -607,12 +630,16 @@ button[type="submit"]:hover {
             align-items: center;
         }
 
-        .header-icons span, .header-icons .nav-link {
-            margin-right: 20px;
-            font-size: 1.2rem;
-            color: white;
-            text-decoration: none;
-        }
+/* General style for navbar links */
+.header-icons span, .header-icons .nav-link {
+    margin-right: 20px;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+    padding: 10px; /* Padding for spacing and better hover effect */
+    border-radius: 5px; /* Optional: rounded corners */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
 
         .header-icons .nav-link i {
             margin-right: 5px;
