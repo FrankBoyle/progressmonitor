@@ -81,10 +81,10 @@ body {
 
 .box, .card {
     background-color: #f9f9f9; /* Lighter shade for panels */
-    border: 1px solid #D6E4F0; /* Soft blue border from the palette */
+    border: 2px solid #D6E4F0; /* Soft blue border from the palette */
     padding: 1rem;
     margin: 0.5rem;
-    border-radius: 0px;
+    border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
