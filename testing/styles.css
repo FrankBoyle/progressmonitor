@@ -66,14 +66,6 @@ body {
     margin-top: 3rem; /* Adjust this value to match the height of the navbar */
 }
 
-/* Card styles for compact layout */
-.card {
-    background-color: white;
-    padding: 1rem;
-    margin: 0.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
   
   .card-header {
     font-size: 1.25rem; /* Adjusted font size */
