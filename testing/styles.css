@@ -26,7 +26,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem; /* Adjusted padding to reduce height */
-    background-color: #45A0DD; /* Dark blue */
+    background-color: #1A3E55; /* Very dark blue for more prominent navbar */
     color: white;
     position: fixed; /* Make the navbar fixed */
     width: 100%;
@@ -35,7 +35,7 @@ body {
   }
 
   .dashboard-header:hover {
-    background-color: #47A6E6; /* Slightly lighter blue */
+    background-color: #45A0DD; /* Lighter blue for hover */
 }
 
 /* Adjust content-wrapper and content-header to account for the fixed header */
@@ -255,7 +255,7 @@ h3 {
 
 .close:hover,
 .close:focus {
-    color: #47A6E6; /* Slightly lighter blue for hover effect */
+    color: #45A0DD; /* Lighter blue to match hover state of navbar */
     text-decoration: none;
     cursor: pointer;
 }
