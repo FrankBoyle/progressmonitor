@@ -470,6 +470,8 @@ td .cell-input {
     box-sizing: border-box;
 }
 
+
+/*
 button[type="submit"] {
     background-color: #4CAF50;
     color: white;
@@ -483,6 +485,7 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #45a049;
 }
+*/
 
 .header-icons span, .header-icons .nav-link {
     margin-right: 20px;
