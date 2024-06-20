@@ -66,9 +66,10 @@ body {
     margin-top: 3.1rem; /* Adjust this value to match the height of the navbar */
 }
   
-  .card-header {
+  .card-header, .box-header {
     font-size: 1.25rem; /* Adjusted font size */
     margin-bottom: 0.5rem;
+    background-color: #47A6E6; /* Light blue for headers */
   }
   
   .card-title {
@@ -86,6 +87,11 @@ body {
     margin: 0.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effects on interactive elements */
+.box:hover, .card:hover {
+    border-color: #45A0DD; /* Slightly darker blue for hover */
 }
 
 .create-group, .students-list {
@@ -148,7 +154,7 @@ body {
 
 /* Buttons */
 button {
-    background-color: #1A3E55; /* Very dark blue */
+    background-color: #0F77BD; /* Bright blue for buttons */
     color: white;
     padding: 8px 12px;
     border: none;
@@ -157,7 +163,7 @@ button {
 }
 
 button:hover {
-    background-color: #333;
+    background-color: #2F6F99; /* Medium blue for button hover */
     font-weight: bold;
 }
 
@@ -187,7 +193,7 @@ ul {
 }
 
 ul li {
-    background-color: #e0e0e0;
+    background-color: #f0f0f0; /* Very light grey for list items */
     margin: 0.5rem 0;
     padding: 0.5rem;
     border-radius: 5px;
@@ -195,11 +201,13 @@ ul li {
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    border-bottom: 1px solid #D6E4F0; /* Soft blue line separator */
 }
 
-ul li:hover, ul li.selected-student {
-    background-color: #ccc;
+ul li:hover, ul li.selected-student, ul li.selected-group{
+    background-color: #D6E4F0; /* Soft blue for selected item */
     font-weight: bold;
+    color: #333;
 }
 
 .add-group-btn {
@@ -425,12 +433,13 @@ td .cell-input {
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: #fff; /* Bright white for modal content background */
     margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 400px;
+    border-color: #D6E4F0; /* Soft blue border */
 }
 
 .close {
@@ -486,6 +495,8 @@ button[type="submit"]:hover {
     font-size: 1.2rem;
     color: white;
     text-decoration: none;
+    padding: 10px; /* Padding for spacing and better hover effect */
+    border-radius: 5px; /* Rounded corners */
 }
 
 .header-icons .nav-link i {
