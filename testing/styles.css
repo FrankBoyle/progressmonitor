@@ -63,7 +63,7 @@ body {
     display: flex;
     flex-grow: 1;
     padding: 1rem; /* Add top padding to compensate for the navbar height */
-    margin-top: 3rem; /* Adjust this value to match the height of the navbar */
+    margin-top: 3.1rem; /* Adjust this value to match the height of the navbar */
 }
   
   .card-header {
@@ -81,7 +81,7 @@ body {
 
 .box, .card {
     background-color: #f9f9f9; /* Lighter shade for panels */
-    border: 2px solid #D6E4F0; /* Soft blue border from the palette */
+    border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
     padding: 1rem;
     margin: 0.5rem;
     border-radius: 8px;
