@@ -34,9 +34,11 @@ body {
     z-index: 1000; /* Ensure it stays above other content */
   }
 
+/*
   .dashboard-header:hover {
-    background-color: #45A0DD; /* Lighter blue for hover */
-}
+    background-color: #45A0DD;
+    }
+*/
 
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
@@ -498,6 +500,13 @@ button[type="submit"]:hover {
     margin-right: 5px;
 }
 
+/* Navbar link hover effect */
+.header-icons span:hover, .header-icons .nav-link:hover {
+    background-color: #45A0DD; /* Lighter blue for hover */
+    padding: 10px; /* Add padding to increase the hover area */
+    border-radius: 5px; /* Optional: adds rounded corners */
+}
+
 .header-icons .nav-link:hover {
     color: #f0f0f0;
 }
@@ -618,12 +627,16 @@ button[type="submit"]:hover {
             align-items: center;
         }
 
-        .header-icons span, .header-icons .nav-link {
-            margin-right: 20px;
-            font-size: 1.2rem;
-            color: white;
-            text-decoration: none;
-        }
+/* General style for navbar links */
+.header-icons span, .header-icons .nav-link {
+    margin-right: 20px;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+    padding: 10px; /* Padding for spacing and better hover effect */
+    border-radius: 5px; /* Optional: rounded corners */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
 
         .header-icons .nav-link i {
             margin-right: 5px;
