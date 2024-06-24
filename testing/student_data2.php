@@ -28,7 +28,7 @@
                 // Define columns based on metadata
                 const columns = [
                     {
-                        title: "Score Date",
+                        title: "Date",
                         field: "score_date",
                         editor: "input",
                         formatter: function(cell, formatterParams, onRendered) {
@@ -44,7 +44,7 @@
                             mask: "MM/DD/YYYY",
                             format: "MM/DD/YYYY",
                         },
-                        headerSortClickElement: "icon"  // Enable sorting via icon only
+                        headerSortClickElement: "icon",  // Enable sorting via icon only
                     },
                 ];
 
@@ -53,7 +53,7 @@
                         title: scoreNames[key], 
                         field: `score${index + 1}`, 
                         editor: "input", 
-                        headerSortClickElement: "icon"  // Enable sorting via icon only
+                        headerSortClickElement: "icon",  // Enable sorting via icon only
                     });
                 });
 
@@ -66,14 +66,21 @@
                     paginationSize: 10,
                     movableColumns: true,
                     resizableRows: true,
-                    clipboard: true,
-                    clipboardCopyRowRange: "all",  // Allow copying all rows
-                    clipboardCopyColumnHeaders: true,  // Include column headers in clipboard output
-                    clipboardPasteAction: "update",  // Update cells with clipboard data
-                    selectable: true,  // Enable row selection
-                    selectableRangeMode: "click",  // Enable range selection with click
-                    selectableRangeColumns: true,  // Enable range selection for columns
-                    selectableRangeRows: true,  // Enable range selection for rows
+                    editTriggerEvent:"dblclick", //trigger edit on double click
+                    editorEmptyValue:null,
+                    clipboard:true,
+                    clipboardCopyRowRange:"range",
+                    clipboardPasteParser:"range",
+                    clipboardPasteAction:"range",
+                    clipboardCopyConfig:{
+                        rowHeaders:false, //do not include row headers in clipboard output
+                        columnHeaders:true, //do not include column headers in clipboard output
+                    },
+                    clipboardCopyStyled:false,
+                    selectableRange:1, //allow only one range at a time
+                    selectableRangeColumns:true,
+                    selectableRangeRows:true,
+                    selectableRangeClearCells:true,
                 });
 
                 // Add cellEdited event listener
@@ -102,7 +109,7 @@
                     }).then(response => response.json())
                       .then(result => {
                           if (result.success) {
-                              // alert('Data updated successfully');
+                              //alert('Data updated successfully');
                           } else {
                               alert('Failed to update data: ' + result.message);
                               console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -117,3 +124,6 @@
 
 </body>
 </html>
+
+
+
