@@ -27,10 +27,21 @@
 
                 // Define columns based on metadata
                 const columns = [
-                    { title: "Score Date", field: "score_date", editor: "input", formatter: "datetime", formatterParams: {
-                        outputFormat: "MM/dd/yyyy",
-                        invalidPlaceholder: "(invalid date)",
-                    }},
+                    {
+                        title: "Score Date",
+                        field: "score_date",
+                        editor: "input",
+                        formatter: function(cell, formatterParams, onRendered) {
+                            // Use Luxon to format date
+                            const DateTime = luxon.DateTime;
+                            let date = DateTime.fromISO(cell.getValue());
+                            if (date.isValid) {
+                                return date.toFormat("MM/dd/yyyy");
+                            } else {
+                                return "(invalid date)";
+                            }
+                        }
+                    },
                 ];
 
                 Object.keys(scoreNames).forEach((key, index) => {
@@ -74,7 +85,7 @@
                     }).then(response => response.json())
                       .then(result => {
                           if (result.success) {
-                              //alert('Data updated successfully');
+                              alert('Data updated successfully');
                           } else {
                               alert('Failed to update data: ' + result.message);
                               console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -89,5 +100,6 @@
 
 </body>
 </html>
+
 
 
