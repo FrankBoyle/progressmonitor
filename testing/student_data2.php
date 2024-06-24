@@ -10,8 +10,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const studentId = '1';  // replace with dynamic value
-        const metadataId = '1'; // replace with dynamic value
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('student_id');
+        const metadataId = urlParams.get('metadata_id');
 
         fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
             .then(response => {
@@ -25,13 +26,13 @@
 
                 // Define columns based on metadata
                 const columns = [
-                    { title: "Performance ID", field: "performance_id" },
-                    { title: "School ID", field: "school_id" },
-                    { title: "Score Date", field: "score_date" },
+                    { title: "Performance ID", field: "performance_id", editor: "input" },
+                    { title: "School ID", field: "school_id", editor: "input" },
+                    { title: "Score Date", field: "score_date", editor: "input" },
                 ];
 
                 Object.keys(scoreNames).forEach((key, index) => {
-                    columns.push({ title: scoreNames[key], field: `score${index + 1}` });
+                    columns.push({ title: scoreNames[key], field: `score${index + 1}`, editor: "input" });
                 });
 
                 // Initialize Tabulator
@@ -43,7 +44,6 @@
                     paginationSize: 10,
                     movableColumns: true,
                     resizableRows: true,
-                    editable: true,
                     cellEdited: function(cell) {
                         // Update the cell data in the backend (make AJAX call)
                         const updatedData = cell.getData();
