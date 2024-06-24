@@ -43,12 +43,18 @@
                         editorParams: {
                             mask: "MM/DD/YYYY",
                             format: "MM/DD/YYYY",
-                        }
+                        },
+                        headerSort: false  // Disable sorting for this column
                     },
                 ];
 
                 Object.keys(scoreNames).forEach((key, index) => {
-                    columns.push({ title: scoreNames[key], field: `score${index + 1}`, editor: "input" });
+                    columns.push({ 
+                        title: scoreNames[key], 
+                        field: `score${index + 1}`, 
+                        editor: "input", 
+                        headerSort: false  // Disable sorting for these columns
+                    });
                 });
 
                 // Initialize Tabulator
@@ -63,9 +69,9 @@
                     editTriggerEvent:"dblclick", //trigger edit on double click
                     editorEmptyValue:null,
                     clipboard:true,
-                    clipboardCopyRowRange:"all",
+                    clipboardCopyRowRange:"range",
                     clipboardPasteParser:"range",
-                    clipboardPasteAction:"update",
+                    clipboardPasteAction:"range",
                     clipboardCopyConfig:{
                         rowHeaders:false, //do not include row headers in clipboard output
                         columnHeaders:true, //do not include column headers in clipboard output
