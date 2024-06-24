@@ -7,8 +7,19 @@
 </head>
 <body>
 
+<div>
+    <label for="function-select">Select Function:</label>
+    <select id="function-select">
+        <option value="mean">Mean</option>
+        <option value="median">Median</option>
+        <option value="mode">Mode</option>
+        <option value="range">Range</option>
+        <option value="slope">Slope</option>
+    </select>
+    <button id="apply-function">Apply Function</button>
+</div>
+
 <div id="performance-table"></div>
-<button id="apply-formula">Apply Formula</button>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -26,15 +37,51 @@
             .then(data => {
                 const { performanceData, scoreNames } = data;
 
-                // Function to evaluate formulas
-                function evaluateFormula(formula, data) {
-                    let value;
-                    try {
-                        value = new Function("data", `return ${formula}`)(data);
-                    } catch (e) {
-                        value = "(error)";
-                    }
-                    return value;
+                // Function to calculate mean
+                function calculateMean(data) {
+                    const sum = data.reduce((acc, val) => acc + val, 0);
+                    return sum / data.length;
+                }
+
+                // Function to calculate median
+                function calculateMedian(data) {
+                    data.sort((a, b) => a - b);
+                    const mid = Math.floor(data.length / 2);
+                    return data.length % 2 !== 0 ? data[mid] : (data[mid - 1] + data[mid]) / 2;
+                }
+
+                // Function to calculate mode
+                function calculateMode(data) {
+                    const frequency = {};
+                    let maxFreq = 0;
+                    let mode = [];
+                    data.forEach(val => {
+                        frequency[val] = (frequency[val] || 0) + 1;
+                        if (frequency[val] > maxFreq) {
+                            maxFreq = frequency[val];
+                            mode = [val];
+                        } else if (frequency[val] === maxFreq) {
+                            mode.push(val);
+                        }
+                    });
+                    return mode.length === data.length ? [] : mode;
+                }
+
+                // Function to calculate range
+                function calculateRange(data) {
+                    return Math.max(...data) - Math.min(...data);
+                }
+
+                // Function to calculate slope (simple linear regression)
+                function calculateSlope(data) {
+                    const n = data.length;
+                    const sumX = data.reduce((acc, val, idx) => acc + idx, 0);
+                    const sumY = data.reduce((acc, val) => acc + val, 0);
+                    const sumXY = data.reduce((acc, val, idx) => acc + idx * val, 0);
+                    const sumX2 = data.reduce((acc, val, idx) => acc + idx * idx, 0);
+
+                    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+                    return slope;
                 }
 
                 // Define columns based on metadata
@@ -69,25 +116,10 @@
                     });
                 });
 
-                // Add a column for the formula
-                columns.push({
-                    title: "Formula",
-                    field: "formula",
-                    editor: "input",
-                });
-
+                // Add a column for the formula result
                 columns.push({
                     title: "Formula Result",
                     field: "formula_result",
-                    mutator: function(value, data, type, params, component) {
-                        // Evaluate the formula from the "formula" field
-                        const formula = data.formula;
-                        if (formula) {
-                            return evaluateFormula(formula, data);
-                        } else {
-                            return "";
-                        }
-                    },
                 });
 
                 // Initialize Tabulator
@@ -115,15 +147,39 @@
                     selectableRangeClearCells:true,
                 });
 
-                document.getElementById('apply-formula').addEventListener('click', function() {
-                    table.getRows().forEach(row => {
-                        const data = row.getData();
-                        const formula = data.formula;
-                        if (formula) {
-                            const result = evaluateFormula(formula, data);
-                            row.update({ formula_result: result });
-                        }
-                    });
+                document.getElementById('apply-function').addEventListener('click', function() {
+                    const selectedFunction = document.getElementById('function-select').value;
+                    const selectedRange = table.getSelectedData();
+                    let result;
+
+                    const data = selectedRange.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));  // Assuming column B is score2
+
+                    switch (selectedFunction) {
+                        case "mean":
+                            result = calculateMean(data);
+                            break;
+                        case "median":
+                            result = calculateMedian(data);
+                            break;
+                        case "mode":
+                            result = calculateMode(data);
+                            break;
+                        case "range":
+                            result = calculateRange(data);
+                            break;
+                        case "slope":
+                            result = calculateSlope(data);
+                            break;
+                        default:
+                            result = "Invalid Function";
+                    }
+
+                    // Display the result in the "Formula Result" column for the first selected row
+                    if (selectedRange.length > 0) {
+                        const firstSelectedRow = selectedRange[0];
+                        const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
+                        table.updateRow(rowIndex, { formula_result: result });
+                    }
                 });
 
                 // Add cellEdited event listener
@@ -166,3 +222,7 @@
 
 </body>
 </html>
+
+
+
+
