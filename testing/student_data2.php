@@ -46,11 +46,11 @@
 
                 // Add cellEdited event listener
                 table.on("cellEdited", function(cell) {
+                    // Check if the value is empty and set to null if it is
                     const field = cell.getField();
                     let value = cell.getValue();
 
                     if (value === "") {
-                        cell.setValue(null, true); // update cell display to null
                         value = null;
                     }
 
@@ -70,7 +70,7 @@
                     }).then(response => response.json())
                       .then(result => {
                           if (result.success) {
-                              //alert('Data updated successfully');
+                              alert('Data updated successfully');
                           } else {
                               alert('Failed to update data: ' + result.message);
                               console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -85,3 +85,4 @@
 
 </body>
 </html>
+
