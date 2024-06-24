@@ -46,17 +46,19 @@
 
                 // Add cellEdited event listener
                 table.on("cellEdited", function(cell) {
-                    // Check if the value is empty and set to null if it is
-                    const field = cell._cell.field;
-                    let value = cell._cell.value;
+                    const field = cell.getField();
+                    let value = cell.getValue();
 
                     if (value === "") {
-                        cell._cell.value = null; // update cell display to null
+                        cell.setValue(null, true); // update cell display to null
                         value = null;
                     }
 
-                    const updatedData = cell._cell.row.data;
+                    const updatedData = cell.getRow().getData();
                     updatedData[field] = value;
+
+                    // Log the updated data for debugging
+                    console.log("Updated data:", updatedData);
 
                     // Update the cell data in the backend (make AJAX call)
                     fetch('./users/update_performance2.php', {
@@ -83,4 +85,3 @@
 
 </body>
 </html>
-
