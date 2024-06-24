@@ -3,9 +3,7 @@ session_start();
 include('auth_session.php');
 
 // Error Reporting
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 0); // Disable display errors
 ini_set('log_errors', 1);
 ini_set('error_log', 'php_errors.log'); // Log errors to a file
 
@@ -43,6 +41,22 @@ function fetchScoreNames($school_id, $metadata_id) {
     );
     $stmt->execute([$school_id, $metadata_id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function fetchIepDate($studentId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT IEP_Date FROM Students_new WHERE student_id_new = ?");
+    $stmt->execute([$studentId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['IEP_Date'] : null;
+}
+
+function fetchSchoolIdForStudent($studentId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT school_id FROM Students_new WHERE student_id_new = ?");
+    $stmt->execute([$studentId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['school_id'] : null;
 }
 
 // Initialize empty arrays and variables
