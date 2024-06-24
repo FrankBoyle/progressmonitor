@@ -44,7 +44,7 @@
                             mask: "MM/DD/YYYY",
                             format: "MM/DD/YYYY",
                         },
-                        headerSort: false  // Disable sorting for this column
+                        headerSort: true,  // Disable sorting for this column
                     },
                 ];
 
@@ -53,7 +53,7 @@
                         title: scoreNames[key], 
                         field: `score${index + 1}`, 
                         editor: "input", 
-                        headerSort: false  // Disable sorting for these columns
+                        headerSort: true,  // Disable sorting for these columns
                     });
                 });
 
