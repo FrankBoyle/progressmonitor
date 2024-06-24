@@ -47,7 +47,7 @@
                     cellEdited: function(cell) {
                         // Update the cell data in the backend (make AJAX call)
                         const updatedData = cell.getData();
-                        fetch('./users/update_performance.php', {
+                        fetch('./users/update_performance2.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
