@@ -32,7 +32,6 @@
                         field: "score_date",
                         editor: "input",
                         formatter: function(cell, formatterParams, onRendered) {
-                            // Use Luxon to format date
                             const DateTime = luxon.DateTime;
                             let date = DateTime.fromISO(cell.getValue());
                             if (date.isValid) {
@@ -40,6 +39,10 @@
                             } else {
                                 return "(invalid date)";
                             }
+                        },
+                        editorParams: {
+                            mask: "MM/DD/YYYY",
+                            format: "MM/DD/YYYY",
                         }
                     },
                 ];
@@ -57,6 +60,8 @@
                     paginationSize: 10,
                     movableColumns: true,
                     resizableRows: true,
+                    clipboard: true,
+                    clipboardPasteAction: "replace",
                 });
 
                 // Add cellEdited event listener
@@ -100,6 +105,7 @@
 
 </body>
 </html>
+
 
 
 
