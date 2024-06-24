@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://unpkg.com/tabulator-tables@5.0.8/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.0.8/dist/js/tabulator.min.js"></script>
+    <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
 </head>
 <body>
 
@@ -45,9 +45,20 @@
                 });
 
                 // Add cellEdited event listener
-                table.on("cellEdited", function(cell) {
-                    // Update the cell data in the backend (make AJAX call)
+                table.on("cellEdited", function(e, cell) {
+                    // Check if the value is empty and set to null if it is
+                    const field = cell.getField();
+                    let value = cell.getValue();
+
+                    if (value === "") {
+                        cell.setValue(null, true); // update cell display to null
+                        value = null;
+                    }
+
                     const updatedData = cell.getData();
+                    updatedData[field] = value;
+
+                    // Update the cell data in the backend (make AJAX call)
                     fetch('./users/update_performance2.php', {
                         method: 'POST',
                         headers: {
@@ -57,7 +68,7 @@
                     }).then(response => response.json())
                       .then(result => {
                           if (result.success) {
-                              //alert('Data updated successfully');
+                              alert('Data updated successfully');
                           } else {
                               alert('Failed to update data');
                           }
