@@ -13,7 +13,7 @@
         const studentId = '1';  // replace with dynamic value
         const metadataId = '1'; // replace with dynamic value
 
-        fetch(`users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
+        fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
             .then(response => response.json())
             .then(data => {
                 const { performanceData, scoreNames } = data;
@@ -42,7 +42,7 @@
                     cellEdited: function(cell) {
                         // Update the cell data in the backend (make AJAX call)
                         const updatedData = cell.getData();
-                        fetch('users/update_performance2.php', {
+                        fetch('./users/update_performance2.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
