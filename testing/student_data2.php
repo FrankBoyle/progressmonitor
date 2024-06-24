@@ -62,6 +62,8 @@
                     resizableRows: true,
                     clipboard: true,
                     clipboardPasteAction: "replace",
+                    selectable: true,  // Enable row selection
+                    selectableRangeMode: "click",  // Enable range selection with click
                 });
 
                 // Add cellEdited event listener
@@ -105,6 +107,7 @@
 
 </body>
 </html>
+
 
 
 
