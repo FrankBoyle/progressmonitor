@@ -78,8 +78,8 @@
                     },
                     clipboardCopyStyled:false,
                     selectableRange:1, //allow only one range at a time
-                    selectableRangeColumns:true,
-                    selectableRangeRows:true,
+                    selectableRangeColumns:false,
+                    selectableRangeRows:false,
                     selectableRangeClearCells:true,
                 });
 
