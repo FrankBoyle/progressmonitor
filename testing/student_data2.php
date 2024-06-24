@@ -8,6 +8,7 @@
 <body>
 
 <div id="performance-table"></div>
+<button id="apply-formula">Apply Formula</button>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -25,10 +26,21 @@
             .then(data => {
                 const { performanceData, scoreNames } = data;
 
+                // Function to evaluate formulas
+                function evaluateFormula(formula, data) {
+                    let value;
+                    try {
+                        value = new Function("data", `return ${formula}`)(data);
+                    } catch (e) {
+                        value = "(error)";
+                    }
+                    return value;
+                }
+
                 // Define columns based on metadata
                 const columns = [
                     {
-                        title: "Date",
+                        title: "Score Date",
                         field: "score_date",
                         editor: "input",
                         formatter: function(cell, formatterParams, onRendered) {
@@ -44,7 +56,7 @@
                             mask: "MM/DD/YYYY",
                             format: "MM/DD/YYYY",
                         },
-                        headerSort: true,  // Disable sorting for this column
+                        headerSortClickElement: "icon"  // Enable sorting via icon only
                     },
                 ];
 
@@ -53,8 +65,29 @@
                         title: scoreNames[key], 
                         field: `score${index + 1}`, 
                         editor: "input", 
-                        headerSort: true,  // Disable sorting for this column
+                        headerSortClickElement: "icon"  // Enable sorting via icon only
                     });
+                });
+
+                // Add a column for the formula
+                columns.push({
+                    title: "Formula",
+                    field: "formula",
+                    editor: "input",
+                });
+
+                columns.push({
+                    title: "Formula Result",
+                    field: "formula_result",
+                    mutator: function(value, data, type, params, component) {
+                        // Evaluate the formula from the "formula" field
+                        const formula = data.formula;
+                        if (formula) {
+                            return evaluateFormula(formula, data);
+                        } else {
+                            return "";
+                        }
+                    },
                 });
 
                 // Initialize Tabulator
@@ -82,9 +115,19 @@
                     selectableRangeClearCells:true,
                 });
 
+                document.getElementById('apply-formula').addEventListener('click', function() {
+                    table.getRows().forEach(row => {
+                        const data = row.getData();
+                        const formula = data.formula;
+                        if (formula) {
+                            const result = evaluateFormula(formula, data);
+                            row.update({ formula_result: result });
+                        }
+                    });
+                });
+
                 // Add cellEdited event listener
                 table.on("cellEdited", function(cell) {
-                    // Check if the value is empty and set to null if it is
                     const field = cell.getField();
                     let value = cell.getValue();
 
@@ -108,7 +151,7 @@
                     }).then(response => response.json())
                       .then(result => {
                           if (result.success) {
-                              //alert('Data updated successfully');
+                              // alert('Data updated successfully');
                           } else {
                               alert('Failed to update data: ' + result.message);
                               console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -123,6 +166,3 @@
 
 </body>
 </html>
-
-
-
