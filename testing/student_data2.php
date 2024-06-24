@@ -7,18 +7,6 @@
 </head>
 <body>
 
-<div>
-    <label for="function-select">Select Function:</label>
-    <select id="function-select">
-        <option value="mean">Mean</option>
-        <option value="median">Median</option>
-        <option value="mode">Mode</option>
-        <option value="range">Range</option>
-        <option value="slope">Slope</option>
-    </select>
-    <button id="apply-function">Apply Function</button>
-</div>
-
 <div id="performance-table"></div>
 
 <script>
@@ -36,53 +24,6 @@
             })
             .then(data => {
                 const { performanceData, scoreNames } = data;
-
-                // Function to calculate mean
-                function calculateMean(data) {
-                    const sum = data.reduce((acc, val) => acc + val, 0);
-                    return sum / data.length;
-                }
-
-                // Function to calculate median
-                function calculateMedian(data) {
-                    data.sort((a, b) => a - b);
-                    const mid = Math.floor(data.length / 2);
-                    return data.length % 2 !== 0 ? data[mid] : (data[mid - 1] + data[mid]) / 2;
-                }
-
-                // Function to calculate mode
-                function calculateMode(data) {
-                    const frequency = {};
-                    let maxFreq = 0;
-                    let mode = [];
-                    data.forEach(val => {
-                        frequency[val] = (frequency[val] || 0) + 1;
-                        if (frequency[val] > maxFreq) {
-                            maxFreq = frequency[val];
-                            mode = [val];
-                        } else if (frequency[val] === maxFreq) {
-                            mode.push(val);
-                        }
-                    });
-                    return mode.length === data.length ? [] : mode;
-                }
-
-                // Function to calculate range
-                function calculateRange(data) {
-                    return Math.max(...data) - Math.min(...data);
-                }
-
-                // Function to calculate slope (simple linear regression)
-                function calculateSlope(data) {
-                    const n = data.length;
-                    const sumX = data.reduce((acc, val, idx) => acc + idx, 0);
-                    const sumY = data.reduce((acc, val) => acc + val, 0);
-                    const sumXY = data.reduce((acc, val, idx) => acc + idx * val, 0);
-                    const sumX2 = data.reduce((acc, val, idx) => acc + idx * idx, 0);
-
-                    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-                    return slope;
-                }
 
                 // Define columns based on metadata
                 const columns = [
@@ -114,12 +55,6 @@
                     });
                 });
 
-                // Add a column for the formula result
-                columns.push({
-                    title: "Formula Result",
-                    field: "formula_result",
-                });
-
                 // Initialize Tabulator with existing settings
                 const table = new Tabulator("#performance-table", {
                     height: "300px",
@@ -143,54 +78,6 @@
                     selectableRangeColumns: false,
                     selectableRangeRows: false,
                     selectableRangeClearCells: true,
-                });
-
-                document.getElementById('apply-function').addEventListener('click', function() {
-                    console.log('Apply function button clicked');
-                    const selectedFunction = document.getElementById('function-select').value;
-                    console.log('Selected function:', selectedFunction);
-
-                    // Get selected data range
-                    const selectedCells = table.getSelectedData();
-                    console.log('Selected cells:', selectedCells);
-
-                    let result;
-
-                    // Ensure at least one cell is selected and extract data for a specific score column
-                    if (selectedCells.length > 0) {
-                        const data = selectedCells.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
-                        console.log('Extracted data:', data);
-
-                        switch (selectedFunction) {
-                            case "mean":
-                                result = calculateMean(data);
-                                break;
-                            case "median":
-                                result = calculateMedian(data);
-                                break;
-                            case "mode":
-                                result = calculateMode(data);
-                                break;
-                            case "range":
-                                result = calculateRange(data);
-                                break;
-                            case "slope":
-                                result = calculateSlope(data);
-                                break;
-                            default:
-                                result = "Invalid Function";
-                        }
-
-                        console.log('Result:', result);
-
-                        // Display the result in the "Formula Result" column for the first selected row
-                        const firstSelectedRow = selectedCells[0];
-                        const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
-                        table.updateRow(rowIndex, { formula_result: result });
-                        console.log('Updated row:', rowIndex, 'with result:', result);
-                    } else {
-                        console.log('No cells selected.');
-                    }
                 });
 
                 // Add cellEdited event listener
