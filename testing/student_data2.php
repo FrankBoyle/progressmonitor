@@ -139,10 +139,9 @@
                         columnHeaders: true, //do not include column headers in clipboard output
                     },
                     clipboardCopyStyled: false,
-                    selectable: true, // Enable row selection
-                    selectableRangeMode: "click",  // Enable range selection with click
-                    selectableRangeColumns: true,  // Enable range selection for columns
-                    selectableRangeRows: true,  // Enable range selection for rows
+                    selectableRange: 1, //allow only one range at a time
+                    selectableRangeColumns: false,
+                    selectableRangeRows: false,
                     selectableRangeClearCells: true,
                 });
 
