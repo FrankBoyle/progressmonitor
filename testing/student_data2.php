@@ -136,13 +136,11 @@
                     clipboardPasteAction: "range",
                     clipboardCopyConfig: {
                         rowHeaders: false, //do not include row headers in clipboard output
-                        columnHeaders: true, //do not include column headers in clipboard output
+                        columnHeaders: true, //include column headers in clipboard output
                     },
                     clipboardCopyStyled: false,
-                    selectableRange: 1, //allow only one range at a time
-                    selectableRangeColumns: false,
-                    selectableRangeRows: false,
-                    selectableRangeClearCells: true,
+                    selectable: true,
+                    selectableRangeMode: "click",
                 });
 
                 document.getElementById('apply-function').addEventListener('click', function() {
@@ -150,7 +148,10 @@
                     const selectedFunction = document.getElementById('function-select').value;
                     console.log('Selected function:', selectedFunction);
 
-                    const selectedCells = table.getSelectedData();
+                    const selectedRows = table.getSelectedRows();
+                    console.log('Selected rows:', selectedRows);
+
+                    const selectedCells = selectedRows.map(row => row.getData());
                     console.log('Selected cells:', selectedCells);
 
                     let result;
@@ -230,4 +231,3 @@
 
 </body>
 </html>
-
