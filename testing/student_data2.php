@@ -60,22 +60,12 @@
                     paginationSize: 10,
                     movableColumns: true,
                     resizableRows: true,
-                    editTriggerEvent:"dblclick", //trigger edit on double click
-                    editorEmptyValue:undefined,
-                    clipboard:true,
-                    clipboardCopyRowRange:"range",
-                    clipboardPasteParser:"range",
-                    clipboardPasteAction:"range",
-                    clipboardCopyConfig:{
-                        rowHeaders:true, //do not include row headers in clipboard output
-                        columnHeaders:true, //do not include column headers in clipboard output
-                    },
-                    clipboardCopyStyled:false,
-                    selectableRange:1, //allow only one range at a time
-                    selectableRangeColumns:true,
-                    selectableRangeRows:true,
-                    selectableRangeClearCells:true,
-                    rowHeader: {resizable: false, frozen: true, width:40, hozAlign:"center", formatter: "rownum", field:"rownum", accessorClipboard:"rownum"},
+                    clipboard: true,
+                    clipboardCopyRowRange: "all",  // Allow copying all rows
+                    clipboardCopyColumnHeaders: true,  // Include column headers in clipboard output
+                    clipboardPasteAction: "update",  // Update cells with clipboard data
+                    selectableRangeMode: "click",  // Enable range selection with click
+                    selectable: true,  // Enable row selection
                 });
 
                 // Add cellEdited event listener
@@ -104,7 +94,7 @@
                     }).then(response => response.json())
                       .then(result => {
                           if (result.success) {
-                              alert('Data updated successfully');
+                              //alert('Data updated successfully');
                           } else {
                               alert('Failed to update data: ' + result.message);
                               console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -119,8 +109,6 @@
 
 </body>
 </html>
-
-
 
 
 
