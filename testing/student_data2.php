@@ -120,29 +120,29 @@
                     field: "formula_result",
                 });
 
-               // Initialize Tabulator
-               const table = new Tabulator("#performance-table", {
+                // Initialize Tabulator
+                const table = new Tabulator("#performance-table", {
                     height: "300px",
                     data: performanceData,
                     columns: columns,
                     layout: "fitColumns",
                     movableColumns: true,
                     resizableRows: true,
-                    editTriggerEvent:"dblclick", //trigger edit on double click
-                    editorEmptyValue:null,
-                    clipboard:true,
-                    clipboardCopyRowRange:"range",
-                    clipboardPasteParser:"range",
-                    clipboardPasteAction:"range",
-                    clipboardCopyConfig:{
-                        rowHeaders:false, //do not include row headers in clipboard output
-                        columnHeaders:true, //do not include column headers in clipboard output
+                    editTriggerEvent: "dblclick", //trigger edit on double click
+                    editorEmptyValue: null,
+                    clipboard: true,
+                    clipboardCopyRowRange: "range",
+                    clipboardPasteParser: "range",
+                    clipboardPasteAction: "range",
+                    clipboardCopyConfig: {
+                        rowHeaders: false, //do not include row headers in clipboard output
+                        columnHeaders: true, //do not include column headers in clipboard output
                     },
-                    clipboardCopyStyled:false,
-                    selectableRange:1, //allow only one range at a time
-                    selectableRangeColumns:false,
-                    selectableRangeRows:false,
-                    selectableRangeClearCells:true,
+                    clipboardCopyStyled: false,
+                    selectableRange: 1, //allow only one range at a time
+                    selectableRangeColumns: false,
+                    selectableRangeRows: false,
+                    selectableRangeClearCells: true,
                 });
 
                 document.getElementById('apply-function').addEventListener('click', function() {
