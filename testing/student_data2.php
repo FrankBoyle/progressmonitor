@@ -45,17 +45,17 @@
                 });
 
                 // Add cellEdited event listener
-                table.on("cellEdited", function(e, cell) {
+                table.on("cellEdited", function(cell) {
                     // Check if the value is empty and set to null if it is
-                    const field = cell.getField();
-                    let value = cell.getValue();
+                    const field = cell._cell.field;
+                    let value = cell._cell.value;
 
                     if (value === "") {
-                        cell.setValue(null, true); // update cell display to null
+                        cell._cell.value = null; // update cell display to null
                         value = null;
                     }
 
-                    const updatedData = cell.getData();
+                    const updatedData = cell._cell.row.data;
                     updatedData[field] = value;
 
                     // Update the cell data in the backend (make AJAX call)
