@@ -11,7 +11,6 @@
 </head>
 <body>
 
-
 <div id="performance-table"></div>
 <div id="w2ui-performance-table" style="height: 300px;"></div>
 
@@ -180,6 +179,3 @@
 
 </body>
 </html>
-
-
-
