@@ -28,7 +28,7 @@
                 // Define columns based on metadata
                 const columns = [
                     {
-                        title: "Score Date",
+                        title: "Date",
                         field: "score_date",
                         editor: "input",
                         formatter: function(cell, formatterParams, onRendered) {
@@ -63,9 +63,9 @@
                     editTriggerEvent:"dblclick", //trigger edit on double click
                     editorEmptyValue:null,
                     clipboard:true,
-                    clipboardCopyRowRange:"range",
+                    clipboardCopyRowRange:"all",
                     clipboardPasteParser:"range",
-                    clipboardPasteAction:"range",
+                    clipboardPasteAction:"update",
                     clipboardCopyConfig:{
                         rowHeaders:false, //do not include row headers in clipboard output
                         columnHeaders:true, //do not include column headers in clipboard output
