@@ -103,7 +103,6 @@
                             mask: "MM/DD/YYYY",
                             format: "MM/DD/YYYY",
                         },
-                        headerSortClickElement: "icon"  // Enable sorting via icon only
                     },
                 ];
 
@@ -112,7 +111,6 @@
                         title: scoreNames[key], 
                         field: `score${index + 1}`, 
                         editor: "input", 
-                        headerSortClickElement: "icon"  // Enable sorting via icon only
                     });
                 });
 
