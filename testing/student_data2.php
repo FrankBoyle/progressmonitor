@@ -61,7 +61,7 @@
                     movableColumns: true,
                     resizableRows: true,
                     editTriggerEvent:"dblclick", //trigger edit on double click
-                    editorEmptyValue:undefined,
+                    editorEmptyValue:null,
                     clipboard:true,
                     clipboardCopyRowRange:"range",
                     clipboardPasteParser:"range",
