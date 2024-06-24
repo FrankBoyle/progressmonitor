@@ -146,12 +146,18 @@
                 });
 
                 document.getElementById('apply-function').addEventListener('click', function() {
+                    console.log('Apply function button clicked');
                     const selectedFunction = document.getElementById('function-select').value;
+                    console.log('Selected function:', selectedFunction);
+
                     const selectedCells = table.getSelectedData();
+                    console.log('Selected cells:', selectedCells);
+
                     let result;
 
                     // Extract the values of the selected cells for score2 column (for example)
                     const data = selectedCells.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
+                    console.log('Extracted data:', data);
 
                     switch (selectedFunction) {
                         case "mean":
@@ -173,11 +179,14 @@
                             result = "Invalid Function";
                     }
 
+                    console.log('Result:', result);
+
                     // Display the result in the "Formula Result" column for the first selected row
                     if (selectedCells.length > 0) {
                         const firstSelectedRow = selectedCells[0];
                         const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
                         table.updateRow(rowIndex, { formula_result: result });
+                        console.log('Updated row:', rowIndex, 'with result:', result);
                     }
                 });
 
@@ -221,3 +230,4 @@
 
 </body>
 </html>
+
