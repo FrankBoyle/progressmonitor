@@ -13,7 +13,7 @@
         const studentId = '1';  // replace with dynamic value
         const metadataId = '1'; // replace with dynamic value
 
-        fetch(`fetch_data.php?student_id=${studentId}&metadata_id=${metadataId}`)
+        fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -47,7 +47,7 @@
                     cellEdited: function(cell) {
                         // Update the cell data in the backend (make AJAX call)
                         const updatedData = cell.getData();
-                        fetch('update_performance.php', {
+                        fetch('./users/update_performance.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
