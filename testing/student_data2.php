@@ -128,29 +128,24 @@
                     layout: "fitColumns",
                     movableColumns: true,
                     resizableRows: true,
-                    editTriggerEvent:"dblclick", //trigger edit on double click
-                    editorEmptyValue:null,
-                    clipboard:true,
-                    clipboardCopyRowRange:"range",
-                    clipboardPasteParser:"range",
-                    clipboardPasteAction:"range",
-                    clipboardCopyConfig:{
-                        rowHeaders:false, //do not include row headers in clipboard output
-                        columnHeaders:true, //do not include column headers in clipboard output
-                    },
-                    clipboardCopyStyled:false,
-                    selectableRange:1, //allow only one range at a time
-                    selectableRangeColumns:false,
-                    selectableRangeRows:false,
-                    selectableRangeClearCells:true,
+                    clipboard: true,
+                    clipboardCopyRowRange: "selected",
+                    clipboardCopyColumnHeaders: true,
+                    clipboardPasteAction: "update",
+                    selectable: true,
+                    selectableRangeMode: "click",
+                    selectableRangeColumns: true,
+                    selectableRangeRows: true,
+                    selectableRangeClearCells: true,
                 });
 
                 document.getElementById('apply-function').addEventListener('click', function() {
                     const selectedFunction = document.getElementById('function-select').value;
-                    const selectedRange = table.getSelectedData();
+                    const selectedCells = table.getSelectedData();
                     let result;
 
-                    const data = selectedRange.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));  // Assuming column B is score2
+                    // Extract the values of the selected cells for score2 column (for example)
+                    const data = selectedCells.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
 
                     switch (selectedFunction) {
                         case "mean":
@@ -173,8 +168,8 @@
                     }
 
                     // Display the result in the "Formula Result" column for the first selected row
-                    if (selectedRange.length > 0) {
-                        const firstSelectedRow = selectedRange[0];
+                    if (selectedCells.length > 0) {
+                        const firstSelectedRow = selectedCells[0];
                         const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
                         table.updateRow(rowIndex, { formula_result: result });
                     }
@@ -220,7 +215,3 @@
 
 </body>
 </html>
-
-
-
-
