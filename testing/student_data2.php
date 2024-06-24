@@ -6,9 +6,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/w2ui/1.5.2/w2ui.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/w2ui/1.5.2/w2ui.min.js"></script>
 </head>
 <body>
+
 
 <div id="performance-table"></div>
 <div id="w2ui-performance-table" style="height: 300px;"></div>
