@@ -34,7 +34,7 @@
                 });
 
                 // Initialize Tabulator
-                new Tabulator("#performance-table", {
+                const table = new Tabulator("#performance-table", {
                     data: performanceData,
                     columns: columns,
                     layout: "fitColumns",
@@ -42,24 +42,26 @@
                     paginationSize: 10,
                     movableColumns: true,
                     resizableRows: true,
-                    cellEdited: function(cell) {
-                        // Update the cell data in the backend (make AJAX call)
-                        const updatedData = cell.getData();
-                        fetch('./users/update_performance2.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(updatedData)
-                        }).then(response => response.json())
-                          .then(result => {
-                              if (result.success) {
-                                  alert('Data updated successfully');
-                              } else {
-                                  alert('Failed to update data');
-                              }
-                          });
-                    }
+                });
+
+                // Add cellEdited event listener
+                table.on("cellEdited", function(cell) {
+                    // Update the cell data in the backend (make AJAX call)
+                    const updatedData = cell.getData();
+                    fetch('./users/update_performance2.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedData)
+                    }).then(response => response.json())
+                      .then(result => {
+                          if (result.success) {
+                              alert('Data updated successfully');
+                          } else {
+                              alert('Failed to update data');
+                          }
+                      });
                 });
             })
             .catch(error => console.error('There was a problem with the fetch operation:', error));
