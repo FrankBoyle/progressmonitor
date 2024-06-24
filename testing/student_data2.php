@@ -26,8 +26,6 @@
 
                 // Define columns based on metadata
                 const columns = [
-                    { title: "Performance ID", field: "performance_id", editor: "input" },
-                    { title: "School ID", field: "school_id", editor: "input" },
                     { title: "Score Date", field: "score_date", editor: "input" },
                 ];
 
