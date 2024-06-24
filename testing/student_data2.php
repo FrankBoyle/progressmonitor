@@ -3,6 +3,7 @@
 <head>
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
 </head>
 <body>
 
@@ -27,7 +28,7 @@
                 // Define columns based on metadata
                 const columns = [
                     { title: "Score Date", field: "score_date", editor: "input", formatter: "datetime", formatterParams: {
-                        outputFormat: "MM/DD/YYYY",
+                        outputFormat: "MM/dd/yyyy",
                         invalidPlaceholder: "(invalid date)",
                     }},
                 ];
@@ -73,7 +74,7 @@
                     }).then(response => response.json())
                       .then(result => {
                           if (result.success) {
-                              //alert('Data updated successfully');
+                              alert('Data updated successfully');
                           } else {
                               alert('Failed to update data: ' + result.message);
                               console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -88,4 +89,5 @@
 
 </body>
 </html>
+
 
