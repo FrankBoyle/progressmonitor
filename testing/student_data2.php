@@ -70,9 +70,11 @@
                           if (result.success) {
                               alert('Data updated successfully');
                           } else {
-                              alert('Failed to update data');
+                              alert('Failed to update data: ' + result.message);
+                              console.error('Error info:', result.errorInfo); // Log detailed error info
                           }
-                      });
+                      })
+                      .catch(error => console.error('Error:', error));
                 });
             })
             .catch(error => console.error('There was a problem with the fetch operation:', error));
@@ -81,3 +83,4 @@
 
 </body>
 </html>
+
