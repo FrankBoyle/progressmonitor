@@ -62,8 +62,9 @@
                     data: performanceData,
                     columns: columns,
                     layout: "fitColumns",
-                    pagination: "local",
-                    paginationSize: 10,
+                    height: "300px",
+                    pagination: true,
+                    //paginationSize: 10,
                     movableColumns: true,
                     resizableRows: true,
                     editTriggerEvent:"dblclick", //trigger edit on double click
