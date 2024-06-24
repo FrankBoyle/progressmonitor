@@ -120,8 +120,8 @@
                     field: "formula_result",
                 });
 
-               // Initialize Tabulator
-               const table = new Tabulator("#performance-table", {
+                // Initialize Tabulator with existing settings
+                const table = new Tabulator("#performance-table", {
                     height: "300px",
                     data: performanceData,
                     columns: columns,
@@ -136,7 +136,7 @@
                     clipboardPasteAction: "range",
                     clipboardCopyConfig: {
                         rowHeaders: false, //do not include row headers in clipboard output
-                        columnHeaders: true, //do not include column headers in clipboard output
+                        columnHeaders: true, //include column headers in clipboard output
                     },
                     clipboardCopyStyled: false,
                     selectableRange: 1, //allow only one range at a time
@@ -150,16 +150,13 @@
                     const selectedFunction = document.getElementById('function-select').value;
                     console.log('Selected function:', selectedFunction);
 
-                    const selectedRows = table.getSelectedRows();
-                    console.log('Selected rows:', selectedRows);
-
-                    const selectedCells = selectedRows.map(row => row.getData());
-                    console.log('Selected cells:', selectedCells);
+                    const selectedData = table.getSelectedData();
+                    console.log('Selected cells:', selectedData);
 
                     let result;
 
                     // Extract the values of the selected cells for score2 column (for example)
-                    const data = selectedCells.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
+                    const data = selectedData.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
                     console.log('Extracted data:', data);
 
                     switch (selectedFunction) {
@@ -185,8 +182,8 @@
                     console.log('Result:', result);
 
                     // Display the result in the "Formula Result" column for the first selected row
-                    if (selectedCells.length > 0) {
-                        const firstSelectedRow = selectedCells[0];
+                    if (selectedData.length > 0) {
+                        const firstSelectedRow = selectedData[0];
                         const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
                         table.updateRow(rowIndex, { formula_result: result });
                         console.log('Updated row:', rowIndex, 'with result:', result);
