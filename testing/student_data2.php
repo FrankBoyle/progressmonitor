@@ -26,7 +26,10 @@
 
                 // Define columns based on metadata
                 const columns = [
-                    { title: "Score Date", field: "score_date", editor: "input" },
+                    { title: "Score Date", field: "score_date", editor: "input", formatter: "datetime", formatterParams: {
+                        outputFormat: "MM/DD/YYYY",
+                        invalidPlaceholder: "(invalid date)",
+                    }},
                 ];
 
                 Object.keys(scoreNames).forEach((key, index) => {
