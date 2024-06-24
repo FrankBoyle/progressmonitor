@@ -5,9 +5,9 @@
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
 
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/w2ui/1.5.0/w2ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/w2ui/1.5.2/w2ui.min.css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/w2ui/1.5.0/w2ui.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/w2ui/1.5.2/w2ui.min.js"></script>
 </head>
 <body>
 
@@ -136,40 +136,42 @@
                 });
 
                 // Initialize w2ui grid
-                $('#w2ui-performance-table').w2grid({
-                    name: 'performanceGrid',
-                    show: { 
-                        toolbar: true,
-                        footer: true,
-                    },
-                    columns: w2uiColumns,
-                    records: performanceData.map((item, index) => ({ recid: index + 1, ...item })),
-                    onEditField: function (event) {
-                        console.log('Edit field', event);
-                    },
-                    onChange: function(event) {
-                        const record = this.get(event.recid);
-                        const updatedData = { ...record, [event.column]: event.value_new };
-                        console.log("Updated data:", updatedData);
+                $(function () {
+                    $('#w2ui-performance-table').w2grid({
+                        name: 'performanceGrid',
+                        show: { 
+                            toolbar: true,
+                            footer: true,
+                        },
+                        columns: w2uiColumns,
+                        records: performanceData.map((item, index) => ({ recid: index + 1, ...item })),
+                        onEditField: function (event) {
+                            console.log('Edit field', event);
+                        },
+                        onChange: function(event) {
+                            const record = this.get(event.recid);
+                            const updatedData = { ...record, [event.column]: event.value_new };
+                            console.log("Updated data:", updatedData);
 
-                        // Update the cell data in the backend (make AJAX call)
-                        fetch('./users/update_performance2.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(updatedData)
-                        }).then(response => response.json())
-                          .then(result => {
-                              if (result.success) {
-                                  // alert('Data updated successfully');
-                              } else {
-                                  alert('Failed to update data: ' + result.message);
-                                  console.error('Error info:', result.errorInfo); // Log detailed error info
-                              }
-                          })
-                          .catch(error => console.error('Error:', error));
-                    }
+                            // Update the cell data in the backend (make AJAX call)
+                            fetch('./users/update_performance2.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(updatedData)
+                            }).then(response => response.json())
+                              .then(result => {
+                                  if (result.success) {
+                                      // alert('Data updated successfully');
+                                  } else {
+                                      alert('Failed to update data: ' + result.message);
+                                      console.error('Error info:', result.errorInfo); // Log detailed error info
+                                  }
+                              })
+                              .catch(error => console.error('Error:', error));
+                        }
+                    });
                 });
 
             })
@@ -179,3 +181,4 @@
 
 </body>
 </html>
+
