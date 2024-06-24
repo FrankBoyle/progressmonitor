@@ -150,14 +150,15 @@
                     const selectedFunction = document.getElementById('function-select').value;
                     console.log('Selected function:', selectedFunction);
 
-                    const selectedData = table.getSelectedData();
-                    console.log('Selected cells:', selectedData);
+                    // Get selected data range
+                    const selectedCells = table.getSelectedData();
+                    console.log('Selected cells:', selectedCells);
 
                     let result;
 
                     // Ensure at least one cell is selected and extract data for a specific score column
-                    if (selectedData.length > 0) {
-                        const data = selectedData.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
+                    if (selectedCells.length > 0) {
+                        const data = selectedCells.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
                         console.log('Extracted data:', data);
 
                         switch (selectedFunction) {
@@ -183,12 +184,10 @@
                         console.log('Result:', result);
 
                         // Display the result in the "Formula Result" column for the first selected row
-                        if (selectedData.length > 0) {
-                            const firstSelectedRow = selectedData[0];
-                            const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
-                            table.updateRow(rowIndex, { formula_result: result });
-                            console.log('Updated row:', rowIndex, 'with result:', result);
-                        }
+                        const firstSelectedRow = selectedCells[0];
+                        const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
+                        table.updateRow(rowIndex, { formula_result: result });
+                        console.log('Updated row:', rowIndex, 'with result:', result);
                     } else {
                         console.log('No cells selected.');
                     }
@@ -234,4 +233,5 @@
 
 </body>
 </html>
+
 
