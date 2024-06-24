@@ -1,9 +1,13 @@
 <?php
 session_start();
 include('auth_session.php');
+
+// Error Reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', 'php_errors.log'); // Log errors to a file
 
 include('db.php');
 
@@ -47,7 +51,8 @@ $scoreNames = [];
 
 // Check if student_id and metadata_id are set
 if (!isset($_GET['student_id']) || !isset($_GET['metadata_id'])) {
-    die("Student ID and Metadata ID are required.");
+    echo json_encode(['success' => false, 'message' => 'Student ID and Metadata ID are required.']);
+    exit;
 }
 
 $studentId = $_GET['student_id'];
@@ -60,7 +65,8 @@ $iep_date = fetchIepDate($studentId);
 $school_id = fetchSchoolIdForStudent($studentId);  
 
 if (!$school_id) {
-    die("School ID not found for the student.");
+    echo json_encode(['success' => false, 'message' => 'School ID not found for the student.']);
+    exit;
 }
 
 // Fetch performance data and score names
