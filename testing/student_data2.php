@@ -155,38 +155,42 @@
 
                     let result;
 
-                    // Extract the values of the selected cells for score2 column (for example)
-                    const data = selectedData.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
-                    console.log('Extracted data:', data);
-
-                    switch (selectedFunction) {
-                        case "mean":
-                            result = calculateMean(data);
-                            break;
-                        case "median":
-                            result = calculateMedian(data);
-                            break;
-                        case "mode":
-                            result = calculateMode(data);
-                            break;
-                        case "range":
-                            result = calculateRange(data);
-                            break;
-                        case "slope":
-                            result = calculateSlope(data);
-                            break;
-                        default:
-                            result = "Invalid Function";
-                    }
-
-                    console.log('Result:', result);
-
-                    // Display the result in the "Formula Result" column for the first selected row
+                    // Ensure at least one cell is selected and extract data for a specific score column
                     if (selectedData.length > 0) {
-                        const firstSelectedRow = selectedData[0];
-                        const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
-                        table.updateRow(rowIndex, { formula_result: result });
-                        console.log('Updated row:', rowIndex, 'with result:', result);
+                        const data = selectedData.map(row => parseFloat(row.score2)).filter(val => !isNaN(val));
+                        console.log('Extracted data:', data);
+
+                        switch (selectedFunction) {
+                            case "mean":
+                                result = calculateMean(data);
+                                break;
+                            case "median":
+                                result = calculateMedian(data);
+                                break;
+                            case "mode":
+                                result = calculateMode(data);
+                                break;
+                            case "range":
+                                result = calculateRange(data);
+                                break;
+                            case "slope":
+                                result = calculateSlope(data);
+                                break;
+                            default:
+                                result = "Invalid Function";
+                        }
+
+                        console.log('Result:', result);
+
+                        // Display the result in the "Formula Result" column for the first selected row
+                        if (selectedData.length > 0) {
+                            const firstSelectedRow = selectedData[0];
+                            const rowIndex = performanceData.findIndex(row => row.performance_id === firstSelectedRow.performance_id);
+                            table.updateRow(rowIndex, { formula_result: result });
+                            console.log('Updated row:', rowIndex, 'with result:', result);
+                        }
+                    } else {
+                        console.log('No cells selected.');
                     }
                 });
 
