@@ -74,7 +74,7 @@
                     }).then(response => response.json())
                       .then(result => {
                           if (result.success) {
-                              alert('Data updated successfully');
+                              //alert('Data updated successfully');
                           } else {
                               alert('Failed to update data: ' + result.message);
                               console.error('Error info:', result.errorInfo); // Log detailed error info
