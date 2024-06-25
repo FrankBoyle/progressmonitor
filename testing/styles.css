@@ -66,6 +66,7 @@ body {
     margin-top: 3.2rem; /* Adjust this value to match the height of the navbar */
     justify-content: center; /* Center the content horizontally */
     width: 100%; /* Ensure it takes full width */
+    max-width: 100%; /* Ensure it does not exceed the view width */
 
 }
   
@@ -338,6 +339,7 @@ h3 {
 
 @media (max-width: 768px) {
     .content {
+        padding: 10px; 
         flex-direction: column;
     }
 
