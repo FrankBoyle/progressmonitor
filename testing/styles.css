@@ -64,12 +64,14 @@ body {
 }
 
 .card {
+    background-color: #c0c8c8; /* Lighter shade for panels */
+    border: 1.5px solid #a3bbcf; /* Soft blue border from the palette */
     margin: 20px;
     padding: 20px;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: auto; /* Adjust width as necessary */
+    width: 95%; /* Adjust width as necessary */
     max-width: 1200px; /* Limit the maximum width for larger screens */
 }
 
@@ -87,15 +89,16 @@ body {
     font-size: 1rem; /* Adjusted font size */
 }
 
+/*
 .box, .card {
-    background-color: #c0c8c8; /* Lighter shade for panels */
+    background-color: #c0c8c8; /* Lighter shade for panels 
     border: 1.5px solid #a3bbcf; /* Soft blue border from the palette */
-    /*padding: 1rem;*/
+    /*padding: 1rem;
     margin: 0.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: auto;
-}
+}*/
 
 .box {
     width: 100%; /* Full width on smaller screens */
