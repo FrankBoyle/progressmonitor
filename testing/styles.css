@@ -361,6 +361,11 @@ h3 {
         margin-top: 10px; /* Reduced margin on smaller screens */
         max-height: 300px; /* Smaller max height on smaller screens */
     }
+    
+    .tabulator .tabulator-header .tabulator-col {
+        padding: 5px 0; 
+        font-size: 14px; 
+    }
 }
 
 #dataTable_wrapper .col-md-6:eq(0) {
@@ -691,10 +696,19 @@ button[type="submit"]:hover {
             overflow: hidden; /* Ensures the rounded corners are visible */
         }
         
-        .tabulator .tabulator-header {
-            background-color: #f4f4f4; /* Light grey background for headers */
+        .tabulator .tabulator-header .tabulator-col {
+            background-color: #f4f4f4; /* Light gray background for headers*/
+            color: #333; /* Darker text for better readability*/
+            font-weight: bold; /* Make header text bold*/
+            text-align: center; /* Center-align header text*/
+            padding: 10px 0; /* Padding for better spacing */
+            border-right: 1px solid #ddd; /* Add borders for separation*/
         }
         
+        .tabulator .tabulator-header .tabulator-col:last-child {
+            border-right: none; /* Remove the right border for the last column */
+        }
+
         .tabulator-row {
             border-bottom: 1px solid #eee; /* Adds separation between rows */
         }

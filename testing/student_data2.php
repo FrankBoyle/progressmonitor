@@ -78,7 +78,7 @@
                     height: "300px",
                     data: performanceData,
                     columns: columns,
-                    layout: "fitColumns",
+                    layout: "fitDataFill",
                     movableColumns: false,
                     resizableRows: false,
                     editTriggerEvent: "dblclick", //trigger edit on double click
