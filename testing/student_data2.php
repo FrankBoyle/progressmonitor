@@ -20,6 +20,7 @@
             <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
         </div>
     </header>
+
     <main class="content">
         <div class="card">
             <div class="form-group">
@@ -33,6 +34,7 @@
             </div>
         </div>
     </main>
+
 </div>
 
 <script>

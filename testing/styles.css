@@ -54,19 +54,21 @@ body {
 
 .content {
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
-    justify-content: flex-start; /* Center the content horizontally */
     width: 100%; /* Ensure it takes full width */
-    max-width: 100%; /* Ensure it does not exceed the view width */
+    align-items: center;
 }
 
 .card {
+    margin: 20px;
     padding: 20px;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: auto; /* Adjust width as necessary */
+    width: 90%; /* Adjust width as necessary */
+    max-width: 1200px; /* Limit the maximum width for larger screens */
 }
 
 .card-header, .box-header {
