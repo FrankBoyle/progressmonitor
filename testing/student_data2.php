@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://unpkg.com/tabulator-ttables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
 </head>
@@ -85,12 +85,12 @@
 
                 // Add cell selection event listener
                 table.on("cellSelectionChanged", function(data, cells) {
-                    console.log("Selected cells data:", cells);
+                    console.log("Selected cells data:", data);
                 });
 
                 // Function to calculate average
                 function calculateAverage() {
-                    const selectedCells = table.getSelectedCells();
+                    const selectedCells = table.getSelectedData();
                     if (selectedCells.length === 0) {
                         alert("Please select some cells first.");
                         return;
@@ -99,7 +99,7 @@
                     let total = 0;
                     let count = 0;
                     selectedCells.forEach(cell => {
-                        const value = parseFloat(cell.getValue());
+                        const value = parseFloat(cell.value);
                         if (!isNaN(value)) {
                             total += value;
                             count++;
@@ -112,7 +112,7 @@
 
                 // Function to calculate slope (example)
                 function calculateSlope() {
-                    const selectedCells = table.getSelectedCells();
+                    const selectedCells = table.getSelectedData();
                     if (selectedCells.length === 0) {
                         alert("Please select some cells first.");
                         return;
@@ -167,7 +167,6 @@
 
 </body>
 </html>
-
 
 
 
