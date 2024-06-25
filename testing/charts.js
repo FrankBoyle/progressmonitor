@@ -1,4 +1,3 @@
-
 let table; // Declare `table` in a higher scope
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -6,21 +5,91 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentId = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
 
-    function initializeTable(performanceData, scoreNames) {
-    // Check if table already exists and destroy it if it does
+    // Fetch initial data and setup the table
+    fetchInitialData(studentId, metadataId);
+
+    // Setup event listener for the filter button
+    document.getElementById('filterData').addEventListener('click', function() {
+        const iepDate = document.getElementById('iep_date').value;
+        console.log('Filter data button clicked, IEP Date:', iepDate);
+        if (iepDate) {
+            saveIEPDate(iepDate, studentId);
+        }
+    });
+
+    // Initialize charts on page load
+    initializeCharts();
+});
+
+function fetchInitialData(studentId, metadataId) {
+    fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Initial data fetched:', data);
+            if (data && data.performanceData && data.scoreNames) {
+                initializeTable(data.performanceData, data.scoreNames);
+                if (data.iepDate) {
+                    document.getElementById('iep_date').value = data.iepDate;
+                }
+            } else {
+                console.error('Invalid or incomplete initial data:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching initial data:', error);
+        });
+}
+
+function saveIEPDate(iepDate, studentId) {
+    console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentId}`);
+    fetch('./users/save_iep_date.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            iep_date: iepDate,
+            student_id: studentId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('IEP date saved:', data);
+        if (data.success) {
+            fetchFilteredData(iepDate, studentId, metadataId);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error saving IEP date:', error));
+}
+
+function fetchFilteredData(iepDate, studentId, metadataId) {
+    console.log(`Fetching filtered data for IEP Date: ${iepDate}, Student ID: ${studentId}, Metadata ID: ${metadataId}`);
+    fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Filtered data fetched:', data);
+            if (data && data.performanceData && data.scoreNames) {
+                initializeTable(data.performanceData, data.scoreNames);
+            } else {
+                console.error('Invalid or incomplete data received:', data);
+            }
+        })
+        .catch(error => console.error('Error fetching filtered data:', error));
+}
+
+function initializeTable(performanceData, scoreNames) {
+    console.log('Initializing table with data and score names:', { performanceData, scoreNames });
+    // Ensure previous instance is cleaned up before initializing a new one
     if (table) {
         table.destroy();
     }
 
-    // Check if scoreNames is valid
-    if (!scoreNames || typeof scoreNames !== 'object') {
-        console.error('scoreNames is invalid or not an object:', scoreNames);
-        return; // Prevent further execution if scoreNames is invalid
-    }
-
+    // Create columns dynamically based on scoreNames
     const columns = [
         {
-            title: "Score Date",
+            title: "Date",
             field: "score_date",
             editor: "input",
             formatter: function(cell, formatterParams, onRendered) {
@@ -46,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Initialize Tabulator
     table = new Tabulator("#performance-table", {
         height: "500px",
         data: performanceData,
@@ -65,102 +135,49 @@ document.addEventListener('DOMContentLoaded', function() {
             columnHeaders: true,
         },
         clipboardCopyStyled: false,
-        selectableRange: 1, // allow only one range at a time
+        selectableRange: 1,
         selectableRangeColumns: false,
         selectableRangeRows: false,
         selectableRangeClearCells: false,
     });
 
-        // Add cellEdited event listener inside initializeTable after declaring table
-        table.on("cellEdited", function(cell) {
-            const field = cell.getField();
-            let value = cell.getValue();
+    // Add cellEdited event listener
+    table.on("cellEdited", function(cell) {
+        console.log('Cell edited:', cell);
+        const field = cell.getField();
+        let value = cell.getValue();
 
-            if (value === "") {
-                value = null;
-            }
+        if (value === "") {
+            value = null;
+        }
 
-            const updatedData = cell.getRow().getData();
-            updatedData[field] = value;
+        const updatedData = cell.getRow().getData();
+        updatedData[field] = value;
 
-            // Log the updated data for debugging
-            console.log("Updated data:", updatedData);
+        console.log("Updated data post-edit:", updatedData);
 
-            // Update the cell data in the backend (make AJAX call)
-            fetch('./users/update_performance2.php', {
+        // Update the cell data in the backend (make AJAX call)
+        fetch('./users/update_performance2.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(updatedData)
             }).then(response => response.json())
-              .then(result => {
-                  if (result.success) {
-                      // Data updated successfully
-                  } else {
-                      alert('Failed to update data: ' + result.message);
-                      console.error('Error info:', result.errorInfo); // Log detailed error info
-                  }
-              })
-              .catch(error => console.error('Error:', error));
-        });
-    }
-
-    function fetchFilteredData(iepDate) {
-        fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Filtered data fetched:', data);
-                if (data && data.performanceData && data.scoreNames) {
-                    initializeTable(data.performanceData, data.scoreNames);
+            .then(result => {
+                if (result.success) {
+                    console.log('Data updated successfully:', result);
                 } else {
-                    console.error('Invalid or incomplete data received:', data);
+                    alert('Failed to update data: ' + result.message);
+                    console.error('Error info:', result.errorInfo);
                 }
             })
-            .catch(error => console.error('Error fetching filtered data:', error));
-    }
-
-    document.getElementById('filterData').addEventListener('click', function() {
-        const iepDate = document.getElementById('iep_date').value;
-        if (iepDate) {
-            fetch('./users/save_iep_date.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    iep_date: iepDate,
-                    student_id: studentId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('IEP date saved:', data);
-                if (data.success) {
-                    fetchFilteredData(iepDate);
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error('Error saving IEP date:', error));
-        }
+            .catch(error => {
+                console.error('Error updating data:', error);
+            });
     });
+}
 
-    fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Initial data fetched:', data);
-            if (data && data.performanceData && data.scoreNames) {
-                initializeTable(data.performanceData, data.scoreNames);
-                if (data.iepDate) {
-                    document.getElementById('iep_date').value = data.iepDate;
-                }
-            } else {
-                console.error('Invalid or incomplete initial data:', data);
-            }
-        })
-        .catch(error => console.error('Error fetching initial data:', error));
-});
 
 // Constants for the colors and other settings
 const seriesColors = ['#082645', '#FF8C00', '#388E3C', '#D32F2F', '#7B1FA2', '#1976D2', '#C2185B', '#0288D1', '#7C4DFF', '#C21807'];
