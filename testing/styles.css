@@ -34,11 +34,6 @@ body {
     z-index: 1000; /* Ensure it stays above other content */
   }
 
-/*
-  .dashboard-header:hover {
-    background-color: #45A0DD;
-    }
-*/
 
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
@@ -63,7 +58,7 @@ body {
     display: flex;
     flex-grow: 1;
     padding: 0 20px; /* Add top padding to compensate for the navbar height */
-    margin-top: 3.2rem; /* Adjust this value to match the height of the navbar */
+    margin-top: 3.1rem; /* Adjust this value to match the height of the navbar */
     justify-content: center; /* Center the content horizontally */
     width: 100%; /* Ensure it takes full width */
     max-width: 100%; /* Ensure it does not exceed the view width */
@@ -85,7 +80,7 @@ body {
   }
 
 .box, .card {
-    background-color: #f9f9f9; /* Lighter shade for panels */
+    background-color: #D5FFFF; /* Lighter shade for panels */
     border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
     padding: 1rem;
     margin: 0.5rem;
@@ -95,7 +90,7 @@ body {
 
 /* Hover effects on interactive elements */
 .box:hover, .card:hover {
-    border-color: #45A0DD; /* Slightly darker blue for hover */
+    border-color: #8cc9f1; /* Slightly darker blue for hover */
 }
 
 .create-group, .students-list {
@@ -363,11 +358,7 @@ h3 {
         margin-top: 30px; /* Reduced margin on smaller screens */
         max-height: auto; /* Smaller max height on smaller screens */
     }
-    
-    .tabulator .tabulator-header .tabulator-col {
-        padding: 5px 0; 
-        font-size: 14px; 
-    }
+
 }
 
 #dataTable_wrapper .col-md-6:eq(0) {
@@ -510,15 +501,6 @@ button[type="submit"]:hover {
     background-color: #45a049;
 }
 */
-
-.header-icons span, .header-icons .nav-link {
-    margin-right: 20px;
-    font-size: 1.2rem;
-    color: white;
-    text-decoration: none;
-    padding: 10px; /* Padding for spacing and better hover effect */
-    border-radius: 5px; /* Rounded corners */
-}
 
 .header-icons .nav-link i {
     margin-right: 5px;
@@ -699,8 +681,8 @@ button[type="submit"]:hover {
         }
         
         .tabulator .tabulator-header .tabulator-col {
-            background-color: #f4f4f4; /* Light gray background for headers*/
-            color: #333; /* Darker text for better readability*/
+            background-color: #9bc4ff; /* Light gray background for headers*/
+            color: #000000; /* Darker text for better readability*/
             font-weight: bold; /* Make header text bold*/
             text-align: center; /* Center-align header text*/
             padding: 10px 0; /* Padding for better spacing */
@@ -715,8 +697,7 @@ button[type="submit"]:hover {
             position: sticky;
             top: 0;
             z-index: 10; 
-            background-color: #d6e4f0; /* A soft background color for headers */
-            color: #333; /* Dark text for better readability */
+            color: #000000; /* Dark text for better readability */
 
         }
 
@@ -728,12 +709,13 @@ button[type="submit"]:hover {
         .tabulator .tabulator-cell {
             padding: 10px 6px; /* More padding within cells */
             font-size: 16px; /* Larger text for easier reading */
-            color: #333; /* Darker text for better contrast */
+            color: #000000; /* Darker text for better contrast */
+            text-align: left;
         }
         
         #performance-table {
-            background-color: #fff; /* Adds contrast if needed */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* Adds depth */
+            background-color: #D5FFFF; /* Adds contrast if needed */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Adds depth */
             border: 1px solid #ddd; /* Defines boundaries more clearly */
             margin-top: 20px; /* Extra space from any content above */
         }
@@ -742,7 +724,7 @@ button[type="submit"]:hover {
             width: 100%; /* Ensures it takes full width of its container */
             max-height: auto;
             overflow-y: auto;
-            margin-top: 30px;
+            margin-top: 5px;
             /*align-self: center; /* This will help in centering the content */
             overflow-x: hidden; /* Hide horizontal scroll if it appears */
         }
@@ -758,21 +740,20 @@ button[type="submit"]:hover {
         }
         
         #performance-table .tabulator-row {
-            border-bottom: 1px solid #ccc; /* Adds a subtle line between rows */
+            border-bottom: 1px solid #777676; /* Adds a subtle line between rows */
         }
         
         #performance-table .tabulator-row:nth-child(odd) {
-            background-color: #f0f0f0; /* Lighter shade for alternate rows */
+            background-color: #deffff; /* Lighter shade for alternate rows */
         }
         
         #performance-table .tabulator-row:nth-child(even) {
-            background-color: #e0e0e0; /* Slightly darker for contrast */
+            background-color: #F5FFFF; /* Slightly darker for contrast */
         }
         
         #performance-table .tabulator-cell {
             border-right: 1px solid #333; /* Adds vertical lines if needed */
             padding: 8px 10px; /* Adjust padding for cell content */
-            text-align: center; /* Center aligns the text in cells */
         }
         
         /* Custom styling for header cells */

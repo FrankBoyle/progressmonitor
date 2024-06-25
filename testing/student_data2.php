@@ -7,24 +7,24 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
 </head>
 <body>
 <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="logo">
-                <img src="bFactor_logo.png" alt="Logo">
-            </div>
-            <div class="header-icons">
-                <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-                <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
-            </div>
-        </header>
-            <main class="content">
-                <section class="box box-centered-top">
-                    <div id="performance-table"></div>
-                </section>
-            </main>
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="bFactor_logo.png" alt="Logo">
+        </div>
+        <div class="header-icons">
+            <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+            <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+        </div>
+    </header>
+    <main class="content">
+        <section class="box box-centered-top">
+            <div id="performance-table"></div>
+        </section>
+    </main>
 </div>
 
 <script>
@@ -62,6 +62,7 @@
                             mask: "MM/DD/YYYY",
                             format: "MM/DD/YYYY",
                         },
+                        headerFilter: "input"  // Add filter to this column
                     },
                 ];
 
@@ -69,7 +70,8 @@
                     columns.push({ 
                         title: scoreNames[key], 
                         field: `score${index + 1}`, 
-                        editor: "input", 
+                        editor: "input",
+                        headerFilter: "input"  // Add filter to each score column
                     });
                 });
 
@@ -78,23 +80,14 @@
                     height: "500px",
                     data: performanceData,
                     columns: columns,
-                    fozenRows:1,
-                    layout: "fitDataStretch",
-                    tooltips: true,  // Show tool tips on cells
-                    movableColumns: false,
-                    resizableRows: false,
-                    editTriggerEvent: "dblclick", //trigger edit on double click
-                    editorEmptyValue: null,
-                    clipboard: true,
-                    clipboardCopyRowRange: "range",
-                    clipboardPasteParser: "range",
-                    clipboardPasteAction: "range",
-                    clipboardCopyConfig: {
-                        rowHeaders: false, //do not include row headers in clipboard output
-                        columnHeaders: true, //include column headers in clipboard output
-                    },
-                    clipboardCopyStyled: false,
-                    selectable: true,
+                    layout: "fitColumns",
+                    tooltips: true,
+                    movableColumns: true,
+                    resizableRows: true,
+                    headerSortTristate: true,
+                    pagination: "local",
+                    paginationSize: 10,
+                    selectable: 1,
                 });
 
                 // Add cellEdited event listener
@@ -108,9 +101,6 @@
 
                     const updatedData = cell.getRow().getData();
                     updatedData[field] = value;
-
-                    // Log the updated data for debugging
-                    console.log("Updated data:", updatedData);
 
                     // Update the cell data in the backend (make AJAX call)
                     fetch('./users/update_performance2.php', {
@@ -134,6 +124,5 @@
             .catch(error => console.error('There was a problem with the fetch operation:', error));
     });
 </script>
-
 </body>
 </html>
