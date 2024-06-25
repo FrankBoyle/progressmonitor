@@ -80,7 +80,7 @@ body {
   }
 
 .box, .card {
-    background-color: #D5FFFF; /* Lighter shade for panels */
+    background-color: #e6f0f0; /* Lighter shade for panels */
     border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
     padding: 1rem;
     margin: 0.5rem;
@@ -713,7 +713,7 @@ button[type="submit"]:hover {
             color: #000000; /* Darker text for better contrast */
             text-align: left;
         }
-        
+
         .left-align-cell {
             text-align: left;  /* Apply left alignment to cell content */
         }
