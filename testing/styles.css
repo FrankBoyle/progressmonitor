@@ -746,7 +746,6 @@ td .cell-input {
     box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Adds depth */
     border: 1px solid #ddd; /* Defines boundaries more clearly */
     width: auto;  /* Set table width to auto */
-    margin-right: auto;  /* Align table to the left */
     flex-grow: 1;
 
 }
