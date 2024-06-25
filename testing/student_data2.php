@@ -42,6 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let table; // Declare `table` in a higher scope
 
     function initializeTable(performanceData, scoreNames) {
+        // Check if scoreNames is valid
+        if (!scoreNames || typeof scoreNames !== 'object') {
+            console.error('scoreNames is invalid or not an object:', scoreNames);
+            return; // Prevent further execution if scoreNames is invalid
+        }
+
         const columns = [
             {
                 title: "Score Date",
@@ -61,12 +67,13 @@ document.addEventListener('DOMContentLoaded', function() {
             },
         ];
 
+        // Safely iterate over scoreNames
         Object.keys(scoreNames).forEach((key, index) => {
-            columns.push({ 
-                title: scoreNames[key], 
-                field: `score${index + 1}`, 
-                editor: "input", 
-                width: 100 
+            columns.push({
+                title: scoreNames[key],
+                field: `score${index + 1}`,
+                editor: "input",
+                width: 100
             });
         });
 
@@ -89,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 columnHeaders: true,
             },
             clipboardCopyStyled: false,
-            selectableRange: 1, //allow only one range at a time
+            selectableRange: 1, // allow only one range at a time
             selectableRangeColumns: false,
             selectableRangeRows: false,
             selectableRangeClearCells: false,
@@ -120,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }).then(response => response.json())
               .then(result => {
                   if (result.success) {
-                      // alert('Data updated successfully');
+                      // Data updated successfully
                   } else {
                       alert('Failed to update data: ' + result.message);
                       console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -135,14 +142,17 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 console.log('Filtered data fetched:', data);
-                initializeTable(data.performanceData, data.scoreNames);
+                if (data && data.performanceData && data.scoreNames) {
+                    initializeTable(data.performanceData, data.scoreNames);
+                } else {
+                    console.error('Invalid or incomplete data received:', data);
+                }
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
 
     document.getElementById('filterData').addEventListener('click', function() {
         const iepDate = document.getElementById('iep_date').value;
-
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
                 method: 'POST',
@@ -170,11 +180,14 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            const { performanceData, scoreNames, iepDate } = data;
             console.log('Initial data fetched:', data);
-            initializeTable(performanceData, scoreNames);
-            if (iepDate) {
-                document.getElementById('iep_date').value = iepDate;
+            if (data && data.performanceData && data.scoreNames) {
+                initializeTable(data.performanceData, data.scoreNames);
+                if (data.iepDate) {
+                    document.getElementById('iep_date').value = data.iepDate;
+                }
+            } else {
+                console.error('Invalid or incomplete initial data:', data);
             }
         })
         .catch(error => console.error('Error fetching initial data:', error));
