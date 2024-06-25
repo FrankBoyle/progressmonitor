@@ -680,7 +680,7 @@ button[type="submit"]:hover {
              /* overflow: hidden; /* Ensures the rounded corners are visible */
         }
         
-        .tabulator .tabulator-header .tabulator-col {
+        .tabulator-header .tabulator-col {
             background-color: #9bc4ff; /* Light gray background for headers*/
             color: #000000; /* Darker text for better readability*/
             font-weight: bold; /* Make header text bold*/
