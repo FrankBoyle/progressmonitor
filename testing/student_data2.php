@@ -78,6 +78,7 @@
                     height: "auto",
                     data: performanceData,
                     columns: columns,
+                    fozenRows:1,
                     layout: "fitColumns",
                     tooltips: true,  // Show tool tips on cells
                     movableColumns: false,
