@@ -676,7 +676,7 @@ button[type="submit"]:hover {
         }
 
         .tabulator {
-            border-radius: 5px; /* Rounds corners for a softer look */
+            border-radius: 8px; /* Rounds corners for a softer look */
             overflow: hidden; /* Ensures the rounded corners are visible */
         }
         
