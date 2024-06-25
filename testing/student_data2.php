@@ -82,8 +82,9 @@
                 });
 
                 // Add cell selection event listener
-                table.on("cellSelectionChanged", function(data) {
-                    console.log("Selected cells data:", data);
+                table.on("cellSelectionChanged", function(data, cells) {
+                    let selectedData = cells.map(cell => cell.getData());
+                    console.log("Selected cells data:", selectedData);
                 });
 
                 // Add cellEdited event listener
@@ -126,6 +127,7 @@
 
 </body>
 </html>
+
 
 
 
