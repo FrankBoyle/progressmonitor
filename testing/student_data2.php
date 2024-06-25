@@ -42,65 +42,69 @@ document.addEventListener('DOMContentLoaded', function() {
     let table; // Declare `table` in a higher scope
 
     function initializeTable(performanceData, scoreNames) {
-        // Check if scoreNames is valid
-        if (!scoreNames || typeof scoreNames !== 'object') {
-            console.error('scoreNames is invalid or not an object:', scoreNames);
-            return; // Prevent further execution if scoreNames is invalid
-        }
+    // Check if table already exists and destroy it if it does
+    if (table) {
+        table.destroy();
+    }
 
-        const columns = [
-            {
-                title: "Score Date",
-                field: "score_date",
-                editor: "input",
-                formatter: function(cell, formatterParams, onRendered) {
-                    const DateTime = luxon.DateTime;
-                    let date = DateTime.fromISO(cell.getValue());
-                    return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-                },
-                editorParams: {
-                    mask: "MM/DD/YYYY",
-                    format: "MM/DD/YYYY",
-                },
-                width: 120,
-                frozen: false,
+    // Check if scoreNames is valid
+    if (!scoreNames || typeof scoreNames !== 'object') {
+        console.error('scoreNames is invalid or not an object:', scoreNames);
+        return; // Prevent further execution if scoreNames is invalid
+    }
+
+    const columns = [
+        {
+            title: "Score Date",
+            field: "score_date",
+            editor: "input",
+            formatter: function(cell, formatterParams, onRendered) {
+                const DateTime = luxon.DateTime;
+                let date = DateTime.fromISO(cell.getValue());
+                return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
             },
-        ];
-
-        // Safely iterate over scoreNames
-        Object.keys(scoreNames).forEach((key, index) => {
-            columns.push({
-                title: scoreNames[key],
-                field: `score${index + 1}`,
-                editor: "input",
-                width: 100
-            });
-        });
-
-        table = new Tabulator("#performance-table", {
-            height: "500px",
-            data: performanceData,
-            columns: columns,
-            layout: "fitDataStretch",
-            tooltips: true,
-            movableColumns: false,
-            resizableRows: false,
-            editTriggerEvent: "dblclick",
-            editorEmptyValue: null,
-            clipboard: true,
-            clipboardCopyRowRange: "range",
-            clipboardPasteParser: "range",
-            clipboardPasteAction: "range",
-            clipboardCopyConfig: {
-                rowHeaders: false,
-                columnHeaders: true,
+            editorParams: {
+                mask: "MM/DD/YYYY",
+                format: "MM/DD/YYYY",
             },
-            clipboardCopyStyled: false,
-            selectableRange: 1, // allow only one range at a time
-            selectableRangeColumns: false,
-            selectableRangeRows: false,
-            selectableRangeClearCells: false,
+            width: 120,
+            frozen: false,
+        },
+    ];
+
+    Object.keys(scoreNames).forEach((key, index) => {
+        columns.push({
+            title: scoreNames[key],
+            field: `score${index + 1}`,
+            editor: "input",
+            width: 100
         });
+    });
+
+    table = new Tabulator("#performance-table", {
+        height: "500px",
+        data: performanceData,
+        columns: columns,
+        layout: "fitDataStretch",
+        tooltips: true,
+        movableColumns: false,
+        resizableRows: false,
+        editTriggerEvent: "dblclick",
+        editorEmptyValue: null,
+        clipboard: true,
+        clipboardCopyRowRange: "range",
+        clipboardPasteParser: "range",
+        clipboardPasteAction: "range",
+        clipboardCopyConfig: {
+            rowHeaders: false,
+            columnHeaders: true,
+        },
+        clipboardCopyStyled: false,
+        selectableRange: 1, // allow only one range at a time
+        selectableRangeColumns: false,
+        selectableRangeRows: false,
+        selectableRangeClearCells: false,
+    });
 
         // Add cellEdited event listener inside initializeTable after declaring table
         table.on("cellEdited", function(cell) {
