@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
 </head>
 <body>
 <div class="dashboard">
@@ -33,9 +33,6 @@
             <div id="performance-table"></div>
         </div>
     </main>
-
-
-
 </div>
 
 <script>
@@ -44,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentId = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
 
+    // Function to fetch and display the filtered data
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.text())
@@ -55,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('filterData').addEventListener('click', function() {
         var iepDate = document.getElementById('iep_date').value;
-        var studentId = urlParams.get('student_id');
 
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
@@ -82,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const table = new Tabulator("#performance-table", {
         height: "500px",
-        layout: "fitcolumns",
+        layout: "fitColumns",
         tooltips: true,
         movableColumns: false,
         resizableRows: false,
@@ -144,12 +141,14 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            const { performanceData, scoreNames } = data;
+            const { performanceData, scoreNames, iepDate } = data;
             initializeTable(performanceData, scoreNames);
+            if (iepDate) {
+                document.getElementById('iep_date').value = iepDate;
+            }
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
-
 </script>
 
 </body>
