@@ -67,7 +67,7 @@ body {
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: 300px;
+    width: 90%; /* Adjust width as necessary */
 }
 
 .card-header, .box-header {
@@ -87,7 +87,7 @@ body {
 .box, .card {
     background-color: #c0c8c8; /* Lighter shade for panels */
     border: 1.5px solid #a3bbcf; /* Soft blue border from the palette */
-    padding: 1rem;
+    /*padding: 1rem;*/
     margin: 0.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -478,7 +478,7 @@ td .cell-input {
 .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
