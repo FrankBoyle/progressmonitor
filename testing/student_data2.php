@@ -75,10 +75,11 @@
 
                 // Initialize Tabulator with existing settings
                 const table = new Tabulator("#performance-table", {
-                    height: "auto",
+                    height: "500px",
                     data: performanceData,
                     columns: columns,
-                    layout: "fitDataFill",
+                    layout: "fitDataStretch",
+                    persistentLayout: true,  // Enables persistent layout to save column layout between page refreshes
                     movableColumns: false,
                     resizableRows: false,
                     editTriggerEvent: "dblclick", //trigger edit on double click
