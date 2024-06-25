@@ -59,7 +59,7 @@ body {
     flex-grow: 1;
     /* padding: 0 20px; /* Add top padding to compensate for the navbar height */
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
-    justify-content: center; /* Center the content horizontally */
+    justify-content: left; /* Center the content horizontally */
     width: 100%; /* Ensure it takes full width */
     max-width: 100%; /* Ensure it does not exceed the view width */
 
