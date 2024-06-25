@@ -68,7 +68,7 @@ body {
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: 100%; /* Adjust width as necessary */
+    width: 95%; /* Adjust width as necessary */
 }
 
 .card-header, .box-header {
@@ -97,6 +97,15 @@ body {
 
 #filterData {
     white-space: nowrap;
+}
+
+.filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 20px;
 }
 
 /*
@@ -498,6 +507,13 @@ td .cell-input {
     margin-bottom: 20px;
 }
 
+.filter-section .form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
 .form-group label {
     display: block;
     margin-bottom: 5px;
@@ -691,6 +707,7 @@ td .cell-input {
     padding: 10px 0; /* Padding for better spacing */
     border-right: 1px solid #ddd; /* Add borders for separation*/
     text-align: center;
+    white-space: normal;
 }
 
 .tabulator .tabulator-header .tabulator-col:last-child {
