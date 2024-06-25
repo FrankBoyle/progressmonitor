@@ -348,6 +348,11 @@ h3 {
     .existing-groups, .details {
         width: 100%;
     }
+
+    #performance-table {
+        width: 100%; /* Full-width on smaller screens */
+        overflow-x: auto; /* Allows scrolling on small devices */
+    }
 }
 
 #dataTable_wrapper .col-md-6:eq(0) {
