@@ -62,7 +62,7 @@ body {
 .content {
     display: flex;
     flex-grow: 1;
-    padding: 20px; /* Add top padding to compensate for the navbar height */
+    padding: 0 20px; /* Add top padding to compensate for the navbar height */
     margin-top: 3.2rem; /* Adjust this value to match the height of the navbar */
     justify-content: center; /* Center the content horizontally */
     width: 100%; /* Ensure it takes full width */
@@ -729,14 +729,15 @@ button[type="submit"]:hover {
             margin-top: 20px; /* Extra space from any content above */
         }
         
-
         .box-centered-top {
-            max-height: 500px; /* Limit the height of the box */
-            overflow-y: auto; /* Enable vertical scrolling */
-            margin-top: 10px; /* Add top margin for spacing from the header */
-            align-self: start; /* Align the box to the start of the flex container */
+            width: 100%; /* Ensures it takes full width of its container */
+            max-height: 500px;
+            overflow-y: auto;
+            margin-top: 10px;
+            align-self: center; /* This will help in centering the content */
+            overflow-x: hidden; /* Hide horizontal scroll if it appears */
         }
-        
+
         /* Optional: Enhance scrollbar appearance for better UX */
         .box-centered-top::-webkit-scrollbar {
             width: 8px;

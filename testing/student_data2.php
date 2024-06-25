@@ -78,8 +78,8 @@
                     height: "auto",
                     data: performanceData,
                     columns: columns,
-                    layout: "fitDataStretch",
-                    persistentLayout: true,  // Enables persistent layout to save column layout between page refreshes
+                    layout: "fitColumns",
+                    tooltips: true,  // Show tool tips on cells
                     movableColumns: false,
                     resizableRows: false,
                     editTriggerEvent: "dblclick", //trigger edit on double click
