@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         mask: "MM/DD/YYYY",
                         format: "MM/DD/YYYY",
                     },
-                    width: 100, // Set a fixed width for better visibility
+                    width: 120, // Set a fixed width for better visibility
                     frozen: true // Freeze the date column
                 },
             ];
@@ -143,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('There was a problem with the fetch operation:', error));
 });
+
 
 </script>
 

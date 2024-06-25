@@ -661,7 +661,7 @@ td .cell-input {
     border-right: 1px solid #ddd; /* Add borders for separation*/
     text-align: center;
     white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Ensure words break and wrap properly */
+    /*word-wrap: break-word; /* Ensure words break and wrap properly */
 }
 
 .tabulator .tabulator-header .tabulator-col:last-child {
