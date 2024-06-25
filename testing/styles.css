@@ -715,7 +715,9 @@ button[type="submit"]:hover {
             position: sticky;
             top: 0;
             z-index: 10; 
-            background: #f9f9f9;  
+            background-color: #d6e4f0; /* A soft background color for headers */
+            color: #333; /* Dark text for better readability */
+
         }
 
         .tabulator-row {
@@ -755,3 +757,25 @@ button[type="submit"]:hover {
             border-radius: 10px;
         }
         
+        #performance-table .tabulator-row {
+            border-bottom: 1px solid #ccc; /* Adds a subtle line between rows */
+        }
+        
+        #performance-table .tabulator-row:nth-child(odd) {
+            background-color: #f0f0f0; /* Lighter shade for alternate rows */
+        }
+        
+        #performance-table .tabulator-row:nth-child(even) {
+            background-color: #e0e0e0; /* Slightly darker for contrast */
+        }
+        
+        #performance-table .tabulator-cell {
+            border-right: 1px solid #e0e0e0; /* Adds vertical lines if needed */
+            padding: 8px 10px; /* Adjust padding for cell content */
+            text-align: center; /* Center aligns the text in cells */
+        }
+        
+        /* Custom styling for header cells */
+        #performance-table .tabulator-col {
+            border-right: 1px solid #ccc; /* Vertical lines between headers */
+        }
