@@ -90,7 +90,8 @@ $scoreNames = fetchScoreNames($school_id, $metadata_id);
 // Prepare the response data
 $response = [
     'performanceData' => $performanceData,
-    'scoreNames' => $scoreNames
+    'scoreNames' => $scoreNames,
+    'iepDate' => $iep_date  // Include IEP date in the response
 ];
 
 // Send JSON response

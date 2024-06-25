@@ -11,31 +11,31 @@
 </head>
 <body>
 <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="logo">
-                <img src="bFactor_logo.png" alt="Logo">
-            </div>
-            <div class="header-icons">
-                <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-                <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
-            </div>
-        </header>
-
-        <section class="content">
-    <div class="card">
-        <div class="form-group" style="text-align: center;">
-            <label for="iep_date" style="display: block;">IEP Date:</label>
-            <input type="date" id="iep_date" name="iep_date" class="form-control" value="<?php echo htmlspecialchars($iep_date); ?>">
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="bFactor_logo.png" alt="Logo">
         </div>
-        <button id="filterData" class="btn btn-primary">Filter Data</button>
-    </div>
-</section>
+        <div class="header-icons">
+            <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+            <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+        </div>
+    </header>
 
-            <main class="content">
-                <section class="box box-centered-top">
-                    <div id="performance-table"></div>
-                </section>
-            </main>
+    <section class="content">
+        <div class="card">
+            <div class="form-group" style="text-align: center;">
+                <label for="iep_date" style="display: block;">IEP Date:</label>
+                <input type="date" id="iep_date" name="iep_date" class="form-control">
+            </div>
+            <button id="filterData" class="btn btn-primary">Filter Data</button>
+        </div>
+    </section>
+
+    <main class="content">
+        <section class="box box-centered-top">
+            <div id="performance-table"></div>
+        </section>
+    </main>
 </div>
 
 <script>
@@ -47,17 +47,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to fetch and display the filtered data
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector('#performance-table').innerHTML = html;
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    table.setData(data.performanceData);
+                } else {
+                    console.error('Error fetching filtered data:', data.message);
+                }
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
 
     document.getElementById('filterData').addEventListener('click', function() {
         var iepDate = document.getElementById('iep_date').value;
-        var studentId = urlParams.get('student_id');
-
 
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
@@ -154,14 +156,15 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            const { performanceData, scoreNames } = data;
+            const { performanceData, scoreNames, iepDate } = data;
             initializeTable(performanceData, scoreNames);
+            // Set the IEP date if it exists
+            if (iepDate) {
+                document.getElementById('iep_date').value = iepDate;
+            }
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
-
-
-
 </script>
 
 </body>
