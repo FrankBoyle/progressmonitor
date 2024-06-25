@@ -672,3 +672,31 @@ button[type="submit"]:hover {
             clear: both;
             display: table;
         }
+
+        .tabulator {
+            border-radius: 5px; /* Rounds corners for a softer look */
+            overflow: hidden; /* Ensures the rounded corners are visible */
+        }
+        
+        .tabulator .tabulator-header {
+            background-color: #f4f4f4; /* Light grey background for headers */
+        }
+        
+        .tabulator-row {
+            border-bottom: 1px solid #eee; /* Adds separation between rows */
+        }
+        
+
+        .tabulator .tabulator-cell {
+            padding: 10px 6px; /* More padding within cells */
+            font-size: 16px; /* Larger text for easier reading */
+            color: #333; /* Darker text for better contrast */
+        }
+        
+        #performance-table {
+            background-color: #fff; /* Adds contrast if needed */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* Adds depth */
+            border: 1px solid #ddd; /* Defines boundaries more clearly */
+            margin-top: 20px; /* Extra space from any content above */
+        }
+        
