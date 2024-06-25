@@ -46,19 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to fetch and display the filtered data
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    table.setData(data.performanceData);
-                } else {
-                    console.error('Error fetching filtered data:', data.message);
-                }
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('#performance-table').innerHTML = html;
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
 
     document.getElementById('filterData').addEventListener('click', function() {
         var iepDate = document.getElementById('iep_date').value;
+        var studentId = urlParams.get('student_id');
 
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
@@ -133,8 +130,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     mask: "MM/DD/YYYY",
                     format: "MM/DD/YYYY",
                 },
-                width: 120, // Set a fixed width for better visibility
-                frozen: true // Freeze the date column
+                width: 120,
+                frozen: true
             },
         ];
 
@@ -143,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: scoreNames[key], 
                 field: `score${index + 1}`, 
                 editor: "input", 
-                width: 100 // Set a fixed width for better visibility
+                width: 100 
             });
         });
 
@@ -155,15 +152,12 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            const { performanceData, scoreNames, iepDate } = data;
+            const { performanceData, scoreNames } = data;
             initializeTable(performanceData, scoreNames);
-            // Set the IEP date if it exists
-            if (iepDate) {
-                document.getElementById('iep_date').value = iepDate;
-            }
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
+
 </script>
 
 </body>
