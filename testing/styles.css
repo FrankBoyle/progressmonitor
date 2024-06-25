@@ -361,7 +361,7 @@ h3 {
     .box-centered-top {
         width: 100%; /* Full width on smaller screens */
         margin-top: 10px; /* Reduced margin on smaller screens */
-        max-height: 300px; /* Smaller max height on smaller screens */
+        max-height: 500px; /* Smaller max height on smaller screens */
     }
     
     .tabulator .tabulator-header .tabulator-col {
@@ -731,9 +731,9 @@ button[type="submit"]:hover {
         
 
         .box-centered-top {
-            max-height: 400px; /* Limit the height of the box */
+            max-height: 500px; /* Limit the height of the box */
             overflow-y: auto; /* Enable vertical scrolling */
-            margin-top: 20px; /* Add top margin for spacing from the header */
+            margin-top: 10px; /* Add top margin for spacing from the header */
             align-self: start; /* Align the box to the start of the flex container */
         }
         
