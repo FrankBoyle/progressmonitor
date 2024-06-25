@@ -8,6 +8,8 @@
 <body>
 
 <div id="performance-table"></div>
+<button id="calculate-average">Calculate Average</button>
+<button id="calculate-slope">Calculate Slope</button>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -63,22 +65,67 @@
                     layout: "fitColumns",
                     movableColumns: true,
                     resizableRows: true,
-                    editTriggerEvent: "dblclick", //trigger edit on double click
+                    editTriggerEvent: "dblclick", // trigger edit on double click
                     editorEmptyValue: null,
                     clipboard: true,
                     clipboardCopyRowRange: "range",
                     clipboardPasteParser: "range",
                     clipboardPasteAction: "range",
                     clipboardCopyConfig: {
-                        rowHeaders: false, //do not include row headers in clipboard output
-                        columnHeaders: true, //include column headers in clipboard output
+                        rowHeaders: false, // do not include row headers in clipboard output
+                        columnHeaders: true, // include column headers in clipboard output
                     },
                     clipboardCopyStyled: false,
-                    selectableRange: true, //allow only one range at a time
+                    selectableRange: 1, // allow only one range at a time
                     selectableRangeColumns: false,
                     selectableRangeRows: false,
                     selectableRangeClearCells: true,
+                    cellSelection: true, // enable cell selection
                 });
+
+                // Add cell selection event listener
+                table.on("cellSelectionChanged", function(data, cells) {
+                    console.log("Selected cells data:", data);
+                });
+
+                // Function to calculate average
+                function calculateAverage() {
+                    const selectedCells = table.getSelectedData();
+                    if (selectedCells.length === 0) {
+                        alert("Please select some cells first.");
+                        return;
+                    }
+
+                    let total = 0;
+                    let count = 0;
+                    selectedCells.forEach(cell => {
+                        const value = parseFloat(cell.value);
+                        if (!isNaN(value)) {
+                            total += value;
+                            count++;
+                        }
+                    });
+
+                    const average = total / count;
+                    alert(`Average of selected cells: ${average}`);
+                }
+
+                // Function to calculate slope (example)
+                function calculateSlope() {
+                    const selectedCells = table.getSelectedData();
+                    if (selectedCells.length === 0) {
+                        alert("Please select some cells first.");
+                        return;
+                    }
+
+                    // Perform slope calculation (this is just an example)
+                    // In a real scenario, you would need to implement the actual logic for slope calculation
+                    alert("Slope calculation functionality is not implemented yet.");
+                }
+
+                // Add event listeners to buttons
+                document.getElementById('calculate-average').addEventListener('click', calculateAverage);
+                document.getElementById('calculate-slope').addEventListener('click', calculateSlope);
 
                 // Add cellEdited event listener
                 table.on("cellEdited", function(cell) {
