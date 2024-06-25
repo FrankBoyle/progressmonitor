@@ -79,7 +79,7 @@
                     data: performanceData,
                     columns: columns,
                     fozenRows:1,
-                    layout: "fitColumns",
+                    layout: "fitDataStretch",
                     tooltips: true,  // Show tool tips on cells
                     movableColumns: false,
                     resizableRows: false,
@@ -94,10 +94,7 @@
                         columnHeaders: true, //include column headers in clipboard output
                     },
                     clipboardCopyStyled: false,
-                    selectableRange: 1, //allow only one range at a time
-                    selectableRangeColumns: false,
-                    selectableRangeRows: false,
-                    selectableRangeClearCells: false,
+                    selectable: true,
                 });
 
                 // Add cellEdited event listener
