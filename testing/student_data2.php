@@ -8,7 +8,7 @@
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
 </head>
 <body>
 <div class="dashboard">
@@ -17,8 +17,8 @@
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
-            <a href="studnets.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-            <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+            <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+            <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
         </div>
     </header>
     <main class="content">
@@ -32,25 +32,14 @@
             </div>
             <div id="performance-table"></div>
         </div>
+        <div id="columnSelector"></div>
         <!-- Chart Containers -->
-        <div class="chart-container">
-            <h3>Performance Line Chart</h3>
-            <div id="columnSelector"></div>
-            <div id="chartContainer"></div>
-        </div>
-        <div class="chart-container">
-            <h3>Performance Bar Chart</h3>
-            <div id="columnSelector"></div>
-            <div id="barChartContainer"></div>
+        <div class="charts-container">
+            <div id="chartContainer" class="chart"></div>
+            <div id="barChartContainer" class="chart"></div>
         </div>
     </main>
 </div>
-<script src="charts.js"></script>
-
-<script>
-
-</script>
-
+<script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
 </body>
 </html>
-
