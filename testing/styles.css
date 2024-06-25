@@ -361,7 +361,7 @@ h3 {
     .box-centered-top {
         width: 100%; /* Full width on smaller screens */
         margin-top: 30px; /* Reduced margin on smaller screens */
-        max-height: 500px; /* Smaller max height on smaller screens */
+        max-height: auto; /* Smaller max height on smaller screens */
     }
     
     .tabulator .tabulator-header .tabulator-col {
