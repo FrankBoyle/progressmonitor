@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/tabulator-ttables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
 </head>
@@ -45,9 +45,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to fetch and display the filtered data
     function fetchFilteredData(iepDate) {
+        console.log('Fetching filtered data with IEP date:', iepDate); // Debugging output
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.json())
             .then(data => {
+                console.log('Filtered data received:', data); // Debugging output
                 table.setData(data);
             })
             .catch(error => console.error('Error fetching filtered data:', error));
@@ -55,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('filterData').addEventListener('click', function() {
         var iepDate = document.getElementById('iep_date').value;
+
+        console.log('Filter Data button clicked, IEP date:', iepDate); // Debugging output
 
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
@@ -69,13 +73,14 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Save IEP date response:', data); // Debugging output
                 if (data.success) {
                     fetchFilteredData(iepDate);
                 } else {
                     alert(data.message);
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error saving IEP date:', error));
         }
     });
 
@@ -144,6 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             const { performanceData, scoreNames, iepDate } = data;
+            console.log('Initial data received:', data); // Debugging output
             initializeTable(performanceData, scoreNames);
             if (iepDate) {
                 document.getElementById('iep_date').value = iepDate;
@@ -155,4 +161,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
 
