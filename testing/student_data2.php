@@ -79,6 +79,7 @@
                     data: performanceData,
                     columns: columns,
                     fozenRows:1,
+                    headerWordWrap: true,
                     layout: "fitColumns",
                     movableColumns: false,
                     resizableRows: false,
