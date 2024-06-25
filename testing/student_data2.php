@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     format: "MM/DD/YYYY",
                 },
                 width: 120,
-                frozen: true
+                frozen: false,
             },
         ];
 
