@@ -41,12 +41,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentId = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
 
+    let table;
+
     // Function to fetch and display the filtered data
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector('#performance-table').innerHTML = html;
+            .then(response => response.json())
+            .then(data => {
+                table.setData(data);
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
@@ -77,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    const table = new Tabulator("#performance-table", {
+    table = new Tabulator("#performance-table", {
         height: "500px",
         layout: "fitColumns",
         tooltips: true,
@@ -153,3 +155,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
