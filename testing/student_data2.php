@@ -21,7 +21,7 @@
         </div>
     </header>
     <main class="content">
-    <section class="content">
+    <section>
         <div class="card">
             <div class="form-group" style="text-align: center;">
                 <label for="iep_date" style="display: block;">IEP Date:</label>
