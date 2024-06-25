@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     format: "MM/DD/YYYY",
                 },
                 width: 120,
-                frozen: false,
+                frozen: true,
             },
         ];
 
@@ -98,6 +98,41 @@ document.addEventListener('DOMContentLoaded', function() {
             selectableRangeColumns: false,
             selectableRangeRows: false,
             selectableRangeClearCells: false,
+        });
+    }
+
+        // Add cellEdited event listener inside initializeTable after declaring table
+        table.on("cellEdited", function(cell) {
+            const field = cell.getField();
+            let value = cell.getValue();
+
+            if (value === "") {
+                value = null;
+            }
+
+            const updatedData = cell.getRow().getData();
+            updatedData[field] = value;
+
+            // Log the updated data for debugging
+            console.log("Updated data:", updatedData);
+
+            // Update the cell data in the backend (make AJAX call)
+            fetch('./users/update_performance2.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            }).then(response => response.json())
+              .then(result => {
+                  if (result.success) {
+                      // alert('Data updated successfully');
+                  } else {
+                      alert('Failed to update data: ' + result.message);
+                      console.error('Error info:', result.errorInfo); // Log detailed error info
+                  }
+              })
+              .catch(error => console.error('Error:', error));
         });
     }
 
