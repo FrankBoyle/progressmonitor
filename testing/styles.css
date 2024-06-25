@@ -709,7 +709,7 @@ button[type="submit"]:hover {
         }
         
 
-        .tabulator .tabulator-cell {
+        .tabulator-cell {
             padding: 10px 6px; /* More padding within cells */
             font-size: 16px; /* Larger text for easier reading */
             color: #000000; /* Darker text for better contrast */
