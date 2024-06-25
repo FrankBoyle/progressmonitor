@@ -22,17 +22,18 @@
     </header>
 
     <main class="content">
-        <div class="card">
+    <div class="card">
+        <div class="filter-section">
             <div class="form-group">
                 <label for="iep_date">IEP Date:</label>
-                <div class="input-group">
-                    <input type="date" id="iep_date" name="iep_date" class="form-control">
-                    <button id="filterData" class="btn btn-primary">Filter Data</button>
-                </div>
+                <input type="date" id="iep_date" name="iep_date" class="form-control">
+                <button id="filterData" class="btn btn-primary">Filter Data</button>
             </div>
-            <div id="performance-table"></div>
         </div>
-    </main>
+        <div id="performance-table"></div>
+    </div>
+</main>
+
 
 
 </div>
