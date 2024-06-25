@@ -701,7 +701,7 @@ td .cell-input {
 
 .tabulator {
     border-radius: 8px; /* Rounds corners for a softer look */
-    width: 100%;
+    width: auto;
     overflow-x: hidden;
 }
 
