@@ -698,6 +698,8 @@ td .cell-input {
 
 .tabulator {
     border-radius: 8px; /* Rounds corners for a softer look */
+    overflow-x: hidden;
+
 }
 
 .tabulator-header .tabulator-col {
