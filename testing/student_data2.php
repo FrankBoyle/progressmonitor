@@ -32,7 +32,7 @@
             </div>
             <div id="performance-table"></div>
         </div>
-        <div id="columnSelector"></div>
+        <div id="columnSelector" class="checkbox-container"></div>
         <!-- Chart Containers -->
         <div class="charts-container">
             <div id="chartContainer" class="chart"></div>
