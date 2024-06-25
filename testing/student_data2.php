@@ -15,7 +15,7 @@
         const studentId = urlParams.get('student_id');
         const metadataId = urlParams.get('metadata_id');
 
-        fetch(./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId})
+        fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -50,7 +50,7 @@
                 Object.keys(scoreNames).forEach((key, index) => {
                     columns.push({ 
                         title: scoreNames[key], 
-                        field: score${index + 1}, 
+                        field: `score${index + 1}`, 
                         editor: "input", 
                     });
                 });
