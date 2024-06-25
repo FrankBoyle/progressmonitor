@@ -79,11 +79,10 @@
                     data: performanceData,
                     columns: columns,
                     fozenRows:1,
-                    layout: "fitDataStretch",
-                    tooltips: true,  // Show tool tips on cells
+                    layout: "fitData",
                     movableColumns: false,
                     resizableRows: false,
-                    editTriggerEvent: "dblclick", //trigger edit on double click
+                    editTriggerEvent: "click", //trigger edit on double click
                     editorEmptyValue: null,
                     clipboard: true,
                     clipboardCopyRowRange: "range",
@@ -103,6 +102,7 @@
                         header.getElement().classList.add("center-align-header");
                         return header.getLabel();
                     },
+                    columnMinWidth: 100,
                 });
 
                 // Add cellEdited event listener
