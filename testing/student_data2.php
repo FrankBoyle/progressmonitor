@@ -28,119 +28,122 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const studentId = urlParams.get('student_id');
-        const metadataId = urlParams.get('metadata_id');
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentId = urlParams.get('student_id');
+    const metadataId = urlParams.get('metadata_id');
 
-        fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+    fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const { performanceData, scoreNames } = data;
+
+            // Define columns based on metadata
+            const columns = [
+                {
+                    title: "Score Date",
+                    field: "score_date",
+                    editor: "input",
+                    formatter: function(cell, formatterParams, onRendered) {
+                        const DateTime = luxon.DateTime;
+                        let date = DateTime.fromISO(cell.getValue());
+                        if (date.isValid) {
+                            return date.toFormat("MM/dd/yyyy");
+                        } else {
+                            return "(invalid date)";
+                        }
+                    },
+                    editorParams: {
+                        mask: "MM/DD/YYYY",
+                        format: "MM/DD/YYYY",
+                    },
+                    width: 100, // Set a fixed width for better visibility
+                    frozen: true // Freeze the date column
+                },
+            ];
+
+            Object.keys(scoreNames).forEach((key, index) => {
+                columns.push({ 
+                    title: scoreNames[key], 
+                    field: `score${index + 1}`, 
+                    editor: "input", 
+                    width: 100 // Set a fixed width for better visibility
+                });
+            });
+
+            // Initialize Tabulator with existing settings
+            const table = new Tabulator("#performance-table", {
+                height: "500px",
+                data: performanceData,
+                columns: columns,
+                layout: "fitColumns",
+                tooltips: true,
+                movableColumns: false,
+                resizableRows: false,
+                editTriggerEvent: "click",
+                editorEmptyValue: null,
+                clipboard: true,
+                clipboardCopyRowRange: "range",
+                clipboardPasteParser: "range",
+                clipboardPasteAction: "range",
+                clipboardCopyConfig: {
+                    rowHeaders: false,
+                    columnHeaders: true,
+                },
+                clipboardCopyStyled: false,
+                selectable: true,
+                cellFormatter: function(cell) {
+                    cell.getElement().classList.add("left-align-cell");
+                    return cell.getValue();
+                },
+                headerFormatter: function(header) {
+                    header.getElement().classList.add("center-align-header");
+                    return header.getLabel();
+                },
+            });
+
+            // Add cellEdited event listener
+            table.on("cellEdited", function(cell) {
+                const field = cell.getField();
+                let value = cell.getValue();
+
+                if (value === "") {
+                    value = null;
                 }
-                return response.json();
-            })
-            .then(data => {
-                const { performanceData, scoreNames } = data;
 
-                // Define columns based on metadata
-                const columns = [
-                    {
-                        title: "Score Date",
-                        field: "score_date",
-                        editor: "input",
-                        formatter: function(cell, formatterParams, onRendered) {
-                            const DateTime = luxon.DateTime;
-                            let date = DateTime.fromISO(cell.getValue());
-                            if (date.isValid) {
-                                return date.toFormat("MM/dd/yyyy");
-                            } else {
-                                return "(invalid date)";
-                            }
-                        },
-                        editorParams: {
-                            mask: "MM/DD/YYYY",
-                            format: "MM/DD/YYYY",
-                        },
+                const updatedData = cell.getRow().getData();
+                updatedData[field] = value;
+
+                // Log the updated data for debugging
+                console.log("Updated data:", updatedData);
+
+                // Update the cell data in the backend (make AJAX call)
+                fetch('./users/update_performance2.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                ];
+                    body: JSON.stringify(updatedData)
+                }).then(response => response.json())
+                  .then(result => {
+                      if (result.success) {
+                          // alert('Data updated successfully');
+                      } else {
+                          alert('Failed to update data: ' + result.message);
+                          console.error('Error info:', result.errorInfo);
+                      }
+                  })
+                  .catch(error => console.error('Error:', error));
+            });
+        })
+        .catch(error => console.error('There was a problem with the fetch operation:', error));
+});
 
-                Object.keys(scoreNames).forEach((key, index) => {
-                    columns.push({ 
-                        title: scoreNames[key], 
-                        field: `score${index + 1}`, 
-                        editor: "input", 
-                    });
-                });
-
-                // Initialize Tabulator with existing settings
-                const table = new Tabulator("#performance-table", {
-                    height: "500px",
-                    data: performanceData,
-                    columns: columns,
-                    fozenRows:1,
-                    headerWordWrap: true,
-                    layout: "fitColumns",
-                    movableColumns: false,
-                    resizableRows: false,
-                    editTriggerEvent: "click", //trigger edit on double click
-                    editorEmptyValue: null,
-                    clipboard: true,
-                    clipboardCopyRowRange: "range",
-                    clipboardPasteParser: "range",
-                    clipboardPasteAction: "range",
-                    clipboardCopyConfig: {
-                        rowHeaders: false, //do not include row headers in clipboard output
-                        columnHeaders: true, //include column headers in clipboard output
-                    },
-                    clipboardCopyStyled: false,
-                    selectable: true,
-                    cellFormatter: function(cell) {
-                        cell.getElement().classList.add("left-align-cell");
-                        return cell.getValue();
-                    },
-                    headerFormatter: function(header) {
-                        header.getElement().classList.add("center-align-header");
-                        return header.getLabel();
-                    },
-                });
-
-                // Add cellEdited event listener
-                table.on("cellEdited", function(cell) {
-                    const field = cell.getField();
-                    let value = cell.getValue();
-
-                    if (value === "") {
-                        value = null;
-                    }
-
-                    const updatedData = cell.getRow().getData();
-                    updatedData[field] = value;
-
-                    // Log the updated data for debugging
-                    console.log("Updated data:", updatedData);
-
-                    // Update the cell data in the backend (make AJAX call)
-                    fetch('./users/update_performance2.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(updatedData)
-                    }).then(response => response.json())
-                      .then(result => {
-                          if (result.success) {
-                              // alert('Data updated successfully');
-                          } else {
-                              alert('Failed to update data: ' + result.message);
-                              console.error('Error info:', result.errorInfo); // Log detailed error info
-                          }
-                      })
-                      .catch(error => console.error('Error:', error));
-                });
-            })
-            .catch(error => console.error('There was a problem with the fetch operation:', error));
-    });
 </script>
 
 </body>
