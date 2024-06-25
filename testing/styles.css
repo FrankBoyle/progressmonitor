@@ -602,7 +602,6 @@ td .cell-input {
     border-radius: 4px;
     font-size: 1rem;
     cursor: pointer;
-    width: 100%;
 }
 
 .btn-primary:hover {
