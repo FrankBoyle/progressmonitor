@@ -14,7 +14,20 @@ if (isset($_GET['student_id']) && isset($_GET['metadata_id']) && isset($_GET['ie
     $stmt->execute([$student_id, $metadata_id, $iep_date]);
     $performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    echo json_encode($performanceData);
+    // Example to create scoreNames based on your existing data structure
+    $scoreNames = [];
+    if (count($performanceData) > 0) {
+        foreach (array_keys($performanceData[0]) as $key) {
+            if (strpos($key, 'score') !== false) { // assuming your score fields start with 'score'
+                $scoreNames[$key] = ucfirst(str_replace('_', ' ', $key)); // Score field names as titles
+            }
+        }
+    }
+
+    echo json_encode([
+        'performanceData' => $performanceData,
+        'scoreNames' => $scoreNames
+    ]);
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid data.']);
 }
