@@ -684,6 +684,7 @@ button[type="submit"]:hover {
             background-color: #9bc4ff; /* Light gray background for headers*/
             color: #000000; /* Darker text for better readability*/
             font-weight: bold; /* Make header text bold*/
+            text-align: center;
             padding: 10px 0; /* Padding for better spacing */
             border-right: 1px solid #ddd; /* Add borders for separation*/
         }
@@ -697,6 +698,7 @@ button[type="submit"]:hover {
             top: 0;
             z-index: 10; 
             color: #000000; /* Dark text for better readability */
+            background-color: #d6e4f0;
 
         }
 
@@ -712,6 +714,14 @@ button[type="submit"]:hover {
             text-align: left;
         }
         
+        .left-align-cell {
+            text-align: left;  /* Apply left alignment to cell content */
+        }
+        
+        .center-align-header {
+            text-align: center;  /* Apply center alignment to header */
+        }
+
         #performance-table {
             background-color: #D5FFFF; /* Adds contrast if needed */
             box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Adds depth */

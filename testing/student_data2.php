@@ -95,6 +95,14 @@
                     },
                     clipboardCopyStyled: false,
                     selectable: true,
+                    cellFormatter: function(cell) {
+                        cell.getElement().classList.add("left-align-cell");
+                        return cell.getValue();
+                    },
+                    headerFormatter: function(header) {
+                        header.getElement().classList.add("center-align-header");
+                        return header.getLabel();
+                    },
                 });
 
                 // Add cellEdited event listener
