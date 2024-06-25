@@ -30,9 +30,8 @@
             <button id="filterData" class="btn btn-primary">Filter Data</button>
         </div>
         <div class="card">
-            <div class="form-group">
         <div id="performance-table"></div>
-        </div>            </div>
+        </div>  
     </section>
 </div>
 
