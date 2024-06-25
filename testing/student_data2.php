@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('filterData').addEventListener('click', function() {
         var iepDate = document.getElementById('iep_date').value;
+        var studentId = urlParams.get('student_id');
+
 
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
