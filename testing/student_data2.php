@@ -61,8 +61,8 @@
                     data: performanceData,
                     columns: columns,
                     layout: "fitColumns",
-                    movableColumns: true,
-                    resizableRows: true,
+                    movableColumns: false,
+                    resizableRows: false,
                     editTriggerEvent: "dblclick", //trigger edit on double click
                     editorEmptyValue: null,
                     clipboard: true,
@@ -77,7 +77,7 @@
                     selectableRange: 1, //allow only one range at a time
                     selectableRangeColumns: false,
                     selectableRangeRows: false,
-                    selectableRangeClearCells: true,
+                    selectableRangeClearCells: false,
                 });
 
                 // Add cellEdited event listener
