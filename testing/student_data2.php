@@ -75,18 +75,39 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert(data.message);
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error saving IEP date:', error));
         }
     });
 
+    // Function to save edited data
+    function saveEditedData(performanceId, fieldName, value) {
+        fetch('./users/update_performance2.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                performance_id: performanceId,
+                [fieldName]: value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                alert('Error saving data: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error saving edited data:', error));
+    }
+
+    // Initialize Tabulator table
     table = new Tabulator("#performance-table", {
         height: "500px",
         layout: "fitColumns",
         tooltips: true,
         movableColumns: false,
         resizableRows: false,
-        editTriggerEvent: "click",
-        editorEmptyValue: null,
+        editable: true,  // Enable editing
         clipboard: true,
         clipboardCopyRowRange: "range",
         clipboardPasteParser: "range",
@@ -97,14 +118,30 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         clipboardCopyStyled: false,
         selectable: true,
-        cellFormatter: function(cell) {
-            cell.getElement().classList.add("left-align-cell");
-            return cell.getValue();
+        cellEdited: function(cell) {
+            const performanceId = cell.getRow().getData().performance_id;
+            const fieldName = cell.getField();
+            const value = cell.getValue();
+            saveEditedData(performanceId, fieldName, value);
         },
-        headerFormatter: function(header) {
-            header.getElement().classList.add("center-align-header");
-            return header.getLabel();
-        },
+        columns: [
+            {
+                title: "Score Date",
+                field: "score_date",
+                editor: "input",
+                formatter: function(cell, formatterParams, onRendered) {
+                    const DateTime = luxon.DateTime;
+                    let date = DateTime.fromISO(cell.getValue());
+                    return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
+                },
+                editorParams: {
+                    mask: "MM/DD/YYYY",
+                    format: "MM/DD/YYYY",
+                },
+                width: 120,
+                frozen: true
+            },
+        ]
     });
 
     function initializeTable(performanceData, scoreNames) {
@@ -155,4 +192,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
 
