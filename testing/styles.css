@@ -56,7 +56,6 @@ body {
 .content {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
     align-items: center;
@@ -69,7 +68,7 @@ body {
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: 95%; /* Adjust width as necessary */
+    width: 100%; /* Adjust width as necessary */
 }
 
 .card-header, .box-header {
@@ -84,6 +83,20 @@ body {
 
 .card-body {
     font-size: 1rem; /* Adjusted font size */
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-group .form-control {
+    flex: 1;
+}
+
+#filterData {
+    white-space: nowrap;
 }
 
 /*
@@ -754,6 +767,10 @@ td .cell-input {
 #performance-table .tabulator-cell {
     border-right: 1px solid #777676; /* Adds vertical lines if needed */
     padding: 8px 10px; /* Adjust padding for cell content */
+}
+
+#performance-table .tabulator-col:last-child {
+    border-right: none;
 }
 
 /* Custom styling for header cells */
