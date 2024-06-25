@@ -74,7 +74,7 @@
                         columnHeaders: true, //include column headers in clipboard output
                     },
                     clipboardCopyStyled: false,
-                    selectableRange: 1, //allow only one range at a time
+                    selectableRange: true, //allow only one range at a time
                     selectableRangeColumns: false,
                     selectableRangeRows: false,
                     selectableRangeClearCells: true,
