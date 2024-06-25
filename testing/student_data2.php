@@ -16,8 +16,8 @@
                 <img src="bFactor_logo.png" alt="Logo">
             </div>
             <div class="header-icons">
-                <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-                <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+                <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+                <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
             </div>
         </header>
             <main class="content">
@@ -62,8 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         mask: "MM/DD/YYYY",
                         format: "MM/DD/YYYY",
                     },
-                    width: 120, // Set a fixed width for better visibility
-                    frozen: true // Freeze the date column
                 },
             ];
 
@@ -72,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     title: scoreNames[key], 
                     field: `score${index + 1}`, 
                     editor: "input", 
-                    width: 100 // Set a fixed width for better visibility
                 });
             });
 
@@ -81,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 height: "500px",
                 data: performanceData,
                 columns: columns,
+                frozenRows: 1,
                 layout: "fitColumns",
                 tooltips: true,
                 movableColumns: false,
@@ -143,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('There was a problem with the fetch operation:', error));
 });
-
 
 </script>
 
