@@ -20,7 +20,7 @@
             <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
         </div>
     </header>
-
+    <main class="content">
     <section class="content">
         <div class="card">
             <div class="form-group" style="text-align: center;">
@@ -31,7 +31,7 @@
         </div>
     </section>
 
-    <main class="content">
+
         <section class="box box-centered-top">
             <div id="performance-table"></div>
         </section>
