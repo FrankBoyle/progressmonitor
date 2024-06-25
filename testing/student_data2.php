@@ -42,11 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let table; // Declare `table` in a higher scope
 
     function initializeTable(performanceData, scoreNames) {
-        if (!scoreNames || typeof scoreNames !== 'object') {
-            console.error('Invalid or missing scoreNames:', scoreNames);
-            return; // Exit the function if scoreNames is invalid
-        }
-
         const columns = [
             {
                 title: "Score Date",
@@ -62,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     format: "MM/DD/YYYY",
                 },
                 width: 120,
-                frozen: true,
+                frozen: true
             },
         ];
 
@@ -99,7 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
             selectableRangeRows: false,
             selectableRangeClearCells: false,
         });
-    }
 
         // Add cellEdited event listener inside initializeTable after declaring table
         table.on("cellEdited", function(cell) {
@@ -134,17 +128,14 @@ document.addEventListener('DOMContentLoaded', function() {
               })
               .catch(error => console.error('Error:', error));
         });
+    }
 
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.json())
             .then(data => {
                 console.log('Filtered data fetched:', data);
-                if (data && data.performanceData && data.scoreNames) {
-                    initializeTable(data.performanceData, data.scoreNames);
-                } else {
-                    console.error('Invalid or incomplete data received:', data);
-                }
+                initializeTable(data.performanceData, data.scoreNames);
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
@@ -181,18 +172,13 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             const { performanceData, scoreNames, iepDate } = data;
             console.log('Initial data fetched:', data);
-            if (data && data.performanceData && data.scoreNames) {
-                initializeTable(performanceData, scoreNames);
-                if (iepDate) {
-                    document.getElementById('iep_date').value = iepDate;
-                }
-            } else {
-                console.error('Invalid or incomplete initial data:', data);
+            initializeTable(performanceData, scoreNames);
+            if (iepDate) {
+                document.getElementById('iep_date').value = iepDate;
             }
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
-
 
 </script>
 
