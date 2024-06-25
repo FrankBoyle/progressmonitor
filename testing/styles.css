@@ -389,7 +389,7 @@ h3 {
 
 .fixed-width-cell {
     width: 100px;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
     padding: 0;
     margin: 0;
 }
@@ -688,7 +688,6 @@ button[type="submit"]:hover {
             padding: 10px 0; /* Padding for better spacing */
             border-right: 1px solid #ddd; /* Add borders for separation*/
             text-align: center;
-            white-space: normal;  /* Allow text to wrap */
 
         }
         
@@ -773,7 +772,6 @@ button[type="submit"]:hover {
         /* Custom styling for header cells */
         #performance-table .tabulator-col {
             border-right: 1px solid #ccc; /* Vertical lines between headers */
-            white-space: normal;  /* Allow text to wrap */
             text-align: center; /* Ensure header text is centered */
 
 
