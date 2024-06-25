@@ -684,7 +684,6 @@ button[type="submit"]:hover {
             background-color: #9bc4ff; /* Light gray background for headers*/
             color: #000000; /* Darker text for better readability*/
             font-weight: bold; /* Make header text bold*/
-            text-align: center; /* Center-align header text*/
             padding: 10px 0; /* Padding for better spacing */
             border-right: 1px solid #ddd; /* Add borders for separation*/
         }
