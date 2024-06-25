@@ -21,9 +21,9 @@
             </div>
         </header>
             <main class="content">
-                <section class="box">
-                    <div id="performance-table"></div>  
-                </section>      
+                <section class="box box-centered-top">
+                    <div id="performance-table"></div>
+                </section>
             </main>
 </div>
 
@@ -75,7 +75,7 @@
 
                 // Initialize Tabulator with existing settings
                 const table = new Tabulator("#performance-table", {
-                    height: "500px",
+                    height: "300px",
                     data: performanceData,
                     columns: columns,
                     layout: "fitColumns",

@@ -65,6 +65,8 @@ body {
     padding: 20px; /* Add top padding to compensate for the navbar height */
     margin-top: 3.2rem; /* Adjust this value to match the height of the navbar */
     justify-content: center; /* Center the content horizontally */
+    width: 100%; /* Ensure it takes full width */
+
 }
   
   .card-header, .box-header {
@@ -352,6 +354,12 @@ h3 {
     #performance-table {
         width: 100%; /* Full-width on smaller screens */
         overflow-x: auto; /* Allows scrolling on small devices */
+    }
+
+    .box-centered-top {
+        width: 100%; /* Full width on smaller screens */
+        margin-top: 10px; /* Reduced margin on smaller screens */
+        max-height: 300px; /* Smaller max height on smaller screens */
     }
 }
 
@@ -703,5 +711,23 @@ button[type="submit"]:hover {
             box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* Adds depth */
             border: 1px solid #ddd; /* Defines boundaries more clearly */
             margin-top: 20px; /* Extra space from any content above */
+        }
+        
+
+        .box-centered-top {
+            max-height: 400px; /* Limit the height of the box */
+            overflow-y: auto; /* Enable vertical scrolling */
+            margin-top: 20px; /* Add top margin for spacing from the header */
+            align-self: start; /* Align the box to the start of the flex container */
+        }
+        
+        /* Optional: Enhance scrollbar appearance for better UX */
+        .box-centered-top::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .box-centered-top::-webkit-scrollbar-thumb {
+            background-color: darkgrey;
+            border-radius: 10px;
         }
         
