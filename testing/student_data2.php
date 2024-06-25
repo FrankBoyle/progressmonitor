@@ -75,10 +75,10 @@
 
                 // Initialize Tabulator with existing settings
                 const table = new Tabulator("#performance-table", {
-                    height: "300px",
+                    height: "auto",
                     data: performanceData,
                     columns: columns,
-                    layout: "fitDataFill",
+                    layout: "fitDataStretch",
                     movableColumns: false,
                     resizableRows: false,
                     editTriggerEvent: "dblclick", //trigger edit on double click

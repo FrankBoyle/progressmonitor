@@ -697,12 +697,16 @@ button[type="submit"]:hover {
         }
         
         .tabulator .tabulator-header .tabulator-col {
-            background-color: #f4f4f4; /* Light gray background for headers*/
-            color: #333; /* Darker text for better readability*/
-            font-weight: bold; /* Make header text bold*/
-            text-align: center; /* Center-align header text*/
-            padding: 10px 0; /* Padding for better spacing */
-            border-right: 1px solid #ddd; /* Add borders for separation*/
+            background-color: #e8e8e8;  /* A light grey background for header
+            color: #333;  /* Dark text for better contrast */
+            font-weight: bold;
+            border-right: 1px solid white;  /* Adds separation between headers */
+        }
+        
+        .tabulator .tabulator-cell {
+            border-right: 1px solid #ddd;  /* Subtle borders for cells */
+            padding: 8px 6px;  /* Adequate padding for text */
+            text-align: center;  /* Center align text for better presentation */
         }
         
         .tabulator .tabulator-header .tabulator-col:last-child {
@@ -711,13 +715,6 @@ button[type="submit"]:hover {
 
         .tabulator-row {
             border-bottom: 1px solid #eee; /* Adds separation between rows */
-        }
-        
-
-        .tabulator .tabulator-cell {
-            padding: 10px 6px; /* More padding within cells */
-            font-size: 16px; /* Larger text for easier reading */
-            color: #333; /* Darker text for better contrast */
         }
         
         #performance-table {
