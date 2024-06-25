@@ -8,8 +8,6 @@
 <body>
 
 <div id="performance-table"></div>
-<button id="calculate-average">Calculate Average</button>
-<button id="calculate-slope">Calculate Slope</button>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -17,7 +15,7 @@
         const studentId = urlParams.get('student_id');
         const metadataId = urlParams.get('metadata_id');
 
-        fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
+        fetch(./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId})
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -52,7 +50,7 @@
                 Object.keys(scoreNames).forEach((key, index) => {
                     columns.push({ 
                         title: scoreNames[key], 
-                        field: `score${index + 1}`, 
+                        field: score${index + 1}, 
                         editor: "input", 
                     });
                 });
@@ -63,69 +61,25 @@
                     data: performanceData,
                     columns: columns,
                     layout: "fitColumns",
-                    movableColumns: true,
-                    resizableRows: true,
-                    editTriggerEvent: "dblclick", // trigger edit on double click
+                    movableColumns: false,
+                    resizableRows: false,
+                    editTriggerEvent: "dblclick", //trigger edit on double click
                     editorEmptyValue: null,
                     clipboard: true,
                     clipboardCopyRowRange: "range",
                     clipboardPasteParser: "range",
                     clipboardPasteAction: "range",
                     clipboardCopyConfig: {
-                        rowHeaders: false, // do not include row headers in clipboard output
-                        columnHeaders: true, // include column headers in clipboard output
+                        rowHeaders: false, //do not include row headers in clipboard output
+                        columnHeaders: true, //include column headers in clipboard output
                     },
                     clipboardCopyStyled: false,
-                    selectableRange: 1, // allow only one range at a time
+                    selectable: true,
+                    selectableRange: 1, //allow only one range at a time
                     selectableRangeColumns: false,
                     selectableRangeRows: false,
-                    selectableRangeClearCells: true,
-                    cellSelection: true, // enable cell selection
+                    selectableRangeClearCells: false,
                 });
-
-                // Add cell selection event listener
-                table.on("cellSelectionChanged", function(data, cells) {
-                    console.log("Selected cells data:", data);
-                });
-
-                // Function to calculate average
-                function calculateAverage() {
-                    const selectedCells = table.getSelectedData();
-                    if (selectedCells.length === 0) {
-                        alert("Please select some cells first.");
-                        return;
-                    }
-
-                    let total = 0;
-                    let count = 0;
-                    selectedCells.forEach(cell => {
-                        const value = parseFloat(cell.value);
-                        if (!isNaN(value)) {
-                            total += value;
-                            count++;
-                        }
-                    });
-
-                    const average = total / count;
-                    alert(`Average of selected cells: ${average}`);
-                }
-
-                // Function to calculate slope (example)
-                function calculateSlope() {
-                    const selectedCells = table.getSelectedData();
-                    if (selectedCells.length === 0) {
-                        alert("Please select some cells first.");
-                        return;
-                    }
-
-                    // Perform slope calculation (this is just an example)
-                    // In a real scenario, you would need to implement the actual logic for slope calculation
-                    alert("Slope calculation functionality is not implemented yet.");
-                }
-
-                // Add event listeners to buttons
-                document.getElementById('calculate-average').addEventListener('click', calculateAverage);
-                document.getElementById('calculate-slope').addEventListener('click', calculateSlope);
 
                 // Add cellEdited event listener
                 table.on("cellEdited", function(cell) {
@@ -167,7 +121,6 @@
 
 </body>
 </html>
-
 
 
 
