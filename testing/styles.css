@@ -57,8 +57,13 @@ body {
     flex-grow: 1;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     justify-content: flex-start; /* Center the content horizontally */
+    flex-direction: column; /* Stack content vertically */
     width: 100%; /* Ensure it takes full width */
     max-width: 100%; /* Ensure it does not exceed the view width */
+}
+
+.card {
+    margin-bottom: 1rem; /* Add some space between the card and other content */
 }
 
 .card-header, .box-header {
@@ -657,11 +662,9 @@ td .cell-input {
     background-color: #9bc4ff; /* Light gray background for headers*/
     color: #000000; /* Darker text for better readability*/
     font-weight: bold; /* Make header text bold*/
-    padding: 10px; /* Padding for better spacing */
+    padding: 10px 0; /* Padding for better spacing */
     border-right: 1px solid #ddd; /* Add borders for separation*/
     text-align: center;
-    white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Ensure words break and wrap properly */
 }
 
 .tabulator .tabulator-header .tabulator-col:last-child {
@@ -706,7 +709,7 @@ td .cell-input {
     width: 100%; /* Ensures it takes full width of its container */
     max-height: auto;
     overflow-y: auto;
-    margin-top: 5px;
+    margin-top: 0px;
     overflow-x: hidden; /* Hide horizontal scroll if it appears */
 }
 
@@ -742,5 +745,4 @@ td .cell-input {
     border-right: 1px solid #ccc; /* Vertical lines between headers */
     text-align: center; /* Ensure header text is centered */
     white-space: normal; /* Allow text to wrap */
-    word-wrap: break-word; /* Ensure words break and wrap properly */
 }

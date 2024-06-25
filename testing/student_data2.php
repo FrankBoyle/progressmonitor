@@ -25,7 +25,7 @@
         <div class="card">
             <div class="form-group" style="text-align: center;">
                 <label for="iep_date" style="display: block;">IEP Date:</label>
-                <input type="date" id="iep_date" name="iep_date" class="form-control">
+                <input type="date" id="iep_date" name="iep_date" class="form-control" value="">
             </div>
             <button id="filterData" class="btn btn-primary">Filter Data</button>
         </div>
@@ -47,19 +47,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to fetch and display the filtered data
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    table.setData(data.performanceData);
-                } else {
-                    console.error('Error fetching filtered data:', data.message);
-                }
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('#performance-table').innerHTML = html;
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
 
     document.getElementById('filterData').addEventListener('click', function() {
         var iepDate = document.getElementById('iep_date').value;
+        var studentId = urlParams.get('student_id');
+
 
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
@@ -156,12 +154,9 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            const { performanceData, scoreNames, iepDate } = data;
+            const { performanceData, scoreNames } = data;
             initializeTable(performanceData, scoreNames);
-            // Set the IEP date if it exists
-            if (iepDate) {
-                document.getElementById('iep_date').value = iepDate;
-            }
+            document.getElementById('iep_date').value = data.iep_date; // Set IEP date input value
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
@@ -169,3 +164,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
