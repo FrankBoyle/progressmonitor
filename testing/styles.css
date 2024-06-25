@@ -35,6 +35,14 @@ body {
     z-index: 1000; /* Ensure it stays above other content */
 }
 
+.content {
+    display: flex;
+    /*flex-direction: column;*/
+    margin-top: 75px; /* Adjust this value to match the height of the navbar */
+    width: 100%; /* Ensure it takes full width */
+    /*align-items: center;*/
+}
+
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
     padding-top: 3rem; /* Adjust this value to match the height of the fixed header */
@@ -53,13 +61,7 @@ body {
     cursor: pointer;
 }
 
-.content {
-    display: flex;
-    /*flex-direction: column;*/
-    margin-top: 75px; /* Adjust this value to match the height of the navbar */
-    width: 100%; /* Ensure it takes full width */
-    /*align-items: center;*/
-}
+
 
 .card {
     background-color: #c0c8c8; /* Lighter shade for panels */
@@ -807,6 +809,9 @@ td .cell-input {
 }
 
 .chart-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
     margin-top: 20px;
     padding: 15px;
     border: 1px solid #ccc;
@@ -817,4 +822,12 @@ td .cell-input {
 #chartContainer, #barChartContainer {
     width: 100%;
     height: 400px; /* Adjust height as necessary */
+}
+
+.chart {
+    width: 48%; /* Adjust the width as necessary */
+    height: 400px; /* Set a fixed height for the charts */
+    border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
+    padding: 10px;
+    box-sizing: border-box;
 }
