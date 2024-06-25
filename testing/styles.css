@@ -32,8 +32,7 @@ body {
     width: 100%;
     top: 0;
     z-index: 1000; /* Ensure it stays above other content */
-  }
-
+}
 
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
@@ -43,7 +42,6 @@ body {
 .content-header {
     margin-top: 2rem; /* Optional: add additional margin if needed */
 }
-
 
 .logo {
     font-weight: bold;
@@ -57,27 +55,25 @@ body {
 .content {
     display: flex;
     flex-grow: 1;
-    /* padding: 0 20px; /* Add top padding to compensate for the navbar height */
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     justify-content: flex-start; /* Center the content horizontally */
     width: 100%; /* Ensure it takes full width */
     max-width: 100%; /* Ensure it does not exceed the view width */
-
 }
-  
-  .card-header, .box-header {
+
+.card-header, .box-header {
     font-size: 1.25rem; /* Adjusted font size */
     margin-bottom: 0.5rem;
     background-color: #47A6E6; /* Light blue for headers */
-  }
-  
-  .card-title {
+}
+
+.card-title {
     font-size: 1.5rem; /* Adjusted font size */
-  }
-  
-  .card-body {
+}
+
+.card-body {
     font-size: 1rem; /* Adjusted font size */
-  }
+}
 
 .box, .card {
     background-color: #c0c8c8; /* Lighter shade for panels */
@@ -183,8 +179,6 @@ button:hover {
     background-color: #255677; /* Deep blue */
     font-weight: bold;
 }
-
-
 
 ul {
     list-style-type: none;
@@ -358,7 +352,6 @@ h3 {
         margin-top: 5px; /* Reduced margin on smaller screens */
         max-height: auto; /* Smaller max height on smaller screens */
     }
-
 }
 
 #dataTable_wrapper .col-md-6:eq(0) {
@@ -485,23 +478,6 @@ td .cell-input {
     box-sizing: border-box;
 }
 
-
-/*
-button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 100%;
-}
-
-button[type="submit"]:hover {
-    background-color: #45a049;
-}
-*/
-
 .header-icons .nav-link i {
     margin-right: 5px;
 }
@@ -527,111 +503,109 @@ button[type="submit"]:hover {
     align-items: center;
 }
 
+/* Additional styles for login form */
+/* Centering the content */
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
 
-      
-        /* Additional styles for login form */
-        /* Centering the content */
-        .center-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
+.login-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
 
-        .login-box {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-        }
+.login-box-msg {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+    text-align: center;
+}
 
-        .login-box-msg {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #333;
-            text-align: center;
-        }
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
 
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
 
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            color: white;
-            padding: 0.75rem;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-        }
+.btn-primary:hover {
+    background-color: #0056b3;
+}
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
+.fas {
+    position: absolute;
+    margin-left: -25px;
+    margin-top: 15px;
+    color: #999;
+}
 
-        .fas {
-            position: absolute;
-            margin-left: -25px;
-            margin-top: 15px;
-            color: #999;
-        }
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-        }
+.remember-me input {
+    margin-right: 0.5rem;
+}
 
-        .remember-me input {
-            margin-right: 0.5rem;
-        }
+.remember-me label {
+    margin: 0;
+}
 
-        .remember-me label {
-            margin: 0;
-        }
+.info, .text-center {
+    text-align: center;
+    color: #007bff;
+}
 
-        .info, .text-center {
-            text-align: center;
-            color: #007bff;
-        }
+.info {
+    margin: 1rem 0;
+}
 
-        .info {
-            margin: 1rem 0;
-        }
+.mb-1, .mb-0 {
+    margin-bottom: 1rem;
+}
 
-        .mb-1, .mb-0 {
-            margin-bottom: 1rem;
-        }
+.forgot-password {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        .forgot-password {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.forgot-password form {
+    width: 100%;
+}
 
-        .forgot-password form {
-            width: 100%;
-        }
+.forgot-password input[type="email"] {
+    margin-bottom: 1rem;
+}
 
-        .forgot-password input[type="email"] {
-            margin-bottom: 1rem;
-        }
-
-        .header-icons {
-            display: flex;
-            align-items: center;
-        }
+.header-icons {
+    display: flex;
+    align-items: center;
+}
 
 /* General style for navbar links */
 .header-icons span, .header-icons .nav-link {
@@ -644,136 +618,129 @@ button[type="submit"]:hover {
     transition: background-color 0.3s; /* Smooth transition for hover effect */
 }
 
-        .header-icons .nav-link i {
-            margin-right: 5px;
-        }
+.header-icons .nav-link i {
+    margin-right: 5px;
+}
 
-        .header-icons .nav-link:hover {
-            color: #f0f0f0;
-        }
+.header-icons .nav-link:hover {
+    color: #f0f0f0;
+}
 
-        .header-icons .nav-link {
-            display: flex;
-            align-items: center;
-        }
+.header-icons .nav-link {
+    display: flex;
+    align-items: center;
+}
 
-        .message {
-            font-size: 16px;
-            color: #333;
-            margin-top: 20px;
-        }
-        .column {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin: 10px;
-            width: 45%;
-            float: left;
-        }
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
+.message {
+    font-size: 16px;
+    color: #333;
+    margin-top: 20px;
+}
+.column {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px;
+    width: 45%;
+    float: left;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
 
-        .tabulator {
-            border-radius: 8px; /* Rounds corners for a softer look */
-             /* overflow: hidden; /* Ensures the rounded corners are visible */
+.tabulator {
+    border-radius: 8px; /* Rounds corners for a softer look */
+}
 
-        }
-        
-        .tabulator-header .tabulator-col {
-            background-color: #9bc4ff; /* Light gray background for headers*/
-            color: #000000; /* Darker text for better readability*/
-            font-weight: bold; /* Make header text bold*/
-            padding: 10px 0; /* Padding for better spacing */
-            border-right: 1px solid #ddd; /* Add borders for separation*/
-            text-align: center;
+.tabulator-header .tabulator-col {
+    background-color: #9bc4ff; /* Light gray background for headers*/
+    color: #000000; /* Darker text for better readability*/
+    font-weight: bold; /* Make header text bold*/
+    padding: 10px; /* Padding for better spacing */
+    border-right: 1px solid #ddd; /* Add borders for separation*/
+    text-align: center;
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Ensure words break and wrap properly */
+}
 
-        }
-        
-        .tabulator .tabulator-header .tabulator-col:last-child {
-            border-right: none; /* Remove the right border for the last column */
-        }
+.tabulator .tabulator-header .tabulator-col:last-child {
+    border-right: none; /* Remove the right border for the last column */
+}
 
-        #performance-table .tabulator-header {
-            position: sticky;
-            top: 0;
-            z-index: 10; 
-            color: #000000; /* Dark text for better readability */
-            /*background-color: #d6e4f0;*/
+#performance-table .tabulator-header {
+    position: sticky;
+    top: 0;
+    z-index: 10; 
+    color: #000000; /* Dark text for better readability */
+}
 
-        }
+.tabulator-row {
+    border-bottom: 1px solid #eee; /* Adds separation between rows */
+}
 
-        .tabulator-row {
-            border-bottom: 1px solid #eee; /* Adds separation between rows */
-        }
-        
+.tabulator-cell {
+    padding: 10px 6px; /* More padding within cells */
+    font-size: 16px; /* Larger text for easier reading */
+    color: #000000; /* Darker text for better contrast */
+    text-align: left;
+}
 
-        .tabulator-cell {
-            padding: 10px 6px; /* More padding within cells */
-            font-size: 16px; /* Larger text for easier reading */
-            color: #000000; /* Darker text for better contrast */
-            text-align: left;
+.left-align-cell {
+    text-align: left;  /* Apply left alignment to cell content */
+}
 
-        }
+.center-align-header {
+    text-align: center;  /* Apply center alignment to header */
+}
 
-        .left-align-cell {
-            text-align: left;  /* Apply left alignment to cell content */
-        }
-        
-        .center-align-header {
-            text-align: center;  /* Apply center alignment to header */
-        }
+#performance-table {
+    background-color: #D5FFFF; /* Adds contrast if needed */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Adds depth */
+    border: 1px solid #ddd; /* Defines boundaries more clearly */
+    width: auto;  /* Set table width to auto */
+    margin-right: auto;  /* Align table to the left */
+}
 
-        #performance-table {
-            background-color: #D5FFFF; /* Adds contrast if needed */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Adds depth */
-            border: 1px solid #ddd; /* Defines boundaries more clearly */
-            width: auto;  /* Set table width to auto */
-            margin-right: auto;  /* Align table to the left */
-        }
-        
-        .box-centered-top {
-            width: 100%; /* Ensures it takes full width of its container */
-            max-height: auto;
-            overflow-y: auto;
-            margin-top: 5px;
-            /*align-self: center; /* This will help in centering the content */
-            overflow-x: hidden; /* Hide horizontal scroll if it appears */
-        }
+.box-centered-top {
+    width: 100%; /* Ensures it takes full width of its container */
+    max-height: auto;
+    overflow-y: auto;
+    margin-top: 5px;
+    overflow-x: hidden; /* Hide horizontal scroll if it appears */
+}
 
-        /* Optional: Enhance scrollbar appearance for better UX */
-        .box-centered-top::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .box-centered-top::-webkit-scrollbar-thumb {
-            background-color: darkgrey;
-            border-radius: 10px;
-        }
-        
-        #performance-table .tabulator-row {
-            border-bottom: 1px solid #777676; /* Adds a subtle line between rows */
-        }
-        
-        #performance-table .tabulator-row:nth-child(odd) {
-            background-color: #deffff; /* Lighter shade for alternate rows */
-        }
-        
-        #performance-table .tabulator-row:nth-child(even) {
-            background-color: #F5FFFF; /* Slightly darker for contrast */
-        }
-        
-        #performance-table .tabulator-cell {
-            border-right: 1px solid #777676; /* Adds vertical lines if needed */
-            padding: 8px 10px; /* Adjust padding for cell content */
-        }
-        
-        /* Custom styling for header cells */
-        #performance-table .tabulator-col {
-            border-right: 1px solid #ccc; /* Vertical lines between headers */
-            text-align: center; /* Ensure header text is centered */
-            white-space: normal;
+/* Optional: Enhance scrollbar appearance for better UX */
+.box-centered-top::-webkit-scrollbar {
+    width: 8px;
+}
 
+.box-centered-top::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius: 10px;
+}
 
-        }
+#performance-table .tabulator-row {
+    border-bottom: 1px solid #777676; /* Adds a subtle line between rows */
+}
+
+#performance-table .tabulator-row:nth-child(odd) {
+    background-color: #deffff; /* Lighter shade for alternate rows */
+}
+
+#performance-table .tabulator-row:nth-child(even) {
+    background-color: #F5FFFF; /* Slightly darker for contrast */
+}
+
+#performance-table .tabulator-cell {
+    border-right: 1px solid #777676; /* Adds vertical lines if needed */
+    padding: 8px 10px; /* Adjust padding for cell content */
+}
+
+/* Custom styling for header cells */
+#performance-table .tabulator-col {
+    border-right: 1px solid #ccc; /* Vertical lines between headers */
+    text-align: center; /* Ensure header text is centered */
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Ensure words break and wrap properly */
+}
