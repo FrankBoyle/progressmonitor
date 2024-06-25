@@ -57,7 +57,6 @@ body {
     flex-grow: 1;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     justify-content: flex-start; /* Center the content horizontally */
-    flex-direction: column; /* Stack content vertically */
     width: 100%; /* Ensure it takes full width */
     max-width: 100%; /* Ensure it does not exceed the view width */
 }
