@@ -62,7 +62,12 @@ body {
 }
 
 .card {
-    margin-bottom: 1rem; /* Add some space between the card and other content */
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 300px;
 }
 
 .card-header, .box-header {
