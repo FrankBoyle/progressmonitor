@@ -815,5 +815,6 @@ td .cell-input {
 }
 
 #chartContainer, #barChartContainer {
+    width: 100%;
     height: 400px; /* Adjust height as necessary */
 }

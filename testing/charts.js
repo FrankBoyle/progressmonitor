@@ -1,4 +1,6 @@
 let table; // Declare `table` in a higher scope
+let chart; // Reference to the line chart
+let barChart; // Reference to the bar chart
 
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -20,6 +22,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize charts on page load
     initializeCharts();
 });
+
+// Initialize and update charts functions
+function initializeCharts() {
+    initializeLineChart();
+    initializeBarChart();
+}
 
 function fetchInitialData(studentId, metadataId) {
     fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
@@ -188,7 +196,7 @@ const trendlineOptions = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    initializeCharts();  // Assuming you have a function to initialize charts
+    //initializeCharts();  // Assuming you have a function to initialize charts
     extractChartData();  // Initial data extraction and chart population
 });
 
@@ -196,17 +204,10 @@ document.getElementById('filterData').addEventListener('click', function() {
     extractChartData();  // Refresh charts on filter change
 });
 
-
-// Initialize Charts
-function initializeCharts() {
-    initializeLineChart();
-    initializeBarChart();
-}
-
 // Initialize Line Chart with dummy data
 function initializeLineChart() {
-    const chartOptions = getLineChartOptions([], []); // Empty data initially
-    chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    const options = getLineChartOptions([], []); // Initialize with empty data
+    chart = new ApexCharts(document.querySelector("#chartContainer"), options);
     chart.render();
 }
 
@@ -218,55 +219,37 @@ function updateLineChart(data) {
 
 // Initialize Bar Chart with dummy data
 function initializeBarChart() {
-    const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    const options = getBarChartOptions([], []); // Initialize with empty data
+    barChart = new ApexCharts(document.querySelector("#barChartContainer"), options);
     barChart.render();
 }
 
-// Update Bar Chart
-function updateBarChart(data) {
-    const chartData = prepareBarChartData(data);
-    barChart.updateOptions(getBarChartOptions(chartData.dates, chartData.seriesData));
-}
-
 function extractChartData() {
-    var data = table.getData(); // Assuming 'table' is your Tabulator table variable
-    var categories = data.map(row => row['Score Date']); // Extract 'Score Date' as categories
+    if (!table) {
+        console.log("Table is not initialized.");
+        return;
+    }
+    var data = table.getData();
+    var categories = data.map(row => row['Score Date']);
+    var series = prepareSeriesData(data);
 
-    // Dynamically determine the columns (excluding 'Score Date')
-    var columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'Score Date');
-
-    // Prepare series data for each column
-    var series = columnHeaders.map(column => {
-        return {
-            name: column,
-            data: data.map(row => row[column])
-        };
-    });
-
-    // Update the charts
     updateLineChart(categories, series);
     updateBarChart(categories, series);
 }
 
 function updateLineChart(categories, seriesData) {
     chart.updateOptions({
-        xaxis: {
-            categories: categories
-        },
+        xaxis: { categories: categories },
         series: seriesData
     });
 }
 
 function updateBarChart(categories, seriesData) {
     barChart.updateOptions({
-        xaxis: {
-            categories: categories
-        },
+        xaxis: { categories: categories },
         series: seriesData
     });
 }
-
 
 // Generate options for line chart
 function getLineChartOptions(dates, seriesData) {
