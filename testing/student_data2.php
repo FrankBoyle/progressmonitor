@@ -28,7 +28,7 @@
             </div>
             <button id="filterData" class="btn btn-primary">Filter Data</button>
             
-            <div class="box">
+            <div>
                 <div id="performance-table"></div>
             </div>
         </div>
