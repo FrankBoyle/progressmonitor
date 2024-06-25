@@ -62,8 +62,9 @@ body {
 .content {
     display: flex;
     flex-grow: 1;
-    padding: 1rem; /* Add top padding to compensate for the navbar height */
-    margin-top: 3.1rem; /* Adjust this value to match the height of the navbar */
+    padding: 20px; /* Add top padding to compensate for the navbar height */
+    margin-top: 3.2rem; /* Adjust this value to match the height of the navbar */
+    justify-content: center; /* Center the content horizontally */
 }
   
   .card-header, .box-header {
@@ -87,6 +88,15 @@ body {
     margin: 0.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chart-box {
+    background-color: #f9f9f9; /* Lighter shade for panels */
+    border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
+    padding: 20px;
+    margin: 0.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Hover effects on interactive elements */
