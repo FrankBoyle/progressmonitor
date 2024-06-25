@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize Tabulator table
     const table = new Tabulator("#performance-table", {
         height: "500px",
-        layout: "fitColumns",
+        layout: "fitColumnsFill",
         tooltips: true,
         movableColumns: false,
         resizableRows: false,
