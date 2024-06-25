@@ -355,7 +355,7 @@ h3 {
 
     .box-centered-top {
         width: 100%; /* Full width on smaller screens */
-        margin-top: 30px; /* Reduced margin on smaller screens */
+        margin-top: 5px; /* Reduced margin on smaller screens */
         max-height: auto; /* Smaller max height on smaller screens */
     }
 
@@ -736,7 +736,7 @@ button[type="submit"]:hover {
             width: 100%; /* Ensures it takes full width of its container */
             max-height: auto;
             overflow-y: auto;
-            margin-top: 30px;
+            margin-top: 5px;
             /*align-self: center; /* This will help in centering the content */
             overflow-x: hidden; /* Hide horizontal scroll if it appears */
         }
