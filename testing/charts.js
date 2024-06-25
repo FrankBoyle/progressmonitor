@@ -6,6 +6,16 @@ const trendlineOptions = {
     color: '#555' // Custom color for trendline
 };
 
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCharts();  // Assuming you have a function to initialize charts
+    extractChartData();  // Initial data extraction and chart population
+});
+
+document.getElementById('filterData').addEventListener('click', function() {
+    extractChartData();  // Refresh charts on filter change
+});
+
+
 // Initialize Charts
 function initializeCharts() {
     initializeLineChart();
@@ -37,6 +47,45 @@ function updateBarChart(data) {
     const chartData = prepareBarChartData(data);
     barChart.updateOptions(getBarChartOptions(chartData.dates, chartData.seriesData));
 }
+
+function extractChartData() {
+    var data = table.getData(); // Assuming 'table' is your Tabulator table variable
+    var categories = data.map(row => row['Score Date']); // Extract 'Score Date' as categories
+
+    // Dynamically determine the columns (excluding 'Score Date')
+    var columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'Score Date');
+
+    // Prepare series data for each column
+    var series = columnHeaders.map(column => {
+        return {
+            name: column,
+            data: data.map(row => row[column])
+        };
+    });
+
+    // Update the charts
+    updateLineChart(categories, series);
+    updateBarChart(categories, series);
+}
+
+function updateLineChart(categories, seriesData) {
+    chart.updateOptions({
+        xaxis: {
+            categories: categories
+        },
+        series: seriesData
+    });
+}
+
+function updateBarChart(categories, seriesData) {
+    barChart.updateOptions({
+        xaxis: {
+            categories: categories
+        },
+        series: seriesData
+    });
+}
+
 
 // Generate options for line chart
 function getLineChartOptions(dates, seriesData) {
