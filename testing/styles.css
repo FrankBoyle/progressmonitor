@@ -698,7 +698,7 @@ td .cell-input {
     background-color: #D5FFFF; /* Adds contrast if needed */
     box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Adds depth */
     border: 1px solid #ddd; /* Defines boundaries more clearly */
-    width: auto;  /* Set table width to auto */
+    width: 100%;  /* Set table width to auto */
     margin-right: auto;  /* Align table to the left */
 }
 
