@@ -20,19 +20,19 @@
             <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
         </div>
     </header>
-
-    <section class="content">
+    <main class="content">
         <div class="card">
-            <div class="form-group">
+            <div class="form-group" style="text-align: center;">
                 <label for="iep_date" style="display: block;">IEP Date:</label>
                 <input type="date" id="iep_date" name="iep_date" class="form-control">
             </div>
             <button id="filterData" class="btn btn-primary">Filter Data</button>
         </div>
-        <div class="card">
-        <div id="performance-table"></div>
-        </div>  
-    </section>
+
+        <div class="box box-centered-top">
+            <div id="performance-table"></div>
+        </div>
+    </main>
 </div>
 
 <script>
