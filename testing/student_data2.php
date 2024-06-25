@@ -24,14 +24,16 @@
     <main class="content">
         <div class="card">
             <div class="form-group">
-                <label for="iep_date" style="display: block;">IEP Date:</label>
-                <input type="date" id="iep_date" name="iep_date" class="form-control">
+                <label for="iep_date">IEP Date:</label>
+                <div class="input-group">
+                    <input type="date" id="iep_date" name="iep_date" class="form-control">
+                    <button id="filterData" class="btn btn-primary">Filter Data</button>
+                </div>
             </div>
-            <button id="filterData" class="btn btn-primary">Filter Data</button>
-            
-                <div id="performance-table"></div>
+            <div id="performance-table"></div>
         </div>
     </main>
+
 
 </div>
 
