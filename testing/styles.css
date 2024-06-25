@@ -825,3 +825,8 @@ td .cell-input {
     padding: 10px;
     box-sizing: border-box;
 }
+
+#filterData {
+    align-items: left;
+
+}
