@@ -698,7 +698,7 @@ button[type="submit"]:hover {
             top: 0;
             z-index: 10; 
             color: #000000; /* Dark text for better readability */
-            background-color: #d6e4f0;
+            /*background-color: #d6e4f0;*/
 
         }
 
