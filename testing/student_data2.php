@@ -16,10 +16,21 @@
                 <img src="bFactor_logo.png" alt="Logo">
             </div>
             <div class="header-icons">
-                <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-                <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+                <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+                <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
             </div>
         </header>
+
+        <section class="content">
+    <div class="card">
+        <div class="form-group" style="text-align: center;">
+            <label for="iep_date" style="display: block;">IEP Date:</label>
+            <input type="date" id="iep_date" name="iep_date" class="form-control" value="<?php echo htmlspecialchars($iep_date); ?>">
+        </div>
+        <button id="filterData" class="btn btn-primary">Filter Data</button>
+    </div>
+</section>
+
             <main class="content">
                 <section class="box box-centered-top">
                     <div id="performance-table"></div>
@@ -140,6 +151,40 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
         .catch(error => console.error('There was a problem with the fetch operation:', error));
+
+    // Adding the filter functionality
+    document.getElementById('filterData').addEventListener('click', function() {
+        var iepDate = document.getElementById('iep_date').value;
+        var studentId = urlParams.get('student_id');
+        var metadataId = urlParams.get('metadata_id');
+
+        if (iepDate) {
+            fetch('./users/save_iep_date.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    iep_date: iepDate,
+                    student_id: studentId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    filterData(iepDate);
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    });
+
+    function filterData(iepDate) {
+        // Assuming the Tabulator table variable is named `table`
+        table.setFilter("score_date", ">=", iepDate);
+    }
 });
 
 </script>
