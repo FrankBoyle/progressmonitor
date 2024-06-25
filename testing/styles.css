@@ -81,7 +81,7 @@ body {
 
 .box, .card {
     background-color: #c0c8c8; /* Lighter shade for panels */
-    border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
+    border: 1.5px solid #a3bbcf; /* Soft blue border from the palette */
     padding: 1rem;
     margin: 0.5rem;
     border-radius: 8px;
@@ -90,7 +90,7 @@ body {
 
 /* Hover effects on interactive elements */
 .box:hover, .card:hover {
-    border-color: #8cc9f1; /* Slightly darker blue for hover */
+    border-color: #b7dffa; /* Slightly darker blue for hover */
 }
 
 .create-group, .students-list {
@@ -687,6 +687,8 @@ button[type="submit"]:hover {
             text-align: center;
             padding: 10px 0; /* Padding for better spacing */
             border-right: 1px solid #ddd; /* Add borders for separation*/
+            white-space: normal;  /* Allow text to wrap */
+
         }
         
         .tabulator .tabulator-header .tabulator-col:last-child {
@@ -734,7 +736,7 @@ button[type="submit"]:hover {
             width: 100%; /* Ensures it takes full width of its container */
             max-height: auto;
             overflow-y: auto;
-            margin-top: 5px;
+            margin-top: 30px;
             /*align-self: center; /* This will help in centering the content */
             overflow-x: hidden; /* Hide horizontal scroll if it appears */
         }
@@ -762,11 +764,13 @@ button[type="submit"]:hover {
         }
         
         #performance-table .tabulator-cell {
-            border-right: 1px solid #333; /* Adds vertical lines if needed */
+            border-right: 1px solid #777676; /* Adds vertical lines if needed */
             padding: 8px 10px; /* Adjust padding for cell content */
         }
         
         /* Custom styling for header cells */
         #performance-table .tabulator-col {
             border-right: 1px solid #ccc; /* Vertical lines between headers */
+            white-space: normal;  /* Allow text to wrap */
+
         }

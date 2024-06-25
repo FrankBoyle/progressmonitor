@@ -102,7 +102,6 @@
                         header.getElement().classList.add("center-align-header");
                         return header.getLabel();
                     },
-                    columnMinWidth: 100,
                 });
 
                 // Add cellEdited event listener
