@@ -773,6 +773,7 @@ button[type="submit"]:hover {
         #performance-table .tabulator-col {
             border-right: 1px solid #ccc; /* Vertical lines between headers */
             text-align: center; /* Ensure header text is centered */
+            white-space: wrap;
 
 
         }
