@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to save edited data
     function saveEditedData(performanceId, fieldName, value) {
+        console.log('Making fetch request to save data:', performanceId, fieldName, value);
         fetch('./users/update_performance2.php', {
             method: 'POST',
             headers: {
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
+            console.log('Response from server:', data);
             if (!data.success) {
                 alert('Error saving data: ' + data.message);
             }
@@ -137,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
         ],
         cellEdited: function(cell) {
+            console.log('Cell edited:', cell);
             const performanceId = cell.getRow().getData().performance_id;
             const fieldName = cell.getField();
             const value = cell.getValue();
@@ -192,3 +195,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
