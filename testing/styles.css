@@ -93,6 +93,11 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.box {
+    width: 100%; /* Full width on smaller screens */
+
+}
+
 /* Hover effects on interactive elements */
 .box:hover, .card:hover {
     border-color: #b7dffa; /* Slightly darker blue for hover */
