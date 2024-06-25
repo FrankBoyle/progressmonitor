@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let table; // Declare `table` in a higher scope
 
     function initializeTable(performanceData, scoreNames) {
+        if (!scoreNames || typeof scoreNames !== 'object') {
+            console.error('Invalid or missing scoreNames:', scoreNames);
+            return; // Exit the function if scoreNames is invalid
+        }
+
         const columns = [
             {
                 title: "Score Date",
@@ -94,40 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
             selectableRangeRows: false,
             selectableRangeClearCells: false,
         });
-
-        // Add cellEdited event listener inside initializeTable after declaring table
-        table.on("cellEdited", function(cell) {
-            const field = cell.getField();
-            let value = cell.getValue();
-
-            if (value === "") {
-                value = null;
-            }
-
-            const updatedData = cell.getRow().getData();
-            updatedData[field] = value;
-
-            // Log the updated data for debugging
-            console.log("Updated data:", updatedData);
-
-            // Update the cell data in the backend (make AJAX call)
-            fetch('./users/update_performance2.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedData)
-            }).then(response => response.json())
-              .then(result => {
-                  if (result.success) {
-                      // alert('Data updated successfully');
-                  } else {
-                      alert('Failed to update data: ' + result.message);
-                      console.error('Error info:', result.errorInfo); // Log detailed error info
-                  }
-              })
-              .catch(error => console.error('Error:', error));
-        });
     }
 
     function fetchFilteredData(iepDate) {
@@ -135,7 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 console.log('Filtered data fetched:', data);
-                initializeTable(data.performanceData, data.scoreNames);
+                if (data && data.performanceData && data.scoreNames) {
+                    initializeTable(data.performanceData, data.scoreNames);
+                } else {
+                    console.error('Invalid or incomplete data received:', data);
+                }
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
@@ -172,13 +147,18 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             const { performanceData, scoreNames, iepDate } = data;
             console.log('Initial data fetched:', data);
-            initializeTable(performanceData, scoreNames);
-            if (iepDate) {
-                document.getElementById('iep_date').value = iepDate;
+            if (data && data.performanceData && data.scoreNames) {
+                initializeTable(performanceData, scoreNames);
+                if (iepDate) {
+                    document.getElementById('iep_date').value = iepDate;
+                }
+            } else {
+                console.error('Invalid or incomplete initial data:', data);
             }
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
+
 
 </script>
 
