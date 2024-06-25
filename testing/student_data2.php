@@ -29,7 +29,7 @@
             <button id="filterData" class="btn btn-primary">Filter Data</button>
         </div>
 
-        <div class="box box-centered-top">
+        <div class="box">
             <div id="performance-table"></div>
         </div>
     </main>
