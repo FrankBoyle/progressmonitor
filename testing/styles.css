@@ -716,7 +716,7 @@ td .cell-input {
     width: 100%; /* Ensures it takes full width of its container */
     max-height: auto;
     overflow-y: auto;
-    margin-top: 0px;
+    margin-top: 20px;
     overflow-x: hidden; /* Hide horizontal scroll if it appears */
 }
 
