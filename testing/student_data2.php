@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
 </head>
 <body>
 <div class="dashboard">
@@ -40,14 +40,94 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentId = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
 
-    let table;
+    function initializeTable(performanceData, scoreNames) {
+        const columns = [
+            {
+                title: "Score Date",
+                field: "score_date",
+                editor: "input",
+                formatter: function(cell, formatterParams, onRendered) {
+                    const DateTime = luxon.DateTime;
+                    let date = DateTime.fromISO(cell.getValue());
+                    return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
+                },
+                editorParams: {
+                    mask: "MM/DD/YYYY",
+                    format: "MM/DD/YYYY",
+                },
+                width: 120,
+                frozen: true
+            },
+        ];
+
+        Object.keys(scoreNames).forEach((key, index) => {
+            columns.push({ 
+                title: scoreNames[key], 
+                field: `score${index + 1}`, 
+                editor: "input", 
+                width: 100 
+            });
+        });
+
+        const table = new Tabulator("#performance-table", {
+            height: "500px",
+            data: performanceData,
+            columns: columns,
+            layout: "fitDataStretch",
+            tooltips: true,
+            movableColumns: false,
+            resizableRows: false,
+            editTriggerEvent: "dblclick",
+            editorEmptyValue: null,
+            clipboard: true,
+            clipboardCopyRowRange: "range",
+            clipboardPasteParser: "range",
+            clipboardPasteAction: "range",
+            clipboardCopyConfig: {
+                rowHeaders: false,
+                columnHeaders: true,
+            },
+            clipboardCopyStyled: false,
+            selectable: true,
+            cellEdited: function(cell) {
+                const field = cell.getField();
+                let value = cell.getValue();
+                if (value === "") {
+                    value = null;
+                }
+                const updatedData = cell.getRow().getData();
+                updatedData[field] = value;
+
+                // Log the updated data for debugging
+                console.log("Updated data:", updatedData);
+
+                // Update the cell data in the backend (make AJAX call)
+                fetch('./users/update_performance2.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                }).then(response => response.json())
+                  .then(result => {
+                      if (result.success) {
+                          // alert('Data updated successfully');
+                      } else {
+                          alert('Failed to update data: ' + result.message);
+                          console.error('Error info:', result.errorInfo); // Log detailed error info
+                      }
+                  })
+                  .catch(error => console.error('Error:', error));
+            }
+        });
+    }
 
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.json())
             .then(data => {
                 console.log('Filtered data fetched:', data);
-                table.setData(data);
+                initializeTable(data.performanceData, data.scoreNames);
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
@@ -78,88 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Error saving IEP date:', error));
         }
     });
-
-    function saveEditedData(performanceId, fieldName, value) {
-        console.log('Making fetch request to save data:', performanceId, fieldName, value);
-        fetch('./users/update_performance2.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                performance_id: performanceId,
-                [fieldName]: value
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Response from server:', data);
-            if (!data.success) {
-                alert('Error saving data: ' + data.message);
-            }
-        })
-        .catch(error => console.error('Error saving edited data:', error));
-    }
-
-    table = new Tabulator("#performance-table", {
-        height: "500px",
-        layout: "fitDataStretch",
-        tooltips: true,
-        movableColumns: false,
-        resizableRows: false,
-        editable: true,
-        clipboard: true,
-        clipboardCopyRowRange: "range",
-        clipboardPasteParser: "range",
-        clipboardPasteAction: "range",
-        clipboardCopyConfig: {
-            rowHeaders: false,
-            columnHeaders: true,
-        },
-        clipboardCopyStyled: false,
-        selectable: true,
-        columns: [],
-        cellEdited: function(cell) {
-            console.log('Cell edited:', cell);
-            const performanceId = cell.getRow().getData().performance_id;
-            const fieldName = cell.getField();
-            const value = cell.getValue();
-            saveEditedData(performanceId, fieldName, value);
-        }
-    });
-
-    function initializeTable(performanceData, scoreNames) {
-        const columns = [
-            {
-                title: "Score Date",
-                field: "score_date",
-                editor: "input",
-                formatter: function(cell, formatterParams, onRendered) {
-                    const DateTime = luxon.DateTime;
-                    let date = DateTime.fromISO(cell.getValue());
-                    return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-                },
-                editorParams: {
-                    mask: "MM/DD/YYYY",
-                    format: "MM/DD/YYYY",
-                },
-                width: 120,
-                frozen: true
-            },
-        ];
-
-        Object.keys(scoreNames).forEach((key, index) => {
-            columns.push({ 
-                title: scoreNames[key], 
-                field: `score${index + 1}`, 
-                editor: "input", 
-                width: 100 
-            });
-        });
-
-        table.setColumns(columns);
-        table.setData(performanceData);
-    }
 
     fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
