@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    extractChartData();  // Initial data extraction and chart population
     // Initialize charts on page load
     initializeCharts();
 });
@@ -197,7 +198,6 @@ const trendlineOptions = {
 
 document.addEventListener('DOMContentLoaded', function() {
     //initializeCharts();  // Assuming you have a function to initialize charts
-    extractChartData();  // Initial data extraction and chart population
 });
 
 document.getElementById('filterData').addEventListener('click', function() {
