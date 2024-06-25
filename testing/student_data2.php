@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentId = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
 
-    // Function to fetch and display the filtered data
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.text())
@@ -71,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data); // Debugging: Log response data
                 if (data.success) {
                     fetchFilteredData(iepDate);
                 } else {
@@ -82,10 +80,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initialize Tabulator table
     const table = new Tabulator("#performance-table", {
         height: "500px",
-        layout: "fitDataFill", // Adjust the layout to fit the data width
+        layout: "fitDataFill",
         tooltips: true,
         movableColumns: false,
         resizableRows: false,
@@ -111,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
         },
     });
 
-    // Function to initialize the table with fetched data
     function initializeTable(performanceData, scoreNames) {
         const columns = [
             {
@@ -121,11 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 formatter: function(cell, formatterParams, onRendered) {
                     const DateTime = luxon.DateTime;
                     let date = DateTime.fromISO(cell.getValue());
-                    if (date.isValid) {
-                        return date.toFormat("MM/dd/yyyy");
-                    } else {
-                        return "(invalid date)";
-                    }
+                    return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
                 },
                 editorParams: {
                     mask: "MM/DD/YYYY",
@@ -149,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function() {
         table.setData(performanceData);
     }
 
-    // Fetch initial data to initialize the table
     fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
@@ -158,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
-
 
 </script>
 
