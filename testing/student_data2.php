@@ -12,9 +12,9 @@
 <body>
 <div class="dashboard">
         <header class="dashboard-header">
-            <div class="logo">
-                <img src="logo.png" alt="Logo">
-            </div>
+        <div class="logo">
+            <img src="bFactor_logo.png" alt="Logo">
+          </div>
             <div class="header-icons">
                 <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
                 <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
