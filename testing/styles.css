@@ -810,7 +810,7 @@ td .cell-input {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-top: 20px;
+    gap: 20px;
 }
 
 #chartContainer, #barChartContainer {
@@ -824,6 +824,7 @@ td .cell-input {
     border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
     padding: 10px;
     box-sizing: border-box;
+    background-color: #fff; /* White background for better contrast */
 }
 
 .checkbox-container {
