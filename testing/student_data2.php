@@ -88,39 +88,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 columnHeaders: true,
             },
             clipboardCopyStyled: false,
-            selectable: true,
-            cellEdited: function(cell) {
-                const field = cell.getField();
-                let value = cell.getValue();
-                if (value === "") {
-                    value = null;
-                }
-                const updatedData = cell.getRow().getData();
-                updatedData[field] = value;
-
-                // Log the updated data for debugging
-                console.log("Updated data:", updatedData);
-
-                // Update the cell data in the backend (make AJAX call)
-                fetch('./users/update_performance2.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updatedData)
-                }).then(response => response.json())
-                  .then(result => {
-                      if (result.success) {
-                          // alert('Data updated successfully');
-                      } else {
-                          alert('Failed to update data: ' + result.message);
-                          console.error('Error info:', result.errorInfo); // Log detailed error info
-                      }
-                  })
-                  .catch(error => console.error('Error:', error));
-            }
+            selectableRange: 1, //allow only one range at a time
+                    selectableRangeColumns: false,
+                    selectableRangeRows: false,
+                    selectableRangeClearCells: false,
         });
     }
+
+                // Add cellEdited event listener
+                table.on("cellEdited", function(cell) {
+                    const field = cell.getField();
+                    let value = cell.getValue();
+
+                    if (value === "") {
+                        value = null;
+                    }
+
+                    const updatedData = cell.getRow().getData();
+                    updatedData[field] = value;
+
+                    // Log the updated data for debugging
+                    console.log("Updated data:", updatedData);
+
+                    // Update the cell data in the backend (make AJAX call)
+                    fetch('./users/update_performance2.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedData)
+                    }).then(response => response.json())
+                      .then(result => {
+                          if (result.success) {
+                              // alert('Data updated successfully');
+                          } else {
+                              alert('Failed to update data: ' + result.message);
+                              console.error('Error info:', result.errorInfo); // Log detailed error info
+                          }
+                      })
+                      .catch(error => console.error('Error:', error));
+                });
 
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
