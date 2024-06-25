@@ -6,8 +6,23 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
 </head>
 <body>
+<div class="dashboard">
+        <header class="dashboard-header">
+            <div class="logo">
+                <img src="logo.png" alt="Logo">
+            </div>
+            <div class="header-icons">
+                <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+                <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+            </div>
+        </header>
+        <div class="content">
+            <div id="performance-table">
+            </div>        
+        </div>
+    </div>
 
-<div id="performance-table"></div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
