@@ -107,16 +107,16 @@ body {
     margin-bottom: 20px;
 }
 
-/*
+
 .box, .card {
-    background-color: #c0c8c8; /* Lighter shade for panels 
+    background-color: #c0c8c8; /* Lighter shade for panels */
     border: 1.5px solid #a3bbcf; /* Soft blue border from the palette */
-    /*padding: 1rem;
+    padding: 1rem;
     margin: 0.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: auto;
-}*/
+}
 
 .box {
     width: 100%; /* Full width on smaller screens */
