@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
             height: "500px",
             data: performanceData,
             columns: columns,
-            layout: "fitColumnsStretch",
+            layout: "fitDataStretch",
             tooltips: true,
             movableColumns: false,
             resizableRows: false,
