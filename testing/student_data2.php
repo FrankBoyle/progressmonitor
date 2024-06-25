@@ -29,9 +29,7 @@
             </div>
             <button id="filterData" class="btn btn-primary">Filter Data</button>
             
-            <div>
                 <div id="performance-table"></div>
-            </div>
         </div>
     </main>
 
