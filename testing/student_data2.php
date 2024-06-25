@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const studentId = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
+    let table; // Declare `table` in a higher scope
 
     function initializeTable(performanceData, scoreNames) {
         const columns = [
