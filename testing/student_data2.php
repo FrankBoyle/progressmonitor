@@ -79,7 +79,7 @@
                     data: performanceData,
                     columns: columns,
                     fozenRows:1,
-                    layout: "fitData",
+                    layout: "fitColumns",
                     movableColumns: false,
                     resizableRows: false,
                     editTriggerEvent: "click", //trigger edit on double click
