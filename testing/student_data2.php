@@ -103,11 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize Tabulator table
     table = new Tabulator("#performance-table", {
         height: "500px",
-        layout: "fitColumns",
+        layout: "fitDataStretch",
         tooltips: true,
         movableColumns: false,
         resizableRows: false,
-        editable: true,  // Enable editing
+        editable: true,
         clipboard: true,
         clipboardCopyRowRange: "range",
         clipboardPasteParser: "range",
@@ -118,12 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         clipboardCopyStyled: false,
         selectable: true,
-        cellEdited: function(cell) {
-            const performanceId = cell.getRow().getData().performance_id;
-            const fieldName = cell.getField();
-            const value = cell.getValue();
-            saveEditedData(performanceId, fieldName, value);
-        },
         columns: [
             {
                 title: "Score Date",
@@ -141,7 +135,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 width: 120,
                 frozen: true
             },
-        ]
+        ],
+        cellEdited: function(cell) {
+            const performanceId = cell.getRow().getData().performance_id;
+            const fieldName = cell.getField();
+            const value = cell.getValue();
+            saveEditedData(performanceId, fieldName, value);
+        }
     });
 
     function initializeTable(performanceData, scoreNames) {
