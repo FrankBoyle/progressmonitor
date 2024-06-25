@@ -770,7 +770,7 @@ button[type="submit"]:hover {
         }
         
         #performance-table .tabulator-cell {
-            border-right: 1px solid #e0e0e0; /* Adds vertical lines if needed */
+            border-right: 2px solid #333; /* Makes vertical lines thicker and darker */
             padding: 8px 10px; /* Adjust padding for cell content */
             text-align: center; /* Center aligns the text in cells */
         }
