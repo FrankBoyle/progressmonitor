@@ -726,7 +726,6 @@ button[type="submit"]:hover {
             background-color: #D5FFFF; /* Adds contrast if needed */
             box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Adds depth */
             border: 1px solid #ddd; /* Defines boundaries more clearly */
-            margin-top: 20px; /* Extra space from any content above */
         }
         
         .box-centered-top {
