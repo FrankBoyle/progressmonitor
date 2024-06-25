@@ -90,15 +90,6 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.chart-box {
-    background-color: #f9f9f9; /* Lighter shade for panels */
-    border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
-    padding: 20px;
-    margin: 0.5rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 /* Hover effects on interactive elements */
 .box:hover, .card:hover {
     border-color: #45A0DD; /* Slightly darker blue for hover */

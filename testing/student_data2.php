@@ -21,7 +21,7 @@
             </div>
         </header>
             <main class="content">
-                <section class="chart-box">
+                <section class="box">
                     <div id="performance-table"></div>  
                 </section>      
             </main>
