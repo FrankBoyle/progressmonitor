@@ -35,10 +35,12 @@
         <!-- Chart Containers -->
         <div class="chart-container">
             <h3>Performance Line Chart</h3>
+            <div id="columnSelector"></div>
             <div id="chartContainer"></div>
         </div>
         <div class="chart-container">
             <h3>Performance Bar Chart</h3>
+            <div id="columnSelector"></div>
             <div id="barChartContainer"></div>
         </div>
     </main>
