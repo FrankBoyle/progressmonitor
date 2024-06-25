@@ -97,6 +97,8 @@
                     selectableRangeColumns: false,
                     selectableRangeRows: false,
                     selectableRangeClearCells: false,
+                    rowHeader: {resizable: true, frozen: true, hozAlign:"center",},
+
                 });
 
                 // Add cellEdited event listener
