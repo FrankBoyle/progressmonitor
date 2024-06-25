@@ -17,8 +17,8 @@
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
-            <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-            <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+            <a href="studnets.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+            <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
         </div>
     </header>
     <main class="content">
