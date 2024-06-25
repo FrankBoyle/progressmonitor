@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.text())
             .then(html => {
-                document.querySelector('#performance-data').innerHTML = html;
+                document.querySelector('#performance-table').innerHTML = html;
             })
             .catch(error => console.error('Error fetching filtered data:', error));
     }
