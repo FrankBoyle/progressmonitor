@@ -711,6 +711,13 @@ button[type="submit"]:hover {
             border-right: none; /* Remove the right border for the last column */
         }
 
+        #performance-table .tabulator-header {
+            position: sticky;
+            top: 0;
+            z-index: 10; 
+            background: #f9f9f9;  
+        }
+
         .tabulator-row {
             border-bottom: 1px solid #eee; /* Adds separation between rows */
         }
