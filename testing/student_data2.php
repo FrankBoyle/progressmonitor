@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
               })
               .catch(error => console.error('Error:', error));
         });
-    }
 
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
