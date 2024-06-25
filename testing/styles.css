@@ -108,7 +108,7 @@ body {
 }
 
 
-.box, .card {
+.card {
     background-color: #c0c8c8; /* Lighter shade for panels */
     border: 1.5px solid #a3bbcf; /* Soft blue border from the palette */
     padding: 1rem;
@@ -119,8 +119,13 @@ body {
 }
 
 .box {
-    width: 100%; /* Full width on smaller screens */
-
+    background-color: #f9f9f9; /* Lighter shade for panels */
+    border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: auto;
 }
 
 /* Hover effects on interactive elements */
