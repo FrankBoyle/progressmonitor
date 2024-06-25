@@ -6,8 +6,9 @@
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
 </head>
 <body>
 <div class="dashboard">
@@ -31,8 +32,18 @@
             </div>
             <div id="performance-table"></div>
         </div>
+        <!-- Chart Containers -->
+        <div class="chart-container">
+            <h3>Performance Line Chart</h3>
+            <div id="chartContainer"></div>
+        </div>
+        <div class="chart-container">
+            <h3>Performance Bar Chart</h3>
+            <div id="barChartContainer"></div>
+        </div>
     </main>
 </div>
+<script src="charts.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

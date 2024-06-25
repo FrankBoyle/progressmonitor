@@ -805,3 +805,15 @@ td .cell-input {
     text-align: center; /* Ensure header text is centered */
     white-space: normal; /* Allow text to wrap */
 }
+
+.chart-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#chartContainer, #barChartContainer {
+    height: 400px; /* Adjust height as necessary */
+}
