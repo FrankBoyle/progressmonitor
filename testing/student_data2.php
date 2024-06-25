@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://unpkg.com/tabulator-ttables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
 </head>
@@ -16,11 +16,10 @@
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
-            <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-            <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+            <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+            <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
         </div>
     </header>
-
     <main class="content">
         <div class="card">
             <div class="filter-section">
@@ -43,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let table;
 
-    // Function to fetch and display the filtered data
     function fetchFilteredData(iepDate) {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.json())
@@ -55,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('filterData').addEventListener('click', function() {
-        var iepDate = document.getElementById('iep_date').value;
+        const iepDate = document.getElementById('iep_date').value;
 
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
@@ -81,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Function to save edited data
     function saveEditedData(performanceId, fieldName, value) {
         console.log('Making fetch request to save data:', performanceId, fieldName, value);
         fetch('./users/update_performance2.php', {
@@ -104,7 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error saving edited data:', error));
     }
 
-    // Initialize Tabulator table
     table = new Tabulator("#performance-table", {
         height: "500px",
         layout: "fitDataStretch",
@@ -122,24 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         clipboardCopyStyled: false,
         selectable: true,
-        columns: [
-            {
-                title: "Score Date",
-                field: "score_date",
-                editor: "input",
-                formatter: function(cell, formatterParams, onRendered) {
-                    const DateTime = luxon.DateTime;
-                    let date = DateTime.fromISO(cell.getValue());
-                    return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-                },
-                editorParams: {
-                    mask: "MM/DD/YYYY",
-                    format: "MM/DD/YYYY",
-                },
-                width: 120,
-                frozen: true
-            },
-        ],
+        columns: [],
         cellEdited: function(cell) {
             console.log('Cell edited:', cell);
             const performanceId = cell.getRow().getData().performance_id;
@@ -198,3 +177,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
+
