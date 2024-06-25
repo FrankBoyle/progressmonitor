@@ -85,7 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize Tabulator table
     const table = new Tabulator("#performance-table", {
         height: "500px",
-        layout: "fitDataFill",
+        layout: "fitDataFill", // Adjust the layout to fit the data width
+        tooltips: true,
         movableColumns: false,
         resizableRows: false,
         editTriggerEvent: "click",
@@ -157,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
+
 
 </script>
 
