@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/tabulator-ttables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
 </head>
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.json())
             .then(data => {
+                console.log('Filtered data fetched:', data);
                 table.setData(data);
             })
             .catch(error => console.error('Error fetching filtered data:', error));
@@ -69,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
+                console.log('IEP date saved:', data);
                 if (data.success) {
                     fetchFilteredData(iepDate);
                 } else {
@@ -184,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             const { performanceData, scoreNames, iepDate } = data;
+            console.log('Initial data fetched:', data);
             initializeTable(performanceData, scoreNames);
             if (iepDate) {
                 document.getElementById('iep_date').value = iepDate;
@@ -195,4 +198,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </body>
 </html>
-
