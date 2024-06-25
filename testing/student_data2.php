@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
             .then(response => response.text())
             .then(html => {
-                // Assuming you have a table body element with the id 'performance-data'
                 document.querySelector('#performance-data').innerHTML = html;
             })
             .catch(error => console.error('Error fetching filtered data:', error));
@@ -57,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('filterData').addEventListener('click', function() {
         var iepDate = document.getElementById('iep_date').value;
-        
+
         if (iepDate) {
             fetch('./users/save_iep_date.php', {
                 method: 'POST',
@@ -71,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data); // Debugging: Log response data
                 if (data.success) {
                     fetchFilteredData(iepDate);
                 } else {
@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error fetching initial data:', error));
 });
+
 
 
 </script>
