@@ -75,7 +75,7 @@
 
                 // Initialize Tabulator with existing settings
                 const table = new Tabulator("#performance-table", {
-                    height: "500px",
+                    height: "auto",
                     data: performanceData,
                     columns: columns,
                     layout: "fitDataStretch",
