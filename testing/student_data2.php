@@ -63,21 +63,27 @@
                     layout: "fitColumns",
                     movableColumns: true,
                     resizableRows: true,
-                    editTriggerEvent: "dblclick", //trigger edit on double click
+                    editTriggerEvent: "dblclick", // trigger edit on double click
                     editorEmptyValue: null,
                     clipboard: true,
                     clipboardCopyRowRange: "range",
                     clipboardPasteParser: "range",
                     clipboardPasteAction: "range",
                     clipboardCopyConfig: {
-                        rowHeaders: false, //do not include row headers in clipboard output
-                        columnHeaders: true, //include column headers in clipboard output
+                        rowHeaders: false, // do not include row headers in clipboard output
+                        columnHeaders: true, // include column headers in clipboard output
                     },
                     clipboardCopyStyled: false,
-                    selectableRange: 1, //allow only one range at a time
+                    selectableRange: 1, // allow only one range at a time
                     selectableRangeColumns: false,
                     selectableRangeRows: false,
                     selectableRangeClearCells: true,
+                    cellSelection: true, // enable cell selection
+                });
+
+                // Add cell selection event listener
+                table.on("cellSelectionChanged", function(data) {
+                    console.log("Selected cells data:", data);
                 });
 
                 // Add cellEdited event listener
@@ -120,5 +126,6 @@
 
 </body>
 </html>
+
 
 
