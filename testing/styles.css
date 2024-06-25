@@ -808,7 +808,7 @@ td .cell-input {
     white-space: normal; /* Allow text to wrap */
 }
 
-.chart-container {
+.charts-container {
     display: flex;
     justify-content: space-between;
     width: 100%;
