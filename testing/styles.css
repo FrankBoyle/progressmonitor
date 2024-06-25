@@ -677,7 +677,7 @@ button[type="submit"]:hover {
 
         .tabulator {
             border-radius: 8px; /* Rounds corners for a softer look */
-            overflow: hidden; /* Ensures the rounded corners are visible */
+             /* overflow: hidden; /* Ensures the rounded corners are visible */
         }
         
         .tabulator .tabulator-header .tabulator-col {
@@ -687,7 +687,7 @@ button[type="submit"]:hover {
             text-align: center;
             padding: 10px 0; /* Padding for better spacing */
             border-right: 1px solid #ddd; /* Add borders for separation*/
-            white-space: normal;  /* Allow text to wrap */
+             /* white-space: normal;  /* Allow text to wrap */
 
         }
         
