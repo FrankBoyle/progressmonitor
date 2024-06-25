@@ -104,7 +104,6 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
     margin-bottom: 20px;
 }
 
@@ -504,7 +503,7 @@ td .cell-input {
 .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
+    gap: 10px;
 }
 
 .filter-section .form-group {
@@ -515,14 +514,18 @@ td .cell-input {
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
+    white-space: nowrap;
+
 }
 
 .form-group input {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
+}
+
+.form-group .form-control {
+    flex: 1;
 }
 
 .header-icons .nav-link i {
@@ -698,8 +701,8 @@ td .cell-input {
 
 .tabulator {
     border-radius: 8px; /* Rounds corners for a softer look */
+    width: 100%;
     overflow-x: hidden;
-
 }
 
 .tabulator-header .tabulator-col {
