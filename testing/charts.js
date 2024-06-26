@@ -112,47 +112,39 @@ function extractChartData() {
     try {
         console.log("Extracting chart data...");
 
-        // Assuming 'table' is your Tabulator table variable
         const data = table.getData();
         console.log("Table data:", data);
 
-        // Extract 'score_date' as categories
         const categories = data.map(row => row['score_date']);
         console.log("Categories (Dates):", categories);
 
-        // Get selected columns
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => item.getAttribute("data-column-name"));
 
         console.log("Selected columns:", selectedColumns);
 
-        // Prepare series data for each selected column
-        const series = selectedColumns.map(column => ({
-            name: column,
-            data: data.map(row => row[column])
-        }));
+        const series = selectedColumns.map(column => {
+            const seriesData = data.map(row => row[column]);
+            return {
+                name: column,
+                data: seriesData
+            };
+        });
 
-        // Calculate trendline data for each series
-        const trendlineSeries = series.map(seriesData => ({
-            name: seriesData.name + ' Trendline',
-            data: getTrendlineData(seriesData.data),
+        const trendlineSeries = series.map(s => ({
+            name: s.name + ' Trendline',
+            data: getTrendlineData(s.data),
             type: 'line',
             dashArray: 5,
-            stroke: {
-                width: 2,
-                curve: 'straight'
-            },
-            color: seriesData.color,
+            color: s.color
         }));
 
-        // Combine original series with trendline series
-        const finalSeries = [...series, ...trendlineSeries];
+        const finalSeriesData = [...series, ...trendlineSeries];
 
-        console.log("Final series data:", finalSeries);
+        console.log("Series data:", finalSeriesData);
 
-        // Update the charts
-        updateLineChart(categories, finalSeries);
-        updateBarChart(categories, series); // Bar chart does not include trendlines
+        updateLineChart(categories, finalSeriesData);
+        updateBarChart(categories, finalSeriesData);
 
         console.log("Charts updated successfully.");
     } catch (error) {
@@ -178,10 +170,10 @@ function updateLineChart(categories, seriesData) {
             categories: categories
         },
         yaxis: {
-            max: maxDataValue + 10,
+            max: Math.ceil(maxDataValue + 10), // Add some padding to the max value and round up
             labels: {
                 formatter: function(val) {
-                    return val.toFixed(2); // Ensure y-axis labels show 2 decimal places
+                    return val.toFixed(0); // Ensure y-axis labels are whole numbers
                 }
             }
         },
@@ -198,7 +190,6 @@ function updateLineChart(categories, seriesData) {
         },
     });
 }
-
 
 // Data preparation for line and bar charts
 function prepareChartData(rawData) {
@@ -328,7 +319,6 @@ function getLineChartOptions(dates, seriesData) {
         }
     };
 }
-
 
 // Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
