@@ -307,16 +307,22 @@ function getBarChartOptions(dates, seriesData) {
             enabled: true,
             style: {
                 fontSize: '12px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                colors: ['#FFF']
+            },
+            formatter: function (val, opts) {
+                return val;
+            },
+            dropShadow: {
+                enabled: false
             },
             background: {
                 enabled: true,
+                foreColor: '#fff',
                 borderRadius: 2,
-                borderWidth: 1, // Thinner border
-                borderColor: '#000', // Black outline
-                dropShadow: {
-                    enabled: false // Disable shadow for labels
-                }
+                borderWidth: 1,
+                borderColor: '#000',
+                opacity: 0.9
             },
         },
         stroke: {
@@ -359,6 +365,7 @@ function getBarChartOptions(dates, seriesData) {
         }
     };
 }
+
 function createColumnCheckboxes(scoreNames) {
     const columnSelector = document.getElementById('columnSelector');
     columnSelector.innerHTML = ''; // Clear any existing checkboxes
