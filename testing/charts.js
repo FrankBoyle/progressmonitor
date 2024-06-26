@@ -313,7 +313,6 @@ function getBarChartOptions(dates, seriesData) {
             },
             background: {
                 enabled: true,
-                foreColor: '#fff', // Text color inside the label
                 borderRadius: 2,
                 borderWidth: 1, // Thinner border
                 borderColor: '#000', // Black outline
@@ -322,7 +321,9 @@ function getBarChartOptions(dates, seriesData) {
                 }
             },
             formatter: function (val, opts) {
-                return val; // Keep the label text the same as the data value
+                const seriesIndex = opts.seriesIndex;
+                const seriesColor = seriesColors[seriesIndex];
+                return `<div style="background-color:${seriesColor};padding:2px;border-radius:2px;border:1px solid #000;">${val}</div>`;
             }
         },
         stroke: {
