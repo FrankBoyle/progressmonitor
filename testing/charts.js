@@ -154,11 +154,17 @@ function updateLineChart(categories, seriesData) {
         seriesData.push({ name: "No Data", data: [] });
     }
 
+    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
+
     chart.updateOptions({
         xaxis: {
             categories: categories
         },
-        series: seriesData
+        yaxis: {
+            max: maxDataValue + 10 // Add some padding to the max value
+        },
+        series: seriesData,
+        colors: seriesColors
     });
 }
 
