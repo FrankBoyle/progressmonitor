@@ -810,7 +810,10 @@ td .cell-input {
 
 .charts-container {
     display: flex;
+    justify-content: space-between;
     width: 100%;
+    margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 #chartContainer, #barChartContainer {
@@ -819,11 +822,13 @@ td .cell-input {
 }
 
 .chart {
-    width: 100%;
+    width: 48%; /* Adjust the width as necessary */
+    min-width: 300px; /* Ensure there is a minimum width */
     height: 400px; /* Set a fixed height for the charts */
     border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
     padding: 10px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .chart-card {
