@@ -317,13 +317,7 @@ function getBarChartOptions(dates, seriesData) {
                 borderRadius: 2,
                 borderWidth: 1, // Thinner border
                 borderColor: '#000', // Black outline
-                dropShadow: {
-                    enabled: false // Disable shadow for labels
-                }
             },
-            formatter: function (val, opts) {
-                return val; // Keep the label text the same as the data value
-            }
         },
         stroke: {
             show: true,
