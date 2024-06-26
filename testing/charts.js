@@ -127,10 +127,9 @@ function extractChartData() {
         console.log("Selected columns:", selectedColumns);
 
         // Prepare series data for each selected column
-        const series = selectedColumns.map((column, index) => ({
+        const series = selectedColumns.map(column => ({
             name: column,
-            data: data.map(row => row[column]),
-            color: seriesColors[index % seriesColors.length] // Assign color from seriesColors
+            data: data.map(row => row[column])
         }));
 
         // Calculate trendline data for each series
@@ -139,11 +138,11 @@ function extractChartData() {
             data: getTrendlineData(seriesData.data),
             type: 'line',
             dashArray: 5,
-            color: seriesData.color,  // Use the same color as the original series
             stroke: {
                 width: 2,
                 curve: 'straight'
             },
+            color: seriesData.color,
         }));
 
         // Combine original series with trendline series
