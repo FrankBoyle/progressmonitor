@@ -328,7 +328,7 @@ function getBarChartOptions(dates, seriesData) {
         stroke: {
             show: true,
             width: 2,
-            colors: ['transparent']
+            colors: seriesColors,
         },
         series: seriesData,
         xaxis: {
