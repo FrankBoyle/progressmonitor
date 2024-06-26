@@ -107,6 +107,11 @@ function initializeBarChart() {
 }
 
 function extractChartData() {
+    if (!table) {
+        console.error('Table is not initialized');
+        return;
+    }
+
     const data = table.getData(); // Assuming 'table' is your Tabulator table variable
     const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
         .map(checkbox => checkbox.getAttribute("data-column-name") || '');
@@ -127,24 +132,46 @@ function extractChartData() {
 }
 
 function updateLineChart(categories, seriesData) {
+    if (!chart) {
+        console.error('Line chart is not initialized');
+        return;
+    }
+
     if (seriesData.length === 0) {
         seriesData.push({ name: "No Data", data: [] });
     }
+
+    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
+
     chart.updateOptions({
         xaxis: {
             categories: categories
+        },
+        yaxis: {
+            max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData
     });
 }
 
 function updateBarChart(categories, seriesData) {
+    if (!barChart) {
+        console.error('Bar chart is not initialized');
+        return;
+    }
+
     if (seriesData.length === 0) {
         seriesData.push({ name: "No Data", data: [] });
     }
+
+    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
+
     barChart.updateOptions({
         xaxis: {
             categories: categories
+        },
+        yaxis: {
+            max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData
     });
@@ -195,8 +222,7 @@ function getLineChartOptions(dates, seriesData) {
             title: {
                 text: 'Value'
             },
-            min: 0,
-            max: (Math.max(...seriesData.map(s => Math.max(...s.data))) + 10)
+            min: 0
         },
         legend: {
             position: 'top',
@@ -212,7 +238,8 @@ function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'bar',
-            height: 350
+            height: 350,
+            stacked: true // Enable stacking
         },
         plotOptions: {
             bar: {
@@ -239,7 +266,8 @@ function getBarChartOptions(dates, seriesData) {
         yaxis: {
             title: {
                 text: 'Value'
-            }
+            },
+            min: 0
         },
         fill: {
             opacity: 1
@@ -330,6 +358,7 @@ function initializeTable(performanceData, scoreNames) {
         selectableRangeClearCells: false,
     });
 
+    // Add cellEdited event listener inside initializeTable after declaring table
     table.on("cellEdited", function(cell) {
         const field = cell.getField();
         let value = cell.getValue();
