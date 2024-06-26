@@ -74,7 +74,9 @@ function fetchFilteredData(iepDate, studentId, metadataId) {
         .then(data => {
             console.log('Filtered data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
+                createColumnCheckboxes(data.scoreNames);
                 initializeTable(data.performanceData, data.scoreNames);
+                extractChartData(); // Update charts based on the new data
             } else {
                 console.error('Invalid or incomplete data received:', data);
             }
@@ -82,21 +84,203 @@ function fetchFilteredData(iepDate, studentId, metadataId) {
         .catch(error => console.error('Error fetching filtered data:', error));
 }
 
+function initializeCharts() {
+    initializeLineChart();
+    initializeBarChart();
+}
+
+function initializeLineChart() {
+    const chartOptions = getLineChartOptions([], []); // Empty data initially
+    chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    chart.render();
+}
+
+function initializeBarChart() {
+    const barChartOptions = getBarChartOptions([], []); // Empty data initially
+    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    barChart.render();
+}
+
+function extractChartData() {
+    const data = table.getData(); // Assuming 'table' is your Tabulator table variable
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+
+    const categories = data.map(row => row['score_date']); // Extract 'Score Date' as categories
+
+    // Prepare series data for each selected column
+    const seriesData = selectedColumns.map(column => {
+        return {
+            name: column,
+            data: data.map(row => row[column])
+        };
+    });
+
+    // Update the charts
+    updateLineChart(categories, seriesData);
+    updateBarChart(categories, seriesData);
+}
+
+function updateLineChart(categories, seriesData) {
+    if (seriesData.length === 0) {
+        seriesData.push({ name: "No Data", data: [] });
+    }
+    chart.updateOptions({
+        xaxis: {
+            categories: categories
+        },
+        series: seriesData
+    });
+}
+
+function updateBarChart(categories, seriesData) {
+    if (seriesData.length === 0) {
+        seriesData.push({ name: "No Data", data: [] });
+    }
+    barChart.updateOptions({
+        xaxis: {
+            categories: categories
+        },
+        series: seriesData
+    });
+}
+
+function getLineChartOptions(dates, seriesData) {
+    return {
+        chart: {
+            type: 'line',
+            height: 350,
+            dropShadow: {
+                enabled: true,
+                color: '#000',
+                top: 18,
+                left: 7,
+                blur: 10,
+                opacity: 0.2
+            },
+            toolbar: {
+                show: false
+            }
+        },
+        colors: seriesColors,
+        dataLabels: {
+            enabled: true
+        },
+        stroke: {
+            curve: 'smooth'
+        },
+        series: seriesData,
+        grid: {
+            borderColor: '#e7e7e7',
+            row: {
+                colors: ['#f3f3f3', 'transparent'],
+                opacity: 0.5
+            },
+        },
+        markers: {
+            size: 1
+        },
+        xaxis: {
+            categories: dates,
+            title: {
+                text: 'Date'
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Value'
+            },
+            min: 0,
+            max: (Math.max(...seriesData.map(s => Math.max(...s.data))) + 10)
+        },
+        legend: {
+            position: 'top',
+            horizontalAlign: 'right',
+            floating: true,
+            offsetY: -25,
+            offsetX: -5
+        }
+    };
+}
+
+function getBarChartOptions(dates, seriesData) {
+    return {
+        chart: {
+            type: 'bar',
+            height: 350
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        series: seriesData,
+        xaxis: {
+            categories: dates,
+            title: {
+                text: 'Date'
+            }
+        },
+        yaxis: {
+            title: {
+                text: 'Value'
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + " units"
+                }
+            }
+        }
+    };
+}
+
+function createColumnCheckboxes(scoreNames) {
+    const columnSelector = document.getElementById('columnSelector');
+    columnSelector.innerHTML = ''; // Clear any existing checkboxes
+    Object.keys(scoreNames).forEach((key, index) => {
+        const label = document.createElement('label');
+        label.innerHTML = `
+            <input type="checkbox" data-column-name="score${index + 1}">
+            ${scoreNames[key]}
+        `;
+        columnSelector.appendChild(label);
+    });
+
+    // Add event listener to update charts when checkboxes change
+    columnSelector.addEventListener('change', function() {
+        extractChartData();
+    });
+}
+
 function initializeTable(performanceData, scoreNames) {
-    console.log('Initializing table with data and score names:', { performanceData, scoreNames });
-    // Ensure previous instance is cleaned up before initializing a new one
     if (table) {
         table.destroy();
     }
 
-    // Create columns dynamically based on scoreNames
     const columns = [
         {
-            title: "Date", // Changed from "Score Date"
+            title: "Date",
             field: "score_date",
             editor: "input",
             formatter: function(cell, formatterParams, onRendered) {
-                return luxon.DateTime.fromISO(cell.getValue()).toFormat("MM/dd/yyyy");
+                const DateTime = luxon.DateTime;
+                let date = DateTime.fromISO(cell.getValue());
+                return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
             },
             editorParams: {
                 mask: "MM/DD/YYYY",
@@ -116,7 +300,6 @@ function initializeTable(performanceData, scoreNames) {
         });
     });
 
-    // Initialize Tabulator
     table = new Tabulator("#performance-table", {
         height: "500px",
         data: performanceData,
@@ -136,15 +319,13 @@ function initializeTable(performanceData, scoreNames) {
             columnHeaders: true,
         },
         clipboardCopyStyled: false,
-        selectableRange: 1,
+        selectableRange: 1, // allow only one range at a time
         selectableRangeColumns: false,
         selectableRangeRows: false,
         selectableRangeClearCells: false,
     });
 
-    // Add cellEdited event listener
     table.on("cellEdited", function(cell) {
-        console.log('Cell edited:', cell);
         const field = cell.getField();
         let value = cell.getValue();
 
@@ -155,127 +336,25 @@ function initializeTable(performanceData, scoreNames) {
         const updatedData = cell.getRow().getData();
         updatedData[field] = value;
 
-        console.log("Updated data post-edit:", updatedData);
+        // Log the updated data for debugging
+        console.log("Updated data:", updatedData);
 
         // Update the cell data in the backend (make AJAX call)
         fetch('./users/update_performance2.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedData)
-            }).then(response => response.json())
-            .then(result => {
-                if (result.success) {
-                    console.log('Data updated successfully:', result);
-                } else {
-                    alert('Failed to update data: ' + result.message);
-                    console.error('Error info:', result.errorInfo);
-                }
-            })
-            .catch(error => {
-                console.error('Error updating data:', error);
-            });
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        }).then(response => response.json())
+          .then(result => {
+              if (result.success) {
+                  // Data updated successfully
+              } else {
+                  alert('Failed to update data: ' + result.message);
+                  console.error('Error info:', result.errorInfo); // Log detailed error info
+              }
+          })
+          .catch(error => console.error('Error:', error));
     });
-}
-
-function createColumnCheckboxes(scoreNames) {
-    const container = document.getElementById('columnSelector');
-    container.innerHTML = ''; // Clear existing options if any
-
-    Object.keys(scoreNames).forEach(key => {
-        const label = document.createElement('label');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = true; // default to checked
-        checkbox.value = key;
-        checkbox.onchange = extractChartData; // Attach the event to refresh the charts on change
-
-        label.appendChild(checkbox);
-        label.append(" " + scoreNames[key]); // Add a space and title
-        container.appendChild(label);
-    });
-}
-
-function initializeCharts() {
-    initializeLineChart();
-    initializeBarChart();
-}
-
-function initializeLineChart() {
-    const options = getLineChartOptions([], []); // Initialize with empty data
-    chart = new ApexCharts(document.querySelector("#chartContainer"), options);
-    chart.render();
-}
-
-function initializeBarChart() {
-    const options = getBarChartOptions([], []); // Initialize with empty data
-    barChart = new ApexCharts(document.querySelector("#barChartContainer"), options);
-    barChart.render();
-}
-
-function extractChartData() {
-    if (!table) {
-        console.log("Table is not initialized.");
-        return;
-    }
-    var data = table.getData();
-    var categories = data.map(row => luxon.DateTime.fromISO(row['score_date']).toFormat("MM/dd/yyyy"));
-    var selectedColumns = getSelectedColumns();
-    var series = prepareSeriesData(data, selectedColumns);
-
-    updateLineChart(categories, series);
-    updateBarChart(categories, series);
-}
-
-function getSelectedColumns() {
-    return Array.from(document.querySelectorAll('#columnSelector input[type="checkbox"]:checked'))
-                .map(input => input.value);
-}
-
-function prepareSeriesData(data, selectedColumns) {
-    return selectedColumns.map(column => ({
-        name: column,
-        data: data.map(row => row[column])
-    }));
-}
-
-function updateLineChart(categories, seriesData) {
-    chart.updateOptions({
-        xaxis: { categories: categories },
-        series: seriesData
-    });
-}
-
-function updateBarChart(categories, seriesData) {
-    barChart.updateOptions({
-        xaxis: { categories: categories },
-        series: seriesData
-    });
-}
-
-function getLineChartOptions(dates, seriesData) {
-    return {
-        chart: {
-            type: 'line',
-            height: 350
-        },
-        series: seriesData,
-        xaxis: {
-            categories: dates
-        }
-    };
-}
-
-function getBarChartOptions(dates, seriesData) {
-    return {
-        chart: {
-            type: 'bar',
-            height: 350
-        },
-        series: seriesData,
-        xaxis: {
-            categories: dates
-        }
-    };
 }
