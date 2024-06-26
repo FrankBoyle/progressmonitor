@@ -252,7 +252,7 @@ function getLineChartOptions(dates, seriesData) {
                 if (seriesName.includes('Trendline')) {
                     return '';
                 }
-                return val.toFixed(2);  // Limit to 2 decimal places
+                return val;
             },
             style: {
                 fontSize: '12px',
@@ -270,10 +270,8 @@ function getLineChartOptions(dates, seriesData) {
         },
         stroke: {
             curve: 'smooth',
-            width: seriesData.map(series =>
-                series.name.includes('Trendline') ? 2 : 5
-            ),
-            dashArray: seriesData.map(series =>
+            width: 5,
+            dashArray: seriesData.map(series => 
                 series.name.includes('Trendline') ? 5 : 0
             ),
             colors: seriesColors
@@ -313,6 +311,7 @@ function getLineChartOptions(dates, seriesData) {
         }
     };
 }
+
 
 // Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
