@@ -37,14 +37,13 @@
             <div id="columnSelector" class="checkbox-container"></div>
         </div>
         <!-- Chart Containers -->
-        <!--<div class="charts-wrapper">-->
             <div class="card chart-card">
                 <div id="chartContainer" class="chart"></div>
             </div>
             <div class="card chart-card">
                 <div id="barChartContainer" class="chart"></div>
             </div>
-        <!--</div>-->
+
     </main>
 </div>
 <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
