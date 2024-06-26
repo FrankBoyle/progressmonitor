@@ -193,20 +193,12 @@ function updateBarChart(categories, seriesData) {
     });
 }
 
-// Generate options for line chart
+// Function to get options for Line Chart
 function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
             height: 350,
-            dropShadow: {
-                enabled: true,
-                color: '#000',
-                top: 18,
-                left: 7,
-                blur: 10,
-                opacity: 0.2
-            },
             toolbar: {
                 show: false
             }
@@ -239,12 +231,15 @@ function getLineChartOptions(dates, seriesData) {
             title: {
                 text: 'Value'
             },
-            min: 0,
-            max: Math.max(...seriesData.flatMap(s => s.data)) + 10 // Adjusted scale for line chart
+            labels: {
+                formatter: function (val) {
+                    return val.toFixed(0);
+                }
+            }
         },
         legend: {
-            position: 'bottom',
-            horizontalAlign: 'center',
+            position: 'top',
+            horizontalAlign: 'right',
             floating: true,
             offsetY: -25,
             offsetX: -5
