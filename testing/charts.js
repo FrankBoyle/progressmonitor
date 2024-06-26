@@ -169,6 +169,7 @@ function prepareChartData(rawData) {
     return { dates, seriesData };
 }
 
+// Update Bar Chart
 function updateBarChart(categories, seriesData) {
     if (!barChart) {
         console.error('Bar chart is not initialized');
