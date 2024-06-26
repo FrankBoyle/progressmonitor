@@ -199,7 +199,8 @@ function updateBarChart(categories, seriesData) {
         yaxis: {
             max: maxDataValue + 10 // Add some padding to the max value
         },
-        series: seriesData
+        series: seriesData,
+        colors: seriesColors
     });
 }
 
