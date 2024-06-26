@@ -17,8 +17,8 @@
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
-            <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-            <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+            <a href="home.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+            <a href="logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
         </div>
     </header>
     <main class="content">
@@ -32,11 +32,17 @@
             </div>
             <div id="performance-table"></div>
         </div>
-        <div id="columnSelector" class="checkbox-container"></div>
+        <div class="card">
+            <div id="columnSelector" class="checkbox-container"></div>
+        </div>
         <!-- Chart Containers -->
         <div class="charts-container">
-            <div id="chartContainer" class="chart"></div>
-            <div id="barChartContainer" class="chart"></div>
+            <div class="card chart-card">
+                <div id="chartContainer" class="chart"></div>
+            </div>
+            <div class="card chart-card">
+                <div id="barChartContainer" class="chart"></div>
+            </div>
         </div>
     </main>
 </div>
