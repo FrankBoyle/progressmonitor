@@ -425,6 +425,9 @@ function createColumnCheckboxes(scoreNames) {
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
             extractChartData();
+            if (item.classList.contains('selected')) {
+                updateStatisticsDisplay(item.getAttribute("data-column-name"), scoreNames[key]);
+            }
         });
         columnSelector.appendChild(item);
     });
