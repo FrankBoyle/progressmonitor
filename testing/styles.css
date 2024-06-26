@@ -816,6 +816,7 @@ td .cell-input {
 }
 
 .charts-wrapper {
+    width: auto;
     display: flex;
     flex-wrap: wrap;
 }
