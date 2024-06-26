@@ -304,12 +304,12 @@ function getBarChartOptions(dates, seriesData) {
                 endingShape: 'rounded'
             },
         },
+        colors: seriesColors,
         dataLabels: {
             enabled: true,
             style: {
                 fontSize: '12px',
-                fontWeight: 'bold',
-                colors: ['#fff'] // Set label text color to white
+                fontWeight: 'bold'
             },
             background: {
                 enabled: true,
@@ -321,9 +321,7 @@ function getBarChartOptions(dates, seriesData) {
                 }
             },
             formatter: function (val, opts) {
-                const seriesIndex = opts.seriesIndex;
-                const seriesColor = seriesColors[seriesIndex];
-                return `<div style="background-color:${seriesColor};padding:2px;border-radius:2px;border:1px solid #000;">${val}</div>`;
+                return val; // Keep the label text the same as the data value
             }
         },
         stroke: {
@@ -366,6 +364,7 @@ function getBarChartOptions(dates, seriesData) {
         }
     };
 }
+
 
 function createColumnCheckboxes(scoreNames) {
     const columnSelector = document.getElementById('columnSelector');
