@@ -269,7 +269,7 @@ function getLineChartOptions(dates, seriesData) {
         },
         series: seriesData,
         grid: {
-            borderColor: '#e7e7e7',
+            borderColor: '#dadada',
             strokeDashArray: 0, // Solid lines
             position: 'back',  // Grid lines behind the data points
             xaxis: {
