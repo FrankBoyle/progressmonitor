@@ -212,7 +212,7 @@ function getLineChartOptions(dates, seriesData) {
             type: 'line',
             height: 350,
             toolbar: {
-                show: false
+                show: true
             }
         },
         colors: seriesColors,
@@ -220,7 +220,15 @@ function getLineChartOptions(dates, seriesData) {
             enabled: true
         },
         stroke: {
-            curve: 'smooth'
+            curve: 'smooth',
+            width: 3, // Set line width
+            shadow: {
+                enabled: true, // Enable shadow
+                top: 10,
+                left: 0,
+                blur: 5,
+                opacity: 0.2
+            }
         },
         series: seriesData,
         grid: {
