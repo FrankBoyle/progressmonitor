@@ -285,7 +285,6 @@ function getLineChartOptions(dates, seriesData) {
     };
 }
 
-// Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
@@ -309,7 +308,13 @@ function getBarChartOptions(dates, seriesData) {
             enabled: true,
             style: {
                 fontSize: '12px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                colors: ['#fff'] // Set text color to white
+            },
+            formatter: function (val, opts) {
+                const seriesIndex = opts.seriesIndex;
+                const seriesColor = seriesColors[seriesIndex];
+                return `<div style="background-color:${seriesColor};padding:2px;border-radius:2px;border:1px solid #000;">${val}</div>`;
             },
             background: {
                 enabled: true,
@@ -320,9 +325,6 @@ function getBarChartOptions(dates, seriesData) {
                     enabled: false // Disable shadow for labels
                 }
             },
-            formatter: function (val, opts) {
-                return val; // Keep the label text the same as the data value
-            }
         },
         stroke: {
             show: true,
@@ -364,6 +366,7 @@ function getBarChartOptions(dates, seriesData) {
         }
     };
 }
+
 
 
 function createColumnCheckboxes(scoreNames) {
