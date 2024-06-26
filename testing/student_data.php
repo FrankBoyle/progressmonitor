@@ -41,7 +41,22 @@
                 <div id="chartContainer" class="chart"></div>
                 <div id="statistics">
     <h3>Statistical Summary</h3>
+    <table id="statsTable">
+        <thead>
+            <tr>
+                <th>Variable</th>
+                <th>Mean</th>
+                <th>Median</th>
+                <th>Standard Deviation</th>
+                <th>Trendline Equation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Statistics rows will be dynamically inserted here -->
+        </tbody>
+    </table>
 </div>
+
 
             </div>
             <div class="card chart-card">

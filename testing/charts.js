@@ -424,10 +424,7 @@ function createColumnCheckboxes(scoreNames) {
         item.textContent = scoreNames[key];
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
-            extractChartData();
-            if (item.classList.contains('selected')) {
-                updateStatisticsDisplay(item.getAttribute("data-column-name"), scoreNames[key]);
-            }
+            refreshStatisticsDisplay();  // Update to call refresh on any click
         });
         columnSelector.appendChild(item);
     });
@@ -600,6 +597,22 @@ function getTrendlineData(data) {
     });
 }
 
+function refreshStatisticsDisplay() {
+    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"));
+    const tbody = document.getElementById('statsTable').getElementsByTagName('tbody')[0];
+    tbody.innerHTML = ''; // Clear existing rows
+
+    selectedColumns.forEach(item => {
+        const columnField = item.getAttribute("data-column-name");
+        const columnName = item.textContent.trim();
+        updateStatisticsDisplay(columnField, columnName, tbody);
+    });
+
+    if (selectedColumns.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">No columns selected</td></tr>'; // Handle no selection
+    }
+}
+
 function calculateStatistics(data) {
     let mean = data.reduce((acc, val) => acc + val, 0) / data.length;
     let median = calculateMedian(data);
@@ -641,18 +654,24 @@ function calculateTrendlineEquation(data) {
     return `y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}`;
 }
 
-function updateStatisticsDisplay(columnField, columnName) {
+function updateStatisticsDisplay(columnField, columnName, tbody) {
     const data = table.getData().map(row => parseFloat(row[columnField])).filter(val => !isNaN(val));
 
     if (data.length > 0) {
         const stats = calculateStatistics(data);
         const trendlineEquation = calculateTrendlineEquation(data);
-        const statsHtml = `
-            <p><strong>${columnName}</strong> - Mean: ${stats.mean}, Median: ${stats.median}, Standard Deviation: ${stats.stdDev}, Trendline: ${trendlineEquation}</p>
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td>${columnName}</td>
+            <td>${stats.mean}</td>
+            <td>${stats.median}</td>
+            <td>${stats.stdDev}</td>
+            <td>${trendlineEquation}</td>
         `;
-        document.getElementById('statistics').innerHTML = statsHtml;
     } else {
-        document.getElementById('statistics').innerHTML = `<p>No data available for ${columnName}</p>`;
+        const row = tbody.insertRow();
+        row.innerHTML = `<td colspan="5">No data available for ${columnName}</td>`;
     }
 }
+
 
