@@ -632,3 +632,20 @@ function calculateTrendlineEquation(data) {
     return `y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}`;
 }
 
+function updateStatisticsDisplay() {
+    const columnNames = getColumnNames(); // Retrieves the column names dynamically
+    const data = table.getData();
+    let statsHtml = '<ul>';
+
+    columnNames.forEach(column => {
+        const columnData = data.map(row => parseFloat(row[column])).filter(val => !isNaN(val));
+        if (columnData.length > 0) {
+            const stats = calculateStatistics(columnData);
+            const trendlineEquation = calculateTrendlineEquation(columnData);
+            statsHtml += `<li><strong>${column}</strong> - Average: ${stats.average}, Median: ${stats.median}, Trendline: ${trendlineEquation}</li>`;
+        }
+    });
+
+    statsHtml += '</ul>';
+    document.getElementById('statistics').innerHTML = statsHtml;
+}
