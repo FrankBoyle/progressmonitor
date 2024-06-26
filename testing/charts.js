@@ -29,6 +29,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCharts();
 });
 
+window.addEventListener('scroll', function(event) {
+    window.clearTimeout(isScrolling);
+
+    // Disable chart interactions during scroll
+    disableChartInteractions();
+
+    isScrolling = setTimeout(function() {
+        // Enable chart interactions after scroll
+        enableChartInteractions();
+    }, 100);
+}, false);
+
 function fetchInitialData(studentId, metadataId) {
     fetch(`./users/fetch_data.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
@@ -533,18 +545,6 @@ function initializeTable(performanceData, scoreNames) {
           .catch(error => console.error('Error:', error));
     });
 }
-
-window.addEventListener('scroll', function(event) {
-    window.clearTimeout(isScrolling);
-
-    // Disable chart interactions during scroll
-    disableChartInteractions();
-
-    isScrolling = setTimeout(function() {
-        // Enable chart interactions after scroll
-        enableChartInteractions();
-    }, 100);
-}, false);
 
 function disableChartInteractions() {
     if (chart) {
