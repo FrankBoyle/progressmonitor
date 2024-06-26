@@ -269,6 +269,9 @@ function getBarChartOptions(dates, seriesData) {
         chart: {
             type: 'bar',
             height: 350,
+            toolbar: {
+                show: true
+            },
             stacked: true
         },
         plotOptions: {
@@ -279,7 +282,7 @@ function getBarChartOptions(dates, seriesData) {
             },
         },
         dataLabels: {
-            enabled: false
+            enabled: true,
         },
         stroke: {
             show: true,
