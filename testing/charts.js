@@ -230,7 +230,7 @@ function getLineChartOptions(dates, seriesData) {
                 top: 1,
                 left: 3,
                 blur: 3,
-                color: '#000',
+                color: seriesColors,
                 opacity: 0.1
             },
         },
@@ -238,7 +238,14 @@ function getLineChartOptions(dates, seriesData) {
         dataLabels: {
             enabled: true,
             formatter: function(val, opts) {
-                return val;  // Display actual value
+                var seriesName = opts.w.config.series[opts.seriesIndex].name;
+                if (val === null) {
+                    return '';
+                }
+                if (seriesName.includes('Trendline')) {
+                    return '';
+                }
+                return val; // Return the value as it is, respecting the table's decimal places
             },
             style: {
                 fontSize: '12px',
@@ -248,32 +255,38 @@ function getLineChartOptions(dates, seriesData) {
                 enabled: true,
                 borderRadius: 2,
                 borderWidth: 1,
-                borderColor: '#000'
+                borderColor: '#000',
+                dropShadow: {
+                    enabled: false
+                }
             }
         },
         stroke: {
-            curve: 'smooth'
+            curve: 'smooth',
+            width: seriesData.map(series =>
+                series.name.includes('Trendline') ? 2 : 5
+            ),
+            dashArray: seriesData.map(series =>
+                series.name.includes('Trendline') ? 5 : 0
+            ),
+            colors: seriesColors
         },
         series: seriesData,
         grid: {
             borderColor: '#e7e7e7',
             row: {
-                colors: ['#f3f3f3', 'transparent'],  // Alternating row background colors
+                colors: ['#f3f3f3', 'transparent'],
                 opacity: 0.5
             },
-            column: {
-                show: true,  // Enable vertical grid lines
-                colors: ['#e7e7e7'],  // Light grey vertical lines
-                width: 1
-            }
         },
         markers: {
-            size: 5
+            size: 0
         },
         xaxis: {
             categories: dates,
             title: {
-                text: 'Date'
+                text: 'Date',
+                offsetY: -20
             }
         },
         yaxis: {
@@ -282,13 +295,14 @@ function getLineChartOptions(dates, seriesData) {
             },
             labels: {
                 formatter: function(val) {
-                    return val.toFixed(0);
+                    return val.toFixed(0); // Ensure y-axis labels are whole numbers
                 }
             }
         },
         legend: {
             position: 'bottom',
-            horizontalAlign: 'center'
+            horizontalAlign: 'center',
+            showForSingleSeries: true
         }
     };
 }
@@ -308,18 +322,45 @@ function getBarChartOptions(dates, seriesData) {
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '80%'
-            }
+                columnWidth: '80%', // Increase the bar width
+            },
         },
         colors: seriesColors,
         dataLabels: {
             enabled: true,
-            formatter: function (val) {
-                return val;
+            enabledOnSeries: undefined, // Show dataLabels on all series
+            formatter: function (val, opts) {
+                return val; // Keep the label text the same as the data value
             },
+            textAnchor: 'middle',
+            distributed: false, // Do not distribute labels individually
+            offsetX: 0,
+            offsetY: 0,
             style: {
                 fontSize: '12px',
-                fontWeight: 'bold'
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 'bold',
+                colors: undefined // Colors will be overridden by background.foreColor
+            },
+            background: {
+                enabled: true,
+                foreColor: '#fff', // Text color
+                padding: 1,
+                borderRadius: 0,
+                borderWidth: 0, // Thin border
+                borderColor: '#000', // Black outline
+                opacity: 0.9,
+                dropShadow: {
+                    enabled: false // Disable background shadow
+                }
+            },
+            dropShadow: {
+                enabled: false, // Disable text shadow
+                top: 1,
+                left: 1,
+                blur: 1,
+                color: '#000',
+                opacity: 0.45
             }
         },
         stroke: {
@@ -328,22 +369,11 @@ function getBarChartOptions(dates, seriesData) {
             colors: ['transparent']
         },
         series: seriesData,
-        grid: {
-            borderColor: '#e7e7e7',
-            row: {
-                colors: ['#f3f3f3', 'transparent'],  // Alternating row colors
-                opacity: 0.5
-            },
-            column: {
-                show: true,  // Enable vertical grid lines
-                colors: ['#e7e7e7'],  // Light grey vertical lines
-                width: 1
-            }
-        },
         xaxis: {
             categories: dates,
             title: {
-                text: 'Date'
+                text: 'Date',
+                offsetY: -10 // Move the axis title closer to the dates
             }
         },
         yaxis: {
@@ -356,9 +386,20 @@ function getBarChartOptions(dates, seriesData) {
                 }
             }
         },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + " units";
+                }
+            }
+        },
         legend: {
             position: 'bottom',
-            horizontalAlign: 'center'
+            horizontalAlign: 'center',
+            showForSingleSeries: true // Always show the legend, even for a single series
         }
     };
 }
