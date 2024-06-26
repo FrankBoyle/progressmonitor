@@ -180,7 +180,11 @@ function updateBarChart(categories, seriesData) {
         seriesData.push({ name: "No Data", data: [] });
     }
 
-    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
+    // Calculate the maximum stack height for each category
+    const maxStackHeight = categories.map((_, i) => {
+        return seriesData.reduce((acc, series) => acc + (series.data[i] || 0), 0);
+    });
+    const maxDataValue = Math.max(...maxStackHeight);
 
     barChart.updateOptions({
         xaxis: {
