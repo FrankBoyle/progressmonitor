@@ -219,9 +219,9 @@ function getLineChartOptions(dates, seriesData) {
                 enabled: true, // Enable shadow
                 top: 1,
                 left: 3,
-                blur: 4,
+                blur: 3,
                 color: seriesColors,
-                opacity: 0.3
+                opacity: 0.1
             },
         },
         colors: seriesColors,
