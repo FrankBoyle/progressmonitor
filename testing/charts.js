@@ -300,7 +300,7 @@ function getBarChartOptions(dates, seriesData) {
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '55%',
+                columnWidth: '75%', // Increase the bar width
                 endingShape: 'rounded'
             },
         },
@@ -309,11 +309,11 @@ function getBarChartOptions(dates, seriesData) {
             style: {
                 fontSize: '12px',
                 fontWeight: 'bold',
-                colors: seriesColors // Set label color to match bar color
+                colors: ['#fff'] // Set label text color to white
             },
             background: {
                 enabled: true,
-                foreColor: '#000', // Text color inside the label
+                foreColor: '#fff', // Text color inside the label
                 borderRadius: 2,
                 borderWidth: 1, // Thinner border
                 borderColor: '#000', // Black outline
