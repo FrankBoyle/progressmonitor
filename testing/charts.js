@@ -213,7 +213,15 @@ function getLineChartOptions(dates, seriesData) {
             height: 800, // Set height to 600
             toolbar: {
                 show: true // Enable the toolbar with the menu button
-            }
+            },
+            shadow: {
+                enabled: true, // Enable shadow
+                top: 3,
+                left: 3,
+                blur: 10,
+                color: '#000', // Set shadow color to black
+                opacity: 0.7
+            },
         },
         colors: seriesColors,
         dataLabels: {
@@ -239,14 +247,6 @@ function getLineChartOptions(dates, seriesData) {
             curve: 'smooth',
             width: 5, // Set line width
             colors: seriesColors,
-            shadow: {
-                enabled: true, // Enable shadow
-                top: 3,
-                left: 3,
-                blur: 10,
-                color: '#000', // Set shadow color to black
-                opacity: 0.7
-            }
         },
         series: seriesData,
         grid: {
