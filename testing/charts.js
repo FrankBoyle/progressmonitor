@@ -308,22 +308,22 @@ function getBarChartOptions(dates, seriesData) {
             style: {
                 fontSize: '12px',
                 fontWeight: 'bold',
-                colors: ['#FFF'] // Set the text color to white
-            },
-            formatter: function (val, opts) {
-                return val;
+                colors: ['#FFF'] // Set text color to white
             },
             background: {
                 enabled: true,
-                foreColor: '#fff',
+                foreColor: '#FFF', // Set text color to white
                 padding: 4,
                 borderRadius: 2,
-                borderWidth: 1,
-                borderColor: '#000',
+                borderWidth: 1, // Thin border
+                borderColor: '#000', // Black outline
                 opacity: 0.9,
                 dropShadow: {
                     enabled: false
                 }
+            },
+            formatter: function (val, opts) {
+                return val; // Display the value inside the label
             }
         },
         stroke: {
