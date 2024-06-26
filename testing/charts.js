@@ -210,7 +210,7 @@ function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
-            height: 800, // Set height to 600
+            height: 800, // Set height to 800
             background: '#fff',
             toolbar: {
                 show: true // Enable the toolbar with the menu button
@@ -263,7 +263,8 @@ function getLineChartOptions(dates, seriesData) {
         xaxis: {
             categories: dates,
             title: {
-                text: 'Date'
+                text: 'Date',
+                offsetY: -10 // Move the axis title closer to the dates
             }
         },
         yaxis: {
@@ -282,7 +283,6 @@ function getLineChartOptions(dates, seriesData) {
         }
     };
 }
-
 
 function getBarChartOptions(dates, seriesData) {
     return {
