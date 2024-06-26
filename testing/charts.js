@@ -210,7 +210,7 @@ function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
-            height: 600,
+            height: 600, // Set height to 600
             toolbar: {
                 show: true // Enable the toolbar with the menu button
             }
@@ -220,19 +220,16 @@ function getLineChartOptions(dates, seriesData) {
             enabled: true,
             style: {
                 fontSize: '12px',
-                fontWeight: 'bold',
-                colors: seriesColors // Set label color to match line color
+                fontWeight: 'bold'
             },
             background: {
                 enabled: true,
-                foreColor: '#000', // Text color inside the label
                 borderRadius: 2,
                 borderWidth: 1, // Thinner border
                 borderColor: '#000', // Black outline
-                opacity: 0.6
-            },
-            dropShadow: {
-                enabled: false // Disable shadow for labels
+                dropShadow: {
+                    enabled: false // Disable shadow for labels
+                }
             },
             formatter: function (val, opts) {
                 return val; // Keep the label text the same as the data value
@@ -284,6 +281,7 @@ function getLineChartOptions(dates, seriesData) {
         }
     };
 }
+
 
 function getBarChartOptions(dates, seriesData) {
     return {
