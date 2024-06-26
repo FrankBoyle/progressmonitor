@@ -321,9 +321,9 @@ function getBarChartOptions(dates, seriesData) {
             background: {
                 enabled: true,
                 foreColor: '#fff', // Text color
-                padding: 2,
-                borderRadius: 1,
-                borderWidth: 1, // Thin border
+                padding: 1,
+                borderRadius: 0,
+                borderWidth: 0, // Thin border
                 borderColor: '#000', // Black outline
                 opacity: 0.9,
                 dropShadow: {
