@@ -840,9 +840,33 @@ td .cell-input {
     width: 100%; /* Ensure full width */
     box-sizing: border-box;
     overflow: hidden; /* Prevent overflow */
-    display: flex; /* Ensure the chart fills the card */
-    justify-content: center; /* Center the chart */
-    align-items: center; /* Center the chart vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* For positioning the minimize button */
+}
+
+.minimize-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.minimized {
+    height: 40px; /* Adjust as needed */
+    overflow: hidden;
 }
 
 .checkbox-container {
