@@ -488,3 +488,59 @@ function initializeTable(performanceData, scoreNames) {
           .catch(error => console.error('Error:', error));
     });
 }
+
+let isScrolling;
+
+window.addEventListener('scroll', function(event) {
+    window.clearTimeout(isScrolling);
+
+    // Disable chart interactions during scroll
+    disableChartInteractions();
+
+    isScrolling = setTimeout(function() {
+        // Enable chart interactions after scroll
+        enableChartInteractions();
+    }, 100);
+}, false);
+
+function disableChartInteractions() {
+    if (chart) {
+        chart.updateOptions({
+            chart: {
+                animations: {
+                    enabled: false
+                }
+            }
+        });
+    }
+    if (barChart) {
+        barChart.updateOptions({
+            chart: {
+                animations: {
+                    enabled: false
+                }
+            }
+        });
+    }
+}
+
+function enableChartInteractions() {
+    if (chart) {
+        chart.updateOptions({
+            chart: {
+                animations: {
+                    enabled: true
+                }
+            }
+        });
+    }
+    if (barChart) {
+        barChart.updateOptions({
+            chart: {
+                animations: {
+                    enabled: true
+                }
+            }
+        });
+    }
+}
