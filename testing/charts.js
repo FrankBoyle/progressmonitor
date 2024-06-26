@@ -287,7 +287,10 @@ function getLineChartOptions(dates, seriesData) {
             title: {
                 text: 'Date',
                 offsetY: -20
-            }
+            },
+            lines: {
+                show: true,
+              }
         },
         yaxis: {
             title: {
@@ -297,7 +300,10 @@ function getLineChartOptions(dates, seriesData) {
                 formatter: function(val) {
                     return val.toFixed(0); // Ensure y-axis labels are whole numbers
                 }
-            }
+            },
+            lines: {
+                show: true,
+              }
         },
         legend: {
             position: 'bottom',
