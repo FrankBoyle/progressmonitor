@@ -32,7 +32,7 @@ include('./users/auth_session.php');
         </div>
     </header>
 
-    <main class="content">
+    <main class="content-students">
     <input type="hidden" id="selected-student-id" value="">
 
         <section class="box create-group">
