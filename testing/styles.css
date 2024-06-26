@@ -945,7 +945,7 @@ td .cell-input {
     align-items: flex-start; /* Align items at the start of the flex container */
     justify-content: space-between; /* Space between the two main divs */
     padding: 20px;
-    background-color: #fff; /* Background color of the card */
+    background-color: #c0c8c8; /* Background color of the card */
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
