@@ -592,7 +592,7 @@ function calculateTrendline(data) {
     const intercept = (sumY - slope * sumX) / n;
 
     return function (x) {
-        return slope * x + intercept;
+        return parseFloat((slope * x + intercept).toFixed(2)); // Round to 2 decimal places
     };
 }
 
@@ -604,3 +604,5 @@ function getTrendlineData(data) {
         return y !== null && !isNaN(y) ? y : null;
     });
 }
+
+
