@@ -267,7 +267,7 @@ function getLineChartOptions(dates, seriesData) {
                 if (seriesName.includes('Trendline')) {
                     return '';
                 }
-                return val.toFixed(2);  // Limit to 2 decimal places
+                return val; // Return the value as it is, respecting the table's decimal places
             },
             style: {
                 fontSize: '12px',
@@ -317,7 +317,7 @@ function getLineChartOptions(dates, seriesData) {
             },
             labels: {
                 formatter: function(val) {
-                    return val.toFixed(2); // Ensure y-axis labels show 2 decimal places
+                    return val.toFixed(0); // Ensure y-axis labels are whole numbers
                 }
             }
         },
@@ -328,6 +328,7 @@ function getLineChartOptions(dates, seriesData) {
         }
     };
 }
+
 
 // Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
