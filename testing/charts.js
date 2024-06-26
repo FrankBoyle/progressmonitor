@@ -273,9 +273,9 @@ function getLineChartOptions(dates, seriesData) {
         },
         series: seriesData,
         grid: {
-            borderColor: '#e7e7e7',
+            borderColor: '#c1c1c1',
             row: {
-                colors: ['#f3f3f3'],
+                colors: ['#c1c1c1', 'transparent'],
                 opacity: 0.5
             },
         },
