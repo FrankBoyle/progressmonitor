@@ -1,6 +1,7 @@
 let table; // Global reference to the Tabulator table
 let chart; // Reference to the line chart
 let barChart; // Reference to the bar chart
+let isScrolling;
 
 // Define series colors
 const seriesColors = [
@@ -131,11 +132,27 @@ function extractChartData() {
             data: data.map(row => row[column])
         }));
 
-        console.log("Series data:", series);
+        // Calculate trendline data for each series
+        const trendlineSeries = series.map(seriesData => ({
+            name: seriesData.name + ' Trendline',
+            data: getTrendlineData(seriesData.data),
+            type: 'line',
+            dashArray: 5,
+            stroke: {
+                width: 2,
+                curve: 'straight'
+            },
+            color: seriesData.color,
+        }));
+
+        // Combine original series with trendline series
+        const finalSeries = [...series, ...trendlineSeries];
+
+        console.log("Final series data:", finalSeries);
 
         // Update the charts
-        updateLineChart(categories, series);
-        updateBarChart(categories, series);
+        updateLineChart(categories, finalSeries);
+        updateBarChart(categories, series); // Bar chart does not include trendlines
 
         console.log("Charts updated successfully.");
     } catch (error) {
@@ -488,8 +505,6 @@ function initializeTable(performanceData, scoreNames) {
           .catch(error => console.error('Error:', error));
     });
 }
-
-let isScrolling;
 
 window.addEventListener('scroll', function(event) {
     window.clearTimeout(isScrolling);
