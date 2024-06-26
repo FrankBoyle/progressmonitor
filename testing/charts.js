@@ -197,6 +197,7 @@ function updateBarChart(categories, seriesData) {
             categories: categories
         },
         yaxis: {
+            min: 0, // Ensure the minimum value is 0
             max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData,
