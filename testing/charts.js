@@ -131,24 +131,11 @@ function extractChartData() {
     updateBarChart(categories, seriesData);
 }
 
+// Update Line Chart
 function updateLineChart(categories, seriesData) {
-    if (!chart) {
-        console.error('Line chart is not initialized');
-        return;
-    }
-
-    if (seriesData.length === 0) {
-        seriesData.push({ name: "No Data", data: [] });
-    }
-
-    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
-
     chart.updateOptions({
         xaxis: {
             categories: categories
-        },
-        yaxis: {
-            max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData
     });
