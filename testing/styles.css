@@ -47,7 +47,10 @@ body {
     flex-direction: column;
 }
 
-
+/* Adjust content-wrapper and content-header to account for the fixed header */
+.content-wrapper {
+    padding-top: 3rem; /* Adjust this value to match the height of the fixed header */
+}
 
 .content-header {
     margin-top: 2rem; /* Optional: add additional margin if needed */
