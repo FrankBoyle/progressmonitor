@@ -106,27 +106,31 @@ function initializeBarChart() {
     barChart.render();
 }
 
+// Extract chart data based on selected checkboxes
 function extractChartData() {
     try {
         console.log("Extracting chart data...");
 
         // Assuming 'table' is your Tabulator table variable
-        const data = table.getData(); 
+        const data = table.getData();
         console.log("Table data:", data);
 
         // Extract 'score_date' as categories
         const categories = data.map(row => row['score_date']);
         console.log("Categories (Dates):", categories);
 
-        // Dynamically determine the columns (excluding 'score_date')
-        const columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'score_date');
-        console.log("Column headers:", columnHeaders);
+        // Get selected columns
+        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-        // Prepare series data for each column
-        const series = columnHeaders.map(column => ({
+        console.log("Selected columns:", selectedColumns);
+
+        // Prepare series data for each selected column
+        const series = selectedColumns.map(column => ({
             name: column,
             data: data.map(row => row[column])
         }));
+
         console.log("Series data:", series);
 
         // Update the charts
@@ -150,14 +154,9 @@ function updateLineChart(categories, seriesData) {
         seriesData.push({ name: "No Data", data: [] });
     }
 
-    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
-
     chart.updateOptions({
         xaxis: {
             categories: categories
-        },
-        yaxis: {
-            max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData
     });
