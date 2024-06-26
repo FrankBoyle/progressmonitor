@@ -123,30 +123,32 @@ function initializeBarChart() {
 function extractChartData() {
     try {
         console.log("Extracting chart data...");
-
-        const data = table.getData();  // Assuming 'table' is your Tabulator table variable
-        const categories = data.map(row => row['score_date']); // Extract 'score_date' as categories
-
+        const data = table.getData();
+        const categories = data.map(row => row['score_date']);
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => item.getAttribute("data-column-name"));
 
         const series = selectedColumns.map((column, index) => ({
             name: column,
             data: data.map(row => row[column]),
-            color: seriesColors[index]  // Assign color based on column index
+            color: seriesColors[index]  // Color assignment by index
         }));
 
-        const trendlineSeries = series.map(seriesData => ({
-            name: `${seriesData.name} Trendline`,
-            data: getTrendlineData(seriesData.data),
+        // Update the line chart
+        const lineSeries = [...series, ...series.map(s => ({
+            name: `${s.name} Trendline`,
+            data: getTrendlineData(s.data),
             type: 'line',
             dashArray: 5,
             stroke: { width: 2, curve: 'straight' },
-            color: seriesData.color  // Use the same color as the series
-        }));
+            color: s.color
+        }))];
 
-        const finalSeries = [...series, ...trendlineSeries];
-        updateLineChart(categories, finalSeries);
+        updateLineChart(categories, lineSeries);
+
+        // Update the bar chart - ensure this is being called
+        updateBarChart(categories, series);
+
         console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
