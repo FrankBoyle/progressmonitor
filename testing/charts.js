@@ -264,7 +264,7 @@ function getLineChartOptions(dates, seriesData) {
             categories: dates,
             title: {
                 text: 'Date',
-                offsetY: -10 // Move the axis title closer to the dates
+                offsetY: -20 // Move the axis title closer to the dates
             }
         },
         yaxis: {
@@ -314,7 +314,9 @@ function getBarChartOptions(dates, seriesData) {
         xaxis: {
             categories: dates,
             title: {
-                text: 'Date'
+                text: 'Date',
+                offsetY: -20 // Move the axis title closer to the dates
+
             }
         },
         yaxis: {
