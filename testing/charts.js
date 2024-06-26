@@ -107,28 +107,21 @@ function initializeBarChart() {
 }
 
 function extractChartData() {
-    if (!table) {
-        console.error('Table is not initialized');
-        return;
-    }
-
     const data = table.getData(); // Assuming 'table' is your Tabulator table variable
-    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+    const categories = data.map(row => row['Date']); // Extract 'Date' as categories
 
-    const categories = data.map(row => row['score_date']); // Extract 'Score Date' as categories
+    // Dynamically determine the columns (excluding 'Date')
+    const columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'Date');
 
-    // Prepare series data for each selected column
-    const seriesData = selectedColumns.map(column => {
-        return {
-            name: column,
-            data: data.map(row => row[column])
-        };
-    });
+    // Prepare series data for each column
+    const series = columnHeaders.map(column => ({
+        name: column,
+        data: data.map(row => row[column])
+    }));
 
     // Update the charts
-    updateLineChart(categories, seriesData);
-    updateBarChart(categories, seriesData);
+    updateLineChart(categories, series);
+    updateBarChart(categories, series);
 }
 
 function updateLineChart(categories, seriesData) {
