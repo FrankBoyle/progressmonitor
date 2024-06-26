@@ -838,8 +838,8 @@ td .cell-input {
     border: 1.5px solid #a3bbcf; /* Same border */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: 49%; /* Default to side-by-side on larger screens */
-    /*margin: 10px 1%;  Adjust margin to reduce the gap */
+    width: 48%; /* Default to side-by-side on larger screens */
+    margin: 10px 1%;  /*Adjust margin to reduce the gap */
     box-sizing: border-box;
     overflow: hidden; /* Prevent overflow */
     display: flex; /* Ensure the chart fills the card */
