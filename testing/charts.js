@@ -220,7 +220,7 @@ function getLineChartOptions(dates, seriesData) {
                 left: 3,
                 blur: 10,
                 color: '#000', // Set shadow color to black
-                opacity: 0.2
+                opacity: 0.4
             },
         },
         colors: seriesColors,
