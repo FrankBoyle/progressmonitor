@@ -178,7 +178,7 @@ function updateLineChart(categories, seriesData) {
             categories: categories
         },
         yaxis: {
-            max: maxDataValue + 10 // Add some padding to the max value
+            max: maxDataValue + 10
         },
         series: seriesData,
         colors: seriesColors
@@ -227,13 +227,13 @@ function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
-            height: '100%', // Set height to 800
+            height: '100%',
             background: '#fff',
             toolbar: {
-                show: true // Enable the toolbar with the menu button
+                show: true
             },
             dropShadow: {
-                enabled: true, // Enable shadow
+                enabled: true,
                 top: 1,
                 left: 3,
                 blur: 3,
@@ -244,25 +244,37 @@ function getLineChartOptions(dates, seriesData) {
         colors: seriesColors,
         dataLabels: {
             enabled: true,
+            formatter: function(val, opts) {
+                var seriesName = opts.w.config.series[opts.seriesIndex].name;
+                if (val === null) {
+                    return '';
+                }
+                if (seriesName.includes('Trendline')) {
+                    return '';
+                }
+                return val;
+            },
             style: {
                 fontSize: '12px',
                 fontWeight: 'bold'
             },
             background: {
                 enabled: true,
-                borderRadius: 1,
-                borderWidth: 1, // Thinner border
-                borderColor: '#000', // Black outline
+                borderRadius: 2,
+                borderWidth: 1,
+                borderColor: '#000',
                 dropShadow: {
-                    enabled: false // Disable shadow for labels
+                    enabled: false
                 }
-            },
-
+            }
         },
         stroke: {
             curve: 'smooth',
-            width: 7, // Set line width
-            colors: seriesColors,
+            width: 5,
+            dashArray: seriesData.map(series => 
+                series.name.includes('Trendline') ? 5 : 0
+            ),
+            colors: seriesColors
         },
         series: seriesData,
         grid: {
@@ -273,13 +285,13 @@ function getLineChartOptions(dates, seriesData) {
             },
         },
         markers: {
-            size: 0 // Adjust marker size if needed
+            size: 0
         },
         xaxis: {
             categories: dates,
             title: {
                 text: 'Date',
-                offsetY: -20 // Move the axis title closer to the dates
+                offsetY: -20
             }
         },
         yaxis: {
@@ -287,7 +299,7 @@ function getLineChartOptions(dates, seriesData) {
                 text: 'Value'
             },
             labels: {
-                formatter: function (val) {
+                formatter: function(val) {
                     return val.toFixed(0);
                 }
             }
@@ -295,10 +307,11 @@ function getLineChartOptions(dates, seriesData) {
         legend: {
             position: 'bottom',
             horizontalAlign: 'center',
-            showForSingleSeries: true // Always show the legend, even for a single series
+            showForSingleSeries: true
         }
     };
 }
+
 
 // Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
