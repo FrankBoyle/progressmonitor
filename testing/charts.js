@@ -206,30 +206,30 @@ function updateBarChart(categories, seriesData) {
 }
 
 // Function to get options for Line Chart
-function getBarChartOptions(dates, seriesData) {
+function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
-            type: 'bar',
-            height: 500,
+            type: 'line',
+            height: 500, // Set height to 800
             background: '#fff',
             toolbar: {
-                show: true
+                show: true // Enable the toolbar with the menu button
             },
-            stacked: true
-        },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                columnWidth: '75%', // Increase the bar width
-                endingShape: 'rounded'
+            dropShadow: {
+                enabled: true, // Enable shadow
+                top: 1,
+                left: 3,
+                blur: 4,
+                color: seriesColors,
+                opacity: 0.3
             },
         },
+        colors: seriesColors,
         dataLabels: {
             enabled: true,
             style: {
                 fontSize: '12px',
-                fontWeight: 'bold',
-                colors: ['#fff'] // Set label text color to white
+                fontWeight: 'bold'
             },
             background: {
                 enabled: true,
@@ -241,22 +241,30 @@ function getBarChartOptions(dates, seriesData) {
                 }
             },
             formatter: function (val, opts) {
-                const seriesIndex = opts.seriesIndex;
-                const seriesColor = seriesColors[seriesIndex];
-                return `<div style="background-color:${seriesColor};padding:2px;border-radius:2px;border:1px solid #000;">${val}</div>`;
+                return val; // Keep the label text the same as the data value
             }
         },
         stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
+            curve: 'smooth',
+            width: 5, // Set line width
+            colors: seriesColors,
         },
         series: seriesData,
+        grid: {
+            borderColor: '#e7e7e7',
+            row: {
+                colors: ['#f3f3f3', 'transparent'],
+                opacity: 0.5
+            },
+        },
+        markers: {
+            size: 0 // Adjust marker size if needed
+        },
         xaxis: {
             categories: dates,
             title: {
                 text: 'Date',
-                offsetY: -10 // Move the axis title closer to the dates
+                offsetY: -20 // Move the axis title closer to the dates
             }
         },
         yaxis: {
@@ -269,16 +277,6 @@ function getBarChartOptions(dates, seriesData) {
                 }
             }
         },
-        fill: {
-            opacity: 1
-        },
-        tooltip: {
-            y: {
-                formatter: function (val) {
-                    return val + " units";
-                }
-            }
-        },
         legend: {
             position: 'bottom',
             horizontalAlign: 'center',
@@ -286,7 +284,6 @@ function getBarChartOptions(dates, seriesData) {
         }
     };
 }
-
 
 // Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
