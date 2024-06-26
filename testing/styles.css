@@ -905,3 +905,19 @@ td .cell-input {
     background-color: #47A6E6; /* Light blue for selected items */
     color: #fff;
 }
+
+#statistics {
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+#statistics ul {
+    list-style-type: none;
+    padding: 0;
+}
+#statistics li {
+    margin-bottom: 10px;
+    font-size: 14px;
+}

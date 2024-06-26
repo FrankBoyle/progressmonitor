@@ -601,27 +601,33 @@ function getTrendlineData(data) {
 }
 
 function calculateStatistics(data) {
-    let validData = data.filter(val => val != null && !isNaN(val));
-    let sum = validData.reduce((acc, val) => acc + val, 0);
-    let count = validData.length;
-    let average = sum / count;
-    let median = calculateMedian(validData);
+    let mean = data.reduce((acc, val) => acc + val, 0) / data.length;
+    let median = calculateMedian(data);
+    let stdDev = calculateStandardDeviation(data, mean);
 
     return {
-        average: average.toFixed(2),
+        mean: mean.toFixed(2),
         median: median,
-        count: count
+        stdDev: stdDev.toFixed(2)
     };
 }
 
+function calculateStandardDeviation(data, mean) {
+    let squareDiffs = data.map(value => {
+        let diff = value - mean;
+        return diff * diff;
+    });
+    let avgSquareDiff = squareDiffs.reduce((sum, value) => sum + value, 0) / data.length;
+    return Math.sqrt(avgSquareDiff);
+}
+
 function calculateMedian(data) {
-    const mid = Math.floor(data.length / 2);
-    const nums = [...data].sort((a, b) => a - b);
-    return data.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+    data.sort((a, b) => a - b);
+    let mid = Math.floor(data.length / 2);
+    return data.length % 2 !== 0 ? data[mid] : (data[mid - 1] + data[mid]) / 2;
 }
 
 function calculateTrendlineEquation(data) {
-    // Simplified linear regression for slope (m) and intercept (b)
     const n = data.length;
     let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
     data.forEach((y, x) => {
@@ -635,20 +641,18 @@ function calculateTrendlineEquation(data) {
     return `y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}`;
 }
 
-function updateStatisticsDisplay() {
-    const columnNames = getColumnNames(); // Retrieves the column names dynamically
-    const data = table.getData();
-    let statsHtml = '<ul>';
+function updateStatisticsDisplay(columnField, columnName) {
+    const data = table.getData().map(row => parseFloat(row[columnField])).filter(val => !isNaN(val));
 
-    columnNames.forEach(column => {
-        const columnData = data.map(row => parseFloat(row[column])).filter(val => !isNaN(val));
-        if (columnData.length > 0) {
-            const stats = calculateStatistics(columnData);
-            const trendlineEquation = calculateTrendlineEquation(columnData);
-            statsHtml += `<li><strong>${column}</strong> - Average: ${stats.average}, Median: ${stats.median}, Trendline: ${trendlineEquation}</li>`;
-        }
-    });
-
-    statsHtml += '</ul>';
-    document.getElementById('statistics').innerHTML = statsHtml;
+    if (data.length > 0) {
+        const stats = calculateStatistics(data);
+        const trendlineEquation = calculateTrendlineEquation(data);
+        const statsHtml = `
+            <p><strong>${columnName}</strong> - Mean: ${stats.mean}, Median: ${stats.median}, Standard Deviation: ${stats.stdDev}, Trendline: ${trendlineEquation}</p>
+        `;
+        document.getElementById('statistics').innerHTML = statsHtml;
+    } else {
+        document.getElementById('statistics').innerHTML = `<p>No data available for ${columnName}</p>`;
+    }
 }
+
