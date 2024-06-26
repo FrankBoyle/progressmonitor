@@ -813,7 +813,7 @@ td .cell-input {
     justify-content: space-between;
     width: 100%;
     margin-top: 20px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Ensure no wrapping */
 }
 
 #chartContainer, #barChartContainer {
@@ -822,8 +822,7 @@ td .cell-input {
 }
 
 .chart {
-    width: 48%; /* Adjust the width as necessary */
-    min-width: 300px; /* Ensure there is a minimum width */
+    width: 48%; /* Adjust the width to fit two charts side by side */
     height: 400px; /* Set a fixed height for the charts */
     border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
     padding: 10px;
