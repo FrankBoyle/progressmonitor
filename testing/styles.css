@@ -36,6 +36,11 @@
     }
 }
 
+
+html {
+    scroll-behavior: smooth;
+}
+
 /* Basic Reset */
 * {
     margin: 0;
