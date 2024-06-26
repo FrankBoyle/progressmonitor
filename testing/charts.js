@@ -170,24 +170,16 @@ function prepareChartData(rawData) {
     return { dates, seriesData };
 }
 
+// Update Bar Chart
 function updateBarChart(categories, seriesData) {
     if (!barChart) {
         console.error('Bar chart is not initialized');
         return;
     }
 
-    if (seriesData.length === 0) {
-        seriesData.push({ name: "No Data", data: [] });
-    }
-
-    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
-
     barChart.updateOptions({
         xaxis: {
             categories: categories
-        },
-        yaxis: {
-            max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData
     });
