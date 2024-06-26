@@ -424,6 +424,7 @@ function createColumnCheckboxes(scoreNames) {
         item.textContent = scoreNames[key];
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
+            extractChartData();
             refreshStatisticsDisplay();  // Update to call refresh on any click
         });
         columnSelector.appendChild(item);
