@@ -220,7 +220,7 @@ function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
-            height: '500',
+            height: '500',  // Make sure this is just a number or a string like '500px'
             background: '#fff',
             toolbar: {
                 show: true
@@ -230,7 +230,7 @@ function getLineChartOptions(dates, seriesData) {
                 top: 1,
                 left: 3,
                 blur: 3,
-                color: seriesColors,
+                color: '#000',  // Ensure this is a valid color or an array of colors
                 opacity: 0.1
             },
         },
@@ -243,9 +243,9 @@ function getLineChartOptions(dates, seriesData) {
                     return '';
                 }
                 if (seriesName.includes('Trendline')) {
-                    return '';
+                    return '';  // No labels on trendlines
                 }
-                return val; // Return the value as it is, respecting the table's decimal places
+                return val.toFixed(0);  // Formatting to zero decimal places
             },
             style: {
                 fontSize: '12px',
@@ -263,34 +263,28 @@ function getLineChartOptions(dates, seriesData) {
         },
         stroke: {
             curve: 'smooth',
-            width: seriesData.map(series =>
-                series.name.includes('Trendline') ? 2 : 5
-            ),
-            dashArray: seriesData.map(series =>
-                series.name.includes('Trendline') ? 5 : 0
-            ),
+            width: seriesData.map(series => series.name.includes('Trendline') ? 2 : 5),
+            dashArray: seriesData.map(series => series.name.includes('Trendline') ? 5 : 0),
             colors: seriesColors
         },
         series: seriesData,
         grid: {
-            borderColor: '#dbdbdb',
-            row: {
-                colors: ['#dbdbdb', 'transparent'],
-                opacity: 0.5
-            },
+            borderColor: '#e7e7e7',
+            strokeDashArray: 0, // Solid lines
+            position: 'back',  // Grid lines behind the data points
             xaxis: {
                 lines: {
-                  show: false,
+                    show: true  // Show vertical grid lines
                 }
-              },
-              yaxis: {
+            },
+            yaxis: {
                 lines: {
-                  show: true,
+                    show: true  // Show horizontal grid lines
                 }
-              },
+            }
         },
         markers: {
-            size: 0
+            size: 5
         },
         xaxis: {
             categories: dates,
@@ -298,6 +292,12 @@ function getLineChartOptions(dates, seriesData) {
                 text: 'Date',
                 offsetY: -20
             },
+            axisTicks: {
+                show: true
+            },
+            axisBorder: {
+                show: true
+            }
         },
         yaxis: {
             title: {
@@ -305,9 +305,9 @@ function getLineChartOptions(dates, seriesData) {
             },
             labels: {
                 formatter: function(val) {
-                    return val.toFixed(0); // Ensure y-axis labels are whole numbers
+                    return val.toFixed(0); // Ensuring labels are whole numbers
                 }
-            },
+            }
         },
         legend: {
             position: 'bottom',
