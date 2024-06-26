@@ -239,7 +239,7 @@ function getLineChartOptions(dates, seriesData) {
             curve: 'smooth',
             width: 3, // Set line width
             colors: seriesColors,
-            shadow: {
+            dropShadow: {
                 enabled: true, // Enable shadow
                 top: 3,
                 left: 3,
