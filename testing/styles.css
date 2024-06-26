@@ -907,12 +907,14 @@ td .cell-input {
 }
 
 #statistics {
-    padding: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-top: 20px;
-    background-color: #f4f4f4;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow-x: auto; /* Ensures the table can scroll horizontally if needed */
 }
+
 #statistics ul {
     list-style-type: none;
     padding: 0;
@@ -920,4 +922,25 @@ td .cell-input {
 #statistics li {
     margin-bottom: 10px;
     font-size: 14px;
+}
+
+#statsTable {
+    width: 100%; /* Full width to expand as needed */
+    border-collapse: collapse; /* Ensures borders between cells are merged */
+    table-layout: fixed; /* Helps in controlling column width */
+}
+
+#statsTable th, #statsTable td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#statsTable th {
+    background-color: #eee;
+}
+
+#statsTable td {
+    white-space: nowrap; /* Prevents wrapping and increases readability */
 }
