@@ -815,11 +815,13 @@ td .cell-input {
     white-space: normal; /* Allow text to wrap */
 }
 
+/*
 .charts-wrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
+*/
 
 #chartContainer, #barChartContainer {
     width: 100%;
