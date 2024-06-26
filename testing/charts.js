@@ -114,12 +114,12 @@ function extractChartData() {
         const data = table.getData(); 
         console.log("Table data:", data);
 
-        // Extract 'Date' as categories
-        const categories = data.map(row => row['Date']);
+        // Extract 'score_date' as categories
+        const categories = data.map(row => row['score_date']);
         console.log("Categories (Dates):", categories);
 
-        // Dynamically determine the columns (excluding 'Date')
-        const columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'Date');
+        // Dynamically determine the columns (excluding 'score_date')
+        const columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'score_date');
         console.log("Column headers:", columnHeaders);
 
         // Prepare series data for each column
@@ -138,6 +138,7 @@ function extractChartData() {
         console.error("Error extracting chart data:", error);
     }
 }
+
 
 
 function updateLineChart(categories, seriesData) {
