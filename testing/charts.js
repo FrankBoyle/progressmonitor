@@ -210,7 +210,7 @@ function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
-            height: 350,
+            //height: 350,
             toolbar: {
                 show: true // Enable the toolbar with the menu button
             }
@@ -286,7 +286,7 @@ function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'bar',
-            height: 350,
+            //height: 350,
             toolbar: {
                 show: true
             },
