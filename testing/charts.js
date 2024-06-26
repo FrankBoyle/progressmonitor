@@ -112,45 +112,54 @@ function extractChartData() {
     try {
         console.log("Extracting chart data...");
 
+        // Assuming 'table' is your Tabulator table variable
         const data = table.getData();
         console.log("Table data:", data);
 
+        // Extract 'score_date' as categories
         const categories = data.map(row => row['score_date']);
         console.log("Categories (Dates):", categories);
 
+        // Get selected columns
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => item.getAttribute("data-column-name"));
 
         console.log("Selected columns:", selectedColumns);
 
-        const series = selectedColumns.map(column => {
-            const seriesData = data.map(row => row[column]);
-            return {
-                name: column,
-                data: seriesData
-            };
-        });
-
-        const trendlineSeries = series.map(s => ({
-            name: s.name + ' Trendline',
-            data: getTrendlineData(s.data),
-            type: 'line',
-            dashArray: 5,
-            color: s.color
+        // Prepare series data for each selected column
+        const series = selectedColumns.map(column => ({
+            name: column,
+            data: data.map(row => row[column])
         }));
 
-        const finalSeriesData = [...series, ...trendlineSeries];
+        // Calculate trendline data for each series
+        const trendlineSeries = series.map(seriesData => ({
+            name: seriesData.name + ' Trendline',
+            data: getTrendlineData(seriesData.data),
+            type: 'line',
+            dashArray: 5,
+            stroke: {
+                width: 2,
+                curve: 'straight'
+            },
+            color: seriesData.color,
+        }));
 
-        console.log("Series data:", finalSeriesData);
+        // Combine original series with trendline series
+        const finalSeries = [...series, ...trendlineSeries];
 
-        updateLineChart(categories, finalSeriesData);
-        updateBarChart(categories, finalSeriesData);
+        console.log("Final series data:", finalSeries);
+
+        // Update the charts
+        updateLineChart(categories, finalSeries);
+        updateBarChart(categories, series); // Bar chart does not include trendlines
 
         console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
 }
+
 
 // Update Line Chart
 function updateLineChart(categories, seriesData) {
