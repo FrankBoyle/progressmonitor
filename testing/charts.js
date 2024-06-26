@@ -139,8 +139,7 @@ function extractChartData() {
     }
 }
 
-
-
+// Update Line Chart
 function updateLineChart(categories, seriesData) {
     if (!chart) {
         console.error('Line chart is not initialized');
