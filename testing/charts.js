@@ -141,6 +141,13 @@ function updateLineChart(categories, seriesData) {
     });
 }
 
+// Data preparation for line and bar charts
+function prepareChartData(rawData) {
+    const dates = rawData.map(data => data.date);
+    const seriesData = rawData.map(data => ({ name: data.name, data: data.values }));
+    return { dates, seriesData };
+}
+
 function updateBarChart(categories, seriesData) {
     if (!barChart) {
         console.error('Bar chart is not initialized');
