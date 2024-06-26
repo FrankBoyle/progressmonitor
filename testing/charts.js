@@ -218,18 +218,29 @@ function getLineChartOptions(dates, seriesData) {
         colors: seriesColors,
         dataLabels: {
             enabled: true,
-            formatter: function (val, opts) {
-                return `<div style="color: ${opts.w.globals.colors[opts.seriesIndex]}; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">${val}</div>`;
-            },
             style: {
                 fontSize: '12px',
                 fontWeight: 'bold'
+            },
+            background: {
+                enabled: true,
+                borderRadius: 2,
+                borderColor: '#000', // Black outline
+                dropShadow: {
+                    enabled: true,
+                    top: 1,
+                    left: 1,
+                    blur: 1,
+                    opacity: 0.45
+                }
+            },
+            formatter: function (val, opts) {
+                return val; // Keep the label text the same as the data value
             }
         },
         stroke: {
             curve: 'smooth',
             width: 3, // Set line width
-            colors: seriesColors,
             shadow: {
                 enabled: true, // Enable shadow
                 top: 3,
@@ -247,7 +258,7 @@ function getLineChartOptions(dates, seriesData) {
             },
         },
         markers: {
-            size: 1
+            size: 5 // Adjust marker size if needed
         },
         xaxis: {
             categories: dates,
@@ -271,7 +282,6 @@ function getLineChartOptions(dates, seriesData) {
         }
     };
 }
-
 
 function getBarChartOptions(dates, seriesData) {
     return {
