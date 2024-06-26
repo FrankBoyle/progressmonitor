@@ -177,6 +177,7 @@ function updateBarChart(categories, seriesData) {
     });
 }
 
+// Generate options for line chart
 function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
@@ -222,7 +223,8 @@ function getLineChartOptions(dates, seriesData) {
             title: {
                 text: 'Value'
             },
-            min: 0
+            min: 0,
+            max: Math.max(...seriesData.flatMap(s => s.data)) + 10 // Adjusted scale for line chart
         },
         legend: {
             position: 'top',
@@ -234,12 +236,13 @@ function getLineChartOptions(dates, seriesData) {
     };
 }
 
+// Generate options for bar chart
 function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'bar',
             height: 350,
-            stacked: true // Enable stacking
+            stacked: true
         },
         plotOptions: {
             bar: {
@@ -267,10 +270,18 @@ function getBarChartOptions(dates, seriesData) {
             title: {
                 text: 'Value'
             },
-            min: 0
+            min: 0,
+            max: Math.max(...seriesData.flatMap(s => s.data)) + 10 // Separate scale for bar chart
         },
         fill: {
             opacity: 1
+        },
+        legend: {
+            position: 'top',
+            horizontalAlign: 'right',
+            floating: true,
+            offsetY: -25,
+            offsetX: -5
         },
         tooltip: {
             y: {
