@@ -233,7 +233,7 @@ function getLineChartOptions(dates, seriesData) {
             },
             background: {
                 enabled: true,
-                borderRadius: 2,
+                borderRadius: 1,
                 borderWidth: 1, // Thinner border
                 borderColor: '#000', // Black outline
                 dropShadow: {
@@ -244,7 +244,7 @@ function getLineChartOptions(dates, seriesData) {
         },
         stroke: {
             curve: 'smooth',
-            width: 5, // Set line width
+            width: 7, // Set line width
             colors: seriesColors,
         },
         series: seriesData,
@@ -380,7 +380,6 @@ function getBarChartOptions(dates, seriesData) {
         }
     };
 }
-
 
 function createColumnCheckboxes(scoreNames) {
     const columnSelector = document.getElementById('columnSelector');
