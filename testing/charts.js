@@ -7,12 +7,6 @@ const seriesColors = [
     '#082645', '#FF8C00', '#388E3C', '#D32F2F', '#7B1FA2', '#1976D2', '#C2185B', '#0288D1', '#7C4DFF', '#C21807'
 ];
 
-const trendlineOptions = {
-    dashArray: 5,
-    width: 2,
-    color: '#555' // Custom color for trendline
-};
-
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const studentId = urlParams.get('student_id');
@@ -100,14 +94,12 @@ function initializeCharts() {
     initializeBarChart();
 }
 
-// Initialize Line Chart with dummy data
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
     chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
     chart.render();
 }
 
-// Initialize Bar Chart with dummy data
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
     barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
@@ -115,14 +107,19 @@ function initializeBarChart() {
 }
 
 function extractChartData() {
-    var data = table.getData(); // Assuming 'table' is your Tabulator table variable
-    var categories = data.map(row => row['Date']); // Extract 'Date' as categories
+    if (!table) {
+        console.error('Table is not initialized');
+        return;
+    }
 
-    // Dynamically determine the columns (excluding 'Date')
-    var columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'Date');
+    const data = table.getData(); // Assuming 'table' is your Tabulator table variable
+    const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
+        .map(checkbox => checkbox.getAttribute("data-column-name") || '');
 
-    // Prepare series data for each column
-    var series = columnHeaders.map(column => {
+    const categories = data.map(row => row['score_date']); // Extract 'Score Date' as categories
+
+    // Prepare series data for each selected column
+    const seriesData = selectedColumns.map(column => {
         return {
             name: column,
             data: data.map(row => row[column])
@@ -130,23 +127,56 @@ function extractChartData() {
     });
 
     // Update the charts
-    updateLineChart(categories, series);
-    updateBarChart(categories, series);
+    updateLineChart(categories, seriesData);
+    updateBarChart(categories, seriesData);
 }
 
-// Update Line Chart
-function updateLineChart(data) {
-    const chartData = prepareChartData(data);
-    chart.updateOptions(getLineChartOptions(chartData.dates, chartData.seriesData));
+function updateLineChart(categories, seriesData) {
+    if (!chart) {
+        console.error('Line chart is not initialized');
+        return;
+    }
+
+    if (seriesData.length === 0) {
+        seriesData.push({ name: "No Data", data: [] });
+    }
+
+    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
+
+    chart.updateOptions({
+        xaxis: {
+            categories: categories
+        },
+        yaxis: {
+            max: maxDataValue + 10 // Add some padding to the max value
+        },
+        series: seriesData
+    });
 }
 
-// Update Bar Chart
-function updateBarChart(data) {
-    const chartData = prepareBarChartData(data);
-    barChart.updateOptions(getBarChartOptions(chartData.dates, chartData.seriesData));
+function updateBarChart(categories, seriesData) {
+    if (!barChart) {
+        console.error('Bar chart is not initialized');
+        return;
+    }
+
+    if (seriesData.length === 0) {
+        seriesData.push({ name: "No Data", data: [] });
+    }
+
+    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
+
+    barChart.updateOptions({
+        xaxis: {
+            categories: categories
+        },
+        yaxis: {
+            max: maxDataValue + 10 // Add some padding to the max value
+        },
+        series: seriesData
+    });
 }
 
-// Generate options for line chart
 function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
@@ -192,8 +222,7 @@ function getLineChartOptions(dates, seriesData) {
             title: {
                 text: 'Value'
             },
-            min: 0,
-            max: Math.max(...seriesData.flatMap(s => s.data)) + 10 // Adjusted scale for line chart
+            min: 0
         },
         legend: {
             position: 'top',
@@ -205,13 +234,12 @@ function getLineChartOptions(dates, seriesData) {
     };
 }
 
-// Generate options for bar chart
 function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'bar',
             height: 350,
-            stacked: true
+            stacked: true // Enable stacking
         },
         plotOptions: {
             bar: {
@@ -239,18 +267,10 @@ function getBarChartOptions(dates, seriesData) {
             title: {
                 text: 'Value'
             },
-            min: 0,
-            max: Math.max(...seriesData.flatMap(s => s.data)) + 10 // Separate scale for bar chart
+            min: 0
         },
         fill: {
             opacity: 1
-        },
-        legend: {
-            position: 'top',
-            horizontalAlign: 'right',
-            floating: true,
-            offsetY: -25,
-            offsetX: -5
         },
         tooltip: {
             y: {
@@ -260,13 +280,6 @@ function getBarChartOptions(dates, seriesData) {
             }
         }
     };
-}
-
-// Data preparation for line and bar charts
-function prepareChartData(rawData) {
-    const dates = rawData.map(data => data.date);
-    const seriesData = rawData.map(data => ({ name: data.name, data: data.values }));
-    return { dates, seriesData };
 }
 
 function createColumnCheckboxes(scoreNames) {
