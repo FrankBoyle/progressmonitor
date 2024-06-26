@@ -313,6 +313,7 @@ function getBarChartOptions(dates, seriesData) {
             },
             background: {
                 enabled: true,
+                foreColor: '#fff',
                 borderRadius: 2,
                 borderWidth: 1, // Thinner border
                 borderColor: '#000', // Black outline
