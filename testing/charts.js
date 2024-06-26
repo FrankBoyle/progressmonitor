@@ -321,8 +321,8 @@ function getBarChartOptions(dates, seriesData) {
             },
             formatter: function (val, opts) {
                 const seriesIndex = opts.seriesIndex;
-                const color = seriesColors[seriesIndex];
-                return '<span style="background:' + color + '">' + val + '</span>'; // Return the data value with background color
+                const seriesColor = seriesColors[seriesIndex];
+                return val; // Return the data value
             }
         },
         stroke: {
