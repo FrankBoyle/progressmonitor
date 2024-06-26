@@ -833,7 +833,6 @@ td .cell-input {
 .chart-card {
     display: flex;
     flex-direction: column; /* Stack the charts vertically */
-    width: 95%;
 }
 
 .checkbox-container {
