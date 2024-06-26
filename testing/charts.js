@@ -258,7 +258,7 @@ function getLineChartOptions(dates, seriesData) {
             },
         },
         markers: {
-            size: 5 // Adjust marker size if needed
+            size: 0 // Adjust marker size if needed
         },
         xaxis: {
             categories: dates,
@@ -279,7 +279,8 @@ function getLineChartOptions(dates, seriesData) {
         },
         legend: {
             position: 'bottom',
-            horizontalAlign: 'center'
+            horizontalAlign: 'center',
+            showForSingleSeries: true // Always show the legend, even for a single series
         }
     };
 }
