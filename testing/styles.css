@@ -841,9 +841,7 @@ td .cell-input {
     border: 1.5px solid #a3bbcf; /* Same border */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: auto; /* Ensure full width */
-    height: 600px; /* Adjust the height to make the charts taller */
-
+    width: 60%; /* Ensure full width */
     box-sizing: border-box;
     overflow: hidden; /* Prevent overflow */
     display: flex;
