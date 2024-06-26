@@ -915,15 +915,6 @@ td .cell-input {
     overflow-x: auto; /* Ensures the table can scroll horizontally if needed */
 }
 
-#statistics ul {
-    list-style-type: none;
-    padding: 0;
-}
-#statistics li {
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
 #statsTable {
     width: 100%; /* Full width to expand as needed */
     border-collapse: collapse; /* Ensures borders between cells are merged */

@@ -35,11 +35,7 @@
         <div class="card chart-card">
             <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
             <div id="columnSelector" class="checkbox-container"></div>
-        </div>
-        <!-- Chart Containers -->
-            <div class="card chart-card">
-                <div id="chartContainer" class="chart"></div>
-                <div id="statistics">
+            <div id="statistics">
     <h3>Statistical Summary</h3>
     <table id="statsTable">
         <thead>
@@ -56,9 +52,10 @@
         </tbody>
     </table>
 </div>
-
-
-
+        </div>
+        <!-- Chart Containers -->
+            <div class="card chart-card">
+                <div id="chartContainer" class="chart"></div>
             </div>
             <div class="card chart-card">
                 <div id="barChartContainer" class="chart"></div>
