@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchInitialData(studentId, metadataId) {
-    fetch(`./users/fetch_data2.php?student_id=${studentId}&metadata_id=${metadataId}`)
+    fetch(`./users/fetch_data.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
             console.log('Initial data fetched:', data);
@@ -399,7 +399,7 @@ function initializeTable(performanceData, scoreNames) {
         console.log("Updated data:", updatedData);
 
         // Update the cell data in the backend (make AJAX call)
-        fetch('./users/update_performance2.php', {
+        fetch('./users/update_performance.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
