@@ -125,28 +125,29 @@ function extractChartData() {
         console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
-        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-            .map(item => item.getAttribute("data-column-name"));
 
-        const series = selectedColumns.map((column, index) => ({
-            name: column,
-            data: data.map(row => row[column]),
-            color: seriesColors[index]  // Color assignment by index
+        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+            .map(item => ({
+                field: item.getAttribute("data-column-name"),
+                name: item.textContent.trim()  // Use textContent of the item as the series name
+            }));
+
+        const series = selectedColumns.map(column => ({
+            name: column.name,  // Using the custom name for the series
+            data: data.map(row => row[column.field]),
+            color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
         }));
 
-        // Update the line chart
-        const lineSeries = [...series, ...series.map(s => ({
-            name: `${s.name} Trendline`,
-            data: getTrendlineData(s.data),
+        const trendlineSeries = series.map(seriesData => ({
+            name: `${seriesData.name} Trendline`,
+            data: getTrendlineData(seriesData.data),
             type: 'line',
             dashArray: 5,
             stroke: { width: 2, curve: 'straight' },
-            color: s.color
-        }))];
+            color: seriesData.color
+        }));
 
-        updateLineChart(categories, lineSeries);
-
-        // Update the bar chart - ensure this is being called
+        updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
 
         console.log("Charts updated successfully.");
