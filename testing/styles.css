@@ -387,6 +387,11 @@ h3 {
         flex-direction: column;
     }
 
+    .content-students {
+        padding: 10px; 
+        flex-direction: column;
+    }
+
     .create-group,
     .students-list {
         max-width: none;
