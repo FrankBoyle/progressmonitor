@@ -32,27 +32,34 @@
             </div>
             <div id="performance-table"></div>
         </div>
+
+
         <div class="card chart-card">
-            <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
-            <div id="columnSelector" class="checkbox-container"></div>
-            <div id="statistics">
-    <h3>Statistical Summary</h3>
-    <table id="statsTable">
-        <thead>
-            <tr>
-                <th>Variable</th>
-                <th>Mean</th>
-                <th>Median</th>
-                <th>Standard Deviation</th>
-                <th>Trendline Equation</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Empty initially -->
-        </tbody>
-    </table>
-</div>
+            <div class="selector-area">
+                <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
+                <div id="columnSelector" class="checkbox-container"></div>
+            </div>
+            <div id="statistics" class="statistics-area">
+                <h3>Statistical Summary</h3>
+                <table id="statsTable">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Mean</th>
+                            <th>Median</th>
+                            <th>Standard Deviation</th>
+                            <th>Trendline Equation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Empty initially -->
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+
+
         <!-- Chart Containers -->
             <div class="card chart-card">
                 <div id="chartContainer" class="chart"></div>

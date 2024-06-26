@@ -874,9 +874,9 @@ td .cell-input {
 }
 
 .checkbox-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Creates a responsive grid layout for checkboxes */
+    gap: 10px; /* Space between grid items */
 }
 
 .checkbox-container label {
@@ -906,6 +906,12 @@ td .cell-input {
     color: #fff;
 }
 
+#columnSelector {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap within the container */
+    gap: 10px; /* Space between checkboxes */
+}
+
 #statistics {
     padding: 10px;
     background-color: #f9f9f9;
@@ -916,16 +922,14 @@ td .cell-input {
 }
 
 #statsTable {
-    width: 100%; /* Full width to expand as needed */
-    border-collapse: collapse; /* Ensures borders between cells are merged */
-    table-layout: fixed; /* Helps in controlling column width */
+    width: 100%;
+    border-collapse: collapse;
 }
 
 #statsTable th, #statsTable td {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
-    vertical-align: middle;
 }
 
 #statsTable th {
@@ -934,4 +938,24 @@ td .cell-input {
 
 #statsTable td {
     white-space: nowrap; /* Prevents wrapping and increases readability */
+}
+
+.card.chart-card {
+    display: flex;
+    align-items: flex-start; /* Align items at the start of the flex container */
+    justify-content: space-between; /* Space between the two main divs */
+    padding: 20px;
+    background-color: #fff; /* Background color of the card */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.selector-area {
+    flex: 1; /* Takes up 1 part of the available space */
+    margin-right: 20px; /* Margin between selectors and statistics */
+}
+
+.statistics-area {
+    flex: 2; /* Takes up 2 parts of the available space, giving more space to statistics */
+    max-width: 600px; /* Maximum width of the statistics area */
 }
