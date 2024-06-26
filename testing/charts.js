@@ -234,8 +234,8 @@ function getLineChartOptions(dates, seriesData) {
             max: Math.max(...seriesData.flatMap(s => s.data)) + 10 // Adjusted scale for line chart
         },
         legend: {
-            position: 'top',
-            horizontalAlign: 'right',
+            position: 'bottom',
+            horizontalAlign: 'center',
             floating: true,
             offsetY: -25,
             offsetX: -5
@@ -284,8 +284,8 @@ function getBarChartOptions(dates, seriesData) {
             opacity: 1
         },
         legend: {
-            position: 'top',
-            horizontalAlign: 'right',
+            position: 'bottom',
+            horizontalAlign: 'center',
             floating: true,
             offsetY: -25,
             offsetX: -5
