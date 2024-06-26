@@ -212,21 +212,39 @@ function getLineChartOptions(dates, seriesData) {
             type: 'line',
             height: 350,
             toolbar: {
-                show: true
+                show: true // Enable the toolbar with the menu button
             }
         },
         colors: seriesColors,
         dataLabels: {
-            enabled: true
+            enabled: true,
+            style: {
+                colors: ['#000'], // Set the text color to black for better visibility
+                fontSize: '12px',
+                fontWeight: 'bold'
+            },
+            background: {
+                enabled: true,
+                foreColor: '#000', // Text color inside the label
+                borderRadius: 2,
+                dropShadow: {
+                    enabled: true,
+                    top: 1,
+                    left: 1,
+                    blur: 1,
+                    opacity: 0.45
+                }
+            }
         },
         stroke: {
             curve: 'smooth',
             width: 3, // Set line width
+            colors: seriesColors,
             shadow: {
                 enabled: true, // Enable shadow
-                top: 10,
-                left: 0,
-                blur: 5,
+                top: 3,
+                left: 3,
+                blur: 10,
                 opacity: 0.2
             }
         },
