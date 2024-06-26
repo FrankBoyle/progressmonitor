@@ -191,15 +191,6 @@ include('./users/auth_session.php');
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
-    const contentElement = document.querySelector('.content');
-    const currentPage = window.location.pathname.split('/').pop();
-
-    if (currentPage === 'student_data.php') {
-        contentElement.classList.add('content-column');
-    } else if (currentPage === 'students.php') {
-        contentElement.classList.remove('content-column');
-    }
-    
     loadGroups();
     loadStaff(); // Load all staff initially
     loadMetadata(); // Load metadata for the add goal form

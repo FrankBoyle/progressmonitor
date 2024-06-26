@@ -47,17 +47,6 @@
     </main>
 </div>
 <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const contentElement = document.querySelector('.content');
-    const currentPage = window.location.pathname.split('/').pop();
 
-    if (currentPage === 'student_data.php') {
-        contentElement.classList.add('content-column');
-    } else if (currentPage === 'students.php') {
-        contentElement.classList.remove('content-column');
-    }
-});
-</script>
 </body>
 </html>
