@@ -813,11 +813,10 @@ td .cell-input {
     white-space: normal; /* Allow text to wrap */
 }
 
-.charts-container {
+.charts-wrapper {
     display: flex;
-    width: 100%;
-    flex-wrap: nowrap; /* Ensure no wrapping */
-    overflow: hidden; /* Prevent overflow */
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 #chartContainer, #barChartContainer {
@@ -839,8 +838,12 @@ td .cell-input {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     width: 48%; /* Default to side-by-side on larger screens */
+    margin: 10px;
     box-sizing: border-box;
     overflow: hidden; /* Prevent overflow */
+    display: flex; /* Ensure the chart fills the card */
+    justify-content: center; /* Center the chart */
+    align-items: center; /* Center the chart vertically */
 }
 
 .checkbox-container {
