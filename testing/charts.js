@@ -240,9 +240,7 @@ function getLineChartOptions(dates, seriesData) {
                     enabled: false // Disable shadow for labels
                 }
             },
-            formatter: function (val, opts) {
-                return val; // Keep the label text the same as the data value
-            }
+
         },
         stroke: {
             curve: 'smooth',
