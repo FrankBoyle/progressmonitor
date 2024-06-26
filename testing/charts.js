@@ -307,15 +307,14 @@ function getBarChartOptions(dates, seriesData) {
             enabled: true,
             style: {
                 fontSize: '12px',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                colors: ['#ffffff'] // Set text color to white
             },
-            background: {
-                enabled: true,
-                foreColor: '#fff',
-                borderRadius: 2,
-                borderWidth: 1, // Thinner border
-                borderColor: '#000', // Black outline
-            },
+            formatter: function (val, opts) {
+                const seriesIndex = opts.seriesIndex;
+                const seriesColor = seriesColors[seriesIndex];
+                return `<span style="background-color:${seriesColor}; color:#ffffff; border: 1px solid #000; border-radius: 2px; padding: 2px;">${val}</span>`;
+            }
         },
         stroke: {
             show: true,
