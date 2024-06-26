@@ -252,7 +252,6 @@ function getLineChartOptions(dates, seriesData) {
     };
 }
 
-// Generate options for bar chart
 function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
@@ -286,23 +285,19 @@ function getBarChartOptions(dates, seriesData) {
             title: {
                 text: 'Value'
             },
-            min: 0,
-            max: Math.max(...seriesData.flatMap(s => s.data)) + 10 // Separate scale for bar chart
+            labels: {
+                formatter: function (val) {
+                    return val.toFixed(0);
+                }
+            }
         },
         fill: {
             opacity: 1
         },
-        legend: {
-            position: 'bottom',
-            horizontalAlign: 'center',
-            floating: true,
-            offsetY: -25,
-            offsetX: -5
-        },
         tooltip: {
             y: {
                 formatter: function (val) {
-                    return val + " units"
+                    return val + " units";
                 }
             }
         }
