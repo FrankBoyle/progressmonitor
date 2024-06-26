@@ -250,10 +250,7 @@ function getLineChartOptions(dates, seriesData) {
         },
         legend: {
             position: 'bottom',
-            horizontalAlign: 'center',
-            floating: true,
-            offsetY: -25,
-            offsetX: -5
+            horizontalAlign: 'center'
         }
     };
 }
