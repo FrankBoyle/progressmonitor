@@ -208,7 +208,7 @@ function updateBarChart(categories, seriesData) {
             max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData,
-        colors: seriesColors
+        colors: seriesData.map(s => s.color)  // Ensure colors are correctly applied
     });
 }
 
