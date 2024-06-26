@@ -37,6 +37,7 @@ body {
 
 .content {
     display: flex;
+    flex-direction: column;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
     /*align-items: center;*/
