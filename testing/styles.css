@@ -814,6 +814,7 @@ td .cell-input {
     width: 100%;
     flex-wrap: nowrap; /* Ensure no wrapping */
     overflow: hidden; /* Prevent overflow */
+    margin: 0.5rem;
 
 }
 
