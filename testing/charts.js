@@ -224,14 +224,11 @@ function getLineChartOptions(dates, seriesData) {
             },
             background: {
                 enabled: true,
-                borderRadius: 1,
+                borderRadius: 2,
+                borderWidth: 1, // Thinner border
                 borderColor: '#000', // Black outline
                 dropShadow: {
-                    enabled: false,
-                    top: 1,
-                    left: 1,
-                    blur: 1,
-                    opacity: 0.45
+                    enabled: false // Disable shadow for labels
                 }
             },
             formatter: function (val, opts) {
@@ -241,11 +238,13 @@ function getLineChartOptions(dates, seriesData) {
         stroke: {
             curve: 'smooth',
             width: 3, // Set line width
+            colors: seriesColors,
             shadow: {
                 enabled: true, // Enable shadow
                 top: 3,
                 left: 3,
                 blur: 10,
+                color: '#000', // Set shadow color to black
                 opacity: 0.2
             }
         },
@@ -282,6 +281,7 @@ function getLineChartOptions(dates, seriesData) {
         }
     };
 }
+
 
 function getBarChartOptions(dates, seriesData) {
     return {
