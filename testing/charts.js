@@ -339,7 +339,7 @@ function getBarChartOptions(dates, seriesData) {
                     return val + " units";
                 }
             }
-        }
+        },
         legend: {
             position: 'bottom',
             horizontalAlign: 'center',
