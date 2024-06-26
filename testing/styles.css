@@ -35,7 +35,7 @@ body {
     z-index: 1000; /* Ensure it stays above other content */
 }
 
-.content {
+.content-students {
     display: flex;
     flex-direction: column;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
@@ -47,10 +47,7 @@ body {
     flex-direction: column;
 }
 
-/* Adjust content-wrapper and content-header to account for the fixed header */
-.content-wrapper {
-    padding-top: 3rem; /* Adjust this value to match the height of the fixed header */
-}
+
 
 .content-header {
     margin-top: 2rem; /* Optional: add additional margin if needed */

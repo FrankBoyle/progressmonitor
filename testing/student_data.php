@@ -48,7 +48,6 @@
 </div>
 <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
 <script>
-    <script>
 document.addEventListener('DOMContentLoaded', function() {
     const contentElement = document.querySelector('.content');
     const currentPage = window.location.pathname.split('/').pop();
