@@ -237,7 +237,7 @@ function getLineChartOptions(dates, seriesData) {
         },
         stroke: {
             curve: 'smooth',
-            width: 3, // Set line width
+            width: 5, // Set line width
             colors: seriesColors,
             shadow: {
                 enabled: true, // Enable shadow
@@ -245,7 +245,7 @@ function getLineChartOptions(dates, seriesData) {
                 left: 3,
                 blur: 10,
                 color: '#000', // Set shadow color to black
-                opacity: 0.2
+                opacity: 0.7
             }
         },
         series: seriesData,
