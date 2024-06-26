@@ -830,8 +830,7 @@ td .cell-input {
     height: auto; /* Set a fixed height for the charts */
     border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
     padding: 10px;
-    box-sizing: border-box;
-    overflow: hidden;
+
 }
 
 .chart-card {
