@@ -126,12 +126,16 @@ function extractChartData() {
 
         console.log("Selected columns:", selectedColumns);
 
-        // Prepare series data for each selected column
-        const series = selectedColumns.map((column, index) => ({
-            name: column,
-            data: data.map(row => row[column]),
-            color: seriesColors[index % seriesColors.length] // Assign color from seriesColors array
-        }));
+        // Prepare series data for each selected column and map colors
+        const colorMap = {};
+        const series = selectedColumns.map((column, index) => {
+            colorMap[column] = seriesColors[index % seriesColors.length]; // Map color to each column
+            return {
+                name: column,
+                data: data.map(row => row[column]),
+                color: colorMap[column] // Assign color from colorMap
+            };
+        });
 
         // Calculate trendline data for each series
         const trendlineSeries = series.map(seriesData => ({
@@ -160,6 +164,7 @@ function extractChartData() {
         console.error("Error extracting chart data:", error);
     }
 }
+
 
 // Update Line Chart
 function updateLineChart(categories, seriesData) {
