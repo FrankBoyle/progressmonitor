@@ -812,7 +812,6 @@ td .cell-input {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    gap: 5px;
 }
 
 #chartContainer, #barChartContainer {
