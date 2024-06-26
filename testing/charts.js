@@ -211,6 +211,7 @@ function getLineChartOptions(dates, seriesData) {
         chart: {
             type: 'line',
             height: 800, // Set height to 600
+            background: '#fff',
             toolbar: {
                 show: true // Enable the toolbar with the menu button
             },
