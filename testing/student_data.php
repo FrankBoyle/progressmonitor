@@ -52,10 +52,11 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Statistics rows will be dynamically inserted here -->
+            <!-- Empty initially -->
         </tbody>
     </table>
 </div>
+
 
 
             </div>

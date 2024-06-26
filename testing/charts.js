@@ -603,15 +603,16 @@ function refreshStatisticsDisplay() {
     const tbody = document.getElementById('statsTable').getElementsByTagName('tbody')[0];
     tbody.innerHTML = ''; // Clear existing rows
 
+    if (selectedColumns.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">No columns selected</td></tr>'; // Handle no selection
+        return;
+    }
+
     selectedColumns.forEach(item => {
         const columnField = item.getAttribute("data-column-name");
         const columnName = item.textContent.trim();
         updateStatisticsDisplay(columnField, columnName, tbody);
     });
-
-    if (selectedColumns.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5">No columns selected</td></tr>'; // Handle no selection
-    }
 }
 
 function calculateStatistics(data) {
