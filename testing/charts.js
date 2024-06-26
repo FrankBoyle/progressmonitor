@@ -392,7 +392,7 @@ function getBarChartOptions(dates, seriesData) {
         tooltip: {
             y: {
                 formatter: function (val) {
-                    return val + " units";
+                    return val;
                 }
             }
         },
