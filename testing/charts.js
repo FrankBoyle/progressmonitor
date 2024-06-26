@@ -219,7 +219,7 @@ function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
-            height: '100%',
+            height: '500',
             background: '#fff',
             toolbar: {
                 show: true
@@ -311,7 +311,7 @@ function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'bar',
-            height: '100%',
+            height: '500',
             background: '#fff',
             toolbar: {
                 show: true
