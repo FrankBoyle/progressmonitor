@@ -238,8 +238,8 @@ function getLineChartOptions(dates, seriesData) {
             }
         },
         legend: {
-            position: 'top',
-            horizontalAlign: 'right',
+            position: 'bottom',
+            horizontalAlign: 'center',
             floating: true,
             offsetY: -25,
             offsetX: -5
