@@ -544,3 +544,35 @@ function enableChartInteractions() {
         });
     }
 }
+
+function calculateTrendline(data) {
+    const validDataPoints = data.map((val, idx) => ({ x: idx + 1, y: val })).filter(point => point.y !== null && !isNaN(point.y));
+
+    if (validDataPoints.length === 0) {
+        return function(x) {
+            return 0;
+        };
+    }
+
+    const n = validDataPoints.length;
+    const sumX = validDataPoints.reduce((acc, point) => acc + point.x, 0);
+    const sumY = validDataPoints.reduce((acc, point) => acc + point.y, 0);
+    const sumXY = validDataPoints.reduce((acc, point) => acc + point.x * point.y, 0);
+    const sumXX = validDataPoints.reduce((acc, point) => acc + point.x * point.x, 0);
+
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    return function (x) {
+        return slope * x + intercept;
+    };
+}
+
+function getTrendlineData(data) {
+    let trendlineFunction = calculateTrendline(data);
+    return data.map((_, idx) => {
+        const x = idx + 1;
+        const y = trendlineFunction(x);
+        return y !== null && !isNaN(y) ? y : null;
+    });
+}
