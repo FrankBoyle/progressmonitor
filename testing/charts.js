@@ -305,25 +305,39 @@ function getBarChartOptions(dates, seriesData) {
         colors: seriesColors,
         dataLabels: {
             enabled: true,
+            enabledOnSeries: undefined, // Show dataLabels on all series
+            formatter: function (val, opts) {
+                return val; // Keep the label text the same as the data value
+            },
+            textAnchor: 'middle',
+            distributed: false, // Do not distribute labels individually
+            offsetX: 0,
+            offsetY: 0,
             style: {
                 fontSize: '12px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
                 fontWeight: 'bold',
-                colors: ['#FFF'] // Set text color to white
+                colors: undefined // Colors will be overridden by background.foreColor
             },
-            /*background: {
+            background: {
                 enabled: true,
-                foreColor: '#FFF', // Set text color to white
+                foreColor: '#fff', // Text color
                 padding: 4,
                 borderRadius: 2,
                 borderWidth: 1, // Thin border
                 borderColor: '#000', // Black outline
                 opacity: 0.9,
                 dropShadow: {
-                    enabled: false
+                    enabled: false // Disable background shadow
                 }
-            },*/
-            formatter: function (val, opts) {
-                return val; // Display the value inside the label
+            },
+            dropShadow: {
+                enabled: false, // Disable text shadow
+                top: 1,
+                left: 1,
+                blur: 1,
+                color: '#000',
+                opacity: 0.45
             }
         },
         stroke: {
