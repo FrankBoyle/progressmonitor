@@ -214,7 +214,7 @@ function getLineChartOptions(dates, seriesData) {
             toolbar: {
                 show: true // Enable the toolbar with the menu button
             },
-            shadow: {
+            dropShadow: {
                 enabled: true, // Enable shadow
                 top: 3,
                 left: 3,
