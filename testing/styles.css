@@ -837,7 +837,7 @@ td .cell-input {
     /*padding: 20px;*/
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: 48%; /* Default to side-by-side on larger screens */
+    width: 50%; /* Default to side-by-side on larger screens */
     margin: 10px;
     box-sizing: border-box;
     overflow: hidden; /* Prevent overflow */
