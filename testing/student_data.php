@@ -36,15 +36,13 @@
             <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
             <div id="columnSelector" class="checkbox-container"></div>
         </div>
-<!-- Chart Containers -->
-<div class="content">
-    <div class="card chart-card">
-        <div id="chartContainer" class="chart"></div>
-    </div>
-    <div class="card chart-card">
-        <div id="barChartContainer" class="chart"></div>
-    </div>
-</div>
+        <!-- Chart Containers -->
+            <div class="card chart-card">
+                <div id="chartContainer" class="chart"></div>
+            </div>
+            <div class="card chart-card">
+                <div id="barChartContainer" class="chart"></div>
+            </div>
 
     </main>
 </div>
