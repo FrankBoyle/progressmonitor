@@ -178,12 +178,27 @@ function updateLineChart(categories, seriesData) {
             categories: categories
         },
         yaxis: {
-            max: maxDataValue + 10
+            max: maxDataValue + 10,
+            labels: {
+                formatter: function(val) {
+                    return val.toFixed(2); // Ensure y-axis labels show 2 decimal places
+                }
+            }
         },
         series: seriesData,
-        colors: seriesColors
+        colors: seriesColors,
+        stroke: {
+            curve: 'smooth',
+            width: seriesData.map(series =>
+                series.name.includes('Trendline') ? 2 : 5
+            ),
+            dashArray: seriesData.map(series =>
+                series.name.includes('Trendline') ? 5 : 0
+            ),
+        },
     });
 }
+
 
 // Data preparation for line and bar charts
 function prepareChartData(rawData) {
