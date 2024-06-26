@@ -107,22 +107,38 @@ function initializeBarChart() {
 }
 
 function extractChartData() {
-    const data = table.getData(); // Assuming 'table' is your Tabulator table variable
-    const categories = data.map(row => row['Date']); // Extract 'Date' as categories
+    try {
+        console.log("Extracting chart data...");
 
-    // Dynamically determine the columns (excluding 'Date')
-    const columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'Date');
+        // Assuming 'table' is your Tabulator table variable
+        const data = table.getData(); 
+        console.log("Table data:", data);
 
-    // Prepare series data for each column
-    const series = columnHeaders.map(column => ({
-        name: column,
-        data: data.map(row => row[column])
-    }));
+        // Extract 'Date' as categories
+        const categories = data.map(row => row['Date']);
+        console.log("Categories (Dates):", categories);
 
-    // Update the charts
-    updateLineChart(categories, series);
-    updateBarChart(categories, series);
+        // Dynamically determine the columns (excluding 'Date')
+        const columnHeaders = table.getColumns().map(column => column.getField()).filter(field => field !== 'Date');
+        console.log("Column headers:", columnHeaders);
+
+        // Prepare series data for each column
+        const series = columnHeaders.map(column => ({
+            name: column,
+            data: data.map(row => row[column])
+        }));
+        console.log("Series data:", series);
+
+        // Update the charts
+        updateLineChart(categories, series);
+        updateBarChart(categories, series);
+
+        console.log("Charts updated successfully.");
+    } catch (error) {
+        console.error("Error extracting chart data:", error);
+    }
 }
+
 
 function updateLineChart(categories, seriesData) {
     if (!chart) {
