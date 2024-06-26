@@ -597,4 +597,38 @@ function getTrendlineData(data) {
     });
 }
 
+function calculateStatistics(data) {
+    let validData = data.filter(val => val != null && !isNaN(val));
+    let sum = validData.reduce((acc, val) => acc + val, 0);
+    let count = validData.length;
+    let average = sum / count;
+    let median = calculateMedian(validData);
+
+    return {
+        average: average.toFixed(2),
+        median: median,
+        count: count
+    };
+}
+
+function calculateMedian(data) {
+    const mid = Math.floor(data.length / 2);
+    const nums = [...data].sort((a, b) => a - b);
+    return data.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+}
+
+function calculateTrendlineEquation(data) {
+    // Simplified linear regression for slope (m) and intercept (b)
+    const n = data.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    data.forEach((y, x) => {
+        sumX += x;
+        sumY += y;
+        sumXY += x * y;
+        sumXX += x * x;
+    });
+    let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    let intercept = (sumY - slope * sumX) / n;
+    return `y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}`;
+}
 

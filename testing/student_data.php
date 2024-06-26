@@ -39,6 +39,10 @@
         <!-- Chart Containers -->
             <div class="card chart-card">
                 <div id="chartContainer" class="chart"></div>
+                <div id="statistics">
+    <h3>Statistical Summary</h3>
+</div>
+
             </div>
             <div class="card chart-card">
                 <div id="barChartContainer" class="chart"></div>
