@@ -298,8 +298,7 @@ function getBarChartOptions(dates, seriesData) {
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '75%', // Increase the bar width
-                endingShape: 'rounded'
+                columnWidth: '80%', // Increase the bar width
             },
         },
         colors: seriesColors,
