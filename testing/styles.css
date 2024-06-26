@@ -813,6 +813,8 @@ td .cell-input {
     justify-content: space-between;
     width: 100%;
     flex-wrap: nowrap; /* Ensure no wrapping */
+    overflow: hidden; /* Prevent overflow */
+
 }
 
 #chartContainer, #barChartContainer {
