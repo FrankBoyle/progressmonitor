@@ -308,27 +308,28 @@ function getBarChartOptions(dates, seriesData) {
             style: {
                 fontSize: '12px',
                 fontWeight: 'bold',
-                colors: ['#FFF']
+                colors: ['#FFF'] // Set the text color to white
             },
             formatter: function (val, opts) {
                 return val;
             },
-            dropShadow: {
-                enabled: false
-            },
             background: {
                 enabled: true,
                 foreColor: '#fff',
+                padding: 4,
                 borderRadius: 2,
                 borderWidth: 1,
                 borderColor: '#000',
-                opacity: 0.9
-            },
+                opacity: 0.9,
+                dropShadow: {
+                    enabled: false
+                }
+            }
         },
         stroke: {
             show: true,
             width: 2,
-            colors: seriesColors,
+            colors: ['transparent']
         },
         series: seriesData,
         xaxis: {
@@ -365,6 +366,7 @@ function getBarChartOptions(dates, seriesData) {
         }
     };
 }
+
 
 function createColumnCheckboxes(scoreNames) {
     const columnSelector = document.getElementById('columnSelector');
