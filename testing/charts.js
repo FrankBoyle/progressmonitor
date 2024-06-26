@@ -106,7 +106,7 @@ function initializeBarChart() {
     barChart.render();
 }
 
-// Extract chart data based on selected checkboxes
+// Extract chart data based on selected columns
 function extractChartData() {
     try {
         console.log("Extracting chart data...");
@@ -120,8 +120,8 @@ function extractChartData() {
         console.log("Categories (Dates):", categories);
 
         // Get selected columns
-        const selectedColumns = Array.from(document.querySelectorAll("#columnSelector input:checked"))
-            .map(checkbox => checkbox.getAttribute("data-column-name") || '');
+        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+            .map(item => item.getAttribute("data-column-name"));
 
         console.log("Selected columns:", selectedColumns);
 
@@ -311,17 +311,15 @@ function createColumnCheckboxes(scoreNames) {
     const columnSelector = document.getElementById('columnSelector');
     columnSelector.innerHTML = ''; // Clear any existing checkboxes
     Object.keys(scoreNames).forEach((key, index) => {
-        const label = document.createElement('label');
-        label.innerHTML = `
-            <input type="checkbox" data-column-name="score${index + 1}">
-            ${scoreNames[key]}
-        `;
-        columnSelector.appendChild(label);
-    });
-
-    // Add event listener to update charts when checkboxes change
-    columnSelector.addEventListener('change', function() {
-        extractChartData();
+        const item = document.createElement('div');
+        item.classList.add('selector-item');
+        item.setAttribute("data-column-name", `score${index + 1}`);
+        item.textContent = scoreNames[key];
+        item.addEventListener('click', function() {
+            item.classList.toggle('selected');
+            extractChartData();
+        });
+        columnSelector.appendChild(item);
     });
 }
 

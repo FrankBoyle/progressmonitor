@@ -33,6 +33,7 @@
             <div id="performance-table"></div>
         </div>
         <div class="card">
+            <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
             <div id="columnSelector" class="checkbox-container"></div>
         </div>
         <!-- Chart Containers -->

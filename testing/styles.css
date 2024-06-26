@@ -858,3 +858,24 @@ td .cell-input {
     align-items: center;
     gap: 5px;
 }
+
+.selector-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.selector-item {
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: #fff;
+    border: 1.5px solid #a3bbcf; /* Soft blue border */
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.selector-item.selected {
+    background-color: #47A6E6; /* Light blue for selected items */
+    color: #fff;
+}
