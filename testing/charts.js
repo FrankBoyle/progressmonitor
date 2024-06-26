@@ -215,7 +215,7 @@ function getLineChartOptions(dates, seriesData) {
                 show: true // Enable the toolbar with the menu button
             }
         },
-        colors: seriesColors,
+        //colors: seriesColors,
         dataLabels: {
             enabled: true,
             style: {
@@ -237,7 +237,7 @@ function getLineChartOptions(dates, seriesData) {
         },
         stroke: {
             curve: 'smooth',
-            width: 3, // Set line width
+            width: 4, // Set line width
             colors: seriesColors,
             dropShadow: {
                 enabled: true, // Enable shadow
