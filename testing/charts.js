@@ -124,49 +124,29 @@ function extractChartData() {
     try {
         console.log("Extracting chart data...");
 
-        // Assuming 'table' is your Tabulator table variable
-        const data = table.getData();
-        console.log("Table data:", data);
+        const data = table.getData();  // Assuming 'table' is your Tabulator table variable
+        const categories = data.map(row => row['score_date']); // Extract 'score_date' as categories
 
-        // Extract 'score_date' as categories
-        const categories = data.map(row => row['score_date']);
-        console.log("Categories (Dates):", categories);
-
-        // Get selected columns
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => item.getAttribute("data-column-name"));
 
-        console.log("Selected columns:", selectedColumns);
-
-        // Prepare series data for each selected column
         const series = selectedColumns.map((column, index) => ({
             name: column,
             data: data.map(row => row[column]),
-            color: seriesColors[index % seriesColors.length] // Ensure color consistency with index
+            color: seriesColors[index]  // Assign color based on column index
         }));
 
-        // Calculate trendline data for each series
         const trendlineSeries = series.map(seriesData => ({
-            name: seriesData.name + ' Trendline',
+            name: `${seriesData.name} Trendline`,
             data: getTrendlineData(seriesData.data),
             type: 'line',
             dashArray: 5,
-            stroke: {
-                width: 2,
-                curve: 'straight'
-            },
-            color: seriesData.color // Use the same color as the main series
+            stroke: { width: 2, curve: 'straight' },
+            color: seriesData.color  // Use the same color as the series
         }));
 
-        // Combine original series with trendline series
         const finalSeries = [...series, ...trendlineSeries];
-
-        console.log("Final series data:", finalSeries);
-
-        // Update the charts
         updateLineChart(categories, finalSeries);
-        updateBarChart(categories, series); // Bar chart does not include trendlines
-
         console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
@@ -180,35 +160,18 @@ function updateLineChart(categories, seriesData) {
         return;
     }
 
-    if (seriesData.length === 0) {
-        seriesData.push({ name: "No Data", data: [] });
-    }
-
-    const maxDataValue = Math.max(...seriesData.flatMap(s => s.data));
-
     chart.updateOptions({
-        xaxis: {
-            categories: categories
-        },
+        xaxis: { categories },
         yaxis: {
-            max: Math.ceil(maxDataValue + 10), // Add some padding to the max value and round up
-            labels: {
-                formatter: function(val) {
-                    return val.toFixed(0); // Ensure y-axis labels are whole numbers
-                }
-            }
+            labels: { formatter: val => val.toFixed(0) }  // Ensure whole numbers
         },
         series: seriesData,
-        colors: seriesColors,
+        colors: seriesData.map(s => s.color),  // Apply specific colors to series
         stroke: {
             curve: 'smooth',
-            width: seriesData.map(series =>
-                series.name.includes('Trendline') ? 2 : 5
-            ),
-            dashArray: seriesData.map(series =>
-                series.name.includes('Trendline') ? 5 : 0
-            ),
-        },
+            width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
+            dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
+        }
     });
 }
 
