@@ -285,6 +285,7 @@ function getLineChartOptions(dates, seriesData) {
     };
 }
 
+// Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
@@ -305,6 +306,24 @@ function getBarChartOptions(dates, seriesData) {
         },
         dataLabels: {
             enabled: true,
+            style: {
+                fontSize: '12px',
+                fontWeight: 'bold',
+                colors: seriesColors // Set label color to match bar color
+            },
+            background: {
+                enabled: true,
+                foreColor: '#000', // Text color inside the label
+                borderRadius: 2,
+                borderWidth: 1, // Thinner border
+                borderColor: '#000', // Black outline
+                dropShadow: {
+                    enabled: false // Disable shadow for labels
+                }
+            },
+            formatter: function (val, opts) {
+                return val; // Keep the label text the same as the data value
+            }
         },
         stroke: {
             show: true,
@@ -316,8 +335,7 @@ function getBarChartOptions(dates, seriesData) {
             categories: dates,
             title: {
                 text: 'Date',
-                offsetY: -20 // Move the axis title closer to the dates
-
+                offsetY: -10 // Move the axis title closer to the dates
             }
         },
         yaxis: {
