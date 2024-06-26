@@ -218,9 +218,9 @@ function getLineChartOptions(dates, seriesData) {
                 enabled: true, // Enable shadow
                 top: 3,
                 left: 3,
-                blur: 10,
-                color: '#000', // Set shadow color to black
-                opacity: 0.4
+                blur: 5,
+                color: seriesColors,
+                opacity: 0.3
             },
         },
         colors: seriesColors,
@@ -288,6 +288,7 @@ function getBarChartOptions(dates, seriesData) {
         chart: {
             type: 'bar',
             height: 800,
+            background: '#fff',
             toolbar: {
                 show: true
             },
