@@ -278,6 +278,16 @@ function getLineChartOptions(dates, seriesData) {
                 colors: ['#dbdbdb', 'transparent'],
                 opacity: 0.5
             },
+            xaxis: {
+                lines: {
+                  show: false,
+                }
+              },
+              yaxis: {
+                lines: {
+                  show: true,
+                }
+              },
         },
         markers: {
             size: 0
@@ -288,9 +298,6 @@ function getLineChartOptions(dates, seriesData) {
                 text: 'Date',
                 offsetY: -20
             },
-            lines: {
-                show: true,
-              }
         },
         yaxis: {
             title: {
@@ -301,9 +308,6 @@ function getLineChartOptions(dates, seriesData) {
                     return val.toFixed(0); // Ensure y-axis labels are whole numbers
                 }
             },
-            lines: {
-                show: true,
-              }
         },
         legend: {
             position: 'bottom',
