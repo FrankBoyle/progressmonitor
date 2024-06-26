@@ -310,7 +310,7 @@ function getBarChartOptions(dates, seriesData) {
                 fontWeight: 'bold',
                 colors: ['#FFF'] // Set text color to white
             },
-            background: {
+            /*background: {
                 enabled: true,
                 foreColor: '#FFF', // Set text color to white
                 padding: 4,
@@ -321,7 +321,7 @@ function getBarChartOptions(dates, seriesData) {
                 dropShadow: {
                     enabled: false
                 }
-            },
+            },*/
             formatter: function (val, opts) {
                 return val; // Display the value inside the label
             }
