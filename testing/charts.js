@@ -2,6 +2,11 @@ let table; // Global reference to the Tabulator table
 let chart; // Reference to the line chart
 let barChart; // Reference to the bar chart
 
+// Define series colors
+const seriesColors = [
+    '#082645', '#FF8C00', '#388E3C', '#D32F2F', '#7B1FA2', '#1976D2', '#C2185B', '#0288D1', '#7C4DFF', '#C21807'
+];
+
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const studentId = urlParams.get('student_id');
