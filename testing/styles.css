@@ -819,12 +819,17 @@ td .cell-input {
 
 .chart {
     width: 100%;
-    height: 100%; /* Set chart height to fill the card */
+    height: 400px; /* Set a fixed height for the charts */
+    border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .chart-card {
-    width: 48%; /* Adjust the width as necessary */
-    height: 400px; /* Set a fixed height for the charts */
+    display: flex;
+    flex-direction: column; /* Stack the charts vertically */
+    width: 100%;
+    gap: 20px;
 }
 
 .checkbox-container {
