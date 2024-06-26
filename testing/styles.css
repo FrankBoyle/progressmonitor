@@ -1,3 +1,41 @@
+@media (max-width: 768px) {
+    .content {
+        padding: 10px; 
+        flex-direction: column;
+    }
+
+    .content-students {
+        padding: 10px; 
+        flex-direction: column;
+    }
+
+    .create-group,
+    .students-list {
+        max-width: none;
+        width: 100%;
+    }
+
+    .existing-groups, .details {
+        width: 100%;
+    }
+
+    #performance-table {
+        width: 100%; /* Full-width on smaller screens */
+        overflow-x: auto; /* Allows scrolling on small devices */
+    }
+
+    .box-centered-top {
+        width: 100%; /* Full width on smaller screens */
+        margin-top: 5px; /* Reduced margin on smaller screens */
+        max-height: auto; /* Smaller max height on smaller screens */
+    }
+
+    .chart-card {
+        width: 100%; /* Full width on smaller screens */
+        margin-bottom: 20px; /* Space between stacked cards */
+    }
+}
+
 /* Basic Reset */
 * {
     margin: 0;
@@ -367,39 +405,6 @@ h3 {
 
 .archive-btn:hover {
     background-color: darkred;
-}
-
-@media (max-width: 768px) {
-    .content {
-        padding: 10px; 
-        flex-direction: column;
-    }
-
-    .content-students {
-        padding: 10px; 
-        flex-direction: column;
-    }
-
-    .create-group,
-    .students-list {
-        max-width: none;
-        width: 100%;
-    }
-
-    .existing-groups, .details {
-        width: 100%;
-    }
-
-    #performance-table {
-        width: 100%; /* Full-width on smaller screens */
-        overflow-x: auto; /* Allows scrolling on small devices */
-    }
-
-    .box-centered-top {
-        width: 100%; /* Full width on smaller screens */
-        margin-top: 5px; /* Reduced margin on smaller screens */
-        max-height: auto; /* Smaller max height on smaller screens */
-    }
 }
 
 #dataTable_wrapper .col-md-6:eq(0) {
@@ -821,8 +826,8 @@ td .cell-input {
 }
 
 .chart {
-    width: 48%; /* Adjust the width to fit two charts side by side */
-    height: 400px; /* Set a fixed height for the charts */
+    width: 100%; /* Adjust the width to fit two charts side by side */
+    height: auto; /* Set a fixed height for the charts */
     border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
     padding: 10px;
     box-sizing: border-box;
@@ -830,9 +835,15 @@ td .cell-input {
 }
 
 .chart-card {
-    display: flex;
-    flex-direction: column; /* Stack the charts vertically */
-    width: 100%;
+    background-color: #c0c8c8; /* Same as other cards */
+    border: 1.5px solid #a3bbcf; /* Same border */
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 48%; /* Default to side-by-side on larger screens */
+    margin: 10px 0; /* Add some margin */
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent overflow */
 }
 
 .checkbox-container {
