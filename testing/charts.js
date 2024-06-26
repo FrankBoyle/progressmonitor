@@ -210,7 +210,7 @@ function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
-            //height: 350,
+            height: 350,
             toolbar: {
                 show: true // Enable the toolbar with the menu button
             }
@@ -225,8 +225,9 @@ function getLineChartOptions(dates, seriesData) {
             },
             background: {
                 enabled: true,
-                foreColor: '#000', // Text color inside the label
+                foreColor: '#fff', // Text color inside the label
                 borderRadius: 2,
+                borderColor: '#000', // Outline color
                 dropShadow: {
                     enabled: true,
                     top: 1,
