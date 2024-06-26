@@ -38,12 +38,16 @@
         </div>
         <!-- Chart Containers -->
         <!--<div class="charts-wrapper">-->
-            <div class="card chart-card">
-                <div id="chartContainer" class="chart"></div>
+        <div class="content">
+            <div class="chart-card">
+                <button class="minimize-button" onclick="toggleMinimize(this)">-</button>
+                <div id="lineChartContainer" style="width: 100%; height: 100%;"></div>
             </div>
-            <div class="card chart-card">
-                <div id="barChartContainer" class="chart"></div>
+            <div class="chart-card">
+                <button class="minimize-button" onclick="toggleMinimize(this)">-</button>
+                <div id="barChartContainer" style="width: 100%; height: 100%;"></div>
             </div>
+        </div>
         <!--</div>-->
     </main>
 </div>
