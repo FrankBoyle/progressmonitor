@@ -210,7 +210,7 @@ function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
             type: 'line',
-            //height: 350,
+            height: 600,
             toolbar: {
                 show: true // Enable the toolbar with the menu button
             }
@@ -224,10 +224,10 @@ function getLineChartOptions(dates, seriesData) {
             },
             background: {
                 enabled: true,
-                borderRadius: 2,
+                borderRadius: 1,
                 borderColor: '#000', // Black outline
                 dropShadow: {
-                    enabled: true,
+                    enabled: false,
                     top: 1,
                     left: 1,
                     blur: 1,
