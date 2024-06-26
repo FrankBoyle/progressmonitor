@@ -340,6 +340,11 @@ function getBarChartOptions(dates, seriesData) {
                 }
             }
         }
+        legend: {
+            position: 'bottom',
+            horizontalAlign: 'center',
+            showForSingleSeries: true // Always show the legend, even for a single series
+        }
     };
 }
 
