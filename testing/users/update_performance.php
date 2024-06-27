@@ -86,6 +86,9 @@ try {
     $params[] = $studentId;
     $params[] = $metadata_id;
 
+    // Log the query and parameters for debugging
+    file_put_contents('update_log.txt', "Query: UPDATE Performance SET $setPartsString WHERE performance_id = $performanceId AND student_id_new = $studentId AND metadata_id = $metadata_id\nParams: " . print_r($params, true), FILE_APPEND);
+
     if ($stmt->execute($params)) {
         echo json_encode(['success' => true]);
     } else {
