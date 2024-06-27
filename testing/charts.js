@@ -191,7 +191,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         selectableRangeColumns: false,
         selectableRangeRows: false,
         selectableRangeClearCells: false,
-        virtualDomBuffer: 300, // Increase virtual DOM buffer size
+        virtualDom: false, // Disable Virtual DOM
     });
 
     // Add cellEdited event listener inside initializeTable after declaring table
@@ -235,7 +235,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         console.log("Table fully built and ready for interaction.");
     });
 }
-
 
 function isDateDuplicate(date) {
     const data = table.getData();
