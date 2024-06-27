@@ -29,6 +29,8 @@
                     <input type="date" id="iep_date" name="iep_date" class="form-control">
                 </div>
                 <button id="filterData" class="btn btn-primary">Filter Data</button>
+                <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
+                <input type="date" id="newRowDate" style="display: none;">
             </div>
             <div id="performance-table"></div>
         </div>
