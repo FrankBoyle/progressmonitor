@@ -18,7 +18,7 @@ function logError($error) {
 
 // Function to handle and send back errors
 function handleError($errorMessage, $missingData = []) {
-    echo json_encode(['success' => false, 'error' => $errorMessage, 'missing_data' => $missingData]);
+    echo json_encode(['success' => false, 'error' => $errorMessage, 'errorInfo' => $missingData]);
     exit;
 }
 
