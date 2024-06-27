@@ -10,18 +10,24 @@ const seriesColors = [
 
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
-    const studentId = urlParams.get('student_id');
+    const studentIdNew = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
 
+    if (!studentIdNew || !metadataId) {
+        console.error('Student ID or Metadata ID is missing in the URL parameters.');
+        alert('Student ID or Metadata ID is missing. Please check the URL parameters.');
+        return;
+    }
+
     // Fetch initial data and setup the table
-    fetchInitialData(studentId, metadataId);
+    fetchInitialData(studentIdNew, metadataId);
 
     // Setup event listener for the filter button
     document.getElementById('filterData').addEventListener('click', function() {
         const iepDate = document.getElementById('iep_date').value;
         console.log('Filter data button clicked, IEP Date:', iepDate);
         if (iepDate) {
-            saveIEPDate(iepDate, studentId);
+            saveIEPDate(iepDate, studentIdNew);
         }
     });
 
@@ -48,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const newData = {
-                student_id_new: studentId,
+                student_id_new: studentIdNew,
                 school_id: 1, // Replace with actual school ID from session or other source
                 metadata_id: metadataId,
                 score_date: newDate,
@@ -58,6 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
             for (let i = 1; i <= 10; i++) {
                 newData.scores[`score${i}`] = null;
             }
+
+            console.log('Sending new data:', newData); // Add debugging statement
 
             fetch('./users/insert_performance.php', {
                 method: 'POST',
@@ -106,14 +114,14 @@ window.addEventListener('scroll', function(event) {
     }, 100);
 }, false);
 
-function fetchInitialData(studentId, metadataId) {
-    fetch(`./users/fetch_data.php?student_id=${studentId}&metadata_id=${metadataId}`)
+function fetchInitialData(studentIdNew, metadataId) {
+    fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
             console.log('Initial data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
                 createColumnCheckboxes(data.scoreNames);
-                initializeTable(data.performanceData, data.scoreNames, studentId, metadataId);
+                initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
                 }
@@ -501,7 +509,7 @@ function createColumnCheckboxes(scoreNames) {
     });
 }
 // Function to initialize the table
-function initializeTable(performanceData, scoreNames, studentId, metadataId) {
+function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) {
     if (table) {
         table.destroy();
     }
@@ -570,7 +578,7 @@ function initializeTable(performanceData, scoreNames, studentId, metadataId) {
 
         const updatedData = cell.getRow().getData();
         updatedData[field] = value;
-        updatedData.student_id_new = studentId;  // Ensure student_id_new is included
+        updatedData.student_id_new = studentIdNew;  // Ensure student_id_new is included
         updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
 
         // Log the updated data for debugging
