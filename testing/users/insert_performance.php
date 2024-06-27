@@ -27,7 +27,7 @@ function handleError($errorMessage, $missingData = []) {
 
 try {
     $studentId = $_POST['student_id'];
-    $schoolId = $_POST['school_id']; 
+    $schoolId = $_POST['school_id'];
     $weekStartDate = $_POST['score_date'];
     $scoreDate = $_POST['score_date'];
     $scores = $_POST['scores'];
