@@ -134,6 +134,107 @@ function fetchInitialData(studentIdNew, metadataId) {
         });
 }
 
+// Function to initialize the table
+function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) {
+    if (table) {
+        table.destroy();
+    }
+
+    const columns = [
+        {
+            title: "Date",
+            field: "score_date",
+            editor: "input",
+            formatter: function(cell, formatterParams, onRendered) {
+                const DateTime = luxon.DateTime;
+                let date = DateTime.fromISO(cell.getValue());
+                return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
+            },
+            editorParams: {
+                mask: "MM/DD/YYYY",
+                format: "MM/DD/YYYY",
+            },
+            width: 120,
+            frozen: false,
+        },
+    ];
+
+    Object.keys(scoreNames).forEach((key, index) => {
+        columns.push({
+            title: scoreNames[key],
+            field: `score${index + 1}`,
+            editor: "input",
+            width: 100
+        });
+    });
+
+    table = new Tabulator("#performance-table", {
+        height: "500px",
+        data: performanceData,
+        columns: columns,
+        layout: "fitDataStretch",
+        tooltips: true,
+        movableColumns: false,
+        resizableRows: false,
+        editTriggerEvent: "dblclick",
+        editorEmptyValue: null,
+        clipboard: true,
+        clipboardCopyRowRange: "range",
+        clipboardPasteParser: "range",
+        clipboardPasteAction: "range",
+        clipboardCopyConfig: {
+            rowHeaders: false,
+            columnHeaders: true,
+        },
+        clipboardCopyStyled: false,
+        selectableRange: 1,
+        selectableRangeColumns: false,
+        selectableRangeRows: false,
+        selectableRangeClearCells: false,
+    });
+
+    // Add cellEdited event listener inside initializeTable after declaring table
+    table.on("cellEdited", function(cell) {
+        const field = cell.getField();
+        let value = cell.getValue();
+
+        if (value === "") {
+            value = null;
+        }
+
+        const updatedData = cell.getRow().getData();
+        updatedData[field] = value;
+        updatedData.student_id_new = studentIdNew;  // Ensure student_id_new is included
+        updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
+
+        // Log the updated data for debugging
+        console.log("Updated data:", updatedData);
+
+        // Update the cell data in the backend (make AJAX call)
+        fetch('./users/update_performance.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        }).then(response => response.json())
+          .then(result => {
+              if (result.success) {
+                  console.log('Data updated successfully');
+              } else {
+                  alert('Failed to update data: ' + result.message);
+                  console.error('Error info:', result.errorInfo); // Log detailed error info
+              }
+          })
+          .catch(error => console.error('Error:', error));
+    });
+
+    // Ensure the table is fully initialized and rendered before allowing selection
+    table.on("tableBuilt", function() {
+        console.log("Table fully built and ready for interaction.");
+    });
+}
+
 function isDateDuplicate(date) {
     const data = table.getData();
     return data.some(row => row['score_date'] === date);
@@ -506,106 +607,6 @@ function createColumnCheckboxes(scoreNames) {
             refreshStatisticsDisplay();  // Update to call refresh on any click
         });
         columnSelector.appendChild(item);
-    });
-}
-// Function to initialize the table
-function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) {
-    if (table) {
-        table.destroy();
-    }
-
-    const columns = [
-        {
-            title: "Date",
-            field: "score_date",
-            editor: "input",
-            formatter: function(cell, formatterParams, onRendered) {
-                const DateTime = luxon.DateTime;
-                let date = DateTime.fromISO(cell.getValue());
-                return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-            },
-            editorParams: {
-                mask: "MM/DD/YYYY",
-                format: "MM/DD/YYYY",
-            },
-            width: 120,
-            frozen: false,
-        },
-    ];
-
-    Object.keys(scoreNames).forEach((key, index) => {
-        columns.push({
-            title: scoreNames[key],
-            field: `score${index + 1}`,
-            editor: "input",
-            width: 100
-        });
-    });
-
-    table = new Tabulator("#performance-table", {
-        height: "500px",
-        data: performanceData,
-        columns: columns,
-        layout: "fitDataStretch",
-        tooltips: true,
-        movableColumns: false,
-        resizableRows: false,
-        editTriggerEvent: "dblclick",
-        editorEmptyValue: null,
-        clipboard: true,
-        clipboardCopyRowRange: "range",
-        clipboardPasteParser: "range",
-        clipboardPasteAction: "range",
-        clipboardCopyConfig: {
-            rowHeaders: false,
-            columnHeaders: true,
-        },
-        clipboardCopyStyled: false,
-        selectableRange: 1,
-        selectableRangeColumns: false,
-        selectableRangeRows: false,
-        selectableRangeClearCells: false,
-    });
-
-    // Add cellEdited event listener inside initializeTable after declaring table
-    table.on("cellEdited", function(cell) {
-        const field = cell.getField();
-        let value = cell.getValue();
-
-        if (value === "") {
-            value = null;
-        }
-
-        const updatedData = cell.getRow().getData();
-        updatedData[field] = value;
-        updatedData.student_id_new = studentIdNew;  // Ensure student_id_new is included
-        updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
-
-        // Log the updated data for debugging
-        console.log("Updated data:", updatedData);
-
-        // Update the cell data in the backend (make AJAX call)
-        fetch('./users/update_performance.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedData)
-        }).then(response => response.json())
-          .then(result => {
-              if (result.success) {
-                  console.log('Data updated successfully');
-              } else {
-                  alert('Failed to update data: ' + result.message);
-                  console.error('Error info:', result.errorInfo); // Log detailed error info
-              }
-          })
-          .catch(error => console.error('Error:', error));
-    });
-
-    // Ensure the table is fully initialized and rendered before allowing selection
-    table.on("tableBuilt", function() {
-        console.log("Table fully built and ready for interaction.");
     });
 }
 
