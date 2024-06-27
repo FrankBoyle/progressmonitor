@@ -238,6 +238,22 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 }
 
+function reloadTable(studentIdNew, metadataId) {
+    fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Reloaded data fetched:', data);
+            if (data && data.performanceData && data.scoreNames) {
+                initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
+            } else {
+                console.error('Invalid or incomplete data:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error reloading data:', error);
+        });
+}
+
 function isDateDuplicate(date) {
     const data = table.getData();
     return data.some(row => row['score_date'] === date);
