@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const newData = {
-                student_id: studentId,
+                student_id_new: studentId,
                 school_id: 1, // Replace with actual school ID from session or other source
                 metadata_id: metadataId,
                 score_date: newDate,
@@ -570,7 +570,7 @@ function initializeTable(performanceData, scoreNames, studentId, metadataId) {
 
         const updatedData = cell.getRow().getData();
         updatedData[field] = value;
-        updatedData.student_id = studentId;  // Ensure student_id is included
+        updatedData.student_id_new = studentId;  // Ensure student_id_new is included
         updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
 
         // Log the updated data for debugging
@@ -595,7 +595,6 @@ function initializeTable(performanceData, scoreNames, studentId, metadataId) {
           .catch(error => console.error('Error:', error));
     });
 }
-
 
 function disableChartInteractions() {
     if (chart) {
