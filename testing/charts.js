@@ -8,17 +8,7 @@ const seriesColors = [
     '#082645', '#FF8C00', '#388E3C', '#D32F2F', '#7B1FA2', '#1976D2', '#C2185B', '#0288D1', '#7C4DFF', '#C21807'
 ];
 
-let scrollTimeout;
 
-document.querySelector("#performance-table").addEventListener('scroll', function() {
-    if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-    }
-    scrollTimeout = setTimeout(() => {
-        console.log("User has stopped scrolling");
-        // You can refresh the table or perform other actions here if needed
-    }, 100);
-});
 
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
