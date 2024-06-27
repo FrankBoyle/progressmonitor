@@ -72,6 +72,8 @@ html, body, .dashboard, .content {
 .dashboard {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+
 }
 
 .dashboard-header {
