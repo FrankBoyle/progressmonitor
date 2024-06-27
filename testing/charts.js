@@ -555,31 +555,37 @@ function initializeTable(performanceData, scoreNames) {
                 body: JSON.stringify(newData)
             }).then(response => {
                 console.log('Fetch response:', response);
-                return response.json();
-            })
-              .then(result => {
-                  console.log('Server response:', result);
-                  if (result.success) {
-                      newData.performance_id = result.performance_id;
-                      table.addRow(newData);
-                      newRowDateInput.value = "";
-                      newRowDateInput.style.display = "none";
-                  } else {
-                      alert('Failed to add new data: ' + result.error);
-                      console.error('Error info:', result.missing_data);
-                  }
-              })
-              .catch(error => {
-                  console.error('Error:', error);
-                  alert('An error occurred while adding new data.');
-              });
+                return response.text(); // Get response as text
+            }).then(text => {
+                console.log('Response text:', text);
+                let result;
+                try {
+                    result = JSON.parse(text); // Parse text as JSON
+                } catch (error) {
+                    throw new Error('Response is not valid JSON');
+                }
+                console.log('Parsed result:', result);
+                if (result.success) {
+                    newData.performance_id = result.performance_id;
+                    table.addRow(newData);
+                    newRowDateInput.value = "";
+                    newRowDateInput.style.display = "none";
+                } else {
+                    alert('Failed to add new data: ' + result.error);
+                    console.error('Error info:', result.missing_data);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding new data.');
+            });
         }, { once: true });
     });
-
+    
     function isDateDuplicate(date) {
         const data = table.getData();
         return data.some(row => row['score_date'] === date);
     }
+    
 
     function disableChartInteractions() {
         if (chart) {
