@@ -13,6 +13,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const studentId = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
 
+    if (!studentId || !metadataId) {
+        console.error('Student ID or Metadata ID is missing in the URL parameters.');
+        alert('Student ID or Metadata ID is missing. Please check the URL parameters.');
+        return;
+    }
+
     // Fetch initial data and setup the table
     fetchInitialData(studentId, metadataId);
 
@@ -48,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const newData = {
-                student_id_new: studentId,
+                student_id: studentId,
                 school_id: 1, // Replace with actual school ID from session or other source
                 metadata_id: metadataId,
                 score_date: newDate,
@@ -58,6 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
             for (let i = 1; i <= 10; i++) {
                 newData.scores[`score${i}`] = null;
             }
+
+            console.log('Sending new data:', newData); // Add debugging statement
 
             fetch('./users/insert_performance.php', {
                 method: 'POST',
