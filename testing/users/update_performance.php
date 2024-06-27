@@ -2,57 +2,100 @@
 session_start();
 include('auth_session.php');
 include('db.php');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 header('Content-Type: application/json');
 
-try {
-    $data = json_decode(file_get_contents('php://input'), true);
+// Start output buffering to catch any unexpected output
+ob_start();
 
-    if (!$data || !isset($data['performance_id'])) {
-        echo json_encode(['success' => false, 'message' => 'Invalid data']);
-        exit;
+// Function to log errors server-side
+function logError($error) {
+    file_put_contents('error_log.txt', $error . PHP_EOL, FILE_APPEND);
+}
+
+// Function to handle and send back errors
+function handleError($errorMessage, $missingData = []) {
+    echo json_encode(['success' => false, 'error' => $errorMessage, 'missing_data' => $missingData]);
+    ob_end_flush();
+    exit;
+}
+
+try {
+    // Use json_decode to parse the JSON body
+    $inputData = json_decode(file_get_contents('php://input'), true);
+
+    // Check if the JSON decoding was successful
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        handleError("Invalid JSON input.");
     }
 
-    $performance_id = $data['performance_id'];
-    unset($data['performance_id']);
+    // Extract data from the parsed JSON
+    $performanceId = $inputData['performance_id'];
+    $studentId = $inputData['student_id_new'];
+    $schoolId = $inputData['school_id'];
+    $scoreDate = $inputData['score_date'];
+    $metadata_id = $inputData['metadata_id'];
 
-    $setClauses = [];
-    $params = [];
-
-    // Log the incoming data for debugging
-    error_log("Received data: " . print_r($data, true));
-
-    foreach ($data as $key => $value) {
-        // Validate if the key is a valid column name
-        if (preg_match('/^[a-zA-Z0-9_]+$/', $key)) {
-            $setClauses[] = "`$key` = ?";
-            $params[] = $value === null ? NULL : $value; // Handle null values
-        } else {
-            // Log invalid field names
-            error_log("Invalid field name: $key");
+    $scoreFields = [];
+    for ($i = 1; $i <= 10; $i++) {
+        $scoreField = "score$i";
+        if (isset($inputData[$scoreField])) {
+            $scoreFields[$scoreField] = $inputData[$scoreField];
         }
     }
 
-    $params[] = $performance_id;
-    $setClause = implode(', ', $setClauses);
+    // Check if the request method is POST
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        handleError("Invalid request method.");
+    }
 
-    // Log the SQL query and parameters for debugging
-    error_log("SQL query: UPDATE Performance SET $setClause WHERE performance_id = ?");
-    error_log("Parameters: " . print_r($params, true));
+    if (empty($performanceId)) {
+        handleError("performance_id is missing.");
+    }
+    if (empty($studentId)) {
+        handleError("student_id_new is missing.");
+    }
+    if (empty($scoreDate)) {
+        handleError("score_date is missing.");
+    }
+    if (empty($metadata_id)) {
+        handleError("metadata_id is missing.");
+    }
 
-    $query = "UPDATE Performance SET $setClause WHERE performance_id = ?";
-    $stmt = $connection->prepare($query);
+    // Update data in the database
+    $setParts = [];
+    $params = [];
+    foreach ($scoreFields as $field => $value) {
+        $setParts[] = "$field = ?";
+        $params[] = $value;
+    }
+    $setParts[] = "score_date = ?";
+    $params[] = $scoreDate;
 
-    $success = $stmt->execute($params);
+    $setPartsString = implode(", ", $setParts);
 
-    if (!$success) {
-        // Capture SQL error info
-        $errorInfo = $stmt->errorInfo();
-        echo json_encode(['success' => false, 'message' => 'Database error', 'errorInfo' => $errorInfo]);
+    $stmt = $connection->prepare("
+        UPDATE Performance 
+        SET $setPartsString
+        WHERE performance_id = ? AND student_id_new = ? AND metadata_id = ?
+    ");
+    $params[] = $performanceId;
+    $params[] = $studentId;
+    $params[] = $metadata_id;
+
+    if ($stmt->execute($params)) {
+        echo json_encode(['success' => true]);
     } else {
-        echo json_encode(['success' => true, 'message' => 'Data updated successfully']);
+        handleError("Failed to update data: " . implode(" | ", $stmt->errorInfo()));
     }
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    logError($e->getMessage());
+    handleError("An unexpected error occurred.");
 }
+
+// Flush the output buffer
+ob_end_flush();
 ?>
