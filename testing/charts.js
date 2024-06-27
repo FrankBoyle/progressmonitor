@@ -528,25 +528,32 @@ function initializeTable(performanceData, scoreNames) {
         const newRowDateInput = document.getElementById("newRowDate");
         newRowDateInput.style.display = "block";
         newRowDateInput.focus();
-    
+
         newRowDateInput.addEventListener("change", function() {
             const newDate = newRowDateInput.value;
-    
+
             if (newDate === "") {
                 alert("Please select a date.");
                 return;
             }
-    
+
             if (isDateDuplicate(newDate)) {
                 alert("An entry for this date already exists. Please choose a different date.");
                 return;
             }
-    
-            const newData = { score_date: newDate };
+
+            const newData = {
+                student_id: studentId,
+                school_id: 1, // Replace with actual school ID from session or other source
+                metadata_id: metadataId,
+                score_date: newDate,
+                scores: {}
+            };
+
             for (let i = 1; i <= 10; i++) {
-                newData[`score${i}`] = null;
+                newData.scores[`score${i}`] = null;
             }
-    
+
             fetch('./users/insert_performance.php', {
                 method: 'POST',
                 headers: {
@@ -580,12 +587,11 @@ function initializeTable(performanceData, scoreNames) {
             });
         }, { once: true });
     });
-    
+
     function isDateDuplicate(date) {
         const data = table.getData();
         return data.some(row => row['score_date'] === date);
-    }
-    
+    }    
 
     function disableChartInteractions() {
         if (chart) {
