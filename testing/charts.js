@@ -529,25 +529,25 @@ function initializeTable(performanceData, scoreNames) {
         const newRowDateInput = document.getElementById("newRowDate");
         newRowDateInput.style.display = "block";
         newRowDateInput.focus();
-
+    
         newRowDateInput.addEventListener("change", function() {
             const newDate = newRowDateInput.value;
-
+    
             if (newDate === "") {
                 alert("Please select a date.");
                 return;
             }
-
+    
             if (isDateDuplicate(newDate)) {
                 alert("An entry for this date already exists. Please choose a different date.");
                 return;
             }
-
+    
             const newData = { score_date: newDate };
             for (let i = 1; i <= 10; i++) {
                 newData[`score${i}`] = null;
             }
-
+    
             fetch('./users/insert_performance.php', {
                 method: 'POST',
                 headers: {
@@ -556,25 +556,29 @@ function initializeTable(performanceData, scoreNames) {
                 body: JSON.stringify(newData)
             }).then(response => response.json())
               .then(result => {
+                  console.log('Server response:', result);
                   if (result.success) {
                       newData.performance_id = result.performance_id;
                       table.addRow(newData);
                       newRowDateInput.value = "";
                       newRowDateInput.style.display = "none";
                   } else {
-                      alert('Failed to add new data: ' + result.message);
-                      console.error('Error info:', result.errorInfo); // Log detailed error info
+                      alert('Failed to add new data: ' + result.error);
+                      console.error('Error info:', result.missing_data);
                   }
               })
-              .catch(error => console.error('Error:', error));
+              .catch(error => {
+                  console.error('Error:', error);
+                  alert('An error occurred while adding new data.');
+              });
         }, { once: true });
     });
-}
-
-function isDateDuplicate(date) {
-    const data = table.getData();
-    return data.some(row => row['score_date'] === date);
-}
+    
+    function isDateDuplicate(date) {
+        const data = table.getData();
+        return data.some(row => row['score_date'] === date);
+    }
+    
 
 function disableChartInteractions() {
     if (chart) {
@@ -595,6 +599,7 @@ function disableChartInteractions() {
             }
         });
     }
+}
 }
 
 function enableChartInteractions() {
