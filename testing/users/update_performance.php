@@ -42,9 +42,7 @@ try {
     $scoreFields = [];
     for ($i = 1; $i <= 10; $i++) {
         $scoreField = "score$i";
-        if (isset($inputData[$scoreField])) {
-            $scoreFields[$scoreField] = $inputData[$scoreField];
-        }
+        $scoreFields[$scoreField] = isset($inputData[$scoreField]) ? $inputData[$scoreField] : null;
     }
 
     // Check if the request method is POST
@@ -102,3 +100,4 @@ try {
 // Flush the output buffer
 ob_end_flush();
 ?>
+
