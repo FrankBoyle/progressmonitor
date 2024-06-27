@@ -771,9 +771,10 @@ td .cell-input {
 }
 
 #performance-table {
+    max-height: 500px; /* Limit the table height */
+    overflow-y: auto; /* Enable vertical scrolling within the table */
     width: 100%;
     overflow-x: auto; /* Allows horizontal scrolling on small devices */
-    overflow-y: hidden; /* Prevents vertical scrolling within the table */
 }
 
 .box-centered-top {
