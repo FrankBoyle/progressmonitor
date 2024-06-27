@@ -65,10 +65,6 @@ body {
 
 }
 
-html, body, .dashboard, .content {
-    height: 100%;
-}
-
 .dashboard {
     display: flex;
     flex-direction: column;
