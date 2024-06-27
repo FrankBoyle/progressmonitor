@@ -113,7 +113,7 @@ function fetchInitialData(studentId, metadataId) {
             console.log('Initial data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
                 createColumnCheckboxes(data.scoreNames);
-                initializeTable(data.performanceData, data.scoreNames);
+                initializeTable(data.performanceData, data.scoreNames, studentId, metadataId);
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
                 }
@@ -501,8 +501,7 @@ function createColumnCheckboxes(scoreNames) {
     });
 }
 // Function to initialize the table
-function initializeTable(performanceData, scoreNames) {
-    // Implement table initialization logic here
+function initializeTable(performanceData, scoreNames, studentId, metadataId) {
     if (table) {
         table.destroy();
     }
@@ -571,6 +570,8 @@ function initializeTable(performanceData, scoreNames) {
 
         const updatedData = cell.getRow().getData();
         updatedData[field] = value;
+        updatedData.student_id = studentId;  // Ensure student_id is included
+        updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
 
         // Log the updated data for debugging
         console.log("Updated data:", updatedData);
@@ -594,6 +595,7 @@ function initializeTable(performanceData, scoreNames) {
           .catch(error => console.error('Error:', error));
     });
 }
+
 
 function disableChartInteractions() {
     if (chart) {
