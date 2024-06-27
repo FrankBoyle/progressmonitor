@@ -201,13 +201,18 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             value = null;
         }
 
-        const updatedData = cell.getRow().getData();
-        updatedData[field] = value;
-        updatedData.student_id_new = studentIdNew;  // Ensure student_id_new is included
-        updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
+        const updatedData = {
+            ...cell.getRow().getData(),
+            [field]: value,
+            student_id_new: studentIdNew,
+            metadata_id: metadataId
+        };
 
         // Log the updated data for debugging
         console.log("Updated data:", updatedData);
+
+        // Remove the scores object before sending the update request
+        delete updatedData.scores;
 
         // Update the cell data in the backend (make AJAX call)
         fetch('./users/update_performance.php', {
@@ -220,6 +225,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
           .then(result => {
               if (result.success) {
                   console.log('Data updated successfully');
+                  reloadTable(studentIdNew, metadataId); // Reload table data
               } else {
                   alert('Failed to update data: ' + result.message);
                   console.error('Error info:', result.errorInfo); // Log detailed error info
