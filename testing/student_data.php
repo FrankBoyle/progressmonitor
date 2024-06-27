@@ -1,3 +1,20 @@
+<?php
+session_start();
+include('auth_session.php');
+include('db.php');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Assuming school_id is set in the session during login
+$schoolId = $_SESSION['school_id'] ?? 1; // Default to 1 if not set
+$teacher_id = $teacherResult['teacher_id'];
+$schoolId = $teacherResult['school_id'];
+$admin = $teacherResult['is_admin'] == 1; // Assuming 'is_admin' is the column name
+
+// Other necessary PHP code...
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
