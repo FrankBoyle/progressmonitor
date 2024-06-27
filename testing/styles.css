@@ -20,8 +20,9 @@
     }
 
     #performance-table {
-        width: 100%; /* Full-width on smaller screens */
-        overflow-x: auto; /* Allows scrolling on small devices */
+        width: 100%;
+        overflow-x: auto; /* Allows horizontal scrolling on small devices */
+        overflow-y: hidden; /* Prevents vertical scrolling within the table */
     }
 
     .box-centered-top {
@@ -33,6 +34,10 @@
     .chart-card {
         width: 100%; /* Full width on smaller screens */
         margin-bottom: 20px; /* Space between stacked cards */
+    }
+
+    .card {
+        max-height: 400px; /* Adjust height for smaller screens */
     }
 }
 
@@ -56,13 +61,17 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #E5E5E5;
     margin: 0;
+    padding: 0;
+
+}
+
+html, body, .dashboard, .content {
+    height: 100%;
 }
 
 .dashboard {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-
 }
 
 .dashboard-header {
@@ -79,10 +88,16 @@ body {
 }
 
 .content {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    margin-top: 75px; /* Adjust this value to match the height of the navbar */
-    width: 100%; /* Ensure it takes full width */
+}
+
+.content .card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
 }
 
 .content-students {
@@ -766,20 +781,15 @@ td .cell-input {
 }
 
 #performance-table {
-    margin-top: 20px;
-    background-color: #95bbdf; /* Adds contrast if needed */
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Adds depth */
-    border: 1px solid #ddd; /* Defines boundaries more clearly */
-    width: auto;  /* Set table width to auto */
-    flex-grow: 1;
-
+    width: 100%;
+    overflow-x: auto; /* Allows horizontal scrolling on small devices */
+    overflow-y: hidden; /* Prevents vertical scrolling within the table */
 }
 
 .box-centered-top {
-    width: 100%; /* Ensures it takes full width of its container */
-    max-height: auto;
-    overflow-y: auto;
+    width: 100%;
     margin-top: 5px;
+    margin-bottom: 10px; /* Add bottom margin */
     overflow-x: hidden; /* Hide horizontal scroll if it appears */
 }
 
