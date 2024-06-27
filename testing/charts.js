@@ -431,6 +431,7 @@ function createColumnCheckboxes(scoreNames) {
     });
 }
 
+// Function to initialize the table
 function initializeTable(performanceData, scoreNames) {
     if (table) {
         table.destroy();
@@ -483,7 +484,7 @@ function initializeTable(performanceData, scoreNames) {
             columnHeaders: true,
         },
         clipboardCopyStyled: false,
-        selectableRange: 1, // allow only one range at a time
+        selectableRange: 1,
         selectableRangeColumns: false,
         selectableRangeRows: false,
         selectableRangeClearCells: false,
@@ -522,6 +523,58 @@ function initializeTable(performanceData, scoreNames) {
           })
           .catch(error => console.error('Error:', error));
     });
+
+    // Event listener for adding a new data row
+    document.getElementById("addDataRow").addEventListener("click", function() {
+        const newRowDateInput = document.getElementById("newRowDate");
+        newRowDateInput.style.display = "block";
+        newRowDateInput.focus();
+
+        newRowDateInput.addEventListener("change", function() {
+            const newDate = newRowDateInput.value;
+
+            if (newDate === "") {
+                alert("Please select a date.");
+                return;
+            }
+
+            if (isDateDuplicate(newDate)) {
+                alert("An entry for this date already exists. Please choose a different date.");
+                return;
+            }
+
+            const newData = { score_date: newDate };
+            for (let i = 1; i <= 10; i++) {
+                newData[`score${i}`] = null;
+            }
+
+            fetch('./users/insert_performance.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newData)
+            }).then(response => response.json())
+              .then(result => {
+                  if (result.success) {
+                      newData.performance_id = result.performance_id;
+                      table.addRow(newData);
+                      newRowDateInput.value = "";
+                      newRowDateInput.style.display = "none";
+                  } else {
+                      alert('Failed to add new data: ' + result.message);
+                      console.error('Error info:', result.errorInfo); // Log detailed error info
+                  }
+              })
+              .catch(error => console.error('Error:', error));
+        }, { once: true });
+    });
+}
+
+function isDateDuplicate(date) {
+    // Add your logic here to check if the date already exists in the table
+    // For now, we'll just return false
+    return false;
 }
 
 function disableChartInteractions() {
