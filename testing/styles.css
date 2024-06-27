@@ -123,7 +123,9 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: auto;
     box-sizing: border-box;
-
+    max-height: 600px; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .card-header, .box-header {
