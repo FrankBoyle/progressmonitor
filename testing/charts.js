@@ -594,6 +594,11 @@ function initializeTable(performanceData, scoreNames, studentId, metadataId) {
           })
           .catch(error => console.error('Error:', error));
     });
+
+    // Ensure the table is fully initialized and rendered before allowing selection
+    table.on("tableBuilt", function() {
+        console.log("Table fully built and ready for interaction.");
+    });
 }
 
 function disableChartInteractions() {
