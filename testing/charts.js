@@ -593,28 +593,28 @@ function initializeTable(performanceData, scoreNames) {
         return data.some(row => row['score_date'] === date);
     }    
 
-    function disableChartInteractions() {
-        if (chart) {
-            chart.updateOptions({
-                chart: {
-                    animations: {
-                        enabled: false
-                    }
-                }
-            });
-        }
-        if (barChart) {
-            barChart.updateOptions({
-                chart: {
-                    animations: {
-                        enabled: false
-                    }
-                }
-            });
-        }
-    }
 }
 
+function disableChartInteractions() {
+    if (chart) {
+        chart.updateOptions({
+            chart: {
+                animations: {
+                    enabled: false
+                }
+            }
+        });
+    }
+    if (barChart) {
+        barChart.updateOptions({
+            chart: {
+                animations: {
+                    enabled: false
+                }
+            }
+        });
+    }
+}
 
 function enableChartInteractions() {
     if (chart) {
