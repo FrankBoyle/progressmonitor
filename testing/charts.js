@@ -572,9 +572,8 @@ function initializeTable(performanceData, scoreNames) {
 }
 
 function isDateDuplicate(date) {
-    // Add your logic here to check if the date already exists in the table
-    // For now, we'll just return false
-    return false;
+    const data = table.getData();
+    return data.some(row => row['score_date'] === date);
 }
 
 function disableChartInteractions() {
