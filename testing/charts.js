@@ -430,7 +430,6 @@ function createColumnCheckboxes(scoreNames) {
         columnSelector.appendChild(item);
     });
 }
-
 // Function to initialize the table
 function initializeTable(performanceData, scoreNames) {
     if (table) {
@@ -515,7 +514,7 @@ function initializeTable(performanceData, scoreNames) {
         }).then(response => response.json())
           .then(result => {
               if (result.success) {
-                  // Data updated successfully
+                  console.log('Data updated successfully');
               } else {
                   alert('Failed to update data: ' + result.message);
                   console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -554,7 +553,10 @@ function initializeTable(performanceData, scoreNames) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newData)
-            }).then(response => response.json())
+            }).then(response => {
+                console.log('Fetch response:', response);
+                return response.json();
+            })
               .then(result => {
                   console.log('Server response:', result);
                   if (result.success) {
@@ -573,34 +575,34 @@ function initializeTable(performanceData, scoreNames) {
               });
         }, { once: true });
     });
-    
+
     function isDateDuplicate(date) {
         const data = table.getData();
         return data.some(row => row['score_date'] === date);
     }
-    
 
-function disableChartInteractions() {
-    if (chart) {
-        chart.updateOptions({
-            chart: {
-                animations: {
-                    enabled: false
+    function disableChartInteractions() {
+        if (chart) {
+            chart.updateOptions({
+                chart: {
+                    animations: {
+                        enabled: false
+                    }
                 }
-            }
-        });
-    }
-    if (barChart) {
-        barChart.updateOptions({
-            chart: {
-                animations: {
-                    enabled: false
+            });
+        }
+        if (barChart) {
+            barChart.updateOptions({
+                chart: {
+                    animations: {
+                        enabled: false
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }
-}
+
 
 function enableChartInteractions() {
     if (chart) {
