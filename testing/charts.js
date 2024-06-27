@@ -169,7 +169,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table = new Tabulator("#performance-table", {
-        height: "500px",
         data: performanceData,
         columns: columns,
         layout: "fitDataStretch",
