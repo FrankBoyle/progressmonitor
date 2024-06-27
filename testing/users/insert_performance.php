@@ -20,25 +20,29 @@ function logError($error) {
 
 // Function to handle and send back errors
 function handleError($errorMessage, $missingData = []) {
-    logError($errorMessage); // Log the error message
     echo json_encode(['success' => false, 'error' => $errorMessage, 'missing_data' => $missingData]);
     ob_end_flush();
     exit;
 }
 
 try {
-    // Read and decode the incoming JSON request body
-    $input = json_decode(file_get_contents('php://input'), true);
-    file_put_contents('json_input_debug.txt', print_r($input, true));
-
-    $studentId = isset($input['student_id']) ? $input['student_id'] : null;
-    $schoolId = isset($input['school_id']) ? $input['school_id'] : null;
-    $weekStartDate = isset($input['score_date']) ? $input['score_date'] : null;
-    $scoreDate = isset($input['score_date']) ? $input['score_date'] : null;
-    $scores = isset($input['scores']) ? $input['scores'] : null;
-    $metadata_id = isset($input['metadata_id']) ? $input['metadata_id'] : null;
-
-    file_put_contents('post_data_debug.txt', print_r(compact('studentId', 'schoolId', 'weekStartDate', 'scoreDate', 'scores', 'metadata_id'), true), FILE_APPEND);
+    $studentId = $_POST['student_id_new'];
+    $schoolId = $_POST['school_id'];
+    $weekStartDate = $_POST['score_date'];
+    $scoreDate = $_POST['score_date'];
+    $scores = $_POST['scores'];
+    $metadata_id = $_POST['metadata_id'];
+    $score1 = isset($_POST['score1']) ? $_POST['score1'] : null;
+    $score2 = isset($_POST['score2']) ? $_POST['score2'] : null;
+    $score3 = isset($_POST['score3']) ? $_POST['score3'] : null;
+    $score4 = isset($_POST['score4']) ? $_POST['score4'] : null;
+    $score5 = isset($_POST['score5']) ? $_POST['score5'] : null;
+    $score6 = isset($_POST['score6']) ? $_POST['score6'] : null;
+    $score7 = isset($_POST['score7']) ? $_POST['score7'] : null;
+    $score8 = isset($_POST['score8']) ? $_POST['score8'] : null;
+    $score9 = isset($_POST['score9']) ? $_POST['score9'] : null;
+    $score10 = isset($_POST['score10']) ? $_POST['score10'] : null;
+    $responseData = [];
 
     // Check if the request method is POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -78,7 +82,7 @@ try {
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
 
-    if ($stmt->execute([$studentId, $metadata_id, $schoolId, $weekStartDate, $scores['score1'], $scores['score2'], $scores['score3'], $scores['score4'], $scores['score5'], $scores['score6'], $scores['score7'], $scores['score8'], $scores['score9'], $scores['score10']])) {
+    if ($stmt->execute([$studentId, $metadata_id, $schoolId, $weekStartDate, $score1, $score2, $score3, $score4, $score5, $score6, $score7, $score8, $score9, $score10])) {
         $newPerformanceId = $connection->lastInsertId();
         $responseData = [
             'success' => true,
