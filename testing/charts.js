@@ -169,6 +169,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table = new Tabulator("#performance-table", {
+        height: "500px",
         data: performanceData,
         columns: columns,
         layout: "fitDataStretch",
@@ -190,7 +191,9 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         selectableRangeColumns: false,
         selectableRangeRows: false,
         selectableRangeClearCells: false,
+        virtualDom: false, // Disable Virtual DOM
     });
+    
 
     // Add cellEdited event listener inside initializeTable after declaring table
     table.on("cellEdited", function(cell) {
