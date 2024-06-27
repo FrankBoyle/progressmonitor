@@ -11,8 +11,6 @@ header('Content-Type: application/json');
 // Start output buffering to catch any unexpected output
 ob_start();
 
-file_put_contents('post_data_debug.txt', print_r($_POST, true));
-
 // Function to log errors server-side
 function logError($error) {
     file_put_contents('error_log.txt', $error . PHP_EOL, FILE_APPEND);
@@ -26,22 +24,31 @@ function handleError($errorMessage, $missingData = []) {
 }
 
 try {
-    $studentId = $_POST['student_id_new'];
-    $schoolId = $_POST['school_id'];
-    $weekStartDate = $_POST['score_date'];
-    $scoreDate = $_POST['score_date'];
-    $scores = $_POST['scores'];
-    $metadata_id = $_POST['metadata_id'];
-    $score1 = isset($_POST['score1']) ? $_POST['score1'] : null;
-    $score2 = isset($_POST['score2']) ? $_POST['score2'] : null;
-    $score3 = isset($_POST['score3']) ? $_POST['score3'] : null;
-    $score4 = isset($_POST['score4']) ? $_POST['score4'] : null;
-    $score5 = isset($_POST['score5']) ? $_POST['score5'] : null;
-    $score6 = isset($_POST['score6']) ? $_POST['score6'] : null;
-    $score7 = isset($_POST['score7']) ? $_POST['score7'] : null;
-    $score8 = isset($_POST['score8']) ? $_POST['score8'] : null;
-    $score9 = isset($_POST['score9']) ? $_POST['score9'] : null;
-    $score10 = isset($_POST['score10']) ? $_POST['score10'] : null;
+    // Use json_decode to parse the JSON body
+    $inputData = json_decode(file_get_contents('php://input'), true);
+
+    // Check if the JSON decoding was successful
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        handleError("Invalid JSON input.");
+    }
+
+    // Extract data from the parsed JSON
+    $studentId = $inputData['student_id_new'];
+    $schoolId = $inputData['school_id'];
+    $weekStartDate = $inputData['score_date'];
+    $scoreDate = $inputData['score_date'];
+    $scores = $inputData['scores'];
+    $metadata_id = $inputData['metadata_id'];
+    $score1 = isset($scores['score1']) ? $scores['score1'] : null;
+    $score2 = isset($scores['score2']) ? $scores['score2'] : null;
+    $score3 = isset($scores['score3']) ? $scores['score3'] : null;
+    $score4 = isset($scores['score4']) ? $scores['score4'] : null;
+    $score5 = isset($scores['score5']) ? $scores['score5'] : null;
+    $score6 = isset($scores['score6']) ? $scores['score6'] : null;
+    $score7 = isset($scores['score7']) ? $scores['score7'] : null;
+    $score8 = isset($scores['score8']) ? $scores['score8'] : null;
+    $score9 = isset($scores['score9']) ? $scores['score9'] : null;
+    $score10 = isset($scores['score10']) ? $scores['score10'] : null;
     $responseData = [];
 
     // Check if the request method is POST
@@ -50,7 +57,7 @@ try {
     }
 
     if (empty($studentId)) {
-        handleError("student_id is missing.");
+        handleError("student_id_new is missing.");
     }
     if (empty($scoreDate)) {
         handleError("score_date is missing.");
@@ -69,11 +76,6 @@ try {
 
     if ($duplicateCount > 0) {
         handleError("Duplicate date entry is not allowed. A record with this date and metadata already exists for the selected student.");
-    }
-
-    // Prepare scores array
-    for ($i = 1; $i <= 10; $i++) {
-        $scores["score$i"] = isset($scores["score$i"]) ? $scores["score$i"] : null;
     }
 
     // Insert data into the database
@@ -104,4 +106,3 @@ try {
 // Flush the output buffer
 ob_end_flush();
 ?>
-
