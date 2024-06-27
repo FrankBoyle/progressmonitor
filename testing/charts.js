@@ -35,67 +35,70 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCharts();
 
     // Event listener for adding a new data row
-    const newRowDateInput = document.getElementById("newRowDate");
     document.getElementById("addDataRow").addEventListener("click", function() {
-        newRowDateInput.value = ""; // Reset the date input value
-        newRowDateInput.click(); // Trigger the date input's click event to open the date selector directly
-    });
+        const newRowDateInput = document.getElementById("newRowDate");
+        newRowDateInput.style.display = "block";
+        newRowDateInput.focus();
 
-    newRowDateInput.addEventListener("change", function() {
-        const newDate = newRowDateInput.value;
+        newRowDateInput.addEventListener("change", function() {
+            const newDate = newRowDateInput.value;
 
-        if (newDate === "") {
-            alert("Please select a date.");
-            return;
-        }
-
-        if (isDateDuplicate(newDate)) {
-            alert("An entry for this date already exists. Please choose a different date.");
-            return;
-        }
-
-        const newData = {
-            student_id_new: studentIdNew,
-            school_id: 1, // Replace with actual school ID from session or other source
-            metadata_id: metadataId,
-            score_date: newDate,
-            scores: {}
-        };
-
-        for (let i = 1; i <= 10; i++) {
-            newData.scores[`score${i}`] = null;
-        }
-
-        console.log('Sending new data:', newData); // Add debugging statement
-
-        fetch('./users/insert_performance.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newData)
-        }).then(response => {
-            console.log('Fetch response:', response);
-            return response.text(); // Get response as text
-        }).then(text => {
-            console.log('Response text:', text);
-            let result;
-            try {
-                result = JSON.parse(text); // Parse text as JSON
-            } catch (error) {
-                throw new Error('Response is not valid JSON');
+            if (newDate === "") {
+                alert("Please select a date.");
+                return;
             }
-            console.log('Parsed result:', result);
-            if (result.success) {
-                reloadTable(studentIdNew, metadataId); // Reload table data
-            } else {
-                alert('Failed to add new data: ' + result.error);
-                console.error('Error info:', result.missing_data);
+
+            if (isDateDuplicate(newDate)) {
+                alert("An entry for this date already exists. Please choose a different date.");
+                return;
             }
-        }).catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while adding new data.');
-        });
+
+            const newData = {
+                student_id_new: studentIdNew,
+                school_id: 1, // Replace with actual school ID from session or other source
+                metadata_id: metadataId,
+                score_date: newDate,
+                scores: {}
+            };
+
+            for (let i = 1; i <= 10; i++) {
+                newData.scores[`score${i}`] = null;
+            }
+
+            console.log('Sending new data:', newData); // Add debugging statement
+
+            fetch('./users/insert_performance.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newData)
+            }).then(response => {
+                console.log('Fetch response:', response);
+                return response.text(); // Get response as text
+            }).then(text => {
+                console.log('Response text:', text);
+                let result;
+                try {
+                    result = JSON.parse(text); // Parse text as JSON
+                } catch (error) {
+                    throw new Error('Response is not valid JSON');
+                }
+                console.log('Parsed result:', result);
+                if (result.success) {
+                    newData.performance_id = result.performance_id;
+                    table.addRow(newData);
+                    newRowDateInput.value = "";
+                    newRowDateInput.style.display = "none";
+                } else {
+                    alert('Failed to add new data: ' + result.error);
+                    console.error('Error info:', result.missing_data);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding new data.');
+            });
+        }, { once: true });
     });
 });
 
@@ -199,18 +202,13 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             value = null;
         }
 
-        const updatedData = {
-            ...cell.getRow().getData(),
-            [field]: value,
-            student_id_new: studentIdNew,
-            metadata_id: metadataId
-        };
+        const updatedData = cell.getRow().getData();
+        updatedData[field] = value;
+        updatedData.student_id_new = studentIdNew;  // Ensure student_id_new is included
+        updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
 
         // Log the updated data for debugging
         console.log("Updated data:", updatedData);
-
-        // Remove the scores object before sending the update request
-        delete updatedData.scores;
 
         // Update the cell data in the backend (make AJAX call)
         fetch('./users/update_performance.php', {
@@ -223,7 +221,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
           .then(result => {
               if (result.success) {
                   console.log('Data updated successfully');
-                  reloadTable(studentIdNew, metadataId); // Reload table data
               } else {
                   alert('Failed to update data: ' + result.message);
                   console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -236,22 +233,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     table.on("tableBuilt", function() {
         console.log("Table fully built and ready for interaction.");
     });
-}
-
-function reloadTable(studentIdNew, metadataId) {
-    fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Reloaded data fetched:', data);
-            if (data && data.performanceData && data.scoreNames) {
-                initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
-            } else {
-                console.error('Invalid or incomplete data:', data);
-            }
-        })
-        .catch(error => {
-            console.error('Error reloading data:', error);
-        });
 }
 
 function isDateDuplicate(date) {
