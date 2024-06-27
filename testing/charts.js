@@ -35,69 +35,67 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCharts();
 
     // Event listener for adding a new data row
+    const newRowDateInput = document.getElementById("newRowDate");
     document.getElementById("addDataRow").addEventListener("click", function() {
-        const newRowDateInput = document.getElementById("newRowDate");
+        newRowDateInput.value = ""; // Reset the date input value
+        newRowDateInput.click(); // Trigger the date input's click event to open the date selector directly
+    });
 
-        // Trigger the date input's click event to open the date selector directly
-        newRowDateInput.click();
+    newRowDateInput.addEventListener("change", function() {
+        const newDate = newRowDateInput.value;
 
-        newRowDateInput.addEventListener("change", function() {
-            const newDate = newRowDateInput.value;
+        if (newDate === "") {
+            alert("Please select a date.");
+            return;
+        }
 
-            if (newDate === "") {
-                alert("Please select a date.");
-                return;
+        if (isDateDuplicate(newDate)) {
+            alert("An entry for this date already exists. Please choose a different date.");
+            return;
+        }
+
+        const newData = {
+            student_id_new: studentIdNew,
+            school_id: 1, // Replace with actual school ID from session or other source
+            metadata_id: metadataId,
+            score_date: newDate,
+            scores: {}
+        };
+
+        for (let i = 1; i <= 10; i++) {
+            newData.scores[`score${i}`] = null;
+        }
+
+        console.log('Sending new data:', newData); // Add debugging statement
+
+        fetch('./users/insert_performance.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        }).then(response => {
+            console.log('Fetch response:', response);
+            return response.text(); // Get response as text
+        }).then(text => {
+            console.log('Response text:', text);
+            let result;
+            try {
+                result = JSON.parse(text); // Parse text as JSON
+            } catch (error) {
+                throw new Error('Response is not valid JSON');
             }
-
-            if (isDateDuplicate(newDate)) {
-                alert("An entry for this date already exists. Please choose a different date.");
-                return;
+            console.log('Parsed result:', result);
+            if (result.success) {
+                reloadTable(studentIdNew, metadataId); // Reload table data
+            } else {
+                alert('Failed to add new data: ' + result.error);
+                console.error('Error info:', result.missing_data);
             }
-
-            const newData = {
-                student_id_new: studentIdNew,
-                school_id: 1, // Replace with actual school ID from session or other source
-                metadata_id: metadataId,
-                score_date: newDate,
-                scores: {}
-            };
-
-            for (let i = 1; i <= 10; i++) {
-                newData.scores[`score${i}`] = null;
-            }
-
-            console.log('Sending new data:', newData); // Add debugging statement
-
-            fetch('./users/insert_performance.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newData)
-            }).then(response => {
-                console.log('Fetch response:', response);
-                return response.text(); // Get response as text
-            }).then(text => {
-                console.log('Response text:', text);
-                let result;
-                try {
-                    result = JSON.parse(text); // Parse text as JSON
-                } catch (error) {
-                    throw new Error('Response is not valid JSON');
-                }
-                console.log('Parsed result:', result);
-                if (result.success) {
-                    newRowDateInput.value = "";
-                    reloadTable(studentIdNew, metadataId); // Reload table data
-                } else {
-                    alert('Failed to add new data: ' + result.error);
-                    console.error('Error info:', result.missing_data);
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while adding new data.');
-            });
-        }, { once: true });
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding new data.');
+        });
     });
 });
 
