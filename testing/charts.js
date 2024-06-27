@@ -169,7 +169,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table = new Tabulator("#performance-table", {
-        height: "500px",
+        height: "500px", // Limit table height to 500px
         data: performanceData,
         columns: columns,
         layout: "fitDataStretch",
@@ -191,9 +191,8 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         selectableRangeColumns: false,
         selectableRangeRows: false,
         selectableRangeClearCells: false,
-        virtualDom: false, // Disable Virtual DOM
+        virtualDomBuffer: 300, // Increase virtual DOM buffer size
     });
-    
 
     // Add cellEdited event listener inside initializeTable after declaring table
     table.on("cellEdited", function(cell) {
@@ -236,6 +235,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         console.log("Table fully built and ready for interaction.");
     });
 }
+
 
 function isDateDuplicate(date) {
     const data = table.getData();
