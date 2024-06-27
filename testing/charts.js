@@ -27,6 +27,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize charts on page load
     initializeCharts();
+
+    // Event listener for adding a new data row
+    document.getElementById("addDataRow").addEventListener("click", function() {
+        const newRowDateInput = document.getElementById("newRowDate");
+        newRowDateInput.style.display = "block";
+        newRowDateInput.focus();
+
+        newRowDateInput.addEventListener("change", function() {
+            const newDate = newRowDateInput.value;
+
+            if (newDate === "") {
+                alert("Please select a date.");
+                return;
+            }
+
+            if (isDateDuplicate(newDate)) {
+                alert("An entry for this date already exists. Please choose a different date.");
+                return;
+            }
+
+            const newData = {
+                student_id: studentId,
+                school_id: 1, // Replace with actual school ID from session or other source
+                metadata_id: metadataId,
+                score_date: newDate,
+                scores: {}
+            };
+
+            for (let i = 1; i <= 10; i++) {
+                newData.scores[`score${i}`] = null;
+            }
+
+            fetch('./users/insert_performance.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newData)
+            }).then(response => {
+                console.log('Fetch response:', response);
+                return response.text(); // Get response as text
+            }).then(text => {
+                console.log('Response text:', text);
+                let result;
+                try {
+                    result = JSON.parse(text); // Parse text as JSON
+                } catch (error) {
+                    throw new Error('Response is not valid JSON');
+                }
+                console.log('Parsed result:', result);
+                if (result.success) {
+                    newData.performance_id = result.performance_id;
+                    table.addRow(newData);
+                    newRowDateInput.value = "";
+                    newRowDateInput.style.display = "none";
+                } else {
+                    alert('Failed to add new data: ' + result.error);
+                    console.error('Error info:', result.missing_data);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding new data.');
+            });
+        }, { once: true });
+    });
 });
 
 window.addEventListener('scroll', function(event) {
