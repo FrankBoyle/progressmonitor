@@ -37,8 +37,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener for adding a new data row
     document.getElementById("addDataRow").addEventListener("click", function() {
         const newRowDateInput = document.getElementById("newRowDate");
-        newRowDateInput.style.display = "block";
-        newRowDateInput.focus();
+
+        // Trigger the date input's click event to open the date selector directly
+        newRowDateInput.click();
 
         newRowDateInput.addEventListener("change", function() {
             const newDate = newRowDateInput.value;
@@ -86,10 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 console.log('Parsed result:', result);
                 if (result.success) {
-                    newData.performance_id = result.performance_id;
-                    table.addRow(newData);
                     newRowDateInput.value = "";
-                    newRowDateInput.style.display = "none";
+                    reloadTable(studentIdNew, metadataId); // Reload table data
                 } else {
                     alert('Failed to add new data: ' + result.error);
                     console.error('Error info:', result.missing_data);
