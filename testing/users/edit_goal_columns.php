@@ -21,20 +21,15 @@ try {
             WHERE metadata_id = ?
         ";
 
-        // Prepare the statement
         $stmt = $connection->prepare($query);
-        
-        // Bind the new column names and the metadata_id
-        $stmt->bind_param("ssssssssssi",
+        $stmt->bind_param("ssssssssssi", 
             $customColumnNames['score1'], $customColumnNames['score2'], $customColumnNames['score3'],
             $customColumnNames['score4'], $customColumnNames['score5'], $customColumnNames['score6'],
             $customColumnNames['score7'], $customColumnNames['score8'], $customColumnNames['score9'],
             $customColumnNames['score10'], $metadataId);
 
-        // Execute the query
         $stmt->execute();
 
-        // Check for successful update
         if ($stmt->affected_rows > 0) {
             echo json_encode(["message" => "Custom column names updated successfully."]);
         } else {
