@@ -2,6 +2,7 @@ let table; // Global reference to the Tabulator table
 let chart; // Reference to the line chart
 let barChart; // Reference to the bar chart
 let isScrolling;
+let customColumnNames = {}; // This will store the custom names
 
 // Define series colors
 const seriesColors = [
@@ -135,6 +136,7 @@ function fetchInitialData(studentIdNew, metadataId) {
             console.log('Initial data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
                 createColumnCheckboxes(data.scoreNames);
+                customColumnNames = data.scoreNames; // Store the names
                 initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
@@ -895,7 +897,6 @@ function submitColumnNames(event) {
 
     updateColumnNamesOnServer(columnUpdates);
 }
-
 
 function updateColumnNamesOnServer(newColumnTitles) {
     // Retrieve the metadata_id from the URL parameters
