@@ -140,16 +140,14 @@ include('./users/auth_session.php');
                     <option value="new">Create New Metadata</option>
                 </select>
             </div>
-            <div id="existing-metadata" class="form-group">
-                <label for="existing-metadata-id">Existing Category:</label>
-                <select id="existing-metadata-id" name="existing_metadata_id">
-                    <!-- Populate with existing metadata rows -->
-                </select>
+            <div id="existing-metadata-group" class="form-group">
+                <label for="existing-metadata-id">Select Existing Category:</label>
+                <select id="existing-metadata-id" name="existing_metadata_id"></select>
             </div>
-            <div id="new-metadata" class="form-group" style="display: none;">
-                <label for="category-name">Category:</label>
+            <div id="new-metadata-group" class="form-group" style="display:none;">
+                <label for="category-name">New Category Name:</label>
                 <input type="text" id="category-name" name="category_name">
-
+            </div>
             <button type="submit">Add Goal</button>
         </form>
     </div>
