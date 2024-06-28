@@ -384,10 +384,10 @@ function updateLineChart(categories, seriesData) {
     chart.updateOptions({
         xaxis: { categories },
         yaxis: {
-            labels: { formatter: val => val.toFixed(0) }  // Ensure whole numbers
+            labels: { formatter: val => val.toFixed(0) } // Ensure whole numbers
         },
         series: seriesData,
-        colors: seriesData.map(s => s.color),  // Apply specific colors to series
+        colors: seriesData.map(s => s.color), // Apply specific colors to series
         stroke: {
             curve: 'smooth',
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
@@ -429,7 +429,7 @@ function updateBarChart(categories, seriesData) {
             max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData,
-        colors: seriesData.map(s => s.color)  // Ensure colors are correctly applied
+        colors: seriesData.map(s => s.color) // Ensure colors are correctly applied
     });
 }
 
