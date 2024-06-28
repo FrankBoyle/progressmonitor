@@ -839,12 +839,29 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 
 function showEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
-    if (modal) {
-        modal.style.display = 'block';
-        console.log("Modal shown.");
-    } else {
-        console.log("Modal element not found.");
-    }
+    const form = document.getElementById('editColumnNamesForm');
+    form.innerHTML = '';  // Clear previous contents
+
+    let columns = table.getColumns();  // Fetch all columns from the Tabulator table
+
+    columns.forEach((column, index) => {
+        // Exclude columns that shouldn't be editable like 'Actions' or 'Date'
+        if (!['actions', 'date'].includes(column.getField())) {
+            let label = document.createElement('label');
+            label.textContent = `Column ${index + 1} (${column.getField()}): `;
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.value = column.getDefinition().title;  // Get the current title of the column
+            input.dataset.columnField = column.getField();  // Store field name in dataset for later use
+
+            form.appendChild(label);
+            form.appendChild(input);
+            form.appendChild(document.createElement('br'));
+        }
+    });
+
+    form.innerHTML += "<button type='submit'>Save Changes</button>";  // Add the submit button at the end
+    modal.style.display = 'block';  // Show the modal
 }
 
 function hideEditColumnNamesModal() {
@@ -860,18 +877,24 @@ function hideEditColumnNamesModal() {
 function submitColumnNames(event) {
     event.preventDefault();
     const inputs = event.target.querySelectorAll('input[type="text"]');
-    let newColumnNames = Array.from(inputs).map(input => input.value);
-    console.log("Submitting column names:", newColumnNames);
+    inputs.forEach(input => {
+        let field = input.dataset.columnField;
+        let newValue = input.value;
+        let column = table.getColumn(field);
+        column.updateDefinition({ title: newValue });  // Update the column title in the table
+    });
 
-    // Send these new column names to server or use them to update the local table
-    updateColumnNamesOnServer(newColumnNames);
+    hideEditColumnNamesModal();  // Optionally close the modal after submit
+    updateColumnNamesOnServer(Array.from(inputs).map(input => ({field: input.dataset.columnField, title: input.value})));  // Send new titles to server
 }
 
-function updateColumnNamesOnServer(newColumnNames) {
+function updateColumnNamesOnServer(newColumnTitles) {
+    // Prepare the data to be sent as FormData to align with your PHP backend expectations
     const formData = new FormData();
-    formData.append('goal_id', '123'); // Assuming you have a way to get the current goal_id
-    formData.append('custom_column_names', JSON.stringify(newColumnNames));
+    formData.append('goal_id', '123');  // Assuming you have a way to get the current goal_id dynamically
+    formData.append('custom_column_names', JSON.stringify(newColumnTitles.map(title => title.title)));  // Assuming the backend needs the titles as an array
 
+    // Make an AJAX call to the PHP script
     fetch('edit_goal_columns.php', {
         method: 'POST',
         body: formData
@@ -879,7 +902,7 @@ function updateColumnNamesOnServer(newColumnNames) {
     .then(response => response.json())
     .then(data => {
         if (data.message) {
-            console.log(data.message);
+            console.log('Column names updated successfully:', data.message);
             alert('Column names updated successfully!');
         } else if (data.error) {
             console.error('Error updating column names:', data.error);
@@ -891,4 +914,5 @@ function updateColumnNamesOnServer(newColumnNames) {
         alert('Network or server error occurred.');
     });
 }
+
 
