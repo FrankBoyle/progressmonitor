@@ -170,6 +170,45 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         });
     });
 
+    columns.push({
+        title: "Actions",
+        field: "actions",
+        formatter: function(cell, formatterParams, onRendered) {
+            return '<button class="delete-row-btn">Delete</button>';
+        },
+        width: 100,
+        align: "center",
+        cellClick: function(e, cell) {
+            const row = cell.getRow();
+            const performanceId = row.getData().performance_id;
+
+            // Confirm before delete
+            if (confirm('Are you sure you want to delete this row?')) {
+                // Send a request to delete the data from the server
+                fetch('./users/delete_performance.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ performance_id: performanceId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove the row from the table
+                        row.delete();
+                    } else {
+                        alert('Failed to delete data. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the data.');
+                });
+            }
+        }
+    });
+
     table = new Tabulator("#performance-table", {
         height: "500px", // Limit table height to 500px
         data: performanceData,
@@ -194,8 +233,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         selectableRangeRows: false,
         selectableRangeClearCells: false,
         virtualDomBuffer: 300, // Increase virtual DOM buffer size
-        virtualDomHoz: true, // Enable horizontal virtual DOM
-        virtualDomVert: true, // Enable vertical virtual DOM
     });
 
     // Add cellEdited event listener inside initializeTable after declaring table
@@ -239,6 +276,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         console.log("Table fully built and ready for interaction.");
     });
 }
+
 
 function isDateDuplicate(date) {
     const data = table.getData();
