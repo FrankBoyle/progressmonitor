@@ -100,6 +100,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, { once: true });
     });
+
+    const editBtn = document.getElementById('editColumnsBtn');
+    if (editBtn) {
+        editBtn.onclick = showEditColumnNamesModal;
+    }
 });
 
 window.addEventListener('scroll', function(event) {
@@ -823,4 +828,59 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
     }
 }
 
+function showEditColumnNamesModal() {
+    const modal = document.getElementById('editColumnNamesModal');
+    const form = document.getElementById('editColumnNamesForm');
+    form.innerHTML = ''; // Clear previous inputs
+
+    // Assuming columns array holds the names of your table columns
+    let columns = table.getColumns(); // Fetch columns from Tabulator table
+    columns.forEach((column, index) => {
+        let inputHTML = `<label>Column ${index + 1}: <input type='text' name='columnName${index}' value='${column.getField()}'></label><br>`;
+        form.innerHTML += inputHTML;
+    });
+
+    form.innerHTML += "<button type='submit'>Save Changes</button>";
+    modal.style.display = 'block';
+}
+
+function hideEditColumnNamesModal() {
+    document.getElementById('editColumnNamesModal').style.display = 'none';
+}
+
+function submitColumnNames(event) {
+    event.preventDefault();
+    const inputs = event.target.querySelectorAll('input[type="text"]');
+    let newColumnNames = Array.from(inputs).map(input => input.value);
+
+    // Send these new column names to server or use them to update the local table
+    updateColumnNamesOnServer(newColumnNames);
+}
+
+function updateColumnNamesOnServer(newColumnNames) {
+    // Prepare the data to be sent to the PHP backend
+    const formData = new FormData();
+    formData.append('goal_id', '123'); // Assuming you have a way to get the current goal_id
+    formData.append('custom_column_names', JSON.stringify(newColumnNames));
+
+    // Make an AJAX call to the PHP script
+    fetch('edit_goal_columns.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            console.log(data.message);
+            alert('Column names updated successfully!');
+        } else if (data.error) {
+            console.error('Error updating column names:', data.error);
+            alert('Failed to update column names: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Network or server error occurred.');
+    });
+}
 
