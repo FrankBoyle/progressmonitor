@@ -355,7 +355,8 @@ function extractChartData() {
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
             return {
                 name: column.name,  // Using the custom name for the series
-                data: interpolatedData,
+                data: interpolatedData.map(d => d.value),
+                interpolatedFlags: interpolatedData.map(d => d.interpolated),
                 color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
             };
         });
@@ -370,7 +371,6 @@ function extractChartData() {
         }));
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
-        updateBarChart(categories, series);
 
         console.log("Charts updated successfully.");
     } catch (error) {
@@ -379,17 +379,17 @@ function extractChartData() {
 }
 
 function interpolateData(data) {
-    let interpolatedData = [...data];
+    let interpolatedData = data.map(value => ({ value, interpolated: false }));
     for (let i = 1; i < interpolatedData.length - 1; i++) {
-        if (interpolatedData[i] === null) {
+        if (interpolatedData[i].value === null) {
             let prev = i - 1;
             let next = i + 1;
-            while (next < interpolatedData.length && interpolatedData[next] === null) {
+            while (next < interpolatedData.length && interpolatedData[next].value === null) {
                 next++;
             }
             if (next < interpolatedData.length) {
-                let interpolatedValue = interpolatedData[prev] + (interpolatedData[next] - interpolatedData[prev]) * (i - prev) / (next - prev);
-                interpolatedData[i] = parseFloat(interpolatedValue.toFixed(2)); // Round to 2 decimal places
+                let interpolatedValue = interpolatedData[prev].value + (interpolatedData[next].value - interpolatedData[prev].value) * (i - prev) / (next - prev);
+                interpolatedData[i] = { value: parseFloat(interpolatedValue.toFixed(2)), interpolated: true };
             }
         }
     }
@@ -406,14 +406,34 @@ function updateLineChart(categories, seriesData) {
     chart.updateOptions({
         xaxis: { categories },
         yaxis: {
-            labels: { formatter: val => val.toFixed(0) } // Ensure whole numbers
+            labels: { formatter: val => val.toFixed(0) }  // Ensure whole numbers
         },
         series: seriesData,
-        colors: seriesData.map(s => s.color), // Apply specific colors to series
+        colors: seriesData.map(s => s.color),  // Apply specific colors to series
         stroke: {
             curve: 'smooth',
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function(val, opts) {
+                const interpolatedFlag = seriesData[opts.seriesIndex].interpolatedFlags[opts.dataPointIndex];
+                return interpolatedFlag ? '' : val.toFixed(0);
+            },
+            style: {
+                fontSize: '12px',
+                fontWeight: 'bold'
+            },
+            background: {
+                enabled: true,
+                borderRadius: 2,
+                borderWidth: 1,
+                borderColor: '#000',
+                dropShadow: {
+                    enabled: false
+                }
+            }
         }
     });
 }
