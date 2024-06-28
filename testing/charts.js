@@ -850,7 +850,7 @@ function showEditColumnNamesModal() {
     Object.keys(customColumnNames).forEach((key, index) => {
         if (key !== "score_date") { // Exclude score_date
             let label = document.createElement('label');
-            label.textContent = `Column ${index + 1} (${customColumnNames[key]}): `; // Display custom names
+            label.textContent = `Column ${index + 1} (${customColumnNames[key]}): `;
             let input = document.createElement('input');
             input.type = 'text';
             input.value = customColumnNames[key]; // Use the stored custom name
