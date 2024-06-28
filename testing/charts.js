@@ -850,7 +850,7 @@ function showEditColumnNamesModal() {
     Object.keys(customColumnNames).forEach((key, index) => {
         if (key !== "score_date") { // Exclude score_date
             let label = document.createElement('label');
-            label.textContent = `Column ${index + 1} (${key}): `;
+            label.textContent = `Column ${index + 1} (${customColumnNames[key]}): `; // Display custom names
             let input = document.createElement('input');
             input.type = 'text';
             input.value = customColumnNames[key]; // Use the stored custom name
@@ -892,6 +892,9 @@ function submitColumnNames(event) {
 }
 
 function updateColumnNamesOnServer(newColumnNames) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadataId = urlParams.get('metadata_id'); // Use the current metadataId dynamically
+
     // Prepare the data to be sent as FormData to align with your PHP backend expectations
     const formData = new FormData();
     formData.append('metadata_id', metadataId); // Use the current metadataId dynamically
