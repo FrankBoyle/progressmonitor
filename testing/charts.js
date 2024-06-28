@@ -100,12 +100,18 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, { once: true });
     });
+});
 
+document.addEventListener('DOMContentLoaded', function() {
     const editBtn = document.getElementById('editColumnsBtn');
     if (editBtn) {
         editBtn.addEventListener('click', showEditColumnNamesModal);
+        console.log("Button listener attached.");
+    } else {
+        console.log("Edit button not found.");
     }
 });
+
 
 window.addEventListener('scroll', function(event) {
     window.clearTimeout(isScrolling);
