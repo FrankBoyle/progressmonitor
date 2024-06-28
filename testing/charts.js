@@ -874,6 +874,7 @@ function showEditColumnNamesModal() {
         }
     }
 
+    // Ensure the modal is displayed after dynamically adding the inputs
     form.innerHTML += "<button type='submit'>Save Changes</button>"; // Add the submit button at the end
     modal.style.display = 'block'; // Show the modal
 }
