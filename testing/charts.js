@@ -350,11 +350,15 @@ function extractChartData() {
                 name: item.textContent.trim()  // Use textContent of the item as the series name
             }));
 
-        const series = selectedColumns.map(column => ({
-            name: column.name,  // Using the custom name for the series
-            data: data.map(row => row[column.field]),
-            color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
-        }));
+        const series = selectedColumns.map(column => {
+            let rawData = data.map(row => row[column.field]);
+            let interpolatedData = interpolateData(rawData); // Interpolate missing values
+            return {
+                name: column.name,  // Using the custom name for the series
+                data: interpolatedData,
+                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
+            };
+        });
 
         const trendlineSeries = series.map(seriesData => ({
             name: `${seriesData.name} Trendline`,
@@ -372,6 +376,24 @@ function extractChartData() {
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
+}
+
+function interpolateData(data) {
+    let interpolatedData = [...data];
+    for (let i = 1; i < interpolatedData.length - 1; i++) {
+        if (interpolatedData[i] === null) {
+            let prev = i - 1;
+            let next = i + 1;
+            while (next < interpolatedData.length && interpolatedData[next] === null) {
+                next++;
+            }
+            if (next < interpolatedData.length) {
+                let interpolatedValue = interpolatedData[prev] + (interpolatedData[next] - interpolatedData[prev]) * (i - prev) / (next - prev);
+                interpolatedData[i] = parseFloat(interpolatedValue.toFixed(2)); // Round to 2 decimal places
+            }
+        }
+    }
+    return interpolatedData;
 }
 
 // Update Line Chart
