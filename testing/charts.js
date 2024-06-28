@@ -846,17 +846,20 @@ function showEditColumnNamesModal() {
     const form = document.getElementById('editColumnNamesForm');
     form.innerHTML = ''; // Clear previous contents
 
+    console.log("Custom Column Names: ", customColumnNames); // Log custom column names
+
     // Use stored custom names
     let index = 1;
     for (const key in customColumnNames) {
         if (customColumnNames.hasOwnProperty(key) && key !== "score_date") { // Exclude score_date
             let label = document.createElement('label');
-            // Updated to show the current custom name for clarity
             label.textContent = `Column ${index} (${customColumnNames[key]}): `;
             let input = document.createElement('input');
             input.type = 'text';
             input.value = customColumnNames[key]; // Use the stored custom name
             input.dataset.columnField = key; // Store field name in dataset for later use
+
+            console.log(`Setting input for ${key} with value ${customColumnNames[key]}`); // Log each input field setup
 
             form.appendChild(label);
             form.appendChild(input);
@@ -868,7 +871,6 @@ function showEditColumnNamesModal() {
     form.innerHTML += "<button type='submit'>Save Changes</button>"; // Add the submit button at the end
     modal.style.display = 'block'; // Show the modal
 }
-
 
 function hideEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
