@@ -877,16 +877,16 @@ function hideEditColumnNamesModal() {
 function submitColumnNames(event) {
     event.preventDefault();
     const inputs = event.target.querySelectorAll('input[type="text"]');
-    inputs.forEach(input => {
-        let field = input.dataset.columnField;
-        let newValue = input.value;
-        let column = table.getColumn(field);
-        column.updateDefinition({ title: newValue });  // Update the column title in the table
-    });
+    const validFields = ['score1_name', 'score2_name', 'score3_name', 'score4_name', 'score5_name', 'score6_name', 'score7_name', 'score8_name', 'score9_name', 'score10_name'];
 
-    hideEditColumnNamesModal();  // Optionally close the modal after submit
-    updateColumnNamesOnServer(Array.from(inputs).map(input => ({field: input.dataset.columnField, title: input.value})));  // Send new titles to server
+    let columnUpdates = Array.from(inputs).map(input => ({
+        field: input.dataset.columnField,
+        title: input.value
+    })).filter(col => validFields.includes(col.field));
+
+    updateColumnNamesOnServer(columnUpdates);
 }
+
 
 function updateColumnNamesOnServer(newColumnTitles) {
     // Retrieve the metadata_id from the URL parameters
