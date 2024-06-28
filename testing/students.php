@@ -134,8 +134,30 @@ include('./users/auth_session.php');
                 <input type="date" id="goal-date" name="goal_date" required>
             </div>
             <div class="form-group">
-                <label for="metadata-id">Category:</label>
-                <select id="metadata-id" name="metadata_id" required></select>
+                <label for="metadata-option">Metadata Option:</label>
+                <select id="metadata-option" name="metadata_option" required onchange="toggleMetadataFields()">
+                    <option value="existing">Use Existing Metadata</option>
+                    <option value="new">Create New Metadata</option>
+                </select>
+            </div>
+            <div id="existing-metadata" class="form-group">
+                <label for="existing-metadata-id">Existing Category:</label>
+                <select id="existing-metadata-id" name="existing_metadata_id">
+                    <!-- Populate with existing metadata rows -->
+                </select>
+            </div>
+            <div id="new-metadata" class="form-group" style="display: none;">
+                <label for="category-name">Category:</label>
+                <input type="text" id="category-name" name="category_name">
+                <div class="form-group">
+                    <label for="score1-name">Score 1 Name:</label>
+                    <input type="text" id="score1-name" name="score1_name">
+                </div>
+                <div class="form-group">
+                    <label for="score2-name">Score 2 Name:</label>
+                    <input type="text" id="score2-name" name="score2_name">
+                </div>
+                <!-- Add fields for other score names similarly -->
             </div>
             <button type="submit">Add Goal</button>
         </form>
@@ -833,13 +855,27 @@ function showAddGoalModal() {
         return;
     }
     const modal = document.getElementById('add-goal-modal');
+    
+    // Fetch and populate existing metadata
+    fetch('users/fetch_existing_metadata.php')
+        .then(response => response.json())
+        .then(data => {
+            const existingMetadataSelect = document.getElementById('existing-metadata-id');
+            existingMetadataSelect.innerHTML = ''; // Clear previous options
+            data.forEach(metadata => {
+                const option = document.createElement('option');
+                option.value = metadata.metadata_id;
+                option.textContent = metadata.category_name;
+                existingMetadataSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching existing metadata:', error);
+        });
+
     modal.style.display = 'block';
 }
 
-function hideAddGoalModal() {
-    const modal = document.getElementById('add-goal-modal');
-    modal.style.display = 'none';
-}
 
 function addGoal(event) {
         event.preventDefault();
@@ -969,7 +1005,19 @@ function archiveGoal(goalId) {
     });
 }
 
-
+function toggleMetadataFields() {
+    const option = document.getElementById('metadata-option').value;
+    const existingFields = document.getElementById('existing-metadata');
+    const newFields = document.getElementById('new-metadata');
+    
+    if (option === 'existing') {
+        existingFields.style.display = 'block';
+        newFields.style.display = 'none';
+    } else {
+        existingFields.style.display = 'none';
+        newFields.style.display = 'block';
+    }
+}
 </script>
 </body>
 </html>
