@@ -875,27 +875,23 @@ function hideEditColumnNamesModal() {
 function submitColumnNames(event) {
     event.preventDefault();
     const inputs = event.target.querySelectorAll('input[type="text"]');
-    const validFields = ['score1_name', 'score2_name', 'score3_name', 'score4_name', 'score5_name', 'score6_name', 'score7_name', 'score8_name', 'score9_name', 'score10_name'];
+    let updatedNames = {};
 
-    let columnUpdates = Array.from(inputs).map(input => ({
-        field: input.dataset.columnField,
-        title: input.value
-    })).filter(col => validFields.includes(col.field));
+    inputs.forEach(input => {
+        let field = input.dataset.columnField;
+        let newValue = input.value;
+        updatedNames[field] = newValue;
+    });
 
-    updateColumnNamesOnServer(columnUpdates);
+    hideEditColumnNamesModal(); // Optionally close the modal after submit
+    updateColumnNamesOnServer(updatedNames); // Send new titles to server
 }
 
-function updateColumnNamesOnServer(newColumnTitles) {
-    // Retrieve the metadata_id from the URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const metadataId = urlParams.get('metadata_id');
-
+function updateColumnNamesOnServer(newColumnNames) {
     // Prepare the data to be sent as FormData to align with your PHP backend expectations
     const formData = new FormData();
-    formData.append('metadata_id', metadataId);  // Use the actual metadata_id from the page URL
-    formData.append('custom_column_names', JSON.stringify(newColumnTitles.map(title => {
-        return { field: title.field, title: title.title }; // Ensure the backend receives both field and title
-    })));
+    formData.append('metadata_id', metadataId); // Use the current metadataId dynamically
+    formData.append('custom_column_names', JSON.stringify(newColumnNames)); // Send the updated names
 
     // Make an AJAX call to the PHP script
     fetch('./users/edit_goal_columns.php', {
@@ -917,5 +913,4 @@ function updateColumnNamesOnServer(newColumnTitles) {
         alert('Network or server error occurred.');
     });
 }
-
 
