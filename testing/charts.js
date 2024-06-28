@@ -838,29 +838,38 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 }
 
 function showEditColumnNamesModal() {
+    const metadataId = urlParams.get('metadata_id');  // Ensure this variable is globally available or passed here
     const modal = document.getElementById('editColumnNamesModal');
     const form = document.getElementById('editColumnNamesForm');
     form.innerHTML = '';  // Clear previous contents
 
-    let columns = table.getColumns();  // Fetch all columns from the Tabulator table
+    // Fetch custom names from the server
+    fetch(`path_to_server_endpoint/fetch_custom_names.php?metadata_id=${metadataId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.names) {
+                data.names.forEach((name, index) => {
+                    if (name.field !== 'date') {  // Exclude 'date' column
+                        let label = document.createElement('label');
+                        label.textContent = `Column ${index + 1} (${name.field}): `;
+                        let input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = name.title;
+                        input.dataset.columnField = name.field;
 
-    columns.forEach((column, index) => {
-        // Exclude columns that shouldn't be editable like 'Actions' or 'Date'
-        if (!['actions', 'date'].includes(column.getField())) {
-            let label = document.createElement('label');
-            label.textContent = `Column ${index + 1} (${column.getField()}): `;
-            let input = document.createElement('input');
-            input.type = 'text';
-            input.value = column.getDefinition().title;  // Get the current title of the column
-            input.dataset.columnField = column.getField();  // Store field name in dataset for later use
+                        form.appendChild(label);
+                        form.appendChild(input);
+                        form.appendChild(document.createElement('br'));
+                    }
+                });
 
-            form.appendChild(label);
-            form.appendChild(input);
-            form.appendChild(document.createElement('br'));
-        }
-    });
+                form.innerHTML += "<button type='submit'>Save Changes</button>";
+            }
+        })
+        .catch(error => {
+            console.error('Failed to fetch custom column names:', error);
+        });
 
-    form.innerHTML += "<button type='submit'>Save Changes</button>";  // Add the submit button at the end
     modal.style.display = 'block';  // Show the modal
 }
 
