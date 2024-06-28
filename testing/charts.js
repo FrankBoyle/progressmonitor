@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const editBtn = document.getElementById('editColumnsBtn');
     if (editBtn) {
-        editBtn.onclick = showEditColumnNamesModal;
+        editBtn.addEventListener('click', showEditColumnNamesModal);
     }
 });
 
@@ -830,22 +830,12 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 
 function showEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
-    const form = document.getElementById('editColumnNamesForm');
-    form.innerHTML = ''; // Clear previous inputs
-
-    // Assuming columns array holds the names of your table columns
-    let columns = table.getColumns(); // Fetch columns from Tabulator table
-    columns.forEach((column, index) => {
-        let inputHTML = `<label>Column ${index + 1}: <input type='text' name='columnName${index}' value='${column.getField()}'></label><br>`;
-        form.innerHTML += inputHTML;
-    });
-
-    form.innerHTML += "<button type='submit'>Save Changes</button>";
     modal.style.display = 'block';
 }
 
 function hideEditColumnNamesModal() {
-    document.getElementById('editColumnNamesModal').style.display = 'none';
+    const modal = document.getElementById('editColumnNamesModal');
+    modal.style.display = 'none';
 }
 
 function submitColumnNames(event) {
