@@ -24,16 +24,42 @@ try {
             }
             $newMetadataId = $_POST['existing_metadata_id'];
         } else if ($metadataOption === 'new') {
-            if (!isset($_POST['category_name'])) {
+            if (!isset($_POST['category_name'], $_POST['score1_name'], $_POST['score2_name'], $_POST['score3_name'], $_POST['score4_name'], $_POST['score5_name'], $_POST['score6_name'], $_POST['score7_name'], $_POST['score8_name'], $_POST['score9_name'], $_POST['score10_name'])) {
                 throw new Exception('New metadata details are required.');
             }
 
             $categoryName = $_POST['category_name'];
+            $score1Name = $_POST['score1_name'];
+            $score2Name = $_POST['score2_name'];
+            $score3Name = $_POST['score3_name'];
+            $score4Name = $_POST['score4_name'];
+            $score5Name = $_POST['score5_name'];
+            $score6Name = $_POST['score6_name'];
+            $score7Name = $_POST['score7_name'];
+            $score8Name = $_POST['score8_name'];
+            $score9Name = $_POST['score9_name'];
+            $score10Name = $_POST['score10_name'];
+
             $stmt = $connection->prepare("
-                INSERT INTO Metadata (school_id, metadata_name, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name) 
-                VALUES (?, 'Custom Metadata', ?, 'Score 1', 'Score 2', 'Score 3', 'Score 4', 'Score 5', 'Score 6', 'Score 7', 'Score 8', 'Score 9', 'Score 10')
+                INSERT INTO Metadata (school_id, metadata_template, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
-            $stmt->execute([$schoolId, $categoryName]);
+            $stmt->execute([
+                $schoolId,
+                0, // Default value for metadata_template
+                $categoryName,
+                $score1Name,
+                $score2Name,
+                $score3Name,
+                $score4Name,
+                $score5Name,
+                $score6Name,
+                $score7Name,
+                $score8Name,
+                $score9Name,
+                $score10Name
+            ]);
+
             $newMetadataId = $connection->lastInsertId();
         } else {
             throw new Exception('Invalid metadata option.');
