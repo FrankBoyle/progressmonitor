@@ -862,12 +862,13 @@ function showEditColumnNamesModal() {
             form.appendChild(input);
             form.appendChild(document.createElement('br'));
 
-            // Set input value explicitly after appending
-            input.value = customColumnNames[key];
-
-            console.log(`Input created:`, input);
-            console.log(`Input value set to: ${input.value}`);
-            console.log(`Input dataset columnField: ${input.dataset.columnField}`);
+            // Use setTimeout to ensure the value is set after appending
+            setTimeout(() => {
+                input.value = customColumnNames[key];
+                console.log(`Input created:`, input);
+                console.log(`Input value set to: ${input.value}`);
+                console.log(`Input dataset columnField: ${input.dataset.columnField}`);
+            }, 0);
 
             index++;
         }
