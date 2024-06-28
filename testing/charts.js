@@ -856,19 +856,16 @@ function showEditColumnNamesModal() {
             label.textContent = `Column ${index} (${customColumnNames[key]}): `;
             let input = document.createElement('input');
             input.type = 'text';
+            input.value = customColumnNames[key]; // Set value attribute directly
             input.dataset.columnField = key; // Store field name in dataset for later use
 
             form.appendChild(label);
             form.appendChild(input);
             form.appendChild(document.createElement('br'));
 
-            // Use setTimeout to ensure the value is set after appending
-            setTimeout(() => {
-                input.value = customColumnNames[key];
-                console.log(`Input created:`, input);
-                console.log(`Input value set to: ${input.value}`);
-                console.log(`Input dataset columnField: ${input.dataset.columnField}`);
-            }, 0);
+            console.log(`Input created:`, input);
+            console.log(`Input value set to: ${input.value}`);
+            console.log(`Input dataset columnField: ${input.dataset.columnField}`);
 
             index++;
         }
