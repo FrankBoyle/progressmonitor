@@ -491,7 +491,7 @@ td .cell-input {
 }
 
 .modal {
-    display: none;
+    display: block !important; /* Force display for testing */
     position: fixed;
     z-index: 1;
     padding-top: 60px;
@@ -504,13 +504,12 @@ td .cell-input {
 }
 
 .modal-content {
-    background-color: #fff; /* Bright white for modal content background */
+    background-color: #fff;
     margin: 5% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 400px;
-    border-color: #D6E4F0; /* Soft blue border */
 }
 
 .close {
@@ -525,6 +524,16 @@ td .cell-input {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* Ensure input fields are displayed properly */
+input[type="text"] {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    padding: 8px !important;
+    box-sizing: border-box !important;
+    border: 1px solid #ccc !important;
 }
 
 .form-group {
