@@ -24,86 +24,21 @@ try {
             }
             $newMetadataId = $_POST['existing_metadata_id'];
         } else if ($metadataOption === 'new') {
-            if (!isset($_POST['category_name'], $_POST['score1_name'], $_POST['score2_name'], $_POST['score3_name'], $_POST['score4_name'], $_POST['score5_name'], $_POST['score6_name'], $_POST['score7_name'], $_POST['score8_name'], $_POST['score9_name'], $_POST['score10_name'])) {
+            if (!isset($_POST['category_name'])) {
                 throw new Exception('New metadata details are required.');
             }
 
             $categoryName = $_POST['category_name'];
-            $score1Name = $_POST['score1_name'];
-            $score2Name = $_POST['score2_name'];
-            $score3Name = $_POST['score3_name'];
-            $score4Name = $_POST['score4_name'];
-            $score5Name = $_POST['score5_name'];
-            $score6Name = $_POST['score6_name'];
-            $score7Name = $_POST['score7_name'];
-            $score8Name = $_POST['score8_name'];
-            $score9Name = $_POST['score9_name'];
-            $score10Name = $_POST['score10_name'];
-
             $stmt = $connection->prepare("
                 INSERT INTO Metadata (school_id, metadata_name, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, 'Custom Metadata', ?, 'Score 1', 'Score 2', 'Score 3', 'Score 4', 'Score 5', 'Score 6', 'Score 7', 'Score 8', 'Score 9', 'Score 10')
             ");
-            $stmt->execute([
-                $schoolId,
-                'Custom Metadata',
-                $categoryName,
-                $score1Name,
-                $score2Name,
-                $score3Name,
-                $score4Name,
-                $score5Name,
-                $score6Name,
-                $score7Name,
-                $score8Name,
-                $score9Name,
-                $score10Name
-            ]);
-
-            $newMetadataId = $connection->lastInsertId();
-        } else if ($metadataOption === 'copy') {
-            if (!isset($_POST['metadata_id'])) {
-                throw new Exception('Original metadata ID is required.');
-            }
-            $originalMetadataId = $_POST['metadata_id'];
-
-            // Copy the original metadata to create a new entry with a new metadata_id
-            $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
-            $stmt->execute([$originalMetadataId]);
-            $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (!$metadata) {
-                throw new Exception('Original metadata not found.');
-            }
-
-            // Prepare and execute the insert statement for the new metadata
-            $stmt = $connection->prepare("
-                INSERT INTO Metadata (school_id, metadata_name, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-            $stmt->execute([
-                $metadata['school_id'],
-                $metadata['metadata_name'],
-                $metadata['category_name'],
-                $metadata['score1_name'],
-                $metadata['score2_name'],
-                $metadata['score3_name'],
-                $metadata['score4_name'],
-                $metadata['score5_name'],
-                $metadata['score6_name'],
-                $metadata['score7_name'],
-                $metadata['score8_name'],
-                $metadata['score9_name'],
-                $metadata['score10_name']
-            ]);
-
-            // Get the new metadata_id
+            $stmt->execute([$schoolId, $categoryName]);
             $newMetadataId = $connection->lastInsertId();
         } else {
             throw new Exception('Invalid metadata option.');
         }
 
-        // Prepare and execute the insert statement for the goal
         $stmt = $connection->prepare("
             INSERT INTO Goals (student_id_new, goal_description, goal_date, school_id, metadata_id) 
             VALUES (?, ?, ?, ?, ?)
@@ -119,4 +54,3 @@ try {
     echo json_encode(["error" => "Error adding goal: " . $e->getMessage()]);
 }
 ?>
-
