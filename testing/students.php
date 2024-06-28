@@ -877,6 +877,11 @@ function showAddGoalModal() {
 }
 
 
+function hideAddGoalModal() {
+    const modal = document.getElementById('add-goal-modal');
+    modal.style.display = 'none';
+}
+
 function addGoal(event) {
         event.preventDefault();
 
