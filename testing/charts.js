@@ -379,17 +379,17 @@ function extractChartData() {
 }
 
 function interpolateData(data) {
-    let interpolatedData = data.map(value => ({ value, interpolated: false }));
+    let interpolatedData = [...data];
     for (let i = 1; i < interpolatedData.length - 1; i++) {
-        if (interpolatedData[i].value === null) {
+        if (interpolatedData[i] === null) {
             let prev = i - 1;
             let next = i + 1;
-            while (next < interpolatedData.length && interpolatedData[next].value === null) {
+            while (next < interpolatedData.length && interpolatedData[next] === null) {
                 next++;
             }
             if (next < interpolatedData.length) {
-                let interpolatedValue = interpolatedData[prev].value + (interpolatedData[next].value - interpolatedData[prev].value) * (i - prev) / (next - prev);
-                interpolatedData[i] = { value: parseFloat(interpolatedValue.toFixed(2)), interpolated: true };
+                let interpolatedValue = interpolatedData[prev] + (interpolatedData[next] - interpolatedData[prev]) * (i - prev) / (next - prev);
+                interpolatedData[i] = parseFloat(interpolatedValue.toFixed(2)); // Round to 2 decimal places
             }
         }
     }
