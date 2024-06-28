@@ -143,6 +143,44 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     }
 
     const columns = [
+        // Add Actions column with delete button
+        {
+            title: "Actions",
+            field: "actions",
+            formatter: function(cell, formatterParams, onRendered) {
+                return '<button class="delete-row-btn" data-performance-id="' + cell.getRow().getData().performance_id + '">Delete</button>';
+            },
+            width: 100,
+            hozAlign: "center", // Correct option for horizontal alignment
+            cellClick: function(e, cell) {
+                const performanceId = cell.getRow().getData().performance_id;
+
+                // Confirm before delete
+                if (confirm('Are you sure you want to delete this row?')) {
+                    // Send a request to delete the data from the server
+                    fetch('./users/delete_performance.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ performance_id: performanceId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove the row from the table
+                            cell.getRow().delete();
+                        } else {
+                            alert('Failed to delete data. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while deleting the data.');
+                    });
+                }
+            }
+        },
         {
             title: "Date",
             field: "score_date",
@@ -158,7 +196,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             },
             width: 120,
             frozen: false,
-        },
+        }
     ];
 
     Object.keys(scoreNames).forEach((key, index) => {
@@ -168,45 +206,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             editor: "input",
             width: 100
         });
-    });
-
-    // Add Actions column with delete button
-    columns.push({
-        title: "Actions",
-        field: "actions",
-        formatter: function(cell, formatterParams, onRendered) {
-            return '<button class="delete-row-btn" data-performance-id="' + cell.getRow().getData().performance_id + '">Delete</button>';
-        },
-        width: 100,
-        hozAlign: "center", // Correct option for horizontal alignment
-        cellClick: function(e, cell) {
-            const performanceId = cell.getRow().getData().performance_id;
-
-            // Confirm before delete
-            if (confirm('Are you sure you want to delete this row?')) {
-                // Send a request to delete the data from the server
-                fetch('./users/delete_performance.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ performance_id: performanceId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Remove the row from the table
-                        cell.getRow().delete();
-                    } else {
-                        alert('Failed to delete data. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while deleting the data.');
-                });
-            }
-        }
     });
 
     table = new Tabulator("#performance-table", {
