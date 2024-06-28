@@ -131,7 +131,6 @@ window.addEventListener('scroll', function(event) {
     }, 100);
 }, false);
 
-// Ensure this function is called and customColumnNames is populated correctly when fetching initial data
 function fetchInitialData(studentIdNew, metadataId) {
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
