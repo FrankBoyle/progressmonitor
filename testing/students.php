@@ -214,21 +214,16 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
-    loadStaff(); // Load all staff initially
+    loadStaff();
     loadMetadata(); // Load metadata for the add goal form
 
-    // Expose functions to global scope for inline event handlers
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
 
-    // Add event listener to the add goal button
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
-
-    // Add event listener to the add group button
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
     document.querySelector('.add-student-btn').addEventListener('click', showAddStudentModal);
 
-    // Expose functions to global scope for inline event handlers
     window.hideAddGroupModal = hideAddGroupModal;
     window.hideAddStudentModal = hideAddStudentModal;
 
@@ -241,7 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     $('.select2').select2();
 
-    // Set up the MutationObserver to watch for added nodes in the goal list
     const goalList = document.getElementById('goal-list');
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
@@ -252,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     observer.observe(goalList, { childList: true, subtree: true });
 
-    // Initial call to populate students and goals
     populateStudentsAndGoals();
 });
 
@@ -381,11 +374,11 @@ function loadStaff() {
 
         // Function to hide the modal
         function hideAddGroupModal() {
-        const modal = document.getElementById('add-group-modal');
-        if (modal) {
-            modal.style.display = 'none';
+            const modal = document.getElementById('add-group-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
         }
-    }
 
     function hideAddStudentModal() {
         const modal = document.getElementById('add-student-modal');
@@ -745,7 +738,6 @@ function removeStudentFromGroup(studentId, groupId) {
     });
 }
 
-
 function loadAllStudentsForAssignment() {
     fetch('users/fetch_students.php') // Adjust the endpoint if necessary
         .then(response => response.json())
@@ -805,7 +797,6 @@ function deleteGroup() {
     });
 }
 
-
 function resetStudentList() {
     const studentList = document.getElementById('student-list');
     const selectedGroup = document.querySelector('.selected-group');
@@ -822,15 +813,19 @@ function loadMetadata() {
     fetch('users/fetch_metadata.php')
         .then(response => response.json())
         .then(data => {
-            const metadataSelect = document.getElementById('metadata-id');
-            metadataSelect.innerHTML = ''; // Clear previous options
+            const metadataSelect = document.getElementById('existing-metadata-id');
+            if (metadataSelect) {
+                metadataSelect.innerHTML = '';
 
-            data.forEach(metadata => {
-                const option = document.createElement('option');
-                option.value = metadata.metadata_id;
-                option.textContent = metadata.category_name;
-                metadataSelect.appendChild(option);
-            });
+                data.forEach(metadata => {
+                    const option = document.createElement('option');
+                    option.value = metadata.metadata_id;
+                    option.textContent = metadata.category_name;
+                    metadataSelect.appendChild(option);
+                });
+            } else {
+                console.error('Metadata select element not found.');
+            }
         })
         .catch(error => {
             console.error('Error loading metadata:', error);
@@ -845,27 +840,8 @@ function showAddGoalModal() {
         return;
     }
     const modal = document.getElementById('add-goal-modal');
-    
-    // Fetch and populate existing metadata
-    fetch('users/fetch_existing_metadata.php')
-        .then(response => response.json())
-        .then(data => {
-            const existingMetadataSelect = document.getElementById('existing-metadata-id');
-            existingMetadataSelect.innerHTML = ''; // Clear previous options
-            data.forEach(metadata => {
-                const option = document.createElement('option');
-                option.value = metadata.metadata_id;
-                option.textContent = metadata.category_name;
-                existingMetadataSelect.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching existing metadata:', error);
-        });
-
     modal.style.display = 'block';
 }
-
 
 function hideAddGoalModal() {
     const modal = document.getElementById('add-goal-modal');
@@ -873,42 +849,49 @@ function hideAddGoalModal() {
 }
 
 function addGoal(event) {
-        event.preventDefault();
+    event.preventDefault();
 
-        const studentId = document.getElementById('selected-student-id').value;
-        const goalDescription = document.getElementById('goal-description').value;
-        const goalDate = document.getElementById('goal-date').value;
-        const metadataId = document.getElementById('metadata-id').value;
+    const studentId = document.getElementById('selected-student-id').value;
+    const goalDescription = document.getElementById('goal-description').value;
+    const goalDate = document.getElementById('goal-date').value;
+    const metadataOption = document.getElementById('metadata-option').value;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+    let payload = {
+        student_id: studentId,
+        goal_description: goalDescription,
+        goal_date: goalDate,
+        metadata_option: metadataOption,
+        school_id: schoolId
+    };
 
-        if (!studentId) {
-            alert('Please select a student first.');
-            return;
-        }
-
-        const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-
-        fetch('./users/add_goal.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message && data.message.includes("Goal added successfully.")) {
-                loadGoals(studentId);
-                hideAddGoalModal();
-            } else {
-                console.error('Error adding goal:', data);
-                alert('Error adding goal: ' + (data.error || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Network or parsing error:', error);
-            alert('There was a network or parsing error. Please try again.');
-        });
+    if (metadataOption === 'existing') {
+        payload.existing_metadata_id = document.getElementById('existing-metadata-id').value;
+    } else if (metadataOption === 'new') {
+        payload.category_name = document.getElementById('category-name').value;
     }
+
+    fetch('./users/add_goal.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams(payload).toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message && data.message.includes("Goal added successfully.")) {
+            loadGoals(studentId);
+            hideAddGoalModal();
+        } else {
+            console.error('Error adding goal:', data);
+            alert('Error adding goal: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Network or parsing error:', error);
+        alert('There was a network or parsing error. Please try again.');
+    });
+}
 
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
@@ -941,7 +924,7 @@ function loadGoals(studentId) {
                 metadataContainer.appendChild(metadataLink);
 
                 metadataGoals.goals.forEach(goal => {
-                    if (!goal.archived) {  // Ensure the goal is not archived
+                    if (!goal.archived) {
                         const listItem = document.createElement('div');
                         listItem.classList.add('goal-item');
                         listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
@@ -954,7 +937,6 @@ function loadGoals(studentId) {
                 goalList.appendChild(metadataContainer);
             }
 
-            // Reinitialize the quill editors
             document.querySelectorAll('.quill-editor').forEach(editor => {
                 const goalId = editor.getAttribute('data-goal-id');
                 if (!quillInstances[goalId]) {
@@ -962,7 +944,8 @@ function loadGoals(studentId) {
                         theme: 'snow',
                         readOnly: true,
                         modules: {
-                            toolbar: true                        }
+                            toolbar: false
+                        }
                     });
                 }
             });
@@ -989,7 +972,7 @@ function archiveGoal(goalId) {
     .then(data => {
         if (data.status === 'success') {
             alert('Goal archived successfully.');
-            loadGoals(document.getElementById('selected-student-id').value); // Reload the goals to reflect the change
+            loadGoals(document.getElementById('selected-student-id').value);
         } else {
             alert('Error archiving goal: ' + (data.message || 'Unknown error'));
         }
@@ -1001,16 +984,16 @@ function archiveGoal(goalId) {
 }
 
 function toggleMetadataFields() {
-    const option = document.getElementById('metadata-option').value;
-    const existingFields = document.getElementById('existing-metadata');
-    const newFields = document.getElementById('new-metadata');
-    
-    if (option === 'existing') {
-        existingFields.style.display = 'block';
-        newFields.style.display = 'none';
-    } else {
-        existingFields.style.display = 'none';
-        newFields.style.display = 'block';
+    const metadataOption = document.getElementById('metadata-option').value;
+    const existingMetadataGroup = document.getElementById('existing-metadata-group');
+    const newMetadataGroup = document.getElementById('new-metadata-group');
+
+    if (metadataOption === 'existing') {
+        existingMetadataGroup.style.display = 'block';
+        newMetadataGroup.style.display = 'none';
+    } else if (metadataOption === 'new') {
+        existingMetadataGroup.style.display = 'none';
+        newMetadataGroup.style.display = 'block';
     }
 }
 </script>
