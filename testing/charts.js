@@ -847,10 +847,11 @@ function showEditColumnNamesModal() {
     form.innerHTML = ''; // Clear previous contents
 
     // Use stored custom names
-    Object.keys(customColumnNames).forEach((key, index) => {
-        if (key !== "score_date") { // Exclude score_date
+    let index = 1;
+    for (const key in customColumnNames) {
+        if (customColumnNames.hasOwnProperty(key) && key !== "score_date") { // Exclude score_date
             let label = document.createElement('label');
-            label.textContent = `Column ${index + 1} (${customColumnNames[key]}): `;
+            label.textContent = `Column ${index} (${customColumnNames[key]}): `;
             let input = document.createElement('input');
             input.type = 'text';
             input.value = customColumnNames[key]; // Use the stored custom name
@@ -859,8 +860,9 @@ function showEditColumnNamesModal() {
             form.appendChild(label);
             form.appendChild(input);
             form.appendChild(document.createElement('br'));
+            index++;
         }
-    });
+    }
 
     form.innerHTML += "<button type='submit'>Save Changes</button>"; // Add the submit button at the end
     modal.style.display = 'block'; // Show the modal
@@ -920,4 +922,6 @@ function updateColumnNamesOnServer(newColumnNames) {
         alert('Network or server error occurred.');
     });
 }
+
+
 
