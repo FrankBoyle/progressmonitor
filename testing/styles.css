@@ -491,16 +491,16 @@ td .cell-input {
 }
 
 .modal {
-    display: block !important; /* Force display for testing */
-    position: fixed;
-    z-index: 1;
-    padding-top: 60px;
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
 }
 
 .modal-content {
