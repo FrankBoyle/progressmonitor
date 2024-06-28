@@ -878,7 +878,6 @@ function showEditColumnNamesModal() {
     modal.style.display = 'block'; // Show the modal
 }
 
-
 function hideEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
     if (modal) {
