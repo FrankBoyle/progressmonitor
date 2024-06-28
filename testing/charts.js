@@ -115,8 +115,6 @@ function submitNewDataRow(newData, newRowDateInput) {
     });
 }
 
-
-
 window.addEventListener('scroll', function(event) {
     window.clearTimeout(isScrolling);
 
@@ -840,30 +838,39 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 
 function showEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
-    modal.style.display = 'block';
+    if (modal) {
+        modal.style.display = 'block';
+        console.log("Modal shown.");
+    } else {
+        console.log("Modal element not found.");
+    }
 }
 
 function hideEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
-    modal.style.display = 'none';
+    if (modal) {
+        modal.style.display = 'none';
+        console.log("Modal hidden.");
+    } else {
+        console.log("Modal element for hiding not found.");
+    }
 }
 
 function submitColumnNames(event) {
     event.preventDefault();
     const inputs = event.target.querySelectorAll('input[type="text"]');
     let newColumnNames = Array.from(inputs).map(input => input.value);
+    console.log("Submitting column names:", newColumnNames);
 
     // Send these new column names to server or use them to update the local table
     updateColumnNamesOnServer(newColumnNames);
 }
 
 function updateColumnNamesOnServer(newColumnNames) {
-    // Prepare the data to be sent to the PHP backend
     const formData = new FormData();
     formData.append('goal_id', '123'); // Assuming you have a way to get the current goal_id
     formData.append('custom_column_names', JSON.stringify(newColumnNames));
 
-    // Make an AJAX call to the PHP script
     fetch('edit_goal_columns.php', {
         method: 'POST',
         body: formData
