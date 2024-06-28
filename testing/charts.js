@@ -852,20 +852,12 @@ function showEditColumnNamesModal() {
     let index = 1;
     for (const key in customColumnNames) {
         if (customColumnNames.hasOwnProperty(key) && key !== "score_date") { // Exclude score_date
-            let label = document.createElement('label');
-            label.textContent = `Column ${index} (${customColumnNames[key]}): `;
-            let input = document.createElement('input');
-            input.type = 'text';
-            input.value = customColumnNames[key]; // Set value attribute directly
-            input.dataset.columnField = key; // Store field name in dataset for later use
+            let label = `<label>Column ${index} (${customColumnNames[key]}): </label>`;
+            let input = `<input type="text" data-column-field="${key}" value="${customColumnNames[key]}"><br>`;
 
-            form.appendChild(label);
-            form.appendChild(input);
-            form.appendChild(document.createElement('br'));
+            form.innerHTML += label + input;
 
-            console.log(`Input created:`, input);
-            console.log(`Input value set to: ${input.value}`);
-            console.log(`Input dataset columnField: ${input.dataset.columnField}`);
+            console.log(`Input for ${key} created with value: ${customColumnNames[key]}`);
 
             index++;
         }
