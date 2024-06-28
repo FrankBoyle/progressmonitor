@@ -840,39 +840,26 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 }
 
 function showEditColumnNamesModal() {
-    const metadataId = urlParams.get('metadata_id');  // Ensure this variable is globally available or passed here
     const modal = document.getElementById('editColumnNamesModal');
     const form = document.getElementById('editColumnNamesForm');
-    form.innerHTML = '';  // Clear previous contents
+    form.innerHTML = ''; // Clear previous contents
 
-    // Fetch custom names from the server
-    fetch(`path_to_server_endpoint/fetch_custom_names.php?metadata_id=${metadataId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success && data.names) {
-                data.names.forEach((name, index) => {
-                    if (name.field !== 'date') {  // Exclude 'date' column
-                        let label = document.createElement('label');
-                        label.textContent = `Column ${index + 1} (${name.field}): `;
-                        let input = document.createElement('input');
-                        input.type = 'text';
-                        input.value = name.title;
-                        input.dataset.columnField = name.field;
+    // Use stored custom names
+    Object.keys(customColumnNames).forEach((key, index) => {
+        let label = document.createElement('label');
+        label.textContent = `Column ${index + 1} (${key}): `;
+        let input = document.createElement('input');
+        input.type = 'text';
+        input.value = customColumnNames[key]; // Use the stored custom name
+        input.dataset.columnField = key; // Store field name in dataset for later use
 
-                        form.appendChild(label);
-                        form.appendChild(input);
-                        form.appendChild(document.createElement('br'));
-                    }
-                });
+        form.appendChild(label);
+        form.appendChild(input);
+        form.appendChild(document.createElement('br'));
+    });
 
-                form.innerHTML += "<button type='submit'>Save Changes</button>";
-            }
-        })
-        .catch(error => {
-            console.error('Failed to fetch custom column names:', error);
-        });
-
-    modal.style.display = 'block';  // Show the modal
+    form.innerHTML += "<button type='submit'>Save Changes</button>"; // Add the submit button at the end
+    modal.style.display = 'block'; // Show the modal
 }
 
 function hideEditColumnNamesModal() {
