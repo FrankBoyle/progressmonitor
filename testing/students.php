@@ -149,16 +149,7 @@ include('./users/auth_session.php');
             <div id="new-metadata" class="form-group" style="display: none;">
                 <label for="category-name">Category:</label>
                 <input type="text" id="category-name" name="category_name">
-                <div class="form-group">
-                    <label for="score1-name">Score 1 Name:</label>
-                    <input type="text" id="score1-name" name="score1_name">
-                </div>
-                <div class="form-group">
-                    <label for="score2-name">Score 2 Name:</label>
-                    <input type="text" id="score2-name" name="score2_name">
-                </div>
-                <!-- Add fields for other score names similarly -->
-            </div>
+
             <button type="submit">Add Goal</button>
         </form>
     </div>
