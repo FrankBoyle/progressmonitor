@@ -889,10 +889,16 @@ function submitColumnNames(event) {
 }
 
 function updateColumnNamesOnServer(newColumnTitles) {
+    // Retrieve the metadata_id from the URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const metadataId = urlParams.get('metadata_id');
+
     // Prepare the data to be sent as FormData to align with your PHP backend expectations
     const formData = new FormData();
-    formData.append('goal_id', '123');  // Assuming you have a way to get the current goal_id dynamically
-    formData.append('custom_column_names', JSON.stringify(newColumnTitles.map(title => title.title)));  // Assuming the backend needs the titles as an array
+    formData.append('metadata_id', metadataId);  // Use the actual metadata_id from the page URL
+    formData.append('custom_column_names', JSON.stringify(newColumnTitles.map(title => {
+        return { field: title.field, title: title.title }; // Ensure the backend receives both field and title
+    })));
 
     // Make an AJAX call to the PHP script
     fetch('./users/edit_goal_columns.php', {
