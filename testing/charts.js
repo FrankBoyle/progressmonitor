@@ -3,6 +3,8 @@ let chart; // Reference to the line chart
 let barChart; // Reference to the bar chart
 let isScrolling;
 let customColumnNames = {}; // This will store the custom names
+let metadataId; // Global metadataId
+let studentIdNew; // Global studentIdNew
 
 // Define series colors
 const seriesColors = [
@@ -17,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function setupInitialPageLoad() {
     const urlParams = new URLSearchParams(window.location.search);
-    const studentIdNew = urlParams.get('student_id');
-    const metadataId = urlParams.get('metadata_id');
+    studentIdNew = urlParams.get('student_id');
+    metadataId = urlParams.get('metadata_id');
 
     if (!studentIdNew || !metadataId) {
         console.error('Student ID or Metadata ID is missing in the URL parameters.');
@@ -846,16 +848,18 @@ function showEditColumnNamesModal() {
 
     // Use stored custom names
     Object.keys(customColumnNames).forEach((key, index) => {
-        let label = document.createElement('label');
-        label.textContent = `Column ${index + 1} (${key}): `;
-        let input = document.createElement('input');
-        input.type = 'text';
-        input.value = customColumnNames[key]; // Use the stored custom name
-        input.dataset.columnField = key; // Store field name in dataset for later use
+        if (key !== "score_date") { // Exclude score_date
+            let label = document.createElement('label');
+            label.textContent = `Column ${index + 1} (${key}): `;
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.value = customColumnNames[key]; // Use the stored custom name
+            input.dataset.columnField = key; // Store field name in dataset for later use
 
-        form.appendChild(label);
-        form.appendChild(input);
-        form.appendChild(document.createElement('br'));
+            form.appendChild(label);
+            form.appendChild(input);
+            form.appendChild(document.createElement('br'));
+        }
     });
 
     form.innerHTML += "<button type='submit'>Save Changes</button>"; // Add the submit button at the end
