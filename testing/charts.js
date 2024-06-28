@@ -864,6 +864,12 @@ function showEditColumnNamesModal() {
             form.appendChild(label);
             form.appendChild(input);
             form.appendChild(document.createElement('br'));
+
+            // Force re-rendering of input to ensure the value is shown
+            input.style.display = 'none';
+            input.offsetHeight; // Trigger reflow
+            input.style.display = 'block';
+
             index++;
         }
     }
@@ -871,6 +877,7 @@ function showEditColumnNamesModal() {
     form.innerHTML += "<button type='submit'>Save Changes</button>"; // Add the submit button at the end
     modal.style.display = 'block'; // Show the modal
 }
+
 
 function hideEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
