@@ -59,7 +59,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                 <input type="date" id="newRowDate" style="display: none;">
             </div>
 
-            <button id="editColumnsBtn" class="btn btn-primary" onclick="showEditColumnNamesModal()">Edit Column Names</button>
+            <button id="editColumnsBtn" class="btn btn-primary">Edit Column Names</button>
 
 <!-- Modal for Editing Column Names -->
 <div id="editColumnNamesModal" class="modal">
