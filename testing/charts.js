@@ -170,17 +170,17 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         });
     });
 
+    // Add Actions column with delete button
     columns.push({
         title: "Actions",
         field: "actions",
         formatter: function(cell, formatterParams, onRendered) {
-            return '<button class="delete-row-btn">Delete</button>';
+            return '<button class="delete-row-btn" data-performance-id="' + cell.getRow().getData().performance_id + '">Delete</button>';
         },
         width: 100,
-        align: "center",
+        hozAlign: "center", // Correct option for horizontal alignment
         cellClick: function(e, cell) {
-            const row = cell.getRow();
-            const performanceId = row.getData().performance_id;
+            const performanceId = cell.getRow().getData().performance_id;
 
             // Confirm before delete
             if (confirm('Are you sure you want to delete this row?')) {
@@ -196,7 +196,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                 .then(data => {
                     if (data.success) {
                         // Remove the row from the table
-                        row.delete();
+                        cell.getRow().delete();
                     } else {
                         alert('Failed to delete data. Please try again.');
                     }
@@ -276,7 +276,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         console.log("Table fully built and ready for interaction.");
     });
 }
-
 
 function isDateDuplicate(date) {
     const data = table.getData();
