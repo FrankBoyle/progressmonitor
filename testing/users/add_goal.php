@@ -10,19 +10,38 @@ try {
         $studentId = $_POST['student_id'];
         $goalDescription = $_POST['goal_description'];
         $goalDate = $_POST['goal_date'];
-        $metadataId = $_POST['metadata_id'];
+        $originalMetadataId = $_POST['metadata_id'];
         $schoolId = $_SESSION['school_id'];
 
-        if (empty($studentId) || empty($goalDescription) || empty($goalDate) || empty($metadataId) || empty($schoolId)) {
+        if (empty($studentId) || empty($goalDescription) || empty($goalDate) || empty($originalMetadataId) || empty($schoolId)) {
             throw new Exception('Missing required parameters.');
         }
 
-        // Prepare and execute the insert statement
+        // Copy the original metadata to create a new entry with a new metadata_id
+        $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
+        $stmt->execute([$originalMetadataId]);
+        $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$metadata) {
+            throw new Exception('Original metadata not found.');
+        }
+
+        // Prepare and execute the insert statement for the new metadata
+        $stmt = $connection->prepare("
+            INSERT INTO Metadata (category_name, other_columns) 
+            VALUES (?, ?)
+        ");
+        $stmt->execute([$metadata['category_name'], $metadata['other_columns']]); // Add other columns as needed
+
+        // Get the new metadata_id
+        $newMetadataId = $connection->lastInsertId();
+
+        // Prepare and execute the insert statement for the goal
         $stmt = $connection->prepare("
             INSERT INTO Goals (student_id_new, goal_description, goal_date, school_id, metadata_id) 
             VALUES (?, ?, ?, ?, ?)
         ");
-        $stmt->execute([$studentId, $goalDescription, $goalDate, $schoolId, $metadataId]);
+        $stmt->execute([$studentId, $goalDescription, $goalDate, $schoolId, $newMetadataId]);
 
         echo json_encode(["message" => "Goal added successfully."]);
     } else {
