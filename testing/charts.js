@@ -895,7 +895,7 @@ function updateColumnNamesOnServer(newColumnTitles) {
     formData.append('custom_column_names', JSON.stringify(newColumnTitles.map(title => title.title)));  // Assuming the backend needs the titles as an array
 
     // Make an AJAX call to the PHP script
-    fetch('edit_goal_columns.php', {
+    fetch('./users/edit_goal_columns.php', {
         method: 'POST',
         body: formData
     })
