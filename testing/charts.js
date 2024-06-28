@@ -22,95 +22,99 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch initial data and setup the table
     fetchInitialData(studentIdNew, metadataId);
 
-    // Setup event listener for the filter button
-    document.getElementById('filterData').addEventListener('click', function() {
-        const iepDate = document.getElementById('iep_date').value;
-        console.log('Filter data button clicked, IEP Date:', iepDate);
-        if (iepDate) {
-            saveIEPDate(iepDate, studentIdNew);
-        }
-    });
-
-    // Initialize charts on page load
-    initializeCharts();
-
-    // Event listener for adding a new data row
-    document.getElementById("addDataRow").addEventListener("click", function() {
-        const newRowDateInput = document.getElementById("newRowDate");
-        newRowDateInput.style.display = "block";
-        newRowDateInput.focus();
-
-        newRowDateInput.addEventListener("change", function() {
-            const newDate = newRowDateInput.value;
-
-            if (newDate === "") {
-                alert("Please select a date.");
-                return;
+    // Setup event listeners for UI actions
+    const filterBtn = document.getElementById('filterData');
+    if (filterBtn) {
+        filterBtn.addEventListener('click', function() {
+            const iepDate = document.getElementById('iep_date').value;
+            if (iepDate) {
+                saveIEPDate(iepDate, studentIdNew);
             }
-
-            if (isDateDuplicate(newDate)) {
-                alert("An entry for this date already exists. Please choose a different date.");
-                return;
-            }
-
-            const newData = {
-                student_id_new: studentIdNew,
-                school_id: schoolId, // Use the schoolId from the session variable
-                metadata_id: metadataId,
-                score_date: newDate,
-                scores: {}
-            };
-
-            for (let i = 1; i <= 10; i++) {
-                newData.scores[`score${i}`] = null;
-            }
-
-            console.log('Sending new data:', newData); // Add debugging statement
-
-            fetch('./users/insert_performance.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newData)
-            }).then(response => {
-                console.log('Fetch response:', response);
-                return response.text(); // Get response as text
-            }).then(text => {
-                console.log('Response text:', text);
-                let result;
-                try {
-                    result = JSON.parse(text); // Parse text as JSON
-                } catch (error) {
-                    throw new Error('Response is not valid JSON');
-                }
-                console.log('Parsed result:', result);
-                if (result.success) {
-                    newData.performance_id = result.performance_id;
-                    table.addRow(newData);
-                    newRowDateInput.value = "";
-                    newRowDateInput.style.display = "none";
-                } else {
-                    alert('Failed to add new data: ' + result.error);
-                    console.error('Error info:', result.missing_data);
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while adding new data.');
-            });
-        }, { once: true });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const editBtn = document.getElementById('editColumnsBtn');
-    if (editBtn) {
-        editBtn.addEventListener('click', showEditColumnNamesModal);
-        console.log("Button listener attached.");
-    } else {
-        console.log("Edit button not found.");
+        });
     }
+
+    const addDataRowBtn = document.getElementById("addDataRow");
+    if (addDataRowBtn) {
+        addDataRowBtn.addEventListener("click", addDataRowHandler);
+    }
+
+    const editColumnsBtn = document.getElementById('editColumnsBtn');
+    if (editColumnsBtn) {
+        editColumnsBtn.addEventListener('click', showEditColumnNamesModal);
+        console.log("Edit columns button listener attached.");
+    } else {
+        console.log("Edit columns button not found.");
+    }
+
+    // Initialize charts if applicable
+    initializeCharts();
 });
+
+function addDataRowHandler() {
+    const newRowDateInput = document.getElementById("newRowDate");
+    newRowDateInput.style.display = "block";
+    newRowDateInput.focus();
+
+    newRowDateInput.addEventListener("change", function() {
+        const newDate = newRowDateInput.value;
+        if (newDate === "") {
+            alert("Please select a date.");
+            return;
+        }
+
+        if (isDateDuplicate(newDate)) {
+            alert("An entry for this date already exists. Please choose a different date.");
+            return;
+        }
+
+        const newData = createNewDataObject(studentIdNew, metadataId, newDate);
+        submitNewDataRow(newData, newRowDateInput);
+    }, { once: true });
+}
+
+function createNewDataObject(studentIdNew, metadataId, newDate) {
+    const newData = {
+        student_id_new: studentIdNew,
+        school_id: schoolId,
+        metadata_id: metadataId,
+        score_date: newDate,
+        scores: {}
+    };
+
+    for (let i = 1; i <= 10; i++) {
+        newData.scores[`score${i}`] = null;
+    }
+
+    return newData;
+}
+
+function submitNewDataRow(newData, newRowDateInput) {
+    console.log('Sending new data:', newData);
+    fetch('./users/insert_performance.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newData)
+    })
+    .then(response => response.text())
+    .then(text => {
+        let result = JSON.parse(text);
+        if (result.success) {
+            newData.performance_id = result.performance_id;
+            table.addRow(newData);
+            newRowDateInput.value = "";
+            newRowDateInput.style.display = "none";
+        } else {
+            throw new Error('Failed to add new data: ' + result.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding new data.');
+    });
+}
+
 
 
 window.addEventListener('scroll', function(event) {
