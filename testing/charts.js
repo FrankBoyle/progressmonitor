@@ -870,13 +870,18 @@ function showEditColumnNamesModal() {
             input.offsetHeight; // Trigger reflow
             input.style.display = 'block';
 
+            // Additional log to confirm display update
+            console.log(`Input for ${key} should now be displayed with value: ${input.value}`);
+
             index++;
         }
     }
 
-    // Ensure the modal is displayed after dynamically adding the inputs
     form.innerHTML += "<button type='submit'>Save Changes</button>"; // Add the submit button at the end
     modal.style.display = 'block'; // Show the modal
+
+    // Log modal display status
+    console.log("Modal displayed with current column names.");
 }
 
 function hideEditColumnNamesModal() {
