@@ -862,8 +862,9 @@ function showEditColumnNamesModal() {
             form.appendChild(input);
             form.appendChild(document.createElement('br'));
 
-            // Ensure the value is set after appending
+            // Set input value explicitly after appending
             input.value = customColumnNames[key];
+
             console.log(`Input created:`, input);
             console.log(`Input value set to: ${input.value}`);
             console.log(`Input dataset columnField: ${input.dataset.columnField}`);
