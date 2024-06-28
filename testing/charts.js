@@ -844,7 +844,7 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 function showEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
     const form = document.getElementById('editColumnNamesForm');
-    //form.innerHTML = ''; // Clear previous contents
+    form.innerHTML = ''; // Clear previous contents
 
     // Use stored custom names
     let index = 1;
