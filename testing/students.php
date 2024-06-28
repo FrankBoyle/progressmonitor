@@ -68,6 +68,25 @@ include('./users/auth_session.php');
             </ul>
         </section>
 
+
+                <!-- Edit Column Names Modal -->
+        <div id="edit-column-names-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hideEditColumnNamesModal()">&times;</span>
+                <h2>Edit Column Names</h2>
+                <form id="edit-column-names-form" onsubmit="editColumnNames(event)">
+                    <div class="form-group">
+                        <label for="edit-custom-column-names">Custom Column Names:</label>
+                        <input type="text" id="edit-custom-column-names" name="custom_column_names[]" placeholder="Column 1">
+                        <input type="text" id="edit-custom-column-names" name="custom_column_names[]" placeholder="Column 2">
+                        <!-- Add more input fields as needed -->
+                    </div>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add the new Edit Column Names button in the goal list section -->
         <section class="box existing-groups">
             <h3>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h3>
             <div class="message" id="goals-message">Click a student to see their goals.</div>
