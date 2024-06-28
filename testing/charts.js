@@ -870,6 +870,14 @@ function showEditColumnNamesModal() {
             console.log(`Input value: ${input.value}`);
             console.log(`Input dataset columnField: ${input.dataset.columnField}`);
 
+            // Force re-rendering of input to ensure the value is shown
+            input.style.display = 'none';
+            input.offsetHeight; // Trigger reflow
+            input.style.display = 'block';
+
+            // Additional log to confirm display update
+            console.log(`Input for ${key} should now be displayed with value: ${input.value}`);
+
             index++;
         }
     }
