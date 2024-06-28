@@ -58,6 +58,21 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                 <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
                 <input type="date" id="newRowDate" style="display: none;">
             </div>
+
+            <button id="editColumnsBtn" class="btn btn-primary" onclick="showEditColumnNamesModal()">Edit Column Names</button>
+
+<!-- Modal for Editing Column Names -->
+<div id="editColumnNamesModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="hideEditColumnNamesModal()">&times;</span>
+        <h2>Edit Column Names</h2>
+        <form id="editColumnNamesForm" onsubmit="submitColumnNames(event)">
+            <!-- Dynamic input fields will be added here based on the existing column names -->
+        </form>
+    </div>
+</div>
+
+
             <div id="performance-table"></div>
         </div>
 
