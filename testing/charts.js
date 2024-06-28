@@ -9,6 +9,12 @@ const seriesColors = [
 ];
 
 document.addEventListener('DOMContentLoaded', function() {
+    setupInitialPageLoad();
+    attachEventListeners();
+    initializeCharts();
+});
+
+function setupInitialPageLoad() {
     const urlParams = new URLSearchParams(window.location.search);
     const studentIdNew = urlParams.get('student_id');
     const metadataId = urlParams.get('metadata_id');
@@ -18,18 +24,16 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Student ID or Metadata ID is missing. Please check the URL parameters.');
         return;
     }
-
-    // Fetch initial data and setup the table
+    
     fetchInitialData(studentIdNew, metadataId);
+}
 
-    // Setup event listeners for UI actions
+function attachEventListeners() {
     const filterBtn = document.getElementById('filterData');
     if (filterBtn) {
         filterBtn.addEventListener('click', function() {
             const iepDate = document.getElementById('iep_date').value;
-            if (iepDate) {
-                saveIEPDate(iepDate, studentIdNew);
-            }
+            saveIEPDate(iepDate, studentIdNew);
         });
     }
 
@@ -45,10 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.log("Edit columns button not found.");
     }
-
-    // Initialize charts if applicable
-    initializeCharts();
-});
+}
 
 function addDataRowHandler() {
     const newRowDateInput = document.getElementById("newRowDate");
