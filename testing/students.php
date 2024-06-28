@@ -68,7 +68,6 @@ include('./users/auth_session.php');
             </ul>
         </section>
 
-
                 <!-- Edit Column Names Modal -->
         <div id="edit-column-names-modal" class="modal">
             <div class="modal-content">
@@ -987,7 +986,67 @@ function archiveGoal(goalId) {
     });
 }
 
+function showEditColumnNamesModal(goalId, currentColumnNames) {
+    const modal = document.getElementById('edit-column-names-modal');
+    const form = document.getElementById('edit-column-names-form');
+    
+    // Clear previous values
+    form.innerHTML = '';
 
+    // Set up form with current column names
+    currentColumnNames.forEach((name, index) => {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'custom_column_names[]';
+        input.placeholder = `Column ${index + 1}`;
+        input.value = name;
+        form.appendChild(input);
+    });
+
+    // Add hidden input for goal ID
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'goal_id';
+    hiddenInput.value = goalId;
+    form.appendChild(hiddenInput);
+
+    modal.style.display = 'block';
+}
+
+function hideEditColumnNamesModal() {
+    const modal = document.getElementById('edit-column-names-modal');
+    modal.style.display = 'none';
+}
+
+function editColumnNames(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const customColumnNames = Array.from(formData.getAll('custom_column_names[]'));
+    const goalId = formData.get('goal_id');
+
+    fetch('edit_goal_columns.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `goal_id=${encodeURIComponent(goalId)}&custom_column_names=${encodeURIComponent(JSON.stringify(customColumnNames))}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message && data.message.includes("Custom column names updated successfully.")) {
+            loadGoals(document.getElementById('selected-student-id').value);
+            hideEditColumnNamesModal();
+        } else {
+            console.error('Error updating column names:', data);
+            alert('Error updating column names: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Network or parsing error:', error);
+        alert('There was a network or parsing error. Please try again.');
+    });
+}
 </script>
 </body>
 </html>
