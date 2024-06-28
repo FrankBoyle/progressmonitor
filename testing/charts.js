@@ -865,6 +865,11 @@ function showEditColumnNamesModal() {
             form.appendChild(input);
             form.appendChild(document.createElement('br'));
 
+            // Log input properties
+            console.log(`Input created:`, input);
+            console.log(`Input value: ${input.value}`);
+            console.log(`Input dataset columnField: ${input.dataset.columnField}`);
+
             // Force re-rendering of input to ensure the value is shown
             input.style.display = 'none';
             input.offsetHeight; // Trigger reflow
@@ -882,6 +887,9 @@ function showEditColumnNamesModal() {
 
     // Log modal display status
     console.log("Modal displayed with current column names.");
+
+    // Log the form's innerHTML to check the final state of the form
+    console.log("Form innerHTML:", form.innerHTML);
 }
 
 function hideEditColumnNamesModal() {
