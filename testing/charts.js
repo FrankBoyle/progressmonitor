@@ -355,8 +355,7 @@ function extractChartData() {
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
             return {
                 name: column.name,  // Using the custom name for the series
-                data: interpolatedData.map(d => d.value),
-                interpolatedFlags: interpolatedData.map(d => d.interpolated),
+                data: interpolatedData,
                 color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
             };
         });
@@ -371,6 +370,7 @@ function extractChartData() {
         }));
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
+        updateBarChart(categories, series);
 
         console.log("Charts updated successfully.");
     } catch (error) {
@@ -406,34 +406,14 @@ function updateLineChart(categories, seriesData) {
     chart.updateOptions({
         xaxis: { categories },
         yaxis: {
-            labels: { formatter: val => val.toFixed(0) }  // Ensure whole numbers
+            labels: { formatter: val => val.toFixed(0) } // Ensure whole numbers
         },
         series: seriesData,
-        colors: seriesData.map(s => s.color),  // Apply specific colors to series
+        colors: seriesData.map(s => s.color), // Apply specific colors to series
         stroke: {
             curve: 'smooth',
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: function(val, opts) {
-                const interpolatedFlag = seriesData[opts.seriesIndex].interpolatedFlags[opts.dataPointIndex];
-                return interpolatedFlag ? '' : val.toFixed(0);
-            },
-            style: {
-                fontSize: '12px',
-                fontWeight: 'bold'
-            },
-            background: {
-                enabled: true,
-                borderRadius: 2,
-                borderWidth: 1,
-                borderColor: '#000',
-                dropShadow: {
-                    enabled: false
-                }
-            }
         }
     });
 }
