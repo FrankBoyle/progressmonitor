@@ -114,7 +114,39 @@ include('./users/auth_session.php');
                 <label for="grade-level">Grade Level:</label>
                 <input type="text" id="grade-level" name="grade_level" required>
             </div>
+            <div class="form-group">
+                <label for="group-select">Assign to Group (optional):</label>
+                <select id="group-select" name="group_id" class="select2" style="width: 100%;">
+                    <option value="" disabled selected>Select a group</option>
+                    <?php foreach ($groups as $group): ?>
+                        <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
             <button type="submit">Add Student</button>
+        </form>
+
+        <h3>Assign Existing Student to Group</h3>
+        <form id="assign-existing-student-form" onsubmit="assignExistingStudentToGroup(event)">
+            <div class="form-group">
+                <label for="existing-student-select">Select Student:</label>
+                <select id="existing-student-select" name="student_id" class="select2" style="width: 100%;" required>
+                    <option value="" disabled selected>Select a student</option>
+                    <?php foreach ($allStudents as $student): ?>
+                        <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="assign-group-select">Select Group:</label>
+                <select id="assign-group-select" name="group_id" class="select2" style="width: 100%;" required>
+                    <option value="" disabled selected>Select a group</option>
+                    <?php foreach ($groups as $group): ?>
+                        <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <button type="submit">Assign to Group</button>
         </form>
     </div>
 </div>
@@ -164,7 +196,6 @@ include('./users/auth_session.php');
         </form>
     </div>
 </div>
-
 
 <!-- Group Options -->
 <div id="group-options" class="group-options">
@@ -343,22 +374,23 @@ function addStudent(event) {
     const lastName = document.getElementById('last-name').value;
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
+    const groupId = document.getElementById('group-select').value;
 
     fetch('./users/add_student.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}`
+        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&group_id=${encodeURIComponent(groupId)}`
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
         console.log('Student added successfully:', data);
-        if (data.includes("Student added successfully.")) {
+        if (data.status === 'success') {
             loadStudents();
             hideAddStudentModal();
         } else {
-            alert('Error adding student: ' + data);
+            alert('Error adding student: ' + data.message);
         }
     })
     .catch(error => {
@@ -408,6 +440,34 @@ function showAddStudentModal() {
         } else {
             console.error("Modal element not found");
         }
+}
+
+function assignExistingStudentToGroup(event) {
+    event.preventDefault();
+    const studentId = document.getElementById('existing-student-select').value;
+    const groupId = document.getElementById('assign-group-select').value;
+
+    fetch('./users/assign_students_to_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}&student_ids=${encodeURIComponent(studentId)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Student assigned to group successfully.');
+            hideAddStudentModal();
+            loadGroups();
+        } else {
+            alert('Error assigning student to group: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error assigning the student to the group. Please try again.');
+    });
 }
 
 // Function to hide the modal

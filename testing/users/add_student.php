@@ -3,48 +3,41 @@ session_start();
 include('auth_session.php');
 include('db.php');
 
-// Enable PHP error logging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
-
-// Check if the request is a POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Retrieve form data
-    $firstName = $_POST['first_name'] ?? null;
-    $lastName = $_POST['last_name'] ?? null;
-    $dateOfBirth = $_POST['date_of_birth'] ?? null;
-    $gradeLevel = $_POST['grade_level'] ?? null;
-    $schoolId = $_SESSION['school_id'] ?? null;
-
-    // Validate the form data
-    if (!$firstName || !$lastName || !$dateOfBirth || !$gradeLevel || !$schoolId) {
-        error_log("Invalid input data: " . print_r($_POST, true));
-        echo "Invalid input data.";
-        exit;
-    }
+// Ensure the request method is POST and required parameters are set
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['first_name'], $_POST['last_name'], $_POST['date_of_birth'], $_POST['grade_level'])) {
+    $firstName = $_POST['first_name'];
+    $lastName = $_POST['last_name'];
+    $dateOfBirth = $_POST['date_of_birth'];
+    $gradeLevel = $_POST['grade_level'];
+    $groupId = isset($_POST['group_id']) ? $_POST['group_id'] : null;
 
     try {
-        // Prepare the SQL statement
-        $stmt = $connection->prepare("INSERT INTO Students_new (first_name, last_name, date_of_birth, grade_level, school_id) VALUES (?, ?, ?, ?, ?)");
-        
-        // Bind parameters and execute the statement
-        $stmt->execute([$firstName, $lastName, $dateOfBirth, $gradeLevel, $schoolId]);
+        // Insert new student
+        $stmt = $connection->prepare("INSERT INTO students (first_name, last_name, date_of_birth, grade_level) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$firstName, $lastName, $dateOfBirth, $gradeLevel]);
+        $studentId = $connection->lastInsertId();
 
-        // Check if the student was added successfully
-        if ($stmt->rowCount() > 0) {
-            echo "Student added successfully.";
-        } else {
-            error_log("Failed to add student.");
-            echo "Failed to add student.";
+        // Assign student to the selected group if a group was selected
+        if ($groupId) {
+            $stmt = $connection->prepare("INSERT INTO group_students (group_id, student_id) VALUES (?, ?)");
+            $stmt->execute([$groupId, $studentId]);
         }
+
+        // Ensure no additional output is sent
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'message' => 'Student added successfully.']);
     } catch (PDOException $e) {
-        // Log any errors
-        error_log("Database error: " . $e->getMessage());
-        echo "Database error: " . $e->getMessage();
+        // Handle any database errors
+        header('Content-Type: application/json');
+        http_response_code(500);
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
     }
 } else {
-    echo "Invalid request method.";
+    header('Content-Type: application/json');
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request or missing parameters.']);
 }
+
+// Ensure no additional output is sent
+exit;
+?>
