@@ -664,7 +664,6 @@ function assignStudentsToGroup(event) {
         if (data.status === "success") {
             alert(data.message);
             hideEditGroupModal();
-            loadStudentsByGroup(groupId); // Reload the students in the group
         } else {
             alert(data.error);
         }
@@ -764,7 +763,6 @@ function showEditGroupModal(groupId, groupName) {
     loadGroupStudents(groupId);
     
     // Load all students for assignment
-    loadAllStudentsForAssignment();
     loadStaff();
 }
 
