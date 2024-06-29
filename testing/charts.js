@@ -18,6 +18,21 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCharts();
     // Fetch and display goals
     fetchGoals(studentIdNew, metadataId);
+
+    document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
+
+    // Function to show the print dialog modal
+    function showPrintDialogModal() {
+        document.getElementById('printDialogModal').style.display = 'block';
+    }
+
+    // Function to hide the print dialog modal
+    function hidePrintDialogModal() {
+        document.getElementById('printDialogModal').style.display = 'none';
+    }
+
+    window.hidePrintDialogModal = hidePrintDialogModal;
+    window.printReport = printReport;
 });
 
 function setupInitialPageLoad() {
@@ -1062,6 +1077,42 @@ function archiveGoal(goalId, goalItem) {
       });
 }
 
+function printReport() {
+    const printGoals = document.getElementById('printGoals').checked;
+    const printTable = document.getElementById('printTable').checked;
+    const printLineChart = document.getElementById('printLineChart').checked;
+    const printBarChart = document.getElementById('printBarChart').checked;
+    const printStatistics = document.getElementById('printStatistics').checked;
 
+    let printContents = '';
 
+    if (printGoals) {
+        const goalsContent = document.getElementById('goalsCard').innerHTML;
+        printContents += `<div>${goalsContent}</div>`;
+    }
 
+    if (printTable) {
+        const tableContent = document.getElementById('performance-table').innerHTML;
+        printContents += `<div>${tableContent}</div>`;
+    }
+
+    if (printLineChart) {
+        const lineChartContent = document.getElementById('chartContainer').innerHTML;
+        printContents += `<div>${lineChartContent}</div>`;
+    }
+
+    if (printBarChart) {
+        const barChartContent = document.getElementById('barChartContainer').innerHTML;
+        printContents += `<div>${barChartContent}</div>`;
+    }
+
+    if (printStatistics) {
+        const statisticsContent = document.getElementById('statistics').innerHTML;
+        printContents += `<div>${statisticsContent}</div>`;
+    }
+
+    const originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+}
