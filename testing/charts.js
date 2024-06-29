@@ -1194,6 +1194,22 @@ function showPrintDialogModal() {
         .catch(error => {
             console.error('Error fetching goals:', error);
         });
+
+    // Set up section selection
+    const sections = ['Performance Table', 'Line Chart', 'Bar Chart', 'Statistics'];
+    const sectionContainer = document.getElementById('sectionSelectionContainer');
+    sectionContainer.innerHTML = ''; // Clear previous options
+
+    sections.forEach(section => {
+        const sectionItem = document.createElement('div');
+        sectionItem.classList.add('selector-item');
+        sectionItem.setAttribute('data-section', section.toLowerCase().replace(' ', ''));
+        sectionItem.textContent = section;
+        sectionItem.addEventListener('click', function() {
+            sectionItem.classList.toggle('selected');
+        });
+        sectionContainer.appendChild(sectionItem);
+    });
 }
 
 function hidePrintDialogModal() {
