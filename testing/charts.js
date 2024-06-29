@@ -1137,7 +1137,7 @@ function showPrintDialogModal() {
     goalContainer.innerHTML = ''; // Clear previous options
 
     // Fetch goals and populate the container
-    fetch(`./users/fetch_goals.php?student_id=${studentId}&metadata_id=${metadataId}`)
+    fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
             if (data.length === 0) {
