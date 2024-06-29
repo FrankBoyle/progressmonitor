@@ -125,6 +125,24 @@ include('./users/auth_session.php');
         <span class="close" onclick="hideAddGoalModal()">&times;</span>
         <h2>Add New Goal</h2>
         <form id="add-goal-form" onsubmit="addGoal(event)">
+            <div class="selector-area">
+                <div id="columnSelectorTitle" class="selector-title">Metadata Option:</div>
+                <div id="metadataOptionSelector" class="checkbox-container">
+                    <div class="selector-item" data-option="template">Use a Category Template</div>
+                    <div class="selector-item" data-option="existing">Link to a Used Category</div>
+                </div>
+            </div>
+
+            <div id="templateDropdown" class="form-group" style="display: none;">
+                <label for="template-metadata-select">Select Category Template:</label>
+                <select id="template-metadata-select" name="template_id"></select>
+            </div>
+
+            <div id="existingDropdown" class="form-group" style="display: none;">
+                <label for="existing-metadata-select">Select Existing Category:</label>
+                <select id="existing-metadata-select" name="existing_category_id"></select>
+            </div>
+
             <div class="form-group">
                 <label for="goal-description">Goal Description:</label>
                 <textarea id="goal-description" name="goal_description" required></textarea>
@@ -132,23 +150,6 @@ include('./users/auth_session.php');
             <div class="form-group">
                 <label for="goal-date">Goal Date:</label>
                 <input type="date" id="goal-date" name="goal_date" required>
-            </div>
-            <div class="form-group">
-                <label>Metadata Option:</label>
-                <div>
-                    <input type="radio" id="use-template" name="metadata_option" value="template" required>
-                    <label for="use-template">Use a Category Template</label>
-                </div>
-                <div>
-                    <select id="template-metadata-select" name="template_metadata_select"></select>
-                </div>
-                <div>
-                    <input type="radio" id="use-existing" name="metadata_option" value="existing" required>
-                    <label for="use-existing">Link to a Used Category</label>
-                </div>
-                <div>
-                    <select id="existing-category-select" name="existing_category_select"></select>
-                </div>
             </div>
             <button type="submit">Add Goal</button>
         </form>
@@ -249,6 +250,28 @@ document.addEventListener('DOMContentLoaded', function() {
     observer.observe(goalList, { childList: true, subtree: true });
 
     populateStudentsAndGoals();
+
+    // Metadata Option Selector
+    const metadataOptionSelector = document.getElementById('metadataOptionSelector');
+    const templateDropdown = document.getElementById('templateDropdown');
+    const existingDropdown = document.getElementById('existingDropdown');
+
+    metadataOptionSelector.addEventListener('click', function(event) {
+        if (event.target.classList.contains('selector-item')) {
+            const items = metadataOptionSelector.querySelectorAll('.selector-item');
+            items.forEach(item => item.classList.remove('selected'));
+            event.target.classList.add('selected');
+
+            const selectedOption = event.target.getAttribute('data-option');
+            if (selectedOption === 'template') {
+                templateDropdown.style.display = 'block';
+                existingDropdown.style.display = 'none';
+            } else if (selectedOption === 'existing') {
+                templateDropdown.style.display = 'none';
+                existingDropdown.style.display = 'block';
+            }
+        }
+    });
 });
 
 function populateStudentsAndGoals() {
@@ -1029,7 +1052,7 @@ function loadTemplates() {
 function loadExistingCategories() {
     const studentId = document.getElementById('selected-student-id').value;
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-
+    
     fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
@@ -1037,18 +1060,18 @@ function loadExistingCategories() {
                 throw new Error(data.error);
             }
 
-            const existingCategorySelect = document.getElementById('existing-category-select');
-            if (!existingCategorySelect) {
-                console.error('Existing category select element not found.');
+            const existingSelect = document.getElementById('existing-metadata-select');
+            if (!existingSelect) {
+                console.error('Existing metadata select element not found.');
                 return;
             }
-            existingCategorySelect.innerHTML = '';
+            existingSelect.innerHTML = '';
 
             data.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category.metadata_id;
                 option.textContent = category.category_name;
-                existingCategorySelect.appendChild(option);
+                existingSelect.appendChild(option);
             });
         })
         .catch(error => {
