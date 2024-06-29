@@ -16,21 +16,19 @@ document.addEventListener('DOMContentLoaded', function() {
     setupInitialPageLoad();
     attachEventListeners();
     initializeCharts();
-    fetchGoals(studentIdNew, metadataId);     // Fetch and display goals
+    fetchGoals(studentIdNew, metadataId);
 
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
     window.hidePrintDialogModal = hidePrintDialogModal;
     window.printReport = printReport;
 
-    
-document.querySelectorAll('.selector-item').forEach(item => {
-    item.addEventListener('click', function() {
-        item.classList.toggle('selected');
+    // Add event listeners to selector items
+    document.querySelectorAll('.selector-item').forEach(item => {
+        item.addEventListener('click', function() {
+            item.classList.toggle('selected');
+        });
     });
 });
-});
-
-
 
 function setupInitialPageLoad() {
     const urlParams = new URLSearchParams(window.location.search);
