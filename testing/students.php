@@ -135,12 +135,16 @@ include('./users/auth_session.php');
 
             <div id="templateDropdown" class="form-group" style="display: none;">
                 <label for="template-metadata-select">Select Category Template:</label>
-                <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')"></select>
+                <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')">
+                    <option value="" disabled selected>Select a category to see column options</option>
+                </select>
             </div>
 
             <div id="existingDropdown" class="form-group" style="display: none;">
                 <label for="existing-metadata-select">Select Existing Category:</label>
-                <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')"></select>
+                <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')">
+                    <option value="" disabled selected>Select a category to see column options</option>
+                </select>
             </div>
 
             <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
@@ -160,6 +164,7 @@ include('./users/auth_session.php');
         </form>
     </div>
 </div>
+
 
 <!-- Group Options -->
 <div id="group-options" class="group-options">
