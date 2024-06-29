@@ -130,10 +130,10 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
         <div id="goalSelectionContainer"></div>
 
         <div>
-            <input type="checkbox" id="printTable"> Performance Table
-            <input type="checkbox" id="printLineChart"> Line Chart
-            <input type="checkbox" id="printBarChart"> Bar Chart
-            <input type="checkbox" id="printStatistics"> Statistics
+            <input type="checkbox" id="printTable"> Performance Table </input>
+            <input type="checkbox" id="printLineChart"> Line Chart </input>
+            <input type="checkbox" id="printBarChart"> Bar Chart </input>
+            <input type="checkbox" id="printStatistics"> Statistics </input>
         </div>
 
         <button onclick="printReport()">Print</button>

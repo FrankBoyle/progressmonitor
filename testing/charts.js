@@ -1074,7 +1074,7 @@ function printReport() {
         return;
     }
 
-    let printContents = `<div>${selectedGoal.outerHTML}</div>`;
+    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1149,16 +1149,12 @@ function showPrintDialogModal() {
                 const goalItem = document.createElement('div');
                 goalItem.classList.add('goal-item');
                 goalItem.setAttribute('data-goal-id', goal.goal_id);
-                goalItem.innerHTML = `<div class="quill-readonly">${goal.goal_description}</div>`;
+                goalItem.innerHTML = goal.goal_description; // Using plain HTML for goal description
                 goalItem.addEventListener('click', function() {
                     document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
                 });
                 goalContainer.appendChild(goalItem);
-                new Quill(goalItem.querySelector('.quill-readonly'), {
-                    readOnly: true,
-                    theme: 'snow'
-                });
             });
 
             document.getElementById('printDialogModal').style.display = 'block';
