@@ -364,44 +364,39 @@ function initializeBarChart() {
 
 // Extract chart data based on selected columns
 function extractChartData() {
-    try {
-        console.log("Extracting chart data...");
-        const data = table.getData();
-        const categories = data.map(row => row['score_date']);
+    const selectedColumns = Array.from(document.querySelectorAll('.selector-item.selected')).map(item => item.getAttribute('data-column-name'));
 
-        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-            .map(item => ({
-                field: item.getAttribute("data-column-name"),
-                name: item.textContent.trim()  // Use textContent of the item as the series name
-            }));
+    if (selectedColumns.length === 0) {
+        console.error('No columns selected for chart data extraction.');
+        return;
+    }
 
-        const series = selectedColumns.map(column => {
-            let rawData = data.map(row => row[column.field]);
-            let interpolatedData = interpolateData(rawData); // Interpolate missing values
-            return {
-                name: column.name,  // Using the custom name for the series
-                data: interpolatedData,
-                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
-            };
-        });
+    const chartData = selectedColumns.map(columnName => {
+        const dataSeries = performanceData.map(entry => ({
+            x: entry.score_date ? new Date(entry.score_date) : null,
+            y: entry[columnName] !== undefined ? entry[columnName] : null
+        })).filter(point => point.x && point.y !== null);
 
-        const trendlineSeries = series.map(seriesData => ({
-            name: `${seriesData.name} Trendline`,
-            data: getTrendlineData(seriesData.data),
-            type: 'line',
-            dashArray: 5,
-            stroke: { width: 2, curve: 'straight' },
-            color: seriesData.color
-        }));
+        if (dataSeries.length === 0) {
+            console.error(`No valid data points found for column ${columnName}`);
+            return null;
+        }
 
-        updateLineChart(categories, [...series, ...trendlineSeries]);
-        updateBarChart(categories, series);
+        return {
+            name: columnName,
+            data: dataSeries
+        };
+    }).filter(series => series !== null);
 
-        console.log("Charts updated successfully.");
-    } catch (error) {
-        console.error("Error extracting chart data:", error);
+    console.log('Extracted chart data:', chartData);
+
+    if (chartData.length > 0) {
+        updateLineChart(chartData);
+    } else {
+        console.error('No valid data series extracted for charting.');
     }
 }
+
 
 function interpolateData(data) {
     let interpolatedData = [...data];
