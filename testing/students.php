@@ -67,7 +67,6 @@ include('./users/auth_session.php');
                 <?php endforeach; ?>
             </ul>
         </section>
-        <div id="group-students-list"></div> <!-- Ensure this element is present and has the correct ID -->
 
         <!-- Add the new Edit Column Names button in the goal list section -->
         <section class="box existing-groups">
@@ -478,16 +477,20 @@ function loadStudentsByGroup(groupId) {
         .then(data => {
             console.log('Fetched group students:', data); // Debug log
 
-            const groupStudentsList = document.getElementById('group-students-list');
-            groupStudentsList.innerHTML = '';
-
+            const studentList = document.getElementById('student-list');
+            const studentsMessage = document.getElementById('students-message');
+            
             if (data.error) {
                 alert(data.error);
                 return;
             }
 
+            studentList.innerHTML = ''; // Clear the existing list
+
             if (data.length === 0) {
-                groupStudentsList.innerHTML = '<p>No students in this group.</p>';
+                studentsMessage.style.display = 'block';
+                studentList.style.display = 'none';
+                studentsMessage.innerHTML = 'No students in this group.';
                 return;
             }
 
@@ -495,35 +498,21 @@ function loadStudentsByGroup(groupId) {
             data.sort((a, b) => a.last_name.localeCompare(b.last_name));
 
             data.forEach(student => {
-                const studentItem = document.createElement('div');
-                studentItem.style.display = 'flex';
-                studentItem.style.alignItems = 'center';
-                studentItem.style.marginBottom = '10px';
-
-                const studentName = document.createElement('span');
-                studentName.style.marginRight = '10px';
-                studentName.textContent = student.first_name + ' ' + student.last_name;
-
-                const removeButton = document.createElement('button');
-                removeButton.style.color = 'red';
-                removeButton.style.background = 'none';
-                removeButton.style.border = 'none';
-                removeButton.style.cursor = 'pointer';
-                removeButton.style.fontSize = '16px';
-                removeButton.style.lineHeight = '1';
-                removeButton.textContent = '×';
-                removeButton.onclick = () => removeStudentFromGroup(student.student_id, groupId);
-
-                studentItem.appendChild(studentName);
-                studentItem.appendChild(removeButton);
-                groupStudentsList.appendChild(studentItem);
+                const listItem = document.createElement('li');
+                listItem.textContent = student.first_name + ' ' + student.last_name;
+                listItem.setAttribute('data-student-id', student.student_id);
+                studentList.appendChild(listItem);
             });
+
+            studentsMessage.style.display = 'none';
+            studentList.style.display = 'block';
         })
         .catch(error => {
             console.error('Error fetching group students:', error);
             alert('There was an error loading the students for this group. Please try again.');
         });
 }
+
 
 function loadGroups() {
     fetch('users/fetch_groups.php')
