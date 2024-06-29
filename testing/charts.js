@@ -279,7 +279,7 @@ function isDateDuplicate(date) {
     return data.some(row => row['score_date'] === date);
 }
 
-function saveIEPDate(iepDate, studentId) {
+function saveIEPDate(iepDate, studentIdNew) {
     console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentId}`);
     fetch('./users/save_iep_date.php', {
         method: 'POST',
