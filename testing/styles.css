@@ -844,17 +844,20 @@ input[type="text"] {
 
 @media print {
     .chart-wrapper-print {
-        max-width: 1000px; /* Ensuring max width is set to 1000px */
-        margin: 0 auto;
-        overflow: visible; /* Ensure overflow is visible for printing */
+        border: none; /* Ensure no border for print */
+        padding: 0; /* Remove any padding */
+        margin: 0 auto; /* Center align */
+        width: 1000px;
+        overflow: visible;
     }
 
     .chart-print {
-        width: 1000px; /* Ensuring width is 1000px */
+        width: 1000px;
         height: auto;
-        overflow: visible; /* Ensure overflow is visible for printing */
+        overflow: visible;
     }
 }
+
 
 #chartContainer, #barChartContainer {
     width: 100%;
