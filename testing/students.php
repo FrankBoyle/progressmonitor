@@ -522,7 +522,7 @@ function loadStudentsByGroup(groupId) {
 }
 
 function loadStudentsForGroupAssignment(groupId) {
-    fetch('users/fetch_students.php')
+    fetch('./users/fetch_students_not_in_group.php')
         .then(response => response.json())
         .then(data => {
             console.log('Fetched students:', data); // Log the fetched data
