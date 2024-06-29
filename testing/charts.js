@@ -1055,22 +1055,22 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    const goalSelect = document.querySelector('.goal-item.selected');
-    const selectedGoalId = goalSelect ? goalSelect.dataset.goalId : null;
+    const selectedGoal = document.querySelector('.goal-item.selected');
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    if (!selectedGoalId) {
+    if (!selectedGoal) {
         alert("Please select a goal.");
         return;
     }
 
     let printContents = '<div class="printable">';
 
-    if (goalSelect) {
-        printContents += `<div>${goalSelect.outerHTML}</div>`;
+    if (selectedGoal) {
+        const goalContent = selectedGoal.querySelector('.ql-editor').innerHTML;
+        printContents += `<div>${goalContent}</div>`;
     }
 
     if (printTable) {
