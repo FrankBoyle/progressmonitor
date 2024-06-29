@@ -229,6 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
     loadTemplates();
+    loadExistingCategories();
 
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
@@ -391,38 +392,38 @@ function loadStaff() {
 }
 
 // Function to show the modal
-    function showAddGroupModal() {
+function showAddGroupModal() {
         const modal = document.getElementById('add-group-modal');
         if (modal) {
             modal.style.display = 'block';
         } else {
             console.error("Modal element not found");
         }
-    }
+}
 
-    function showAddStudentModal() {
+function showAddStudentModal() {
         const modal = document.getElementById('add-student-modal');
         if (modal) {
             modal.style.display = 'block';
         } else {
             console.error("Modal element not found");
         }
-    }
+}
 
-        // Function to hide the modal
-        function hideAddGroupModal() {
-            const modal = document.getElementById('add-group-modal');
-            if (modal) {
-                modal.style.display = 'none';
-            }
+// Function to hide the modal
+function hideAddGroupModal() {
+    const modal = document.getElementById('add-group-modal');
+        if (modal) {
+            modal.style.display = 'none';
         }
+}
 
-    function hideAddStudentModal() {
+function hideAddStudentModal() {
         const modal = document.getElementById('add-student-modal');
         if (modal) {
             modal.style.display = 'none';
         }
-    }
+}
 
 function loadStudentsByGroup(groupId) {
     fetch('users/fetch_students_by_group.php', {
