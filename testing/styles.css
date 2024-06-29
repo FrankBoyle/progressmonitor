@@ -971,3 +971,26 @@ input[type="text"] {
     flex: 2; /* Takes up 2 parts of the available space, giving more space to statistics */
     max-width: 600px; /* Maximum width of the statistics area */
 }
+
+.red-coin {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.table-container {
+    position: relative;
+}
+
+.chart-container {
+    position: relative;
+}
+
+.statistics-container {
+    position: relative;
+}
