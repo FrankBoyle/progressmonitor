@@ -1126,9 +1126,9 @@ function saveAndPrintReport() {
     }
 
     const goalId = selectedGoal.getAttribute('data-goal-id');
-    const studentIdNew = ...; // Add your logic to get studentIdNew
-    const schoolId = ...; // Add your logic to get schoolId
-    const metadataId = ...; // Add your logic to get metadataId
+    const studentIdNew = window.studentIdNew;
+    const schoolId = window.schoolId;
+    const metadataId = window.metadataId;
 
     const payload = {
         goal_id: goalId,
