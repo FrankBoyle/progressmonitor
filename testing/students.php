@@ -585,6 +585,9 @@ function loadStudents() {
 
 function selectGroup(element) {
     const groupId = element.getAttribute('data-group-id');
+    
+    // Update the hidden input with the selected groupId
+    document.getElementById('edit-group-id').value = groupId;
 
     // Load students for the selected group
     loadStudentsByGroup(groupId);
@@ -593,6 +596,7 @@ function selectGroup(element) {
     groupItems.forEach(group => group.classList.remove('selected-group'));
     element.classList.add('selected-group');
 }
+
 
 function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
