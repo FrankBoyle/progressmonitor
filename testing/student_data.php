@@ -57,6 +57,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
             <div id="goals-container"></div>
             <div class="red-coin"></div>
+
         </div>
         
         <div class="card">
@@ -84,6 +85,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
 
             <div id="performance-table"></div>
+            <div class="red-coin"></div>
+
         </div>
 
         <div class="card chart-card">
