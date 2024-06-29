@@ -1072,11 +1072,6 @@ input[type="text"] {
         font-size: 10px;
     }
 
-    #printLineChart, #printBarChart {
-        width: 200px !important;
-        height: 200px !important;
-    }
-
     .chart-card {
         display: inline-block;
         width: 200px;

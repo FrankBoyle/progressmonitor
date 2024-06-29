@@ -1068,7 +1068,7 @@ function printReport() {
 
     const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected")).map(item => item.getAttribute("data-column-name"));
 
-    let printContents = '<div id="printContainer" style="visibility: visible;">';
+    let printContents = '<div id="printContainer" style="visibility: visible; width: 600px; height: 600px;">';
 
     if (goalContainer) {
         printContents += `<div>${goalContainer.innerHTML}</div>`;
@@ -1080,13 +1080,11 @@ function printReport() {
     }
 
     if (printLineChart) {
-        const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div class="chart-card" id="printLineChart">${lineChartContent}</div>`;
+        printContents += '<div class="chart-card" id="printLineChart" style="width: 200px; height: 200px;"></div>';
     }
 
     if (printBarChart) {
-        const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div class="chart-card" id="printBarChart">${barChartContent}</div>`;
+        printContents += '<div class="chart-card" id="printBarChart" style="width: 200px; height: 200px;"></div>';
     }
 
     if (printStatistics) {
@@ -1100,18 +1098,32 @@ function printReport() {
     document.body.innerHTML = printContents;
 
     // Render charts in print layout
-    renderPrintCharts();
+    setTimeout(renderPrintCharts, 500); // Adding a slight delay to ensure elements are in the DOM
 
     window.print();
     document.body.innerHTML = originalContents;
 }
 
 function renderPrintCharts() {
-    const lineChartContent = document.getElementById('chartContainer').innerHTML;
-    const barChartContent = document.getElementById('barChartContainer').innerHTML;
+    const originalLineChart = document.getElementById('chartContainer').innerHTML;
+    const originalBarChart = document.getElementById('barChartContainer').innerHTML;
 
-    document.getElementById('printLineChart').innerHTML = lineChartContent;
-    document.getElementById('printBarChart').innerHTML = barChartContent;
+    document.getElementById('printLineChart').innerHTML = originalLineChart;
+    document.getElementById('printBarChart').innerHTML = originalBarChart;
+
+    // Resize charts for print layout
+    const lineChartElement = document.querySelector('#printLineChart .apexcharts-canvas');
+    const barChartElement = document.querySelector('#printBarChart .apexcharts-canvas');
+
+    if (lineChartElement) {
+        lineChartElement.style.width = '200px';
+        lineChartElement.style.height = '200px';
+    }
+
+    if (barChartElement) {
+        barChartElement.style.width = '200px';
+        barChartElement.style.height = '200px';
+    }
 }
 
 function generatePrintTable(selectedColumns) {
