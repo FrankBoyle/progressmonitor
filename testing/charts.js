@@ -676,18 +676,22 @@ function getBarChartOptions(dates, seriesData) {
 }
 
 function createColumnCheckboxes(scoreNames) {
-    const checkboxContainer = document.getElementById('columnSelector');
-    checkboxContainer.innerHTML = ''; // Clear existing checkboxes
+    const columnSelector = document.getElementById('columnSelector');
+    columnSelector.innerHTML = ''; // Clear any existing checkboxes
 
-    scoreNames.forEach((scoreName, index) => {
-        const checkbox = document.createElement('div');
-        checkbox.className = 'selector-item';
-        checkbox.dataset.columnName = `score${index + 1}`;
-        checkbox.innerText = scoreName;
-        checkboxContainer.appendChild(checkbox);
+    Object.keys(scoreNames).forEach((key, index) => {
+        const item = document.createElement('div');
+        item.classList.add('selector-item');
+        item.setAttribute("data-column-name", `score${index + 1}`);
+        item.textContent = scoreNames[key];
+        item.addEventListener('click', function() {
+            item.classList.toggle('selected');
+            extractChartData();
+            refreshStatisticsDisplay();  // Update to call refresh on any click
+        });
+        columnSelector.appendChild(item);
     });
 }
-
 
 function disableChartInteractions() {
     if (chart) {
