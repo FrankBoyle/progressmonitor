@@ -72,7 +72,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
 
             <button id="editColumnsBtn" class="btn btn-primary">Edit Column Names</button>
-            <div class="red-coin"></div>
 
             <!-- Modal for Editing Column Names -->
             <div id="editColumnNamesModal" class="modal">
@@ -85,7 +84,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                 </div>
             </div>
 
-            <div id="performance-table"></div>
+            <div id="performance-table">            <div class="red-coin"></div>
+            </div>
 
         </div>
 
