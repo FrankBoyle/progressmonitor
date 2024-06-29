@@ -125,30 +125,27 @@ include('./users/auth_session.php');
         <span class="close" onclick="hideAddGoalModal()">&times;</span>
         <h2>Add New Goal</h2>
         <form id="add-goal-form" onsubmit="addGoal(event)">
-            <div class="form-group">
-                <label>Metadata Option:</label>
-                <div id="metadata-option-container">
-                    <div class="selector-item" data-metadata-option="template">Use a Category Template</div>
-                    <div class="selector-item" data-metadata-option="existing">Link to a Used Category</div>
+            <div class="selector-area">
+                <div id="columnSelectorTitle" class="selector-title">Metadata Option:</div>
+                <div id="metadataOptionSelector" class="checkbox-container">
+                    <div class="selector-item" data-option="template">Use a Category Template</div>
+                    <div class="selector-item" data-option="existing">Link to a Used Category</div>
                 </div>
             </div>
 
-            <div id="template-metadata-section" style="display: none;">
+            <div id="templateDropdown" class="form-group" style="display: none;">
                 <label for="template-metadata-select">Select Category Template:</label>
-                <select id="template-metadata-select" name="template_id">
-                    <option value="">Select a category to see column options</option>
-                    <!-- Options will be populated here by loadTemplates() -->
-                </select>
-                <div id="template-columns"></div>
+                <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')"></select>
             </div>
 
-            <div id="existing-metadata-section" style="display: none;">
+            <div id="existingDropdown" class="form-group" style="display: none;">
                 <label for="existing-metadata-select">Select Existing Category:</label>
-                <select id="existing-metadata-select" name="existing_category_id">
-                    <option value="">Select a category to see column options</option>
-                    <!-- Options will be populated here by loadExistingCategories() -->
-                </select>
-                <div id="existing-columns"></div>
+                <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')"></select>
+            </div>
+
+            <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
+                <h3>Column Names:</h3>
+                <ul id="columnNamesList"></ul>
             </div>
 
             <div class="form-group">
@@ -224,71 +221,64 @@ include('./users/auth_session.php');
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
-        loadGroups();
-        loadStaff();
-        loadTemplates();
-        loadExistingCategories();
+    loadGroups();
+    loadStaff();
+    loadTemplates();
 
-        window.showAddGoalModal = showAddGoalModal;
-        window.hideAddGoalModal = hideAddGoalModal;
+    window.showAddGoalModal = showAddGoalModal;
+    window.hideAddGoalModal = hideAddGoalModal;
 
-        document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
-        document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
-        document.querySelector('.add-student-btn').addEventListener('click', showAddStudentModal);
+    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
+    document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
+    document.querySelector('.add-student-btn').addEventListener('click', showAddStudentModal);
 
-        window.hideAddGroupModal = hideAddGroupModal;
-        window.hideAddStudentModal = hideAddStudentModal;
+    window.hideAddGroupModal = hideAddGroupModal;
+    window.hideAddStudentModal = hideAddStudentModal;
 
-        document.addEventListener('click', function(event) {
-            const optionsMenu = document.getElementById('group-options');
-            if (optionsMenu && !optionsMenu.contains(event.target)) {
-                optionsMenu.style.display = 'none';
+    document.addEventListener('click', function(event) {
+        const optionsMenu = document.getElementById('group-options');
+        if (optionsMenu && !optionsMenu.contains(event.target)) {
+            optionsMenu.style.display = 'none';
+        }
+    });
+
+    $('.select2').select2();
+
+    const goalList = document.getElementById('goal-list');
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length) {
+                populateStudentsAndGoals();
             }
         });
+    });
+    observer.observe(goalList, { childList: true, subtree: true });
 
-        $('.select2').select2();
+    populateStudentsAndGoals();
 
-        const goalList = document.getElementById('goal-list');
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.addedNodes.length) {
-                    populateStudentsAndGoals();
-                }
-            });
-        });
-        observer.observe(goalList, { childList: true, subtree: true });
+    // Metadata Option Selector
+    const metadataOptionSelector = document.getElementById('metadataOptionSelector');
+    const templateDropdown = document.getElementById('templateDropdown');
+    const existingDropdown = document.getElementById('existingDropdown');
 
-        populateStudentsAndGoals();
-});
+    metadataOptionSelector.addEventListener('click', function(event) {
+        if (event.target.classList.contains('selector-item')) {
+            const items = metadataOptionSelector.querySelectorAll('.selector-item');
+            items.forEach(item => item.classList.remove('selected'));
+            event.target.classList.add('selected');
 
-document.getElementById('metadata-option-container').addEventListener('click', function(event) {
-        const selectedOption = event.target.getAttribute('data-metadata-option');
-
-        if (selectedOption === 'template') {
-            document.getElementById('template-metadata-section').style.display = 'block';
-            document.getElementById('existing-metadata-section').style.display = 'none';
-        } else if (selectedOption === 'existing') {
-            document.getElementById('template-metadata-section').style.display = 'none';
-            document.getElementById('existing-metadata-section').style.display = 'block';
+            const selectedOption = event.target.getAttribute('data-option');
+            if (selectedOption === 'template') {
+                templateDropdown.style.display = 'block';
+                existingDropdown.style.display = 'none';
+                document.getElementById('columnNamesDisplay').style.display = 'none';
+            } else if (selectedOption === 'existing') {
+                templateDropdown.style.display = 'none';
+                existingDropdown.style.display = 'block';
+                document.getElementById('columnNamesDisplay').style.display = 'none';
+            }
         }
-});
-
-document.getElementById('template-metadata-select').addEventListener('change', function(event) {
-        const templateId = event.target.value;
-        if (templateId) {
-            fetchTemplateColumns(templateId, 'template-columns');
-        } else {
-            document.getElementById('template-columns').innerHTML = '';
-        }
-});
-
-document.getElementById('existing-metadata-select').addEventListener('change', function(event) {
-        const categoryId = event.target.value;
-        if (categoryId) {
-            fetchTemplateColumns(categoryId, 'existing-columns');
-        } else {
-            document.getElementById('existing-columns').innerHTML = '';
-        }
+    });
 });
 
 function populateStudentsAndGoals() {
@@ -876,17 +866,18 @@ function loadMetadata() {
 }
 
 function showAddGoalModal() {
-        const modal = document.getElementById('add-goal-modal');
-        modal.style.display = 'block';
-
-        // Reset the form and hide the sections
-        const form = document.getElementById('add-goal-form');
-        form.reset();
-        document.getElementById('template-metadata-section').style.display = 'none';
-        document.getElementById('existing-metadata-section').style.display = 'none';
-        document.getElementById('template-columns').innerHTML = '';
-        document.getElementById('existing-columns').innerHTML = '';
+    const selectedStudent = document.querySelector('.selected-student');
+    if (!selectedStudent) {
+        alert('Please select a student first.');
+        return;
     }
+    const modal = document.getElementById('add-goal-modal');
+    modal.style.display = 'block';
+
+    // Load templates and existing categories when modal is shown
+    loadTemplates();
+    loadExistingCategories();
+}
 
 function hideAddGoalModal() {
     const modal = document.getElementById('add-goal-modal');
@@ -894,31 +885,107 @@ function hideAddGoalModal() {
 }
 
 function addGoal(event) {
-        event.preventDefault();
+    event.preventDefault();
 
-        const form = document.getElementById('add-goal-form');
-        const formData = new FormData(form);
-        const payload = new URLSearchParams(formData);
+    const studentId = document.getElementById('selected-student-id').value;
+    const goalDescription = document.getElementById('goal-description').value;
+    const goalDate = document.getElementById('goal-date').value;
+    const metadataOptionElement = document.querySelector('#metadataOptionSelector .selector-item.selected');
+    const metadataOption = metadataOptionElement ? metadataOptionElement.getAttribute('data-option') : null;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+    let metadataId = null;
 
-        fetch('./users/add_goal.php', {
-            method: 'POST',
-            body: payload
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                alert(data.message);
-                hideAddGoalModal();
-                loadGoals(document.getElementById('selected-student-id').value);
-            } else {
-                throw new Error(data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error adding goal:', error);
-            alert('Error adding goal: ' + error.message);
-        });
+    if (!studentId || !goalDescription || !goalDate || !metadataOption || !schoolId) {
+        alert('Missing required parameters.');
+        return;
     }
+
+    if (metadataOption === 'existing') {
+        metadataId = document.getElementById('existing-metadata-select').value;
+        if (!metadataId) {
+            alert('Please select an existing category.');
+            return;
+        }
+    } else if (metadataOption === 'template') {
+        metadataId = document.getElementById('template-metadata-select').value;
+        if (!metadataId) {
+            alert('Please select a category template.');
+            return;
+        }
+
+        // If using a template, copy the template to create a new metadata entry
+        fetch(`users/fetch_metadata_details.php?metadata_id=${metadataId}`)
+            .then(response => response.json())
+            .then(template => {
+                if (template.error) {
+                    throw new Error(template.error);
+                }
+
+                return fetch('./users/add_goal.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        student_id: studentId,
+                        goal_description: goalDescription,
+                        goal_date: goalDate,
+                        metadata_option: metadataOption,
+                        template_id: metadataId,
+                        school_id: schoolId
+                    })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                alert('Goal added successfully!');
+                hideAddGoalModal();
+                loadGoals(studentId); // Refresh the goals list
+            })
+            .catch(error => {
+                console.error('Error adding goal:', error);
+                alert('Error adding goal: ' + error.message);
+            });
+
+        return;
+    } else {
+        alert('Invalid metadata option.');
+        return;
+    }
+
+    fetch('./users/add_goal.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            student_id: studentId,
+            goal_description: goalDescription,
+            goal_date: goalDate,
+            metadata_option: metadataOption,
+            existing_category_id: metadataId,
+            school_id: schoolId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        alert('Goal added successfully!');
+        hideAddGoalModal();
+        loadGoals(studentId); // Refresh the goals list
+    })
+    .catch(error => {
+        console.error('Error adding goal:', error);
+        alert('Error adding goal: ' + error.message);
+    });
+}
 
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
@@ -1119,27 +1186,6 @@ function showColumnNames(type) {
             console.error('Error loading column names:', error);
         });
 }
-
-function fetchTemplateColumns(templateId, containerId) {
-        fetch(`./users/fetch_metadata_template_columns.php?template_id=${templateId}`)
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById(containerId);
-                container.innerHTML = '';
-                if (data.columns) {
-                    data.columns.forEach(column => {
-                        const div = document.createElement('div');
-                        div.textContent = column;
-                        container.appendChild(div);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching template columns:', error);
-            });
-}
-
-
 </script>
 </body>
 </html>
