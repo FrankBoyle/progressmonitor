@@ -125,48 +125,17 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
         <div id="printDialogModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-                <h2>Select Sections to Print</h2>
-                <form id="printOptionsForm">
-                    <div class="form-group">
-                        <label for="goalSelection">Select a Goal:</label>
-                        <select id="goalSelection" name="goalSelection" class="form-control" required>
-                            <!-- Goals will be dynamically populated here -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" id="printTable" name="printTable" checked>
-                        <label for="printTable">Performance Table</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" id="printLineChart" name="printLineChart" checked>
-                        <label for="printLineChart">Line Chart</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" id="printBarChart" name="printBarChart" checked>
-                        <label for="printBarChart">Bar Chart</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" id="printStatistics" name="printStatistics" checked>
-                        <label for="printStatistics">Statistics</label>
-                    </div>
-                    <button type="button" class="btn btn-primary" onclick="printReport()">Print</button>
-                </form>
+                <h3>Select Sections to Print</h3>
+                <div id="goalSelectionContainer"></div>
+                <div>
+                    <input type="checkbox" id="printTable"> Performance Table<br>
+                    <input type="checkbox" id="printLineChart"> Line Chart<br>
+                    <input type="checkbox" id="printBarChart"> Bar Chart<br>
+                    <input type="checkbox" id="printStatistics"> Statistics<br>
+                </div>
+                <button onclick="printReport()">Print</button>
             </div>
         </div>
-
-
-        <!-- Goal Selection Modal -->
-<div id="goalSelectionModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="hideGoalSelectionModal()">&times;</span>
-        <h2>Select a Goal</h2>
-        <div id="goalSelectionContainer">
-            <!-- Dynamic goal selection options will be inserted here -->
-        </div>
-        <button type="button" class="btn btn-primary" onclick="confirmGoalSelection()">Confirm</button>
-    </div>
-</div>
-
 
     </main>
 </div>
