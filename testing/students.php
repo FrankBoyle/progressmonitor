@@ -134,29 +134,19 @@ include('./users/auth_session.php');
                 <input type="date" id="goal-date" name="goal_date" required>
             </div>
             <div class="form-group">
-                <label for="metadata-option">Metadata Option:</label>
-                <select id="metadata-option" name="metadata_option" required onchange="toggleMetadataFields()">
-                    <option value="existing">Use Existing Metadata</option>
-                    <option value="new">Create New Metadata</option>
-                </select>
+                <label for="metadata-option">Metadata Option:</label><br>
+                <input type="radio" id="use-template" name="metadata_option" value="template" onchange="toggleMetadataFields()"> 
+                <label for="use-template">Use a Category Template</label><br>
+                <input type="radio" id="link-category" name="metadata_option" value="existing" onchange="toggleMetadataFields()">
+                <label for="link-category">Link to a Used Category</label>
             </div>
-            <div id="existing-metadata-group" class="form-group">
-                <label for="existing-metadata-id">Select Existing Category:</label>
-                <select id="existing-metadata-id" name="existing_metadata_id"></select>
+            <div id="template-group" class="form-group" style="display:none;">
+                <label for="template-id">Select Category Template:</label>
+                <select id="template-id" name="template_id"></select>
             </div>
-            <div id="new-metadata-group" class="form-group" style="display:none;">
-                <label for="category-name">New Category Name:</label>
-                <input type="text" id="category-name" name="category_name">
-                <!-- Add fields for other score names similarly -->
-                <div class="form-group">
-                    <label for="score1-name">Score 1 Name:</label>
-                    <input type="text" id="score1-name" name="score1_name">
-                </div>
-                <div class="form-group">
-                    <label for="score2-name">Score 2 Name:</label>
-                    <input type="text" id="score2-name" name="score2_name">
-                </div>
-                <!-- Add fields for score3_name to score10_name similarly -->
+            <div id="existing-category-group" class="form-group" style="display:none;">
+                <label for="existing-category-id">Select Existing Category:</label>
+                <select id="existing-category-id" name="existing_category_id"></select>
             </div>
             <button type="submit">Add Goal</button>
         </form>
@@ -227,6 +217,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
     loadMetadata(); // Load metadata for the add goal form
+    loadTemplates();
+    loadExistingCategories();
 
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
@@ -995,17 +987,55 @@ function archiveGoal(goalId) {
 }
 
 function toggleMetadataFields() {
-    const metadataOption = document.getElementById('metadata-option').value;
-    const existingMetadataGroup = document.getElementById('existing-metadata-group');
-    const newMetadataGroup = document.getElementById('new-metadata-group');
+    const templateGroup = document.getElementById('template-group');
+    const existingCategoryGroup = document.getElementById('existing-category-group');
+    const selectedOption = document.querySelector('input[name="metadata_option"]:checked').value;
 
-    if (metadataOption === 'existing') {
-        existingMetadataGroup.style.display = 'block';
-        newMetadataGroup.style.display = 'none';
-    } else if (metadataOption === 'new') {
-        existingMetadataGroup.style.display = 'none';
-        newMetadataGroup.style.display = 'block';
+    if (selectedOption === 'template') {
+        templateGroup.style.display = 'block';
+        existingCategoryGroup.style.display = 'none';
+    } else if (selectedOption === 'existing') {
+        templateGroup.style.display = 'none';
+        existingCategoryGroup.style.display = 'block';
     }
+}
+
+function loadTemplates() {
+    fetch('users/fetch_templates.php')
+        .then(response => response.json())
+        .then(data => {
+            const templateSelect = document.getElementById('template-id');
+            templateSelect.innerHTML = ''; // Clear previous options
+            data.forEach(template => {
+                const option = document.createElement('option');
+                option.value = template.metadata_id;
+                option.textContent = template.category_name;
+                templateSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading templates:', error);
+        });
+}
+
+function loadExistingCategories() {
+    const studentId = document.getElementById('selected-student-id').value;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+    fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
+        .then(response => response.json())
+        .then(data => {
+            const existingCategorySelect = document.getElementById('existing-category-id');
+            existingCategorySelect.innerHTML = ''; // Clear previous options
+            data.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.metadata_id;
+                option.textContent = category.category_name;
+                existingCategorySelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading existing categories:', error);
+        });
 }
 </script>
 </body>

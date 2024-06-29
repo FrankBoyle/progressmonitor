@@ -19,45 +19,44 @@ try {
         }
 
         if ($metadataOption === 'existing') {
-            if (!isset($_POST['existing_metadata_id'])) {
-                throw new Exception('Existing metadata ID is required.');
+            if (!isset($_POST['existing_category_id'])) {
+                throw new Exception('Existing category ID is required.');
             }
-            $newMetadataId = $_POST['existing_metadata_id'];
-        } else if ($metadataOption === 'new') {
-            if (!isset($_POST['category_name'], $_POST['score1_name'], $_POST['score2_name'], $_POST['score3_name'], $_POST['score4_name'], $_POST['score5_name'], $_POST['score6_name'], $_POST['score7_name'], $_POST['score8_name'], $_POST['score9_name'], $_POST['score10_name'])) {
-                throw new Exception('New metadata details are required.');
+            $newMetadataId = $_POST['existing_category_id'];
+        } else if ($metadataOption === 'template') {
+            if (!isset($_POST['template_id'])) {
+                throw new Exception('Template ID is required.');
             }
 
-            $categoryName = $_POST['category_name'];
-            $score1Name = $_POST['score1_name'];
-            $score2Name = $_POST['score2_name'];
-            $score3Name = $_POST['score3_name'];
-            $score4Name = $_POST['score4_name'];
-            $score5Name = $_POST['score5_name'];
-            $score6Name = $_POST['score6_name'];
-            $score7Name = $_POST['score7_name'];
-            $score8Name = $_POST['score8_name'];
-            $score9Name = $_POST['score9_name'];
-            $score10Name = $_POST['score10_name'];
+            $templateId = $_POST['template_id'];
+
+            // Copy the template to create a new metadata entry
+            $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
+            $stmt->execute([$templateId]);
+            $template = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$template) {
+                throw new Exception('Template not found.');
+            }
 
             $stmt = $connection->prepare("
                 INSERT INTO Metadata (school_id, metadata_template, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt->execute([
-                $schoolId,
-                0, // Default value for metadata_template
-                $categoryName,
-                $score1Name,
-                $score2Name,
-                $score3Name,
-                $score4Name,
-                $score5Name,
-                $score6Name,
-                $score7Name,
-                $score8Name,
-                $score9Name,
-                $score10Name
+                $template['school_id'],
+                0, // Not a template
+                $template['category_name'],
+                $template['score1_name'],
+                $template['score2_name'],
+                $template['score3_name'],
+                $template['score4_name'],
+                $template['score5_name'],
+                $template['score6_name'],
+                $template['score7_name'],
+                $template['score8_name'],
+                $template['score9_name'],
+                $template['score10_name']
             ]);
 
             $newMetadataId = $connection->lastInsertId();
