@@ -1140,7 +1140,7 @@ function printReport() {
     // Adding a delay to ensure charts resize properly before printing
     setTimeout(() => {
         console.log('Printing...');
-        window.print();
+        // window.print(); // Commenting out the automatic print call
         document.body.innerHTML = originalContents;
         enableChartInteractions();
     }, 500);
