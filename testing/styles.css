@@ -973,8 +973,8 @@ input[type="text"] {
 }
 
 #printReportBtn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
+    position: realtive;
+    top: 0;
+    right: 0;
     z-index: 1000;
 }
