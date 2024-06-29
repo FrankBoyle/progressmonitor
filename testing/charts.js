@@ -1111,18 +1111,36 @@ function printReport() {
 
 // Function to show the print dialog modal
 function showPrintDialogModal() {
-        if (document.querySelectorAll(".goal-item.selected").length === 0) {
-            alert("Please select a goal first.");
-            showGoalSelectionModal();
-            return;
-        }
-
-        if (document.querySelectorAll(".selector-item.selected").length === 0) {
+        const selectedColumns = document.querySelectorAll(".selector-item.selected").length;
+        if (selectedColumns === 0) {
             alert("Please select at least one column.");
             return;
         }
 
-        document.getElementById('printDialogModal').style.display = 'block';
+        const goalSelect = document.getElementById('goalSelection');
+        goalSelect.innerHTML = ''; // Clear previous options
+
+        // Fetch goals and populate the dropdown
+        fetch(`./users/fetch_goals.php?student_id=${studentId}&metadata_id=${metadataId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    alert("No goals available.");
+                    return;
+                }
+
+                data.forEach(goal => {
+                    const option = document.createElement('option');
+                    option.value = goal.goal_id;
+                    option.textContent = goal.goal_description;
+                    goalSelect.appendChild(option);
+                });
+
+                document.getElementById('printDialogModal').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching goals:', error);
+            });
 }
 
 // Function to hide the print dialog modal
