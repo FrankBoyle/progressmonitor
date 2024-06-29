@@ -1,8 +1,17 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include('db.php');
 
 $query = "SELECT student_id_new, first_name, last_name, group_id FROM Students_new LEFT JOIN StudentGroup ON Students_new.student_id_new = StudentGroup.student_id_new";
 $result = $connection->query($query);
+
+if (!$result) {
+    // Log the error message if the query fails
+    error_log("Query Error: " . $connection->error);
+    echo json_encode(['error' => 'Database query failed.']);
+    exit;
+}
 
 $students = [];
 
