@@ -133,11 +133,17 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             <div class="selector-item" data-section="printBarChart">Bar Chart</div>
             <div class="selector-item" data-section="printStatistics">Statistics</div>
         </div>
-        <button onclick="printReport()">Print</button>
+        <div>
+            <label for="reporting_period">Reporting Period:</label>
+            <input type="text" id="reporting_period" name="reporting_period" placeholder="e.g., Marking Period 1 Progress Report">
+        </div>
+        <div>
+            <label for="notes">Notes:</label>
+            <textarea id="notes" name="notes" rows="4" cols="50"></textarea>
+        </div>
+        <button onclick="saveAndPrintReport()">Print</button>
     </div>
 </div>
-
-
 
         </main>
     </div>

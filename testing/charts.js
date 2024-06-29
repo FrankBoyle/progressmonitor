@@ -1063,23 +1063,7 @@ function archiveGoal(goalId, goalItem) {
       });
 }
 
-function printReport() {
-    const selectedGoal = document.querySelector('.goal-item.selected');
-    if (!selectedGoal) {
-        alert("Please select a goal.");
-        return;
-    }
-
-    const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
-        .map(item => item.getAttribute('data-section'));
-
-    console.log("Selected sections:", selectedSections); // Log selected sections
-
-    if (selectedSections.length === 0) {
-        alert("Please select at least one section to print.");
-        return;
-    }
-
+function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
@@ -1089,30 +1073,23 @@ function printReport() {
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer');
-
-        console.log("Including line chart in the print content"); // Log line chart inclusion
-
         printContents += lineChartElement.outerHTML;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer');
-
-        console.log("Including bar chart in the print content"); // Log bar chart inclusion
-
         printContents += barChartElement.outerHTML;
     }
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        console.log("Including statistics in the print content"); // Log statistics inclusion
         printContents += `<div>${statisticsContent}</div>`;
     }
 
+    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
+    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+
     const originalContents = document.body.innerHTML;
-
-    disableChartInteractions();
-
     document.body.innerHTML = printContents;
 
     setTimeout(() => {
@@ -1120,6 +1097,58 @@ function printReport() {
         document.body.innerHTML = originalContents;
         enableChartInteractions();
     }, 500);
+}
+
+function saveAndPrintReport() {
+    const selectedGoal = document.querySelector('.goal-item.selected');
+    if (!selectedGoal) {
+        alert("Please select a goal.");
+        return;
+    }
+
+    const goalId = selectedGoal.getAttribute('data-goal-id');
+    const studentIdNew = ...; // Add your logic to get studentIdNew
+    const schoolId = ...; // Add your logic to get schoolId
+    const metadataId = ...; // Add your logic to get metadataId
+    const reportingPeriod = document.getElementById('reporting_period').value;
+    const notes = document.getElementById('notes').value;
+
+    const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
+        .map(item => item.getAttribute('data-section'));
+
+    if (selectedSections.length === 0) {
+        alert("Please select at least one section to print.");
+        return;
+    }
+
+    const noteData = {
+        goal_id: goalId,
+        student_id_new: studentIdNew,
+        school_id: schoolId,
+        metadata_id: metadataId,
+        reporting_period: reportingPeriod,
+        notes: notes
+    };
+
+    fetch('./users/save_notes.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(noteData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            printReport(selectedGoal, selectedSections, reportingPeriod, notes);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while saving the notes.');
+    });
 }
 
 function generatePrintTable(selectedColumns) {
