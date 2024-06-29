@@ -522,14 +522,18 @@ function loadStudentsByGroup(groupId) {
 }
 
 function loadStudentsForGroupAssignment(groupId) {
-    fetch('users/fetch_students.php') // Adjust the endpoint if necessary
+    fetch('users/fetch_students.php')
         .then(response => response.json())
         .then(data => {
+            console.log('Fetched students:', data); // Log the fetched data
             const studentSelect = document.querySelector('[name="student_id"]');
-            studentSelect.innerHTML = '<option></option>'; // Clear previous options
+            studentSelect.innerHTML = '<option></option>';
 
-            // Filter students who are not in the selected group
-            const filteredStudents = data.filter(student => !student.groups.includes(groupId));
+            const filteredStudents = data.filter(student => {
+                // Ensure student.groups is an array before calling includes
+                return Array.isArray(student.groups) && !student.groups.includes(groupId);
+            });
+            console.log('Filtered students:', filteredStudents); // Log the filtered data
 
             filteredStudents.forEach(student => {
                 const option = document.createElement('option');
@@ -538,7 +542,6 @@ function loadStudentsForGroupAssignment(groupId) {
                 studentSelect.appendChild(option);
             });
 
-            // Reinitialize the select2 element
             $('.select2').select2();
         })
         .catch(error => {
