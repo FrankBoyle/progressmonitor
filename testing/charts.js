@@ -1055,18 +1055,29 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
+    // Get the selected goal
     const goalContainer = document.querySelector('.goal-item.selected');
     const selectedGoalId = goalContainer ? goalContainer.getAttribute('data-goal-id') : null;
     const selectedGoal = goalContainer ? goalContainer.innerHTML : '';
-    const printTable = document.getElementById('printTable').checked;
-    const printLineChart = document.getElementById('printLineChart').checked;
-    const printBarChart = document.getElementById('printBarChart').checked;
-    const printStatistics = document.getElementById('printStatistics').checked;
 
+    // Get the selected columns
+    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected")).map(item => item.getAttribute("data-column-name"));
+
+    // Check if a goal and at least one column is selected
     if (!selectedGoalId) {
         alert("Please select a goal.");
         return;
     }
+    if (selectedColumns.length === 0) {
+        alert("Please select at least one column.");
+        return;
+    }
+
+    // Check which sections to print
+    const printTable = document.getElementById('printTable').checked;
+    const printLineChart = document.getElementById('printLineChart').checked;
+    const printBarChart = document.getElementById('printBarChart').checked;
+    const printStatistics = document.getElementById('printStatistics').checked;
 
     let printContents = '<div id="reportContainer">';
 
@@ -1101,6 +1112,7 @@ function printReport() {
     window.print();
     document.body.innerHTML = originalContents;
 }
+
 
 function generatePrintTable(selectedColumns) {
     console.log('Selected Columns:', selectedColumns);
