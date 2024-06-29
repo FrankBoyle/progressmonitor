@@ -996,43 +996,7 @@ input[type="text"] {
     overflow: hidden;
 }
 
-#reportContainer .goal {
-    grid-column: 1 / -1;
-    font-size: 8px;
-    overflow: auto;
-    max-height: 80px;
-}
 
-#reportContainer .table {
-    grid-row: 2;
-    grid-column: 1;
-    font-size: 8px;
-    overflow: auto;
-    max-height: 250px;
-}
-
-#reportContainer .statistics {
-    grid-row: 3;
-    grid-column: 1 / -1;
-    font-size: 8px;
-    overflow: auto;
-    max-height: 80px;
-}
-
-#reportContainer table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-#reportContainer table th, #reportContainer table td {
-    padding: 2px;
-    text-align: left;
-    font-size: 8px;
-}
-
-#reportContainer table th {
-    background-color: #f2f2f2;
-}
 
 
 
