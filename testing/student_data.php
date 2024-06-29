@@ -50,6 +50,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
         </div>
     </header>
     <main class="content">
+    <button id="printReportBtn" class="btn btn-primary">Print Report</button>
+
         <!-- New Goals Card -->
         <div class="card" id="goalsCard">
             <div class="card-header">
@@ -89,30 +91,28 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
         </div>
 
         <div class="card chart-card">
-    <div class="selector-area">
-        <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
-        <div id="columnSelector" class="checkbox-container"></div>
-    </div>
-    <div id="statistics" class="statistics-area statistics-container">
-        <div class="red-coin"></div>
-        <h3>Statistical Summary</h3>
-        <table id="statsTable">
-            <thead>
-                <tr>
-                    <th>Variable</th>
-                    <th>Mean</th>
-                    <th>Median</th>
-                    <th>Standard Deviation</th>
-                    <th>Trendline Equation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Empty initially -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
+            <div class="selector-area">
+                <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
+                <div id="columnSelector" class="checkbox-container"></div>
+            </div>
+            <div id="statistics" class="statistics-area">
+                <h3>Statistical Summary</h3>
+                <table id="statsTable">
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Mean</th>
+                            <th>Median</th>
+                            <th>Standard Deviation</th>
+                            <th>Trendline Equation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Empty initially -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         <!-- Chart Containers -->
         <div class="card chart-card">
