@@ -525,7 +525,6 @@ function loadStudentsByGroup(groupId) {
         });
 }
 
-
 function loadGroups() {
     fetch('users/fetch_groups.php')
         .then(response => response.json())
