@@ -1142,7 +1142,7 @@ function showPrintDialogModal() {
     goalContainer.innerHTML = ''; // Clear previous options
 
     // Fetch goals and populate the container
-    fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+    fetch(`./users/fetch_goals.php?student_id=${studentIdNew}`)
         .then(response => response.json())
         .then(data => {
             if (data.length === 0) {
@@ -1150,7 +1150,10 @@ function showPrintDialogModal() {
                 return;
             }
 
-            data.forEach(goal => {
+            // Filter goals based on current metadata
+            const filteredGoals = data.filter(goal => goal.metadata_id == metadataId);
+
+            filteredGoals.forEach(goal => {
                 const goalItem = document.createElement('div');
                 goalItem.classList.add('goal-item');
                 goalItem.setAttribute('data-goal-id', goal.goal_id);
