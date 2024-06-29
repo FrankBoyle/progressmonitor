@@ -983,20 +983,3 @@ input[type="text"] {
     right: 0;
     z-index: 1000;
 }
-
-#reportContainer {
-    width: 600px;
-    height: 600px;
-    padding: 5px;
-    box-sizing: border-box;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: 1fr 1fr;
-    gap: 5px;
-    overflow: hidden;
-}
-
-
-
-
-
