@@ -116,9 +116,13 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
         <!-- Chart Containers -->
         <div class="card chart-card">
             <div id="chartContainer" class="chart"></div>
+            <div class="red-coin"></div>
+
         </div>
         <div class="card chart-card">
             <div id="barChartContainer" class="chart"></div>
+            <div class="red-coin"></div>
+
         </div>
 
     </main>
