@@ -1055,26 +1055,24 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    const selectedGoal = document.querySelector('.goal-item.selected');
+    const goalContainer = document.querySelector('.goal-item.selected');
+    const selectedGoalId = goalContainer ? goalContainer.getAttribute('data-goal-id') : null;
+    const selectedGoal = goalContainer ? goalContainer.innerHTML : '';
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    if (!selectedGoal) {
+    if (!selectedGoalId) {
         alert("Please select a goal.");
         return;
     }
 
-    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-        .map(item => item.getAttribute("data-column-name"));
+    let printContents = '<div id="reportContainer">';
 
-    if (selectedColumns.length === 0) {
-        alert("Please select at least one column.");
-        return;
+    if (selectedGoal) {
+        printContents += `<div class="quill-readonly">${selectedGoal}</div>`;
     }
-
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1083,25 +1081,25 @@ function printReport() {
 
     if (printLineChart) {
         const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div>${lineChartContent}</div>`;
+        printContents += `<div class="chart">${lineChartContent}</div>`;
     }
 
     if (printBarChart) {
         const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div>${barChartContent}</div>`;
+        printContents += `<div class="chart">${barChartContent}</div>`;
     }
 
     if (printStatistics) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div>${statisticsContent}</div>`;
+        printContents += `<div class="statistics">${statisticsContent}</div>`;
     }
+
+    printContents += '</div>';
 
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
-
-    enableChartInteractions();
 }
 
 function generatePrintTable(selectedColumns) {
