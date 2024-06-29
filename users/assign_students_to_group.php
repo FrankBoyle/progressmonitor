@@ -5,10 +5,6 @@ include('db.php');
 
 header('Content-Type: application/json');
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
-
 try {
     if (isset($_POST['group_id']) && isset($_POST['student_ids'])) {
         $groupId = $_POST['group_id'];
@@ -38,3 +34,4 @@ try {
     echo json_encode(["error" => "Error assigning students to group: " . $e->getMessage()]);
 }
 ?>
+

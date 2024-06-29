@@ -13,12 +13,4 @@
         error_log("Database connection failed: " . $e->getMessage());
         exit("Error: " . $e->getMessage());
     }
-
-        /*
-
-
-
-    *////////
     ?>
-
-
