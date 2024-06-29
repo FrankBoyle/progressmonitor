@@ -876,7 +876,7 @@ input[type="text"] {
 }
 
 #chartContainer, #barChartContainer {
-    width: 100%;
+    width: 1000px;
 }
 
 .chart {
