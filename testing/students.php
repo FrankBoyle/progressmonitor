@@ -125,30 +125,27 @@ include('./users/auth_session.php');
         <span class="close" onclick="hideAddGoalModal()">&times;</span>
         <h2>Add New Goal</h2>
         <form id="add-goal-form" onsubmit="addGoal(event)">
-            <div class="form-group">
-                <label>Metadata Option:</label>
-                <div id="metadata-option-container">
-                    <div class="selector-item" data-metadata-option="template">Use a Category Template</div>
-                    <div class="selector-item" data-metadata-option="existing">Link to a Used Category</div>
+            <div class="selector-area">
+                <div id="columnSelectorTitle" class="selector-title">Metadata Option:</div>
+                <div id="metadataOptionSelector" class="checkbox-container">
+                    <div class="selector-item" data-option="template">Use a Category Template</div>
+                    <div class="selector-item" data-option="existing">Link to a Used Category</div>
                 </div>
             </div>
 
-            <div id="template-metadata-section" style="display: none;">
+            <div id="templateDropdown" class="form-group" style="display: none;">
                 <label for="template-metadata-select">Select Category Template:</label>
-                <select id="template-metadata-select" name="template_id">
-                    <option value="">Select a category to see column options</option>
-                    <!-- Options will be populated here by loadTemplates() -->
-                </select>
-                <div id="template-columns"></div>
+                <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')"></select>
             </div>
 
-            <div id="existing-metadata-section" style="display: none;">
+            <div id="existingDropdown" class="form-group" style="display: none;">
                 <label for="existing-metadata-select">Select Existing Category:</label>
-                <select id="existing-metadata-select" name="existing_category_id">
-                    <option value="">Select a category to see column options</option>
-                    <!-- Options will be populated here by loadExistingCategories() -->
-                </select>
-                <div id="existing-columns"></div>
+                <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')"></select>
+            </div>
+
+            <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
+                <h3>Column Names:</h3>
+                <ul id="columnNamesList"></ul>
             </div>
 
             <div class="form-group">
