@@ -845,7 +845,7 @@ input[type="text"] {
 @media print {
     .chart-wrapper-print,
     .chart-print {
-        width: 1000px;
+        width: 800px;
         height: auto;
         overflow: visible;
         border: none;
