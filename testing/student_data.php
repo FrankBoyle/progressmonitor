@@ -127,7 +127,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
         <div>Please select a goal:</div>
         <div id="goalSelectionContainer" class="selection-container"></div>
         <div>Select what you want to print in the report:</div>
-        <div id="printSelectionContainer" class="selection-container">
+        <div id="sectionSelectionContainer" class="selection-container">
             <div class="selector-item" data-section="printTable">Performance Table</div>
             <div class="selector-item" data-section="printLineChart">Line Chart</div>
             <div class="selector-item" data-section="printBarChart">Bar Chart</div>
