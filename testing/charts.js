@@ -1029,7 +1029,6 @@ function saveGoal(goalId, updatedContent, goalItem) {
       });
 }
 
-
 function cancelEdit(goalId) {
     document.getElementById(`goal-text-${goalId}`).style.display = 'block';
     document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
@@ -1088,6 +1087,8 @@ function printReport() {
 
     if (printLineChart) {
         const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
+        lineChartElement.style.width = '600px'; // Explicitly set width for printing
+        lineChartElement.style.height = 'auto';
         lineChartElement.classList.add('chart-wrapper-print');
         lineChartElement.querySelector('.apexcharts-canvas').classList.add('chart-print');
         printContents += `<div>${lineChartElement.outerHTML}</div>`;
@@ -1095,6 +1096,8 @@ function printReport() {
 
     if (printBarChart) {
         const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
+        barChartElement.style.width = '600px'; // Explicitly set width for printing
+        barChartElement.style.height = 'auto';
         barChartElement.classList.add('chart-wrapper-print');
         barChartElement.querySelector('.apexcharts-canvas').classList.add('chart-print');
         printContents += `<div>${barChartElement.outerHTML}</div>`;
