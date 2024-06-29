@@ -217,9 +217,7 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
-    loadMetadata(); // Load metadata for the add goal form
-    loadTemplates();
-    loadExistingCategories();
+    loadMetadata();
 
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
