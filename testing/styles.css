@@ -843,7 +843,7 @@ input[type="text"] {
 }
 
 @media print {
-    .chart-wrapper {
+    #chartContainer, #barChartContainer {
         max-width: 800px;
     }
 }
