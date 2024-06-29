@@ -1087,17 +1087,13 @@ function printReport() {
     }
 
     if (printLineChart) {
-        const lineChartContainer = document.getElementById('chartContainer').cloneNode(true);
-        lineChartContainer.style.maxWidth = "1000px"; // Limit width for print
-        lineChartContainer.style.width = "100%";
-        printContents += `<div class="chart-wrapper chart-wrapper-print">${lineChartContainer.outerHTML}</div>`;
+        const lineChartContent = document.getElementById('chartContainer').innerHTML;
+        printContents += `<div class="chart-wrapper chart-wrapper-print"><div class="chart chart-print">${lineChartContent}</div></div>`;
     }
 
     if (printBarChart) {
-        const barChartContainer = document.getElementById('barChartContainer').cloneNode(true);
-        barChartContainer.style.maxWidth = "1000px"; // Limit width for print
-        barChartContainer.style.width = "100%";
-        printContents += `<div class="chart-wrapper chart-wrapper-print">${barChartContainer.outerHTML}</div>`;
+        const barChartContent = document.getElementById('barChartContainer').innerHTML;
+        printContents += `<div class="chart-wrapper chart-wrapper-print"><div class="chart chart-print">${barChartContent}</div></div>`;
     }
 
     if (printStatistics) {
@@ -1107,12 +1103,10 @@ function printReport() {
 
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
 
-    setTimeout(() => {
-        window.print();
-        document.body.innerHTML = originalContents;
-        enableChartInteractions();
-    }, 500); // Adding a delay to ensure the chart content is fully rendered
+    enableChartInteractions();
 }
 
 function generatePrintTable(selectedColumns) {

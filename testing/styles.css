@@ -844,13 +844,13 @@ input[type="text"] {
 
 @media print {
     .chart-wrapper-print {
-        max-width: auto;
+        max-width: 1000px; /* Ensuring max width is set to 1000px */
         margin: 0 auto;
         overflow: visible; /* Ensure overflow is visible for printing */
     }
 
     .chart-print {
-        width: 1000px;
+        width: 1000px; /* Ensuring width is 1000px */
         height: auto;
         overflow: visible; /* Ensure overflow is visible for printing */
     }
