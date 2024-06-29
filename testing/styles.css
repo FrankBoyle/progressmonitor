@@ -499,7 +499,7 @@ td .cell-input {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000; /* Higher than any other element */
     left: 0;
     top: 0;
     width: 100%;
@@ -507,7 +507,6 @@ td .cell-input {
     overflow: auto;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
-    padding-top: 60px;
 }
 
 .modal-content {
