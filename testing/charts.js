@@ -1010,14 +1010,17 @@ function initializeQuillEditor(goalId, content) {
 }
 
 function editGoal(goalId) {
-    document.getElementById(`goal-text-${goalId}`).style.display = 'none';
+    const quill = window[`quillEditor${goalId}`];
+    if (!quill) {
+        console.error('Quill editor instance not found for goal ID:', goalId);
+        return;
+    }
+    quill.enable(true);
+    document.getElementById(`goal-content-${goalId}`).style.display = 'none';
     document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
 }
 
-function saveGoal(goalId) {
-    const quill = window[`quillEditor${goalId}`];
-    const content = quill.root.innerHTML;
-
+function saveGoal(goalId, updatedContent, goalItem) {
     fetch('./users/update_goal.php', {
         method: 'POST',
         headers: {
@@ -1025,13 +1028,15 @@ function saveGoal(goalId) {
         },
         body: JSON.stringify({
             goal_id: goalId,
-            goal_description: content
+            goal_description: updatedContent
         })
     }).then(response => response.json())
       .then(data => {
           if (data.success) {
-              document.getElementById(`goal-text-${goalId}`).innerHTML = content;
-              cancelEdit(goalId);
+              goalItem.querySelector('.goal-text').innerHTML = updatedContent;
+              quill.enable(false);
+              document.getElementById(`goal-content-${goalId}`).style.display = 'block';
+              document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
           } else {
               alert('Failed to save goal. Please try again.');
           }
@@ -1046,7 +1051,7 @@ function cancelEdit(goalId) {
     document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
 }
 
-function archiveGoal(goalId) {
+function archiveGoal(goalId, goalItem) {
     if (!confirm('Are you sure you want to archive this goal?')) return;
 
     fetch('./users/archive_goal.php', {
@@ -1060,7 +1065,7 @@ function archiveGoal(goalId) {
     }).then(response => response.json())
       .then(data => {
           if (data.success) {
-              document.querySelector(`#goal-edit-${goalId}`).closest('.goal-item').remove();
+              goalItem.remove();
           } else {
               alert('Failed to archive goal. Please try again.');
           }
@@ -1069,7 +1074,6 @@ function archiveGoal(goalId) {
           alert('An error occurred while archiving the goal.');
       });
 }
-
 
 
 
