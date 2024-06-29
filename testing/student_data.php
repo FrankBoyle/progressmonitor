@@ -118,21 +118,38 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <div id="barChartContainer" class="chart"></div>
                 </div>
             </div>
-            <!-- Print Report Modal -->
-            <div id="printDialogModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-                    <h2>Select Sections to Print</h2>
-                    <div id="goalSelectionContainer"></div>
-                    <div>
-                        <input type="checkbox" id="printTable"> Performance Table </input>
-                        <input type="checkbox" id="printLineChart"> Line Chart </input>
-                        <input type="checkbox" id="printBarChart"> Bar Chart </input>
-                        <input type="checkbox" id="printStatistics"> Statistics </input>
-                    </div>
-                    <button onclick="printReport()">Print</button>
-                </div>
+
+<!-- Print Report Modal -->
+<div id="printDialogModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="hidePrintDialogModal()">&times;</span>
+        <h2>Select Sections to Print</h2>
+        <div>
+            <h5>Please select a goal:</h5>
+            <div id="goalSelectionContainer"></div>
+        </div>
+        <div>
+            <h5>Select what you want to print in the report:</h5>
+            <div class="form-group">
+                <label class="selector-item">
+                    <input type="checkbox" id="printTable" data-column-name="table"> Performance Table
+                </label>
+                <label class="selector-item">
+                    <input type="checkbox" id="printLineChart" data-column-name="lineChart"> Line Chart
+                </label>
+                <label class="selector-item">
+                    <input type="checkbox" id="printBarChart" data-column-name="barChart"> Bar Chart
+                </label>
+                <label class="selector-item">
+                    <input type="checkbox" id="printStatistics" data-column-name="statistics"> Statistics
+                </label>
             </div>
+        </div>
+        <button onclick="printReport()">Print</button>
+    </div>
+</div>
+
+
         </main>
     </div>
     <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
