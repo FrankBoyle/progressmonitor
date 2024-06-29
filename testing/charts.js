@@ -139,9 +139,9 @@ function fetchInitialData(studentIdNew, metadataId) {
         .then(data => {
             console.log('Initial data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
-                createColumnCheckboxes(data.scoreNames);
                 customColumnNames = data.scoreNames; // Store the names
-                initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
+                createColumnCheckboxes(customColumnNames);
+                initializeTable(data.performanceData, customColumnNames, studentIdNew, metadataId);
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
                 }
@@ -330,8 +330,9 @@ function fetchFilteredData(iepDate, studentId, metadataId) {
         .then(data => {
             console.log('Filtered data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
-                createColumnCheckboxes(data.scoreNames);
-                initializeTable(data.performanceData, data.scoreNames);
+                customColumnNames = data.scoreNames; // Update the stored names
+                createColumnCheckboxes(customColumnNames);
+                initializeTable(data.performanceData, customColumnNames, studentId, metadataId);
                 extractChartData(); // Update charts based on the new data
             } else {
                 console.error('Invalid or incomplete data received:', data);
