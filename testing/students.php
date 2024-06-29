@@ -531,26 +531,26 @@ function loadStudentsForGroupAssignment(groupId) {
         .then(data => {
             console.log('Fetched students:', data); // Debug log
 
-            const studentSelect = document.querySelector('[name="student_id"]');
-            studentSelect.innerHTML = '<option></option>'; // Clear previous options
+            if (Array.isArray(data)) {
+                const studentSelect = document.querySelector('[name="student_id"]');
+                studentSelect.innerHTML = '<option></option>'; // Clear previous options
 
-            if (data.error) {
-                alert(data.error);
-                return;
+                // Sort students by last name
+                data.sort((a, b) => a.last_name.localeCompare(b.last_name));
+
+                data.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student.student_id_new;
+                    option.textContent = student.first_name + ' ' + student.last_name;
+                    studentSelect.appendChild(option);
+                });
+
+                // Reinitialize the select2 element
+                $('.select2').select2();
+            } else {
+                console.error('Expected an array but received:', data);
+                alert('There was an error loading students. Please try again.');
             }
-
-            // Sort students by last name
-            data.sort((a, b) => a.last_name.localeCompare(b.last_name));
-
-            data.forEach(student => {
-                const option = document.createElement('option');
-                option.value = student.student_id_new;
-                option.textContent = student.first_name + ' ' + student.last_name;
-                studentSelect.appendChild(option);
-            });
-
-            // Reinitialize the select2 element
-            $('.select2').select2();
         })
         .catch(error => {
             console.error('Error fetching students for assignment:', error);
