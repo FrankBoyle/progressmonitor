@@ -995,13 +995,7 @@ function addGoal(event) {
 
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
-    const metadataId = document.querySelector('.selected-metadata')?.getAttribute('data-metadata-id'); // Adjust this to get the correct metadata_id
-    if (!metadataId) {
-        alert('No metadata selected.');
-        return;
-    }
-
-    fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}&metadata_id=${encodeURIComponent(metadataId)}`)
+    fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
