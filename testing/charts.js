@@ -1149,7 +1149,7 @@ function showPrintDialogModal() {
 
 // Function to hide the print dialog modal
 function hidePrintDialogModal() {
-        document.getElementById('printDialogModal').style.display = 'none';
+    document.getElementById('printDialogModal').style.display = 'none';
 }
 
 // Function to show the goal selection modal
