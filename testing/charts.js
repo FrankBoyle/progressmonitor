@@ -1092,6 +1092,10 @@ function printReport() {
         lineChartElement.style.overflow = 'visible';
         lineChartElement.style.border = 'none';
         lineChartElement.style.padding = '0';
+        // Trigger resize event for the chart
+        if (window.myLineChart) {
+            window.myLineChart.resize();
+        }
         printContents += lineChartElement.outerHTML;
     }
 
@@ -1102,6 +1106,10 @@ function printReport() {
         barChartElement.style.overflow = 'visible';
         barChartElement.style.border = 'none';
         barChartElement.style.padding = '0';
+        // Trigger resize event for the chart
+        if (window.myBarChart) {
+            window.myBarChart.resize();
+        }
         printContents += barChartElement.outerHTML;
     }
 
