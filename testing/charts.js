@@ -308,13 +308,10 @@ function fetchInitialData(studentIdNew, metadataId) {
         .then(response => response.json())
         .then(data => {
             console.log('Initial data fetched:', data);
-            console.log('Data structure:', data);
             if (data && data.performanceData && data.scoreNames) {
-                performanceData = data.performanceData; // Store the performance data
+                createColumnCheckboxes(data.scoreNames);
                 customColumnNames = data.scoreNames; // Store the names
-                createColumnCheckboxes(customColumnNames);
-                initializeTable(performanceData, customColumnNames, studentIdNew, metadataId);
-                extractChartData(); // Update charts based on the new data
+                initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
                 }
@@ -328,24 +325,20 @@ function fetchInitialData(studentIdNew, metadataId) {
 }
 
 function fetchFilteredData(iepDate, studentId, metadataId) {
+    console.log(`Fetching filtered data for IEP Date: ${iepDate}, Student ID: ${studentId}, Metadata ID: ${metadataId}`);
     fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
         .then(response => response.json())
         .then(data => {
             console.log('Filtered data fetched:', data);
-            console.log('Data structure:', data);
             if (data && data.performanceData && data.scoreNames) {
-                performanceData = data.performanceData; // Store the performance data
-                customColumnNames = data.scoreNames; // Store the names
-                createColumnCheckboxes(customColumnNames);
-                initializeTable(performanceData, customColumnNames, studentId, metadataId);
+                createColumnCheckboxes(data.scoreNames);
+                initializeTable(data.performanceData, data.scoreNames);
                 extractChartData(); // Update charts based on the new data
             } else {
-                console.error('Invalid or incomplete filtered data:', data);
+                console.error('Invalid or incomplete data received:', data);
             }
         })
-        .catch(error => {
-            console.error('Error fetching filtered data:', error);
-        });
+        .catch(error => console.error('Error fetching filtered data:', error));
 }
 
 function initializeCharts() {
@@ -367,51 +360,44 @@ function initializeBarChart() {
 
 // Extract chart data based on selected columns
 function extractChartData() {
-    const selectedColumns = Array.from(document.querySelectorAll('.selector-item.selected')).map(item => item.getAttribute('data-column-name'));
+    try {
+        console.log("Extracting chart data...");
+        const data = table.getData();
+        const categories = data.map(row => row['score_date']);
 
-    if (selectedColumns.length === 0) {
-        console.error('No columns selected for chart data extraction.');
-        return;
-    }
+        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+            .map(item => ({
+                field: item.getAttribute("data-column-name"),
+                name: item.textContent.trim()  // Use textContent of the item as the series name
+            }));
 
-    console.log('Selected columns for charting:', selectedColumns);
-    console.log('Performance data:', performanceData);
-
-    const chartData = selectedColumns.map(columnName => {
-        const dataSeries = performanceData.map(entry => {
-            const xValue = entry.score_date ? new Date(entry.score_date) : null;
-            const yValue = entry[columnName];
-
-            console.log(`Processing entry: score_date = ${xValue}, ${columnName} = ${yValue}`);
-
+        const series = selectedColumns.map(column => {
+            let rawData = data.map(row => row[column.field]);
+            let interpolatedData = interpolateData(rawData); // Interpolate missing values
             return {
-                x: xValue,
-                y: yValue !== undefined ? yValue : null
+                name: column.name,  // Using the custom name for the series
+                data: interpolatedData,
+                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
             };
-        }).filter(point => point.x && point.y !== null);
+        });
 
-        console.log(`Data series for column ${columnName}:`, dataSeries);
+        const trendlineSeries = series.map(seriesData => ({
+            name: `${seriesData.name} Trendline`,
+            data: getTrendlineData(seriesData.data),
+            type: 'line',
+            dashArray: 5,
+            stroke: { width: 2, curve: 'straight' },
+            color: seriesData.color
+        }));
 
-        if (dataSeries.length === 0) {
-            console.error(`No valid data points found for column ${columnName}`);
-            return null;
-        }
+        updateLineChart(categories, [...series, ...trendlineSeries]);
+        updateBarChart(categories, series);
 
-        return {
-            name: columnName,
-            data: dataSeries
-        };
-    }).filter(series => series !== null);
-
-    console.log('Extracted chart data:', chartData);
-
-    if (chartData.length > 0) {
-        updateLineChart(chartData);
-    } else {
-        console.error('No valid data series extracted for charting.');
+        console.log("Charts updated successfully.");
+    } catch (error) {
+        console.error("Error extracting chart data:", error);
     }
 }
-
 
 function interpolateData(data) {
     let interpolatedData = [...data];
