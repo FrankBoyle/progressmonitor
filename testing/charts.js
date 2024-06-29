@@ -35,6 +35,9 @@ function setupInitialPageLoad() {
     studentIdNew = urlParams.get('student_id');
     metadataId = urlParams.get('metadata_id');
     
+    window.studentIdNew = studentIdNew;
+    window.metadataId = metadataId;
+    window.schoolId = schoolId;
 
     if (!studentIdNew || !metadataId) {
         console.error('Student ID or Metadata ID is missing in the URL parameters.');
