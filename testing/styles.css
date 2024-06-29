@@ -836,7 +836,7 @@ input[type="text"] {
     white-space: normal; /* Allow text to wrap */
 }
 
-.charts-wrapper {
+.chart-wrapper {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
