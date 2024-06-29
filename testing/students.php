@@ -638,6 +638,42 @@ function editGroup() {
     showEditGroupModal(groupId, groupName);
 }
 
+function updateGroup(event) {
+    event.preventDefault();
+
+    const groupId = document.getElementById('edit-group-id').value;
+    const groupName = document.getElementById('edit-group-name').value;
+
+    if (!groupId || !groupName) {
+        alert("Group ID and name are required.");
+        return;
+    }
+
+    fetch('./users/update_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}&group_name=${encodeURIComponent(groupName)}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log('Response:', data); // Debug log
+
+        if (data.includes('Group updated successfully')) {
+            alert('Group updated successfully.');
+            hideEditGroupModal();
+            loadGroups(); // Reload the groups to reflect the updated name
+        } else {
+            alert('Error updating group: ' + data);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error updating the group. Please try again.');
+    });
+}
+
 function assignStudentsToGroup(event) {
     event.preventDefault();
 
