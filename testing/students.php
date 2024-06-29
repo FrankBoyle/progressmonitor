@@ -691,8 +691,9 @@ function editGroup() {
 
 function assignStudentsToGroup(event) {
     event.preventDefault();
+
     const groupId = document.getElementById('edit-group-id').value;
-    const studentIds = Array.from(document.querySelector('[name="student_ids[]"]').selectedOptions).map(option => option.value);
+    const studentIds = Array.from(document.querySelector('[name="student_id"]').selectedOptions).map(option => option.value);
 
     if (!groupId || studentIds.length === 0) {
         alert("Please select a student and a group.");
