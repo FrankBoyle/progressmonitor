@@ -1089,11 +1089,7 @@ function printReport() {
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer');
-        lineChartElement.style.width = '800px';
-        lineChartElement.style.height = 'auto';
-        lineChartElement.style.overflow = 'visible';
-        lineChartElement.style.border = 'none';
-        lineChartElement.style.padding = '0';
+
 
         console.log("Including line chart in the print content"); // Log line chart inclusion
 
@@ -1102,11 +1098,7 @@ function printReport() {
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer');
-        barChartElement.style.width = '800px';
-        barChartElement.style.height = 'auto';
-        barChartElement.style.overflow = 'visible';
-        barChartElement.style.border = 'none';
-        barChartElement.style.padding = '0';
+
 
         console.log("Including bar chart in the print content"); // Log bar chart inclusion
 
