@@ -100,8 +100,8 @@ function fetchGoals(studentIdNew, metadataId) {
         .then(response => response.json())
         .then(data => {
             console.log('Goals data fetched:', data);
-            if (data && data.goals && Array.isArray(data.goals)) {
-                displayGoals(data.goals);
+            if (data && Array.isArray(data)) {
+                displayGoals(data);
             } else {
                 console.error('Invalid or incomplete goals data:', data);
             }
@@ -116,7 +116,7 @@ function displayGoals(goals) {
     goalsContainer.innerHTML = ''; // Clear existing goals
 
     goals.forEach(goal => {
-        if (!goal.id || !goal.content) {
+        if (!goal.goal_id || !goal.goal_description) {
             console.error('Invalid goal structure:', goal);
             return;
         }
@@ -124,7 +124,7 @@ function displayGoals(goals) {
         const goalItem = document.createElement('div');
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
-            <div class="quill-editor" id="editor-${goal.id}"></div>
+            <div class="quill-editor" id="editor-${goal.goal_id}"></div>
             <button class="edit-btn">Edit</button>
             <button class="save-btn">Save</button>
             <button class="cancel-btn">Cancel</button>
@@ -133,12 +133,12 @@ function displayGoals(goals) {
 
         goalsContainer.appendChild(goalItem);
 
-        const quill = new Quill(`#editor-${goal.id}`, {
+        const quill = new Quill(`#editor-${goal.goal_id}`, {
             theme: 'snow',
             readOnly: true
         });
 
-        quill.setContents(JSON.parse(goal.content)); // Load the goal content
+        quill.root.innerHTML = goal.goal_description; // Load the goal content
 
         goalItem.querySelector('.edit-btn').addEventListener('click', () => {
             quill.enable(true);
@@ -146,18 +146,18 @@ function displayGoals(goals) {
         });
 
         goalItem.querySelector('.save-btn').addEventListener('click', () => {
-            const updatedContent = quill.getContents();
-            saveGoal(goal.id, updatedContent, goalItem);
+            const updatedContent = quill.root.innerHTML;
+            saveGoal(goal.goal_id, updatedContent, goalItem);
         });
 
         goalItem.querySelector('.cancel-btn').addEventListener('click', () => {
-            quill.setContents(JSON.parse(goal.content));
+            quill.root.innerHTML = goal.goal_description;
             quill.enable(false);
             goalItem.classList.remove('editing');
         });
 
         goalItem.querySelector('.archive-btn').addEventListener('click', () => {
-            archiveGoal(goal.id, goalItem);
+            archiveGoal(goal.goal_id, goalItem);
         });
     });
 }
@@ -168,7 +168,7 @@ function saveGoal(goalId, content, goalItem) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: goalId, content: JSON.stringify(content) })
+        body: JSON.stringify({ id: goalId, content: content })
     })
     .then(response => response.json())
     .then(data => {
