@@ -623,11 +623,11 @@ function editGroup() {
 
 function assignStudentsToGroup(event) {
     event.preventDefault();
-    const studentName = document.getElementById('assign-student-name').value;
     const groupId = document.getElementById('edit-group-id').value;
+    const studentId = document.querySelector('[name="student_id"]').value;
 
-    if (!studentName) {
-        alert('Please enter a student name.');
+    if (!studentId || !groupId) {
+        alert('Please select a student and a group.');
         return;
     }
 
@@ -636,16 +636,13 @@ function assignStudentsToGroup(event) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `group_id=${encodeURIComponent(groupId)}&student_name=${encodeURIComponent(studentName)}`
+        body: `group_id=${encodeURIComponent(groupId)}&student_id=${encodeURIComponent(studentId)}`
     })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
-        if (data.status === 'success') {
-            alert('Student assigned to group successfully.');
-            loadGroupStudents(groupId); // Refresh the group students list
-        } else {
-            alert('Error assigning student to group: ' + data.message);
-        }
+        alert(data);
+        hideEditGroupModal();
+        loadGroups();
     })
     .catch(error => {
         console.error('Error:', error);
