@@ -890,43 +890,101 @@ function addGoal(event) {
     const studentId = document.getElementById('selected-student-id').value;
     const goalDescription = document.getElementById('goal-description').value;
     const goalDate = document.getElementById('goal-date').value;
-    const metadataOption = document.querySelector('input[name="metadata_option"]:checked').value;
+    const metadataOptionElement = document.querySelector('#metadataOptionSelector .selector-item.selected');
+    const metadataOption = metadataOptionElement ? metadataOptionElement.getAttribute('data-option') : null;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
     let metadataId = null;
 
-    if (metadataOption === 'template') {
-        metadataId = document.getElementById('template-metadata-select').value;
-    } else if (metadataOption === 'existing') {
-        metadataId = document.getElementById('existing-category-select').value;
-    }
-
-    if (!studentId || !goalDescription || !goalDate || !metadataOption || !metadataId) {
-        alert('All fields are required.');
+    if (!studentId || !goalDescription || !goalDate || !metadataOption || !schoolId) {
+        alert('Missing required parameters.');
         return;
     }
 
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+    if (metadataOption === 'existing') {
+        metadataId = document.getElementById('existing-metadata-select').value;
+        if (!metadataId) {
+            alert('Please select an existing category.');
+            return;
+        }
+    } else if (metadataOption === 'template') {
+        metadataId = document.getElementById('template-metadata-select').value;
+        if (!metadataId) {
+            alert('Please select a category template.');
+            return;
+        }
+
+        // If using a template, copy the template to create a new metadata entry
+        fetch(`users/fetch_metadata_details.php?metadata_id=${metadataId}`)
+            .then(response => response.json())
+            .then(template => {
+                if (template.error) {
+                    throw new Error(template.error);
+                }
+
+                return fetch('./users/add_goal.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        student_id: studentId,
+                        goal_description: goalDescription,
+                        goal_date: goalDate,
+                        metadata_option: metadataOption,
+                        template_id: metadataId,
+                        school_id: schoolId
+                    })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                alert('Goal added successfully!');
+                hideAddGoalModal();
+                loadGoals(studentId); // Refresh the goals list
+            })
+            .catch(error => {
+                console.error('Error adding goal:', error);
+                alert('Error adding goal: ' + error.message);
+            });
+
+        return;
+    } else {
+        alert('Invalid metadata option.');
+        return;
+    }
 
     fetch('./users/add_goal.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_option=${encodeURIComponent(metadataOption)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message && data.message.includes("Goal added successfully.")) {
-                loadGoals(studentId);
-                hideAddGoalModal();
-            } else {
-                console.error('Error adding goal:', data);
-                alert('Error adding goal: ' + (data.error || 'Unknown error'));
-            }
+        body: new URLSearchParams({
+            student_id: studentId,
+            goal_description: goalDescription,
+            goal_date: goalDate,
+            metadata_option: metadataOption,
+            existing_category_id: metadataId,
+            school_id: schoolId
         })
-        .catch(error => {
-            console.error('Network or parsing error:', error);
-            alert('There was a network or parsing error. Please try again.');
-        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        alert('Goal added successfully!');
+        hideAddGoalModal();
+        loadGoals(studentId); // Refresh the goals list
+    })
+    .catch(error => {
+        console.error('Error adding goal:', error);
+        alert('Error adding goal: ' + error.message);
+    });
 }
 
 // Add the loadGoals function definition somewhere in your script
