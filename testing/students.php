@@ -200,21 +200,6 @@ include('./users/auth_session.php');
         </form>
         <button onclick="deleteGroup()">Delete Group</button>
 
-        <h3>Assign Students to Group</h3>
-        <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
-            <div style="display: flex; align-items: center;">
-                <div style="margin-right: 10px;">
-                    <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
-                        <option></option>
-                        <?php foreach ($allStudents as $student): ?>
-                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <button type="submit" name="assign_to_group">Assign to Group</button>
-            </div>
-        </form>
-
         <h3>Remove Students from Group</h3>
         <div id="group-students-list">
             <!-- Students will be loaded here dynamically -->
@@ -433,34 +418,6 @@ function showAddStudentModal() {
         } else {
             console.error("Modal element not found");
         }
-}
-
-function assignExistingStudentToGroup(event) {
-    event.preventDefault();
-    const studentId = document.getElementById('existing-student-select').value;
-    const groupId = document.getElementById('assign-group-select').value;
-
-    fetch('./users/assign_students_to_group.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `group_id=${encodeURIComponent(groupId)}&student_ids=${encodeURIComponent(studentId)}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert('Student assigned to group successfully.');
-            hideAddStudentModal();
-            loadGroups();
-        } else {
-            alert('Error assigning student to group: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error assigning the student to the group. Please try again.');
-    });
 }
 
 // Function to hide the modal
