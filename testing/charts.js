@@ -1097,15 +1097,6 @@ function printReport() {
 
         console.log("Including line chart in the print content"); // Log line chart inclusion
 
-        if (window.myLineChart) {
-            window.myLineChart.updateOptions({
-                chart: {
-                    width: 800,
-                }
-            });
-            window.myLineChart.render();
-        }
-
         printContents += lineChartElement.outerHTML;
     }
 
@@ -1118,15 +1109,6 @@ function printReport() {
         barChartElement.style.padding = '0';
 
         console.log("Including bar chart in the print content"); // Log bar chart inclusion
-
-        if (window.myBarChart) {
-            window.myBarChart.updateOptions({
-                chart: {
-                    width: 800,
-                }
-            });
-            window.myBarChart.render();
-        }
 
         printContents += barChartElement.outerHTML;
     }
