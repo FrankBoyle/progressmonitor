@@ -837,13 +837,12 @@ input[type="text"] {
 }
 
 .charts-wrapper {
-    max-width: 1000px;
+    max-width: 100%;
     display: flex;
     flex-wrap: wrap;
 }
 
 #chartContainer, #barChartContainer {
-    width: 100%;
     width: "1000px",
 
 }
