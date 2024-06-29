@@ -9,7 +9,6 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         if (isset($_GET['student_id'])) {
             $studentId = $_GET['student_id'];
-
             $stmt = $connection->prepare("
                 SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name
                 FROM Goals g
@@ -20,7 +19,7 @@ try {
             $goals = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($goals);
         } else {
-            echo json_encode(["error" => "Invalid request, missing student_id"]);
+            echo json_encode(["error" => "Invalid request"]);
         }
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['goal_id']) && isset($_POST['goal_description'])) {
@@ -32,7 +31,7 @@ try {
 
             echo json_encode(["status" => "success", "message" => "Goal updated successfully."]);
         } else {
-            echo json_encode(["status" => "error", "message" => "Invalid request, missing goal_id or goal_description"]);
+            echo json_encode(["status" => "error", "message" => "Invalid request"]);
         }
     } else {
         echo json_encode(["status" => "error", "message" => "Invalid request method"]);
@@ -42,4 +41,3 @@ try {
     echo json_encode(["status" => "error", "message" => "Error processing request: " . $e->getMessage()]);
 }
 ?>
-

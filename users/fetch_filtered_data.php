@@ -1,9 +1,6 @@
 <?php
-session_start();
-include('auth_session.php');
 include('db.php');
-
-header('Content-Type: application/json');
+include('auth_session.php');
 
 if (isset($_GET['student_id']) && isset($_GET['metadata_id']) && isset($_GET['iep_date'])) {
     $student_id = $_GET['student_id'];
@@ -14,21 +11,16 @@ if (isset($_GET['student_id']) && isset($_GET['metadata_id']) && isset($_GET['ie
     $stmt->execute([$student_id, $metadata_id, $iep_date]);
     $performanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Example to create scoreNames based on your existing data structure
-    $scoreNames = [];
-    if (count($performanceData) > 0) {
-        foreach (array_keys($performanceData[0]) as $key) {
-            if (strpos($key, 'score') !== false) { // assuming your score fields start with 'score'
-                $scoreNames[$key] = ucfirst(str_replace('_', ' ', $key)); // Score field names as titles
-            }
+    foreach ($performanceData as $data) {
+        echo "<tr data-performance-id='{$data['performance_id']}'>";
+        echo "<td class='editable' data-field-name='score_date'>" . (isset($data['score_date']) ? date("m/d/Y", strtotime($data['score_date'])) : "") . "</td>";
+        for ($i = 1; $i <= 10; $i++) {
+            echo "<td class='editable' data-field-name='score{$i}'>" . (isset($data["score{$i}"]) ? $data["score{$i}"] : "") . "</td>";
         }
+        echo "<td><button class='deleteRow btn btn-block btn-primary' data-performance-id='{$data['performance_id']}'>Delete</button></td>";
+        echo "</tr>";
     }
-
-    echo json_encode([
-        'performanceData' => $performanceData,
-        'scoreNames' => $scoreNames
-    ]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid data.']);
+    echo "Invalid data.";
 }
 ?>

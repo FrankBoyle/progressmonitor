@@ -14,10 +14,8 @@ if (!$connection) {
     exit;
 }
 
-$inputData = json_decode(file_get_contents('php://input'), true);
-
-if (isset($inputData['performance_id'])) {
-    $performanceId = $inputData['performance_id'];
+if (isset($_POST['performance_id'])) {
+    $performanceId = $_POST['performance_id'];
 
     try {
         // Prepare the DELETE statement
@@ -49,6 +47,6 @@ if (isset($inputData['performance_id'])) {
 }
 
 echo json_encode($response);
-?>
 
+?>
 

@@ -1,12 +1,10 @@
 <?php
-session_start();
-include('auth_session.php');
 include('db.php');
+include('auth_session.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $iep_date = isset($data['iep_date']) ? $data['iep_date'] : null;
-    $student_id = isset($data['student_id']) ? $data['student_id'] : null;
+    $iep_date = isset($_POST['iep_date']) ? $_POST['iep_date'] : null;
+    $student_id = isset($_POST['student_id']) ? $_POST['student_id'] : null;
 
     if ($iep_date && $student_id) {
         $stmt = $connection->prepare("UPDATE Students_new SET IEP_Date = ? WHERE student_id_new = ?");
