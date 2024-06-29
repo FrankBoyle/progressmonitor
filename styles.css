@@ -1,3 +1,52 @@
+@media (max-width: 768px) {
+    .content {
+        padding: 10px; 
+        flex-direction: column;
+    }
+
+    .content-students {
+        padding: 10px; 
+        flex-direction: column;
+    }
+
+    .create-group,
+    .students-list {
+        max-width: none;
+        width: 100%;
+    }
+
+    .existing-groups, .details {
+        width: 100%;
+    }
+
+    #performance-table {
+        width: 100%;
+        overflow-x: auto; /* Allows horizontal scrolling on small devices */
+        overflow-y: hidden; /* Prevents vertical scrolling within the table */
+    }
+
+    .box-centered-top {
+        width: 100%; /* Full width on smaller screens */
+        margin-top: 5px; /* Reduced margin on smaller screens */
+        max-height: auto; /* Smaller max height on smaller screens */
+    }
+
+    .chart-card {
+        width: 100%; /* Full width on smaller screens */
+        margin-bottom: 20px; /* Space between stacked cards */
+    }
+
+    .card {
+        padding: 10px;
+        margin: 10px;
+    }
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
 /* Basic Reset */
 * {
     margin: 0;
@@ -13,12 +62,15 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #E5E5E5;
     margin: 0;
+    padding: 0;
+
 }
 
 .dashboard {
     display: flex;
     flex-direction: column;
     height: 100vh;
+
 }
 
 .dashboard-header {
@@ -32,13 +84,25 @@ body {
     width: 100%;
     top: 0;
     z-index: 1000; /* Ensure it stays above other content */
-  }
+}
 
-/*
-  .dashboard-header:hover {
-    background-color: #45A0DD;
-    }
-*/
+.content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 75px; /* Adjust this value to match the height of the navbar */
+    width: 100%; /* Ensure it takes full width */
+}
+
+.content-students {
+    display: flex;
+    margin-top: 75px; /* Adjust this value to match the height of the navbar */
+    width: 100%; /* Ensure it takes full width */
+    /*align-items: center;*/
+}
+
+.content-column {
+    flex-direction: column;
+}
 
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
@@ -49,7 +113,6 @@ body {
     margin-top: 2rem; /* Optional: add additional margin if needed */
 }
 
-
 .logo {
     font-weight: bold;
 }
@@ -59,39 +122,65 @@ body {
     cursor: pointer;
 }
 
-.content {
-    display: flex;
-    flex-grow: 1;
-    padding: 1rem; /* Add top padding to compensate for the navbar height */
-    margin-top: 3.1rem; /* Adjust this value to match the height of the navbar */
+.card {
+    background-color: #c0c8c8; /* Lighter shade for panels */
+    border: 1.5px solid #a3bbcf; /* Soft blue border from the palette */
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: auto;
+    box-sizing: border-box;
 }
-  
-  .card-header, .box-header {
+
+.card-header, .box-header {
     font-size: 1.25rem; /* Adjusted font size */
     margin-bottom: 0.5rem;
-    background-color: #47A6E6; /* Light blue for headers */
-  }
-  
-  .card-title {
-    font-size: 1.5rem; /* Adjusted font size */
-  }
-  
-  .card-body {
-    font-size: 1rem; /* Adjusted font size */
-  }
+    background-color: transparent; /* Light blue for headers */
+}
 
-.box, .card {
+.card-title {
+    font-size: 1.5rem; /* Adjusted font size */
+}
+
+.card-body {
+    font-size: 1rem; /* Adjusted font size */
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-group .form-control {
+    flex: 1;
+}
+
+#filterData {
+    white-space: nowrap;
+}
+
+.filter-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.box {
     background-color: #f9f9f9; /* Lighter shade for panels */
     border: 1.5px solid #D6E4F0; /* Soft blue border from the palette */
     padding: 1rem;
     margin: 0.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: auto;
 }
 
 /* Hover effects on interactive elements */
 .box:hover, .card:hover {
-    border-color: #45A0DD; /* Slightly darker blue for hover */
+    border-color: #b7dffa; /* Slightly darker blue for hover */
 }
 
 .create-group, .students-list {
@@ -185,8 +274,6 @@ button:hover {
     font-weight: bold;
 }
 
-
-
 ul {
     list-style-type: none;
     padding: 0;
@@ -274,13 +361,19 @@ h3 {
 }
 
 .goal-item {
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border: 1px solid #ddd;
+    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
     position: relative;
     padding-right: 100px; /* Adjust the padding to fit the button */
+}
+
+.goal-item.selected {
+    background-color: #47A6E6;
+    color: #fff;
 }
 
 .goal-item .edit-btn {
@@ -292,6 +385,13 @@ h3 {
     font-size: 16px;
     cursor: pointer;
     display: inline-block;
+}
+
+.edit-group-btn {
+    z-index: 10; /* Lower than the modal */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
 }
 
 .archive-btn {
@@ -333,22 +433,6 @@ h3 {
     background-color: darkred;
 }
 
-@media (max-width: 768px) {
-    .content {
-        flex-direction: column;
-    }
-
-    .create-group,
-    .students-list {
-        max-width: none;
-        width: 100%;
-    }
-
-    .existing-groups, .details {
-        width: 100%;
-    }
-}
-
 #dataTable_wrapper .col-md-6:eq(0) {
     position: relative;
     z-index: 1000;
@@ -377,7 +461,7 @@ h3 {
 
 .fixed-width-cell {
     width: 100px;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
     padding: 0;
     margin: 0;
 }
@@ -422,24 +506,24 @@ td .cell-input {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
-    padding-top: 60px;
+    z-index: 1000; /* Higher than any other element */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
+    background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
-    background-color: #fff; /* Bright white for modal content background */
-    margin: 5% auto;
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    max-width: 400px;
-    border-color: #D6E4F0; /* Soft blue border */
+    z-index: 1001; /* Ensure it's higher than the button */
 }
 
 .close {
@@ -456,15 +540,30 @@ td .cell-input {
     cursor: pointer;
 }
 
+input[type="text"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.filter-section .form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
+    white-space: nowrap;
+
 }
 
 .form-group input {
@@ -473,30 +572,8 @@ td .cell-input {
     box-sizing: border-box;
 }
 
-
-/*
-button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 100%;
-}
-
-button[type="submit"]:hover {
-    background-color: #45a049;
-}
-*/
-
-.header-icons span, .header-icons .nav-link {
-    margin-right: 20px;
-    font-size: 1.2rem;
-    color: white;
-    text-decoration: none;
-    padding: 10px; /* Padding for spacing and better hover effect */
-    border-radius: 5px; /* Rounded corners */
+.form-group .form-control {
+    flex: 1;
 }
 
 .header-icons .nav-link i {
@@ -524,111 +601,108 @@ button[type="submit"]:hover {
     align-items: center;
 }
 
+/* Additional styles for login form */
+/* Centering the content */
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
 
-      
-        /* Additional styles for login form */
-        /* Centering the content */
-        .center-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
+.login-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
 
-        .login-box {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-        }
+.login-box-msg {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+    text-align: center;
+}
 
-        .login-box-msg {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #333;
-            text-align: center;
-        }
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
 
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
 
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            color: white;
-            padding: 0.75rem;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-        }
+.btn-primary:hover {
+    background-color: #0056b3;
+}
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
+.fas {
+    position: absolute;
+    margin-left: -25px;
+    margin-top: 15px;
+    color: #999;
+}
 
-        .fas {
-            position: absolute;
-            margin-left: -25px;
-            margin-top: 15px;
-            color: #999;
-        }
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-        }
+.remember-me input {
+    margin-right: 0.5rem;
+}
 
-        .remember-me input {
-            margin-right: 0.5rem;
-        }
+.remember-me label {
+    margin: 0;
+}
 
-        .remember-me label {
-            margin: 0;
-        }
+.info, .text-center {
+    text-align: center;
+    color: #007bff;
+}
 
-        .info, .text-center {
-            text-align: center;
-            color: #007bff;
-        }
+.info {
+    margin: 1rem 0;
+}
 
-        .info {
-            margin: 1rem 0;
-        }
+.mb-1, .mb-0 {
+    margin-bottom: 1rem;
+}
 
-        .mb-1, .mb-0 {
-            margin-bottom: 1rem;
-        }
+.forgot-password {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        .forgot-password {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.forgot-password form {
+    width: 100%;
+}
 
-        .forgot-password form {
-            width: 100%;
-        }
+.forgot-password input[type="email"] {
+    margin-bottom: 1rem;
+}
 
-        .forgot-password input[type="email"] {
-            margin-bottom: 1rem;
-        }
-
-        .header-icons {
-            display: flex;
-            align-items: center;
-        }
+.header-icons {
+    display: flex;
+    align-items: center;
+}
 
 /* General style for navbar links */
 .header-icons span, .header-icons .nav-link {
@@ -641,33 +715,333 @@ button[type="submit"]:hover {
     transition: background-color 0.3s; /* Smooth transition for hover effect */
 }
 
-        .header-icons .nav-link i {
-            margin-right: 5px;
-        }
+.header-icons .nav-link i {
+    margin-right: 5px;
+}
 
-        .header-icons .nav-link:hover {
-            color: #f0f0f0;
-        }
+.header-icons .nav-link:hover {
+    color: #f0f0f0;
+}
 
-        .header-icons .nav-link {
-            display: flex;
-            align-items: center;
-        }
+.header-icons .nav-link {
+    display: flex;
+    align-items: center;
+}
 
-        .message {
-            font-size: 16px;
-            color: #333;
-            margin-top: 20px;
-        }
-        .column {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin: 10px;
-            width: 45%;
-            float: left;
-        }
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
+.message {
+    font-size: 16px;
+    color: #333;
+    margin-top: 20px;
+}
+.column {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px;
+    width: 45%;
+    float: left;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.tabulator {
+    border-radius: 8px; /* Rounds corners for a softer look */
+    width: auto;
+    overflow-x: hidden;
+}
+
+.tabulator-header .tabulator-col {
+    background-color: #9bc4ff; /* Light gray background for headers*/
+    color: #000000; /* Darker text for better readability*/
+    font-weight: bold; /* Make header text bold*/
+    padding: 10px 0; /* Padding for better spacing */
+    border-right: 1px solid #ddd; /* Add borders for separation*/
+    text-align: center;
+    white-space: normal;
+}
+
+.tabulator .tabulator-header .tabulator-col:last-child {
+    border-right: none; /* Remove the right border for the last column */
+}
+
+#performance-table .tabulator-header {
+    position: sticky;
+    top: 0;
+    z-index: 10; 
+    color: #000000; /* Dark text for better readability */
+}
+
+.tabulator-row {
+    border-bottom: 1px solid #eee; /* Adds separation between rows */
+}
+
+.tabulator-cell {
+    padding: 10px 6px; /* More padding within cells */
+    font-size: 16px; /* Larger text for easier reading */
+    color: #000000; /* Darker text for better contrast */
+    text-align: left;
+}
+
+.left-align-cell {
+    text-align: left;  /* Apply left alignment to cell content */
+}
+
+.center-align-header {
+    text-align: center;  /* Apply center alignment to header */
+}
+
+#performance-table {
+    max-height: 500px; /* Limit the table height */
+    overflow-y: auto; /* Enable vertical scrolling within the table */
+    width: 100%;
+    overflow-x: auto; /* Allows horizontal scrolling on small devices */
+}
+
+.box-centered-top {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 10px; /* Add bottom margin */
+    overflow-x: hidden; /* Hide horizontal scroll if it appears */
+}
+
+/* Optional: Enhance scrollbar appearance for better UX */
+.box-centered-top::-webkit-scrollbar {
+    width: 8px;
+}
+
+.box-centered-top::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius: 10px;
+}
+
+#performance-table .tabulator-row {
+    border-bottom: 1px solid #777676; /* Adds a subtle line between rows */
+}
+
+#performance-table .tabulator-row:nth-child(odd) {
+    background-color: #deffff; /* Lighter shade for alternate rows */
+}
+
+#performance-table .tabulator-row:nth-child(even) {
+    background-color: #F5FFFF; /* Slightly darker for contrast */
+}
+
+#performance-table .tabulator-cell {
+    border-right: 1px solid #777676; /* Adds vertical lines if needed */
+    padding: 8px 10px; /* Adjust padding for cell content */
+}
+
+#performance-table .tabulator-col:last-child {
+    border-right: none;
+}
+
+/* Custom styling for header cells */
+#performance-table .tabulator-col {
+    border-right: 1px solid #ccc; /* Vertical lines between headers */
+    text-align: center; /* Ensure header text is centered */
+    white-space: normal; /* Allow text to wrap */
+}
+
+.chart-wrapper {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media print {
+    .chart-wrapper-print,
+    .chart-print {
+        width: 800px;
+        height: auto;
+        overflow: visible;
+        border: none;
+        padding: 0;
+    }
+
+    body, html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .content, .dashboard {
+        width: 100%;
+        height: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    .card {
+        box-shadow: none;
+    }
+
+    #chartContainer, #barChartContainer {
+        width: 1000px;
+    }
+}
+
+#chartContainer, #barChartContainer {
+    width: 1000px;
+}
+
+.chart {
+    width: 100%; /* Make the chart take the full width of the wrapper */
+    height: auto; /* Set a fixed height for the charts */
+    border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
+
+}
+
+.chart-card {
+    background-color: #c0c8c8; /* Same as other cards */
+    border: 1.5px solid #a3bbcf; /* Same border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: auto; /* Ensure full width */
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent overflow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* For positioning the minimize button */
+}
+
+.column-select-card {
+    background-color: #c0c8c8; /* Same as other cards */
+    border: 1.5px solid #a3bbcf; /* Same border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: auto; /* Ensure full width */
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent overflow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* For positioning the minimize button */
+}
+
+.minimize-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.minimized {
+    height: 40px; /* Adjust as needed */
+    overflow: hidden;
+}
+
+.checkbox-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Creates a responsive grid layout for checkboxes */
+    gap: 10px; /* Space between grid items */
+}
+
+.checkbox-container label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.selector-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.selector-item {
+    cursor: pointer;
+    padding: 10px 15px;
+    background-color: #fff;
+    border: 1.5px solid #a3bbcf; /* Soft blue border */
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.selector-item.selected {
+    background-color: #47A6E6; /* Light blue for selected items */
+    color: #fff;
+}
+
+#columnSelector {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap within the container */
+    gap: 10px; /* Space between checkboxes */
+}
+
+#statistics {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    overflow-x: auto; /* Ensures the table can scroll horizontally if needed */
+}
+
+#statsTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#statsTable th, #statsTable td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+#statsTable th {
+    background-color: #eee;
+}
+
+#statsTable td {
+    white-space: nowrap; /* Prevents wrapping and increases readability */
+}
+
+.card.chart-card {
+    display: flex;
+    align-items: flex-start; /* Align items at the start of the flex container */
+    justify-content: space-between; /* Space between the two main divs */
+    padding: 20px;
+    background-color: #c0c8c8; /* Background color of the card */
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.selector-area {
+    flex: 1; /* Takes up 1 part of the available space */
+    margin-right: 20px; /* Margin between selectors and statistics */
+}
+
+.statistics-area {
+    flex: 2; /* Takes up 2 parts of the available space, giving more space to statistics */
+    max-width: 600px; /* Maximum width of the statistics area */
+}
+
+#printReportBtn {
+    position: relative;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.selection-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}

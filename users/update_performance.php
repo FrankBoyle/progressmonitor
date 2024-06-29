@@ -1,90 +1,103 @@
 <?php
+session_start();
+include('auth_session.php');
+include('db.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('db.php');  
 header('Content-Type: application/json');
 
-// Main logic
-if (isset($_POST['performance_id'], $_POST['field_name'], $_POST['new_value'])) {
-    $performanceId = $_POST['performance_id'];
-    $fieldName = $_POST['field_name'];
-    $newValue = $_POST['new_value'];
-    $studentId = $_POST['student_id'] ?? null;
-    $metadata_id = $_POST['metadata_id'];
-    if (in_array($fieldName, ['score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'])) {
-        if ($newValue === '' || !isset($newValue)) {
-            $newValue = NULL;
-        }
-    }
+// Start output buffering to catch any unexpected output
+ob_start();
 
-    if ($fieldName === 'score_date') {
-        $checkStmt = $connection->prepare("
-        SELECT COUNT(*) 
-        FROM Performance 
-        WHERE 
-            student_id_new = ? AND 
-            score_date = ? AND 
-            metadata_id = ? AND 
-            performance_id != ?
-    ");
-
-        if($metadata_id !== null) {
-            $checkStmt->execute([$studentId, $newValue, $metadata_id, $performanceId]);  
-        } else {
-            handleError("Metadata ID is missing!");  
-            return;
-        }
-        
-        $newDate = date_create_from_format('Y-m-d', $newValue);
-        if (!$newDate) {
-            handleError("Invalid date format received. Expected 'Y-m-d' format but received: " . $newValue);
-            return;
-        }
-        $newValue = date_format($newDate, 'Y-m-d');
-    }
-
-    updatePerformance($connection, $performanceId, $fieldName, $newValue);  
-} else {
-    handleError("Invalid data provided.");
+// Function to log errors server-side
+function logError($error) {
+    file_put_contents('error_log.txt', $error . PHP_EOL, FILE_APPEND);
 }
 
-function updatePerformance($connection, $performanceId, $fieldName, $newValue) {
-    $allowedFields = ['score_date', 'score1', 'score2', 'score3', 'score4', 'score5', 'score6', 'score7', 'score8', 'score9', 'score10'];
-
-    if (!in_array($fieldName, $allowedFields)) {
-        handleError("Invalid field specified.");
-        return;
-    }
-
-    // Prepare SQL statement
-    $sql = "UPDATE `Performance` SET `$fieldName` = ? WHERE `performance_id` = ?";
-    $stmt = $connection->prepare($sql);
-    $stmt->bindParam(1, $newValue);
-    $stmt->bindParam(2, $performanceId);
-
-    // Execute and respond
-    if ($stmt->execute()) {
-        sendResponse(["success" => true]);
-    } else {
-        handleError("Database error: " . $stmt->errorInfo()[2]);
-    }
-}
-
-function handleError($errorMessage) {
-    sendResponse(["success" => false, "error" => $errorMessage]);
-}
-
-
-function sendResponse($response) {
-    echo json_encode($response);
+// Function to handle and send back errors
+function handleError($errorMessage, $missingData = []) {
+    echo json_encode(['success' => false, 'error' => $errorMessage, 'missing_data' => $missingData]);
+    ob_end_flush();
     exit;
 }
+
+try {
+    // Use json_decode to parse the JSON body
+    $inputData = json_decode(file_get_contents('php://input'), true);
+
+    // Check if the JSON decoding was successful
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        handleError("Invalid JSON input.");
+    }
+
+    // Extract data from the parsed JSON
+    $performanceId = $inputData['performance_id'];
+    $studentId = $inputData['student_id_new'];
+    $schoolId = $inputData['school_id'];
+    $scoreDate = $inputData['score_date'];
+    $metadata_id = $inputData['metadata_id'];
+
+    $scoreFields = [];
+    for ($i = 1; $i <= 10; $i++) {
+        $scoreField = "score$i";
+        $scoreFields[$scoreField] = isset($inputData[$scoreField]) ? $inputData[$scoreField] : null;
+    }
+
+    // Check if the request method is POST
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        handleError("Invalid request method.");
+    }
+
+    if (empty($performanceId)) {
+        handleError("performance_id is missing.");
+    }
+    if (empty($studentId)) {
+        handleError("student_id_new is missing.");
+    }
+    if (empty($scoreDate)) {
+        handleError("score_date is missing.");
+    }
+    if (empty($metadata_id)) {
+        handleError("metadata_id is missing.");
+    }
+
+    // Update data in the database
+    $setParts = [];
+    $params = [];
+    foreach ($scoreFields as $field => $value) {
+        $setParts[] = "$field = ?";
+        $params[] = $value;
+    }
+    $setParts[] = "score_date = ?";
+    $params[] = $scoreDate;
+
+    $setPartsString = implode(", ", $setParts);
+
+    $stmt = $connection->prepare("
+        UPDATE Performance 
+        SET $setPartsString
+        WHERE performance_id = ? AND student_id_new = ? AND metadata_id = ?
+    ");
+    $params[] = $performanceId;
+    $params[] = $studentId;
+    $params[] = $metadata_id;
+
+    // Log the query and parameters for debugging
+    file_put_contents('update_log.txt', "Query: UPDATE Performance SET $setPartsString WHERE performance_id = $performanceId AND student_id_new = $studentId AND metadata_id = $metadata_id\nParams: " . print_r($params, true), FILE_APPEND);
+
+    if ($stmt->execute($params)) {
+        echo json_encode(['success' => true]);
+    } else {
+        handleError("Failed to update data: " . implode(" | ", $stmt->errorInfo()));
+    }
+} catch (Exception $e) {
+    logError($e->getMessage());
+    handleError("An unexpected error occurred.");
+}
+
+// Flush the output buffer
+ob_end_flush();
 ?>
-
-
-
-
-
 

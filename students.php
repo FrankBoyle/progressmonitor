@@ -6,6 +6,15 @@ include('./users/auth_session.php');
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKFCCN4XXS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LKFCCN4XXS');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
@@ -32,7 +41,7 @@ include('./users/auth_session.php');
         </div>
     </header>
 
-    <main class="content">
+    <main class="content-students">
     <input type="hidden" id="selected-student-id" value="">
 
         <section class="box create-group">
@@ -59,6 +68,7 @@ include('./users/auth_session.php');
             </ul>
         </section>
 
+        <!-- Add the new Edit Column Names button in the goal list section -->
         <section class="box existing-groups">
             <h3>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h3>
             <div class="message" id="goals-message">Click a student to see their goals.</div>
@@ -82,10 +92,29 @@ include('./users/auth_session.php');
     </div>
 </div>
 
+   <!-- Place the Edit Group button here, outside the modal -->
+   <button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>
+
 <!-- Add Student Modal -->
 <div id="add-student-modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hideAddStudentModal()">&times;</span>
+
+        <h2>Assign Students to Group</h2>
+        <div style="margin-top: 20px;">
+            <h3>Assign Students to Group</h3>
+            <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
+                <div style="display: flex; align-items: center;">
+                    <div style="margin-right: 10px;">
+                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here">
+                            <option></option>
+                            <!-- Options will be dynamically populated -->
+                        </select>
+                    </div>
+                    <button type="submit" name="assign_to_group">Assign to Group</button>
+                </div>
+            </form>
+        </div>
         <h2>Add New Student</h2>
         <form id="add-student-form" onsubmit="addStudent(event)">
             <div class="form-group">
@@ -106,6 +135,7 @@ include('./users/auth_session.php');
             </div>
             <button type="submit">Add Student</button>
         </form>
+
     </div>
 </div>
 
@@ -115,6 +145,33 @@ include('./users/auth_session.php');
         <span class="close" onclick="hideAddGoalModal()">&times;</span>
         <h2>Add New Goal</h2>
         <form id="add-goal-form" onsubmit="addGoal(event)">
+            <div class="selector-area">
+                <div id="columnSelectorTitle" class="selector-title">Goal Category Options:</div>
+                <div id="metadataOptionSelector" class="checkbox-container">
+                    <div class="selector-item" data-option="template">Use a Category Template</div>
+                    <div class="selector-item" data-option="existing">Link to a Used Category</div>
+                </div>
+            </div>
+
+            <div id="templateDropdown" class="form-group" style="display: none;">
+                <label for="template-metadata-select">Select Category Template:</label>
+                <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')">
+                    <option value="" disabled selected>Select a category to see column options</option>
+                </select>
+            </div>
+
+            <div id="existingDropdown" class="form-group" style="display: none;">
+                <label for="existing-metadata-select">Select Existing Category:</label>
+                <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')">
+                    <option value="" disabled selected>Select a category to see column options</option>
+                </select>
+            </div>
+
+            <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
+                <h3>Column Names:</h3>
+                <ul id="columnNamesList"></ul>
+            </div>
+
             <div class="form-group">
                 <label for="goal-description">Goal Description:</label>
                 <textarea id="goal-description" name="goal_description" required></textarea>
@@ -122,10 +179,6 @@ include('./users/auth_session.php');
             <div class="form-group">
                 <label for="goal-date">Goal Date:</label>
                 <input type="date" id="goal-date" name="goal_date" required>
-            </div>
-            <div class="form-group">
-                <label for="metadata-id">Category:</label>
-                <select id="metadata-id" name="metadata_id" required></select>
             </div>
             <button type="submit">Add Goal</button>
         </form>
@@ -150,21 +203,6 @@ include('./users/auth_session.php');
         </form>
         <button onclick="deleteGroup()">Delete Group</button>
 
-        <h3>Assign Students to Group</h3>
-        <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
-            <div style="display: flex; align-items: center;">
-                <div style="margin-right: 10px;">
-                    <select name="student_ids[]" multiple class="select2" style="width: 200px; height: 100px;" data-placeholder="Student name here">
-                        <option></option>
-                        <?php foreach ($allStudents as $student): ?>
-                            <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <button type="submit" name="assign_to_group">Assign to Group</button>
-            </div>
-        </form>
-
         <h3>Remove Students from Group</h3>
         <div id="group-students-list">
             <!-- Students will be loaded here dynamically -->
@@ -187,26 +225,22 @@ include('./users/auth_session.php');
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
 <script>
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
-    loadStaff(); // Load all staff initially
-    loadMetadata(); // Load metadata for the add goal form
+    loadStaff();
+    loadTemplates();
+    loadExistingCategories();
 
-    // Expose functions to global scope for inline event handlers
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
 
-    // Add event listener to the add goal button
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
-
-    // Add event listener to the add group button
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
-    document.querySelector('.add-student-btn').addEventListener('click', showAddStudentModal);
 
-    // Expose functions to global scope for inline event handlers
     window.hideAddGroupModal = hideAddGroupModal;
     window.hideAddStudentModal = hideAddStudentModal;
 
@@ -219,7 +253,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     $('.select2').select2();
 
-    // Set up the MutationObserver to watch for added nodes in the goal list
     const goalList = document.getElementById('goal-list');
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
@@ -230,9 +263,41 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     observer.observe(goalList, { childList: true, subtree: true });
 
-    // Initial call to populate students and goals
     populateStudentsAndGoals();
+
+    // Metadata Option Selector
+    const metadataOptionSelector = document.getElementById('metadataOptionSelector');
+    const templateDropdown = document.getElementById('templateDropdown');
+    const existingDropdown = document.getElementById('existingDropdown');
+
+    metadataOptionSelector.addEventListener('click', function(event) {
+        if (event.target.classList.contains('selector-item')) {
+            const items = metadataOptionSelector.querySelectorAll('.selector-item');
+            items.forEach(item => item.classList.remove('selected'));
+            event.target.classList.add('selected');
+
+            const selectedOption = event.target.getAttribute('data-option');
+            if (selectedOption === 'template') {
+                templateDropdown.style.display = 'block';
+                existingDropdown.style.display = 'none';
+                document.getElementById('columnNamesDisplay').style.display = 'none';
+            } else if (selectedOption === 'existing') {
+                templateDropdown.style.display = 'none';
+                existingDropdown.style.display = 'block';
+                document.getElementById('columnNamesDisplay').style.display = 'none';
+            }
+        }
+    });
 });
+
+document.querySelector('.add-student-btn').addEventListener('click', function() {
+        const selectedGroup = document.querySelector('.selected-group');
+        if (selectedGroup) {
+            const groupId = selectedGroup.getAttribute('data-group-id');
+            loadStudentsForGroupAssignment(groupId);
+        }
+        showAddStudentModal();
+    });
 
 function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
@@ -274,7 +339,7 @@ function addGroup(event) {
             return response.text();
         })
         .then(data => {
-            console.log('Group added successfully:', data);
+            //console.log('Group added successfully:', data);
             loadGroups();
             hideAddGroupModal();
         })
@@ -290,22 +355,23 @@ function addStudent(event) {
     const lastName = document.getElementById('last-name').value;
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
+    const groupId = document.getElementById('group-select').value;
 
     fetch('./users/add_student.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}`
+        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&group_id=${encodeURIComponent(groupId)}`
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        console.log('Student added successfully:', data);
-        if (data.includes("Student added successfully.")) {
+        //console.log('Student added successfully:', data);
+        if (data.status === 'success') {
             loadStudents();
             hideAddStudentModal();
         } else {
-            alert('Error adding student: ' + data);
+            alert('Error adding student: ' + data.message);
         }
     })
     .catch(error => {
@@ -338,82 +404,118 @@ function loadStaff() {
         });
 }
 
-    // Function to show the modal
-    function showAddGroupModal() {
+// Function to show the modal
+function showAddGroupModal() {
         const modal = document.getElementById('add-group-modal');
         if (modal) {
             modal.style.display = 'block';
         } else {
             console.error("Modal element not found");
         }
-    }
+}
 
-    function showAddStudentModal() {
+function showAddStudentModal() {
         const modal = document.getElementById('add-student-modal');
         if (modal) {
             modal.style.display = 'block';
         } else {
             console.error("Modal element not found");
         }
-    }
+}
 
-        // Function to hide the modal
-        function hideAddGroupModal() {
-        const modal = document.getElementById('add-group-modal');
+// Function to hide the modal
+function hideAddGroupModal() {
+    const modal = document.getElementById('add-group-modal');
         if (modal) {
             modal.style.display = 'none';
         }
-    }
+}
 
-    function hideAddStudentModal() {
+function hideAddStudentModal() {
         const modal = document.getElementById('add-student-modal');
         if (modal) {
             modal.style.display = 'none';
         }
-    }
+}
 
 function loadStudentsByGroup(groupId) {
-    fetch('users/fetch_students_by_group.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `group_id=${encodeURIComponent(groupId)}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        const studentList = document.getElementById('student-list');
-        const studentSelect = document.querySelector('[name="student_ids[]"]');
-        studentList.innerHTML = '';
-        studentSelect.innerHTML = '<option></option>'; // Clear previous options
+    //console.log('Loading students for group by ID:', groupId); // Debug log
 
-        data.forEach(student => {
-            // Populate student list
-            const listItem = document.createElement('li');
-            listItem.textContent = student.first_name + ' ' + student.last_name;
-            listItem.setAttribute('data-student-id', student.student_id_new);
-            listItem.addEventListener('click', function() {
-                selectStudent(this);
+    fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
+        .then(response => response.json())
+        .then(data => {
+            //console.log('Fetched group students:', data); // Debug log
+
+            const studentList = document.getElementById('student-list');
+            const studentsMessage = document.getElementById('students-message');
+            
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            studentList.innerHTML = ''; // Clear the existing list
+
+            if (data.length === 0) {
+                studentsMessage.style.display = 'block';
+                studentList.style.display = 'none';
+                studentsMessage.innerHTML = 'No students in this group.';
+                return;
+            }
+
+            // Sort students by last name within the group
+            data.sort((a, b) => a.last_name.localeCompare(b.last_name));
+
+            data.forEach(student => {
+                const listItem = document.createElement('li');
+                listItem.textContent = student.first_name + ' ' + student.last_name;
+                listItem.setAttribute('data-student-id', student.student_id);
+                listItem.addEventListener('click', () => selectStudent(listItem)); // Add event listener
+                studentList.appendChild(listItem);
             });
-            studentList.appendChild(listItem);
 
-            // Populate select options
-            const option = document.createElement('option');
-            option.value = student.student_id_new;
-            option.textContent = student.first_name + ' ' + student.last_name;
-            studentSelect.appendChild(option);
+            studentsMessage.style.display = 'none';
+            studentList.style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error fetching group students:', error);
+            alert('There was an error loading the students for this group. Please try again.');
         });
+}
 
-        // Reinitialize the select2 element
-        $('.select2').select2();
+function loadStudentsForGroupAssignment(groupId) {
+    //console.log('Loading students for group assignment:', groupId); // Debug log
 
-        // Call populateStudentsAndGoals after updating the student list
-        populateStudentsAndGoals();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error loading students. Please try again.');
-    });
+    fetch(`users/fetch_students.php?group_id=${encodeURIComponent(groupId)}`)
+        .then(response => response.json())
+        .then(data => {
+            //console.log('Fetched students:', data); // Debug log
+
+            if (Array.isArray(data)) {
+                const studentSelect = document.querySelector('[name="student_id"]');
+                studentSelect.innerHTML = '<option></option>'; // Clear previous options
+
+                // Sort students by last name
+                data.sort((a, b) => a.last_name.localeCompare(b.last_name));
+
+                data.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student.student_id_new;
+                    option.textContent = student.first_name + ' ' + student.last_name;
+                    studentSelect.appendChild(option);
+                });
+
+                // Reinitialize the select2 element
+                $('.select2').select2();
+            } else {
+                console.error('Expected an array but received:', data);
+                alert('There was an error loading students. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching students for assignment:', error);
+            alert('There was an error loading students. Please try again.');
+        });
 }
 
 function loadGroups() {
@@ -455,15 +557,22 @@ function loadStudents() {
         .then(response => response.json())
         .then(data => {
             const studentList = document.getElementById('student-list');
+            const studentsMessage = document.getElementById('students-message');
             const studentSelect = document.querySelector('[name="student_ids[]"]');
             studentList.innerHTML = '';
             studentSelect.innerHTML = '<option></option>'; // Clear previous options
+
+            // Sort students by last name
+            data.sort((a, b) => a.last_name.localeCompare(b.last_name));
 
             data.forEach(student => {
                 // Populate student list
                 const listItem = document.createElement('li');
                 listItem.textContent = student.first_name + ' ' + student.last_name;
                 listItem.setAttribute('data-student-id', student.student_id_new);
+                listItem.addEventListener('click', function() {
+                    selectStudent(this);
+                });
                 studentList.appendChild(listItem);
 
                 // Populate select options
@@ -476,8 +585,14 @@ function loadStudents() {
             // Reinitialize the select2 element
             $('.select2').select2();
 
-            // Call populateStudentsAndGoals after updating the student list
-            populateStudentsAndGoals();
+            // Show or hide the student list and message based on content
+            if (studentList.children.length > 0) {
+                studentsMessage.style.display = 'none';
+                studentList.style.display = 'block';
+            } else {
+                studentsMessage.style.display = 'block';
+                studentList.style.display = 'none';
+            }
         })
         .catch(error => {
             console.error('Error:', error);
@@ -487,6 +602,9 @@ function loadStudents() {
 
 function selectGroup(element) {
     const groupId = element.getAttribute('data-group-id');
+    
+    // Update the hidden input with the selected groupId
+    document.getElementById('edit-group-id').value = groupId;
 
     // Load students for the selected group
     loadStudentsByGroup(groupId);
@@ -523,10 +641,54 @@ function editGroup() {
     showEditGroupModal(groupId, groupName);
 }
 
+function updateGroup(event) {
+    event.preventDefault();
+
+    const groupId = document.getElementById('edit-group-id').value;
+    const groupName = document.getElementById('edit-group-name').value;
+
+    if (!groupId || !groupName) {
+        alert("Group ID and name are required.");
+        return;
+    }
+
+    fetch('./users/update_group.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `group_id=${encodeURIComponent(groupId)}&group_name=${encodeURIComponent(groupName)}`
+    })
+    .then(response => response.text())
+    .then(data => {
+        //console.log('Response:', data); // Debug log
+
+        if (data.includes('Group updated successfully')) {
+            alert('Group updated successfully.');
+            hideEditGroupModal();
+            loadGroups(); // Reload the groups to reflect the updated name
+        } else {
+            alert('Error updating group: ' + data);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error updating the group. Please try again.');
+    });
+}
+
 function assignStudentsToGroup(event) {
     event.preventDefault();
+
     const groupId = document.getElementById('edit-group-id').value;
-    const studentIds = Array.from(document.querySelector('[name="student_ids[]"]').selectedOptions).map(option => option.value);
+    const studentIds = Array.from(document.querySelector('[name="student_id"]').selectedOptions).map(option => option.value);
+
+    if (!groupId || studentIds.length === 0) {
+        alert("Please select a student and a group.");
+        return;
+    }
+
+    //console.log('Assigning students to group:', groupId, studentIds); // Debug log
 
     fetch('./users/assign_students_to_group.php', {
         method: 'POST',
@@ -535,11 +697,15 @@ function assignStudentsToGroup(event) {
         },
         body: `group_id=${encodeURIComponent(groupId)}&student_ids=${encodeURIComponent(studentIds.join(','))}`
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        alert(data);
-        hideEditGroupModal();
-        loadGroups();
+        //console.log('Response:', data); // Debug log
+        if (data.status === "success") {
+            alert(data.message);
+            hideEditGroupModal();
+        } else {
+            alert(data.error);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -627,8 +793,13 @@ function saveGoal(goalId, goalDescription) {
 function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-id').value = groupId;
     document.getElementById('edit-group-name').value = groupName || '';
-    document.getElementById('share-group-id').value = groupId;
     document.getElementById('edit-group-modal').style.display = 'block';
+
+    // Hide the Edit Group button
+    const editGroupButton = document.querySelector('.edit-group-btn');
+    if (editGroupButton) {
+        editGroupButton.style.display = 'none';
+    }
 
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
@@ -636,21 +807,27 @@ function showEditGroupModal(groupId, groupName) {
     // Load students for the selected group
     loadGroupStudents(groupId);
     
-    // Load all students for assignment
-    loadAllStudentsForAssignment();
     loadStaff();
 }
 
 function hideEditGroupModal() {
     document.getElementById('edit-group-modal').style.display = 'none';
     resetStudentList();
+
+    // Show the Edit Group button
+    const editGroupButton = document.querySelector('.edit-group-btn');
+    if (editGroupButton) {
+        editGroupButton.style.display = 'inline-block';
+    }
 }
 
 function loadGroupStudents(groupId) {
+    //console.log('Loading students for group:', groupId); // Debug log
+
     fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched group students:', data); // Log the response data
+            //console.log('Fetched group students:', data); // Debug log
 
             const groupStudentsList = document.getElementById('group-students-list');
             groupStudentsList.innerHTML = '';
@@ -723,15 +900,17 @@ function removeStudentFromGroup(studentId, groupId) {
     });
 }
 
-
-function loadAllStudentsForAssignment() {
+function loadAllStudentsForAssignment(groupId) {
     fetch('users/fetch_students.php') // Adjust the endpoint if necessary
         .then(response => response.json())
         .then(data => {
-            const studentSelect = document.querySelector('[name="student_ids[]"]');
+            const studentSelect = document.querySelector('[name="student_id"]');
             studentSelect.innerHTML = '<option></option>'; // Clear previous options
 
-            data.forEach(student => {
+            // Filter students who are not in the selected group
+            const filteredStudents = data.filter(student => !student.groups.includes(groupId));
+
+            filteredStudents.forEach(student => {
                 const option = document.createElement('option');
                 option.value = student.student_id_new;
                 option.textContent = student.first_name + ' ' + student.last_name;
@@ -783,7 +962,6 @@ function deleteGroup() {
     });
 }
 
-
 function resetStudentList() {
     const studentList = document.getElementById('student-list');
     const selectedGroup = document.querySelector('.selected-group');
@@ -800,15 +978,19 @@ function loadMetadata() {
     fetch('users/fetch_metadata.php')
         .then(response => response.json())
         .then(data => {
-            const metadataSelect = document.getElementById('metadata-id');
-            metadataSelect.innerHTML = ''; // Clear previous options
+            const metadataSelect = document.getElementById('existing-metadata-id');
+            if (metadataSelect) {
+                metadataSelect.innerHTML = '';
 
-            data.forEach(metadata => {
-                const option = document.createElement('option');
-                option.value = metadata.metadata_id;
-                option.textContent = metadata.category_name;
-                metadataSelect.appendChild(option);
-            });
+                data.forEach(metadata => {
+                    const option = document.createElement('option');
+                    option.value = metadata.metadata_id;
+                    option.textContent = metadata.category_name;
+                    metadataSelect.appendChild(option);
+                });
+            } else {
+                console.error('Metadata select element not found.');
+            }
         })
         .catch(error => {
             console.error('Error loading metadata:', error);
@@ -824,6 +1006,10 @@ function showAddGoalModal() {
     }
     const modal = document.getElementById('add-goal-modal');
     modal.style.display = 'block';
+
+    // Load templates and existing categories when modal is shown
+    loadTemplates();
+    loadExistingCategories();
 }
 
 function hideAddGoalModal() {
@@ -832,55 +1018,120 @@ function hideAddGoalModal() {
 }
 
 function addGoal(event) {
-        event.preventDefault();
+    event.preventDefault();
 
-        const studentId = document.getElementById('selected-student-id').value;
-        const goalDescription = document.getElementById('goal-description').value;
-        const goalDate = document.getElementById('goal-date').value;
-        const metadataId = document.getElementById('metadata-id').value;
+    const studentId = document.getElementById('selected-student-id').value;
+    const goalDescription = document.getElementById('goal-description').value;
+    const goalDate = document.getElementById('goal-date').value;
+    const metadataOptionElement = document.querySelector('#metadataOptionSelector .selector-item.selected');
+    const metadataOption = metadataOptionElement ? metadataOptionElement.getAttribute('data-option') : null;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+    let metadataId = null;
 
-        if (!studentId) {
-            alert('Please select a student first.');
+    if (!studentId || !goalDescription || !goalDate || !metadataOption || !schoolId) {
+        alert('Missing required parameters.');
+        return;
+    }
+
+    if (metadataOption === 'existing') {
+        metadataId = document.getElementById('existing-metadata-select').value;
+        if (!metadataId) {
+            alert('Please select an existing category.');
+            return;
+        }
+    } else if (metadataOption === 'template') {
+        metadataId = document.getElementById('template-metadata-select').value;
+        if (!metadataId) {
+            alert('Please select a category template.');
             return;
         }
 
-        const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+        // If using a template, copy the template to create a new metadata entry
+        fetch(`users/fetch_metadata_details.php?metadata_id=${metadataId}`)
+            .then(response => response.json())
+            .then(template => {
+                if (template.error) {
+                    throw new Error(template.error);
+                }
 
-        fetch('./users/add_goal.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message && data.message.includes("Goal added successfully.")) {
-                loadGoals(studentId);
+                return fetch('./users/add_goal.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        student_id: studentId,
+                        goal_description: goalDescription,
+                        goal_date: goalDate,
+                        metadata_option: metadataOption,
+                        template_id: metadataId,
+                        school_id: schoolId
+                    })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                alert('Goal added successfully!');
                 hideAddGoalModal();
-            } else {
-                console.error('Error adding goal:', data);
-                alert('Error adding goal: ' + (data.error || 'Unknown error'));
-            }
-        })
-        .catch(error => {
-            console.error('Network or parsing error:', error);
-            alert('There was a network or parsing error. Please try again.');
-        });
+                loadGoals(studentId); // Refresh the goals list
+            })
+            .catch(error => {
+                console.error('Error adding goal:', error);
+                alert('Error adding goal: ' + error.message);
+            });
+
+        return;
+    } else {
+        alert('Invalid metadata option.');
+        return;
     }
+
+    fetch('./users/add_goal.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            student_id: studentId,
+            goal_description: goalDescription,
+            goal_date: goalDate,
+            metadata_option: metadataOption,
+            existing_category_id: metadataId,
+            school_id: schoolId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+        alert('Goal added successfully!');
+        hideAddGoalModal();
+        loadGoals(studentId); // Refresh the goals list
+    })
+    .catch(error => {
+        console.error('Error adding goal:', error);
+        alert('Error adding goal: ' + error.message);
+    });
+}
 
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.json())
         .then(data => {
-            const goalList = document.getElementById('goal-list');
-            goalList.innerHTML = '';
-
             if (data.error) {
                 alert(data.message);
                 return;
             }
+
+            const goalList = document.getElementById('goal-list');
+            goalList.innerHTML = '';
 
             const goalsByMetadata = data.reduce((acc, goal) => {
                 if (!acc[goal.metadata_id]) {
@@ -900,7 +1151,7 @@ function loadGoals(studentId) {
                 metadataContainer.appendChild(metadataLink);
 
                 metadataGoals.goals.forEach(goal => {
-                    if (!goal.archived) {  // Ensure the goal is not archived
+                    if (!goal.archived) {
                         const listItem = document.createElement('div');
                         listItem.classList.add('goal-item');
                         listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
@@ -913,7 +1164,6 @@ function loadGoals(studentId) {
                 goalList.appendChild(metadataContainer);
             }
 
-            // Reinitialize the quill editors
             document.querySelectorAll('.quill-editor').forEach(editor => {
                 const goalId = editor.getAttribute('data-goal-id');
                 if (!quillInstances[goalId]) {
@@ -921,7 +1171,8 @@ function loadGoals(studentId) {
                         theme: 'snow',
                         readOnly: true,
                         modules: {
-                            toolbar: true                        }
+                            toolbar: false
+                        }
                     });
                 }
             });
@@ -948,7 +1199,7 @@ function archiveGoal(goalId) {
     .then(data => {
         if (data.status === 'success') {
             alert('Goal archived successfully.');
-            loadGoals(document.getElementById('selected-student-id').value); // Reload the goals to reflect the change
+            loadGoals(document.getElementById('selected-student-id').value);
         } else {
             alert('Error archiving goal: ' + (data.message || 'Unknown error'));
         }
@@ -959,7 +1210,115 @@ function archiveGoal(goalId) {
     });
 }
 
+function toggleMetadataOption() {
+    const templateOption = document.querySelector('input[name="metadata_option"][value="template"]').checked;
+    const existingOption = document.querySelector('input[name="metadata_option"][value="existing"]').checked;
 
+    document.getElementById('template-dropdown').style.display = templateOption ? 'block' : 'none';
+    document.getElementById('existing-dropdown').style.display = existingOption ? 'block' : 'none';
+}
+
+// Function to load metadata templates
+
+function loadTemplates() {
+    fetch('users/fetch_metadata_templates.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            const templateSelect = document.getElementById('template-metadata-select');
+            if (!templateSelect) {
+                console.error('Template metadata select element not found.');
+                return;
+            }
+            templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
+
+            data.forEach(template => {
+                const option = document.createElement('option');
+                option.value = template.metadata_id;
+                option.textContent = template.category_name;
+                templateSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading metadata templates:', error);
+        });
+}
+
+function loadExistingCategories() {
+    const studentId = document.getElementById('selected-student-id').value;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+
+    fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            const existingSelect = document.getElementById('existing-metadata-select');
+            if (!existingSelect) {
+                console.error('Existing metadata select element not found.');
+                return;
+            }
+            existingSelect.innerHTML = '<option value="">Select a category to see column options</option>';
+
+            data.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.metadata_id;
+                option.textContent = category.category_name;
+                existingSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading existing categories:', error);
+        });
+}
+
+function showColumnNames(type) {
+    let selectedId;
+    if (type === 'template') {
+        selectedId = document.getElementById('template-metadata-select').value;
+    } else if (type === 'existing') {
+        selectedId = document.getElementById('existing-metadata-select').value;
+    }
+
+    if (!selectedId) {
+        document.getElementById('columnNamesDisplay').style.display = 'none';
+        return;
+    }
+
+    fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            const columnNamesList = document.getElementById('columnNamesList');
+            if (!columnNamesList) {
+                console.error('Column names list element not found.');
+                return;
+            }
+            columnNamesList.innerHTML = '';
+
+            for (let i = 1; i <= 10; i++) {
+                const scoreName = data[`score${i}_name`];
+                if (scoreName) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = scoreName;
+                    columnNamesList.appendChild(listItem);
+                }
+            }
+
+            document.getElementById('columnNamesDisplay').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error loading column names:', error);
+        });
+}
 </script>
 </body>
 </html>
