@@ -133,27 +133,6 @@ window.addEventListener('scroll', function(event) {
     }, 100);
 }, false);
 
-function fetchInitialData(studentIdNew, metadataId) {
-    fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Initial data fetched:', data);
-            if (data && data.performanceData && data.scoreNames) {
-                customColumnNames = data.scoreNames; // Store the names
-                createColumnCheckboxes(customColumnNames);
-                initializeTable(data.performanceData, customColumnNames, studentIdNew, metadataId);
-                if (data.iepDate) {
-                    document.getElementById('iep_date').value = data.iepDate;
-                }
-            } else {
-                console.error('Invalid or incomplete initial data:', data);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching initial data:', error);
-        });
-}
-
 // Function to initialize the table
 function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) {
     if (table) {
@@ -323,12 +302,35 @@ function saveIEPDate(iepDate, studentId) {
     .catch(error => console.error('Error saving IEP date:', error));
 }
 
+function fetchInitialData(studentIdNew, metadataId) {
+    fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Initial data fetched:', data);
+            console.log('Data structure:', data);
+            if (data && data.performanceData && data.scoreNames) {
+                customColumnNames = data.scoreNames; // Store the names
+                createColumnCheckboxes(customColumnNames);
+                initializeTable(data.performanceData, customColumnNames, studentIdNew, metadataId);
+                if (data.iepDate) {
+                    document.getElementById('iep_date').value = data.iepDate;
+                }
+            } else {
+                console.error('Invalid or incomplete initial data:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching initial data:', error);
+        });
+}
+
 function fetchFilteredData(iepDate, studentId, metadataId) {
     console.log(`Fetching filtered data for IEP Date: ${iepDate}, Student ID: ${studentId}, Metadata ID: ${metadataId}`);
     fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
         .then(response => response.json())
         .then(data => {
             console.log('Filtered data fetched:', data);
+            console.log('Data structure:', data);
             if (data && data.performanceData && data.scoreNames) {
                 customColumnNames = data.scoreNames; // Update the stored names
                 createColumnCheckboxes(customColumnNames);
@@ -676,6 +678,7 @@ function getBarChartOptions(dates, seriesData) {
 }
 
 function createColumnCheckboxes(scoreNames) {
+    console.log('Creating checkboxes with scoreNames:', scoreNames); // Add logging
     const columnSelector = document.getElementById('columnSelector');
     columnSelector.innerHTML = ''; // Clear any existing checkboxes
 
