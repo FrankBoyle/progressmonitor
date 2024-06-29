@@ -837,7 +837,7 @@ input[type="text"] {
 }
 
 .charts-wrapper {
-    width: 100%;
+    max-width: 1000px;
     display: flex;
     flex-wrap: wrap;
 }
@@ -849,7 +849,7 @@ input[type="text"] {
 }
 
 .chart {
-    width: 1000px; /* Adjust the width to fit two charts side by side */
+    width: 100%; /* Make the chart take the full width of the wrapper */
     height: auto; /* Set a fixed height for the charts */
     border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
 
