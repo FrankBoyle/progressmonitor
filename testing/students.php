@@ -779,9 +779,13 @@ function hideEditGroupModal() {
 }
 
 function loadGroupStudents(groupId) {
+    console.log('Loading students for group:', groupId); // Debug log
+
     fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
+            console.log('Fetched group students:', data); // Debug log
+
             const groupStudentsList = document.getElementById('group-students-list');
             groupStudentsList.innerHTML = '';
 
@@ -825,6 +829,7 @@ function loadGroupStudents(groupId) {
             alert('There was an error loading the students for this group. Please try again.');
         });
 }
+
 
 function removeStudentFromGroup(studentId, groupId) {
     if (!confirm('Are you sure you want to remove this student from the group?')) {
