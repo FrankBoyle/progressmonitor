@@ -251,14 +251,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
-    document.querySelector('.add-student-btn').addEventListener('click', function() {
-        const selectedGroup = document.querySelector('.selected-group');
-        if (selectedGroup) {
-            const groupId = selectedGroup.getAttribute('data-group-id');
-            loadStudentsForGroupAssignment(groupId);
-        }
-        showAddStudentModal();
-    });
 
     window.hideAddGroupModal = hideAddGroupModal;
     window.hideAddStudentModal = hideAddStudentModal;
@@ -308,6 +300,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+document.querySelector('.add-student-btn').addEventListener('click', function() {
+        const selectedGroup = document.querySelector('.selected-group');
+        if (selectedGroup) {
+            const groupId = selectedGroup.getAttribute('data-group-id');
+            loadStudentsForGroupAssignment(groupId);
+        }
+        showAddStudentModal();
+    });
 
 function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
