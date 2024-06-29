@@ -521,6 +521,32 @@ function loadStudentsByGroup(groupId) {
         });
 }
 
+function loadStudentsForGroupAssignment(groupId) {
+    fetch('users/fetch_students.php') // Adjust the endpoint if necessary
+        .then(response => response.json())
+        .then(data => {
+            const studentSelect = document.querySelector('[name="student_id"]');
+            studentSelect.innerHTML = '<option></option>'; // Clear previous options
+
+            // Filter students who are not in the selected group
+            const filteredStudents = data.filter(student => !student.groups.includes(groupId));
+
+            filteredStudents.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.student_id_new;
+                option.textContent = student.first_name + ' ' + student.last_name;
+                studentSelect.appendChild(option);
+            });
+
+            // Reinitialize the select2 element
+            $('.select2').select2();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('There was an error loading students. Please try again.');
+        });
+}
+
 function loadGroups() {
     fetch('users/fetch_groups.php')
         .then(response => response.json())
