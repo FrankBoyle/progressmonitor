@@ -96,6 +96,22 @@ include('./users/auth_session.php');
 <div id="add-student-modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hideAddStudentModal()">&times;</span>
+
+        <h2>Assign Students to Group</h2>
+        <div style="margin-top: 20px;">
+            <h3>Assign Students to Group</h3>
+            <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
+                <div style="display: flex; align-items: center;">
+                    <div style="margin-right: 10px;">
+                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here">
+                            <option></option>
+                            <!-- Options will be dynamically populated -->
+                        </select>
+                    </div>
+                    <button type="submit" name="assign_to_group">Assign to Group</button>
+                </div>
+            </form>
+        </div>
         <h2>Add New Student</h2>
         <form id="add-student-form" onsubmit="addStudent(event)">
             <div class="form-group">
@@ -117,21 +133,6 @@ include('./users/auth_session.php');
             <button type="submit">Add Student</button>
         </form>
 
-        <!-- Assign Students to Group -->
-        <div style="margin-top: 20px;">
-            <h3>Assign Students to Group</h3>
-            <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
-                <div style="display: flex; align-items: center;">
-                    <div style="margin-right: 10px;">
-                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here">
-                            <option></option>
-                            <!-- Options will be dynamically populated -->
-                        </select>
-                    </div>
-                    <button type="submit" name="assign_to_group">Assign to Group</button>
-                </div>
-            </form>
-        </div>
     </div>
 </div>
 
