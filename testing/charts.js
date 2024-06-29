@@ -295,7 +295,7 @@ function saveIEPDate(iepDate, studentIdNew) {
     .then(data => {
         console.log('IEP date saved:', data);
         if (data.success) {
-            fetchInitialData(iepDate, studentIdNew, metadataId);
+            fetchInitialData(studentIdNew, metadataId);
         } else {
             alert(data.message);
         }
@@ -303,7 +303,7 @@ function saveIEPDate(iepDate, studentIdNew) {
     .catch(error => console.error('Error saving IEP date:', error));
 }
 
-function fetchInitialData(iepDate, studentIdNew, metadataId) {
+function fetchInitialData(studentIdNew, metadataId) {
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
