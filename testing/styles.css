@@ -842,6 +842,12 @@ input[type="text"] {
     flex-wrap: wrap;
 }
 
+@media print {
+    .chart-wrapper {
+        max-width: 1000px;
+    }
+}
+
 #chartContainer, #barChartContainer {
     width: 100%;
 

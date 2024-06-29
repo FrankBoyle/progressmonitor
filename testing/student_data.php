@@ -19,14 +19,13 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKFCCN4XXS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-LKFCCN4XXS');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKFCCN4XXS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-LKFCCN4XXS');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
@@ -38,117 +37,121 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
+    <style>
+        .chart-wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
 
+        .chart {
+            width: 100%;
+        }
+
+        @media print {
+            .chart-wrapper {
+                max-width: 1000px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="dashboard">
-    <header class="dashboard-header">
-        <div class="logo">
-            <img src="bFactor_logo.png" alt="Logo">
-        </div>
-        <div class="header-icons">
-            <button id="printReportBtn" class="btn btn-primary">Print Report</button>
-            <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-            <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
-        </div>
-    </header>
-    <main class="content">
-
-        <!-- New Goals Card -->
-        <div class="card" id="goalsCard">
-            <div class="card-header">
-                <h3>Goals</h3>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="logo">
+                <img src="bFactor_logo.png" alt="Logo">
             </div>
-            <div id="goals-container"></div>
-
-        </div>
-        
-        <div class="card">
-            <div class="filter-section">
-                <div class="form-group">
-                    <label for="iep_date">IEP Date:</label>
-                    <input type="date" id="iep_date" name="iep_date" class="form-control">
+            <div class="header-icons">
+                <button id="printReportBtn" class="btn btn-primary">Print Report</button>
+                <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+                <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+            </div>
+        </header>
+        <main class="content">
+            <!-- New Goals Card -->
+            <div class="card" id="goalsCard">
+                <div class="card-header">
+                    <h3>Goals</h3>
                 </div>
-                <button id="filterData" class="btn btn-primary">Filter Data</button>
-                <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
-                <input type="date" id="newRowDate" style="display: none;">
+                <div id="goals-container"></div>
             </div>
-
-            <button id="editColumnsBtn" class="btn btn-primary">Edit Column Names</button>
-
-            <!-- Modal for Editing Column Names -->
-            <div id="editColumnNamesModal" class="modal">
+            <div class="card">
+                <div class="filter-section">
+                    <div class="form-group">
+                        <label for="iep_date">IEP Date:</label>
+                        <input type="date" id="iep_date" name="iep_date" class="form-control">
+                    </div>
+                    <button id="filterData" class="btn btn-primary">Filter Data</button>
+                    <button id="addDataRow" class="btn btn-primary">Add Data Row</button>
+                    <input type="date" id="newRowDate" style="display: none;">
+                </div>
+                <button id="editColumnsBtn" class="btn btn-primary">Edit Column Names</button>
+                <!-- Modal for Editing Column Names -->
+                <div id="editColumnNamesModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="hideEditColumnNamesModal()">&times;</span>
+                        <h2>Edit Column Names</h2>
+                        <form id="editColumnNamesForm" onsubmit="submitColumnNames(event)">
+                            <!-- Dynamic input fields will be added here based on the existing column names -->
+                        </form>
+                    </div>
+                </div>
+                <div id="performance-table"></div>
+            </div>
+            <div class="card chart-card">
+                <div class="selector-area">
+                    <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
+                    <div id="columnSelector" class="checkbox-container"></div>
+                </div>
+                <div id="statistics" class="statistics-area">
+                    <h3>Statistical Summary</h3>
+                    <table id="statsTable">
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Mean</th>
+                                <th>Median</th>
+                                <th>Standard Deviation</th>
+                                <th>Trendline Equation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Empty initially -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Chart Containers -->
+            <div class="card chart-card">
+                <div class="chart-wrapper">
+                    <div id="chartContainer" class="chart"></div>
+                </div>
+            </div>
+            <div class="card chart-card">
+                <div class="chart-wrapper">
+                    <div id="barChartContainer" class="chart"></div>
+                </div>
+            </div>
+            <!-- Print Report Modal -->
+            <div id="printDialogModal" class="modal">
                 <div class="modal-content">
-                    <span class="close" onclick="hideEditColumnNamesModal()">&times;</span>
-                    <h2>Edit Column Names</h2>
-                    <form id="editColumnNamesForm" onsubmit="submitColumnNames(event)">
-                        <!-- Dynamic input fields will be added here based on the existing column names -->
-                    </form>
+                    <span class="close" onclick="hidePrintDialogModal()">&times;</span>
+                    <h2>Select Sections to Print</h2>
+                    <div id="goalSelectionContainer"></div>
+                    <div>
+                        <input type="checkbox" id="printTable"> Performance Table </input>
+                        <input type="checkbox" id="printLineChart"> Line Chart </input>
+                        <input type="checkbox" id="printBarChart"> Bar Chart </input>
+                        <input type="checkbox" id="printStatistics"> Statistics </input>
+                    </div>
+                    <button onclick="printReport()">Print</button>
                 </div>
             </div>
-
-            <div id="performance-table"></div>
-
-        </div>
-
-        <div class="card column-select-card">
-            <div class="selector-area">
-                <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
-                <div id="columnSelector" class="checkbox-container"></div>
-            </div>
-            <div id="statistics" class="statistics-area">
-                <h3>Statistical Summary</h3>
-                <table id="statsTable">
-                    <thead>
-                        <tr>
-                            <th>Variable</th>
-                            <th>Mean</th>
-                            <th>Median</th>
-                            <th>Standard Deviation</th>
-                            <th>Trendline Equation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Empty initially -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Chart Containers -->
-        <div class="card chart-card">
-            <div id="chartContainer" class="chart"></div>
-        </div>
-        <div class="card chart-card">
-            <div id="barChartContainer" class="chart"></div>
-        </div>
-
-<!-- Print Report Modal -->
-<div id="printDialogModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-        <h2>Select Sections to Print</h2>
-
-        <div id="goalSelectionContainer"></div>
-
-        <div>
-            <input type="checkbox" id="printTable"> Performance Table </input>
-            <input type="checkbox" id="printLineChart"> Line Chart </input>
-            <input type="checkbox" id="printBarChart"> Bar Chart </input>
-            <input type="checkbox" id="printStatistics"> Statistics </input>
-        </div>
-
-        <button onclick="printReport()">Print</button>
+        </main>
     </div>
-</div>
-
-
-
-    </main>
-</div>
-<script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
-<script>
-const schoolId = <?php echo json_encode($schoolId); ?>;
-</script>
+    <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
+    <script>
+        const schoolId = <?php echo json_encode($schoolId); ?>;
+    </script>
 </body>
 </html>
+
