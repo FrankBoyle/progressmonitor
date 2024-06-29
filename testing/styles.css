@@ -136,7 +136,7 @@ body {
 .card-header, .box-header {
     font-size: 1.25rem; /* Adjusted font size */
     margin-bottom: 0.5rem;
-    background-color: #47A6E6; /* Light blue for headers */
+    background-color: #47a6e600; /* Light blue for headers */
 }
 
 .card-title {
