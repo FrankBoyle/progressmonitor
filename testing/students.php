@@ -117,17 +117,20 @@ include('./users/auth_session.php');
             <button type="submit">Add Student</button>
         </form>
 
-        <h3>Assign Students to Group</h3>
-        <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
-            <div style="display: flex; align-items: center;">
-                <input type="text" id="assign-student-name" placeholder="Student name here" style="margin-right: 10px;">
-                <button type="submit">Assign to Group</button>
-            </div>
-        </form>
-
-        <h3>Remove Students from Group</h3>
-        <div id="group-students-list">
-            <!-- Students will be loaded here dynamically -->
+        <!-- Assign Students to Group -->
+        <div style="margin-top: 20px;">
+            <h3>Assign Students to Group</h3>
+            <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
+                <div style="display: flex; align-items: center;">
+                    <div style="margin-right: 10px;">
+                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here">
+                            <option></option>
+                            <!-- Options will be dynamically populated -->
+                        </select>
+                    </div>
+                    <button type="submit" name="assign_to_group">Assign to Group</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -242,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadStaff();
     loadTemplates();
     loadExistingCategories();
+    loadAllStudentsForAssignment(); // Ensure this function is called to populate the select
 
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
