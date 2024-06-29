@@ -58,7 +58,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                 <h3>Goals</h3>
             </div>
             <div id="goals-container"></div>
-            <div class="red-coin"></div>
 
         </div>
         
