@@ -1179,11 +1179,11 @@ function showPrintDialogModal() {
 
             filteredGoals.forEach(goal => {
                 const goalItem = document.createElement('div');
-                goalItem.classList.add('selector-item');
+                goalItem.classList.add('selector-item', 'goal-item'); // Added 'goal-item' class
                 goalItem.setAttribute('data-goal-id', goal.goal_id);
                 goalItem.innerHTML = goal.goal_description; // Using plain HTML for goal description
                 goalItem.addEventListener('click', function() {
-                    document.querySelectorAll('.selector-item').forEach(item => item.classList.remove('selected'));
+                    document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
                 });
                 goalContainer.appendChild(goalItem);
