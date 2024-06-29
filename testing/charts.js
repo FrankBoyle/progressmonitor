@@ -1087,7 +1087,7 @@ function printReport() {
 
     if (printLineChart) {
         const lineChartElement = document.getElementById('chartContainer');
-        lineChartElement.style.width = '1000px';
+        lineChartElement.style.width = '800px';
         lineChartElement.style.height = 'auto';
         lineChartElement.style.overflow = 'visible';
         lineChartElement.style.border = 'none';
@@ -1097,7 +1097,7 @@ function printReport() {
 
     if (printBarChart) {
         const barChartElement = document.getElementById('barChartContainer');
-        barChartElement.style.width = '1000px';
+        barChartElement.style.width = '800px';
         barChartElement.style.height = 'auto';
         barChartElement.style.overflow = 'visible';
         barChartElement.style.border = 'none';
