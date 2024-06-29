@@ -854,7 +854,7 @@ input[type="text"] {
 }
 
 #chartContainer, #barChartContainer {
-    width: auto;
+    width: 100%;
 
 }
 
