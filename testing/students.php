@@ -830,7 +830,7 @@ function loadAllStudentsForAssignment() {
     fetch('users/fetch_students.php') // Adjust the endpoint if necessary
         .then(response => response.json())
         .then(data => {
-            const studentSelect = document.querySelector('[name="student_ids[]"]');
+            const studentSelect = document.querySelector('[name="student_id"]');
             studentSelect.innerHTML = '<option></option>'; // Clear previous options
 
             data.forEach(student => {
