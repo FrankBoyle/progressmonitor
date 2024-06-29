@@ -1090,7 +1090,8 @@ function printReport() {
         lineChartElement.style.width = '600px'; // Explicitly set width for printing
         lineChartElement.style.height = 'auto';
         lineChartElement.classList.add('chart-wrapper-print');
-        lineChartElement.querySelector('.apexcharts-canvas').classList.add('chart-print');
+        const canvasElement = lineChartElement.querySelector('.apexcharts-canvas');
+        canvasElement.classList.add('chart-print');
         printContents += `<div>${lineChartElement.outerHTML}</div>`;
     }
 
@@ -1099,7 +1100,8 @@ function printReport() {
         barChartElement.style.width = '600px'; // Explicitly set width for printing
         barChartElement.style.height = 'auto';
         barChartElement.classList.add('chart-wrapper-print');
-        barChartElement.querySelector('.apexcharts-canvas').classList.add('chart-print');
+        const canvasElement = barChartElement.querySelector('.apexcharts-canvas');
+        canvasElement.classList.add('chart-print');
         printContents += `<div>${barChartElement.outerHTML}</div>`;
     }
 
