@@ -1180,7 +1180,6 @@ function showPrintDialogModal() {
     const goalContainer = document.getElementById('goalSelectionContainer');
     goalContainer.innerHTML = ''; // Clear previous options
 
-    // Fetch goals and populate the container
     fetch(`./users/fetch_goals.php?student_id=${studentIdNew}`)
         .then(response => response.json())
         .then(data => {
@@ -1189,14 +1188,13 @@ function showPrintDialogModal() {
                 return;
             }
 
-            // Filter goals based on current metadata
             const filteredGoals = data.filter(goal => goal.metadata_id == metadataId);
 
             filteredGoals.forEach(goal => {
                 const goalItem = document.createElement('div');
-                goalItem.classList.add('selector-item', 'goal-item'); // Added 'goal-item' class
+                goalItem.classList.add('goal-item');
                 goalItem.setAttribute('data-goal-id', goal.goal_id);
-                goalItem.innerHTML = goal.goal_description; // Using plain HTML for goal description
+                goalItem.innerHTML = goal.goal_description;
                 goalItem.addEventListener('click', function() {
                     document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
@@ -1209,22 +1207,6 @@ function showPrintDialogModal() {
         .catch(error => {
             console.error('Error fetching goals:', error);
         });
-
-    // Set up section selection
-    const sections = ['Performance Table', 'Line Chart', 'Bar Chart', 'Statistics'];
-    const sectionContainer = document.getElementById('sectionSelectionContainer');
-    sectionContainer.innerHTML = ''; // Clear previous options
-
-    sections.forEach(section => {
-        const sectionItem = document.createElement('div');
-        sectionItem.classList.add('selector-item');
-        sectionItem.setAttribute('data-section', section.toLowerCase().replace(' ', ''));
-        sectionItem.textContent = section;
-        sectionItem.addEventListener('click', function() {
-            sectionItem.classList.toggle('selected');
-        });
-        sectionContainer.appendChild(sectionItem);
-    });
 }
 
 function hidePrintDialogModal() {
