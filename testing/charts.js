@@ -324,7 +324,7 @@ function fetchInitialData(studentIdNew, metadataId) {
         });
 }
 
-function fetchFilteredData(iepDate, studentId, metadataId) {
+function fetchFilteredData(iepDate, studentIdNew, metadataId) {
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
