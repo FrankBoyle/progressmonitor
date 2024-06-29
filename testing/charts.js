@@ -303,7 +303,7 @@ function saveIEPDate(iepDate, studentIdNew) {
     .catch(error => console.error('Error saving IEP date:', error));
 }
 
-function fetchInitialData(studentIdNew, metadataId) {
+function fetchInitialData(iepDate, studentIdNew, metadataId) {
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
