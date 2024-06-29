@@ -114,40 +114,21 @@ include('./users/auth_session.php');
                 <label for="grade-level">Grade Level:</label>
                 <input type="text" id="grade-level" name="grade_level" required>
             </div>
-            <div class="form-group">
-                <label for="group-select">Assign to Group (optional):</label>
-                <select id="group-select" name="group_id" class="select2" style="width: 100%;">
-                    <option value="" disabled selected>Select a group</option>
-                    <?php foreach ($groups as $group): ?>
-                        <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
             <button type="submit">Add Student</button>
         </form>
 
-        <h3>Assign Existing Student to Group</h3>
-        <form id="assign-existing-student-form" onsubmit="assignExistingStudentToGroup(event)">
-            <div class="form-group">
-                <label for="existing-student-select">Select Student:</label>
-                <select id="existing-student-select" name="student_id" class="select2" style="width: 100%;" required>
-                    <option value="" disabled selected>Select a student</option>
-                    <?php foreach ($allStudents as $student): ?>
-                        <option value="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
+        <h3>Assign Students to Group</h3>
+        <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="assign-student-name" placeholder="Student name here" style="margin-right: 10px;">
+                <button type="submit">Assign to Group</button>
             </div>
-            <div class="form-group">
-                <label for="assign-group-select">Select Group:</label>
-                <select id="assign-group-select" name="group_id" class="select2" style="width: 100%;" required>
-                    <option value="" disabled selected>Select a group</option>
-                    <?php foreach ($groups as $group): ?>
-                        <option value="<?= htmlspecialchars($group['group_id']) ?>"><?= htmlspecialchars($group['group_name']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <button type="submit">Assign to Group</button>
         </form>
+
+        <h3>Remove Students from Group</h3>
+        <div id="group-students-list">
+            <!-- Students will be loaded here dynamically -->
+        </div>
     </div>
 </div>
 
@@ -638,25 +619,33 @@ function editGroup() {
 
 function assignStudentsToGroup(event) {
     event.preventDefault();
+    const studentName = document.getElementById('assign-student-name').value;
     const groupId = document.getElementById('edit-group-id').value;
-    const studentIds = Array.from(document.querySelector('[name="student_ids[]"]').selectedOptions).map(option => option.value);
+
+    if (!studentName) {
+        alert('Please enter a student name.');
+        return;
+    }
 
     fetch('./users/assign_students_to_group.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `group_id=${encodeURIComponent(groupId)}&student_ids=${encodeURIComponent(studentIds.join(','))}`
+        body: `group_id=${encodeURIComponent(groupId)}&student_name=${encodeURIComponent(studentName)}`
     })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        alert(data);
-        hideEditGroupModal();
-        loadGroups();
+        if (data.status === 'success') {
+            alert('Student assigned to group successfully.');
+            loadGroupStudents(groupId); // Refresh the group students list
+        } else {
+            alert('Error assigning student to group: ' + data.message);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('There was an error assigning students to the group. Please try again.');
+        alert('There was an error assigning the student to the group. Please try again.');
     });
 }
 
@@ -740,7 +729,6 @@ function saveGoal(goalId, goalDescription) {
 function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-id').value = groupId;
     document.getElementById('edit-group-name').value = groupName || '';
-    document.getElementById('share-group-id').value = groupId;
     document.getElementById('edit-group-modal').style.display = 'block';
 
     // Ensure the select2 is properly refreshed
@@ -763,8 +751,6 @@ function loadGroupStudents(groupId) {
     fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched group students:', data); // Log the response data
-
             const groupStudentsList = document.getElementById('group-students-list');
             groupStudentsList.innerHTML = '';
 
@@ -827,7 +813,7 @@ function removeStudentFromGroup(studentId, groupId) {
             alert('Student removed from group successfully.');
             loadGroupStudents(groupId); // Refresh the group students list
         } else {
-            alert('There was an error removing the student from the group. Please try again.');
+            alert('Error removing student from group: ' + data.message);
         }
     })
     .catch(error => {
