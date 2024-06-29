@@ -870,11 +870,10 @@ input[type="text"] {
     .card {
         box-shadow: none;
     }
-}
 
-#chartContainer, #barChartContainer {
-    width: 100%;
-
+    #chartContainer, #barChartContainer {
+        width: 100%;
+    }
 }
 
 .chart {
