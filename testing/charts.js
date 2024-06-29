@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
     setupInitialPageLoad();
     attachEventListeners();
     initializeCharts();
+    // Fetch and display goals
+    fetchGoals(studentIdNew, metadataId);
 });
 
 function setupInitialPageLoad() {
