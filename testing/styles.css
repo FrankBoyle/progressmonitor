@@ -844,7 +844,7 @@ input[type="text"] {
 
 @media print {
     .chart-wrapper-print {
-        width: 1000px;
+        width: 600px;
         margin: 0 auto; /* Center align the chart */
         overflow: visible; /* Ensure overflow is visible for printing */
         border: none; /* Remove any borders */
@@ -852,7 +852,7 @@ input[type="text"] {
     }
 
     .chart-print {
-        width: 1000px;
+        width: 600px;
         height: auto;
         overflow: visible; /* Ensure overflow is visible for printing */
         border: none; /* Remove any borders */
