@@ -852,17 +852,22 @@ function removeStudentFromGroup(studentId, groupId) {
     });
 }
 
-function loadAllStudentsForAssignment() {
-    fetch('users/fetch_students.php') // Adjust the endpoint if necessary
+function loadAllStudentsForAssignment(groupId) {
+    fetch(`./users/fetch_students_not_in_group.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
             const studentSelect = document.querySelector('[name="student_id"]');
             studentSelect.innerHTML = '<option></option>'; // Clear previous options
 
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
             data.forEach(student => {
                 const option = document.createElement('option');
                 option.value = student.student_id_new;
-                option.textContent = student.first_name + ' ' + student.last_name;
+                option.textContent = `${student.first_name} ${student.last_name}`;
                 studentSelect.appendChild(option);
             });
 
