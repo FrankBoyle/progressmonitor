@@ -501,6 +501,7 @@ function loadStudentsByGroup(groupId) {
                 const listItem = document.createElement('li');
                 listItem.textContent = student.first_name + ' ' + student.last_name;
                 listItem.setAttribute('data-student-id', student.student_id);
+                listItem.addEventListener('click', () => selectStudent(listItem)); // Add event listener
                 studentList.appendChild(listItem);
             });
 
@@ -512,6 +513,7 @@ function loadStudentsByGroup(groupId) {
             alert('There was an error loading the students for this group. Please try again.');
         });
 }
+
 
 function loadGroups() {
     fetch('users/fetch_groups.php')
