@@ -251,7 +251,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
-    document.querySelector('.add-student-btn').addEventListener('click', showAddStudentModal);
+    document.querySelector('.add-student-btn').addEventListener('click', function() {
+        const selectedGroup = document.querySelector('.selected-group');
+        if (selectedGroup) {
+            const groupId = selectedGroup.getAttribute('data-group-id');
+            loadStudentsForGroupAssignment(groupId);
+        }
+        showAddStudentModal();
+    });
 
     window.hideAddGroupModal = hideAddGroupModal;
     window.hideAddStudentModal = hideAddStudentModal;
@@ -514,7 +521,6 @@ function loadStudentsByGroup(groupId) {
         });
 }
 
-
 function loadGroups() {
     fetch('users/fetch_groups.php')
         .then(response => response.json())
@@ -673,7 +679,6 @@ function assignStudentsToGroup(event) {
         alert('There was an error assigning students to the group. Please try again.');
     });
 }
-
 
 function shareGroup(event) {
     event.preventDefault();
@@ -853,21 +858,19 @@ function removeStudentFromGroup(studentId, groupId) {
 }
 
 function loadAllStudentsForAssignment(groupId) {
-    fetch(`./users/fetch_students_not_in_group.php?group_id=${encodeURIComponent(groupId)}`)
+    fetch('users/fetch_students.php') // Adjust the endpoint if necessary
         .then(response => response.json())
         .then(data => {
             const studentSelect = document.querySelector('[name="student_id"]');
             studentSelect.innerHTML = '<option></option>'; // Clear previous options
 
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
+            // Filter students who are not in the selected group
+            const filteredStudents = data.filter(student => !student.groups.includes(groupId));
 
-            data.forEach(student => {
+            filteredStudents.forEach(student => {
                 const option = document.createElement('option');
                 option.value = student.student_id_new;
-                option.textContent = `${student.first_name} ${student.last_name}`;
+                option.textContent = student.first_name + ' ' + student.last_name;
                 studentSelect.appendChild(option);
             });
 
