@@ -1088,12 +1088,12 @@ function printReport() {
 
     if (printLineChart) {
         const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div>${lineChartContent}</div>`;
+        printContents += `<div class="chart-wrapper chart-wrapper-print"><div class="chart chart-print">${lineChartContent}</div></div>`;
     }
 
     if (printBarChart) {
         const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div>${barChartContent}</div>`;
+        printContents += `<div class="chart-wrapper chart-wrapper-print"><div class="chart chart-print">${barChartContent}</div></div>`;
     }
 
     if (printStatistics) {
