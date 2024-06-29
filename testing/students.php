@@ -471,47 +471,56 @@ function hideAddStudentModal() {
 }
 
 function loadStudentsByGroup(groupId) {
-    fetch('users/fetch_students_by_group.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `group_id=${encodeURIComponent(groupId)}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        const studentList = document.getElementById('student-list');
-        const studentSelect = document.querySelector('[name="student_ids[]"]');
-        studentList.innerHTML = '';
-        studentSelect.innerHTML = '<option></option>'; // Clear previous options
+    fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched group students:', data); // Log the response data
 
-        data.forEach(student => {
-            // Populate student list
-            const listItem = document.createElement('li');
-            listItem.textContent = student.first_name + ' ' + student.last_name;
-            listItem.setAttribute('data-student-id', student.student_id_new);
-            listItem.addEventListener('click', function() {
-                selectStudent(this);
+            const groupStudentsList = document.getElementById('group-students-list');
+            groupStudentsList.innerHTML = '';
+
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            if (data.length === 0) {
+                groupStudentsList.innerHTML = '<p>No students in this group.</p>';
+                return;
+            }
+
+            // Sort students by last name within the group
+            data.sort((a, b) => a.last_name.localeCompare(b.last_name));
+
+            data.forEach(student => {
+                const studentItem = document.createElement('div');
+                studentItem.style.display = 'flex';
+                studentItem.style.alignItems = 'center';
+                studentItem.style.marginBottom = '10px';
+
+                const studentName = document.createElement('span');
+                studentName.style.marginRight = '10px';
+                studentName.textContent = student.first_name + ' ' + student.last_name;
+
+                const removeButton = document.createElement('button');
+                removeButton.style.color = 'red';
+                removeButton.style.background = 'none';
+                removeButton.style.border = 'none';
+                removeButton.style.cursor = 'pointer';
+                removeButton.style.fontSize = '16px';
+                removeButton.style.lineHeight = '1';
+                removeButton.textContent = '×';
+                removeButton.onclick = () => removeStudentFromGroup(student.student_id, groupId);
+
+                studentItem.appendChild(studentName);
+                studentItem.appendChild(removeButton);
+                groupStudentsList.appendChild(studentItem);
             });
-            studentList.appendChild(listItem);
-
-            // Populate select options
-            const option = document.createElement('option');
-            option.value = student.student_id_new;
-            option.textContent = student.first_name + ' ' + student.last_name;
-            studentSelect.appendChild(option);
+        })
+        .catch(error => {
+            console.error('Error fetching group students:', error);
+            alert('There was an error loading the students for this group. Please try again.');
         });
-
-        // Reinitialize the select2 element
-        $('.select2').select2();
-
-        // Call populateStudentsAndGoals after updating the student list
-        populateStudentsAndGoals();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error loading students. Please try again.');
-    });
 }
 
 function loadGroups() {
@@ -556,6 +565,9 @@ function loadStudents() {
             const studentSelect = document.querySelector('[name="student_ids[]"]');
             studentList.innerHTML = '';
             studentSelect.innerHTML = '<option></option>'; // Clear previous options
+
+            // Sort students by last name
+            data.sort((a, b) => a.last_name.localeCompare(b.last_name));
 
             data.forEach(student => {
                 // Populate student list
@@ -626,20 +638,11 @@ function editGroup() {
 
 function assignStudentsToGroup(event) {
     event.preventDefault();
-    
     const groupId = document.getElementById('edit-group-id').value;
-    const studentId = document.querySelector('[name="student_id"]').value;
+    const studentIds = Array.from(document.querySelector('[name="student_ids[]"]').selectedOptions).map(option => option.value);
 
-    console.log('groupId:', groupId); // Log the groupId
-    console.log('studentId:', studentId); // Log the studentId
-
-    if (!groupId) {
-        alert('Please select a group.');
-        return;
-    }
-    
-    if (!studentId) {
-        alert('Please select a student.');
+    if (!groupId || studentIds.length === 0) {
+        alert("Please select a student and a group.");
         return;
     }
 
@@ -648,22 +651,22 @@ function assignStudentsToGroup(event) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `group_id=${encodeURIComponent(groupId)}&student_ids=${encodeURIComponent(studentId)}`
+        body: `group_id=${encodeURIComponent(groupId)}&student_ids=${encodeURIComponent(studentIds.join(','))}`
     })
-    .then(response => response.json()) // Assuming the response is JSON
+    .then(response => response.json())
     .then(data => {
-        console.log('Response:', data); // Log the response
-        if (data.status === 'success') {
-            alert('Student assigned to group successfully.');
-            hideAddStudentModal(); // Close the modal
-            loadGroups(); // Refresh the groups list
+        if (data.status === "success") {
+            alert(data.message);
+            hideEditGroupModal();
+            loadGroupStudents(groupId); // Reload the students in the group
+            loadStudents(); // Reload the student list
         } else {
-            alert(`Error: ${data.message}`);
+            alert(data.error);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('There was an error assigning the student to the group. Please try again.');
+        alert('There was an error assigning students to the group. Please try again.');
     });
 }
 
@@ -831,7 +834,7 @@ function removeStudentFromGroup(studentId, groupId) {
             alert('Student removed from group successfully.');
             loadGroupStudents(groupId); // Refresh the group students list
         } else {
-            alert('Error removing student from group: ' + data.message);
+            alert('There was an error removing the student from the group. Please try again.');
         }
     })
     .catch(error => {
