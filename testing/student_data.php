@@ -51,7 +51,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </header>
     <main class="content">
         <!-- New Goals Card -->
-        <div class="card" id="goals-card">
+        <div class="card" id="goalsCard">
             <div class="card-header">
                 <h3>Goals</h3>
             </div>
