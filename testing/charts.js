@@ -1088,9 +1088,11 @@ function printReport() {
     printContents += '</div>';
 
     const originalContents = document.body.innerHTML;
+    disableChartInteractions(); // Disable chart interactions
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
+    enableChartInteractions(); // Re-enable chart interactions
 }
 
 
