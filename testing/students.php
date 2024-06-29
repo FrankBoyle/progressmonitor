@@ -562,6 +562,7 @@ function loadStudents() {
         .then(response => response.json())
         .then(data => {
             const studentList = document.getElementById('student-list');
+            const studentsMessage = document.getElementById('students-message');
             const studentSelect = document.querySelector('[name="student_ids[]"]');
             studentList.innerHTML = '';
             studentSelect.innerHTML = '<option></option>'; // Clear previous options
@@ -574,6 +575,9 @@ function loadStudents() {
                 const listItem = document.createElement('li');
                 listItem.textContent = student.first_name + ' ' + student.last_name;
                 listItem.setAttribute('data-student-id', student.student_id_new);
+                listItem.addEventListener('click', function() {
+                    selectStudent(this);
+                });
                 studentList.appendChild(listItem);
 
                 // Populate select options
@@ -586,8 +590,14 @@ function loadStudents() {
             // Reinitialize the select2 element
             $('.select2').select2();
 
-            // Call populateStudentsAndGoals after updating the student list
-            populateStudentsAndGoals();
+            // Show or hide the student list and message based on content
+            if (studentList.children.length > 0) {
+                studentsMessage.style.display = 'none';
+                studentList.style.display = 'block';
+            } else {
+                studentsMessage.style.display = 'block';
+                studentList.style.display = 'none';
+            }
         })
         .catch(error => {
             console.error('Error:', error);
