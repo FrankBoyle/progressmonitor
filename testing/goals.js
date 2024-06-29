@@ -101,7 +101,8 @@ function fetchGoals(studentIdNew, metadataId) {
         .then(data => {
             console.log('Goals data fetched:', data);
             if (data && Array.isArray(data)) {
-                displayGoals(data);
+                const filteredGoals = data.filter(goal => goal.metadata_id == metadataId);
+                displayGoals(filteredGoals);
             } else {
                 console.error('Invalid or incomplete goals data:', data);
             }
