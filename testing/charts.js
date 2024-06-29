@@ -1063,8 +1063,10 @@ function printReport() {
         return;
     }
 
-    const selectedSections = Array.from(document.querySelectorAll('#printSelectionContainer .selector-item.selected'))
+    const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
         .map(item => item.getAttribute('data-section'));
+
+    console.log("Selected sections:", selectedSections); // Add this line to log selected sections
 
     if (selectedSections.length === 0) {
         alert("Please select at least one section to print.");
