@@ -947,27 +947,53 @@ function fetchGoals(studentId, metadataId) {
 }
 
 function displayGoals(goals) {
-    const goalsContainer = document.getElementById('goalsContainer');
-    goalsContainer.innerHTML = ''; // Clear any existing goals
+    const goalsContainer = document.getElementById('goals-container');
+    goalsContainer.innerHTML = ''; // Clear existing goals
 
     goals.forEach(goal => {
-        const goalElement = document.createElement('div');
-        goalElement.className = 'goal-item';
-        goalElement.innerHTML = `
-            <div class="goal-content" ondblclick="editGoal(${goal.goal_id})">
-                <div class="goal-text" id="goal-text-${goal.goal_id}">${goal.goal_description}</div>
-                <div class="goal-actions">
-                    <button class="btn btn-danger" onclick="archiveGoal(${goal.goal_id})">Archive</button>
-                </div>
-            </div>
-            <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
-                <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                <button class="btn btn-primary" onclick="saveGoal(${goal.goal_id})">Save</button>
-                <button class="btn btn-secondary" onclick="cancelEdit(${goal.goal_id})">Cancel</button>
-            </div>
+        if (!goal.goal_id || !goal.goal_description) {
+            console.error('Invalid goal structure:', goal);
+            return;
+        }
+
+        const goalItem = document.createElement('div');
+        goalItem.classList.add('goal-item');
+        goalItem.innerHTML = `
+            <div class="quill-editor" id="editor-${goal.goal_id}"></div>
+            <button class="edit-btn">Edit</button>
+            <button class="save-btn">Save</button>
+            <button class="cancel-btn">Cancel</button>
+            <button class="archive-btn">Archive</button>
         `;
-        goalsContainer.appendChild(goalElement);
-        initializeQuillEditor(goal.goal_id, goal.goal_description);
+
+        goalsContainer.appendChild(goalItem);
+
+        const quill = new Quill(`#editor-${goal.goal_id}`, {
+            theme: 'snow',
+            readOnly: true
+        });
+
+        quill.root.innerHTML = goal.goal_description; // Load the goal content
+
+        goalItem.querySelector('.edit-btn').addEventListener('click', () => {
+            quill.enable(true);
+            goalItem.classList.add('editing');
+        });
+
+        goalItem.querySelector('.save-btn').addEventListener('click', () => {
+            const updatedContent = quill.root.innerHTML;
+            saveGoal(goal.goal_id, updatedContent, goalItem);
+        });
+
+        goalItem.querySelector('.cancel-btn').addEventListener('click', () => {
+            quill.root.innerHTML = goal.goal_description;
+            quill.enable(false);
+            goalItem.classList.remove('editing');
+        });
+
+        goalItem.querySelector('.archive-btn').addEventListener('click', () => {
+            archiveGoal(goal.goal_id, goalItem);
+        });
     });
 }
 
