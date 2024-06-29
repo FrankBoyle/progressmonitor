@@ -1055,35 +1055,26 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    const goalSelect = document.getElementById('goalSelection');
-    if (!goalSelect) {
-        alert("Goal selection element not found.");
-        return;
-    }
-
-    const selectedGoalId = goalSelect.value;
-    const selectedGoal = document.querySelector(`.goal-item[data-goal-id="${selectedGoalId}"]`);
+    const selectedGoal = document.querySelector('.goal-item.selected');
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    if (!selectedGoalId) {
+    if (!selectedGoal) {
         alert("Please select a goal.");
         return;
-    }
-
-    let printContents = '';
-
-    if (selectedGoal) {
-        printContents += `<div>${selectedGoal.outerHTML}</div>`;
     }
 
     const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
         .map(item => item.getAttribute("data-column-name"));
 
-    console.log("Selected Columns:", selectedColumns); // Debugging line
-    console.log("Table Data:", table.getData()); // Debugging line
+    if (selectedColumns.length === 0) {
+        alert("Please select at least one column.");
+        return;
+    }
+
+    let printContents = `<div>${selectedGoal.outerHTML}</div>`;
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1110,7 +1101,6 @@ function printReport() {
     window.print();
     document.body.innerHTML = originalContents;
 
-    // Re-enable chart interactions after printing
     enableChartInteractions();
 }
 
