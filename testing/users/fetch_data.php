@@ -3,9 +3,9 @@ session_start();
 include('auth_session.php');
 
 // Error Reporting
-ini_set('display_errors', 0); // Disable display errors
-ini_set('log_errors', 1);
-ini_set('error_log', 'php_errors.log'); // Log errors to a file
+ini_set('display_errors', 1); // Enable display errors
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include('db.php');
 
@@ -100,10 +100,15 @@ if (!$school_id) {
 }
 
 // Fetch performance data, score names, student name, and category name
-$performanceData = fetchPerformanceData($studentId, $metadata_id, $iep_date);
-$scoreNames = fetchScoreNames($school_id, $metadata_id);
-$studentName = fetchStudentName($studentId);
-$categoryName = fetchCategoryName($metadata_id);
+try {
+    $performanceData = fetchPerformanceData($studentId, $metadata_id, $iep_date);
+    $scoreNames = fetchScoreNames($school_id, $metadata_id);
+    $studentName = fetchStudentName($studentId);
+    $categoryName = fetchCategoryName($metadata_id);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    exit;
+}
 
 // Prepare the response data
 $response = [
