@@ -471,10 +471,12 @@ function hideAddStudentModal() {
 }
 
 function loadStudentsByGroup(groupId) {
+    console.log('Loading students for group by ID:', groupId); // Debug log
+
     fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched group students:', data); // Log the response data
+            console.log('Fetched group students:', data); // Debug log
 
             const groupStudentsList = document.getElementById('group-students-list');
             groupStudentsList.innerHTML = '';
@@ -522,6 +524,7 @@ function loadStudentsByGroup(groupId) {
             alert('There was an error loading the students for this group. Please try again.');
         });
 }
+
 
 function loadGroups() {
     fetch('users/fetch_groups.php')
