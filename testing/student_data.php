@@ -121,27 +121,25 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             <div id="barChartContainer" class="chart"></div>
         </div>
 
-        <!-- Print Dialog Modal -->
-        <div id="printDialogModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-                <h2>Select Sections to Print</h2>
-                <div id="goalSelectionContainer">
-                    <div class="goal-item" data-goal-id="1"> <!-- Example goal item -->
-                        <div class="quill-editor">Goal content</div>
-                    </div>
-                    <!-- More goal items -->
-                </div>
-                <select id="goalSelection">
-                    <!-- Options will be populated dynamically -->
-                </select>
-                <input type="checkbox" id="printTable"> Performance Table<br>
-                <input type="checkbox" id="printLineChart"> Line Chart<br>
-                <input type="checkbox" id="printBarChart"> Bar Chart<br>
-                <input type="checkbox" id="printStatistics"> Statistics<br>
-                <button onclick="printReport()">Print</button>
-            </div>
+<!-- Print Report Modal -->
+<div id="printDialogModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="hidePrintDialogModal()">&times;</span>
+        <h2>Select Sections to Print</h2>
+
+        <div id="goalSelectionContainer"></div>
+
+        <div>
+            <input type="checkbox" id="printTable"> Performance Table
+            <input type="checkbox" id="printLineChart"> Line Chart
+            <input type="checkbox" id="printBarChart"> Bar Chart
+            <input type="checkbox" id="printStatistics"> Statistics
         </div>
+
+        <button onclick="printReport()">Print</button>
+    </div>
+</div>
+
 
 
     </main>

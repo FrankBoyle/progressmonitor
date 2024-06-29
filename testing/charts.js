@@ -1133,11 +1133,11 @@ function showPrintDialogModal() {
         return;
     }
 
-    const goalSelect = document.getElementById('goalSelection');
-    goalSelect.innerHTML = ''; // Clear previous options
+    const goalContainer = document.getElementById('goalSelectionContainer');
+    goalContainer.innerHTML = ''; // Clear previous options
 
-    // Fetch goals and populate the dropdown
-    fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+    // Fetch goals and populate the container
+    fetch(`./users/fetch_goals.php?student_id=${studentId}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
             if (data.length === 0) {
@@ -1146,10 +1146,19 @@ function showPrintDialogModal() {
             }
 
             data.forEach(goal => {
-                const option = document.createElement('option');
-                option.value = goal.goal_id;
-                option.textContent = goal.goal_description;
-                goalSelect.appendChild(option);
+                const goalItem = document.createElement('div');
+                goalItem.classList.add('goal-item');
+                goalItem.setAttribute('data-goal-id', goal.goal_id);
+                goalItem.innerHTML = `<div class="quill-readonly">${goal.goal_description}</div>`;
+                goalItem.addEventListener('click', function() {
+                    document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
+                    goalItem.classList.add('selected');
+                });
+                goalContainer.appendChild(goalItem);
+                new Quill(goalItem.querySelector('.quill-readonly'), {
+                    readOnly: true,
+                    theme: 'snow'
+                });
             });
 
             document.getElementById('printDialogModal').style.display = 'block';
