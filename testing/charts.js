@@ -23,6 +23,23 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
     window.hidePrintDialogModal = hidePrintDialogModal;
     window.printReport = printReport;
+
+    const goalItems = document.querySelectorAll('.goal-item.selectable');
+    const selectorItems = document.querySelectorAll('.selector-item');
+
+    goalItems.forEach(item => {
+        item.addEventListener('click', function() {
+            goalItems.forEach(goal => goal.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+
+    selectorItems.forEach(item => {
+        item.addEventListener('click', function() {
+            this.classList.toggle('selected');
+            this.querySelector('input').checked = this.classList.contains('selected');
+        });
+    });
 });
 
 function setupInitialPageLoad() {
@@ -1187,7 +1204,7 @@ function showPrintDialogModal() {
 
             filteredGoals.forEach(goal => {
                 const goalItem = document.createElement('div');
-                goalItem.classList.add('goal-item');
+                goalItem.classList.add('goal-item', 'selectable');
                 goalItem.setAttribute('data-goal-id', goal.goal_id);
                 goalItem.innerHTML = goal.goal_description; // Using plain HTML for goal description
                 goalItem.addEventListener('click', function() {

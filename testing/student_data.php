@@ -123,9 +123,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 <div id="printDialogModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-        <h2>Select Sections to Print</h2>
         <div>
-            <h5>Please select a goal:</h5>
+            <h3>Please select a goal:</h3>
             <div id="goalSelectionContainer"></div>
         </div>
         <div>
