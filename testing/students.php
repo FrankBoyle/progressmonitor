@@ -67,6 +67,7 @@ include('./users/auth_session.php');
                 <?php endforeach; ?>
             </ul>
         </section>
+        <div id="group-students-list"></div> <!-- Ensure this element is present and has the correct ID -->
 
         <!-- Add the new Edit Column Names button in the goal list section -->
         <section class="box existing-groups">
@@ -830,7 +831,6 @@ function loadGroupStudents(groupId) {
             alert('There was an error loading the students for this group. Please try again.');
         });
 }
-
 
 function removeStudentFromGroup(studentId, groupId) {
     if (!confirm('Are you sure you want to remove this student from the group?')) {
