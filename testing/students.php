@@ -792,12 +792,6 @@ function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('edit-group-modal').style.display = 'block';
 
-    // Hide the Edit Group button
-    const editGroupButton = document.querySelector('.edit-group-btn');
-    if (editGroupButton) {
-        editGroupButton.style.display = 'none';
-    }
-
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
 
@@ -816,6 +810,12 @@ function hideEditGroupModal() {
     const editGroupButton = document.querySelector('.edit-group-btn');
     if (editGroupButton) {
         editGroupButton.style.display = 'inline-block';
+    }
+
+    // Hide the Edit Group button
+    const editGroupButton = document.querySelector('.edit-group-btn');
+    if (editGroupButton) {
+        editGroupButton.style.display = 'none';
     }
 }
 
