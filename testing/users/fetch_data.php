@@ -61,7 +61,7 @@ function fetchSchoolIdForStudent($studentId) {
 
 function fetchStudentName($studentId) {
     global $connection;
-    $stmt = $connection->prepare("SELECT student_name FROM Students_new WHERE student_id_new = ?");
+    $stmt = $connection->prepare("SELECT CONCAT(first_name, ' ', last_name) as student_name FROM Students_new WHERE student_id_new = ?");
     $stmt->execute([$studentId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ? $result['student_name'] : null;
