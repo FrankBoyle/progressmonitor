@@ -869,7 +869,7 @@ function addGoal(event) {
         metadataId = document.getElementById('existing-category-select').value;
     }
 
-    if (!studentId || !goalDescription || !goalDate || !metadataId) {
+    if (!studentId || !goalDescription || !goalDate || !metadataOption || !metadataId) {
         alert('All fields are required.');
         return;
     }
@@ -881,7 +881,7 @@ function addGoal(event) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
+        body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_option=${encodeURIComponent(metadataOption)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
     })
         .then(response => response.json())
         .then(data => {
