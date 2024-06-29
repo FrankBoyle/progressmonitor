@@ -648,7 +648,7 @@ function assignStudentsToGroup(event) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `group_id=${encodeURIComponent(groupId)}&student_id=${encodeURIComponent(studentId)}`
+        body: `group_id=${encodeURIComponent(groupId)}&student_ids=${encodeURIComponent(studentId)}`
     })
     .then(response => response.json()) // Assuming the response is JSON
     .then(data => {
