@@ -871,6 +871,10 @@ input[type="text"] {
     }
 }
 
+#chartContainer, #barChartContainer {
+    width: 1000px;
+}
+
 .chart {
     width: 100%; /* Make the chart take the full width of the wrapper */
     height: auto; /* Set a fixed height for the charts */
