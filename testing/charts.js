@@ -1087,13 +1087,17 @@ function printReport() {
     }
 
     if (printLineChart) {
-        const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div class="chart-wrapper chart-wrapper-print"><div class="chart chart-print">${lineChartContent}</div></div>`;
+        const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
+        lineChartElement.classList.add('chart-wrapper-print');
+        lineChartElement.querySelector('.apexcharts-canvas').classList.add('chart-print');
+        printContents += `<div>${lineChartElement.outerHTML}</div>`;
     }
 
     if (printBarChart) {
-        const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div class="chart-wrapper chart-wrapper-print"><div class="chart chart-print">${barChartContent}</div></div>`;
+        const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
+        barChartElement.classList.add('chart-wrapper-print');
+        barChartElement.querySelector('.apexcharts-canvas').classList.add('chart-print');
+        printContents += `<div>${barChartElement.outerHTML}</div>`;
     }
 
     if (printStatistics) {
