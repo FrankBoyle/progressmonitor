@@ -1024,6 +1024,7 @@ function saveGoal(goalId, updatedContent, goalItem) {
       });
 }
 
+
 function cancelEdit(goalId) {
     document.getElementById(`goal-text-${goalId}`).style.display = 'block';
     document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
@@ -1073,7 +1074,7 @@ function printReport() {
         return;
     }
 
-    let printContents = `<div id="printContent" style="width: 800px; height: 800px; overflow: hidden;">${selectedGoal.innerHTML}`;
+    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1095,29 +1096,12 @@ function printReport() {
         printContents += `<div>${statisticsContent}</div>`;
     }
 
-    printContents += '</div>';
-
-    // Create a temporary container to hold the content to be printed
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
 
-    // Use html2canvas to capture the content as an image with a higher resolution
-    html2canvas(document.getElementById('printContent'), { scale: 2 }).then(canvas => {
-        // Create a link element to download the image
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = 'report.png';
-        link.click();
-
-        // Restore the original content
-        document.body.innerHTML = originalContents;
-        enableChartInteractions();
-    }).catch(error => {
-        console.error('Error generating image:', error);
-        // Restore the original content in case of error
-        document.body.innerHTML = originalContents;
-        enableChartInteractions();
-    });
+    enableChartInteractions();
 }
 
 function generatePrintTable(selectedColumns) {
