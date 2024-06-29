@@ -1055,35 +1055,27 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    const goalSelect = document.getElementById('goalSelection');
-    const selectedGoalId = goalSelect.value;
-    const selectedGoal = document.querySelector(`.goal-item[data-goal-id="${selectedGoalId}"]`);
+    const selectedGoal = document.querySelector('.goal-item.selected');
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    if (!selectedGoalId) {
+    if (!selectedGoal) {
         alert("Please select a goal.");
         return;
     }
 
-    let printContents = '';
+    let printContents = '<div class="printable">';
 
     if (selectedGoal) {
-        printContents += `<div>${selectedGoal.outerHTML}</div>`;
+        const goalContent = selectedGoal.querySelector('.ql-editor').innerHTML;
+        printContents += `<div>${goalContent}</div>`;
     }
 
-    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-        .map(item => ({
-            field: item.getAttribute("data-column-name"),
-            name: item.textContent.trim()  // Use textContent of the item as the series name
-        }));
-
-    console.log("Selected Columns:", selectedColumns); // Add this line for debugging
-    console.log("Table Data:", table.getData()); // Add this line for debugging
-
     if (printTable) {
+        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+            .map(item => item.getAttribute("data-column-name"));
         const tableContent = generatePrintTable(selectedColumns);
         printContents += `<div>${tableContent}</div>`;
     }
@@ -1103,13 +1095,14 @@ function printReport() {
         printContents += `<div>${statisticsContent}</div>`;
     }
 
+    printContents += '</div>';
+
     const originalContents = document.body.innerHTML;
+    disableChartInteractions(); // Disable chart interactions and animations
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
-
-    // Re-enable chart interactions after printing
-    enableChartInteractions();
+    enableChartInteractions(); // Re-enable chart interactions and animations
 }
 
 function generatePrintTable(selectedColumns) {
