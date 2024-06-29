@@ -123,30 +123,20 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 <div id="printDialogModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-        <div>
-            <h3>Please select a goal:</h3>
-            <div id="goalSelectionContainer"></div>
-        </div>
-        <div>
-            <h5>Select what you want to print in the report:</h5>
-            <div class="form-group">
-                <label class="selector-item">
-                    <input type="checkbox" id="printTable" data-column-name="table"> Performance Table
-                </label>
-                <label class="selector-item">
-                    <input type="checkbox" id="printLineChart" data-column-name="lineChart"> Line Chart
-                </label>
-                <label class="selector-item">
-                    <input type="checkbox" id="printBarChart" data-column-name="barChart"> Bar Chart
-                </label>
-                <label class="selector-item">
-                    <input type="checkbox" id="printStatistics" data-column-name="statistics"> Statistics
-                </label>
-            </div>
+        <h2>Select Sections to Print</h2>
+        <div>Please select a goal:</div>
+        <div id="goalSelectionContainer" class="selection-container"></div>
+        <div>Select what you want to print in the report:</div>
+        <div id="printSelectionContainer" class="selection-container">
+            <div class="selector-item" data-section="printTable">Performance Table</div>
+            <div class="selector-item" data-section="printLineChart">Line Chart</div>
+            <div class="selector-item" data-section="printBarChart">Bar Chart</div>
+            <div class="selector-item" data-section="printStatistics">Statistics</div>
         </div>
         <button onclick="printReport()">Print</button>
     </div>
 </div>
+
 
 
         </main>
