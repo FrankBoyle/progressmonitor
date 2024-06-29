@@ -295,7 +295,7 @@ function saveIEPDate(iepDate, studentId) {
     .then(data => {
         console.log('IEP date saved:', data);
         if (data.success) {
-            fetchFilteredData(iepDate, studentId, metadataId);
+            fetchInitialData(iepDate, studentIdNew, metadataId);
         } else {
             alert(data.message);
         }
@@ -304,27 +304,6 @@ function saveIEPDate(iepDate, studentId) {
 }
 
 function fetchInitialData(studentIdNew, metadataId) {
-    fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Initial data fetched:', data);
-            if (data && data.performanceData && data.scoreNames) {
-                createColumnCheckboxes(data.scoreNames);
-                customColumnNames = data.scoreNames; // Store the names
-                initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
-                if (data.iepDate) {
-                    document.getElementById('iep_date').value = data.iepDate;
-                }
-            } else {
-                console.error('Invalid or incomplete initial data:', data);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching initial data:', error);
-        });
-}
-
-function fetchFilteredData(iepDate, studentIdNew, metadataId) {
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
