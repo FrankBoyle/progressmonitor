@@ -1075,7 +1075,7 @@ function printReport() {
     const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
         .map(item => item.getAttribute('data-section'));
 
-    console.log("Selected sections:", selectedSections); // Add this line to log selected sections
+    console.log("Selected sections:", selectedSections); // Log selected sections
 
     if (selectedSections.length === 0) {
         alert("Please select at least one section to print.");
@@ -1097,6 +1097,8 @@ function printReport() {
         lineChartElement.style.border = 'none';
         lineChartElement.style.padding = '0';
 
+        console.log("Including line chart in the print content"); // Log line chart inclusion
+
         if (window.myLineChart) {
             window.myLineChart.updateOptions({
                 chart: {
@@ -1117,6 +1119,8 @@ function printReport() {
         barChartElement.style.border = 'none';
         barChartElement.style.padding = '0';
 
+        console.log("Including bar chart in the print content"); // Log bar chart inclusion
+
         if (window.myBarChart) {
             window.myBarChart.updateOptions({
                 chart: {
@@ -1131,6 +1135,7 @@ function printReport() {
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
+        console.log("Including statistics in the print content"); // Log statistics inclusion
         printContents += `<div>${statisticsContent}</div>`;
     }
 
