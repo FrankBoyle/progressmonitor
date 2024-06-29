@@ -121,32 +121,38 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             <div id="barChartContainer" class="chart"></div>
         </div>
 
-<!-- Print Dialog Modal -->
-<div id="printDialogModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-        <h2>Select Sections to Print</h2>
-        <form id="printOptionsForm">
-            <div class="form-group">
-                <input type="checkbox" id="printTable" name="printTable" checked>
-                <label for="printTable">Performance Table</label>
+        <!-- Print Dialog Modal -->
+        <div id="printDialogModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hidePrintDialogModal()">&times;</span>
+                <h2>Select Sections to Print</h2>
+                <form id="printOptionsForm">
+                    <div class="form-group">
+                        <label for="goalSelection">Select a Goal:</label>
+                        <select id="goalSelection" name="goalSelection" class="form-control" required>
+                            <!-- Goals will be dynamically populated here -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="printTable" name="printTable" checked>
+                        <label for="printTable">Performance Table</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="printLineChart" name="printLineChart" checked>
+                        <label for="printLineChart">Line Chart</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="printBarChart" name="printBarChart" checked>
+                        <label for="printBarChart">Bar Chart</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="printStatistics" name="printStatistics" checked>
+                        <label for="printStatistics">Statistics</label>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="printReport()">Print</button>
+                </form>
             </div>
-            <div class="form-group">
-                <input type="checkbox" id="printLineChart" name="printLineChart" checked>
-                <label for="printLineChart">Line Chart</label>
-            </div>
-            <div class="form-group">
-                <input type="checkbox" id="printBarChart" name="printBarChart" checked>
-                <label for="printBarChart">Bar Chart</label>
-            </div>
-            <div class="form-group">
-                <input type="checkbox" id="printStatistics" name="printStatistics" checked>
-                <label for="printStatistics">Statistics</label>
-            </div>
-            <button type="button" class="btn btn-primary" onclick="printReport()">Print</button>
-        </form>
-    </div>
-</div>
+        </div>
 
 
         <!-- Goal Selection Modal -->
