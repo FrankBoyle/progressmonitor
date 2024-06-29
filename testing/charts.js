@@ -326,25 +326,22 @@ function fetchInitialData(studentIdNew, metadataId) {
 }
 
 function fetchFilteredData(iepDate, studentId, metadataId) {
-    fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+    fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Initial data fetched:', data);
+            console.log('Filtered data fetched:', data);
             console.log('Data structure:', data);
             if (data && data.performanceData && data.scoreNames) {
                 customColumnNames = data.scoreNames; // Store the names
                 createColumnCheckboxes(customColumnNames);
-                initializeTable(data.performanceData, customColumnNames, studentIdNew, metadataId);
+                initializeTable(data.performanceData, customColumnNames, studentId, metadataId);
                 extractChartData(); // Update charts based on the new data
-                if (data.iepDate) {
-                    document.getElementById('iep_date').value = data.iepDate;
-                }
             } else {
-                console.error('Invalid or incomplete initial data:', data);
+                console.error('Invalid or incomplete filtered data:', data);
             }
         })
         .catch(error => {
-            console.error('Error fetching initial data:', error);
+            console.error('Error fetching filtered data:', error);
         });
 }
 
@@ -685,7 +682,7 @@ function getBarChartOptions(dates, seriesData) {
 function createColumnCheckboxes(scoreNames) {
     const columnSelector = document.getElementById('columnSelector');
     columnSelector.innerHTML = ''; // Clear any existing checkboxes
-    Object.keys(scoreNames).forEach((key) => {
+    Object.keys(scoreNames).forEach((key, index) => {
         const item = document.createElement('div');
         item.classList.add('selector-item');
         item.setAttribute("data-column-name", key);
