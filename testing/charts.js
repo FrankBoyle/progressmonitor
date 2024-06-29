@@ -1089,20 +1089,22 @@ function printReport() {
         const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
         lineChartElement.style.width = '600px'; // Explicitly set width for printing
         lineChartElement.style.height = 'auto';
-        lineChartElement.classList.add('chart-wrapper-print');
-        const canvasElement = lineChartElement.querySelector('.apexcharts-canvas');
-        canvasElement.classList.add('chart-print');
-        printContents += `<div>${lineChartElement.outerHTML}</div>`;
+        lineChartElement.style.margin = '0 auto'; // Center align the chart
+        lineChartElement.style.overflow = 'visible';
+        lineChartElement.style.border = 'none';
+        lineChartElement.style.padding = '0';
+        printContents += `<div style="width: 600px; margin: 0 auto; overflow: visible;">${lineChartElement.outerHTML}</div>`;
     }
 
     if (printBarChart) {
         const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
         barChartElement.style.width = '600px'; // Explicitly set width for printing
         barChartElement.style.height = 'auto';
-        barChartElement.classList.add('chart-wrapper-print');
-        const canvasElement = barChartElement.querySelector('.apexcharts-canvas');
-        canvasElement.classList.add('chart-print');
-        printContents += `<div>${barChartElement.outerHTML}</div>`;
+        barChartElement.style.margin = '0 auto'; // Center align the chart
+        barChartElement.style.overflow = 'visible';
+        barChartElement.style.border = 'none';
+        barChartElement.style.padding = '0';
+        printContents += `<div style="width: 600px; margin: 0 auto; overflow: visible;">${barChartElement.outerHTML}</div>`;
     }
 
     if (printStatistics) {
