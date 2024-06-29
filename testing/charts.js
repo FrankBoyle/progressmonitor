@@ -1074,7 +1074,7 @@ function printReport() {
         return;
     }
 
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+    let printContents = `<div id="printContent">${selectedGoal.innerHTML}`;
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1083,12 +1083,12 @@ function printReport() {
 
     if (printLineChart) {
         const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div>${lineChartContent}</div>`;
+        printContents += `<div id="lineChartPrint">${lineChartContent}</div>`;
     }
 
     if (printBarChart) {
         const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div>${barChartContent}</div>`;
+        printContents += `<div id="barChartPrint">${barChartContent}</div>`;
     }
 
     if (printStatistics) {
@@ -1096,10 +1096,27 @@ function printReport() {
         printContents += `<div>${statisticsContent}</div>`;
     }
 
+    printContents += '</div>';
+
+    // Create a temporary container to hold the content to be printed
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
+
+    // Use html2canvas to capture the content as an image
+    html2canvas(document.getElementById('printContent')).then(canvas => {
+        // Create a link element to download the image
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'report.png';
+        link.click();
+
+        // Restore the original content
+        document.body.innerHTML = originalContents;
+    }).catch(error => {
+        console.error('Error generating image:', error);
+        // Restore the original content in case of an error
+        document.body.innerHTML = originalContents;
+    });
 
     enableChartInteractions();
 }
