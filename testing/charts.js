@@ -1110,7 +1110,8 @@ function generatePrintTable(selectedColumns) {
     console.log('Table Data:', data);
     console.log('Custom Column Names:', customColumnNames);
 
-    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col] || col)];
+    // Correctly map custom column names
+    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col + '_name'] || col)];
     console.log('Headers:', headers);
 
     const rows = data.map(row => [row.score_date, ...selectedColumns.map(col => row[col])]);
