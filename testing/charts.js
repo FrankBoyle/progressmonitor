@@ -678,14 +678,12 @@ function getBarChartOptions(dates, seriesData) {
 }
 
 function createColumnCheckboxes(scoreNames) {
-    console.log('Creating checkboxes with scoreNames:', scoreNames); // Add logging
     const columnSelector = document.getElementById('columnSelector');
     columnSelector.innerHTML = ''; // Clear any existing checkboxes
-
-    Object.keys(scoreNames).forEach((key, index) => {
+    Object.keys(scoreNames).forEach((key) => {
         const item = document.createElement('div');
         item.classList.add('selector-item');
-        item.setAttribute("data-column-name", `score${index + 1}`);
+        item.setAttribute("data-column-name", key);
         item.textContent = scoreNames[key];
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
