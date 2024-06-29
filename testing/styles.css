@@ -843,40 +843,7 @@ input[type="text"] {
 }
 
 @media print {
-    .chart-wrapper-print {
-        width: 600px; /* Ensure fixed width for printing */
-        margin: 0 auto; /* Center align the chart */
-        overflow: visible; /* Ensure overflow is visible for printing */
-        border: none; /* Remove any borders */
-        padding: 0; /* Remove padding */
-    }
 
-    .chart-print {
-        width: 600px; /* Ensure fixed width for printing */
-        height: auto;
-        overflow: visible; /* Ensure overflow is visible for printing */
-        border: none; /* Remove any borders */
-        padding: 0; /* Remove padding */
-    }
-
-    /* Additional styles to ensure proper print formatting */
-    body, html {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    .content, .dashboard {
-        width: 100%;
-        height: auto;
-        margin: 0;
-        padding: 0;
-    }
-
-    .card {
-        box-shadow: none; /* Remove shadow for printing */
-    }
 }
 
 #chartContainer, #barChartContainer {
