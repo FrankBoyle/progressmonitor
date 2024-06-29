@@ -6,29 +6,23 @@ include('db.php');
 header('Content-Type: application/json');
 
 try {
-    if (isset($_POST['student_id'], $_POST['goal_description'], $_POST['goal_date'], $_POST['metadata_option'])) {
+    if (isset($_POST['student_id'], $_POST['goal_description'], $_POST['goal_date'], $_POST['metadata_option'], $_POST['metadata_id'])) {
         $studentId = $_POST['student_id'];
         $goalDescription = $_POST['goal_description'];
         $goalDate = $_POST['goal_date'];
         $metadataOption = $_POST['metadata_option'];
+        $metadataId = $_POST['metadata_id'];
         $schoolId = $_SESSION['school_id'];
         $newMetadataId = null;
 
-        if (empty($studentId) || empty($goalDescription) || empty($goalDate) || empty($metadataOption) || empty($schoolId)) {
+        if (empty($studentId) || empty($goalDescription) || empty($goalDate) || empty($metadataOption) || empty($metadataId) || empty($schoolId)) {
             throw new Exception('Missing required parameters.');
         }
 
         if ($metadataOption === 'existing') {
-            if (!isset($_POST['existing_category_id'])) {
-                throw new Exception('Existing category ID is required.');
-            }
-            $newMetadataId = $_POST['existing_category_id'];
+            $newMetadataId = $metadataId;
         } else if ($metadataOption === 'template') {
-            if (!isset($_POST['template_id'])) {
-                throw new Exception('Template ID is required.');
-            }
-
-            $templateId = $_POST['template_id'];
+            $templateId = $metadataId;
 
             // Copy the template to create a new metadata entry
             $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = ?");
@@ -78,4 +72,5 @@ try {
     error_log("Error adding goal: " . $e->getMessage());
     echo json_encode(["error" => "Error adding goal: " . $e->getMessage()]);
 }
+
 ?>
