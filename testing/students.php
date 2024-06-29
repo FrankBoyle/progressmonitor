@@ -1106,7 +1106,7 @@ function loadTemplates() {
                 console.error('Template metadata select element not found.');
                 return;
             }
-            templateSelect.innerHTML = '';
+            templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
 
             data.forEach(template => {
                 const option = document.createElement('option');
