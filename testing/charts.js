@@ -1055,27 +1055,35 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    const selectedGoal = document.querySelector('.goal-item.selected');
+    const goalSelect = document.getElementById('goalSelection');
+    const selectedGoalId = goalSelect.value;
+    const selectedGoal = document.querySelector(`.goal-item[data-goal-id="${selectedGoalId}"]`);
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    if (!selectedGoal) {
+    if (!selectedGoalId) {
         alert("Please select a goal.");
         return;
     }
 
-    let printContents = '<div class="printable">';
+    let printContents = '';
 
     if (selectedGoal) {
-        const goalContent = selectedGoal.querySelector('.ql-editor').innerHTML;
-        printContents += `<div>${goalContent}</div>`;
+        printContents += `<div>${selectedGoal.outerHTML}</div>`;
     }
 
+    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+        .map(item => ({
+            field: item.getAttribute("data-column-name"),
+            name: item.textContent.trim()  // Use textContent of the item as the series name
+        }));
+
+    console.log("Selected Columns:", selectedColumns); // Add this line for debugging
+    console.log("Table Data:", table.getData()); // Add this line for debugging
+
     if (printTable) {
-        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-            .map(item => item.getAttribute("data-column-name"));
         const tableContent = generatePrintTable(selectedColumns);
         printContents += `<div>${tableContent}</div>`;
     }
@@ -1095,14 +1103,13 @@ function printReport() {
         printContents += `<div>${statisticsContent}</div>`;
     }
 
-    printContents += '</div>';
-
     const originalContents = document.body.innerHTML;
-    disableChartInteractions(); // Disable chart interactions and animations
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
-    enableChartInteractions(); // Re-enable chart interactions and animations
+
+    // Re-enable chart interactions after printing
+    enableChartInteractions();
 }
 
 function generatePrintTable(selectedColumns) {
@@ -1127,6 +1134,9 @@ function generatePrintTable(selectedColumns) {
     });
 
     tableHtml += '</tbody></table>';
+    console.log("Table Data:", table.getData());
+    console.log("Selected Columns:", selectedColumns);
+
     return tableHtml;
 }
 
