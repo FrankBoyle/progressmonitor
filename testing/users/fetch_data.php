@@ -59,6 +59,22 @@ function fetchSchoolIdForStudent($studentId) {
     return $result ? $result['school_id'] : null;
 }
 
+function fetchStudentName($studentId) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT student_name FROM Students_new WHERE student_id_new = ?");
+    $stmt->execute([$studentId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['student_name'] : null;
+}
+
+function fetchCategoryName($metadata_id) {
+    global $connection;
+    $stmt = $connection->prepare("SELECT category_name FROM Metadata WHERE metadata_id = ?");
+    $stmt->execute([$metadata_id]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['category_name'] : null;
+}
+
 // Initialize empty arrays and variables
 $performanceData = [];
 $scoreNames = [];
@@ -76,22 +92,26 @@ $metadata_id = $_GET['metadata_id'];
 $iep_date = fetchIepDate($studentId);
 
 // Fetch school_id for the student
-$school_id = fetchSchoolIdForStudent($studentId);  
+$school_id = fetchSchoolIdForStudent($studentId);
 
 if (!$school_id) {
     echo json_encode(['success' => false, 'message' => 'School ID not found for the student.']);
     exit;
 }
 
-// Fetch performance data and score names
+// Fetch performance data, score names, student name, and category name
 $performanceData = fetchPerformanceData($studentId, $metadata_id, $iep_date);
 $scoreNames = fetchScoreNames($school_id, $metadata_id);
+$studentName = fetchStudentName($studentId);
+$categoryName = fetchCategoryName($metadata_id);
 
 // Prepare the response data
 $response = [
     'performanceData' => $performanceData,
     'scoreNames' => $scoreNames,
-    'iepDate' => $iep_date  // Include IEP date in the response
+    'iepDate' => $iep_date,  // Include IEP date in the response
+    'studentName' => $studentName,
+    'categoryName' => $categoryName
 ];
 
 // Send JSON response
