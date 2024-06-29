@@ -45,12 +45,12 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
+            <button id="printReportBtn" class="btn btn-primary">Print Report</button>
             <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
             <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
         </div>
     </header>
     <main class="content">
-    <button id="printReportBtn" class="btn btn-primary">Print Report</button>
 
         <!-- New Goals Card -->
         <div class="card" id="goalsCard">
