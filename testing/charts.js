@@ -1105,6 +1105,31 @@ function printReport() {
     enableChartInteractions(); // Re-enable chart interactions and animations
 }
 
+function generatePrintTable(selectedColumns) {
+    const tableData = table.getData();
+    let tableHtml = '<table border="1"><thead><tr>';
+
+    // Generate table headers
+    tableHtml += '<th>Date</th>';
+    selectedColumns.forEach(column => {
+        tableHtml += `<th>${column.name}</th>`;
+    });
+    tableHtml += '</tr></thead><tbody>';
+
+    // Generate table rows
+    tableData.forEach(row => {
+        tableHtml += '<tr>';
+        tableHtml += `<td>${row.score_date}</td>`;
+        selectedColumns.forEach(column => {
+            tableHtml += `<td>${row[column.field] || ''}</td>`;
+        });
+        tableHtml += '</tr>';
+    });
+
+    tableHtml += '</tbody></table>';
+    return tableHtml;
+}
+
 // Function to show the print dialog modal
 function showPrintDialogModal() {
     const selectedColumns = document.querySelectorAll(".selector-item.selected").length;
