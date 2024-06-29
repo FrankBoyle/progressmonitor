@@ -1055,54 +1055,43 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    // Get the selected goal
     const goalContainer = document.querySelector('.goal-item.selected');
-    const selectedGoalId = goalContainer ? goalContainer.getAttribute('data-goal-id') : null;
-    const selectedGoal = goalContainer ? goalContainer.innerHTML : '';
-
-    // Get the selected columns
-    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected")).map(item => item.getAttribute("data-column-name"));
-
-    // Check if a goal and at least one column is selected
-    if (!selectedGoalId) {
+    if (!goalContainer) {
         alert("Please select a goal.");
         return;
     }
-    if (selectedColumns.length === 0) {
-        alert("Please select at least one column.");
-        return;
-    }
 
-    // Check which sections to print
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    let printContents = '<div id="reportContainer">';
+    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected")).map(item => item.getAttribute("data-column-name"));
 
-    if (selectedGoal) {
-        printContents += `<div class="goal">${selectedGoal}</div>`;
+    let printContents = '<div id="printContainer" style="visibility: visible;">';
+
+    if (goalContainer) {
+        printContents += `<div>${goalContainer.innerHTML}</div>`;
     }
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="table">${tableContent}</div>`;
+        printContents += `<div>${tableContent}</div>`;
     }
 
     if (printLineChart) {
         const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div class="chart">${lineChartContent}</div>`;
+        printContents += `<div class="chart-card">${lineChartContent}</div>`;
     }
 
     if (printBarChart) {
         const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div class="chart">${barChartContent}</div>`;
+        printContents += `<div class="chart-card">${barChartContent}</div>`;
     }
 
     if (printStatistics) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics">${statisticsContent}</div>`;
+        printContents += `<div>${statisticsContent}</div>`;
     }
 
     printContents += '</div>';
