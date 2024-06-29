@@ -524,44 +524,36 @@ function loadStudentsByGroup(groupId) {
 }
 
 function loadStudentsForGroupAssignment(groupId) {
-    fetch('users/fetch_students.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+    console.log('Loading students for group assignment:', groupId); // Debug log
+
+    fetch(`users/fetch_students.php?group_id=${encodeURIComponent(groupId)}`)
+        .then(response => response.json())
         .then(data => {
-            console.log('Fetched students:', data); // Log the fetched data
+            console.log('Fetched students:', data); // Debug log
+
+            const studentSelect = document.querySelector('[name="student_id"]');
+            studentSelect.innerHTML = '<option></option>'; // Clear previous options
+
             if (data.error) {
                 alert(data.error);
                 return;
             }
-            const studentSelect = document.querySelector('[name="student_id"]');
-            studentSelect.innerHTML = '<option></option>';
 
-            // Log each student's groups property
+            // Sort students by last name
+            data.sort((a, b) => a.last_name.localeCompare(b.last_name));
+
             data.forEach(student => {
-                console.log('Student:', student.first_name, student.last_name, 'Groups:', student.groups);
-            });
-
-            const filteredStudents = data.filter(student => {
-                // Ensure student.groups is an array before calling includes
-                return Array.isArray(student.groups) && !student.groups.includes(groupId);
-            });
-            console.log('Filtered students:', filteredStudents); // Log the filtered data
-
-            filteredStudents.forEach(student => {
                 const option = document.createElement('option');
                 option.value = student.student_id_new;
                 option.textContent = student.first_name + ' ' + student.last_name;
                 studentSelect.appendChild(option);
             });
 
+            // Reinitialize the select2 element
             $('.select2').select2();
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error fetching students for assignment:', error);
             alert('There was an error loading students. Please try again.');
         });
 }

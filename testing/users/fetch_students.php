@@ -8,38 +8,34 @@ include('db.php');
 
 $schoolId = $_SESSION['school_id'];
 $teacherId = $_SESSION['teacher_id'];
+$groupId = isset($_GET['group_id']) ? intval($_GET['group_id']) : 0;
 
-function fetchStudentsByTeacher($teacherId, $archived = false) {
+function fetchStudentsByTeacher($teacherId, $groupId, $archived = false) {
     global $connection;
     $archivedValue = $archived ? 1 : 0;
-    $stmt = $connection->prepare("
-        SELECT s.student_id_new, s.first_name, s.last_name, sg.group_id 
-        FROM Students_new s 
-        LEFT JOIN StudentGroup sg ON s.student_id_new = sg.student_id_new 
-        INNER JOIN Teachers t ON s.school_id = t.school_id 
-        WHERE t.teacher_id = ? AND s.archived = ?
-    ");
+
+    // Fetch all students assigned to the teacher and not archived
+    $stmt = $connection->prepare("SELECT s.student_id_new, s.first_name, s.last_name 
+                                  FROM Students_new s 
+                                  INNER JOIN Teachers t ON s.school_id = t.school_id 
+                                  WHERE t.teacher_id = ? AND s.archived = ?");
     $stmt->execute([$teacherId, $archivedValue]);
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    $students = [];
-    foreach ($result as $row) {
-        if (!isset($students[$row['student_id_new']])) {
-            $students[$row['student_id_new']] = [
-                'student_id_new' => $row['student_id_new'],
-                'first_name' => $row['first_name'],
-                'last_name' => $row['last_name'],
-                'groups' => []
-            ];
-        }
-        if ($row['group_id'] !== null) {
-            $students[$row['student_id_new']]['groups'][] = $row['group_id'];
-        }
-    }
-    return array_values($students);
+    $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch all students already in the group
+    $stmt = $connection->prepare("SELECT student_id_new FROM StudentGroup WHERE group_id = ?");
+    $stmt->execute([$groupId]);
+    $groupStudents = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    // Filter out students who are already in the group
+    $filteredStudents = array_filter($students, function($student) use ($groupStudents) {
+        return !in_array($student['student_id_new'], $groupStudents);
+    });
+
+    return $filteredStudents;
 }
 
-$allStudents = fetchStudentsByTeacher($teacherId, false);
+$allStudents = fetchStudentsByTeacher($teacherId, $groupId, false);
 
-echo json_encode($allStudents);
+echo json_encode($allStudents); // Output students as JSON
 ?>
