@@ -1073,7 +1073,7 @@ function printReport() {
         return;
     }
 
-    let printContents = `<div id="printContent">${selectedGoal.innerHTML}`;
+    let printContents = `<div id="printContent" style="width: 600px; height: 600px; overflow: hidden;">${selectedGoal.innerHTML}`;
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1082,12 +1082,12 @@ function printReport() {
 
     if (printLineChart) {
         const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div id="lineChartPrint">${lineChartContent}</div>`;
+        printContents += `<div>${lineChartContent}</div>`;
     }
 
     if (printBarChart) {
         const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div id="barChartPrint">${barChartContent}</div>`;
+        printContents += `<div>${barChartContent}</div>`;
     }
 
     if (printStatistics) {
