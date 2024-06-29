@@ -844,7 +844,7 @@ function showAddGoalModal() {
     const modal = document.getElementById('add-goal-modal');
     modal.style.display = 'block';
 
-    // Load templates and existing categories
+    // Load templates and existing categories when modal is shown
     loadTemplates();
     loadExistingCategories();
 }
