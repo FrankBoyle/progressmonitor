@@ -116,11 +116,39 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
         <!-- Chart Containers -->
         <div class="card chart-card">
             <div id="chartContainer" class="chart"></div>
-
         </div>
         <div class="card chart-card">
             <div id="barChartContainer" class="chart"></div>
+        </div>
 
+        <div id="printDialogModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="hidePrintDialogModal()">&times;</span>
+                <h2>Select Sections to Print</h2>
+                <form id="printOptionsForm">
+                    <div class="form-group">
+                        <input type="checkbox" id="printGoals" name="printGoals" checked>
+                        <label for="printGoals">Goals</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="printTable" name="printTable" checked>
+                        <label for="printTable">Performance Table</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="printLineChart" name="printLineChart" checked>
+                        <label for="printLineChart">Line Chart</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="printBarChart" name="printBarChart" checked>
+                        <label for="printBarChart">Bar Chart</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="printStatistics" name="printStatistics" checked>
+                        <label for="printStatistics">Statistics</label>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="printReport()">Print</button>
+                </form>
+            </div>
         </div>
 
     </main>
