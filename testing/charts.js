@@ -1099,6 +1099,7 @@ function printReport() {
                     width: 800,
                 }
             });
+            window.myLineChart.render();
         }
 
         printContents += lineChartElement.outerHTML;
@@ -1118,6 +1119,7 @@ function printReport() {
                     width: 800,
                 }
             });
+            window.myBarChart.render();
         }
 
         printContents += barChartElement.outerHTML;
@@ -1130,10 +1132,13 @@ function printReport() {
 
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
 
-    enableChartInteractions();
+    // Adding a delay to ensure charts resize properly before printing
+    setTimeout(() => {
+        window.print();
+        document.body.innerHTML = originalContents;
+        enableChartInteractions();
+    }, 500);
 }
 
 function generatePrintTable(selectedColumns) {
