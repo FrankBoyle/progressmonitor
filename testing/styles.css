@@ -852,10 +852,7 @@ input[type="text"] {
         width: 1000px;
     }
 
-    #chartContainer, #barChartContainer {
-        width: 1000px;
     
-    }
 }
 
 #chartContainer, #barChartContainer {
