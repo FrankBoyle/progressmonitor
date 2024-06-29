@@ -522,12 +522,17 @@ function loadStudentsByGroup(groupId) {
 }
 
 function loadStudentsForGroupAssignment(groupId) {
-    fetch('./users/fetch_students_not_in_group.php')
+    fetch('users/fetch_students.php')
         .then(response => response.json())
         .then(data => {
             console.log('Fetched students:', data); // Log the fetched data
             const studentSelect = document.querySelector('[name="student_id"]');
             studentSelect.innerHTML = '<option></option>';
+
+            // Log each student's groups property
+            data.forEach(student => {
+                console.log('Student:', student.first_name, student.last_name, 'Groups:', student.groups);
+            });
 
             const filteredStudents = data.filter(student => {
                 // Ensure student.groups is an array before calling includes
