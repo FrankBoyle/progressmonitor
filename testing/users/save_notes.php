@@ -15,8 +15,8 @@ function addNotes($goalId, $studentIdNew, $schoolId, $metadataId, $reportingPeri
 
         if ($count > 0) {
             // Update the existing notes
-            $stmt = $connection->prepare("UPDATE Goal_notes SET reporting_period = ?, notes = ? WHERE goal_id = ?");
-            $stmt->execute([$reportingPeriod, $notes, $goalId]);
+            $stmt = $connection->prepare("UPDATE Goal_notes SET notes = ?, reporting_period = ? WHERE goal_id = ?");
+            $stmt->execute([$notes, $reportingPeriod, $goalId]);
         } else {
             // Insert new notes
             $stmt = $connection->prepare("INSERT INTO Goal_notes (goal_id, student_id_new, school_id, metadata_id, reporting_period, notes) VALUES (?, ?, ?, ?, ?, ?)");
@@ -35,20 +35,27 @@ function addNotes($goalId, $studentIdNew, $schoolId, $metadataId, $reportingPeri
 }
 
 // Ensure the request method is POST and required parameters are set
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goal_id'], $_POST['student_id_new'], $_POST['school_id'], $_POST['metadata_id'], $_POST['reporting_period'], $_POST['notes'])) {
-    $goalId = $_POST['goal_id'];
-    $studentIdNew = $_POST['student_id_new'];
-    $schoolId = $_POST['school_id'];
-    $metadataId = $_POST['metadata_id'];
-    $reportingPeriod = $_POST['reporting_period'];
-    $notes = $_POST['notes'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    if (isset($data['goal_id'], $data['student_id_new'], $data['school_id'], $data['metadata_id'], $data['reporting_period'], $data['notes'])) {
+        $goalId = $data['goal_id'];
+        $studentIdNew = $data['student_id_new'];
+        $schoolId = $data['school_id'];
+        $metadataId = $data['metadata_id'];
+        $reportingPeriod = $data['reporting_period'];
+        $notes = $data['notes'];
 
-    // Call the function to add notes
-    addNotes($goalId, $studentIdNew, $schoolId, $metadataId, $reportingPeriod, $notes);
+        // Call the function to add notes
+        addNotes($goalId, $studentIdNew, $schoolId, $metadataId, $reportingPeriod, $notes);
+    } else {
+        header('Content-Type: application/json');
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request or missing parameters.']);
+    }
 } else {
     header('Content-Type: application/json');
     http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request or missing parameters.']);
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
 
 // Ensure no additional output is sent
