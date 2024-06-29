@@ -1058,13 +1058,13 @@ function archiveGoal(goalId, goalItem) {
 
 function printReport() {
     const selectedGoal = document.querySelector('.goal-item.selected');
-    const selectedSections = Array.from(document.querySelectorAll('.selector-item.selected'))
-                                  .map(item => item.getAttribute('data-section'));
-
     if (!selectedGoal) {
         alert("Please select a goal.");
         return;
     }
+
+    const selectedSections = Array.from(document.querySelectorAll('#printSelectionContainer .selector-item.selected'))
+        .map(item => item.getAttribute('data-section'));
 
     if (selectedSections.length === 0) {
         alert("Please select at least one section to print.");
