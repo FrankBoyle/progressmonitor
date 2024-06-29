@@ -245,7 +245,6 @@ document.addEventListener('DOMContentLoaded', function() {
     loadStaff();
     loadTemplates();
     loadExistingCategories();
-    loadAllStudentsForAssignment(); // Ensure this function is called to populate the select
 
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
