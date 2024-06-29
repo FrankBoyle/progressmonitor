@@ -1056,6 +1056,11 @@ function archiveGoal(goalId, goalItem) {
 
 function printReport() {
     const goalSelect = document.getElementById('goalSelection');
+    if (!goalSelect) {
+        alert("Goal selection element not found.");
+        return;
+    }
+
     const selectedGoalId = goalSelect.value;
     const selectedGoal = document.querySelector(`.goal-item[data-goal-id="${selectedGoalId}"]`);
     const printTable = document.getElementById('printTable').checked;
@@ -1109,7 +1114,6 @@ function printReport() {
     enableChartInteractions();
 }
 
-
 function generatePrintTable(selectedColumns) {
     const tableData = table.getData();
     let tableHtml = '<table border="1"><thead><tr>';
@@ -1143,7 +1147,30 @@ function showPrintDialogModal() {
         return;
     }
 
-    document.getElementById('printDialogModal').style.display = 'block';
+    const goalSelect = document.getElementById('goalSelection');
+    goalSelect.innerHTML = ''; // Clear previous options
+
+    // Fetch goals and populate the dropdown
+    fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                alert("No goals available.");
+                return;
+            }
+
+            data.forEach(goal => {
+                const option = document.createElement('option');
+                option.value = goal.goal_id;
+                option.textContent = goal.goal_description;
+                goalSelect.appendChild(option);
+            });
+
+            document.getElementById('printDialogModal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error fetching goals:', error);
+        });
 }
 
 function hidePrintDialogModal() {
