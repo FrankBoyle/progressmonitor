@@ -1136,7 +1136,7 @@ function loadExistingCategories() {
                 console.error('Existing metadata select element not found.');
                 return;
             }
-            existingSelect.innerHTML = '';
+            existingSelect.innerHTML = '<option value="">Select a category to see column options</option>';
 
             data.forEach(category => {
                 const option = document.createElement('option');
