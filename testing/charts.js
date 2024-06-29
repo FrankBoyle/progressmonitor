@@ -288,7 +288,7 @@ function saveIEPDate(iepDate, studentIdNew) {
         },
         body: JSON.stringify({
             iep_date: iepDate,
-            student_id: studentId
+            student_id: studentIdNew
         })
     })
     .then(response => response.json())
