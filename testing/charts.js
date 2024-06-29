@@ -1045,25 +1045,28 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    const selectedGoal = document.querySelector('.goal-item.selected');
+    const goalSelect = document.querySelector('.goal-item.selected');
+    const selectedGoalId = goalSelect ? goalSelect.dataset.goalId : null;
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    if (!selectedGoal) {
+    if (!selectedGoalId) {
         alert("Please select a goal.");
         return;
     }
 
-    let printContents = '';
+    let printContents = '<div class="printable">';
 
-    if (selectedGoal) {
-        printContents += `<div>${selectedGoal.outerHTML}</div>`;
+    if (goalSelect) {
+        printContents += `<div>${goalSelect.outerHTML}</div>`;
     }
 
     if (printTable) {
-        const tableContent = document.getElementById('performance-table').innerHTML;
+        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+            .map(item => item.getAttribute("data-column-name"));
+        const tableContent = generatePrintTable(selectedColumns);
         printContents += `<div>${tableContent}</div>`;
     }
 
@@ -1082,11 +1085,14 @@ function printReport() {
         printContents += `<div>${statisticsContent}</div>`;
     }
 
+    printContents += '</div>';
+
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
 }
+
 
 // Function to show the print dialog modal
 function showPrintDialogModal() {
