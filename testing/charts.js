@@ -374,11 +374,23 @@ function extractChartData() {
         return;
     }
 
+    console.log('Selected columns for charting:', selectedColumns);
+    console.log('Performance data:', performanceData);
+
     const chartData = selectedColumns.map(columnName => {
-        const dataSeries = performanceData.map(entry => ({
-            x: entry.score_date ? new Date(entry.score_date) : null,
-            y: entry[columnName] !== undefined ? entry[columnName] : null
-        })).filter(point => point.x && point.y !== null);
+        const dataSeries = performanceData.map(entry => {
+            const xValue = entry.score_date ? new Date(entry.score_date) : null;
+            const yValue = entry[columnName];
+
+            console.log(`Processing entry: score_date = ${xValue}, ${columnName} = ${yValue}`);
+
+            return {
+                x: xValue,
+                y: yValue !== undefined ? yValue : null
+            };
+        }).filter(point => point.x && point.y !== null);
+
+        console.log(`Data series for column ${columnName}:`, dataSeries);
 
         if (dataSeries.length === 0) {
             console.error(`No valid data points found for column ${columnName}`);
@@ -399,6 +411,7 @@ function extractChartData() {
         console.error('No valid data series extracted for charting.');
     }
 }
+
 
 function interpolateData(data) {
     let interpolatedData = [...data];
