@@ -1109,13 +1109,6 @@ function saveAndPrintReport() {
         return;
     }
 
-    const goalId = selectedGoal.getAttribute('data-goal-id');
-    const studentIdNew = window.studentIdNew;
-    const schoolId = window.schoolId;
-    const metadataId = window.metadataId;
-    const reportingPeriod = document.getElementById('reporting_period').value;
-    const notes = document.getElementById('notes').value;
-
     const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
         .map(item => item.getAttribute('data-section'));
 
@@ -1124,7 +1117,20 @@ function saveAndPrintReport() {
         return;
     }
 
-    const noteData = {
+    const reportingPeriod = document.getElementById('reporting_period').value.trim();
+    const notes = document.getElementById('notes').value.trim();
+
+    if (!reportingPeriod) {
+        alert("Please enter the reporting period.");
+        return;
+    }
+
+    const goalId = selectedGoal.getAttribute('data-goal-id');
+    const studentIdNew = ...; // Add your logic to get studentIdNew
+    const schoolId = ...; // Add your logic to get schoolId
+    const metadataId = ...; // Add your logic to get metadataId
+
+    const payload = {
         goal_id: goalId,
         student_id_new: studentIdNew,
         school_id: schoolId,
@@ -1138,19 +1144,22 @@ function saveAndPrintReport() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(noteData)
+        body: JSON.stringify(payload)
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
+            console.log('Notes saved successfully:', data.message);
+            // Proceed to print the report
             printReport(selectedGoal, selectedSections, reportingPeriod, notes);
         } else {
-            alert(data.message);
+            console.error('Error saving notes:', data.message);
+            alert('Failed to save notes: ' + data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('An error occurred while saving the notes.');
+        alert('An error occurred while saving notes.');
     });
 }
 
@@ -1177,6 +1186,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
         printContents += `<div>${statisticsContent}</div>`;
     }
 
+    // Include reporting period and notes in the print content
     printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
     printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 

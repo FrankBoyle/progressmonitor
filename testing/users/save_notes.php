@@ -8,20 +8,9 @@ function addNotes($goalId, $studentIdNew, $schoolId, $metadataId, $reportingPeri
     global $connection; // Assuming you have a database connection
 
     try {
-        // Check if the notes already exist for the given goal
-        $stmt = $connection->prepare("SELECT COUNT(*) FROM Goal_notes WHERE goal_id = ?");
-        $stmt->execute([$goalId]);
-        $count = $stmt->fetchColumn();
-
-        if ($count > 0) {
-            // Update the existing notes
-            $stmt = $connection->prepare("UPDATE Goal_notes SET notes = ?, reporting_period = ? WHERE goal_id = ?");
-            $stmt->execute([$notes, $reportingPeriod, $goalId]);
-        } else {
-            // Insert new notes
-            $stmt = $connection->prepare("INSERT INTO Goal_notes (goal_id, student_id_new, school_id, metadata_id, reporting_period, notes) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$goalId, $studentIdNew, $schoolId, $metadataId, $reportingPeriod, $notes]);
-        }
+        // Insert new notes
+        $stmt = $connection->prepare("INSERT INTO Goal_notes (goal_id, student_id_new, school_id, metadata_id, reporting_period, notes) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$goalId, $studentIdNew, $schoolId, $metadataId, $reportingPeriod, $notes]);
 
         // Ensure no additional output is sent
         header('Content-Type: application/json');
@@ -37,7 +26,7 @@ function addNotes($goalId, $studentIdNew, $schoolId, $metadataId, $reportingPeri
 // Ensure the request method is POST and required parameters are set
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
-    if (isset($data['goal_id'], $data['student_id_new'], $data['school_id'], $data['metadata_id'], $data['reporting_period'], $data['notes'])) {
+    if (isset($data['goal_id'], $data['student_id_new'], $data['school_id'], $data['metadata_id'], $data['reporting_period'], $data['notes']) && !empty($data['reporting_period'])) {
         $goalId = $data['goal_id'];
         $studentIdNew = $data['student_id_new'];
         $schoolId = $data['school_id'];
