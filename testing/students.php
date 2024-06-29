@@ -135,12 +135,20 @@ include('./users/auth_session.php');
             </div>
             <div class="form-group">
                 <label>Metadata Option:</label>
-                <input type="radio" id="use-template" name="metadata_option" value="template" required>
-                <label for="use-template">Use a Category Template</label><br>
-                <select id="template-metadata-select" required></select><br>
-                <input type="radio" id="use-existing" name="metadata_option" value="existing" required>
-                <label for="use-existing">Link to a Used Category</label><br>
-                <select id="existing-category-select" required></select>
+                <div>
+                    <input type="radio" id="use-template" name="metadata_option" value="template" required>
+                    <label for="use-template">Use a Category Template</label>
+                </div>
+                <div>
+                    <select id="template-metadata-select" name="template_metadata_select"></select>
+                </div>
+                <div>
+                    <input type="radio" id="use-existing" name="metadata_option" value="existing" required>
+                    <label for="use-existing">Link to a Used Category</label>
+                </div>
+                <div>
+                    <select id="existing-category-select" name="existing_category_select"></select>
+                </div>
             </div>
             <button type="submit">Add Goal</button>
         </form>
@@ -992,6 +1000,7 @@ function toggleMetadataOption() {
 }
 
 // Function to load metadata templates
+
 function loadTemplates() {
     fetch('users/fetch_metadata_templates.php')
         .then(response => response.json())
@@ -1001,6 +1010,10 @@ function loadTemplates() {
             }
 
             const templateSelect = document.getElementById('template-metadata-select');
+            if (!templateSelect) {
+                console.error('Template metadata select element not found.');
+                return;
+            }
             templateSelect.innerHTML = '';
 
             data.forEach(template => {
@@ -1027,6 +1040,10 @@ function loadExistingCategories() {
             }
 
             const existingCategorySelect = document.getElementById('existing-category-select');
+            if (!existingCategorySelect) {
+                console.error('Existing category select element not found.');
+                return;
+            }
             existingCategorySelect.innerHTML = '';
 
             data.forEach(category => {
