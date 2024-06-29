@@ -843,13 +843,18 @@ input[type="text"] {
 }
 
 @media print {
-    #chartContainer, #barChartContainer {
-        max-width: 800px;
+    .chart-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .chart {
+        width: 1000px;
     }
 }
 
 #chartContainer, #barChartContainer {
-    width: 100%;
+    width: 1000px;
 
 }
 
