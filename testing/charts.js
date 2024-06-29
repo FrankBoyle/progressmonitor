@@ -1103,10 +1103,12 @@ function printReport() {
 
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
 
-    enableChartInteractions();
+    setTimeout(() => {
+        window.print();
+        document.body.innerHTML = originalContents;
+        enableChartInteractions();
+    }, 500); // Adding a delay to ensure the chart content is fully rendered
 }
 
 function generatePrintTable(selectedColumns) {
