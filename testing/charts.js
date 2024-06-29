@@ -1092,10 +1092,15 @@ function printReport() {
         lineChartElement.style.overflow = 'visible';
         lineChartElement.style.border = 'none';
         lineChartElement.style.padding = '0';
-        // Trigger resize event for the chart
+
         if (window.myLineChart) {
-            window.myLineChart.resize();
+            window.myLineChart.updateOptions({
+                chart: {
+                    width: 800,
+                }
+            });
         }
+
         printContents += lineChartElement.outerHTML;
     }
 
@@ -1106,10 +1111,15 @@ function printReport() {
         barChartElement.style.overflow = 'visible';
         barChartElement.style.border = 'none';
         barChartElement.style.padding = '0';
-        // Trigger resize event for the chart
+
         if (window.myBarChart) {
-            window.myBarChart.resize();
+            window.myBarChart.updateOptions({
+                chart: {
+                    width: 800,
+                }
+            });
         }
+
         printContents += barChartElement.outerHTML;
     }
 
