@@ -1071,7 +1071,6 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    const printGoals = document.getElementById('printGoals').checked;
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
@@ -1079,9 +1078,9 @@ function printReport() {
 
     let printContents = '';
 
-    if (printGoals) {
-        const goalsContent = document.getElementById('goalsCard').innerHTML;
-        printContents += `<div>${goalsContent}</div>`;
+    const selectedGoal = document.querySelector('.goal-item.selected');
+    if (selectedGoal) {
+        printContents += `<div>${selectedGoal.outerHTML}</div>`;
     }
 
     if (printTable) {
