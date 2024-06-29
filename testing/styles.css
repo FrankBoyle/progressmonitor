@@ -361,13 +361,19 @@ h3 {
 }
 
 .goal-item {
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border: 1px solid #ddd;
+    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
     position: relative;
     padding-right: 100px; /* Adjust the padding to fit the button */
+}
+
+.goal-item.selected {
+    background-color: #47A6E6;
+    color: #fff;
 }
 
 .goal-item .edit-btn {
@@ -972,8 +978,8 @@ input[type="text"] {
 }
 
 #printReportBtn {
-    position: relative;
-    top: 0;
-    right: 0;
+    position: fixed;
+    top: 20px;
+    right: 20px;
     z-index: 1000;
 }

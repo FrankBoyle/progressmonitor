@@ -21,18 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
 
-    // Function to show the print dialog modal
-    function showPrintDialogModal() {
-        document.getElementById('printDialogModal').style.display = 'block';
-    }
-
-    // Function to hide the print dialog modal
-    function hidePrintDialogModal() {
-        document.getElementById('printDialogModal').style.display = 'none';
-    }
-
     window.hidePrintDialogModal = hidePrintDialogModal;
     window.printReport = printReport;
+    window.hideGoalSelectionModal = hideGoalSelectionModal;
+    window.showGoalSelectionModal = showGoalSelectionModal;
+    window.confirmGoalSelection = confirmGoalSelection;
 });
 
 function setupInitialPageLoad() {
@@ -1115,4 +1108,67 @@ function printReport() {
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
+}
+
+// Function to show the print dialog modal
+function showPrintDialogModal() {
+        if (document.querySelectorAll(".goal-item.selected").length === 0) {
+            alert("Please select a goal first.");
+            showGoalSelectionModal();
+            return;
+        }
+
+        if (document.querySelectorAll(".selector-item.selected").length === 0) {
+            alert("Please select at least one column.");
+            return;
+        }
+
+        document.getElementById('printDialogModal').style.display = 'block';
+}
+
+// Function to hide the print dialog modal
+function hidePrintDialogModal() {
+        document.getElementById('printDialogModal').style.display = 'none';
+}
+
+// Function to show the goal selection modal
+function showGoalSelectionModal() {
+        const modal = document.getElementById('goalSelectionModal');
+        const container = document.getElementById('goalSelectionContainer');
+        container.innerHTML = '';
+
+        // Fetch goals and populate the modal
+        fetch(`./users/fetch_goals.php?student_id=${studentId}&metadata_id=${metadataId}`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(goal => {
+                    const goalItem = document.createElement('div');
+                    goalItem.classList.add('goal-item');
+                    goalItem.textContent = goal.goal_description;
+                    goalItem.addEventListener('click', function() {
+                        document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
+                        goalItem.classList.add('selected');
+                    });
+                    container.appendChild(goalItem);
+                });
+                modal.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error fetching goals:', error);
+            });
+}
+
+// Function to hide the goal selection modal
+function hideGoalSelectionModal() {
+        document.getElementById('goalSelectionModal').style.display = 'none';
+}
+
+// Function to confirm goal selection
+function confirmGoalSelection() {
+        const selectedGoal = document.querySelector('.goal-item.selected');
+        if (selectedGoal) {
+            document.getElementById('goalSelectionModal').style.display = 'none';
+        } else {
+            alert("Please select a goal.");
+        }
 }
