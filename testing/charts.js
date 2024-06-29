@@ -1087,6 +1087,7 @@ function printReport() {
 
     if (printLineChart) {
         const lineChartElement = document.getElementById('chartContainer');
+        console.log('Before applying styles: ', lineChartElement.clientWidth, lineChartElement.clientHeight);
         lineChartElement.style.width = '800px';
         lineChartElement.style.height = 'auto';
         lineChartElement.style.overflow = 'visible';
@@ -1094,6 +1095,7 @@ function printReport() {
         lineChartElement.style.padding = '0';
 
         if (window.myLineChart) {
+            console.log('Updating line chart options');
             window.myLineChart.updateOptions({
                 chart: {
                     width: 800,
@@ -1101,12 +1103,13 @@ function printReport() {
             });
             window.myLineChart.render();
         }
-
+        console.log('After applying styles: ', lineChartElement.clientWidth, lineChartElement.clientHeight);
         printContents += lineChartElement.outerHTML;
     }
 
     if (printBarChart) {
         const barChartElement = document.getElementById('barChartContainer');
+        console.log('Before applying styles: ', barChartElement.clientWidth, barChartElement.clientHeight);
         barChartElement.style.width = '800px';
         barChartElement.style.height = 'auto';
         barChartElement.style.overflow = 'visible';
@@ -1114,6 +1117,7 @@ function printReport() {
         barChartElement.style.padding = '0';
 
         if (window.myBarChart) {
+            console.log('Updating bar chart options');
             window.myBarChart.updateOptions({
                 chart: {
                     width: 800,
@@ -1121,7 +1125,7 @@ function printReport() {
             });
             window.myBarChart.render();
         }
-
+        console.log('After applying styles: ', barChartElement.clientWidth, barChartElement.clientHeight);
         printContents += barChartElement.outerHTML;
     }
 
@@ -1135,6 +1139,7 @@ function printReport() {
 
     // Adding a delay to ensure charts resize properly before printing
     setTimeout(() => {
+        console.log('Printing...');
         window.print();
         document.body.innerHTML = originalContents;
         enableChartInteractions();
