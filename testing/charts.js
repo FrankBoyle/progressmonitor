@@ -1081,12 +1081,12 @@ function printReport() {
 
     if (printLineChart) {
         const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div class="chart-card">${lineChartContent}</div>`;
+        printContents += `<div class="chart-card" id="printLineChart">${lineChartContent}</div>`;
     }
 
     if (printBarChart) {
         const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div class="chart-card">${barChartContent}</div>`;
+        printContents += `<div class="chart-card" id="printBarChart">${barChartContent}</div>`;
     }
 
     if (printStatistics) {
@@ -1098,8 +1098,20 @@ function printReport() {
 
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
+
+    // Render charts in print layout
+    renderPrintCharts();
+
     window.print();
     document.body.innerHTML = originalContents;
+}
+
+function renderPrintCharts() {
+    const lineChartContent = document.getElementById('chartContainer').innerHTML;
+    const barChartContent = document.getElementById('barChartContainer').innerHTML;
+
+    document.getElementById('printLineChart').innerHTML = lineChartContent;
+    document.getElementById('printBarChart').innerHTML = barChartContent;
 }
 
 function generatePrintTable(selectedColumns) {
