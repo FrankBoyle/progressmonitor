@@ -9,14 +9,24 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         if (isset($_GET['student_id'])) {
             $studentId = $_GET['student_id'];
+            $metadataId = isset($_GET['metadata_id']) ? $_GET['metadata_id'] : null;
 
-            $stmt = $connection->prepare("
+            $query = "
                 SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name
                 FROM Goals g
                 INNER JOIN Metadata gm ON g.metadata_id = gm.metadata_id
-                WHERE g.student_id_new = ? AND g.archived = 0
-            ");
-            $stmt->execute([$studentId]);
+                WHERE g.student_id_new = ?
+            ";
+
+            if ($metadataId) {
+                $query .= " AND g.metadata_id = ?";
+                $stmt = $connection->prepare($query);
+                $stmt->execute([$studentId, $metadataId]);
+            } else {
+                $stmt = $connection->prepare($query);
+                $stmt->execute([$studentId]);
+            }
+
             $goals = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($goals);
         } else {
