@@ -312,6 +312,7 @@ function fetchInitialData(studentIdNew, metadataId) {
                 customColumnNames = data.scoreNames; // Store the names
                 createColumnCheckboxes(customColumnNames);
                 initializeTable(data.performanceData, customColumnNames, studentIdNew, metadataId);
+                extractChartData(); // Update charts based on the new data
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
                 }
@@ -325,22 +326,26 @@ function fetchInitialData(studentIdNew, metadataId) {
 }
 
 function fetchFilteredData(iepDate, studentId, metadataId) {
-    console.log(`Fetching filtered data for IEP Date: ${iepDate}, Student ID: ${studentId}, Metadata ID: ${metadataId}`);
-    fetch(`./users/fetch_filtered_data.php?student_id=${studentId}&metadata_id=${metadataId}&iep_date=${iepDate}`)
+    fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Filtered data fetched:', data);
+            console.log('Initial data fetched:', data);
             console.log('Data structure:', data);
             if (data && data.performanceData && data.scoreNames) {
-                customColumnNames = data.scoreNames; // Update the stored names
+                customColumnNames = data.scoreNames; // Store the names
                 createColumnCheckboxes(customColumnNames);
-                initializeTable(data.performanceData, customColumnNames, studentId, metadataId);
+                initializeTable(data.performanceData, customColumnNames, studentIdNew, metadataId);
                 extractChartData(); // Update charts based on the new data
+                if (data.iepDate) {
+                    document.getElementById('iep_date').value = data.iepDate;
+                }
             } else {
-                console.error('Invalid or incomplete data received:', data);
+                console.error('Invalid or incomplete initial data:', data);
             }
         })
-        .catch(error => console.error('Error fetching filtered data:', error));
+        .catch(error => {
+            console.error('Error fetching initial data:', error);
+        });
 }
 
 function initializeCharts() {
