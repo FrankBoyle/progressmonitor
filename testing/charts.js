@@ -1105,26 +1105,22 @@ function printReport() {
 }
 
 function generatePrintTable(selectedColumns) {
-    const tableData = table.getData();
-    let tableHtml = '<table border="1"><thead><tr>';
+    const data = table.getData();
+    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col])];
+    const rows = data.map(row => [row.score_date, ...selectedColumns.map(col => row[col])]);
 
-    // Generate table headers
-    tableHtml += '<th>Date</th>';
-    selectedColumns.forEach(column => {
-        tableHtml += `<th>${column.name}</th>`;
+    let tableHtml = '<table border="1" width="100%"><thead><tr>';
+    headers.forEach(header => {
+        tableHtml += `<th>${header}</th>`;
     });
     tableHtml += '</tr></thead><tbody>';
-
-    // Generate table rows
-    tableData.forEach(row => {
+    rows.forEach(row => {
         tableHtml += '<tr>';
-        tableHtml += `<td>${row['score_date']}</td>`;
-        selectedColumns.forEach(column => {
-            tableHtml += `<td>${row[column] || ''}</td>`;
+        row.forEach(cell => {
+            tableHtml += `<td>${cell || ''}</td>`;
         });
         tableHtml += '</tr>';
     });
-
     tableHtml += '</tbody></table>';
     return tableHtml;
 }
