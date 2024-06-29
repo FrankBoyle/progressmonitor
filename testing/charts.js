@@ -1086,25 +1086,23 @@ function printReport() {
     }
 
     if (printLineChart) {
-        const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
-        lineChartElement.style.width = '600px'; // Explicitly set width for printing
+        const lineChartElement = document.getElementById('chartContainer');
+        lineChartElement.style.width = '1000px';
         lineChartElement.style.height = 'auto';
-        lineChartElement.style.margin = '0 auto'; // Center align the chart
         lineChartElement.style.overflow = 'visible';
         lineChartElement.style.border = 'none';
         lineChartElement.style.padding = '0';
-        printContents += `<div style="width: 600px; margin: 0 auto; overflow: visible;">${lineChartElement.outerHTML}</div>`;
+        printContents += lineChartElement.outerHTML;
     }
 
     if (printBarChart) {
-        const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
-        barChartElement.style.width = '600px'; // Explicitly set width for printing
+        const barChartElement = document.getElementById('barChartContainer');
+        barChartElement.style.width = '1000px';
         barChartElement.style.height = 'auto';
-        barChartElement.style.margin = '0 auto'; // Center align the chart
         barChartElement.style.overflow = 'visible';
         barChartElement.style.border = 'none';
         barChartElement.style.padding = '0';
-        printContents += `<div style="width: 600px; margin: 0 auto; overflow: visible;">${barChartElement.outerHTML}</div>`;
+        printContents += barChartElement.outerHTML;
     }
 
     if (printStatistics) {
