@@ -681,7 +681,7 @@ function createColumnCheckboxes(scoreNames) {
     Object.keys(scoreNames).forEach((key, index) => {
         const item = document.createElement('div');
         item.classList.add('selector-item');
-        item.setAttribute("data-column-name", key);
+        item.setAttribute("data-column-name", `score${index + 1}`);
         item.textContent = scoreNames[key];
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
