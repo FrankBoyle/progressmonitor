@@ -6,15 +6,15 @@ include('db.php');
 header('Content-Type: application/json');
 
 try {
-    if (isset($_GET['student_id'], $_GET['school_id'])) {
+    if (isset($_GET['student_id']) && isset($_GET['school_id'])) {
         $studentId = $_GET['student_id'];
         $schoolId = $_GET['school_id'];
 
         $stmt = $connection->prepare("
-            SELECT DISTINCT Metadata.metadata_id, Metadata.category_name 
-            FROM Metadata
-            JOIN Goals ON Metadata.metadata_id = Goals.metadata_id
-            WHERE Goals.student_id_new = ? AND Goals.school_id = ?
+            SELECT DISTINCT m.metadata_id, m.category_name
+            FROM Goals g
+            JOIN Metadata m ON g.metadata_id = m.metadata_id
+            WHERE g.student_id_new = ? AND g.school_id = ?
         ");
         $stmt->execute([$studentId, $schoolId]);
         $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
