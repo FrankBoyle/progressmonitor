@@ -1082,12 +1082,12 @@ function printReport() {
     let printContents = '<div id="reportContainer">';
 
     if (selectedGoal) {
-        printContents += `<div class="quill-readonly">${selectedGoal}</div>`;
+        printContents += `<div class="goal">${selectedGoal}</div>`;
     }
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div>${tableContent}</div>`;
+        printContents += `<div class="table">${tableContent}</div>`;
     }
 
     if (printLineChart) {
@@ -1112,7 +1112,6 @@ function printReport() {
     window.print();
     document.body.innerHTML = originalContents;
 }
-
 
 function generatePrintTable(selectedColumns) {
     console.log('Selected Columns:', selectedColumns);
