@@ -513,7 +513,6 @@ function loadStudentsByGroup(groupId) {
         });
 }
 
-
 function loadGroups() {
     fetch('users/fetch_groups.php')
         .then(response => response.json())
@@ -647,6 +646,8 @@ function assignStudentsToGroup(event) {
         return;
     }
 
+    console.log('Assigning students to group:', groupId, studentIds); // Debug log
+
     fetch('./users/assign_students_to_group.php', {
         method: 'POST',
         headers: {
@@ -656,11 +657,11 @@ function assignStudentsToGroup(event) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log('Response:', data); // Debug log
         if (data.status === "success") {
             alert(data.message);
             hideEditGroupModal();
-            loadGroupStudents(groupId); // Reload the students in the group
-            loadStudents(); // Reload the student list
+            loadStudentsByGroup(groupId); // Reload the students in the group
         } else {
             alert(data.error);
         }
@@ -670,6 +671,7 @@ function assignStudentsToGroup(event) {
         alert('There was an error assigning students to the group. Please try again.');
     });
 }
+
 
 function shareGroup(event) {
     event.preventDefault();
