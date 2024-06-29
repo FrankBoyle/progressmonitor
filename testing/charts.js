@@ -13,7 +13,6 @@ const seriesColors = [
 ];
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.title = `${studentName} - ${categoryName} Dashboard`;
 
     setupInitialPageLoad();
     attachEventListeners();
