@@ -218,7 +218,6 @@ document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
     loadTemplates();
-    loadExisitingCategories();
 
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
