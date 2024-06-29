@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.hidePrintDialogModal = hidePrintDialogModal;
     window.printReport = printReport;
 
-    // Add event listeners to selector items
     document.querySelectorAll('.selector-item').forEach(item => {
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
