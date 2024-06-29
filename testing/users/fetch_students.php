@@ -37,5 +37,8 @@ function fetchStudentsByTeacher($teacherId, $groupId, $archived = false) {
 
 $allStudents = fetchStudentsByTeacher($teacherId, $groupId, false);
 
-echo json_encode($allStudents); // Output students as JSON
+// Log the final students array
+error_log(print_r($allStudents, true));
+
+echo json_encode(array_values($allStudents)); // Output students as JSON
 ?>
