@@ -12,21 +12,36 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 //$schoolId = $SESSION['school_id'];
 //$admin = $SESSION['is_admin'] == 1; // Assuming 'is_admin' is the column name
 
-// Other necessary PHP code...
+// Fetch student name and metadata category from the database
+$studentIdNew = $_GET['student_id']; // Assuming student_id is passed as a GET parameter
+$metadataId = $_GET['metadata_id']; // Assuming metadata_id is passed as a GET parameter
+
+// Example query, adjust based on your actual database schema
+$stmt = $connection->prepare("
+    SELECT s.student_name, m.category_name
+    FROM Students s
+    INNER JOIN Metadata m ON s.metadata_id = m.metadata_id
+    WHERE s.student_id_new = ? AND m.metadata_id = ?
+");
+$stmt->execute([$studentIdNew, $metadataId]);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$studentName = $result['student_name'];
+$categoryName = $result['category_name'];
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKFCCN4XXS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKFCCN4XXS"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-LKFCCN4XXS');
-</script>
+      gtag('config', 'G-LKFCCN4XXS');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Layout</title>
@@ -38,7 +53,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
-
 </head>
 <body>
 <div class="dashboard">
@@ -142,13 +156,14 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </div>
 </div>
 
-
-
     </main>
 </div>
 <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
 <script>
 const schoolId = <?php echo json_encode($schoolId); ?>;
+const studentName = <?php echo json_encode($studentName); ?>;
+const categoryName = <?php echo json_encode($categoryName); ?>;
+
 </script>
 </body>
 </html>

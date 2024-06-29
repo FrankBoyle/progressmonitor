@@ -30,6 +30,7 @@ function setupInitialPageLoad() {
     const urlParams = new URLSearchParams(window.location.search);
     studentIdNew = urlParams.get('student_id');
     metadataId = urlParams.get('metadata_id');
+    
 
     if (!studentIdNew || !metadataId) {
         console.error('Student ID or Metadata ID is missing in the URL parameters.');
