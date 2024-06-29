@@ -523,9 +523,18 @@ function loadStudentsByGroup(groupId) {
 
 function loadStudentsForGroupAssignment(groupId) {
     fetch('users/fetch_students.php')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             console.log('Fetched students:', data); // Log the fetched data
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
             const studentSelect = document.querySelector('[name="student_id"]');
             studentSelect.innerHTML = '<option></option>';
 
