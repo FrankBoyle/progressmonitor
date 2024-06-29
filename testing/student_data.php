@@ -83,9 +83,9 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     </form>
                 </div>
             </div>
+            <div class="red-coin"></div>
 
-            <div id="performance-table">            <div class="red-coin"></div>
-            </div>
+            <div id="performance-table"></div>
 
         </div>
 
