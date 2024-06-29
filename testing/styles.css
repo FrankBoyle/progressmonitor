@@ -868,6 +868,20 @@ input[type="text"] {
     position: relative; /* For positioning the minimize button */
 }
 
+.column-select-card {
+    background-color: #c0c8c8; /* Same as other cards */
+    border: 1.5px solid #a3bbcf; /* Same border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 100%; /* Ensure full width */
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent overflow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* For positioning the minimize button */
+}
+
 .minimize-button {
     position: absolute;
     top: 5px;

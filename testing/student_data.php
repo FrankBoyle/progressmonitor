@@ -91,7 +91,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 
         </div>
 
-        <div class="card chart-card">
+        <div class="card column-select-card">
             <div class="selector-area">
                 <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
                 <div id="columnSelector" class="checkbox-container"></div>
