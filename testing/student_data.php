@@ -140,10 +140,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </div>
 </div>
 
-<div id="reportContainer">
-    <!-- Report content will be injected here -->
-</div>
-
     </main>
 </div>
 <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
