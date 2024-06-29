@@ -13,33 +13,14 @@ const seriesColors = [
 ];
 
 document.addEventListener('DOMContentLoaded', function() {
-
     setupInitialPageLoad();
     attachEventListeners();
     initializeCharts();
-    // Fetch and display goals
-    fetchGoals(studentIdNew, metadataId);
+    fetchGoals(studentIdNew, metadataId);     // Fetch and display goals
 
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
     window.hidePrintDialogModal = hidePrintDialogModal;
     window.printReport = printReport;
-
-    const goalItems = document.querySelectorAll('.goal-item.selectable');
-    const selectorItems = document.querySelectorAll('.selector-item');
-
-    goalItems.forEach(item => {
-        item.addEventListener('click', function() {
-            goalItems.forEach(goal => goal.classList.remove('selected'));
-            this.classList.add('selected');
-        });
-    });
-
-    selectorItems.forEach(item => {
-        item.addEventListener('click', function() {
-            this.classList.toggle('selected');
-            this.querySelector('input').checked = this.classList.contains('selected');
-        });
-    });
 });
 
 function setupInitialPageLoad() {
@@ -1077,32 +1058,27 @@ function archiveGoal(goalId, goalItem) {
 
 function printReport() {
     const selectedGoal = document.querySelector('.goal-item.selected');
-    const printTable = document.getElementById('printTable').checked;
-    const printLineChart = document.getElementById('printLineChart').checked;
-    const printBarChart = document.getElementById('printBarChart').checked;
-    const printStatistics = document.getElementById('printStatistics').checked;
+    const selectedSections = Array.from(document.querySelectorAll('.selector-item.selected'))
+                                  .map(item => item.getAttribute('data-section'));
 
     if (!selectedGoal) {
         alert("Please select a goal.");
         return;
     }
 
-    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-        .map(item => item.getAttribute("data-column-name"));
-
-    if (selectedColumns.length === 0) {
-        alert("Please select at least one column.");
+    if (selectedSections.length === 0) {
+        alert("Please select at least one section to print.");
         return;
     }
 
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
-    if (printTable) {
+    if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
         printContents += `<div>${tableContent}</div>`;
     }
 
-    if (printLineChart) {
+    if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer');
         lineChartElement.style.width = '800px';
         lineChartElement.style.height = 'auto';
@@ -1122,7 +1098,7 @@ function printReport() {
         printContents += lineChartElement.outerHTML;
     }
 
-    if (printBarChart) {
+    if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer');
         barChartElement.style.width = '800px';
         barChartElement.style.height = 'auto';
@@ -1142,7 +1118,7 @@ function printReport() {
         printContents += barChartElement.outerHTML;
     }
 
-    if (printStatistics) {
+    if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
         printContents += `<div>${statisticsContent}</div>`;
     }
@@ -1150,7 +1126,6 @@ function printReport() {
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
 
-    // Adding a delay to ensure charts resize properly before printing
     setTimeout(() => {
         window.print();
         document.body.innerHTML = originalContents;
@@ -1204,11 +1179,11 @@ function showPrintDialogModal() {
 
             filteredGoals.forEach(goal => {
                 const goalItem = document.createElement('div');
-                goalItem.classList.add('goal-item', 'selectable');
+                goalItem.classList.add('selector-item');
                 goalItem.setAttribute('data-goal-id', goal.goal_id);
                 goalItem.innerHTML = goal.goal_description; // Using plain HTML for goal description
                 goalItem.addEventListener('click', function() {
-                    document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
+                    document.querySelectorAll('.selector-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
                 });
                 goalContainer.appendChild(goalItem);
