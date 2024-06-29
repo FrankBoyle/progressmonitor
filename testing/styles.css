@@ -387,6 +387,13 @@ h3 {
     display: inline-block;
 }
 
+.edit-group-btn {
+    z-index: 10; /* Lower than the modal */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
 .archive-btn {
     background-color: red;
     color: white;
@@ -510,11 +517,13 @@ td .cell-input {
 }
 
 .modal-content {
+    position: relative;
     background-color: #fefefe;
-    margin: 5% auto;
+    margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    z-index: 1001; /* Ensure it's higher than the button */
 }
 
 .close {
