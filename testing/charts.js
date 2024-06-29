@@ -23,9 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.hidePrintDialogModal = hidePrintDialogModal;
     window.printReport = printReport;
-    window.hideGoalSelectionModal = hideGoalSelectionModal;
-    window.showGoalSelectionModal = showGoalSelectionModal;
-    window.confirmGoalSelection = confirmGoalSelection;
 });
 
 function setupInitialPageLoad() {
