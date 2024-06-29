@@ -1110,9 +1110,9 @@ function saveAndPrintReport() {
     }
 
     const goalId = selectedGoal.getAttribute('data-goal-id');
-    const studentIdNew = studentIdNew; // Use your existing logic to get studentIdNew
-    const schoolId = schoolId; // Use your existing logic to get schoolId
-    const metadataId = metadataId; // Use your existing logic to get metadataId
+    const studentIdNew = window.studentIdNew;
+    const schoolId = window.schoolId;
+    const metadataId = window.metadataId;
     const reportingPeriod = document.getElementById('reporting_period').value;
     const notes = document.getElementById('notes').value;
 
