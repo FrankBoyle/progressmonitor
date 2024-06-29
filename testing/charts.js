@@ -1028,12 +1028,13 @@ function saveGoal(goalId, updatedContent, goalItem) {
         },
         body: JSON.stringify({
             goal_id: goalId,
-            goal_description: updatedContent
+            new_text: updatedContent
         })
     }).then(response => response.json())
       .then(data => {
           if (data.success) {
               goalItem.querySelector('.goal-text').innerHTML = updatedContent;
+              const quill = window[`quillEditor${goalId}`];
               quill.enable(false);
               document.getElementById(`goal-content-${goalId}`).style.display = 'block';
               document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
@@ -1045,6 +1046,7 @@ function saveGoal(goalId, updatedContent, goalItem) {
           alert('An error occurred while saving the goal.');
       });
 }
+
 
 function cancelEdit(goalId) {
     document.getElementById(`goal-text-${goalId}`).style.display = 'block';
