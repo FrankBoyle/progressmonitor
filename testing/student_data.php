@@ -108,7 +108,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
 <script>
 const schoolId = <?php echo json_encode($schoolId); ?>;
-const studentIdNew = <?php echo json_encode($studentIdNew); ?>;
 const metadataId = <?php echo json_encode($metadataId); ?>;
 </script>
 </body>
