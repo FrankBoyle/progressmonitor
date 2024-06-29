@@ -1108,8 +1108,9 @@ function generatePrintTable(selectedColumns) {
     console.log('Selected Columns:', selectedColumns);
     const data = table.getData();
     console.log('Table Data:', data);
-    
-    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col])];
+    console.log('Custom Column Names:', customColumnNames);
+
+    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col] || col)];
     console.log('Headers:', headers);
 
     const rows = data.map(row => [row.score_date, ...selectedColumns.map(col => row[col])]);
@@ -1130,7 +1131,6 @@ function generatePrintTable(selectedColumns) {
     tableHtml += '</tbody></table>';
     return tableHtml;
 }
-
 
 // Function to show the print dialog modal
 function showPrintDialogModal() {
