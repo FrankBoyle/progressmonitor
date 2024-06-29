@@ -1024,7 +1024,6 @@ function saveGoal(goalId, updatedContent, goalItem) {
       });
 }
 
-
 function cancelEdit(goalId) {
     document.getElementById(`goal-text-${goalId}`).style.display = 'block';
     document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
@@ -1218,6 +1217,7 @@ function showGoalSelectionModal() {
 }
 
 // Function to hide the goal selection modal
+
 function hideGoalSelectionModal() {
         document.getElementById('goalSelectionModal').style.display = 'none';
 }
