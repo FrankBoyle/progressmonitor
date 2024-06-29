@@ -427,20 +427,12 @@ function showAddGroupModal() {
 }
 
 function showAddStudentModal() {
-    const selectedGroup = document.querySelector('.selected-group');
-    if (!selectedGroup) {
-        alert('Please select a group first.');
-        return;
-    }
-
-    const groupId = selectedGroup.getAttribute('data-group-id');
-    const modal = document.getElementById('add-student-modal');
-    if (modal) {
-        modal.style.display = 'block';
-        loadStudentsForGroupAssignment(groupId); // Load students for group assignment
-    } else {
-        console.error("Modal element not found");
-    }
+        const modal = document.getElementById('add-student-modal');
+        if (modal) {
+            modal.style.display = 'block';
+        } else {
+            console.error("Modal element not found");
+        }
 }
 
 function assignExistingStudentToGroup(event) {
