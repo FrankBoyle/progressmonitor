@@ -1055,24 +1055,26 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
-    const goalContainer = document.querySelector('.goal-item.selected');
-    if (!goalContainer) {
-        alert("Please select a goal.");
-        return;
-    }
-
+    const selectedGoal = document.querySelector('.goal-item.selected');
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected")).map(item => item.getAttribute("data-column-name"));
-
-    let printContents = '<div id="printContainer" style="visibility: visible; width: 600px; height: 600px;">';
-
-    if (goalContainer) {
-        printContents += `<div>${goalContainer.innerHTML}</div>`;
+    if (!selectedGoal) {
+        alert("Please select a goal.");
+        return;
     }
+
+    const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+        .map(item => item.getAttribute("data-column-name"));
+
+    if (selectedColumns.length === 0) {
+        alert("Please select at least one column.");
+        return;
+    }
+
+    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1080,11 +1082,13 @@ function printReport() {
     }
 
     if (printLineChart) {
-        printContents += '<div class="chart-card" id="printLineChart" style="width: 200px; height: 200px;"></div>';
+        const lineChartContent = document.getElementById('chartContainer').innerHTML;
+        printContents += `<div>${lineChartContent}</div>`;
     }
 
     if (printBarChart) {
-        printContents += '<div class="chart-card" id="printBarChart" style="width: 200px; height: 200px;"></div>';
+        const barChartContent = document.getElementById('barChartContainer').innerHTML;
+        printContents += `<div>${barChartContent}</div>`;
     }
 
     if (printStatistics) {
@@ -1092,52 +1096,18 @@ function printReport() {
         printContents += `<div>${statisticsContent}</div>`;
     }
 
-    printContents += '</div>';
-
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
-
-    // Render charts in print layout
-    setTimeout(renderPrintCharts, 500); // Adding a slight delay to ensure elements are in the DOM
-
     window.print();
     document.body.innerHTML = originalContents;
-}
 
-function renderPrintCharts() {
-    const originalLineChart = document.getElementById('chartContainer').innerHTML;
-    const originalBarChart = document.getElementById('barChartContainer').innerHTML;
-
-    document.getElementById('printLineChart').innerHTML = originalLineChart;
-    document.getElementById('printBarChart').innerHTML = originalBarChart;
-
-    // Resize charts for print layout
-    const lineChartElement = document.querySelector('#printLineChart .apexcharts-canvas');
-    const barChartElement = document.querySelector('#printBarChart .apexcharts-canvas');
-
-    if (lineChartElement) {
-        lineChartElement.style.width = '200px';
-        lineChartElement.style.height = '200px';
-    }
-
-    if (barChartElement) {
-        barChartElement.style.width = '200px';
-        barChartElement.style.height = '200px';
-    }
+    enableChartInteractions();
 }
 
 function generatePrintTable(selectedColumns) {
-    console.log('Selected Columns:', selectedColumns);
     const data = table.getData();
-    console.log('Table Data:', data);
-    console.log('Custom Column Names:', customColumnNames);
-
-    // Correctly map custom column names
-    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col + '_name'] || col)];
-    console.log('Headers:', headers);
-
+    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col])];
     const rows = data.map(row => [row.score_date, ...selectedColumns.map(col => row[col])]);
-    console.log('Rows:', rows);
 
     let tableHtml = '<table border="1" width="100%"><thead><tr>';
     headers.forEach(header => {
@@ -1166,6 +1136,7 @@ function showPrintDialogModal() {
     const goalContainer = document.getElementById('goalSelectionContainer');
     goalContainer.innerHTML = ''; // Clear previous options
 
+    // Fetch goals and populate the container
     fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
@@ -1178,7 +1149,7 @@ function showPrintDialogModal() {
                 const goalItem = document.createElement('div');
                 goalItem.classList.add('goal-item');
                 goalItem.setAttribute('data-goal-id', goal.goal_id);
-                goalItem.innerHTML = `<div class="quill-readonly">${goal.goal_description}</div>`;
+                goalItem.innerHTML = goal.goal_description; // Using plain HTML for goal description
                 goalItem.addEventListener('click', function() {
                     document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
