@@ -1073,7 +1073,7 @@ function printReport() {
         return;
     }
 
-    let printContents = `<div id="printContent" style="width: 600px; height: 600px; overflow: hidden;">${selectedGoal.innerHTML}`;
+    let printContents = `<div id="printContent" style="width: 800px; height: 800px; overflow: hidden;">${selectedGoal.innerHTML}`;
 
     if (printTable) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1101,8 +1101,8 @@ function printReport() {
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
 
-    // Use html2canvas to capture the content as an image
-    html2canvas(document.getElementById('printContent')).then(canvas => {
+    // Use html2canvas to capture the content as an image with a higher resolution
+    html2canvas(document.getElementById('printContent'), { scale: 2 }).then(canvas => {
         // Create a link element to download the image
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
@@ -1111,13 +1111,13 @@ function printReport() {
 
         // Restore the original content
         document.body.innerHTML = originalContents;
+        enableChartInteractions();
     }).catch(error => {
         console.error('Error generating image:', error);
-        // Restore the original content in case of an error
+        // Restore the original content in case of error
         document.body.innerHTML = originalContents;
+        enableChartInteractions();
     });
-
-    enableChartInteractions();
 }
 
 function generatePrintTable(selectedColumns) {
@@ -1217,7 +1217,6 @@ function showGoalSelectionModal() {
 }
 
 // Function to hide the goal selection modal
-
 function hideGoalSelectionModal() {
         document.getElementById('goalSelectionModal').style.display = 'none';
 }
