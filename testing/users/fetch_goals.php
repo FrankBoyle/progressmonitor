@@ -7,21 +7,20 @@ header('Content-Type: application/json');
 
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
+        if (isset($_GET['student_id'])) {
             $studentId = $_GET['student_id'];
-            $metadataId = $_GET['metadata_id'];
 
             $stmt = $connection->prepare("
                 SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name
                 FROM Goals g
                 INNER JOIN Metadata gm ON g.metadata_id = gm.metadata_id
-                WHERE g.student_id_new = ? AND g.metadata_id = ? AND g.archived = 0
+                WHERE g.student_id_new = ? AND g.archived = 0
             ");
-            $stmt->execute([$studentId, $metadataId]);
+            $stmt->execute([$studentId]);
             $goals = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode($goals);
         } else {
-            echo json_encode(["error" => "Invalid request, missing student_id or metadata_id"]);
+            echo json_encode(["error" => "Invalid request, missing student_id"]);
         }
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['goal_id']) && isset($_POST['goal_description'])) {
