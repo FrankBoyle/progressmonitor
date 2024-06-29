@@ -100,7 +100,7 @@ function fetchGoals(studentIdNew, metadataId) {
         .then(response => response.json())
         .then(data => {
             console.log('Goals data fetched:', data);
-            if (data && data.goals) {
+            if (data && data.goals && Array.isArray(data.goals)) {
                 displayGoals(data.goals);
             } else {
                 console.error('Invalid or incomplete goals data:', data);
@@ -116,6 +116,11 @@ function displayGoals(goals) {
     goalsContainer.innerHTML = ''; // Clear existing goals
 
     goals.forEach(goal => {
+        if (!goal.id || !goal.content) {
+            console.error('Invalid goal structure:', goal);
+            return;
+        }
+
         const goalItem = document.createElement('div');
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
