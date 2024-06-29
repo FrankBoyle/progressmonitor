@@ -5,6 +5,7 @@ let isScrolling;
 let customColumnNames = {}; // This will store the custom names
 let metadataId; // Global metadataId
 let studentIdNew; // Global studentIdNew
+let performanceData = [];
 
 // Define series colors
 const seriesColors = [
@@ -309,9 +310,10 @@ function fetchInitialData(studentIdNew, metadataId) {
             console.log('Initial data fetched:', data);
             console.log('Data structure:', data);
             if (data && data.performanceData && data.scoreNames) {
+                performanceData = data.performanceData; // Store the performance data
                 customColumnNames = data.scoreNames; // Store the names
                 createColumnCheckboxes(customColumnNames);
-                initializeTable(data.performanceData, customColumnNames, studentIdNew, metadataId);
+                initializeTable(performanceData, customColumnNames, studentIdNew, metadataId);
                 extractChartData(); // Update charts based on the new data
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
@@ -332,9 +334,10 @@ function fetchFilteredData(iepDate, studentId, metadataId) {
             console.log('Filtered data fetched:', data);
             console.log('Data structure:', data);
             if (data && data.performanceData && data.scoreNames) {
+                performanceData = data.performanceData; // Store the performance data
                 customColumnNames = data.scoreNames; // Store the names
                 createColumnCheckboxes(customColumnNames);
-                initializeTable(data.performanceData, customColumnNames, studentId, metadataId);
+                initializeTable(performanceData, customColumnNames, studentId, metadataId);
                 extractChartData(); // Update charts based on the new data
             } else {
                 console.error('Invalid or incomplete filtered data:', data);
@@ -396,7 +399,6 @@ function extractChartData() {
         console.error('No valid data series extracted for charting.');
     }
 }
-
 
 function interpolateData(data) {
     let interpolatedData = [...data];
