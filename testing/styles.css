@@ -1042,12 +1042,3 @@ input[type="text"] {
     background-color: #f2f2f2;
 }
 
-.chart svg {
-    width: 100% !important;
-    height: 100px !important;
-}
-
-.chart .apexcharts-canvas {
-    margin: 0 auto;
-}
-
