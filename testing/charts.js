@@ -1071,9 +1071,9 @@ function printReport() {
     }
 
     const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
-        .map(item => item.getAttribute('data-section').toLowerCase());
+        .map(item => item.getAttribute('data-section'));
 
-    console.log("Selected sections:", selectedSections);
+    console.log("Selected sections:", selectedSections); // Log selected sections
 
     if (selectedSections.length === 0) {
         alert("Please select at least one section to print.");
@@ -1082,12 +1082,12 @@ function printReport() {
 
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
-    if (selectedSections.includes('printtable')) {
+    if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
         printContents += `<div>${tableContent}</div>`;
     }
 
-    if (selectedSections.includes('linechart')) {
+    if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer');
         lineChartElement.style.width = '800px';
         lineChartElement.style.height = 'auto';
@@ -1095,7 +1095,7 @@ function printReport() {
         lineChartElement.style.border = 'none';
         lineChartElement.style.padding = '0';
 
-        console.log("Including line chart in the print content");
+        console.log("Including line chart in the print content"); // Log line chart inclusion
 
         if (window.myLineChart) {
             window.myLineChart.updateOptions({
@@ -1109,7 +1109,7 @@ function printReport() {
         printContents += lineChartElement.outerHTML;
     }
 
-    if (selectedSections.includes('barchart')) {
+    if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer');
         barChartElement.style.width = '800px';
         barChartElement.style.height = 'auto';
@@ -1117,7 +1117,7 @@ function printReport() {
         barChartElement.style.border = 'none';
         barChartElement.style.padding = '0';
 
-        console.log("Including bar chart in the print content");
+        console.log("Including bar chart in the print content"); // Log bar chart inclusion
 
         if (window.myBarChart) {
             window.myBarChart.updateOptions({
@@ -1131,9 +1131,9 @@ function printReport() {
         printContents += barChartElement.outerHTML;
     }
 
-    if (selectedSections.includes('statistics')) {
+    if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        console.log("Including statistics in the print content");
+        console.log("Including statistics in the print content"); // Log statistics inclusion
         printContents += `<div>${statisticsContent}</div>`;
     }
 
