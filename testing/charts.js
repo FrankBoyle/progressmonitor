@@ -928,7 +928,119 @@ function updateColumnNamesOnServer(newColumnNames) {
     });
 }
 
+function fetchGoals(studentIdNew, metadataId) {
+    fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Goals data fetched:', data);
+            if (data && Array.isArray(data)) {
+                const filteredGoals = data.filter(goal => goal.metadata_id == metadataId);
+                displayGoals(filteredGoals);
+            } else {
+                console.error('Invalid or incomplete goals data:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching goals data:', error);
+        });
+}
 
+function displayGoals(goals) {
+    const goalsContainer = document.getElementById('goals-container');
+    goalsContainer.innerHTML = ''; // Clear existing goals
+
+    goals.forEach(goal => {
+        if (!goal.goal_id || !goal.goal_description) {
+            console.error('Invalid goal structure:', goal);
+            return;
+        }
+
+        const goalItem = document.createElement('div');
+        goalItem.classList.add('goal-item');
+        goalItem.innerHTML = `
+            <div class="quill-editor" id="editor-${goal.goal_id}"></div>
+            <button class="edit-btn">Edit</button>
+            <button class="save-btn">Save</button>
+            <button class="cancel-btn">Cancel</button>
+            <button class="archive-btn">Archive</button>
+        `;
+
+        goalsContainer.appendChild(goalItem);
+
+        const quill = new Quill(`#editor-${goal.goal_id}`, {
+            theme: 'snow',
+            readOnly: true
+        });
+
+        quill.root.innerHTML = goal.goal_description; // Load the goal content
+
+        goalItem.querySelector('.edit-btn').addEventListener('click', () => {
+            quill.enable(true);
+            goalItem.classList.add('editing');
+        });
+
+        goalItem.querySelector('.save-btn').addEventListener('click', () => {
+            const updatedContent = quill.root.innerHTML;
+            saveGoal(goal.goal_id, updatedContent, goalItem);
+        });
+
+        goalItem.querySelector('.cancel-btn').addEventListener('click', () => {
+            quill.root.innerHTML = goal.goal_description;
+            quill.enable(false);
+            goalItem.classList.remove('editing');
+        });
+
+        goalItem.querySelector('.archive-btn').addEventListener('click', () => {
+            archiveGoal(goal.goal_id, goalItem);
+        });
+    });
+}
+
+function saveGoal(goalId, content, goalItem) {
+    fetch('./users/save_goal.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: goalId, content: content })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            goalItem.classList.remove('editing');
+            const quill = Quill.find(goalItem.querySelector('.quill-editor'));
+            quill.enable(false);
+        } else {
+            alert('Failed to save goal. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error saving goal:', error);
+    });
+}
+
+function archiveGoal(goalId, goalItem) {
+    if (confirm('Are you sure you want to archive this goal?')) {
+        fetch('./users/archive_goal.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: goalId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                goalItem.remove();
+            } else {
+                alert('Failed to archive goal. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error archiving goal:', error);
+        });
+    }
+}
 
 
 

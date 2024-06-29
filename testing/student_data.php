@@ -123,7 +123,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 <script>
 const schoolId = <?php echo json_encode($schoolId); ?>;
 </script>
-<script src="goals.js"></script> <!-- Link to the new JS file that handles goals logic -->
 </body>
 </html>
 
