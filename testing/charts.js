@@ -321,6 +321,9 @@ function fetchInitialData(studentIdNew, metadataId) {
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
                 }
+                if (data.studentName && data.categoryName) {
+                    document.title = `${data.studentName} - ${data.categoryName}`;
+                }
             } else {
                 console.error('Invalid or incomplete initial data:', data);
             }
