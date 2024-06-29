@@ -126,32 +126,26 @@ include('./users/auth_session.php');
         <h2>Add New Goal</h2>
         <form id="add-goal-form" onsubmit="addGoal(event)">
             <div class="form-group">
-                <label for="metadata-option">Metadata Option:</label>
-                <div>
-                    <input type="radio" id="use-template" name="metadata_option" value="template" checked>
-                    <label for="use-template">Use a Category Template</label>
-                </div>
-                <div>
-                    <input type="radio" id="link-existing" name="metadata_option" value="existing">
-                    <label for="link-existing">Link to a Used Category</label>
-                </div>
+                <label for="goal-description">Goal Description:</label>
+                <textarea id="goal-description" name="goal_description" required></textarea>
             </div>
-
-            <div id="template-dropdown" class="form-group" style="display: block;">
-                <label for="template-id">Select Category Template:</label>
-                <select id="template-id" name="template_id"></select>
+            <div class="form-group">
+                <label for="goal-date">Goal Date:</label>
+                <input type="date" id="goal-date" name="goal_date" required>
             </div>
-
-            <div id="existing-dropdown" class="form-group" style="display: none;">
-                <label for="existing-metadata-id">Select Category Template:</label>
-                <select id="existing-metadata-id" name="existing_metadata_id"></select>
+            <div class="form-group">
+                <label>Metadata Option:</label>
+                <input type="radio" id="use-template" name="metadata_option" value="template" required>
+                <label for="use-template">Use a Category Template</label><br>
+                <select id="template-metadata-select" required></select><br>
+                <input type="radio" id="use-existing" name="metadata_option" value="existing" required>
+                <label for="use-existing">Link to a Used Category</label><br>
+                <select id="existing-category-select" required></select>
             </div>
-
             <button type="submit">Add Goal</button>
         </form>
     </div>
 </div>
-
 
 <!-- Group Options -->
 <div id="group-options" class="group-options">
@@ -213,29 +207,22 @@ include('./users/auth_session.php');
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Load initial data
     loadGroups();
     loadStaff();
-    loadMetadata(); // This seems to be a general load, keeping it as is
-    loadTemplates(); // Load metadata templates
-    loadExistingCategories(); // Load existing categories
+    loadMetadata(); // Load metadata for the add goal form
+    loadTemplates();
+    loadExistingCategories();
 
-    // Expose functions to global scope for inline event handlers
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
-    window.hideAddGroupModal = hideAddGroupModal;
-    window.hideAddStudentModal = hideAddStudentModal;
 
-    // Add event listeners to buttons
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
     document.querySelector('.add-student-btn').addEventListener('click', showAddStudentModal);
 
-    // Add event listeners to the radio buttons
-    document.querySelector('input[name="metadata_option"][value="template"]').addEventListener('change', toggleMetadataOption);
-    document.querySelector('input[name="metadata_option"][value="existing"]').addEventListener('change', toggleMetadataOption);
+    window.hideAddGroupModal = hideAddGroupModal;
+    window.hideAddStudentModal = hideAddStudentModal;
 
-    // Hide group options when clicking outside
     document.addEventListener('click', function(event) {
         const optionsMenu = document.getElementById('group-options');
         if (optionsMenu && !optionsMenu.contains(event.target)) {
@@ -243,10 +230,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initialize select2 elements
     $('.select2').select2();
 
-    // Set up MutationObserver to watch for added nodes in the goal list
     const goalList = document.getElementById('goal-list');
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
@@ -257,7 +242,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     observer.observe(goalList, { childList: true, subtree: true });
 
-    // Initial call to populate students and goals
     populateStudentsAndGoals();
 });
 
@@ -853,6 +837,10 @@ function showAddGoalModal() {
     }
     const modal = document.getElementById('add-goal-modal');
     modal.style.display = 'block';
+
+    // Load templates and existing categories
+    loadTemplates();
+    loadExistingCategories();
 }
 
 function hideAddGoalModal() {
@@ -867,33 +855,42 @@ function addGoal(event) {
     const goalDescription = document.getElementById('goal-description').value;
     const goalDate = document.getElementById('goal-date').value;
     const metadataOption = document.querySelector('input[name="metadata_option"]:checked').value;
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-
     let metadataId = null;
+
     if (metadataOption === 'template') {
-        metadataId = document.getElementById('template-id').value;
+        metadataId = document.getElementById('template-metadata-select').value;
     } else if (metadataOption === 'existing') {
-        metadataId = document.getElementById('existing-metadata-id').value;
+        metadataId = document.getElementById('existing-category-select').value;
     }
 
-    fetch('users/add_goal.php', {
+    if (!studentId || !goalDescription || !goalDate || !metadataId) {
+        alert('All fields are required.');
+        return;
+    }
+
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+
+    fetch('./users/add_goal.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_option=${encodeURIComponent(metadataOption)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
+        body: `student_id=${encodeURIComponent(studentId)}&goal_description=${encodeURIComponent(goalDescription)}&goal_date=${encodeURIComponent(goalDate)}&metadata_id=${encodeURIComponent(metadataId)}&school_id=${encodeURIComponent(schoolId)}`
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            alert(data.message);
-            hideAddGoalModal();
-            loadGoals(studentId);
-        } else {
-            alert(data.error);
-        }
-    })
-    .catch(error => console.error('Error adding goal:', error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.message && data.message.includes("Goal added successfully.")) {
+                loadGoals(studentId);
+                hideAddGoalModal();
+            } else {
+                console.error('Error adding goal:', data);
+                alert('Error adding goal: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Network or parsing error:', error);
+            alert('There was a network or parsing error. Please try again.');
+        });
 }
 
 // Add the loadGoals function definition somewhere in your script
@@ -999,8 +996,13 @@ function loadTemplates() {
     fetch('users/fetch_metadata_templates.php')
         .then(response => response.json())
         .then(data => {
-            const templateSelect = document.getElementById('template-id');
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            const templateSelect = document.getElementById('template-metadata-select');
             templateSelect.innerHTML = '';
+
             data.forEach(template => {
                 const option = document.createElement('option');
                 option.value = template.metadata_id;
@@ -1008,25 +1010,35 @@ function loadTemplates() {
                 templateSelect.appendChild(option);
             });
         })
-        .catch(error => console.error('Error loading metadata templates:', error));
+        .catch(error => {
+            console.error('Error loading metadata templates:', error);
+        });
 }
 
 function loadExistingCategories() {
     const studentId = document.getElementById('selected-student-id').value;
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+
     fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
-            const existingSelect = document.getElementById('existing-metadata-id');
-            existingSelect.innerHTML = '';
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            const existingCategorySelect = document.getElementById('existing-category-select');
+            existingCategorySelect.innerHTML = '';
+
             data.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category.metadata_id;
                 option.textContent = category.category_name;
-                existingSelect.appendChild(option);
+                existingCategorySelect.appendChild(option);
             });
         })
-        .catch(error => console.error('Error loading existing categories:', error));
+        .catch(error => {
+            console.error('Error loading existing categories:', error);
+        });
 }
 </script>
 </body>
