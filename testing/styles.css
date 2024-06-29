@@ -849,7 +849,7 @@ input[type="text"] {
 }
 
 .chart {
-    width: 100%; /* Adjust the width to fit two charts side by side */
+    width: 1000px; /* Adjust the width to fit two charts side by side */
     height: auto; /* Set a fixed height for the charts */
     border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
 
