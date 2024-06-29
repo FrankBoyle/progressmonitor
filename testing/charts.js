@@ -21,14 +21,16 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
     window.hidePrintDialogModal = hidePrintDialogModal;
     window.printReport = printReport;
-});
 
-
+    
 document.querySelectorAll('.selector-item').forEach(item => {
     item.addEventListener('click', function() {
         item.classList.toggle('selected');
     });
 });
+});
+
+
 
 function setupInitialPageLoad() {
     const urlParams = new URLSearchParams(window.location.search);
