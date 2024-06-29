@@ -698,6 +698,11 @@ function disableChartInteractions() {
             }
         });
     }
+
+    const chartElements = document.querySelectorAll('.apexcharts-canvas');
+    chartElements.forEach(chart => {
+        chart.style.pointerEvents = 'none';
+    });
 }
 
 function enableChartInteractions() {
@@ -719,6 +724,11 @@ function enableChartInteractions() {
             }
         });
     }
+
+    const chartElements = document.querySelectorAll('.apexcharts-canvas');
+    chartElements.forEach(chart => {
+        chart.style.pointerEvents = 'auto';
+    });
 }
 
 function calculateTrendline(data) {
@@ -1088,13 +1098,12 @@ function printReport() {
     printContents += '</div>';
 
     const originalContents = document.body.innerHTML;
-    disableChartInteractions(); // Disable chart interactions
+    disableChartInteractions(); // Disable chart interactions and animations
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
-    enableChartInteractions(); // Re-enable chart interactions
+    enableChartInteractions(); // Re-enable chart interactions and animations
 }
-
 
 // Function to show the print dialog modal
 function showPrintDialogModal() {
