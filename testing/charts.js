@@ -1071,42 +1071,49 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function printReport() {
+    const goalSelect = document.getElementById('goalSelection');
+    const selectedGoalId = goalSelect.value;
+    const selectedGoal = document.querySelector(`.goal-item[data-goal-id="${selectedGoalId}"]`);
     const printTable = document.getElementById('printTable').checked;
     const printLineChart = document.getElementById('printLineChart').checked;
     const printBarChart = document.getElementById('printBarChart').checked;
     const printStatistics = document.getElementById('printStatistics').checked;
 
-    let printContents = '';
+        if (!selectedGoalId) {
+            alert("Please select a goal.");
+            return;
+        }
 
-    const selectedGoal = document.querySelector('.goal-item.selected');
-    if (selectedGoal) {
-        printContents += `<div>${selectedGoal.outerHTML}</div>`;
-    }
+        let printContents = '';
 
-    if (printTable) {
-        const tableContent = document.getElementById('performance-table').innerHTML;
-        printContents += `<div>${tableContent}</div>`;
-    }
+        if (selectedGoal) {
+            printContents += `<div>${selectedGoal.outerHTML}</div>`;
+        }
 
-    if (printLineChart) {
-        const lineChartContent = document.getElementById('chartContainer').innerHTML;
-        printContents += `<div>${lineChartContent}</div>`;
-    }
+        if (printTable) {
+            const tableContent = document.getElementById('performance-table').innerHTML;
+            printContents += `<div>${tableContent}</div>`;
+        }
 
-    if (printBarChart) {
-        const barChartContent = document.getElementById('barChartContainer').innerHTML;
-        printContents += `<div>${barChartContent}</div>`;
-    }
+        if (printLineChart) {
+            const lineChartContent = document.getElementById('chartContainer').innerHTML;
+            printContents += `<div>${lineChartContent}</div>`;
+        }
 
-    if (printStatistics) {
-        const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div>${statisticsContent}</div>`;
-    }
+        if (printBarChart) {
+            const barChartContent = document.getElementById('barChartContainer').innerHTML;
+            printContents += `<div>${barChartContent}</div>`;
+        }
 
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
+        if (printStatistics) {
+            const statisticsContent = document.getElementById('statistics').innerHTML;
+            printContents += `<div>${statisticsContent}</div>`;
+        }
+
+        const originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
 }
 
 // Function to show the print dialog modal
