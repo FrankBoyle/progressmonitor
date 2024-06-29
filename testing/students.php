@@ -805,6 +805,12 @@ function showEditGroupModal(groupId, groupName) {
 function hideEditGroupModal() {
     document.getElementById('edit-group-modal').style.display = 'none';
     resetStudentList();
+
+    // Show the Edit Group button
+    const editGroupButton = document.querySelector('.edit-group-btn');
+    if (editGroupButton) {
+        editGroupButton.style.display = 'inline-block';
+    }
 }
 
 function loadGroupStudents(groupId) {
