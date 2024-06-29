@@ -1119,7 +1119,7 @@ function generatePrintTable(selectedColumns) {
     // Generate table rows
     tableData.forEach(row => {
         tableHtml += '<tr>';
-        tableHtml += `<td>${row.score_date}</td>`;
+        tableHtml += `<td>${row['score_date']}</td>`;
         selectedColumns.forEach(column => {
             tableHtml += `<td>${row[column.field] || ''}</td>`;
         });
