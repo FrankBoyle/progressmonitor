@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.selector-item').forEach(item => {
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
-            console.log(`Toggled selection for ${item.getAttribute('data-section')}: ${item.classList.contains('selected')}`);
+            //console.log(`Toggled selection for ${item.getAttribute('data-section')}: ${item.classList.contains('selected')}`);
         });
     });
 });
@@ -65,9 +65,9 @@ function attachEventListeners() {
     const editColumnsBtn = document.getElementById('editColumnsBtn');
     if (editColumnsBtn) {
         editColumnsBtn.addEventListener('click', showEditColumnNamesModal);
-        console.log("Edit columns button listener attached.");
+        //console.log("Edit columns button listener attached.");
     } else {
-        console.log("Edit columns button not found.");
+        //console.log("Edit columns button not found.");
     }
 }
 
@@ -110,7 +110,7 @@ function createNewDataObject(studentIdNew, metadataId, newDate) {
 }
 
 function submitNewDataRow(newData, newRowDateInput) {
-    console.log('Sending new data:', newData);
+    //console.log('Sending new data:', newData);
     fetch('./users/insert_performance.php', {
         method: 'POST',
         headers: {
@@ -261,7 +261,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
 
         // Log the updated data for debugging
-        console.log("Updated data:", updatedData);
+        //console.log("Updated data:", updatedData);
 
         // Update the cell data in the backend (make AJAX call)
         fetch('./users/update_performance.php', {
@@ -273,7 +273,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         }).then(response => response.json())
           .then(result => {
               if (result.success) {
-                  console.log('Data updated successfully');
+                  //console.log('Data updated successfully');
               } else {
                   alert('Failed to update data: ' + result.message);
                   console.error('Error info:', result.errorInfo); // Log detailed error info
@@ -284,7 +284,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
 
     // Ensure the table is fully initialized and rendered before allowing selection
     table.on("tableBuilt", function() {
-        console.log("Table fully built and ready for interaction.");
+        //console.log("Table fully built and ready for interaction.");
     });
 }
 
@@ -294,7 +294,7 @@ function isDateDuplicate(date) {
 }
 
 function saveIEPDate(iepDate, studentIdNew) {
-    console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentIdNew}`);
+    //console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentIdNew}`);
     fetch('./users/save_iep_date.php', {
         method: 'POST',
         headers: {
@@ -307,7 +307,7 @@ function saveIEPDate(iepDate, studentIdNew) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('IEP date saved:', data);
+        //console.log('IEP date saved:', data);
         if (data.success) {
             fetchInitialData(studentIdNew, metadataId);
         } else {
@@ -321,7 +321,7 @@ function fetchInitialData(studentIdNew, metadataId) {
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Initial data fetched:', data);
+            //console.log('Initial data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
                 createColumnCheckboxes(data.scoreNames);
                 customColumnNames = data.scoreNames; // Store the names
@@ -361,7 +361,7 @@ function initializeBarChart() {
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
-        console.log("Extracting chart data...");
+        //console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
 
@@ -393,7 +393,7 @@ function extractChartData() {
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
 
-        console.log("Charts updated successfully.");
+        //console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
@@ -859,7 +859,7 @@ function showEditColumnNamesModal() {
     const form = document.getElementById('editColumnNamesForm');
     form.innerHTML = ''; // Clear previous contents
 
-    console.log("Custom Column Names: ", customColumnNames); // Log custom column names
+    //console.log("Custom Column Names: ", customColumnNames); // Log custom column names
 
     // Use stored custom names
     let index = 1;
@@ -870,7 +870,7 @@ function showEditColumnNamesModal() {
 
             form.innerHTML += label + input;
 
-            console.log(`Input for ${key} created with value: ${customColumnNames[key]}`);
+            //console.log(`Input for ${key} created with value: ${customColumnNames[key]}`);
 
             index++;
         }
@@ -880,19 +880,19 @@ function showEditColumnNamesModal() {
     modal.style.display = 'block'; // Show the modal
 
     // Log modal display status
-    console.log("Modal displayed with current column names.");
+    //console.log("Modal displayed with current column names.");
 
     // Log the form's innerHTML to check the final state of the form
-    console.log("Form innerHTML:", form.innerHTML);
+    //console.log("Form innerHTML:", form.innerHTML);
 }
 
 function hideEditColumnNamesModal() {
     const modal = document.getElementById('editColumnNamesModal');
     if (modal) {
         modal.style.display = 'none';
-        console.log("Modal hidden.");
+        //console.log("Modal hidden.");
     } else {
-        console.log("Modal element for hiding not found.");
+        //console.log("Modal element for hiding not found.");
     }
 }
 
@@ -928,7 +928,7 @@ function updateColumnNamesOnServer(newColumnNames) {
     .then(response => response.json())
     .then(data => {
         if (data.message) {
-            console.log('Column names updated successfully:', data.message);
+            //console.log('Column names updated successfully:', data.message);
             alert('Column names updated successfully!');
         } else if (data.error) {
             console.error('Error updating column names:', data.error);
@@ -945,7 +945,7 @@ function fetchGoals(studentIdNew, metadataId) {
     fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Goals data fetched:', data);
+            //console.log('Goals data fetched:', data);
             if (data && Array.isArray(data)) {
                 // Filter goals by metadata_id before displaying
                 displayGoals(data.filter(goal => goal.metadata_id == metadataId));
@@ -1149,7 +1149,7 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            console.log('Notes saved successfully:', data.message);
+            //console.log('Notes saved successfully:', data.message);
             // Proceed to print the report
             printReport(selectedGoal, selectedSections, reportingPeriod, notes);
         } else {

@@ -339,7 +339,7 @@ function addGroup(event) {
             return response.text();
         })
         .then(data => {
-            console.log('Group added successfully:', data);
+            //console.log('Group added successfully:', data);
             loadGroups();
             hideAddGroupModal();
         })
@@ -366,7 +366,7 @@ function addStudent(event) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Student added successfully:', data);
+        //console.log('Student added successfully:', data);
         if (data.status === 'success') {
             loadStudents();
             hideAddStudentModal();
@@ -439,12 +439,12 @@ function hideAddStudentModal() {
 }
 
 function loadStudentsByGroup(groupId) {
-    console.log('Loading students for group by ID:', groupId); // Debug log
+    //console.log('Loading students for group by ID:', groupId); // Debug log
 
     fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched group students:', data); // Debug log
+            //console.log('Fetched group students:', data); // Debug log
 
             const studentList = document.getElementById('student-list');
             const studentsMessage = document.getElementById('students-message');
@@ -484,12 +484,12 @@ function loadStudentsByGroup(groupId) {
 }
 
 function loadStudentsForGroupAssignment(groupId) {
-    console.log('Loading students for group assignment:', groupId); // Debug log
+    //console.log('Loading students for group assignment:', groupId); // Debug log
 
     fetch(`users/fetch_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched students:', data); // Debug log
+            //console.log('Fetched students:', data); // Debug log
 
             if (Array.isArray(data)) {
                 const studentSelect = document.querySelector('[name="student_id"]');
@@ -661,7 +661,7 @@ function updateGroup(event) {
     })
     .then(response => response.text())
     .then(data => {
-        console.log('Response:', data); // Debug log
+        //console.log('Response:', data); // Debug log
 
         if (data.includes('Group updated successfully')) {
             alert('Group updated successfully.');
@@ -688,7 +688,7 @@ function assignStudentsToGroup(event) {
         return;
     }
 
-    console.log('Assigning students to group:', groupId, studentIds); // Debug log
+    //console.log('Assigning students to group:', groupId, studentIds); // Debug log
 
     fetch('./users/assign_students_to_group.php', {
         method: 'POST',
@@ -699,7 +699,7 @@ function assignStudentsToGroup(event) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Response:', data); // Debug log
+        //console.log('Response:', data); // Debug log
         if (data.status === "success") {
             alert(data.message);
             hideEditGroupModal();
@@ -822,12 +822,12 @@ function hideEditGroupModal() {
 }
 
 function loadGroupStudents(groupId) {
-    console.log('Loading students for group:', groupId); // Debug log
+    //console.log('Loading students for group:', groupId); // Debug log
 
     fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched group students:', data); // Debug log
+            //console.log('Fetched group students:', data); // Debug log
 
             const groupStudentsList = document.getElementById('group-students-list');
             groupStudentsList.innerHTML = '';
