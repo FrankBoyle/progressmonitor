@@ -597,7 +597,6 @@ function selectGroup(element) {
     element.classList.add('selected-group');
 }
 
-
 function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
     document.getElementById('selected-student-id').value = studentId;
@@ -631,7 +630,9 @@ function assignStudentsToGroup(event) {
     const groupId = document.getElementById('edit-group-id').value;
     const studentId = document.querySelector('[name="student_id"]').value;
 
-    // Check if both groupId and studentId are present
+    console.log('groupId:', groupId); // Log the groupId
+    console.log('studentId:', studentId); // Log the studentId
+
     if (!groupId) {
         alert('Please select a group.');
         return;
@@ -651,6 +652,7 @@ function assignStudentsToGroup(event) {
     })
     .then(response => response.json()) // Assuming the response is JSON
     .then(data => {
+        console.log('Response:', data); // Log the response
         if (data.status === 'success') {
             alert('Student assigned to group successfully.');
             hideAddStudentModal(); // Close the modal
@@ -664,7 +666,6 @@ function assignStudentsToGroup(event) {
         alert('There was an error assigning the student to the group. Please try again.');
     });
 }
-
 
 function shareGroup(event) {
     event.preventDefault();
