@@ -135,12 +135,17 @@ include('./users/auth_session.php');
 
             <div id="templateDropdown" class="form-group" style="display: none;">
                 <label for="template-metadata-select">Select Category Template:</label>
-                <select id="template-metadata-select" name="template_id"></select>
+                <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')"></select>
             </div>
 
             <div id="existingDropdown" class="form-group" style="display: none;">
                 <label for="existing-metadata-select">Select Existing Category:</label>
-                <select id="existing-metadata-select" name="existing_category_id"></select>
+                <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')"></select>
+            </div>
+
+            <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
+                <h3>Column Names:</h3>
+                <ul id="columnNamesList"></ul>
             </div>
 
             <div class="form-group">
@@ -266,9 +271,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (selectedOption === 'template') {
                 templateDropdown.style.display = 'block';
                 existingDropdown.style.display = 'none';
+                document.getElementById('columnNamesDisplay').style.display = 'none';
             } else if (selectedOption === 'existing') {
                 templateDropdown.style.display = 'none';
                 existingDropdown.style.display = 'block';
+                document.getElementById('columnNamesDisplay').style.display = 'none';
             }
         }
     });
@@ -1052,7 +1059,7 @@ function loadTemplates() {
 function loadExistingCategories() {
     const studentId = document.getElementById('selected-student-id').value;
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-    
+
     fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
@@ -1076,6 +1083,49 @@ function loadExistingCategories() {
         })
         .catch(error => {
             console.error('Error loading existing categories:', error);
+        });
+}
+
+function showColumnNames(type) {
+    let selectedId;
+    if (type === 'template') {
+        selectedId = document.getElementById('template-metadata-select').value;
+    } else if (type === 'existing') {
+        selectedId = document.getElementById('existing-metadata-select').value;
+    }
+
+    if (!selectedId) {
+        document.getElementById('columnNamesDisplay').style.display = 'none';
+        return;
+    }
+
+    fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            const columnNamesList = document.getElementById('columnNamesList');
+            if (!columnNamesList) {
+                console.error('Column names list element not found.');
+                return;
+            }
+            columnNamesList.innerHTML = '';
+
+            for (let i = 1; i <= 10; i++) {
+                const scoreName = data[`score${i}_name`];
+                if (scoreName) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = scoreName;
+                    columnNamesList.appendChild(listItem);
+                }
+            }
+
+            document.getElementById('columnNamesDisplay').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error loading column names:', error);
         });
 }
 </script>
