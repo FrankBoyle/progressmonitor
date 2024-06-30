@@ -361,15 +361,22 @@ function initializeBarChart() {
 // Function to extract chart data
 function extractChartData() {
     try {
+        console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
 
-        const selectedColumns = getSelectedColumns().map(field => ({
-            field: field,
-            name: customColumnNames[field]  // Assuming customColumnNames is defined somewhere in your code
-        }));
+        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+            .map(item => ({
+                field: item.getAttribute("data-column-name"),
+                name: item.textContent.trim()  // Use textContent of the item as the series name
+            }));
 
         const series = selectedColumns.map(column => {
+            if (!column.field || !customColumnNames[column.field]) {
+                console.error(`Invalid column field: ${column.field}`);
+                return null;
+            }
+
             let rawData = data.map(row => row[column.field]);
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
             return {
@@ -377,7 +384,7 @@ function extractChartData() {
                 data: interpolatedData,
                 color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
             };
-        });
+        }).filter(series => series !== null); // Filter out null values
 
         const trendlineSeries = series.map(seriesData => ({
             name: `${seriesData.name} Trendline`,
@@ -390,10 +397,13 @@ function extractChartData() {
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
+
+        console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
 }
+
 
 function getSelectedColumns() {
     return Array.from(document.querySelectorAll(".selector-item.selected"))
@@ -1200,7 +1210,6 @@ function saveAndPrintReport() {
         alert('An error occurred while saving notes.');
     });
 }
-
 
 function generatePrintTable(selectedColumns) {
     const data = table.getData();
