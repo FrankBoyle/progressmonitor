@@ -1199,43 +1199,6 @@ function saveAndPrintReport() {
     });
 }
 
-function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
-
-    if (selectedSections.includes('printTable')) {
-        const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div>${tableContent}</div>`;
-    }
-
-    if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer');
-        printContents += lineChartElement.outerHTML;
-    }
-
-    if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer');
-        printContents += barChartElement.outerHTML;
-    }
-
-    if (selectedSections.includes('printStatistics')) {
-        const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div>${statisticsContent}</div>`;
-    }
-
-    // Include reporting period and notes in the print content
-    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
-
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-
-    setTimeout(() => {
-        window.print();
-        document.body.innerHTML = originalContents;
-        enableChartInteractions();
-    }, 500);
-}
-
 function generatePrintTable(selectedColumns) {
     const data = table.getData();
     const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col])];
