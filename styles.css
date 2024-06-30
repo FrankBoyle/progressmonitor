@@ -850,15 +850,21 @@ input[type="text"] {
 
 @media print {
     #chartContainer, #barChartContainer {
-        max-width: 100%;
-        height: auto;
-    }
-    .apexcharts-canvas {
-        max-width: 100% !important;
+        width: 100% !important;
         height: auto !important;
     }
+    .apexcharts-canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+    table {
+        width: 100% !important;
+    }
+    th, td {
+        width: auto !important;
+        word-wrap: break-word;
+    }
 }
-
 #chartContainer, #barChartContainer {
     width: 1000px;
 }
