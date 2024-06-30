@@ -1102,11 +1102,81 @@ function archiveGoal(goalId, goalItem) {
       });
 }
 
-function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
+function getSelectedColumns() {
+    return Array.from(document.querySelectorAll(".selector-item.selected"));
+}
+
+function saveAndPrintReport() {
+    const selectedGoal = document.querySelector('.goal-item.selected');
+    if (!selectedGoal) {
+        alert("Please select a goal.");
+        return;
+    }
+
+    const selectedColumns = getSelectedColumns();
+    if (selectedColumns.length === 0) {
+        alert("Please select at least one column.");
+        return;
+    }
+
+    const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
+        .map(item => item.getAttribute('data-section'));
+
+    if (selectedSections.length === 0) {
+        alert("Please select at least one section to print.");
+        return;
+    }
+
+    const reportingPeriod = document.getElementById('reporting_period').value.trim();
+    const notes = document.getElementById('notes').value.trim();
+
+    if (!reportingPeriod) {
+        alert("Please enter the reporting period.");
+        return;
+    }
+
+    const goalId = selectedGoal.getAttribute('data-goal-id');
+    const studentIdNew = window.studentIdNew;
+    const schoolId = window.schoolId;
+    const metadataId = window.metadataId;
+
+    const payload = {
+        goal_id: goalId,
+        student_id_new: studentIdNew,
+        school_id: schoolId,
+        metadata_id: metadataId,
+        reporting_period: reportingPeriod,
+        notes: notes
+    };
+
+    fetch('./users/save_notes.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            //console.log('Notes saved successfully:', data.message);
+            // Proceed to print the report
+            printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
+        } else {
+            console.error('Error saving notes:', data.message);
+            alert('Failed to save notes: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while saving notes.');
+    });
+}
+
+function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
-        const selectedColumns = document.querySelectorAll(".selector-item.selected");
         const tableContent = generatePrintTable(selectedColumns);
         printContents += `<div>${tableContent}</div>`;
     }
@@ -1138,73 +1208,6 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
         document.body.innerHTML = originalContents;
         enableChartInteractions();
     }, 500);
-}
-
-function getSelectedColumns() {
-    return Array.from(document.querySelectorAll(".selector-item.selected"));
-}
-
-
-function saveAndPrintReport() {
-    const selectedGoal = document.querySelector('.goal-item.selected');
-    if (!selectedGoal) {
-        alert("Please select a goal.");
-        return;
-    }
-
-    const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
-        .map(item => item.getAttribute('data-section'));
-
-    if (selectedSections.length === 0) {
-        alert("Please select at least one section to print.");
-        return;
-    }
-
-    const reportingPeriod = document.getElementById('reporting_period').value.trim();
-    const notes = document.getElementById('notes').value.trim();
-
-    if (!reportingPeriod) {
-        alert("Please enter the reporting period.");
-        return;
-    }
-
-    const selectedColumns = getSelectedColumns();
-
-    const goalId = selectedGoal.getAttribute('data-goal-id');
-    const studentIdNew = window.studentIdNew;
-    const schoolId = window.schoolId;
-    const metadataId = window.metadataId;
-
-    const payload = {
-        goal_id: goalId,
-        student_id_new: studentIdNew,
-        school_id: schoolId,
-        metadata_id: metadataId,
-        reporting_period: reportingPeriod,
-        notes: notes
-    };
-
-    fetch('./users/save_notes.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            // Proceed to print the report
-            printReport(selectedGoal, selectedSections, selectedColumns, reportingPeriod, notes);
-        } else {
-            console.error('Error saving notes:', data.message);
-            alert('Failed to save notes: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while saving notes.');
-    });
 }
 
 function generatePrintTable(selectedColumns) {
