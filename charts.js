@@ -1201,29 +1201,39 @@ function saveAndPrintReport() {
 }
 
 function generatePrintTable(selectedColumns) {
-    const data = table.getData();
-    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col])];
-    const rows = data.map(row => {
-        return [
-            row.score_date,
-            ...selectedColumns.map(col => row[col] !== null && row[col] !== undefined ? row[col] : '')
-        ];
-    });
+    const tableData = table.getData();
+    if (!tableData || tableData.length === 0) {
+        return "<div>No data available to display.</div>";
+    }
 
-    let tableHtml = '<table border="1" width="100%"><thead><tr>';
-    headers.forEach(header => {
-        tableHtml += `<th>${header}</th>`;
+    // Create the table element
+    let tableHTML = '<table border="1" style="border-collapse: collapse; width: 100%;">';
+
+    // Generate table header
+    tableHTML += '<thead><tr>';
+    selectedColumns.forEach(column => {
+        const columnName = column.textContent.trim();
+        tableHTML += `<th>${columnName}</th>`;
     });
-    tableHtml += '</tr></thead><tbody>';
-    rows.forEach(row => {
-        tableHtml += '<tr>';
-        row.forEach(cell => {
-            tableHtml += `<td>${cell}</td>`;
+    tableHTML += '</tr></thead>';
+
+    // Generate table body
+    tableHTML += '<tbody>';
+    tableData.forEach(row => {
+        tableHTML += '<tr>';
+        selectedColumns.forEach(column => {
+            const columnField = column.getAttribute("data-column-name");
+            const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
+            tableHTML += `<td>${cellData}</td>`;
         });
-        tableHtml += '</tr>';
+        tableHTML += '</tr>';
     });
-    tableHtml += '</tbody></table>';
-    return tableHtml;
+    tableHTML += '</tbody>';
+
+    // Close the table element
+    tableHTML += '</table>';
+
+    return tableHTML;
 }
 
 // Function to show the print dialog modal
