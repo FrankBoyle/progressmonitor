@@ -1140,6 +1140,10 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
     }, 500);
 }
 
+function getSelectedColumns() {
+    return Array.from(document.querySelectorAll(".selector-item.selected"));
+}
+
 
 function saveAndPrintReport() {
     const selectedGoal = document.querySelector('.goal-item.selected');
