@@ -961,20 +961,25 @@ function fetchGoals(studentIdNew, metadataId) {
 
 function displayGoals(goals) {
     const goalsContainer = document.getElementById('goals-container');
-    goalsContainer.innerHTML = ''; 
+    goalsContainer.innerHTML = ''; // Clear existing goals
 
     goals.forEach(goal => {
+        if (!goal.goal_id || !goal.goal_description) {
+            console.error('Invalid goal structure:', goal);
+            return;
+        }
+
         const goalItem = document.createElement('div');
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
             <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
                 <div class="goal-text">${goal.goal_description}</div>
-                <button class="archive-btn" onclick="archiveGoal(${goal.goal_id}, this.parentElement.parentElement)">Archive</button>
+                <button class="archive-btn">Archive</button>
             </div>
             <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
                 <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, this.parentElement)">Save</button>
-                <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id})">Cancel</button>
+                <button class="btn btn-primary save-btn">Save</button>
+                <button class="btn btn-secondary cancel-btn">Cancel</button>
             </div>
         `;
 
@@ -982,11 +987,29 @@ function displayGoals(goals) {
 
         const quill = new Quill(`#editor-${goal.goal_id}`, {
             theme: 'snow',
-            readOnly: false
+            readOnly: true
         });
 
-        quill.root.innerHTML = goal.goal_description;
-        window[`quillEditor${goal.goal_id}`] = quill;
+        quill.root.innerHTML = goal.goal_description; // Load the goal content
+
+        // Set up button actions
+        goalItem.querySelector('.archive-btn').addEventListener('click', () => {
+            archiveGoal(goal.goal_id, goalItem);
+        });
+
+        goalItem.querySelector('.save-btn').addEventListener('click', () => {
+            const updatedContent = quill.root.innerHTML;
+            saveGoal(goal.goal_id, updatedContent, goalItem);
+        });
+
+        goalItem.querySelector('.cancel-btn').addEventListener('click', () => {
+            quill.root.innerHTML = goal.goal_description;
+            quill.enable(false);
+            document.getElementById(`goal-content-${goal.goal_id}`).style.display = 'block';
+            document.getElementById(`goal-edit-${goal.goal_id}`).style.display = 'none';
+        });
+
+        window[`quillEditor${goal.goal_id}`] = quill; // Save the editor instance to a global variable for later use
     });
 }
 
