@@ -854,8 +854,8 @@ input[type="text"] {
     }
     table {
         width: auto !important;
-        max-width: 80%; /* Adjust this value as needed */
-        margin: 0 auto; /* Center the table */
+        max-width: 50%; /* Adjust this value as needed for a narrower table */
+        margin: 0; /* Left justify the table */
         table-layout: auto;
         border-collapse: collapse;
     }
