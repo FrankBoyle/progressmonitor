@@ -361,14 +361,13 @@ function initializeBarChart() {
 // Function to extract chart data
 function extractChartData() {
     try {
-        console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
 
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => ({
                 field: item.getAttribute("data-column-name"),
-                name: item.textContent.trim()  // Use textContent of the item as the series name
+                name: item.textContent.trim()
             }));
 
         const series = selectedColumns.map(column => {
@@ -378,13 +377,13 @@ function extractChartData() {
             }
 
             let rawData = data.map(row => row[column.field]);
-            let interpolatedData = interpolateData(rawData); // Interpolate missing values
+            let interpolatedData = interpolateData(rawData);
             return {
-                name: column.name,  // Using the custom name for the series
+                name: column.name,
                 data: interpolatedData,
-                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
+                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]
             };
-        }).filter(series => series !== null); // Filter out null values
+        }).filter(series => series !== null);
 
         const trendlineSeries = series.map(seriesData => ({
             name: `${seriesData.name} Trendline`,
@@ -397,13 +396,10 @@ function extractChartData() {
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
-
-        console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
 }
-
 
 function getSelectedColumns() {
     return Array.from(document.querySelectorAll(".selector-item.selected"))
