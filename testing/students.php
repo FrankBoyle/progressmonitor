@@ -419,7 +419,7 @@ function showAddGroupModal() {
         }
 }
 
-function showAddStudentModal() {
+function showAddStudentModal(groupId) {
         const modal = document.getElementById('add-student-modal');
 
         if (modal) {
