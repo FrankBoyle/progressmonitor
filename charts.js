@@ -1236,6 +1236,27 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
     }, 500);
 }
 
+function generatePrintTable(selectedColumns) {
+    const data = table.getData();
+    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col])];
+    const rows = data.map(row => [row.score_date, ...selectedColumns.map(col => row[col])]);
+
+    let tableHtml = '<table border="1" width="100%"><thead><tr>';
+    headers.forEach(header => {
+        tableHtml += `<th>${header}</th>`;
+    });
+    tableHtml += '</tr></thead><tbody>';
+    rows.forEach(row => {
+        tableHtml += '<tr>';
+        row.forEach(cell => {
+            tableHtml += `<td>${cell || ''}</td>`;
+        });
+        tableHtml += '</tr>';
+    });
+    tableHtml += '</tbody></table>';
+    return tableHtml;
+}
+
 // Function to show the print dialog modal
 function showPrintDialogModal() {
     const selectedColumns = document.querySelectorAll(".selector-item.selected").length;
