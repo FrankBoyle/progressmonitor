@@ -368,6 +368,19 @@ function initializeBarChart() {
     });
 }
 
+function registerChart(chartElementId, chartInstance) {
+    // Register the chart manually
+    setTimeout(() => {
+        ApexCharts.exec(chartElementId, 'render');
+        const chart = ApexCharts.getChartByID(chartElementId);
+        if (chart) {
+            console.log(`${chartElementId} registered successfully`);
+        } else {
+            console.error(`${chartElementId} registration failed`);
+        }
+    }, 1000);
+}
+
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
