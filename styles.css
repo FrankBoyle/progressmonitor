@@ -849,6 +849,9 @@ input[type="text"] {
 }
 
 @media print {
+    body {
+        -webkit-print-color-adjust: exact;
+    }
     #chartContainer, #barChartContainer {
         width: 100% !important;
         height: auto !important;
@@ -865,6 +868,7 @@ input[type="text"] {
         word-wrap: break-word;
     }
 }
+
 #chartContainer, #barChartContainer {
     width: 1000px;
 }
