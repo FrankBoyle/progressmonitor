@@ -355,8 +355,13 @@ function initializeLineChart() {
         console.error('Error initializing line chart:', err);
     });
 
-    // Register the chart globally with the correct ID
-    ApexCharts.getChartByID('chartContainer');  // This line ensures the chart is fetched correctly
+    // Fetch the chart instance to ensure it's correctly registered
+    const chart = ApexCharts.getChartByID('chartContainer');
+    if (chart) {
+        console.log('Line chart registered with ID chartContainer');
+    } else {
+        console.error('Line chart registration failed for ID chartContainer');
+    }
 }
 
 function initializeBarChart() {
@@ -368,8 +373,13 @@ function initializeBarChart() {
         console.error('Error initializing bar chart:', err);
     });
 
-    // Register the chart globally with the correct ID
-    ApexCharts.getChartByID('barChartContainer');  // This line ensures the chart is fetched correctly
+    // Fetch the chart instance to ensure it's correctly registered
+    const chart = ApexCharts.getChartByID('barChartContainer');
+    if (chart) {
+        console.log('Bar chart registered with ID barChartContainer');
+    } else {
+        console.error('Bar chart registration failed for ID barChartContainer');
+    }
 }
 
 // Extract chart data based on selected columns
