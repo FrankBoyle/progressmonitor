@@ -852,24 +852,39 @@ input[type="text"] {
     body {
         -webkit-print-color-adjust: exact;
     }
+    .print-container {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+    .print-container > div {
+        width: 49%; /* Adjust as needed */
+    }
+    .print-table-container {
+        max-width: 50%;
+        margin: 0;
+    }
+    .print-charts-container {
+        max-width: 50%;
+        margin: 0;
+        padding-left: 10px;
+    }
     table {
-        width: auto !important;
-        max-width: 50%; /* Adjust this value as needed for a narrower table */
-        margin: 0; /* Left justify the table */
+        width: 100%;
         table-layout: auto;
         border-collapse: collapse;
     }
     th, td {
-        width: auto !important;
+        width: auto;
         word-wrap: break-word;
         text-align: left;
         padding: 8px;
         border: 1px solid #000;
     }
-}
-
-#chartContainer, #barChartContainer {
-    width: 1000px;
+    img {
+        width: 100%;
+        height: auto;
+    }
 }
 
 .chart {
