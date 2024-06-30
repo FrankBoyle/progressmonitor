@@ -1106,6 +1106,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
+        const selectedColumns = document.querySelectorAll(".selector-item.selected");
         const tableContent = generatePrintTable(selectedColumns);
         printContents += `<div>${tableContent}</div>`;
     }
@@ -1125,6 +1126,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
         printContents += `<div>${statisticsContent}</div>`;
     }
 
+    // Include reporting period and notes in the print content
     printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
     printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
@@ -1137,6 +1139,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
         enableChartInteractions();
     }, 500);
 }
+
 
 function saveAndPrintReport() {
     const selectedGoal = document.querySelector('.goal-item.selected');
