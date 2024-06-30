@@ -12,7 +12,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 //$schoolId = $SESSION['school_id'];
 //$admin = $SESSION['is_admin'] == 1; // Assuming 'is_admin' is the column name
 
-// Other necessary PHP code...
+
 ?>
 
 <!DOCTYPE html>
@@ -54,13 +54,16 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
         </header>
         <main class="content">
-            <!-- New Goals Card -->
+
+        <!-- New Goals Card -->
             <div class="card" id="goalsCard">
                 <div class="card-header">
                     <h3>Goals</h3>
                 </div>
                 <div id="goals-container"></div>
             </div>
+
+            
             <div class="card">
                 <div class="filter-section">
                     <div class="form-group">

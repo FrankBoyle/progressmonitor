@@ -982,7 +982,7 @@ function displayGoals(goals) {
 
         const quill = new Quill(`#editor-${goal.goal_id}`, {
             theme: 'snow',
-            readOnly: true
+            readOnly: false
         });
 
         quill.root.innerHTML = goal.goal_description;
