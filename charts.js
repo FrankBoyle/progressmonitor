@@ -1172,7 +1172,7 @@ function saveAndPrintReport() {
     });
 }
 
-async function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
