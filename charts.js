@@ -1200,6 +1200,16 @@ function saveAndPrintReport() {
     });
 }
 
+function convertChartToImage(chartElementId) {
+    console.log(`Converting chart to image with ID: ${chartElementId}`);
+    const chart = ApexCharts.getChartByID(chartElementId);
+    if (chart) {
+        return chart.dataURI().then(({ imgURI }) => imgURI);
+    } else {
+        return Promise.reject(`Chart with ID ${chartElementId} not found`);
+    }
+}
+
 async function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
@@ -1297,15 +1307,6 @@ function generatePrintTable(selectedColumns) {
     return tableHTML;
 }
 
-function convertChartToImage(chartElementId) {
-    console.log(`Converting chart to image with ID: ${chartElementId}`);
-    const chart = ApexCharts.getChartByID(chartElementId);
-    if (chart) {
-        return chart.dataURI().then(({ imgURI }) => imgURI);
-    } else {
-        return Promise.reject(`Chart with ID ${chartElementId} not found`);
-    }
-}
 
 // Function to show the print dialog modal
 function showPrintDialogModal() {
