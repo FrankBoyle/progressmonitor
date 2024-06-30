@@ -853,8 +853,11 @@ input[type="text"] {
         -webkit-print-color-adjust: exact;
     }
     table {
-        width: 100% !important;
+        width: auto !important;
+        max-width: 80%; /* Adjust this value as needed */
+        margin: 0 auto; /* Center the table */
         table-layout: auto;
+        border-collapse: collapse;
     }
     th, td {
         width: auto !important;
