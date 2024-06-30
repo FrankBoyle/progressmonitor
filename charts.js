@@ -1172,7 +1172,7 @@ function saveAndPrintReport() {
     });
 }
 
-function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+async function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
@@ -1183,7 +1183,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     let lineChartImage = '';
     if (selectedSections.includes('printLineChart')) {
         try {
-            lineChartImage = convertChartToImage('chartContainer');
+            lineChartImage = await convertChartToImage('chartContainer');
         } catch (error) {
             console.error('Error converting line chart to image:', error);
         }
@@ -1192,7 +1192,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     let barChartImage = '';
     if (selectedSections.includes('printBarChart')) {
         try {
-            barChartImage = convertChartToImage('barChartContainer');
+            barChartImage = await convertChartToImage('barChartContainer');
         } catch (error) {
             console.error('Error converting bar chart to image:', error);
         }
@@ -1270,6 +1270,7 @@ function generatePrintTable(selectedColumns) {
 }
 
 function convertChartToImage(chartElementId) {
+    console.log(`Converting chart to image with ID: ${chartElementId}`);
     const chart = ApexCharts.getChartByID(chartElementId);
     if (chart) {
         return chart.dataURI().then(({ imgURI }) => imgURI);
