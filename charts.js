@@ -1103,7 +1103,7 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function getSelectedColumns() {
-    return Array.from(document.querySelectorAll(".selector-item.selected"));
+    return Array.from(document.querySelectorAll("#columnSelector .selector-item.selected"));
 }
 
 function saveAndPrintReport() {
