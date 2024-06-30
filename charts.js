@@ -348,36 +348,28 @@ function initializeCharts() {
 
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
-    const lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    lineChart.render().then(() => {
+    window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    window.lineChart.render().then(() => {
         console.log('Line chart initialized with ID chartContainer');
     }).catch(err => {
         console.error('Error initializing line chart:', err);
     });
 
     // Register the chart globally with the correct ID
-    ApexCharts.exec('chartContainer', 'render').then(() => {
-        console.log('Line chart registered with ID chartContainer');
-    }).catch(err => {
-        console.error('Error registering line chart:', err);
-    });
+    ApexCharts.getChartByID('chartContainer');  // This line ensures the chart is fetched correctly
 }
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    const barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    barChart.render().then(() => {
+    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    window.barChart.render().then(() => {
         console.log('Bar chart initialized with ID barChartContainer');
     }).catch(err => {
         console.error('Error initializing bar chart:', err);
     });
 
     // Register the chart globally with the correct ID
-    ApexCharts.exec('barChartContainer', 'render').then(() => {
-        console.log('Bar chart registered with ID barChartContainer');
-    }).catch(err => {
-        console.error('Error registering bar chart:', err);
-    });
+    ApexCharts.getChartByID('barChartContainer');  // This line ensures the chart is fetched correctly
 }
 
 // Extract chart data based on selected columns
