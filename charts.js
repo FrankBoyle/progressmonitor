@@ -987,7 +987,20 @@ function displayGoals(goals) {
 
         const quill = new Quill(`#editor-${goal.goal_id}`, {
             theme: 'snow',
-            readOnly: true
+            modules: {
+                toolbar: [
+                    [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                    [{size: []}],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']  
+                ]
+            }
         });
 
         quill.root.innerHTML = goal.goal_description; // Load the goal content
