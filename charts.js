@@ -969,11 +969,11 @@ function displayGoals(goals) {
         goalItem.innerHTML = `
             <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
                 <div class="goal-text">${goal.goal_description}</div>
-                <button class="archive-btn">Archive</button>
+                <button class="archive-btn" onclick="archiveGoal(${goal.goal_id}, this.parentElement.parentElement)">Archive</button>
             </div>
             <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
                 <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id})">Save</button>
+                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, this.parentElement)">Save</button>
                 <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id})">Cancel</button>
             </div>
         `;
@@ -1010,7 +1010,11 @@ function editGoal(goalId) {
     document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
 }
 
-function saveGoal(goalId, updatedContent, goalItem) {
+function saveGoal(goalId, goalEditElement) {
+    const quill = window[`quillEditor${goalId}`];
+    const updatedDescription = quill.root.innerHTML;
+    const goalItem = goalEditElement.parentElement;
+
     fetch('./users/update_goal.php', {
         method: 'POST',
         headers: {
@@ -1018,13 +1022,12 @@ function saveGoal(goalId, updatedContent, goalItem) {
         },
         body: JSON.stringify({
             goal_id: goalId,
-            new_text: updatedContent
+            new_text: updatedDescription
         })
     }).then(response => response.json())
       .then(data => {
           if (data.success) {
-              goalItem.querySelector('.goal-text').innerHTML = updatedContent;
-              const quill = window[`quillEditor${goalId}`];
+              goalItem.querySelector('.goal-text').innerHTML = updatedDescription;
               quill.enable(false);
               document.getElementById(`goal-content-${goalId}`).style.display = 'block';
               document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
@@ -1038,7 +1041,7 @@ function saveGoal(goalId, updatedContent, goalItem) {
 }
 
 function cancelEdit(goalId) {
-    document.getElementById(`goal-text-${goalId}`).style.display = 'block';
+    document.getElementById(`goal-content-${goalId}`).style.display = 'block';
     document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
 }
 
