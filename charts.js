@@ -1183,7 +1183,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     let lineChartImage = '';
     if (selectedSections.includes('printLineChart')) {
         try {
-            lineChartImage = await convertChartToImage('chartContainer');
+            lineChartImage = convertChartToImage('chartContainer');
         } catch (error) {
             console.error('Error converting line chart to image:', error);
         }
@@ -1192,7 +1192,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     let barChartImage = '';
     if (selectedSections.includes('printBarChart')) {
         try {
-            barChartImage = await convertChartToImage('barChartContainer');
+            barChartImage = convertChartToImage('barChartContainer');
         } catch (error) {
             console.error('Error converting bar chart to image:', error);
         }
