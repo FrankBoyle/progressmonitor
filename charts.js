@@ -1270,12 +1270,12 @@ function generatePrintTable(selectedColumns) {
 }
 
 function convertChartToImage(chartElementId) {
-    return ApexCharts.exec(chartElementId, 'dataURI').then((response) => {
-        if (response && response.imgURI) {
-            return response.imgURI;
-        }
-        throw new Error('Unable to convert chart to image');
-    });
+    const chart = ApexCharts.getChartByID(chartElementId);
+    if (chart) {
+        return chart.dataURI().then(({ imgURI }) => imgURI);
+    } else {
+        return Promise.reject(`Chart with ID ${chartElementId} not found`);
+    }
 }
 
 // Function to show the print dialog modal
