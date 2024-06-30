@@ -1172,22 +1172,33 @@ function saveAndPrintReport() {
     });
 }
 
-function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+async function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div>${tableContent}</div>`;
+        printContents += `<div class="print-table-container">${tableContent}</div>`;
     }
 
+    let lineChartImage = '';
     if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div id="printLineChartContainer" style="width: 100%; height: auto;">${lineChartElement}</div>`;
+        lineChartImage = await convertChartToImage('chartContainer');
     }
 
+    let barChartImage = '';
     if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div id="printBarChartContainer" style="width: 100%; height: auto;">${barChartElement}</div>`;
+        barChartImage = await convertChartToImage('barChartContainer');
+    }
+
+    if (lineChartImage || barChartImage) {
+        printContents += `<div class="print-charts-container">`;
+        if (lineChartImage) {
+            printContents += `<img src="${lineChartImage}" alt="Line Chart">`;
+        }
+        if (barChartImage) {
+            printContents += `<img src="${barChartImage}" alt="Bar Chart">`;
+        }
+        printContents += `</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
@@ -1200,7 +1211,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
     const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
+    document.body.innerHTML = `<div class="print-container">${printContents}</div>`;
 
     setTimeout(() => {
         window.print();
@@ -1216,7 +1227,7 @@ function generatePrintTable(selectedColumns) {
     }
 
     // Create the table element
-    let tableHTML = '<table style="width: auto; max-width: 50%; margin: 0; table-layout: auto; border-collapse: collapse;">';
+    let tableHTML = '<table>';
 
     // Generate table header
     tableHTML += '<thead><tr>';
@@ -1248,6 +1259,12 @@ function generatePrintTable(selectedColumns) {
     tableHTML += '</table>';
 
     return tableHTML;
+}
+
+function convertChartToImage(chartElementId) {
+    return ApexCharts.exec(chartElementId, 'dataURI').then(({ imgURI }) => {
+        return imgURI;
+    });
 }
 
 // Function to show the print dialog modal
