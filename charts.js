@@ -358,18 +358,16 @@ function initializeBarChart() {
     barChart.render();
 }
 
-// Extract chart data based on selected columns
+// Function to extract chart data
 function extractChartData() {
     try {
-        //console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
 
-        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-            .map(item => ({
-                field: item.getAttribute("data-column-name"),
-                name: item.textContent.trim()  // Use textContent of the item as the series name
-            }));
+        const selectedColumns = getSelectedColumns().map(field => ({
+            field: field,
+            name: customColumnNames[field]  // Assuming customColumnNames is defined somewhere in your code
+        }));
 
         const series = selectedColumns.map(column => {
             let rawData = data.map(row => row[column.field]);
@@ -392,11 +390,14 @@ function extractChartData() {
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
-
-        //console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
+}
+
+function getSelectedColumns() {
+    return Array.from(document.querySelectorAll(".selector-item.selected"))
+        .map(item => item.getAttribute("data-column-name"));
 }
 
 function interpolateData(data) {
@@ -1161,6 +1162,8 @@ function saveAndPrintReport() {
         return;
     }
 
+    const selectedColumns = getSelectedColumns();
+
     const goalId = selectedGoal.getAttribute('data-goal-id');
     const studentIdNew = window.studentIdNew;
     const schoolId = window.schoolId;
@@ -1185,9 +1188,8 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            //console.log('Notes saved successfully:', data.message);
             // Proceed to print the report
-            printReport(selectedGoal, selectedSections, reportingPeriod, notes);
+            printReport(selectedGoal, selectedSections, selectedColumns, reportingPeriod, notes);
         } else {
             console.error('Error saving notes:', data.message);
             alert('Failed to save notes: ' + data.message);
@@ -1198,6 +1200,7 @@ function saveAndPrintReport() {
         alert('An error occurred while saving notes.');
     });
 }
+
 
 function generatePrintTable(selectedColumns) {
     const data = table.getData();
