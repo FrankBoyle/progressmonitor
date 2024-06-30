@@ -1033,13 +1033,7 @@ function editGoal(goalId) {
     document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
 }
 
-function saveGoal(goalId, goalEditElement) {
-    console.log(`saveGoal called for goalId: ${goalId}`); // Log the function call
-    const quill = window[`quillEditor${goalId}`];
-    const updatedDescription = quill.root.innerHTML;
-    const goalItem = goalEditElement.parentElement;
-    console.log(`Updated Description: ${updatedDescription}`); // Log the updated content
-
+function saveGoal(goalId, updatedContent, goalItem) {
     fetch('./users/update_goal.php', {
         method: 'POST',
         headers: {
@@ -1047,25 +1041,23 @@ function saveGoal(goalId, goalEditElement) {
         },
         body: JSON.stringify({
             goal_id: goalId,
-            new_text: updatedDescription
+            new_text: updatedContent
         })
-    }).then(response => {
-        console.log('Response received:', response); // Log the response
-        return response.json();
-    }).then(data => {
-        console.log('Data received:', data); // Log the data
-        if (data.success) {
-            goalItem.querySelector('.goal-text').innerHTML = updatedDescription;
-            quill.enable(false);
-            document.getElementById(`goal-content-${goalId}`).style.display = 'block';
-            document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
-        } else {
-            alert('Failed to save goal. Please try again.');
-        }
-    }).catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while saving the goal.');
-    });
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              goalItem.querySelector('.goal-text').innerHTML = updatedContent;
+              const quill = window[`quillEditor${goalId}`];
+              quill.enable(false);
+              document.getElementById(`goal-content-${goalId}`).style.display = 'block';
+              document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
+          } else {
+              alert('Failed to save goal. Please try again.');
+          }
+      }).catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while saving the goal.');
+      });
 }
 
 function cancelEdit(goalId) {
