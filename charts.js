@@ -348,37 +348,14 @@ function initializeCharts() {
 
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
-    window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    window.lineChart.render().then(() => {
-        console.log('Line chart initialized with ID chartContainer');
-        registerChart('chartContainer', window.lineChart);
-    }).catch(err => {
-        console.error('Error initializing line chart:', err);
-    });
+    chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    chart.render();
 }
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    window.barChart.render().then(() => {
-        console.log('Bar chart initialized with ID barChartContainer');
-        registerChart('barChartContainer', window.barChart);
-    }).catch(err => {
-        console.error('Error initializing bar chart:', err);
-    });
-}
-
-function registerChart(chartElementId, chartInstance) {
-    // Register the chart manually
-    setTimeout(() => {
-        ApexCharts.exec(chartElementId, 'render');
-        const chart = ApexCharts.getChartByID(chartElementId);
-        if (chart) {
-            console.log(`${chartElementId} registered successfully`);
-        } else {
-            console.error(`${chartElementId} registration failed`);
-        }
-    }, 1000);
+    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    barChart.render();
 }
 
 // Extract chart data based on selected columns
@@ -1195,51 +1172,22 @@ function saveAndPrintReport() {
     });
 }
 
-function convertChartToImage(chartElementId) {
-    console.log(`Converting chart to image with ID: ${chartElementId}`);
-    const chart = ApexCharts.getChartByID(chartElementId);
-    if (chart) {
-        return chart.dataURI().then(({ imgURI }) => imgURI);
-    } else {
-        return Promise.reject(`Chart with ID ${chartElementId} not found`);
-    }
-}
-
-async function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container">${tableContent}</div>`;
+        printContents += `<div>${tableContent}</div>`;
     }
 
-    let lineChartImage = '';
     if (selectedSections.includes('printLineChart')) {
-        try {
-            lineChartImage = await convertChartToImage('chartContainer');
-        } catch (error) {
-            console.error('Error converting line chart to image:', error);
-        }
+        const lineChartElement = document.getElementById('chartContainer').outerHTML;
+        printContents += `<div id="printLineChartContainer" style="width: 100%; height: auto;">${lineChartElement}</div>`;
     }
 
-    let barChartImage = '';
     if (selectedSections.includes('printBarChart')) {
-        try {
-            barChartImage = await convertChartToImage('barChartContainer');
-        } catch (error) {
-            console.error('Error converting bar chart to image:', error);
-        }
-    }
-
-    if (lineChartImage || barChartImage) {
-        printContents += `<div class="print-charts-container">`;
-        if (lineChartImage) {
-            printContents += `<img src="${lineChartImage}" alt="Line Chart">`;
-        }
-        if (barChartImage) {
-            printContents += `<img src="${barChartImage}" alt="Bar Chart">`;
-        }
-        printContents += `</div>`;
+        const barChartElement = document.getElementById('barChartContainer').outerHTML;
+        printContents += `<div id="printBarChartContainer" style="width: 100%; height: auto;">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
@@ -1252,7 +1200,7 @@ async function printReport(selectedGoal, selectedSections, reportingPeriod, note
     printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
     const originalContents = document.body.innerHTML;
-    document.body.innerHTML = `<div class="print-container">${printContents}</div>`;
+    document.body.innerHTML = printContents;
 
     setTimeout(() => {
         window.print();
@@ -1268,7 +1216,7 @@ function generatePrintTable(selectedColumns) {
     }
 
     // Create the table element
-    let tableHTML = '<table>';
+    let tableHTML = '<table style="width: auto; max-width: 50%; margin: 0; table-layout: auto; border-collapse: collapse;">';
 
     // Generate table header
     tableHTML += '<thead><tr>';
@@ -1301,7 +1249,6 @@ function generatePrintTable(selectedColumns) {
 
     return tableHTML;
 }
-
 
 // Function to show the print dialog modal
 function showPrintDialogModal() {
