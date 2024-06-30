@@ -1221,6 +1221,8 @@ function generatePrintTable(selectedColumns) {
 
     // Generate table header
     tableHTML += '<thead><tr>';
+    // Add "Date" column header first
+    tableHTML += '<th>Date</th>';
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
         tableHTML += `<th>${columnName}</th>`;
@@ -1231,6 +1233,9 @@ function generatePrintTable(selectedColumns) {
     tableHTML += '<tbody>';
     tableData.forEach(row => {
         tableHTML += '<tr>';
+        // Add "Date" column data first
+        const dateValue = row['score_date'] !== null && row['score_date'] !== undefined ? row['score_date'] : '';
+        tableHTML += `<td>${dateValue}</td>`;
         selectedColumns.forEach(column => {
             const columnField = column.getAttribute("data-column-name");
             const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
