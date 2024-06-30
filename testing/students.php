@@ -93,16 +93,15 @@ include('./users/auth_session.php');
 </div>
 
    <!-- Place the Edit Group button here, outside the modal -->
-   <button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>
+   <!-- <button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>-->
 
 <!-- Add Student Modal -->
 <div id="add-student-modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hideAddStudentModal()">&times;</span>
 
-        <h2>Assign Students to Group</h2>
+        <h3>Assign Students to Group</h3>
         <div style="margin-top: 20px;">
-            <h3>Assign Students to Group</h3>
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
                     <div style="margin-right: 10px;">
@@ -115,7 +114,11 @@ include('./users/auth_session.php');
                 </div>
             </form>
         </div>
-        <h2>Add New Student</h2>
+        <h3>Remove Students from Group</h3>
+        <div id="group-students-list">
+            <!-- Students will be loaded here dynamically -->
+        </div>
+        <h3>Add New Student</h3>
         <form id="add-student-form" onsubmit="addStudent(event)">
             <div class="form-group">
                 <label for="first-name">First Name:</label>
@@ -299,7 +302,9 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
         showAddStudentModal();
     });
 
-function populateStudentsAndGoals() {
+
+
+    function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
     const studentsMessage = document.getElementById('students-message');
     if (studentList.children.length > 0) {
@@ -416,11 +421,14 @@ function showAddGroupModal() {
 
 function showAddStudentModal() {
         const modal = document.getElementById('add-student-modal');
+
         if (modal) {
             modal.style.display = 'block';
         } else {
             console.error("Modal element not found");
         }
+            // Load students for the selected group
+    loadGroupStudents(groupId);
 }
 
 // Function to hide the modal
