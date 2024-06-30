@@ -1216,7 +1216,7 @@ function generatePrintTable(selectedColumns) {
     }
 
     // Create the table element
-    let tableHTML = '<table border="1" style="border-collapse: collapse; width: 100%;">';
+    let tableHTML = '<table style="width: 100%; table-layout: auto; border-collapse: collapse;">';
 
     // Generate table header
     tableHTML += '<thead><tr>';
