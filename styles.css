@@ -852,20 +852,16 @@ input[type="text"] {
     body {
         -webkit-print-color-adjust: exact;
     }
-    #chartContainer, #barChartContainer {
-        width: 100% !important;
-        height: auto !important;
-    }
-    .apexcharts-canvas {
-        width: 100% !important;
-        height: auto !important;
-    }
     table {
         width: 100% !important;
+        table-layout: auto;
     }
     th, td {
         width: auto !important;
         word-wrap: break-word;
+        text-align: left;
+        padding: 8px;
+        border: 1px solid #000;
     }
 }
 
