@@ -1182,12 +1182,20 @@ async function printReport(selectedGoal, selectedSections, reportingPeriod, note
 
     let lineChartImage = '';
     if (selectedSections.includes('printLineChart')) {
-        lineChartImage = await convertChartToImage('chartContainer');
+        try {
+            lineChartImage = await convertChartToImage('chartContainer');
+        } catch (error) {
+            console.error('Error converting line chart to image:', error);
+        }
     }
 
     let barChartImage = '';
     if (selectedSections.includes('printBarChart')) {
-        barChartImage = await convertChartToImage('barChartContainer');
+        try {
+            barChartImage = await convertChartToImage('barChartContainer');
+        } catch (error) {
+            console.error('Error converting bar chart to image:', error);
+        }
     }
 
     if (lineChartImage || barChartImage) {
@@ -1262,8 +1270,11 @@ function generatePrintTable(selectedColumns) {
 }
 
 function convertChartToImage(chartElementId) {
-    return ApexCharts.exec(chartElementId, 'dataURI').then(({ imgURI }) => {
-        return imgURI;
+    return ApexCharts.exec(chartElementId, 'dataURI').then((response) => {
+        if (response && response.imgURI) {
+            return response.imgURI;
+        }
+        throw new Error('Unable to convert chart to image');
     });
 }
 
