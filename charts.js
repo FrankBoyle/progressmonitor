@@ -1182,12 +1182,12 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div style="max-width: 100%; height: auto;">${lineChartElement}</div>`;
+        printContents += `<div id="printLineChartContainer" style="max-width: 100%; height: auto;">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div style="max-width: 100%; height: auto;">${barChartElement}</div>`;
+        printContents += `<div id="printBarChartContainer" style="max-width: 100%; height: auto;">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
