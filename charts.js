@@ -1199,41 +1199,30 @@ function saveAndPrintReport() {
     });
 }
 
-function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+function generatePrintTable(selectedColumns) {
+    const data = table.getData();
+    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col])];
+    const rows = data.map(row => {
+        return [
+            row.score_date,
+            ...selectedColumns.map(col => row[col] !== null && row[col] !== undefined ? row[col] : '')
+        ];
+    });
 
-    if (selectedSections.includes('printTable')) {
-        const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div>${tableContent}</div>`;
-    }
-
-    if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer');
-        printContents += lineChartElement.outerHTML;
-    }
-
-    if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer');
-        printContents += barChartElement.outerHTML;
-    }
-
-    if (selectedSections.includes('printStatistics')) {
-        const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div>${statisticsContent}</div>`;
-    }
-
-    // Include reporting period and notes in the print content
-    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
-
-    const originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-
-    setTimeout(() => {
-        window.print();
-        document.body.innerHTML = originalContents;
-        enableChartInteractions();
-    }, 500);
+    let tableHtml = '<table border="1" width="100%"><thead><tr>';
+    headers.forEach(header => {
+        tableHtml += `<th>${header}</th>`;
+    });
+    tableHtml += '</tr></thead><tbody>';
+    rows.forEach(row => {
+        tableHtml += '<tr>';
+        row.forEach(cell => {
+            tableHtml += `<td>${cell}</td>`;
+        });
+        tableHtml += '</tr>';
+    });
+    tableHtml += '</tbody></table>';
+    return tableHtml;
 }
 
 // Function to show the print dialog modal
