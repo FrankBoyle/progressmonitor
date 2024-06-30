@@ -93,7 +93,7 @@ include('./users/auth_session.php');
 </div>
 
    <!-- Place the Edit Group button here, outside the modal -->
-   <button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>
+   <!--<button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>-->
 
 <!-- Add Student Modal -->
 <div id="add-student-modal" class="modal">
