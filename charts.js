@@ -973,8 +973,8 @@ function displayGoals(goals) {
             </div>
             <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
                 <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                <button class="btn btn-primary save-btn">Save</button>
-                <button class="btn btn-secondary cancel-btn">Cancel</button>
+                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id})">Save</button>
+                <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id})">Cancel</button>
             </div>
         `;
 
