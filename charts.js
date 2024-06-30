@@ -1159,7 +1159,6 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            //console.log('Notes saved successfully:', data.message);
             // Proceed to print the report
             printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
         } else {
