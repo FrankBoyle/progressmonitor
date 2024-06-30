@@ -358,32 +358,28 @@ function initializeBarChart() {
     barChart.render();
 }
 
-// Function to extract chart data
+// Extract chart data based on selected columns
 function extractChartData() {
     try {
+        //console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
 
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => ({
                 field: item.getAttribute("data-column-name"),
-                name: item.textContent.trim()
+                name: item.textContent.trim()  // Use textContent of the item as the series name
             }));
 
         const series = selectedColumns.map(column => {
-            if (!column.field || !customColumnNames[column.field]) {
-                console.error(`Invalid column field: ${column.field}`);
-                return null;
-            }
-
             let rawData = data.map(row => row[column.field]);
-            let interpolatedData = interpolateData(rawData);
+            let interpolatedData = interpolateData(rawData); // Interpolate missing values
             return {
-                name: column.name,
+                name: column.name,  // Using the custom name for the series
                 data: interpolatedData,
-                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]
+                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
             };
-        }).filter(series => series !== null);
+        });
 
         const trendlineSeries = series.map(seriesData => ({
             name: `${seriesData.name} Trendline`,
@@ -396,14 +392,11 @@ function extractChartData() {
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
+
+        //console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
-}
-
-function getSelectedColumns() {
-    return Array.from(document.querySelectorAll(".selector-item.selected"))
-        .map(item => item.getAttribute("data-column-name"));
 }
 
 function interpolateData(data) {
@@ -1168,8 +1161,6 @@ function saveAndPrintReport() {
         return;
     }
 
-    const selectedColumns = getSelectedColumns();
-
     const goalId = selectedGoal.getAttribute('data-goal-id');
     const studentIdNew = window.studentIdNew;
     const schoolId = window.schoolId;
@@ -1194,8 +1185,9 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
+            //console.log('Notes saved successfully:', data.message);
             // Proceed to print the report
-            printReport(selectedGoal, selectedSections, selectedColumns, reportingPeriod, notes);
+            printReport(selectedGoal, selectedSections, reportingPeriod, notes);
         } else {
             console.error('Error saving notes:', data.message);
             alert('Failed to save notes: ' + data.message);
@@ -1207,25 +1199,41 @@ function saveAndPrintReport() {
     });
 }
 
-function generatePrintTable(selectedColumns) {
-    const data = table.getData();
-    const headers = ['Date', ...selectedColumns.map(col => customColumnNames[col])];
-    const rows = data.map(row => [row.score_date, ...selectedColumns.map(col => row[col])]);
+function printReport(selectedGoal, selectedSections, reportingPeriod, notes) {
+    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
-    let tableHtml = '<table border="1" width="100%"><thead><tr>';
-    headers.forEach(header => {
-        tableHtml += `<th>${header}</th>`;
-    });
-    tableHtml += '</tr></thead><tbody>';
-    rows.forEach(row => {
-        tableHtml += '<tr>';
-        row.forEach(cell => {
-            tableHtml += `<td>${cell || ''}</td>`;
-        });
-        tableHtml += '</tr>';
-    });
-    tableHtml += '</tbody></table>';
-    return tableHtml;
+    if (selectedSections.includes('printTable')) {
+        const tableContent = generatePrintTable(selectedColumns);
+        printContents += `<div>${tableContent}</div>`;
+    }
+
+    if (selectedSections.includes('printLineChart')) {
+        const lineChartElement = document.getElementById('chartContainer');
+        printContents += lineChartElement.outerHTML;
+    }
+
+    if (selectedSections.includes('printBarChart')) {
+        const barChartElement = document.getElementById('barChartContainer');
+        printContents += barChartElement.outerHTML;
+    }
+
+    if (selectedSections.includes('printStatistics')) {
+        const statisticsContent = document.getElementById('statistics').innerHTML;
+        printContents += `<div>${statisticsContent}</div>`;
+    }
+
+    // Include reporting period and notes in the print content
+    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
+    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+
+    const originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+
+    setTimeout(() => {
+        window.print();
+        document.body.innerHTML = originalContents;
+        enableChartInteractions();
+    }, 500);
 }
 
 // Function to show the print dialog modal
