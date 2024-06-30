@@ -1161,6 +1161,8 @@ function saveAndPrintReport() {
         return;
     }
 
+    const selectedColumns = getSelectedColumns();
+
     const goalId = selectedGoal.getAttribute('data-goal-id');
     const studentIdNew = window.studentIdNew;
     const schoolId = window.schoolId;
@@ -1185,9 +1187,8 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            //console.log('Notes saved successfully:', data.message);
             // Proceed to print the report
-            printReport(selectedGoal, selectedSections, reportingPeriod, notes);
+            printReport(selectedGoal, selectedSections, selectedColumns, reportingPeriod, notes);
         } else {
             console.error('Error saving notes:', data.message);
             alert('Failed to save notes: ' + data.message);
