@@ -99,7 +99,6 @@ include('./users/auth_session.php');
 <div id="add-student-modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hideAddStudentModal()">&times;</span>
-
         <h3>Assign Students to Group</h3>
         <div style="margin-top: 20px;">
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
@@ -115,7 +114,7 @@ include('./users/auth_session.php');
             </form>
         </div>
         <h3>Remove Students from Group</h3>
-        <div id="group-students-list">
+        <div id="group-students-list-add-modal">
             <!-- Students will be loaded here dynamically -->
         </div>
         <h3>Add New Student</h3>
@@ -138,7 +137,6 @@ include('./users/auth_session.php');
             </div>
             <button type="submit">Add Student</button>
         </form>
-
     </div>
 </div>
 
@@ -205,12 +203,10 @@ include('./users/auth_session.php');
             <button type="submit">Save Changes</button>
         </form>
         <button onclick="deleteGroup()">Delete Group</button>
-
         <h3>Remove Students from Group</h3>
-        <div id="group-students-list">
+        <div id="group-students-list-edit-modal">
             <!-- Students will be loaded here dynamically -->
         </div>
-
         <h3>Share Group</h3>
         <form id="share-group-form" onsubmit="shareGroup(event)">
             <input type="hidden" id="share-group-id">
@@ -420,15 +416,14 @@ function showAddGroupModal() {
 }
 
 function showAddStudentModal(groupId) {
-        const modal = document.getElementById('add-student-modal');
+    const modal = document.getElementById('add-student-modal');
 
-        if (modal) {
-            modal.style.display = 'block';
-        } else {
-            console.error("Modal element not found");
-        }
-            // Load students for the selected group
-    loadGroupStudents(groupId);
+    if (modal) {
+        modal.style.display = 'block';
+        loadGroupStudents(groupId, 'group-students-list-add-modal');
+    } else {
+        console.error("Modal element not found");
+    }
 }
 
 // Function to hide the modal
@@ -813,7 +808,7 @@ function showEditGroupModal(groupId, groupName) {
     $('.select2').select2();
 
     // Load students for the selected group
-    loadGroupStudents(groupId);
+    loadGroupStudents(groupId, 'group-students-list-edit-modal');
     
     loadStaff();
 }
@@ -829,15 +824,15 @@ function hideEditGroupModal() {
     }
 }
 
-function loadGroupStudents(groupId) {
-    //console.log('Loading students for group:', groupId); // Debug log
+function loadGroupStudents(groupId, containerId) {
+    console.log('Loading students for group:', groupId); // Debug log
 
     fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            //console.log('Fetched group students:', data); // Debug log
+            console.log('Fetched group students:', data); // Debug log
 
-            const groupStudentsList = document.getElementById('group-students-list');
+            const groupStudentsList = document.getElementById(containerId);
             groupStudentsList.innerHTML = '';
 
             if (data.error) {
