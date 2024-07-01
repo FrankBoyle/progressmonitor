@@ -1050,17 +1050,20 @@ input[type="text"] {
     background-color: green;
     color: white;
     border: none;
+    padding: 5px;
     cursor: pointer;
-    padding: 5px 10px;
-    margin-right: 5px;
+    font-size: 16px;
+    border-radius: 4px;
 }
 
 .delete-btn {
     background-color: red;
     color: white;
     border: none;
+    padding: 5px;
     cursor: pointer;
-    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 4px;
 }
 
 button:focus {

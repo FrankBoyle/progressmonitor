@@ -29,7 +29,7 @@ function loadUsers() {
             // Create approved users table
             const approvedTable = new Tabulator(approvedUsersTableContainer, {
                 data: approvedTableData,
-                layout: "fitDataStretch",
+                layout: "fitColumns",
                 columns: [
                     { 
                         title: "Admin?", 
@@ -44,7 +44,6 @@ function loadUsers() {
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
                         },
-                        width: 100
                     },
                     { title: "Name", field: "name", editor: "input", widthGrow: 2 },
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
@@ -52,7 +51,6 @@ function loadUsers() {
                         title: "Delete", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
                             return '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">🗑️</button>';
                         },
-                        width: 100
                     }
                 ],
             });
@@ -65,7 +63,7 @@ function loadUsers() {
             // Create users waiting for approval table
             const waitingApprovalTable = new Tabulator(waitingApprovalTableContainer, {
                 data: waitingApprovalTableData,
-                layout: "fitDataStretch",
+                layout: "fitColumns",
                 columns: [
                     { 
                         title: "Is Admin", 
@@ -80,18 +78,14 @@ function loadUsers() {
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
                         },
-                        width: 100
                     },
                     { title: "Name", field: "name", editor: "input", widthGrow: 2 },
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
-                            return `
-                                <button class="approve-btn" onclick="toggleApproval(${cell.getValue()}, 1)" style="background-color: green; color: white;">✔️</button>
-                                <button class="delete-btn" onclick="deleteUser(${cell.getValue()})" style="background-color: red; color: white;">❌</button>
-                            `;
+                            return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 1)">✔️</button>' +
+                                   '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
                         },
-                        width: 150
                     }
                 ],
             });
