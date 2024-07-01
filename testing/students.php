@@ -30,9 +30,7 @@ include('./users/auth_session.php');
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
-            <a href="manage.php" class="nav-link">
-                <button class="btn btn-primary">Manage</button>
-            </a>            
+            <button id="manageBtn" class="btn btn-primary">Manage</button>
             <a href="students.php" class="nav-link">
                 <i class="nav-icon"></i>
                 <p>Home</p>
