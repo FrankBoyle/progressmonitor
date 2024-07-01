@@ -36,7 +36,6 @@ include('./users/auth_session.php');
         <section class="box manage-section">
             <h2>Manage Dashboard</h2>
             <div id="manage-content">
-                <!-- Add management content here -->
                 <h3>Manage Users</h3>
                 <div id="approved-users-table-container"></div>
                 <h3>Users Waiting for Approval</h3>
