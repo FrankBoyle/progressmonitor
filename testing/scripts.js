@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadUsers();
-    loadStudents();
+    loadActiveStudents();
+    loadArchivedStudents();
 });
 
 function loadUsers() {
@@ -100,8 +101,8 @@ function loadUsers() {
         });
 }
 
-function loadStudents() {
-    fetch('./users/fetch_students.php')
+function loadActiveStudents() {
+    fetch('./users/fetch_active_students.php')
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -110,21 +111,15 @@ function loadStudents() {
             }
 
             const activeStudentsTableContainer = document.getElementById('active-students-table-container');
-            const archivedStudentsTableContainer = document.getElementById('archived-students-table-container');
-
-            if (activeStudentsTableContainer && archivedStudentsTableContainer) {
+            if (activeStudentsTableContainer) {
                 activeStudentsTableContainer.innerHTML = '';
-                archivedStudentsTableContainer.innerHTML = '';
             } else {
-                console.error('Table container elements not found');
+                console.error('Table container element not found');
                 return;
             }
 
-            const activeStudentsData = data.filter(student => !student.archived);
-            const archivedStudentsData = data.filter(student => student.archived);
-
             const activeStudentsTable = new Tabulator(activeStudentsTableContainer, {
-                data: activeStudentsData,
+                data: data,
                 layout: "fitDataStretch",
                 columns: [
                     { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
@@ -143,9 +138,31 @@ function loadStudents() {
             activeStudentsTable.on("cellEdited", function(cell) {
                 updateStudent(cell.getRow().getData());
             });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function loadArchivedStudents() {
+    fetch('./users/fetch_archived_students.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error fetching students:', data.error);
+                return;
+            }
+
+            const archivedStudentsTableContainer = document.getElementById('archived-students-table-container');
+            if (archivedStudentsTableContainer) {
+                archivedStudentsTableContainer.innerHTML = '';
+            } else {
+                console.error('Table container element not found');
+                return;
+            }
 
             const archivedStudentsTable = new Tabulator(archivedStudentsTableContainer, {
-                data: archivedStudentsData,
+                data: data,
                 layout: "fitDataStretch",
                 columns: [
                     { title: "First Name", field: "first_name", widthGrow: 2 },
@@ -172,7 +189,7 @@ function toggleApproval(teacherId, newStatus) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            loadUsers();
+            loadUsers(); // Reload the users to reflect the change
         } else {
             console.error('Error updating approval status:', data.message);
         }
@@ -195,33 +212,9 @@ function deleteUser(teacherId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            loadUsers();
+            loadUsers(); // Reload the users to reflect the deletion
         } else {
             console.error('Error deleting user:', data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-function updateUser(userData) {
-    if (userData.subject_taught === "") {
-        userData.subject_taught = null;
-    }
-    userData.is_admin = parseInt(userData.is_admin);
-
-    fetch('./users/update_staff.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (!data.success) {
-            console.error('Error updating user:', data.message);
         }
     })
     .catch(error => {
@@ -240,7 +233,8 @@ function archiveStudent(studentId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            loadStudents();
+            loadActiveStudents(); // Reload the active students to reflect the change
+            loadArchivedStudents(); // Reload the archived students to reflect the change
         } else {
             console.error('Error archiving student:', data.message);
         }
@@ -262,6 +256,25 @@ function updateStudent(studentData) {
     .then(data => {
         if (!data.success) {
             console.error('Error updating student:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function updateUser(userData) {
+    fetch('./users/update_staff.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            console.error('Error updating user:', data.message);
         }
     })
     .catch(error => {
