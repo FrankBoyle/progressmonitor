@@ -34,8 +34,13 @@ function loadUsers() {
                     { 
                         title: "Is Admin", 
                         field: "is_admin", 
-                        editor: "select", 
-                        editorParams: { values: {"1": "Yes", "0": "No"} },
+                        editor: "list", 
+                        editorParams: {
+                            values: [
+                                {label:"Yes", value:"1"},
+                                {label:"No", value:"0"}
+                            ]
+                        },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
                         }
@@ -63,8 +68,13 @@ function loadUsers() {
                     { 
                         title: "Is Admin", 
                         field: "is_admin", 
-                        editor: "select", 
-                        editorParams: { values: {"1": "Yes", "0": "No"} },
+                        editor: "list", 
+                        editorParams: {
+                            values: [
+                                {label:"Yes", value:"1"},
+                                {label:"No", value:"0"}
+                            ]
+                        },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
                         }
