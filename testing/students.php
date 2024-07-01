@@ -795,6 +795,7 @@ function saveGoal(goalId, goalDescription) {
 }
 
 function showEditGroupModal(groupId, groupName) {
+    console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
     document.getElementById('edit-group-id').value = groupId;
     document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('edit-group-modal').style.display = 'block';
@@ -809,7 +810,7 @@ function showEditGroupModal(groupId, groupName) {
     $('.select2').select2();
 
     // Load students for the selected group
-    loadGroupStudents(groupId, 'group-students-list-edit-modal');
+    loadGroupStudents(groupId, 'group-students-list-edit');
     
     loadStaff();
 }
