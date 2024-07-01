@@ -114,7 +114,7 @@ include('./users/auth_session.php');
             </form>
         </div>
         <h3>Remove Students from Group</h3>
-        <div id="group-students-list-add-modal">
+        <div id="group-students-list-add">
             <!-- Students will be loaded here dynamically -->
         </div>
         <h3>Add New Student</h3>
@@ -204,7 +204,7 @@ include('./users/auth_session.php');
         </form>
         <button onclick="deleteGroup()">Delete Group</button>
         <h3>Remove Students from Group</h3>
-        <div id="group-students-list-edit-modal">
+        <div id="group-students-list-edit">
             <!-- Students will be loaded here dynamically -->
         </div>
         <h3>Share Group</h3>
@@ -416,11 +416,12 @@ function showAddGroupModal() {
 }
 
 function showAddStudentModal(groupId) {
+    console.log('showAddStudentModal called with groupId:', groupId); // Debug log
     const modal = document.getElementById('add-student-modal');
 
     if (modal) {
         modal.style.display = 'block';
-        loadGroupStudents(groupId, 'group-students-list-add-modal');
+        loadGroupStudents(groupId, 'group-students-list-add');
     } else {
         console.error("Modal element not found");
     }
