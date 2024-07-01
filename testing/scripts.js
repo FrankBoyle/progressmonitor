@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function loadUsers() {
-    fetch('./users/fetch_users.php')
+    fetch('./users/fetch_staff.php')
         .then(response => response.json())
         .then(data => {
             if (data.error) {
