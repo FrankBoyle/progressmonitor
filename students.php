@@ -1,3 +1,8 @@
+<?php
+include('./users/db.php');
+include('./users/auth_session.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +17,7 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Students and Groups</title>
+    <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -25,6 +30,11 @@
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
+            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+                <a href="manage.php" class="nav-link">
+                    <button class="btn btn-primary">Manage</button>
+                </a>
+            <?php endif; ?>
             <a href="students.php" class="nav-link">
                 <i class="nav-icon"></i>
                 <p>Home</p>
@@ -54,7 +64,7 @@
         </section>
 
         <section class="box students-list">
-            <h3>Students <button class="add-student-btn" onclick="showAddStudentModal()">+</button></h3>
+            <h3>Students <button class="add-student-btn">+</button></h3>
             <div class="message" id="students-message">Please use groups to see students.</div>
             <ul id="student-list" style="display: none;">
                 <?php foreach ($allStudents as $student): ?>
@@ -88,16 +98,14 @@
 </div>
 
    <!-- Place the Edit Group button here, outside the modal -->
-   <!--<button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>-->
+   <!-- <button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>-->
 
 <!-- Add Student Modal -->
 <div id="add-student-modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hideAddStudentModal()">&times;</span>
-
-        <h2>Assign Students to Group</h2>
+        <h3>Assign Students to Group</h3>
         <div style="margin-top: 20px;">
-            <h3>Assign Students to Group</h3>
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
                     <div style="margin-right: 10px;">
@@ -110,7 +118,11 @@
                 </div>
             </form>
         </div>
-        <h2>Add New Student</h2>
+        <h3>Remove Students from Group</h3>
+        <div id="group-students-list-add">
+            <!-- Students will be loaded here dynamically -->
+        </div>
+        <h3>Add New Student</h3>
         <form id="add-student-form" onsubmit="addStudent(event)">
             <div class="form-group">
                 <label for="first-name">First Name:</label>
@@ -130,7 +142,6 @@
             </div>
             <button type="submit">Add Student</button>
         </form>
-
     </div>
 </div>
 
@@ -197,12 +208,10 @@
             <button type="submit">Save Changes</button>
         </form>
         <button onclick="deleteGroup()">Delete Group</button>
-
         <h3>Remove Students from Group</h3>
-        <div id="group-students-list">
+        <div id="group-students-list-edit">
             <!-- Students will be loaded here dynamically -->
         </div>
-
         <h3>Share Group</h3>
         <form id="share-group-form" onsubmit="shareGroup(event)">
             <input type="hidden" id="share-group-id">
@@ -286,15 +295,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
-        const selectedGroup = document.querySelector('.selected-group');
-        if (selectedGroup) {
-            const groupId = selectedGroup.getAttribute('data-group-id');
+    const selectedGroup = document.querySelector('.selected-group');
+    if (selectedGroup) {
+        const groupId = selectedGroup.getAttribute('data-group-id');
+        if (groupId) {
             loadStudentsForGroupAssignment(groupId);
+            showAddStudentModal(groupId);
+        } else {
+            console.error('Group ID is not defined.');
         }
-        showAddStudentModal();
-    });
+    } else {
+        console.error('No group is selected.');
+    }
+});
 
-function populateStudentsAndGoals() {
+    function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
     const studentsMessage = document.getElementById('students-message');
     if (studentList.children.length > 0) {
@@ -409,13 +424,16 @@ function showAddGroupModal() {
         }
 }
 
-function showAddStudentModal() {
-        const modal = document.getElementById('add-student-modal');
-        if (modal) {
-            modal.style.display = 'block';
-        } else {
-            console.error("Modal element not found");
-        }
+function showAddStudentModal(groupId) {
+    console.log('showAddStudentModal called with groupId:', groupId); // Debug log
+    const modal = document.getElementById('add-student-modal');
+
+    if (modal) {
+        modal.style.display = 'block';
+        loadGroupStudents(groupId, 'group-students-list-add');
+    } else {
+        console.error("Modal element not found");
+    }
 }
 
 // Function to hide the modal
@@ -786,6 +804,7 @@ function saveGoal(goalId, goalDescription) {
 }
 
 function showEditGroupModal(groupId, groupName) {
+    console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
     document.getElementById('edit-group-id').value = groupId;
     document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('edit-group-modal').style.display = 'block';
@@ -800,7 +819,7 @@ function showEditGroupModal(groupId, groupName) {
     $('.select2').select2();
 
     // Load students for the selected group
-    loadGroupStudents(groupId);
+    loadGroupStudents(groupId, 'group-students-list-edit');
     
     loadStaff();
 }
@@ -816,15 +835,15 @@ function hideEditGroupModal() {
     }
 }
 
-function loadGroupStudents(groupId) {
-    //console.log('Loading students for group:', groupId); // Debug log
+function loadGroupStudents(groupId, targetElementId) {
+    console.log('Loading students for group:', groupId); // Debug log
 
-    fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
+    fetch(`./users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            //console.log('Fetched group students:', data); // Debug log
+            console.log('Fetched group students:', data); // Debug log
 
-            const groupStudentsList = document.getElementById('group-students-list');
+            const groupStudentsList = document.getElementById(targetElementId);
             groupStudentsList.innerHTML = '';
 
             if (data.error) {
@@ -1166,19 +1185,8 @@ function loadGoals(studentId) {
                         theme: 'snow',
                         readOnly: true,
                         modules: {
-                        toolbar: [
-                            [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-                            [{size: []}],
-                            ['bold', 'italic', 'underline', 'strike'],
-                            [{ 'color': [] }, { 'background': [] }],
-                            [{ 'script': 'sub'}, { 'script': 'super' }],
-                            ['blockquote', 'code-block'],
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
-                            ['link', 'image', 'video'],
-                            ['clean']  
-                        ]
-                    }
+                            toolbar: false
+                        }
                     });
                 }
             });
