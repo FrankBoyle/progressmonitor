@@ -37,8 +37,8 @@ function loadUsers() {
                         editor: "list", 
                         editorParams: {
                             values: [
-                                {label: "Yes", value: "1"},
-                                {label: "No", value: "0"}
+                                {label: "Yes", value: 1},
+                                {label: "No", value: 0}
                             ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
@@ -74,8 +74,8 @@ function loadUsers() {
                         editor: "list", 
                         editorParams: {
                             values: [
-                                {label: "Yes", value: "1"},
-                                {label: "No", value: "0"}
+                                {label: "Yes", value: 1},
+                                {label: "No", value: 0}
                             ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
@@ -151,6 +151,9 @@ function deleteUser(teacherId) {
 }
 
 function updateUser(userData) {
+    // Ensure is_admin is sent as an integer
+    userData.is_admin = parseInt(userData.is_admin);
+
     fetch('./users/update_staff.php', {
         method: 'POST',
         headers: {
