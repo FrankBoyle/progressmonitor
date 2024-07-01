@@ -10,7 +10,7 @@ $schoolId = $_SESSION['school_id'];
 function fetchAllRelevantStaff($schoolId) {
     global $connection;
     $stmt = $connection->prepare("
-        SELECT teacher_id, name 
+        SELECT teacher_id, name, subject_taught, is_admin, approved
         FROM Teachers
         WHERE school_id = :schoolId
     ");
@@ -23,4 +23,3 @@ function fetchAllRelevantStaff($schoolId) {
 $staff = fetchAllRelevantStaff($schoolId);
 echo json_encode($staff);
 ?>
-
