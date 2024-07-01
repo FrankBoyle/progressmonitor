@@ -11,92 +11,62 @@ function loadUsers() {
                 return;
             }
 
-            // Separate approved and unapproved users
-            const approvedUsers = data.filter(user => user.approved);
-            const unapprovedUsers = data.filter(user => !user.approved);
-
             const approvedUsersTableContainer = document.getElementById('approved-users-table-container');
-            const unapprovedUsersTableContainer = document.getElementById('unapproved-users-table-container');
+            const waitingApprovalTableContainer = document.getElementById('waiting-approval-table-container');
+            
+            // Clear existing tables
+            approvedUsersTableContainer.innerHTML = '';
+            waitingApprovalTableContainer.innerHTML = '';
 
-            // Create tables for approved and unapproved users
-            createApprovedUsersTable(approvedUsersTableContainer, approvedUsers);
-            createUnapprovedUsersTable(unapprovedUsersTableContainer, unapprovedUsers);
+            const approvedTableData = data.filter(user => user.approved);
+            const waitingApprovalTableData = data.filter(user => !user.approved);
+
+            // Create approved users table
+            new Tabulator("#approved-users-table-container", {
+                data: approvedTableData,
+                layout: "fitColumns",
+                columns: [
+                    { title: "Admin?", field: "is_admin", editor: "select", editorParams: { values: ["Yes", "No"] } },
+                    { title: "Name", field: "name", editor: "input" },
+                    { title: "Subject Taught", field: "subject_taught", editor: "input" },
+                    {
+                        title: "Delete", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
+                            return '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">🗑️</button>';
+                        }
+                    }
+                ],
+                cellEdited: function(cell) {
+                    updateUser(cell.getRow().getData());
+                }
+            });
+
+            // Create users waiting for approval table
+            new Tabulator("#waiting-approval-table-container", {
+                data: waitingApprovalTableData,
+                layout: "fitColumns",
+                columns: [
+                    { title: "Is Admin", field: "is_admin", editor: "select", editorParams: { values: ["Yes", "No"] } },
+                    { title: "Name", field: "name", editor: "input" },
+                    { title: "Subject Taught", field: "subject_taught", editor: "input" },
+                    {
+                        title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
+                            return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 0)">✔️</button>' +
+                                   '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
+                        }
+                    }
+                ],
+                cellEdited: function(cell) {
+                    updateUser(cell.getRow().getData());
+                }
+            });
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
-function createApprovedUsersTable(container, users) {
-    const table = document.createElement('table');
-    table.classList.add('users-table');
-
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    const headers = ['Is Admin', 'Name', 'Subject Taught', 'Delete'];
-    headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
-    users.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${user.is_admin ? 'Yes' : 'No'}</td>
-            <td>${user.name}</td>
-            <td>${user.subject_taught || ''}</td>
-            <td>
-                <button class="delete-btn" onclick="deleteUser(${user.teacher_id})">🗑️</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-    table.appendChild(tbody);
-
-    container.innerHTML = '';
-    container.appendChild(table);
-}
-
-function createUnapprovedUsersTable(container, users) {
-    const table = document.createElement('table');
-    table.classList.add('users-table');
-
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    const headers = ['Is Admin', 'Name', 'Subject Taught', 'Approve?'];
-    headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-
-    const tbody = document.createElement('tbody');
-    users.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${user.is_admin ? 'Yes' : 'No'}</td>
-            <td>${user.name}</td>
-            <td>${user.subject_taught || ''}</td>
-            <td>
-                <button class="approve-btn" onclick="toggleApproval(${user.teacher_id}, 1)" style="color: green;">✔️</button>
-                <button class="delete-btn" onclick="deleteUser(${user.teacher_id})" style="color: red;">❌</button>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-    table.appendChild(tbody);
-
-    container.innerHTML = '';
-    container.appendChild(table);
-}
-
-function toggleApproval(teacherId, newStatus) {
+function toggleApproval(teacherId, currentStatus) {
+    const newStatus = currentStatus ? 0 : 1;
     fetch('./users/toggle_approval.php', {
         method: 'POST',
         headers: {
@@ -133,6 +103,25 @@ function deleteUser(teacherId) {
             loadUsers(); // Reload the users to reflect the deletion
         } else {
             console.error('Error deleting user:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function updateUser(userData) {
+    fetch('./users/update_staff.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            console.error('Error updating user:', data.message);
         }
     })
     .catch(error => {
