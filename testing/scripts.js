@@ -29,19 +29,16 @@ function loadUsers() {
             // Create approved users table
             const approvedTable = new Tabulator(approvedUsersTableContainer, {
                 data: approvedTableData,
-                layout: "fitData",
+                layout: "fitDataStretch",
                 columns: [
                     { 
                         title: "Admin?", 
                         field: "is_admin", 
-                        editor: "list", 
+                        editor: "select", 
                         editorParams: {
-                            values: [
-                                {label: "Yes", value: "1"},
-                                {label: "No", value: "0"}
-                            ],
-                            listItemFormatter: function(value, text) {
-                                return text;
+                            values: {
+                                "1": "Yes",
+                                "0": "No"
                             }
                         },
                         formatter: function(cell, formatterParams, onRendered) {
@@ -68,19 +65,16 @@ function loadUsers() {
             // Create users waiting for approval table
             const waitingApprovalTable = new Tabulator(waitingApprovalTableContainer, {
                 data: waitingApprovalTableData,
-                layout: "fitData",
+                layout: "fitDataStretch",
                 columns: [
                     { 
                         title: "Is Admin", 
                         field: "is_admin", 
-                        editor: "list", 
+                        editor: "select", 
                         editorParams: {
-                            values: [
-                                {label: "Yes", value: "1"},
-                                {label: "No", value: "0"}
-                            ],
-                            listItemFormatter: function(value, text) {
-                                return text;
+                            values: {
+                                "1": "Yes",
+                                "0": "No"
                             }
                         },
                         formatter: function(cell, formatterParams, onRendered) {
@@ -92,8 +86,8 @@ function loadUsers() {
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 1)">✔️</button>' +
-                                   '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
+                            return '<button class="approve-btn green" onclick="toggleApproval(' + cell.getValue() + ', 1)">✔️</button>' +
+                                   '<button class="delete-btn red" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
                         },
                         width: 150
                     }
