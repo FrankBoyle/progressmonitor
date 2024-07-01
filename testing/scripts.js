@@ -69,7 +69,7 @@ function loadUsers() {
                 layout: "fitColumns",
                 columns: [
                     { 
-                        title: "Admin?", 
+                        title: "Is Admin", 
                         field: "is_admin", 
                         editor: "list", 
                         editorParams: {
