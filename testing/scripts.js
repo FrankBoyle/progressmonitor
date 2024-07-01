@@ -31,7 +31,15 @@ function loadUsers() {
                 data: approvedTableData,
                 layout: "fitColumns",
                 columns: [
-                    { title: "Is Admin", field: "is_admin", editor: "select", editorParams: { values: ["Yes", "No"] } },
+                    { 
+                        title: "Is Admin", 
+                        field: "is_admin", 
+                        editor: "select", 
+                        editorParams: { values: {"1": "Yes", "0": "No"} },
+                        formatter: function(cell, formatterParams, onRendered) {
+                            return cell.getValue() == 1 ? "Yes" : "No";
+                        }
+                    },
                     { title: "Name", field: "name", editor: "input" },
                     { title: "Subject Taught", field: "subject_taught", editor: "input" },
                     {
@@ -52,7 +60,15 @@ function loadUsers() {
                 data: waitingApprovalTableData,
                 layout: "fitColumns",
                 columns: [
-                    { title: "Is Admin", field: "is_admin", editor: "select", editorParams: { values: ["Yes", "No"] } },
+                    { 
+                        title: "Is Admin", 
+                        field: "is_admin", 
+                        editor: "select", 
+                        editorParams: { values: {"1": "Yes", "0": "No"} },
+                        formatter: function(cell, formatterParams, onRendered) {
+                            return cell.getValue() == 1 ? "Yes" : "No";
+                        }
+                    },
                     { title: "Name", field: "name", editor: "input" },
                     { title: "Subject Taught", field: "subject_taught", editor: "input" },
                     {
