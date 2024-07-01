@@ -1045,3 +1045,25 @@ input[type="text"] {
     gap: 10px;
     margin: 10px 0;
 }
+
+.approve-btn.green {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delete-btn.red {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.approve-btn.green:hover, .delete-btn.red:hover {
+    opacity: 0.8;
+}
