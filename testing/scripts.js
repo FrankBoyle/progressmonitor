@@ -50,7 +50,7 @@ function loadUsers() {
                     { title: "Subject Taught", field: "subject_taught", editor: "input", minWidth: 150, widthGrow: 2 },
                     {
                         title: "Delete", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')"><i class="fas fa-trash-alt"></i></button>';
+                            return '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
                         },
                         minWidth: 100,
                         hozAlign: "center"
@@ -69,7 +69,7 @@ function loadUsers() {
                 layout: "fitColumns",
                 columns: [
                     { 
-                        title: "Is Admin", 
+                        title: "Admin?", 
                         field: "is_admin", 
                         editor: "list", 
                         editorParams: {
@@ -87,8 +87,8 @@ function loadUsers() {
                     { title: "Subject Taught", field: "subject_taught", editor: "input", minWidth: 150, widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 1)"><i class="fas fa-check" style="color: green;"></i></button>' +
-                                   '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')"><i class="fas fa-times" style="color: red;"></i></button>';
+                            return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 1)">✅</button>' +
+                                   '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
                         },
                         minWidth: 150,
                         hozAlign: "center"
