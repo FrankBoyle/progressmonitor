@@ -21,8 +21,8 @@ include('./users/auth_session.php');
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.0.0/dist/css/tabulator.min.css">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.0.0/dist/js/tabulator.min.js"></script>
+    <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.0.0/dist/js/tabulator.min.js"></script>
 
 </head>
 <body>
