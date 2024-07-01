@@ -15,18 +15,23 @@ function loadUsers() {
             const waitingApprovalTableContainer = document.getElementById('waiting-approval-table-container');
             
             // Clear existing tables
-            approvedUsersTableContainer.innerHTML = '';
-            waitingApprovalTableContainer.innerHTML = '';
+            if (approvedUsersTableContainer && waitingApprovalTableContainer) {
+                approvedUsersTableContainer.innerHTML = '';
+                waitingApprovalTableContainer.innerHTML = '';
+            } else {
+                console.error('Table container elements not found');
+                return;
+            }
 
             const approvedTableData = data.filter(user => user.approved);
             const waitingApprovalTableData = data.filter(user => !user.approved);
 
             // Create approved users table
-            new Tabulator("#approved-users-table-container", {
+            new Tabulator(approvedUsersTableContainer, {
                 data: approvedTableData,
                 layout: "fitColumns",
                 columns: [
-                    { title: "Admin?", field: "is_admin", editor: "select", editorParams: { values: ["Yes", "No"] } },
+                    { title: "Is Admin", field: "is_admin", editor: "select", editorParams: { values: ["Yes", "No"] } },
                     { title: "Name", field: "name", editor: "input" },
                     { title: "Subject Taught", field: "subject_taught", editor: "input" },
                     {
@@ -41,7 +46,7 @@ function loadUsers() {
             });
 
             // Create users waiting for approval table
-            new Tabulator("#waiting-approval-table-container", {
+            new Tabulator(waitingApprovalTableContainer, {
                 data: waitingApprovalTableData,
                 layout: "fitColumns",
                 columns: [
