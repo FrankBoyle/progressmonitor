@@ -39,7 +39,10 @@ function loadUsers() {
                             values: [
                                 {label: "Yes", value: "1"},
                                 {label: "No", value: "0"}
-                            ]
+                            ],
+                            listItemFormatter: function(value, text) {
+                                return text;
+                            }
                         },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
@@ -75,7 +78,10 @@ function loadUsers() {
                             values: [
                                 {label: "Yes", value: "1"},
                                 {label: "No", value: "0"}
-                            ]
+                            ],
+                            listItemFormatter: function(value, text) {
+                                return text;
+                            }
                         },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
