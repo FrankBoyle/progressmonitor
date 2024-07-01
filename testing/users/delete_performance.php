@@ -1,4 +1,6 @@
 <?php
+include('auth_session.php');
+
 file_put_contents('post_log.txt', print_r($_POST, true));
 error_reporting(E_ALL);
 ini_set('display_errors', 1);

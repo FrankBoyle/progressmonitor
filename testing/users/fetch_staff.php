@@ -1,10 +1,10 @@
 <?php
-session_start();
-include('auth_session.php');
-include('db.php');
+include('auth_session.php'); // Ensure the user is authenticated
+include('db.php'); // Include the database connection
 
 header('Content-Type: application/json');
 
+// Get the school ID from the session
 $schoolId = $_SESSION['school_id'];
 
 function fetchAllRelevantStaff($schoolId) {
@@ -19,7 +19,8 @@ function fetchAllRelevantStaff($schoolId) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Fetch staff and output as JSON
 $staff = fetchAllRelevantStaff($schoolId);
-
 echo json_encode($staff);
 ?>
+

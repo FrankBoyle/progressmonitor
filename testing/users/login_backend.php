@@ -1,5 +1,4 @@
 <?php
-    session_start();
 
     // Error reporting for development
     ini_set('display_errors', 1);

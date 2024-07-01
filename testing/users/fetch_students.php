@@ -1,9 +1,10 @@
 <?php
+
+include('auth_session.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include('auth_session.php');
 include('db.php');
 
 $schoolId = $_SESSION['school_id'];
