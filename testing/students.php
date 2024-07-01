@@ -59,7 +59,7 @@ include('./users/auth_session.php');
         </section>
 
         <section class="box students-list">
-            <h3>Students <button class="add-student-btn" onclick="showAddStudentModal(groupId)">+</button></h3>
+            <h3>Students <button class="add-student-btn" onclick="showAddStudentModal()">+</button></h3>
             <div class="message" id="students-message">Please use groups to see students.</div>
             <ul id="student-list" style="display: none;">
                 <?php foreach ($allStudents as $student): ?>
