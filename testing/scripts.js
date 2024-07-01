@@ -17,7 +17,7 @@ function loadUsers() {
 
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
-            const headers = ['ID', 'School ID', 'Is Admin', 'Teacher ID', 'Name', 'Subject Taught', 'Approve'];
+            const headers = ['Is Admin', 'Name', 'Subject Taught', 'Approve/Delete'];
             headers.forEach(header => {
                 const th = document.createElement('th');
                 th.textContent = header;
@@ -30,14 +30,11 @@ function loadUsers() {
             data.forEach(user => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${user.account_id}</td>
-                    <td>${user.school_id}</td>
                     <td>${user.is_admin ? 'Yes' : 'No'}</td>
-                    <td>${user.teacher_id}</td>
                     <td>${user.name}</td>
                     <td>${user.subject_taught || ''}</td>
                     <td>
-                        <button class="approve-btn" onclick="toggleApproval(${user.teacher_id}, ${user.approved})">
+                        <button class="approve-btn" onclick="toggleApproval(${user.teacher_id}, ${user.approved})" style="color: ${user.approved ? 'green' : 'red'};">
                             ${user.approved ? '✔️' : '❌'}
                         </button>
                         <button class="delete-btn" onclick="deleteUser(${user.teacher_id})">🗑️</button>
