@@ -7,8 +7,8 @@ $data = json_decode(file_get_contents("php://input"), true);
 if (isset($data['teacher_id']) && isset($data['name']) && isset($data['subject_taught']) && isset($data['is_admin'])) {
     $teacherId = $data['teacher_id'];
     $name = $data['name'];
-    $subjectTaught = $data['subject_taught'];
-    $isAdmin = $data['is_admin'] == '1' ? 1 : 0;
+    $subjectTaught = $data['subject_taught'] === '' ? null : $data['subject_taught'];
+    $isAdmin = $data['is_admin'] === 'Yes' ? 1 : 0;
     
     try {
         // Log the query and parameters for debugging
@@ -30,3 +30,4 @@ if (isset($data['teacher_id']) && isset($data['name']) && isset($data['subject_t
     echo json_encode(['success' => false, 'message' => 'Invalid data']);
 }
 ?>
+
