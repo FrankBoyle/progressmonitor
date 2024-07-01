@@ -6,18 +6,9 @@ include('./users/auth_session.php');
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKFCCN4XXS"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-LKFCCN4XXS');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Layout</title>
+    <title>Manage Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -44,15 +35,12 @@ include('./users/auth_session.php');
     <main class="content-students">
         <section class="box manage-section">
             <h2>Manage Dashboard</h2>
-            <div class="card">
+            <div id="manage-content">
+                <!-- Add management content here -->
                 <h3>Manage Users</h3>
-                <div id="users-table-container">
-                    <!-- Table will be dynamically populated here -->
-                </div>
-            </div>
-            <div class="card">
-                <h3>Other Management Features</h3>
-                <p>Content for other management features goes here.</p>
+                <div id="approved-users-table-container"></div>
+                <h3>Users Waiting for Approval</h3>
+                <div id="unapproved-users-table-container"></div>
             </div>
         </section>
     </main>
@@ -61,7 +49,8 @@ include('./users/auth_session.php');
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<script src="scripts.js"></script> <!-- Include any additional JavaScript for the manage page -->
+<script src="scripts.js"></script> <!-- Include the updated JavaScript for the manage page -->
 </body>
 </html>
+
 
