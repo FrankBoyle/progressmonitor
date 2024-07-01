@@ -59,7 +59,7 @@ include('./users/auth_session.php');
         </section>
 
         <section class="box students-list">
-            <h3>Students <button class="add-student-btn" onclick="showAddStudentModal()">+</button></h3>
+            <h3>Students <button class="add-student-btn" onclick="showAddStudentModal(groupId)">+</button></h3>
             <div class="message" id="students-message">Please use groups to see students.</div>
             <ul id="student-list" style="display: none;">
                 <?php foreach ($allStudents as $student): ?>
@@ -290,15 +290,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
-        const selectedGroup = document.querySelector('.selected-group');
-        if (selectedGroup) {
-            const groupId = selectedGroup.getAttribute('data-group-id');
+    const selectedGroup = document.querySelector('.selected-group');
+    if (selectedGroup) {
+        const groupId = selectedGroup.getAttribute('data-group-id');
+        if (groupId) {
             loadStudentsForGroupAssignment(groupId);
+            showAddStudentModal(groupId);
+        } else {
+            console.error('Group ID is not defined.');
         }
-        showAddStudentModal(groupId);
-    });
-
-
+    } else {
+        console.error('No group is selected.');
+    }
+});
 
     function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
@@ -826,15 +830,15 @@ function hideEditGroupModal() {
     }
 }
 
-function loadGroupStudents(groupId, containerId) {
+function loadGroupStudents(groupId, targetElementId) {
     console.log('Loading students for group:', groupId); // Debug log
 
-    fetch(`users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
+    fetch(`./users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
             console.log('Fetched group students:', data); // Debug log
 
-            const groupStudentsList = document.getElementById(containerId);
+            const groupStudentsList = document.getElementById(targetElementId);
             groupStudentsList.innerHTML = '';
 
             if (data.error) {
