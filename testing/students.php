@@ -295,7 +295,7 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
             const groupId = selectedGroup.getAttribute('data-group-id');
             loadStudentsForGroupAssignment(groupId);
         }
-        showAddStudentModal();
+        showAddStudentModal(groupId);
     });
 
 
