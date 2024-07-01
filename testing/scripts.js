@@ -29,7 +29,7 @@ function loadUsers() {
             // Create approved users table
             const approvedTable = new Tabulator(approvedUsersTableContainer, {
                 data: approvedTableData,
-                layout: "fitDataStretch",
+                layout: "fitData",
                 columns: [
                     { 
                         title: "Admin?", 
@@ -65,7 +65,7 @@ function loadUsers() {
             // Create users waiting for approval table
             const waitingApprovalTable = new Tabulator(waitingApprovalTableContainer, {
                 data: waitingApprovalTableData,
-                layout: "fitDataStretch",
+                layout: "fitData",
                 columns: [
                     { 
                         title: "Is Admin", 
