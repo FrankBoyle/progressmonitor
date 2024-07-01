@@ -29,7 +29,7 @@ function loadUsers() {
             // Create approved users table
             const approvedTable = new Tabulator(approvedUsersTableContainer, {
                 data: approvedTableData,
-                layout: "fitColumns",
+                layout: "fitDataStretch",
                 columns: [
                     { 
                         title: "Is Admin", 
@@ -37,20 +37,22 @@ function loadUsers() {
                         editor: "list", 
                         editorParams: {
                             values: [
-                                {label:"Yes", value:"1"},
-                                {label:"No", value:"0"}
+                                {label: "Yes", value: "1"},
+                                {label: "No", value: "0"}
                             ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
-                        }
+                        },
+                        width: 100
                     },
-                    { title: "Name", field: "name", editor: "input" },
-                    { title: "Subject Taught", field: "subject_taught", editor: "input" },
+                    { title: "Name", field: "name", editor: "input", widthGrow: 2 },
+                    { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Delete", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
                             return '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">🗑️</button>';
-                        }
+                        },
+                        width: 100
                     }
                 ],
             });
@@ -63,7 +65,7 @@ function loadUsers() {
             // Create users waiting for approval table
             const waitingApprovalTable = new Tabulator(waitingApprovalTableContainer, {
                 data: waitingApprovalTableData,
-                layout: "fitColumns",
+                layout: "fitDataStretch",
                 columns: [
                     { 
                         title: "Is Admin", 
@@ -71,21 +73,23 @@ function loadUsers() {
                         editor: "list", 
                         editorParams: {
                             values: [
-                                {label:"Yes", value:"1"},
-                                {label:"No", value:"0"}
+                                {label: "Yes", value: "1"},
+                                {label: "No", value: "0"}
                             ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
-                        }
+                        },
+                        width: 100
                     },
-                    { title: "Name", field: "name", editor: "input" },
-                    { title: "Subject Taught", field: "subject_taught", editor: "input" },
+                    { title: "Name", field: "name", editor: "input", widthGrow: 2 },
+                    { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
                             return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 0)">✔️</button>' +
                                    '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
-                        }
+                        },
+                        width: 150
                     }
                 ],
             });
