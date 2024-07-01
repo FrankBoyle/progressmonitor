@@ -19,21 +19,21 @@ function loadUsers() {
             const unapprovedUsersTableContainer = document.getElementById('unapproved-users-table-container');
 
             // Create tables for approved and unapproved users
-            createTable(approvedUsersTableContainer, approvedUsers, true);
-            createTable(unapprovedUsersTableContainer, unapprovedUsers, false);
+            createApprovedUsersTable(approvedUsersTableContainer, approvedUsers);
+            createUnapprovedUsersTable(unapprovedUsersTableContainer, unapprovedUsers);
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
 
-function createTable(container, users, isApproved) {
+function createApprovedUsersTable(container, users) {
     const table = document.createElement('table');
     table.classList.add('users-table');
 
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    const headers = ['Is Admin', 'Name', 'Subject Taught', isApproved ? 'Delete' : 'Approve/Delete'];
+    const headers = ['Is Admin', 'Name', 'Subject Taught', 'Delete'];
     headers.forEach(header => {
         const th = document.createElement('th');
         th.textContent = header;
@@ -50,14 +50,7 @@ function createTable(container, users, isApproved) {
             <td>${user.name}</td>
             <td>${user.subject_taught || ''}</td>
             <td>
-                ${isApproved ? `
                 <button class="delete-btn" onclick="deleteUser(${user.teacher_id})">🗑️</button>
-                ` : `
-                <button class="approve-btn" onclick="toggleApproval(${user.teacher_id}, ${user.approved})" style="color: ${user.approved ? 'green' : 'red'};">
-                    ${user.approved ? '✔️' : '❌'}
-                </button>
-                <button class="delete-btn" onclick="deleteUser(${user.teacher_id})">🗑️</button>
-                `}
             </td>
         `;
         tbody.appendChild(row);
@@ -68,8 +61,42 @@ function createTable(container, users, isApproved) {
     container.appendChild(table);
 }
 
-function toggleApproval(teacherId, currentStatus) {
-    const newStatus = currentStatus ? 0 : 1;
+function createUnapprovedUsersTable(container, users) {
+    const table = document.createElement('table');
+    table.classList.add('users-table');
+
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    const headers = ['Is Admin', 'Name', 'Subject Taught', 'Approve?'];
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    users.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${user.is_admin ? 'Yes' : 'No'}</td>
+            <td>${user.name}</td>
+            <td>${user.subject_taught || ''}</td>
+            <td>
+                <button class="approve-btn" onclick="toggleApproval(${user.teacher_id}, 1)" style="color: green;">✔️</button>
+                <button class="delete-btn" onclick="deleteUser(${user.teacher_id})" style="color: red;">❌</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+
+    container.innerHTML = '';
+    container.appendChild(table);
+}
+
+function toggleApproval(teacherId, newStatus) {
     fetch('./users/toggle_approval.php', {
         method: 'POST',
         headers: {
