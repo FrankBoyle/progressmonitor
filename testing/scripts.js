@@ -14,7 +14,6 @@ function loadUsers() {
             const approvedUsersTableContainer = document.getElementById('approved-users-table-container');
             const waitingApprovalTableContainer = document.getElementById('waiting-approval-table-container');
             
-            // Clear existing tables
             if (approvedUsersTableContainer && waitingApprovalTableContainer) {
                 approvedUsersTableContainer.innerHTML = '';
                 waitingApprovalTableContainer.innerHTML = '';
@@ -26,10 +25,9 @@ function loadUsers() {
             const approvedTableData = data.filter(user => user.approved);
             const waitingApprovalTableData = data.filter(user => !user.approved);
 
-            // Create approved users table
             const approvedTable = new Tabulator(approvedUsersTableContainer, {
                 data: approvedTableData,
-                layout: "fitColumns",
+                layout: "fitDataStretch",
                 columns: [
                     { 
                         title: "Admin?", 
@@ -37,36 +35,33 @@ function loadUsers() {
                         editor: "list", 
                         editorParams: {
                             values: [
-                                {label: "Yes", value: 1},
-                                {label: "No", value: 0}
+                                {label: "Yes", value: "1"},
+                                {label: "No", value: "0"}
                             ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
                         },
-                        minWidth: 100
+                        width: 100
                     },
-                    { title: "Name", field: "name", editor: "input", minWidth: 150, widthGrow: 2 },
-                    { title: "Subject Taught", field: "subject_taught", editor: "input", minWidth: 150, widthGrow: 2 },
+                    { title: "Name", field: "name", editor: "input", widthGrow: 2 },
+                    { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Delete", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
                             return '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
                         },
-                        minWidth: 100,
-                        hozAlign: "center"
+                        width: 100
                     }
                 ],
             });
 
-            // Add cell edited event listener to the approved table
             approvedTable.on("cellEdited", function(cell) {
                 updateUser(cell.getRow().getData());
             });
 
-            // Create users waiting for approval table
             const waitingApprovalTable = new Tabulator(waitingApprovalTableContainer, {
                 data: waitingApprovalTableData,
-                layout: "fitColumns",
+                layout: "fitDataStretch",
                 columns: [
                     { 
                         title: "Is Admin", 
@@ -74,29 +69,27 @@ function loadUsers() {
                         editor: "list", 
                         editorParams: {
                             values: [
-                                {label: "Yes", value: 1},
-                                {label: "No", value: 0}
+                                {label: "Yes", value: "1"},
+                                {label: "No", value: "0"}
                             ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
                         },
-                        minWidth: 100
+                        width: 100
                     },
-                    { title: "Name", field: "name", editor: "input", minWidth: 150, widthGrow: 2 },
-                    { title: "Subject Taught", field: "subject_taught", editor: "input", minWidth: 150, widthGrow: 2 },
+                    { title: "Name", field: "name", editor: "input", widthGrow: 2 },
+                    { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
                             return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 1)">✅</button>' +
                                    '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
                         },
-                        minWidth: 150,
-                        hozAlign: "center"
+                        width: 150
                     }
                 ],
             });
 
-            // Add cell edited event listener to the waiting approval table
             waitingApprovalTable.on("cellEdited", function(cell) {
                 updateUser(cell.getRow().getData());
             });
@@ -117,7 +110,7 @@ function toggleApproval(teacherId, newStatus) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            loadUsers(); // Reload the users to reflect the change
+            loadUsers();
         } else {
             console.error('Error updating approval status:', data.message);
         }
@@ -140,7 +133,7 @@ function deleteUser(teacherId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            loadUsers(); // Reload the users to reflect the deletion
+            loadUsers();
         } else {
             console.error('Error deleting user:', data.message);
         }
@@ -151,8 +144,9 @@ function deleteUser(teacherId) {
 }
 
 function updateUser(userData) {
-    // Ensure is_admin is sent as an integer
-    userData.is_admin = parseInt(userData.is_admin);
+    if (userData.subject_taught === "") {
+        userData.subject_taught = null;
+    }
 
     fetch('./users/update_staff.php', {
         method: 'POST',
