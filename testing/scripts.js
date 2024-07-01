@@ -27,7 +27,7 @@ function loadUsers() {
             const waitingApprovalTableData = data.filter(user => !user.approved);
 
             // Create approved users table
-            new Tabulator(approvedUsersTableContainer, {
+            const approvedTable = new Tabulator(approvedUsersTableContainer, {
                 data: approvedTableData,
                 layout: "fitColumns",
                 columns: [
@@ -40,13 +40,15 @@ function loadUsers() {
                         }
                     }
                 ],
-                cellEdited: function(cell) {
-                    updateUser(cell.getRow().getData());
-                }
+            });
+
+            // Add cell edited event listener to the approved table
+            approvedTable.on("cellEdited", function(cell) {
+                updateUser(cell.getRow().getData());
             });
 
             // Create users waiting for approval table
-            new Tabulator(waitingApprovalTableContainer, {
+            const waitingApprovalTable = new Tabulator(waitingApprovalTableContainer, {
                 data: waitingApprovalTableData,
                 layout: "fitColumns",
                 columns: [
@@ -60,9 +62,11 @@ function loadUsers() {
                         }
                     }
                 ],
-                cellEdited: function(cell) {
-                    updateUser(cell.getRow().getData());
-                }
+            });
+
+            // Add cell edited event listener to the waiting approval table
+            waitingApprovalTable.on("cellEdited", function(cell) {
+                updateUser(cell.getRow().getData());
             });
         })
         .catch(error => {
