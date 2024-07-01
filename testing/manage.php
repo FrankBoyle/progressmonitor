@@ -44,9 +44,15 @@ include('./users/auth_session.php');
     <main class="content-students">
         <section class="box manage-section">
             <h2>Manage Dashboard</h2>
-            <div id="manage-content">
-                <!-- Add management content here -->
-                <p>Management section content goes here.</p>
+            <div class="card">
+                <h3>Manage Users</h3>
+                <div id="users-table-container">
+                    <!-- Table will be dynamically populated here -->
+                </div>
+            </div>
+            <div class="card">
+                <h3>Other Management Features</h3>
+                <p>Content for other management features goes here.</p>
             </div>
         </section>
     </main>
@@ -58,3 +64,4 @@ include('./users/auth_session.php');
 <script src="scripts.js"></script> <!-- Include any additional JavaScript for the manage page -->
 </body>
 </html>
+
