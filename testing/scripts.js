@@ -102,7 +102,7 @@ function loadUsers() {
 }
 
 function loadActiveStudents() {
-    fetch('./users/fetch_active_students.php')
+    fetch('./users/fetch_students.php')
         .then(response => response.json())
         .then(data => {
             if (data.error) {
