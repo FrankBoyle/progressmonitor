@@ -26,35 +26,32 @@ include('./users/auth_session.php');
 
 </head>
 <body>
-    <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="logo">
-                <img src="bFactor_logo.png" alt="Logo">
-            </div>
-            <div class="header-icons">
-                <a href="students.php" class="nav-link">
-                    <i class="nav-icon"></i>
-                    <p>Home</p>
-                </a>
-                <a href="./users/logout.php" class="nav-link">
-                    <i class="nav-icon"></i>
-                    <p>Sign Out</p>
-                </a>
-            </div>
-        </header>
+<div class="dashboard">
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="bFactor_logo.png" alt="Logo">
+        </div>
+        <div class="header-icons">
+            <a href="students.php" class="nav-link">
+                <i class="nav-icon"></i>
+                <p>Home</p>
+            </a>
+            <a href="./users/logout.php" class="nav-link">
+                <i class="nav-icon"></i>
+                <p>Sign Out</p>
+            </a>
+        </div>
+    </header>
 
-        <main class="content-students">
-            <section class="box manage-section">
-                <h2>Manage Dashboard</h2>
-
-                <h3>Manage Users</h3>
-                <div id="approved-users-table-container"></div>
-                
-                <h3>Users Waiting for Approval</h3>
-                <div id="waiting-approval-table-container"></div>
-            </section>
-        </main>
-    </div>
+    <main class="content-students">
+        <section class="box manage-section">
+            <h2>Manage Dashboard</h2>
+            <div id="approved-users-table-container"></div>
+            <h2>Users Waiting for Approval</h2>
+            <div id="waiting-approval-table-container"></div>
+        </section>
+    </main>
+</div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

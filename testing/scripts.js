@@ -32,7 +32,7 @@ function loadUsers() {
                 layout: "fitDataStretch",
                 columns: [
                     { 
-                        title: "Is Admin", 
+                        title: "Admin?", 
                         field: "is_admin", 
                         editor: "list", 
                         editorParams: {
@@ -86,7 +86,7 @@ function loadUsers() {
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 0)">✔️</button>' +
+                            return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 1)">✔️</button>' +
                                    '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
                         },
                         width: 150
@@ -104,8 +104,7 @@ function loadUsers() {
         });
 }
 
-function toggleApproval(teacherId, currentStatus) {
-    const newStatus = currentStatus ? 0 : 1;
+function toggleApproval(teacherId, newStatus) {
     fetch('./users/toggle_approval.php', {
         method: 'POST',
         headers: {
