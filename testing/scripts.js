@@ -29,7 +29,7 @@ function loadUsers() {
             // Create approved users table
             const approvedTable = new Tabulator(approvedUsersTableContainer, {
                 data: approvedTableData,
-                layout: "fitColumns",
+                layout: "fitData",
                 columns: [
                     { 
                         title: "Admin?", 
