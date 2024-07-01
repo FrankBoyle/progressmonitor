@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     loadUsers();
+    loadStudents();
 });
 
 function loadUsers() {
@@ -13,7 +14,7 @@ function loadUsers() {
 
             const approvedUsersTableContainer = document.getElementById('approved-users-table-container');
             const waitingApprovalTableContainer = document.getElementById('waiting-approval-table-container');
-            
+
             if (approvedUsersTableContainer && waitingApprovalTableContainer) {
                 approvedUsersTableContainer.innerHTML = '';
                 waitingApprovalTableContainer.innerHTML = '';
@@ -35,8 +36,8 @@ function loadUsers() {
                         editor: "list", 
                         editorParams: {
                             values: [
-                                {label: "Yes", value: "1"},
-                                {label: "No", value: "0"}
+                                {label: "Yes", value: 1},
+                                {label: "No", value: 0}
                             ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
@@ -69,8 +70,8 @@ function loadUsers() {
                         editor: "list", 
                         editorParams: {
                             values: [
-                                {label: "Yes", value: "1"},
-                                {label: "No", value: "0"}
+                                {label: "Yes", value: 1},
+                                {label: "No", value: 0}
                             ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
@@ -92,6 +93,67 @@ function loadUsers() {
 
             waitingApprovalTable.on("cellEdited", function(cell) {
                 updateUser(cell.getRow().getData());
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function loadStudents() {
+    fetch('./users/fetch_students.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error fetching students:', data.error);
+                return;
+            }
+
+            const activeStudentsTableContainer = document.getElementById('active-students-table-container');
+            const archivedStudentsTableContainer = document.getElementById('archived-students-table-container');
+
+            if (activeStudentsTableContainer && archivedStudentsTableContainer) {
+                activeStudentsTableContainer.innerHTML = '';
+                archivedStudentsTableContainer.innerHTML = '';
+            } else {
+                console.error('Table container elements not found');
+                return;
+            }
+
+            const activeStudentsData = data.filter(student => !student.archived);
+            const archivedStudentsData = data.filter(student => student.archived);
+
+            const activeStudentsTable = new Tabulator(activeStudentsTableContainer, {
+                data: activeStudentsData,
+                layout: "fitDataStretch",
+                columns: [
+                    { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
+                    { title: "Last Name", field: "last_name", editor: "input", widthGrow: 2 },
+                    { title: "Date of Birth", field: "date_of_birth", editor: "input", widthGrow: 2 },
+                    { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 },
+                    {
+                        title: "Archive", field: "student_id_new", formatter: function(cell, formatterParams, onRendered) {
+                            return '<button class="archive-btn" onclick="archiveStudent(' + cell.getValue() + ')">Archive</button>';
+                        },
+                        width: 100
+                    }
+                ],
+            });
+
+            activeStudentsTable.on("cellEdited", function(cell) {
+                updateStudent(cell.getRow().getData());
+            });
+
+            const archivedStudentsTable = new Tabulator(archivedStudentsTableContainer, {
+                data: archivedStudentsData,
+                layout: "fitDataStretch",
+                columns: [
+                    { title: "First Name", field: "first_name", widthGrow: 2 },
+                    { title: "Last Name", field: "last_name", widthGrow: 2 },
+                    { title: "Date of Birth", field: "date_of_birth", widthGrow: 2 },
+                    { title: "Grade Level", field: "grade_level", widthGrow: 2 }
+                ],
+                cellEditing: false
             });
         })
         .catch(error => {
@@ -160,6 +222,46 @@ function updateUser(userData) {
     .then(data => {
         if (!data.success) {
             console.error('Error updating user:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function archiveStudent(studentId) {
+    fetch('./users/archive_student.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ student_id_new: studentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            loadStudents();
+        } else {
+            console.error('Error archiving student:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function updateStudent(studentData) {
+    fetch('./users/update_student.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(studentData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            console.error('Error updating student:', data.message);
         }
     })
     .catch(error => {

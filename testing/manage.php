@@ -29,31 +29,38 @@ include('./users/auth_session.php');
 </head>
 <body>
 <div class="dashboard">
-    <header class="dashboard-header">
-        <div class="logo">
-            <img src="bFactor_logo.png" alt="Logo">
-        </div>
-        <div class="header-icons">
-            <a href="students.php" class="nav-link">
-                <i class="nav-icon"></i>
-                <p>Home</p>
-            </a>
-            <a href="./users/logout.php" class="nav-link">
-                <i class="nav-icon"></i>
-                <p>Sign Out</p>
-            </a>
-        </div>
-    </header>
+        <header class="dashboard-header">
+            <div class="logo">
+                <img src="bFactor_logo.png" alt="Logo">
+            </div>
+            <div class="header-icons">
+                <a href="students.php" class="nav-link">
+                    <i class="nav-icon"></i>
+                    <p>Home</p>
+                </a>
+                <a href="./users/logout.php" class="nav-link">
+                    <i class="nav-icon"></i>
+                    <p>Sign Out</p>
+                </a>
+            </div>
+        </header>
 
-    <main class="content-students">
-        <section class="box manage-section">
-            <h2>Manage Dashboard</h2>
-            <div id="approved-users-table-container"></div>
-            <h2>Users Waiting for Approval</h2>
-            <div id="waiting-approval-table-container"></div>
-        </section>
-    </main>
-</div>
+        <main class="content-students">
+            <!-- Existing Users Management Section -->
+            <section class="box manage-section">
+                <h2>Manage Users</h2>
+                <div id="approved-users-table-container"></div>
+                <div id="waiting-approval-table-container"></div>
+            </section>
+
+            <!-- New Students Management Section -->
+            <section class="box manage-section">
+                <h2>Manage Students</h2>
+                <div id="active-students-table-container"></div>
+                <div id="archived-students-table-container"></div>
+            </section>
+        </main>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
