@@ -1046,24 +1046,23 @@ input[type="text"] {
     margin: 10px 0;
 }
 
-.approve-btn.green {
+.approve-btn {
     background-color: green;
     color: white;
     border: none;
-    padding: 5px 10px;
     cursor: pointer;
-    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 5px;
 }
 
-.delete-btn.red {
+.delete-btn {
     background-color: red;
     color: white;
     border: none;
-    padding: 5px 10px;
     cursor: pointer;
-    font-size: 14px;
+    padding: 5px 10px;
 }
 
-.approve-btn.green:hover, .delete-btn.red:hover {
-    opacity: 0.8;
+button:focus {
+    outline: none;
 }

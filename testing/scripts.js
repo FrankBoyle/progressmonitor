@@ -34,12 +34,12 @@ function loadUsers() {
                     { 
                         title: "Admin?", 
                         field: "is_admin", 
-                        editor: "select", 
+                        editor: "list", 
                         editorParams: {
-                            values: {
-                                "1": "Yes",
-                                "0": "No"
-                            }
+                            values: [
+                                {label: "Yes", value: "1"},
+                                {label: "No", value: "0"}
+                            ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
@@ -70,12 +70,12 @@ function loadUsers() {
                     { 
                         title: "Is Admin", 
                         field: "is_admin", 
-                        editor: "select", 
+                        editor: "list", 
                         editorParams: {
-                            values: {
-                                "1": "Yes",
-                                "0": "No"
-                            }
+                            values: [
+                                {label: "Yes", value: "1"},
+                                {label: "No", value: "0"}
+                            ]
                         },
                         formatter: function(cell, formatterParams, onRendered) {
                             return cell.getValue() == 1 ? "Yes" : "No";
@@ -86,8 +86,10 @@ function loadUsers() {
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="approve-btn green" onclick="toggleApproval(' + cell.getValue() + ', 1)">✔️</button>' +
-                                   '<button class="delete-btn red" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
+                            return `
+                                <button class="approve-btn" onclick="toggleApproval(${cell.getValue()}, 1)" style="background-color: green; color: white;">✔️</button>
+                                <button class="delete-btn" onclick="deleteUser(${cell.getValue()})" style="background-color: red; color: white;">❌</button>
+                            `;
                         },
                         width: 150
                     }
