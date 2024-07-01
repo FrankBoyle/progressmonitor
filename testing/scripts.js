@@ -147,6 +147,7 @@ function updateUser(userData) {
     if (userData.subject_taught === "") {
         userData.subject_taught = null;
     }
+    userData.is_admin = parseInt(userData.is_admin);
 
     fetch('./users/update_staff.php', {
         method: 'POST',
