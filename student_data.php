@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 // Assuming school_id is set in the session during login
 //$schoolId = $_SESSION['school_id']; // Default to 1 if not set
 //$teacher_id = $SESSION['teacher_id'];
-$schoolId = $SESSION['school_id'];
+$schoolId = $_SESSION['school_id'];
 //$admin = $SESSION['is_admin'] == 1; // Assuming 'is_admin' is the column name
 
 // Other necessary PHP code...
@@ -148,7 +148,7 @@ $schoolId = $SESSION['school_id'];
     </div>
     <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
     <script>
-        const schoolId = <?php echo json_encode($schoolId); ?>;
+        let schoolId = <?php echo json_encode($schoolId); ?>;
     </script>
 </body>
 </html>
