@@ -1,8 +1,4 @@
 <?php
-session_start();
-echo '<pre>';
-print_r($_SESSION);
-echo '</pre>';
 include('auth_session.php');
 
 // Error Reporting
