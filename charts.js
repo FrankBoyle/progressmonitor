@@ -354,8 +354,8 @@ function initializeLineChart() {
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    barChart.render();
+    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    window.barChart.render();
 }
 
 // Extract chart data based on selected columns
