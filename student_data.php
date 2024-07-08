@@ -2,9 +2,9 @@
 session_start();
 include('auth_session.php');
 include('db.php');
-echo '<pre>';
-print_r($_SESSION);
-echo '</pre>';
+//echo '<pre>';
+//print_r($_SESSION);
+//echo '</pre>';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);

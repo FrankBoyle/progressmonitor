@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('./users/db.php');
 include('./users/auth_session.php');
 ?>

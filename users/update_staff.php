@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include('auth_session.php'); // Ensure the user is authenticated
 include('db.php'); // Include the database connection
 
