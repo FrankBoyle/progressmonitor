@@ -693,8 +693,8 @@ function createColumnCheckboxes(scoreNames) {
 }
 
 function disableChartInteractions() {
-    if (chart) {
-        chart.updateOptions({
+    if (window.lineChart) {
+        window.lineChart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
@@ -702,8 +702,8 @@ function disableChartInteractions() {
             }
         });
     }
-    if (barChart) {
-        barChart.updateOptions({
+    if (window.barChart) {
+        window.barChart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
