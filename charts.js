@@ -719,8 +719,8 @@ function disableChartInteractions() {
 }
 
 function enableChartInteractions() {
-    if (chart) {
-        chart.updateOptions({
+    if (window.lineChart) {
+        window.lineChart.updateOptions({
             chart: {
                 animations: {
                     enabled: true
@@ -728,8 +728,8 @@ function enableChartInteractions() {
             }
         });
     }
-    if (barChart) {
-        barChart.updateOptions({
+    if (window.barChart) {
+        window.barChart.updateOptions({
             chart: {
                 animations: {
                     enabled: true
