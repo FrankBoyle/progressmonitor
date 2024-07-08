@@ -348,14 +348,14 @@ function initializeCharts() {
 
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
-    chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    chart.render();
+    window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    window.lineChart.render();
 }
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    barChart.render();
+    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    window.barChart.render();
 }
 
 // Extract chart data based on selected columns
@@ -693,8 +693,8 @@ function createColumnCheckboxes(scoreNames) {
 }
 
 function disableChartInteractions() {
-    if (chart) {
-        chart.updateOptions({
+    if (window.lineChart) {
+        window.lineChart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
@@ -702,8 +702,8 @@ function disableChartInteractions() {
             }
         });
     }
-    if (barChart) {
-        barChart.updateOptions({
+    if (window.barChart) {
+        window.barChart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
@@ -719,8 +719,8 @@ function disableChartInteractions() {
 }
 
 function enableChartInteractions() {
-    if (chart) {
-        chart.updateOptions({
+    if (window.lineChart) {
+        window.lineChart.updateOptions({
             chart: {
                 animations: {
                     enabled: true
@@ -728,8 +728,8 @@ function enableChartInteractions() {
             }
         });
     }
-    if (barChart) {
-        barChart.updateOptions({
+    if (window.barChart) {
+        window.barChart.updateOptions({
             chart: {
                 animations: {
                     enabled: true
