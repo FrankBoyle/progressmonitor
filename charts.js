@@ -354,8 +354,8 @@ function initializeLineChart() {
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    window.barChart.render();
+    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    barChart.render();
 }
 
 // Extract chart data based on selected columns
@@ -419,12 +419,12 @@ function interpolateData(data) {
 
 // Update Line Chart
 function updateLineChart(categories, seriesData) {
-    if (!window.lineChart) {
+    if (!chart) {
         console.error('Line chart is not initialized');
         return;
     }
 
-    window.lineChart.updateOptions({
+    chart.updateOptions({
         xaxis: { categories },
         yaxis: {
             labels: { formatter: val => val.toFixed(0) } // Ensure whole numbers
@@ -436,10 +436,6 @@ function updateLineChart(categories, seriesData) {
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
         }
-    }).then(() => {
-        // Force a full redraw
-        window.lineChart.destroy();
-        initializeLineChart();
     });
 }
 
@@ -484,9 +480,8 @@ function updateBarChart(categories, seriesData) {
 function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
-            id: 'chartContainer',
             type: 'line',
-            height: 500,
+            height: '500',  // Make sure this is just a number or a string like '500px'
             background: '#fff',
             toolbar: {
                 show: true
@@ -496,7 +491,7 @@ function getLineChartOptions(dates, seriesData) {
                 top: 1,
                 left: 3,
                 blur: 3,
-                color: '#000',
+                color: '#000',  // Ensure this is a valid color or an array of colors
                 opacity: 0.1
             },
         },
@@ -511,7 +506,7 @@ function getLineChartOptions(dates, seriesData) {
                 if (seriesName.includes('Trendline')) {
                     return '';  // No labels on trendlines
                 }
-                return val.toFixed(0);
+                return val.toFixed(0);  // Formatting to zero decimal places
             },
             style: {
                 fontSize: '12px',
@@ -536,16 +531,16 @@ function getLineChartOptions(dates, seriesData) {
         series: seriesData,
         grid: {
             borderColor: '#a8a8a8',
-            strokeDashArray: 0,
-            position: 'back',
+            strokeDashArray: 0, // Solid lines
+            position: 'back',  // Grid lines behind the data points
             xaxis: {
                 lines: {
-                    show: true
+                    show: true  // Show vertical grid lines
                 }
             },
             yaxis: {
                 lines: {
-                    show: true
+                    show: true  // Show horizontal grid lines
                 }
             }
         },
@@ -571,7 +566,7 @@ function getLineChartOptions(dates, seriesData) {
             },
             labels: {
                 formatter: function(val) {
-                    return val.toFixed(0);
+                    return val.toFixed(0); // Ensuring labels are whole numbers
                 }
             }
         },
