@@ -354,8 +354,8 @@ function initializeLineChart() {
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    window.barChart.render();
+    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    barChart.render();
 }
 
 // Extract chart data based on selected columns
@@ -435,21 +435,6 @@ function updateLineChart(categories, seriesData) {
             curve: 'smooth',
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
-        },
-        chart: {
-            animations: {
-                enabled: true,
-                easing: 'easeinout',
-                speed: 800,
-                animateGradually: {
-                    enabled: true,
-                    delay: 150
-                },
-                dynamicAnimation: {
-                    enabled: true,
-                    speed: 350
-                }
-            }
         }
     }).then(() => {
         // Force a full redraw
