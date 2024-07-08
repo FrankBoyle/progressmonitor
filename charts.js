@@ -348,8 +348,8 @@ function initializeCharts() {
 
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
-    chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    chart.render();
+    window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    window.lineChart.render();
 }
 
 function initializeBarChart() {
@@ -693,8 +693,8 @@ function createColumnCheckboxes(scoreNames) {
 }
 
 function disableChartInteractions() {
-    if (chart) {
-        chart.updateOptions({
+    if (window.lineChart) {
+        window.lineChart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
@@ -702,8 +702,8 @@ function disableChartInteractions() {
             }
         });
     }
-    if (barChart) {
-        barChart.updateOptions({
+    if (window.barChart) {
+        window.barChart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
