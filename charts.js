@@ -348,8 +348,8 @@ function initializeCharts() {
 
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
-    window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    window.lineChart.render();
+    chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    chart.render();
 }
 
 function initializeBarChart() {
