@@ -354,8 +354,8 @@ function initializeLineChart() {
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    window.barChart.render();
+    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    barChart.render();
 }
 
 // Extract chart data based on selected columns
@@ -419,12 +419,12 @@ function interpolateData(data) {
 
 // Update Line Chart
 function updateLineChart(categories, seriesData) {
-    if (!window.lineChart) {
+    if (!chart) {
         console.error('Line chart is not initialized');
         return;
     }
 
-    window.lineChart.updateOptions({
+    chart.updateOptions({
         xaxis: { categories },
         yaxis: {
             labels: { formatter: val => val.toFixed(0) } // Ensure whole numbers
@@ -436,9 +436,6 @@ function updateLineChart(categories, seriesData) {
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
         }
-    }).then(() => {
-        // Force a full redraw
-        window.lineChart.updateSeries(seriesData);
     });
 }
 
@@ -696,8 +693,8 @@ function createColumnCheckboxes(scoreNames) {
 }
 
 function disableChartInteractions() {
-    if (window.lineChart) {
-        window.lineChart.updateOptions({
+    if (chart) {
+        chart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
@@ -705,8 +702,8 @@ function disableChartInteractions() {
             }
         });
     }
-    if (window.barChart) {
-        window.barChart.updateOptions({
+    if (barChart) {
+        barChart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
@@ -722,8 +719,8 @@ function disableChartInteractions() {
 }
 
 function enableChartInteractions() {
-    if (window.lineChart) {
-        window.lineChart.updateOptions({
+    if (chart) {
+        chart.updateOptions({
             chart: {
                 animations: {
                     enabled: true
@@ -731,8 +728,8 @@ function enableChartInteractions() {
             }
         });
     }
-    if (window.barChart) {
-        window.barChart.updateOptions({
+    if (barChart) {
+        barChart.updateOptions({
             chart: {
                 animations: {
                     enabled: true
