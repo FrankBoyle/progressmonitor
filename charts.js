@@ -483,8 +483,9 @@ function updateBarChart(categories, seriesData) {
 function getLineChartOptions(dates, seriesData) {
     return {
         chart: {
+            id: 'chartContainer',
             type: 'line',
-            height: '500',  // Make sure this is just a number or a string like '500px'
+            height: 500,
             background: '#fff',
             toolbar: {
                 show: true
@@ -494,7 +495,7 @@ function getLineChartOptions(dates, seriesData) {
                 top: 1,
                 left: 3,
                 blur: 3,
-                color: '#000',  // Ensure this is a valid color or an array of colors
+                color: '#000',
                 opacity: 0.1
             },
         },
@@ -509,7 +510,7 @@ function getLineChartOptions(dates, seriesData) {
                 if (seriesName.includes('Trendline')) {
                     return '';  // No labels on trendlines
                 }
-                return val.toFixed(0);  // Formatting to zero decimal places
+                return val.toFixed(0);
             },
             style: {
                 fontSize: '12px',
@@ -534,16 +535,16 @@ function getLineChartOptions(dates, seriesData) {
         series: seriesData,
         grid: {
             borderColor: '#a8a8a8',
-            strokeDashArray: 0, // Solid lines
-            position: 'back',  // Grid lines behind the data points
+            strokeDashArray: 0,
+            position: 'back',
             xaxis: {
                 lines: {
-                    show: true  // Show vertical grid lines
+                    show: true
                 }
             },
             yaxis: {
                 lines: {
-                    show: true  // Show horizontal grid lines
+                    show: true
                 }
             }
         },
@@ -569,7 +570,7 @@ function getLineChartOptions(dates, seriesData) {
             },
             labels: {
                 formatter: function(val) {
-                    return val.toFixed(0); // Ensuring labels are whole numbers
+                    return val.toFixed(0);
                 }
             }
         },
