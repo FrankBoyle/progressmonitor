@@ -348,14 +348,14 @@ function initializeCharts() {
 
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
-    window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    window.lineChart.render();
+    chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    chart.render();
 }
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    window.barChart.render();
+    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    barChart.render();
 }
 
 // Extract chart data based on selected columns
@@ -693,8 +693,8 @@ function createColumnCheckboxes(scoreNames) {
 }
 
 function disableChartInteractions() {
-    if (window.lineChart) {
-        window.lineChart.updateOptions({
+    if (chart) {
+        chart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
@@ -702,8 +702,8 @@ function disableChartInteractions() {
             }
         });
     }
-    if (window.barChart) {
-        window.barChart.updateOptions({
+    if (barChart) {
+        barChart.updateOptions({
             chart: {
                 animations: {
                     enabled: false
