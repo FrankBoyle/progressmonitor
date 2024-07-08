@@ -419,12 +419,12 @@ function interpolateData(data) {
 
 // Update Line Chart
 function updateLineChart(categories, seriesData) {
-    if (!chart) {
+    if (!window.lineChart) {
         console.error('Line chart is not initialized');
         return;
     }
 
-    chart.updateOptions({
+    window.lineChart.updateOptions({
         xaxis: { categories },
         yaxis: {
             labels: { formatter: val => val.toFixed(0) } // Ensure whole numbers
@@ -436,6 +436,9 @@ function updateLineChart(categories, seriesData) {
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
         }
+    }).then(() => {
+        // Force a full redraw
+        window.lineChart.updateSeries(seriesData);
     });
 }
 
