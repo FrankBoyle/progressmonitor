@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.selector-item').forEach(item => {
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
+            //console.log(`Toggled selection for ${item.getAttribute('data-section')}: ${item.classList.contains('selected')}`);
         });
     });
 });
@@ -347,14 +348,14 @@ function initializeCharts() {
 
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
-    chart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    chart.render();
+    window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
+    window.lineChart.render();
 }
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    barChart.render();
+    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    window.barChart.render();
 }
 
 // Extract chart data based on selected columns
@@ -418,12 +419,12 @@ function interpolateData(data) {
 
 // Update Line Chart
 function updateLineChart(categories, seriesData) {
-    if (!chart) {
+    if (!window.lineChart) {
         console.error('Line chart is not initialized');
         return;
     }
 
-    chart.updateOptions({
+    window.lineChart.updateOptions({
         xaxis: { categories },
         yaxis: {
             labels: { formatter: val => val.toFixed(0) } // Ensure whole numbers
@@ -435,6 +436,10 @@ function updateLineChart(categories, seriesData) {
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
         }
+    }).then(() => {
+        // Force a full redraw
+        window.lineChart.destroy();
+        initializeLineChart();
     });
 }
 
