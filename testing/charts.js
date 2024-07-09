@@ -812,6 +812,8 @@ function enableChartInteractions() {
 }
 
 function calculateTrendline(data) {
+    console.log('Data for Trendline Calculation:', data);
+    
     const validDataPoints = data
         .map((val, idx) => ({ x: idx + 1, y: val }))
         .filter(point => point.y !== null && !isNaN(point.y));
