@@ -1272,17 +1272,17 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div>${tableContent}</div>`;
+        printContents += `<div class="print-table-container">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div id="printLineChartContainer" style="width: 100%; height: auto;">${lineChartElement}</div>`;
+        printContents += `<div class="print-graph">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div id="printBarChartContainer" style="width: 100%; height: auto;">${barChartElement}</div>`;
+        printContents += `<div class="print-graph">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
@@ -1295,7 +1295,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
     const printDiv = document.createElement('div');
-    printDiv.innerHTML = printContents;
+    printDiv.innerHTML = `<div class="print-container">${printContents}</div>`;
     document.body.appendChild(printDiv);
 
     html2canvas(printDiv).then(canvas => {
