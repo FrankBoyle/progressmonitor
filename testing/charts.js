@@ -704,7 +704,7 @@ function getBarChartOptions(dates, seriesData) {
             },
             labels: {
                 formatter: function(val) {
-                    return val + "K"; // Append 'K' to the values on the x-axis
+                    return val; // No need to append 'K' dynamically, the values will match the data
                 }
             }
         },
@@ -719,7 +719,7 @@ function getBarChartOptions(dates, seriesData) {
         tooltip: {
             y: {
                 formatter: function(val) {
-                    return val + "K"; // Append 'K' to the values in the tooltip
+                    return val; // No need to append 'K' dynamically, the values will match the data
                 }
             }
         },
