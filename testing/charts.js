@@ -801,10 +801,12 @@ function enableChartInteractions() {
 }
 
 function calculateTrendline(data) {
-    const validDataPoints = data.map((val, idx) => ({ x: idx + 1, y: val })).filter(point => point.y !== null && !isNaN(point.y));
+    const validDataPoints = data
+        .map((val, idx) => ({ x: idx + 1, y: val }))
+        .filter(point => point.y !== null && !isNaN(point.y));
 
     if (validDataPoints.length === 0) {
-        return function(x) {
+        return function (x) {
             return 0;
         };
     }
