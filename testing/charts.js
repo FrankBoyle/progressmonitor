@@ -639,7 +639,7 @@ function getBarChartOptions(dates, seriesData) {
         plotOptions: {
             bar: {
                 horizontal: true, // Make the bar chart horizontal
-                columnWidth: '80%', // Increase the bar width
+                barHeight: '50%', // Increase the bar height (can be adjusted as needed)
                 dataLabels: {
                     total: {
                         enabled: true,
