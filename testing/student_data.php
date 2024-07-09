@@ -34,56 +34,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
     <style>
-        .print-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto; /* Center the container */
-        }
 
-        .print-table-container,
-        .print-graph {
-            flex: 1;
-            min-width: 45%; /* Ensure both elements have a minimum width */
-            margin: 10px; /* Adjust as needed for spacing */
-            overflow: hidden;
-        }
-
-        .print-table th, .print-table td, .print-graph th, .print-graph td {
-            padding: 8px;
-            border: 1px solid #ccc;
-            text-align: center;
-            word-wrap: break-word; /* Ensure long words are wrapped */
-        }
-
-        .statistics-table {
-            width: 48%;
-            box-sizing: border-box;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .statistics-table th, .statistics-table td {
-            padding: 8px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-
-        .report-details {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding: 0 10px;
-            box-sizing: border-box;
-        }
-
-        .report-details div {
-            flex: 1;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
