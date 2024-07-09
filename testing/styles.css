@@ -1045,3 +1045,28 @@ input[type="text"] {
     gap: 10px;
     margin: 10px 0;
 }
+
+.print-container {
+    display: flex;
+    justify-content: space-between;
+}
+.print-table, .print-graph {
+    width: 48%;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+}
+.print-table th, .print-table td, .print-graph th, .print-graph td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+.statistics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.statistics-table th, .statistics-table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+}

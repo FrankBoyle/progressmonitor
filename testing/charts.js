@@ -1302,21 +1302,25 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
 function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+    
+    printContents += `<div class="print-container">`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div>${tableContent}</div>`;
+        printContents += `<div class="print-table-container">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div id="printLineChartContainer" style="width: 100%; height: auto;">${lineChartElement}</div>`;
+        printContents += `<div class="print-graph">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div id="printBarChartContainer" style="width: 100%; height: auto;">${barChartElement}</div>`;
+        printContents += `<div class="print-graph">${barChartElement}</div>`;
     }
+
+    printContents += `</div>`;
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
@@ -1340,7 +1344,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
             document.body.innerHTML = originalContents;
             enableChartInteractions();
         });
-    }, 500);
+    }, 50);
 }
 
 function generatePrintTable(selectedColumns) {
@@ -1349,16 +1353,15 @@ function generatePrintTable(selectedColumns) {
         return "<div>No data available to display.</div>";
     }
 
-    // Create the table element
     let tableHTML = `
-        <table style="width: 100%; border-collapse: collapse; table-layout: auto; margin: 0;">
+        <table class="print-table">
             <thead>
                 <tr>
-                    <th style="padding: 8px; border: 1px solid #ccc;">Date</th>`;
+                    <th>Date</th>`;
     
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
-        tableHTML += `<th style="padding: 8px; border: 1px solid #ccc;">${columnName}</th>`;
+        tableHTML += `<th>${columnName}</th>`;
     });
     
     tableHTML += `
@@ -1369,12 +1372,12 @@ function generatePrintTable(selectedColumns) {
     tableData.forEach(row => {
         tableHTML += '<tr>';
         const dateValue = row['score_date'] !== null && row['score_date'] !== undefined ? row['score_date'] : '';
-        tableHTML += `<td style="padding: 8px; border: 1px solid #ccc;">${dateValue}</td>`;
+        tableHTML += `<td>${dateValue}</td>`;
         
         selectedColumns.forEach(column => {
             const columnField = column.getAttribute("data-column-name");
             const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
-            tableHTML += `<td style="padding: 8px; border: 1px solid #ccc;">${cellData}</td>`;
+            tableHTML += `<td>${cellData}</td>`;
         });
         
         tableHTML += '</tr>';
