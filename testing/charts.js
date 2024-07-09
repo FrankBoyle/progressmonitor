@@ -1344,37 +1344,40 @@ function generatePrintTable(selectedColumns) {
     }
 
     // Create the table element
-    let tableHTML = '<table style="width: auto; max-width: 50%; margin: 0; table-layout: auto; border-collapse: collapse;">';
-
-    // Generate table header
-    tableHTML += '<thead><tr>';
-    // Add "Date" column header first
-    tableHTML += '<th>Date</th>';
+    let tableHTML = `
+        <table style="width: 100%; border-collapse: collapse; table-layout: auto; margin: 0;">
+            <thead>
+                <tr>
+                    <th style="padding: 8px; border: 1px solid #ccc;">Date</th>`;
+    
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
-        tableHTML += `<th>${columnName}</th>`;
+        tableHTML += `<th style="padding: 8px; border: 1px solid #ccc;">${columnName}</th>`;
     });
-    tableHTML += '</tr></thead>';
-
-    // Generate table body
-    tableHTML += '<tbody>';
+    
+    tableHTML += `
+                </tr>
+            </thead>
+            <tbody>`;
+    
     tableData.forEach(row => {
         tableHTML += '<tr>';
-        // Add "Date" column data first
         const dateValue = row['score_date'] !== null && row['score_date'] !== undefined ? row['score_date'] : '';
-        tableHTML += `<td>${dateValue}</td>`;
+        tableHTML += `<td style="padding: 8px; border: 1px solid #ccc;">${dateValue}</td>`;
+        
         selectedColumns.forEach(column => {
             const columnField = column.getAttribute("data-column-name");
             const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
-            tableHTML += `<td>${cellData}</td>`;
+            tableHTML += `<td style="padding: 8px; border: 1px solid #ccc;">${cellData}</td>`;
         });
+        
         tableHTML += '</tr>';
     });
-    tableHTML += '</tbody>';
-
-    // Close the table element
-    tableHTML += '</table>';
-
+    
+    tableHTML += `
+            </tbody>
+        </table>`;
+    
     return tableHTML;
 }
 
