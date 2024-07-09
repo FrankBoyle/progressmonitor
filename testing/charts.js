@@ -349,7 +349,11 @@ function initializeCharts() {
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
     window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    window.lineChart.render();
+    window.lineChart.render().then(() => {
+        console.log('Line chart initialized');
+    }).catch((error) => {
+        console.error('Line chart initialization failed:', error);
+    });
 }
 
 function initializeBarChart() {
@@ -437,9 +441,10 @@ function updateLineChart(categories, seriesData) {
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
         }
     }).then(() => {
-        // Force a full redraw
         window.lineChart.updateSeries(seriesData);
         window.lineChart.render(); // Ensure the chart is fully rendered
+    }).catch((error) => {
+        console.error('Error updating line chart:', error);
     });
 }
 
