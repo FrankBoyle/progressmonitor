@@ -1268,41 +1268,41 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+    let printContents = <div>${selectedGoal.innerHTML}</div>;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div>${tableContent}</div>`;
+        printContents += <div class="print-table-container">${tableContent}</div>;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div id="printLineChartContainer" style="width: 100%; height: auto;">${lineChartElement}</div>`;
+        printContents += <div class="print-graph">${lineChartElement}</div>;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div id="printBarChartContainer" style="width: 100%; height: auto;">${barChartElement}</div>`;
+        printContents += <div class="print-graph">${barChartElement}</div>;
     }
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div>${statisticsContent}</div>`;
+        printContents += <div>${statisticsContent}</div>;
     }
 
     // Include reporting period and notes in the print content
-    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+    printContents += <div><strong>Reporting Period:</strong> ${reportingPeriod}</div>;
+    printContents += <div><strong>Notes:</strong> ${notes}</div>;
 
     const printDiv = document.createElement('div');
-    printDiv.innerHTML = printContents;
+    printDiv.innerHTML = <div class="print-container">${printContents}</div>;
     document.body.appendChild(printDiv);
 
     html2canvas(printDiv).then(canvas => {
         document.body.removeChild(printDiv);
         const dataUrl = canvas.toDataURL('image/png');
         const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
+        newTab.document.write(<img src="${dataUrl}" alt="Report Image"/>);
     });
 }
 
