@@ -1269,6 +1269,9 @@ function saveAndPrintReport() {
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+    
+    // Ensure print-container is created properly
+    printContents += `<div class="print-container">`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1285,8 +1288,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         printContents += `<div class="print-graph">${barChartElement}</div>`;
     }
 
-    // Ensure that print-container is created properly
-    printContents = `<div class="print-container">${printContents}</div>`;
+    printContents += `</div>`; // Close print-container
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
