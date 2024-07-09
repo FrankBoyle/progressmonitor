@@ -1059,14 +1059,11 @@ function displayGoals(goals) {
         const goalItem = document.createElement('div');
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
-            <div class="goal-text-container">
-                <div class="goal-text">${goal.goal_description}</div>
-                <button class="archive-btn">Archive</button>
-            </div>
-            <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
-                <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                <button class="btn btn-primary save-btn">Save</button>
-                <button class="btn btn-secondary cancel-btn">Cancel</button>
+            <div class="print-container">  <!-- Wrap dynamic goal text in print-container -->
+                <div class="goal-text-container">
+                    <div class="print-goal-text">${goal.goal_description}</div>
+                    <button class="archive-btn">Archive</button>
+                </div>
             </div>
         `;
 
