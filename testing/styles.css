@@ -1027,11 +1027,6 @@ input[type="text"] {
     margin-right: 20px; /* Margin between selectors and statistics */
 }
 
-.statistics-area {
-    flex: 2; /* Takes up 2 parts of the available space, giving more space to statistics */
-    /*max-width: 600px; /* Maximum width of the statistics area */
-}
-
 #printReportBtn {
     position: relative;
     top: 0;
@@ -1051,6 +1046,7 @@ input[type="text"] {
     margin: 0 auto; /* Center the container */
     padding: 20px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .print-table-container,
@@ -1095,5 +1091,7 @@ input[type="text"] {
 .report-details div {
     flex: 1;
     text-align: center;
+    word-wrap: break-word;
 }
+
 
