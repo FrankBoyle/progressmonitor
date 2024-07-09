@@ -42,16 +42,15 @@
     }
 }
 
-
-html {
-    scroll-behavior: smooth;
-}
-
 /* Basic Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 .logo img {
@@ -886,14 +885,14 @@ input[type="text"] {
         max-width: 100%; /* Ensure text does not overflow the container */
     }
 
-        /* Ensure that the main container also respects max-width */
-        .content, .dashboard {
-            width: 100%;
-            height: auto;
-            margin: 0 auto;
-            max-width: 1000px; /* Limit the width to prevent overflow */
-            padding: 0;
-        }
+    /* Ensure that the main container also respects max-width */
+    .content, .dashboard {
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        max-width: 1000px; /* Limit the width to prevent overflow */
+        padding: 0;
+    }
 
             /* Ensure the goal text container within the goal item is also constrained */
     .goal-item .goal-text-container {
@@ -905,20 +904,20 @@ input[type="text"] {
 /* Regular styles */
 .goal-text-container {
     width: 100%;
-    max-width: 100%;
-    overflow-wrap: break-word; /* Ensures long words break and wrap */
-    word-wrap: break-word; /* Ensures long words break and wrap */
-    white-space: normal; /* Ensures text wraps normally */
+    max-width: 1000px;
     padding: 10px;
-    box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    margin: 0 auto;
 }
 
 .goal-text {
-    line-height: 1.5; /* Adjust the line height for better readability */
-    overflow-wrap: break-word; /* Ensures long words break and wrap */
-    word-wrap: break-word; /* Ensures long words break and wrap */
-    white-space: normal; /* Ensures text wraps normally */
-    max-width: 100%; /* Ensure text does not overflow the container */
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 #chartContainer, #barChartContainer {
