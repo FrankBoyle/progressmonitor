@@ -897,6 +897,20 @@ input[type="text"] {
         word-wrap: break-word; /* Ensures long words break and wrap */
         white-space: normal; /* Ensures text wraps normally */
     }
+
+    .goal-text-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .goal-text {
+        line-height: 1.5;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        white-space: normal;
+    }
 }
 
 #chartContainer, #barChartContainer {
