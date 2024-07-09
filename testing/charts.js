@@ -506,7 +506,7 @@ function getLineChartOptions(dates, seriesData) {
                 show: true
             },
             animations: {
-                enabled: true,
+                enabled: false,
                 easing: 'easeinout',
                 speed: 800,
                 animateGradually: {
@@ -514,7 +514,7 @@ function getLineChartOptions(dates, seriesData) {
                     delay: 150
                 },
                 dynamicAnimation: {
-                    enabled: true,
+                    enabled: false,
                     speed: 350
                 }
             },
