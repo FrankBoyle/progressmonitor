@@ -6,6 +6,8 @@ let customColumnNames = {}; // This will store the custom names
 let metadataId; // Global metadataId
 let studentIdNew; // Global studentIdNew
 let performanceData = [];
+let globalSlope = 0;
+let globalIntercept = 0;
 
 // Define series colors
 const seriesColors = [
@@ -819,13 +821,13 @@ function calculateTrendline(data) {
     const sumXY = validDataPoints.reduce((acc, point) => acc + point.x * point.y, 0);
     const sumXX = validDataPoints.reduce((acc, point) => acc + point.x * point.x, 0);
 
-    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-    const intercept = (sumY - slope * sumX) / n;
+    globalSlope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    globalIntercept = (sumY - globalSlope * sumX) / n;
 
-    console.log('Slope:', slope, 'Intercept:', intercept);
+    console.log('Slope:', globalSlope, 'Intercept:', globalIntercept);
 
     return function (x) {
-        return parseFloat((slope * x + intercept).toFixed(2)); // Round to 2 decimal places
+        return parseFloat((globalSlope * x + globalIntercept).toFixed(2)); // Round to 2 decimal places
     };
 }
 
