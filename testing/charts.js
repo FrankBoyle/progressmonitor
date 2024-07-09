@@ -1045,7 +1045,7 @@ function fetchGoals(studentIdNew, metadataId) {
 
 function displayGoals(goals) {
     const goalsContainer = document.getElementById('goals-container');
-    goalsContainer.innerHTML = '';
+    goalsContainer.innerHTML = ''; // Clear existing goals
 
     goals.forEach(goal => {
         if (!goal.goal_id || !goal.goal_description) {
@@ -1057,10 +1057,12 @@ function displayGoals(goals) {
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
             <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
-                <div class="goal-text">${goal.goal_description}</div>
+                <div class="goal-text-container">
+                    <div class="goal-text">${goal.goal_description}</div>
+                </div>
                 <button class="archive-btn">Archive</button>
             </div>
-            <div class="goal-edit" id="goal-edit-${goal.goal_id}">
+            <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
                 <div id="editor-${goal.goal_id}" class="quill-editor"></div>
                 <button class="btn btn-primary save-btn">Save</button>
                 <button class="btn btn-secondary cancel-btn">Cancel</button>
@@ -1082,13 +1084,14 @@ function displayGoals(goals) {
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                     [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
                     ['link', 'image', 'video'],
-                    ['clean']
+                    ['clean']  
                 ]
             }
         });
 
-        quill.root.innerHTML = goal.goal_description;
+        quill.root.innerHTML = goal.goal_description; // Load the goal content
 
+        // Set up button actions
         goalItem.querySelector('.archive-btn').addEventListener('click', () => {
             archiveGoal(goal.goal_id, goalItem);
         });
@@ -1105,7 +1108,7 @@ function displayGoals(goals) {
             document.getElementById(`goal-edit-${goal.goal_id}`).style.display = 'none';
         });
 
-        window[`quillEditor${goal.goal_id}`] = quill;
+        window[`quillEditor${goal.goal_id}`] = quill; // Save the editor instance to a global variable for later use
     });
 }
 
