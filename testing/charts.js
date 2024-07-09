@@ -1267,7 +1267,7 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+    let printContents = `<div class="print-container"><div class="print-goal-text">${selectedGoal.innerHTML}</div></div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1296,14 +1296,6 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     const printDiv = document.createElement('div');
     printDiv.innerHTML = printContents;
     document.body.appendChild(printDiv);
-
-    // Add console logging to check the width of each element
-    const printTableContainer = printDiv.querySelector('.print-table-container');
-    const printGraphContainer = printDiv.querySelector('.print-graph');
-    const statisticsArea = printDiv.querySelector('.statistics-area');
-    console.log('Print Table Container Width:', printTableContainer ? printTableContainer.offsetWidth : 'Not found');
-    console.log('Print Graph Container Width:', printGraphContainer ? printGraphContainer.offsetWidth : 'Not found');
-    console.log('Statistics Area Width:', statisticsArea ? statisticsArea.offsetWidth : 'Not found');
 
     html2canvas(printDiv).then(canvas => {
         document.body.removeChild(printDiv);
