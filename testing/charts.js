@@ -1191,9 +1191,12 @@ function archiveGoal(goalId, goalItem) {
 
 // Function to check if a column is numeric and not "Notes"
 function isNumericColumn(columnName) {
-    const nonNumericColumns = ['score10']; // Adjust based on your actual non-numeric column names
-    return !nonNumericColumns.includes(columnName);
+    const nonNumericColumns = ['score10']; // Add specific column names here
+    const isNumeric = !nonNumericColumns.includes(columnName);
+    console.log(`Checking if column is numeric - Column: ${columnName}, Is Numeric: ${isNumeric}`);
+    return isNumeric;
 }
+
 
 // Function to get selected columns excluding non-numeric ones
 function getSelectedColumns() {
