@@ -1248,8 +1248,8 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Proceed to print the report
-            printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
+            // Proceed to generate the report
+            generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
         } else {
             console.error('Error saving notes:', data.message);
             alert('Failed to save notes: ' + data.message);
@@ -1258,6 +1258,45 @@ function saveAndPrintReport() {
     .catch(error => {
         console.error('Error:', error);
         alert('An error occurred while saving notes.');
+    });
+}
+
+function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+
+    if (selectedSections.includes('printTable')) {
+        const tableContent = generatePrintTable(selectedColumns);
+        printContents += `<div>${tableContent}</div>`;
+    }
+
+    if (selectedSections.includes('printLineChart')) {
+        const lineChartElement = document.getElementById('chartContainer').outerHTML;
+        printContents += `<div id="printLineChartContainer" style="width: 100%; height: auto;">${lineChartElement}</div>`;
+    }
+
+    if (selectedSections.includes('printBarChart')) {
+        const barChartElement = document.getElementById('barChartContainer').outerHTML;
+        printContents += `<div id="printBarChartContainer" style="width: 100%; height: auto;">${barChartElement}</div>`;
+    }
+
+    if (selectedSections.includes('printStatistics')) {
+        const statisticsContent = document.getElementById('statistics').innerHTML;
+        printContents += `<div>${statisticsContent}</div>`;
+    }
+
+    // Include reporting period and notes in the print content
+    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
+    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+
+    const printDiv = document.createElement('div');
+    printDiv.innerHTML = printContents;
+    document.body.appendChild(printDiv);
+
+    html2canvas(printDiv).then(canvas => {
+        document.body.removeChild(printDiv);
+        const dataUrl = canvas.toDataURL('image/png');
+        const newTab = window.open();
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
     });
 }
 
