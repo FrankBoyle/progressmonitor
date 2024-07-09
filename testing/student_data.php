@@ -84,28 +84,28 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
                     <div id="columnSelector" class="checkbox-container"></div>
                 </div>
-                    <div class="print-container">
-                        <div class="print-table-container" id="printTableContainer"></div>
-                        <div class="print-graph" id="printGraphContainer"></div>
+                <div class="print-container">
+                    <div class="print-table-container" id="printTableContainer"></div>
+                    <div class="print-graph" id="printGraphContainer"></div>
+                    <div id="statistics" class="statistics-area">
+                        <h3>Statistical Summary</h3>
+                        <table id="statsTable" class="statistics-table">
+                            <thead>
+                                <tr>
+                                    <th>Variable</th>
+                                    <th>Mean</th>
+                                    <th>Median</th>
+                                    <th>Standard Deviation</th>
+                                    <th>Trendline Equation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Empty initially -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                <div id="statistics" class="statistics-area">
-                    <h3>Statistical Summary</h3>
-                    <table id="statsTable" class="statistics-table">
-                        <thead>
-                            <tr>
-                                <th>Variable</th>
-                                <th>Mean</th>
-                                <th>Median</th>
-                                <th>Standard Deviation</th>
-                                <th>Trendline Equation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Empty initially -->
-                        </tbody>
-                    </table>
-                </div>
-                </div>
 
             </div>
             <div class="card chart-card">

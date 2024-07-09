@@ -1012,7 +1012,7 @@ input[type="text"] {
 }
 
 #statsTable td {
-    white-space: nowrap; /* Prevents wrapping and increases readability */
+    white-space: wrap; /* Prevents wrapping and increases readability */
 }
 
 .card.chart-card {
@@ -1045,19 +1045,17 @@ input[type="text"] {
 }
 
 .print-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     max-width: 1000px;
-    margin: 0 auto; /* Center the container */
-    padding: 20px;
-    box-sizing: border-box;
-    overflow: hidden;
+    margin: 0 auto;
 }
 
 .print-table-container,
 .print-graph {
-    width: 100%;
-    margin: 10px 0; /* Adjust as needed for spacing */
-    overflow: hidden;
-    box-sizing: border-box;
+    flex: 1 1 100%;
+    margin: 10px 0;
 }
 
 .print-table th, .print-table td, .print-graph th, .print-graph td {
@@ -1071,7 +1069,7 @@ input[type="text"] {
     width: 100%;
     box-sizing: border-box;
     border-collapse: collapse;
-    table-layout: fixed; /* Ensure table respects width constraints */
+    margin-top: 20px;
 }
 
 .statistics-table th, .statistics-table td {
@@ -1079,6 +1077,12 @@ input[type="text"] {
     border: 1px solid #ccc;
     text-align: center;
     word-wrap: break-word; /* Ensure long words are wrapped */
+}
+
+.statistics-area {
+    flex: 1 1 100%;
+    max-width: 1000px;
+    margin: 10px 0;
 }
 
 .report-details {
