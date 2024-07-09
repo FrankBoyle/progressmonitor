@@ -364,22 +364,22 @@ function initializeBarChart() {
 function extractChartData() {
     try {
         const data = table.getData();
-        console.log('Table Data:', data);
+        //console.log('Table Data:', data);
         const categories = data.map(row => row['score_date']);
-        console.log('Categories:', categories);
+        //console.log('Categories:', categories);
 
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => ({
                 field: item.getAttribute("data-column-name"),
                 name: item.textContent.trim()  // Use textContent of the item as the series name
             }));
-        console.log('Selected Columns:', selectedColumns);
+        //console.log('Selected Columns:', selectedColumns);
 
         const series = selectedColumns.map(column => {
             let rawData = data.map(row => row[column.field]);
-            console.log(`Raw Data for ${column.name}:`, rawData);
+            //console.log(`Raw Data for ${column.name}:`, rawData);
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
-            console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
+            //console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
             return {
                 name: column.name,  // Using the custom name for the series
                 data: interpolatedData,
@@ -389,8 +389,8 @@ function extractChartData() {
 
         const trendlineSeries = series.map(seriesData => {
             const { trendlineData, slope, intercept } = getTrendlineData(seriesData.data);
-            console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
-            console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
+            //console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
+            //console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
             return {
                 name: `${seriesData.name} Trendline`,
                 data: trendlineData,
@@ -818,7 +818,7 @@ function enableChartInteractions() {
 }
 
 function calculateTrendline(data) {
-    console.log('Data for Trendline Calculation:', data);
+    //console.log('Data for Trendline Calculation:', data);
     
     const validDataPoints = data
         .map((val, idx) => ({ x: idx + 1, y: val }))
@@ -843,7 +843,7 @@ function calculateTrendline(data) {
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    console.log('Slope:', slope, 'Intercept:', intercept);
+    //console.log('Slope:', slope, 'Intercept:', intercept);
 
     const trendlineFunction = function (x) {
         return parseFloat((slope * x + intercept).toFixed(2)); // Round to 2 decimal places
