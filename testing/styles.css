@@ -1069,7 +1069,7 @@ input[type="text"] {
 }
 
 .statistics-table {
-    width: 48%;
+    width: 75%;
     box-sizing: border-box;
     border-collapse: collapse;
     margin-top: 20px;
