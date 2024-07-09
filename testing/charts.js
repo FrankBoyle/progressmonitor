@@ -1272,17 +1272,17 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container">${tableContent}</div>`;
+        printContents += `<div>${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph">${lineChartElement}</div>`;
+        printContents += `<div id="printLineChartContainer" style="width: 100%; height: auto;">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph">${barChartElement}</div>`;
+        printContents += `<div id="printBarChartContainer" style="width: 100%; height: auto;">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
@@ -1295,7 +1295,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
     const printDiv = document.createElement('div');
-    printDiv.innerHTML = `<div class="print-container">${printContents}</div>`;
+    printDiv.innerHTML = printContents;
     document.body.appendChild(printDiv);
 
     html2canvas(printDiv).then(canvas => {
@@ -1354,47 +1354,67 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
 }
 
 // Function to generate the print table
-function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
-
-    if (selectedSections.includes('printTable')) {
-        const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container">${tableContent}</div>`;
+function generatePrintTable(selectedColumns) {
+    const tableData = table.getData();
+    if (!tableData || tableData.length === 0) {
+        return "<div>No data available to display.</div>";
     }
 
-    if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph">${lineChartElement}</div>`;
-    }
+    const excludeColumns = ['Performance Table', 'Line Chart', 'Bar Chart', 'Statistics'];
 
-    if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph">${barChartElement}</div>`;
-    }
-
-    if (selectedSections.includes('printStatistics')) {
-        const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics-table">${statisticsContent}</div>`;
-    }
-
-    // Include reporting period and notes in the print content
-    printContents += `
-        <div class="report-details">
-            <div><strong>Reporting Period:</strong> ${reportingPeriod}</div>
-            <div><strong>Notes:</strong> ${notes}</div>
-        </div>
-    `;
-
-    const printDiv = document.createElement('div');
-    printDiv.innerHTML = `<div class="print-container">${printContents}</div>`;
-    document.body.appendChild(printDiv);
-
-    html2canvas(printDiv).then(canvas => {
-        document.body.removeChild(printDiv);
-        const dataUrl = canvas.toDataURL('image/png');
-        const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
+    let tableHTML = `
+        <table class="print-table">
+            <thead>
+                <tr>
+                    <th>Date</th>`;
+    
+    // Add all columns including non-numeric ones for printing
+    selectedColumns.forEach(column => {
+        const columnName = column.textContent.trim();
+        if (!excludeColumns.includes(columnName)) {
+            let splitColumnName = columnName.split('/').join('<br>'); // Splitting at "/" and joining with a line break
+            tableHTML += `<th>${splitColumnName}</th>`;
+        }
     });
+
+    // Ensure Notes column is included in the printed table
+    if (!selectedColumns.some(col => col.getAttribute("data-column-name") === 'score10')) {
+        tableHTML += `<th>Notes</th>`;
+    }
+
+    tableHTML += `
+                </tr>
+            </thead>
+            <tbody>`;
+    
+    tableData.forEach(row => {
+        tableHTML += '<tr>';
+        const dateValue = row['score_date'] !== null && row['score_date'] !== undefined ? row['score_date'] : '';
+        tableHTML += `<td>${dateValue}</td>`;
+        
+        selectedColumns.forEach(column => {
+            const columnField = column.getAttribute("data-column-name");
+            const columnName = column.textContent.trim();
+            if (!excludeColumns.includes(columnName)) {
+                const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
+                tableHTML += `<td>${cellData}</td>`;
+            }
+        });
+
+        // Add Notes column data to the printed table
+        if (!selectedColumns.some(col => col.getAttribute("data-column-name") === 'score10')) {
+            const notesData = row['score10'] !== null && row['score10'] !== undefined ? row['score10'] : '';
+            tableHTML += `<td>${notesData}</td>`;
+        }
+
+        tableHTML += '</tr>';
+    });
+    
+    tableHTML += `
+            </tbody>
+        </table>`;
+    
+    return tableHTML;
 }
 
 // Function to show the print dialog modal
