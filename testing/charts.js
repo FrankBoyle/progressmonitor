@@ -1270,9 +1270,7 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div class="print-container"><div>${selectedGoal.innerHTML}</div>`;
-
-    printContents += `<div class="print-container">`;
+    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1289,19 +1287,26 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         printContents += `<div class="print-graph">${barChartElement}</div>`;
     }
 
-    printContents += `</div></div>`;
-
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div>${statisticsContent}</div>`;
+        printContents += `<div class="statistics-area">${statisticsContent}</div>`;
     }
 
     // Include reporting period and notes in the print content
-    printContents += `<div class="report-details"><div><strong>Reporting Period:</strong> ${reportingPeriod}</div><div><strong>Notes:</strong> ${notes}</div></div>`;
+    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
+    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
     const printDiv = document.createElement('div');
     printDiv.innerHTML = printContents;
     document.body.appendChild(printDiv);
+
+    // Add console logging to check the width of each element
+    const printTableContainer = printDiv.querySelector('.print-table-container');
+    const printGraphContainer = printDiv.querySelector('.print-graph');
+    const statisticsArea = printDiv.querySelector('.statistics-area');
+    console.log('Print Table Container Width:', printTableContainer ? printTableContainer.offsetWidth : 'Not found');
+    console.log('Print Graph Container Width:', printGraphContainer ? printGraphContainer.offsetWidth : 'Not found');
+    console.log('Statistics Area Width:', statisticsArea ? statisticsArea.offsetWidth : 'Not found');
 
     html2canvas(printDiv).then(canvas => {
         document.body.removeChild(printDiv);
