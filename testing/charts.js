@@ -1059,7 +1059,7 @@ function displayGoals(goals) {
         const goalItem = document.createElement('div');
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
-            <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
+            <div class="goal-text-container">
                 <div class="goal-text">${goal.goal_description}</div>
                 <button class="archive-btn">Archive</button>
             </div>
@@ -1111,14 +1111,6 @@ function displayGoals(goals) {
 
         window[`quillEditor${goal.goal_id}`] = quill; // Save the editor instance to a global variable for later use
     });
-
-    // Log the widths
-    setTimeout(() => {
-        console.log('Goals Container Width:', goalsContainer.offsetWidth);
-        document.querySelectorAll('.goal-item').forEach(item => {
-            console.log('Goal Item Width:', item.offsetWidth);
-        });
-    }, 100); // Delay to ensure elements are rendered
 }
 
 function initializeQuillEditor(goalId, content) {
