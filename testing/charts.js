@@ -1287,12 +1287,16 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div>${statisticsContent}</div>`;
+        printContents += `<div class="statistics-table">${statisticsContent}</div>`;
     }
 
     // Include reporting period and notes in the print content
-    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+    printContents += `
+        <div class="report-details">
+            <div><strong>Reporting Period:</strong> ${reportingPeriod}</div>
+            <div><strong>Notes:</strong> ${notes}</div>
+        </div>
+    `;
 
     const printDiv = document.createElement('div');
     printDiv.innerHTML = `<div class="print-container">${printContents}</div>`;

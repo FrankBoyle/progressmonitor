@@ -1050,6 +1050,7 @@ input[type="text"] {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    width: 100%;
 }
 
 .print-table-container,
@@ -1077,5 +1078,19 @@ input[type="text"] {
 .statistics-table th, .statistics-table td {
     padding: 8px;
     border: 1px solid #ccc;
+    text-align: center;
+}
+
+.report-details {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.report-details div {
+    flex: 1;
     text-align: center;
 }
