@@ -1028,8 +1028,7 @@ input[type="text"] {
 }
 
 .statistics-area {
-    flex: 2; /* Takes up 2 parts of the available space, giving more space to statistics */
-    max-width: 600px; /* Maximum width of the statistics area */
+    flex: 1; /* Takes up 2 parts of the available space, giving more space to statistics */
 }
 
 #printReportBtn {
