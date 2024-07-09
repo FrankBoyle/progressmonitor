@@ -161,4 +161,3 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </script>
 </body>
 </html>
-
