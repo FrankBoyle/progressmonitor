@@ -1406,10 +1406,8 @@ function generatePrintTable(selectedColumns) {
         });
 
         // Add Notes column data to the printed table
-        if (!selectedColumns.some(col => col.getAttribute("data-column-name") === 'score10')) {
-            const notesData = row['score10'] !== null && row['score10'] !== undefined ? row['score10'] : '';
-            tableHTML += `<td>${notesData}</td>`;
-        }
+        const notesData = row['score10'] !== null && row['score10'] !== undefined ? row['score10'] : '';
+        tableHTML += `<td>${notesData}</td>`;
 
         tableHTML += '</tr>';
     });
