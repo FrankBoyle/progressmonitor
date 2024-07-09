@@ -34,7 +34,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
     <style>
-
+        /* Include the updated CSS here */
     </style>
 </head>
 <body>
@@ -144,7 +144,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <button onclick="saveAndPrintReport()">Print</button>
                 </div>
             </div>
-
         </main>
     </div>
     <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
