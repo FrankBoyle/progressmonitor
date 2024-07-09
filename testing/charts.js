@@ -1248,8 +1248,8 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Proceed to print the report
-            printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
+            // Proceed to generate the report
+            generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
         } else {
             console.error('Error saving notes:', data.message);
             alert('Failed to save notes: ' + data.message);
@@ -1301,12 +1301,8 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 }
 
 function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = '';
-
-    if (selectedGoal) {
-        printContents += `<div>${selectedGoal.innerHTML}</div>`;
-    }
-
+    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+    
     printContents += `<div class="print-container">`;
 
     if (selectedSections.includes('printTable')) {
@@ -1315,26 +1311,20 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     }
 
     if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer');
-        if (lineChartElement) {
-            printContents += `<div class="print-graph">${lineChartElement.outerHTML}</div>`;
-        }
+        const lineChartElement = document.getElementById('chartContainer').outerHTML;
+        printContents += `<div class="print-graph">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer');
-        if (barChartElement) {
-            printContents += `<div class="print-graph">${barChartElement.outerHTML}</div>`;
-        }
+        const barChartElement = document.getElementById('barChartContainer').outerHTML;
+        printContents += `<div class="print-graph">${barChartElement}</div>`;
     }
 
     printContents += `</div>`;
 
     if (selectedSections.includes('printStatistics')) {
-        const statisticsContent = document.getElementById('statistics');
-        if (statisticsContent) {
-            printContents += `<div class="statistics-container">${statisticsContent.innerHTML}</div>`;
-        }
+        const statisticsContent = document.getElementById('statistics').innerHTML;
+        printContents += `<div>${statisticsContent}</div>`;
     }
 
     // Include reporting period and notes in the print content
@@ -1353,13 +1343,8 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
 
             document.body.innerHTML = originalContents;
             enableChartInteractions();
-        }).catch(error => {
-            console.error('Error generating report image:', error);
-            alert('An error occurred while generating the report image.');
-            document.body.innerHTML = originalContents;
-            enableChartInteractions();
         });
-    }, 500);
+    }, 50);
 }
 
 function generatePrintTable(selectedColumns) {
@@ -1368,38 +1353,40 @@ function generatePrintTable(selectedColumns) {
         return "<div>No data available to display.</div>";
     }
 
-    // Create the table element
-    let tableHTML = '<table style="width: auto; max-width: 50%; margin: 0; table-layout: auto; border-collapse: collapse;">';
-
-    // Generate table header
-    tableHTML += '<thead><tr>';
-    // Add "Date" column header first
-    tableHTML += '<th>Date</th>';
+    let tableHTML = `
+        <table class="print-table">
+            <thead>
+                <tr>
+                    <th>Date</th>`;
+    
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
         tableHTML += `<th>${columnName}</th>`;
     });
-    tableHTML += '</tr></thead>';
-
-    // Generate table body
-    tableHTML += '<tbody>';
+    
+    tableHTML += `
+                </tr>
+            </thead>
+            <tbody>`;
+    
     tableData.forEach(row => {
         tableHTML += '<tr>';
-        // Add "Date" column data first
         const dateValue = row['score_date'] !== null && row['score_date'] !== undefined ? row['score_date'] : '';
         tableHTML += `<td>${dateValue}</td>`;
+        
         selectedColumns.forEach(column => {
             const columnField = column.getAttribute("data-column-name");
             const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
             tableHTML += `<td>${cellData}</td>`;
         });
+        
         tableHTML += '</tr>';
     });
-    tableHTML += '</tbody>';
-
-    // Close the table element
-    tableHTML += '</table>';
-
+    
+    tableHTML += `
+            </tbody>
+        </table>`;
+    
     return tableHTML;
 }
 
