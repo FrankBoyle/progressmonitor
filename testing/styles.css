@@ -1029,7 +1029,6 @@ input[type="text"] {
 }
 
 .goal-text {
-    font-size: 14px; /* Adjust the font size as needed */
     line-height: 1.5; /* Adjust the line height for better readability */
     overflow-wrap: break-word; /* Ensures long words break and wrap */
     word-wrap: break-word; /* Ensures long words break and wrap */
@@ -1065,21 +1064,22 @@ input[type="text"] {
     margin: 10px 0;
 }
 
-.print-container {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-}
+@media print {
+    .print-container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
 
-.print-goal-text {
-    line-height: 1.5; /* Adjust the line height for better readability */
-    overflow-wrap: break-word; /* Ensures long words break and wrap */
-    word-wrap: break-word; /* Ensures long words break and wrap */
-    white-space: normal; /* Ensures text wraps normally */
+    .print-goal-text {
+        line-height: 1.5; /* Adjust the line height for better readability */
+        overflow-wrap: break-word; /* Ensures long words break and wrap */
+        word-wrap: break-word; /* Ensures long words break and wrap */
+        white-space: normal; /* Ensures text wraps normally */
+    }
 }
-
 .print-table-container,
 .print-graph,
 .statistics-area {

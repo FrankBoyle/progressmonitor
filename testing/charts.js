@@ -1032,11 +1032,8 @@ function fetchGoals(studentIdNew, metadataId) {
     fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            //console.log('Goals data fetched:', data);
             if (data && Array.isArray(data)) {
-                // Filter goals by metadata_id before displaying
                 displayGoals(data.filter(goal => goal.metadata_id == metadataId));
-                populateGoalSelectionModal(data);
             } else {
                 console.error('Invalid or incomplete goals data:', data);
             }
@@ -1048,7 +1045,7 @@ function fetchGoals(studentIdNew, metadataId) {
 
 function displayGoals(goals) {
     const goalsContainer = document.getElementById('goals-container');
-    goalsContainer.innerHTML = ''; // Clear existing goals
+    goalsContainer.innerHTML = '';
 
     goals.forEach(goal => {
         if (!goal.goal_id || !goal.goal_description) {
@@ -1059,22 +1056,19 @@ function displayGoals(goals) {
         const goalItem = document.createElement('div');
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
-            <div class="print-container">
-                <div class="goal-text-container">
-                    <div class="print-goal-text" id="goal-content-${goal.goal_id}">${goal.goal_description}</div>
-                    <button class="archive-btn">Archive</button>
-                </div>
-                <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
-                    <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                    <button class="btn btn-primary save-btn">Save</button>
-                    <button class="btn btn-secondary cancel-btn">Cancel</button>
-                </div>
+            <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
+                <div class="goal-text">${goal.goal_description}</div>
+                <button class="archive-btn">Archive</button>
+            </div>
+            <div class="goal-edit" id="goal-edit-${goal.goal_id}">
+                <div id="editor-${goal.goal_id}" class="quill-editor"></div>
+                <button class="btn btn-primary save-btn">Save</button>
+                <button class="btn btn-secondary cancel-btn">Cancel</button>
             </div>
         `;
 
         goalsContainer.appendChild(goalItem);
 
-        // Initialize Quill editor after the element is added to the DOM
         const quill = new Quill(`#editor-${goal.goal_id}`, {
             theme: 'snow',
             modules: {
@@ -1088,14 +1082,13 @@ function displayGoals(goals) {
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                     [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
                     ['link', 'image', 'video'],
-                    ['clean']  
+                    ['clean']
                 ]
             }
         });
 
-        quill.root.innerHTML = goal.goal_description; // Load the goal content
+        quill.root.innerHTML = goal.goal_description;
 
-        // Set up button actions
         goalItem.querySelector('.archive-btn').addEventListener('click', () => {
             archiveGoal(goal.goal_id, goalItem);
         });
@@ -1112,7 +1105,7 @@ function displayGoals(goals) {
             document.getElementById(`goal-edit-${goal.goal_id}`).style.display = 'none';
         });
 
-        window[`quillEditor${goal.goal_id}`] = quill; // Save the editor instance to a global variable for later use
+        window[`quillEditor${goal.goal_id}`] = quill;
     });
 }
 
