@@ -1372,7 +1372,8 @@ function generatePrintTable(selectedColumns) {
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
         if (!excludeColumns.includes(columnName)) {
-            tableHTML += `<th>${columnName}</th>`;
+            let splitColumnName = columnName.split('/').join('<br>'); // Splitting at "/" and joining with a line break
+            tableHTML += `<th>${splitColumnName}</th>`;
         }
     });
 
