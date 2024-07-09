@@ -483,9 +483,10 @@ function updateBarChart(categories, seriesData) {
         series: seriesData,
         colors: seriesData.map(s => s.color) // Ensure colors are correctly applied
     }).then(() => {
-        // Force a full redraw
         window.barChart.updateSeries(seriesData);
         window.barChart.render(); // Ensure the chart is fully rendered
+    }).catch((error) => {
+        console.error('Error updating bar chart:', error);
     });
 }
 
