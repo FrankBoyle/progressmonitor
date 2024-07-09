@@ -358,6 +358,7 @@ function initializeBarChart() {
     barChart.render();
 }
 
+
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
@@ -614,11 +615,25 @@ function getLineChartOptions(dates, seriesData) {
 function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
+            id: 'barChartContainer',
             type: 'bar',
             height: '500',
             background: '#fff',
             toolbar: {
                 show: true
+            },
+            animations: {
+                enabled: false, // Disable animations
+                easing: 'easeinout',
+                speed: 800,
+                animateGradually: {
+                    enabled: false,
+                    delay: 150
+                },
+                dynamicAnimation: {
+                    enabled: false,
+                    speed: 350
+                }
             },
             stacked: true
         },
