@@ -1066,8 +1066,8 @@ input[type="text"] {
 }
 
 .print-container {
-    width: 100%;
-    max-width: 1000px; /* Limit the width to 1000px */
+    /*width: 100%;
+    max-width: 1000px;  Limit the width to 1000px */
     margin: 0 auto; /* Center the container */
     padding: 20px; /* Add some padding if needed */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
