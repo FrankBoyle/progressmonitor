@@ -1060,3 +1060,22 @@ input[type="text"] {
     overflow: hidden;
 }
 
+.print-table th, .print-table td, .print-graph th, .print-graph td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    word-wrap: break-word; /* Ensure long words are wrapped */
+}
+
+.statistics-table {
+    width: 48%;
+    box-sizing: border-box;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.statistics-table th, .statistics-table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
