@@ -995,15 +995,6 @@ input[type="text"] {
     margin: 0 auto;
 }
 
-.goal-text {
-    white-space: normal; /* Allow text to wrap */
-    overflow-wrap: break-word; /* Break long words */
-    word-break: break-all; /* Ensure long words are wrapped */
-    max-width: 1000px; /* Set max-width to fit within the container */
-    margin: 0 auto;
-    padding: 10px;
-}
-
 #statsTable {
     width: 100%;
     max-width: 1000px;
