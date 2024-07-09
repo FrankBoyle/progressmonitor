@@ -439,6 +439,7 @@ function updateLineChart(categories, seriesData) {
     }).then(() => {
         // Force a full redraw
         window.lineChart.updateSeries(seriesData);
+        window.lineChart.render(); // Ensure the chart is fully rendered
     });
 }
 
