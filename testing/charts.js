@@ -358,7 +358,6 @@ function initializeBarChart() {
     barChart.render();
 }
 
-
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
@@ -639,15 +638,25 @@ function getBarChartOptions(dates, seriesData) {
         },
         plotOptions: {
             bar: {
-                horizontal: false,
+                horizontal: true, // Make the bar chart horizontal
                 columnWidth: '80%', // Increase the bar width
-            },
+                dataLabels: {
+                    total: {
+                        enabled: true,
+                        offsetX: 0,
+                        style: {
+                            fontSize: '13px',
+                            fontWeight: 900
+                        }
+                    }
+                }
+            }
         },
         colors: seriesColors,
         dataLabels: {
             enabled: true,
             enabledOnSeries: undefined, // Show dataLabels on all series
-            formatter: function (val, opts) {
+            formatter: function(val, opts) {
                 return val; // Keep the label text the same as the data value
             },
             textAnchor: 'middle',
@@ -683,25 +692,25 @@ function getBarChartOptions(dates, seriesData) {
         },
         stroke: {
             show: true,
-            width: 2,
-            colors: ['transparent']
+            width: 1,
+            colors: ['#fff'] // Add white stroke between bars
         },
         series: seriesData,
         xaxis: {
             categories: dates,
             title: {
-                text: 'Date',
+                text: 'Value',
                 offsetY: -10 // Move the axis title closer to the dates
+            },
+            labels: {
+                formatter: function(val) {
+                    return val + "K"; // Append 'K' to the values on the x-axis
+                }
             }
         },
         yaxis: {
             title: {
-                text: 'Value'
-            },
-            labels: {
-                formatter: function (val) {
-                    return val.toFixed(0);
-                }
+                text: undefined
             }
         },
         fill: {
@@ -709,15 +718,15 @@ function getBarChartOptions(dates, seriesData) {
         },
         tooltip: {
             y: {
-                formatter: function (val) {
-                    return val;
+                formatter: function(val) {
+                    return val + "K"; // Append 'K' to the values in the tooltip
                 }
             }
         },
         legend: {
-            position: 'bottom',
-            horizontalAlign: 'center',
-            showForSingleSeries: true // Always show the legend, even for a single series
+            position: 'top',
+            horizontalAlign: 'left',
+            offsetX: 40
         }
     };
 }
