@@ -361,7 +361,7 @@ function initializeBarChart() {
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
-        //console.log("Extracting chart data...");
+        console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
 
@@ -393,7 +393,7 @@ function extractChartData() {
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
 
-        //console.log("Charts updated successfully.");
+        console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
@@ -451,7 +451,7 @@ function prepareChartData(rawData) {
 
 // Update Bar Chart
 function updateBarChart(categories, seriesData) {
-    if (!barChart) {
+    if (!window.barChart) {
         console.error('Bar chart is not initialized');
         return;
     }
@@ -466,7 +466,7 @@ function updateBarChart(categories, seriesData) {
     });
     const maxDataValue = Math.max(...maxStackHeight);
 
-    barChart.updateOptions({
+    window.barChart.updateOptions({
         xaxis: {
             categories: categories
         },
