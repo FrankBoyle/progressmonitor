@@ -1301,8 +1301,12 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 }
 
 function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
-    
+    let printContents = '';
+
+    if (selectedGoal) {
+        printContents += `<div>${selectedGoal.innerHTML}</div>`;
+    }
+
     printContents += `<div class="print-container">`;
 
     if (selectedSections.includes('printTable')) {
@@ -1311,20 +1315,26 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     }
 
     if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph">${lineChartElement}</div>`;
+        const lineChartElement = document.getElementById('chartContainer');
+        if (lineChartElement) {
+            printContents += `<div class="print-graph">${lineChartElement.outerHTML}</div>`;
+        }
     }
 
     if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph">${barChartElement}</div>`;
+        const barChartElement = document.getElementById('barChartContainer');
+        if (barChartElement) {
+            printContents += `<div class="print-graph">${barChartElement.outerHTML}</div>`;
+        }
     }
 
     printContents += `</div>`;
 
     if (selectedSections.includes('printStatistics')) {
-        const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics-container">${statisticsContent}</div>`;
+        const statisticsContent = document.getElementById('statistics');
+        if (statisticsContent) {
+            printContents += `<div class="statistics-container">${statisticsContent.innerHTML}</div>`;
+        }
     }
 
     // Include reporting period and notes in the print content
@@ -1341,6 +1351,11 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
             newTab.document.write('<img src="' + imgData + '" />');
             newTab.document.close();
 
+            document.body.innerHTML = originalContents;
+            enableChartInteractions();
+        }).catch(error => {
+            console.error('Error generating report image:', error);
+            alert('An error occurred while generating the report image.');
             document.body.innerHTML = originalContents;
             enableChartInteractions();
         });
