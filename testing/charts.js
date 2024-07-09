@@ -1297,8 +1297,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     }
 
     // Include reporting period and notes in the print content
-    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+    printContents += `<div class="report-details"><div><strong>Reporting Period:</strong> ${reportingPeriod}</div><div><strong>Notes:</strong> ${notes}</div></div>`;
 
     const printDiv = document.createElement('div');
     printDiv.innerHTML = printContents;
