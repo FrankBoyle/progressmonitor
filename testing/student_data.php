@@ -38,6 +38,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </style>
 </head>
 <body>
+<div class="container">
+
     <div class="dashboard">
         <header class="dashboard-header">
             <div class="logo">
@@ -144,6 +146,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
         </main>
     </div>
+</div>
+
     <script src="charts.js"></script>
     <script>
         let schoolId = <?php echo json_encode($schoolId); ?>;

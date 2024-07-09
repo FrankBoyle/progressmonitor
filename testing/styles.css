@@ -1046,9 +1046,11 @@ input[type="text"] {
     margin: 10px 0;
 }
 
-.print-container-wrapper {
+.container {
     max-width: 1000px;
     margin: 0 auto; /* Center the container */
+    box-sizing: border-box;
+    padding: 20px; /* Add some padding for better appearance */
 }
 
 .print-container {
@@ -1061,8 +1063,8 @@ input[type="text"] {
 .print-table-container,
 .print-graph {
     flex: 1;
-    min-width: 48%; /* Ensure both elements have a minimum width */
-    max-width: 48%; /* Ensure both elements have a maximum width */
+    min-width: 45%; /* Ensure both elements have a minimum width */
+    max-width: 45%; /* Ensure both elements have a maximum width */
     margin: 10px; /* Adjust as needed for spacing */
     overflow: hidden;
     box-sizing: border-box;
