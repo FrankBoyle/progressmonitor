@@ -1331,9 +1331,15 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     document.body.innerHTML = printContents;
 
     setTimeout(() => {
-        window.print();
-        document.body.innerHTML = originalContents;
-        enableChartInteractions();
+        html2canvas(document.body).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const newTab = window.open();
+            newTab.document.write('<img src="' + imgData + '" />');
+            newTab.document.close();
+
+            document.body.innerHTML = originalContents;
+            enableChartInteractions();
+        });
     }, 500);
 }
 
