@@ -1054,9 +1054,11 @@ input[type="text"] {
 }
 
 .print-table-container,
-.print-graph {
+.print-graph,
+.statistics-area {
     flex: 1 1 100%;
     margin: 10px 0;
+    max-width: 1000px; /* Ensure maximum width is set */
 }
 
 .print-table th, .print-table td, .print-graph th, .print-graph td {
