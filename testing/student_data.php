@@ -2,9 +2,6 @@
 session_start();
 include('auth_session.php');
 include('db.php');
-//echo '<pre>';
-//print_r($_SESSION);
-//echo '</pre>';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -12,11 +9,6 @@ error_reporting(E_ALL);
 
 // Assuming school_id is set in the session during login
 $schoolId = $_SESSION['school_id']; // Default to 1 if not set
-//$teacher_id = $SESSION['teacher_id'];
-//$schoolId = $_SESSION['school_id'];
-//$admin = $SESSION['is_admin'] == 1; // Assuming 'is_admin' is the column name
-
-// Other necessary PHP code...
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +34,56 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
     <style>
+        .print-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto; /* Center the container */
+        }
 
+        .print-table-container,
+        .print-graph {
+            flex: 1;
+            min-width: 45%; /* Ensure both elements have a minimum width */
+            margin: 10px; /* Adjust as needed for spacing */
+            overflow: hidden;
+        }
+
+        .print-table th, .print-table td, .print-graph th, .print-graph td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+            word-wrap: break-word; /* Ensure long words are wrapped */
+        }
+
+        .statistics-table {
+            width: 48%;
+            box-sizing: border-box;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .statistics-table th, .statistics-table td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .report-details {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .report-details div {
+            flex: 1;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -93,7 +134,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
                     <div id="columnSelector" class="checkbox-container"></div>
                 </div>
-                <div class="print-container">
+                <div id="reportContainer" class="print-container">
                     <div class="print-table-container" id="printTableContainer"></div>
                     <div class="print-graph" id="printGraphContainer"></div>
                 </div>
@@ -127,31 +168,31 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                 </div>
             </div>
 
-<!-- Print Report Modal -->
-<div id="printDialogModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-        <h2>Select Sections to Print</h2>
-        <div>Please select a goal:</div>
-        <div id="goalSelectionContainer" class="selection-container"></div>
-        <div>Select what you want to print in the report:</div>
-        <div id="sectionSelectionContainer" class="selection-container">
-            <div class="selector-item" data-section="printTable">Performance Table</div>
-            <div class="selector-item" data-section="printLineChart">Line Chart</div>
-            <div class="selector-item" data-section="printBarChart">Bar Chart</div>
-            <div class="selector-item" data-section="printStatistics">Statistics</div>
-        </div>
-        <div>
-            <label for="reporting_period">Reporting Period:</label>
-            <input type="text" id="reporting_period" placeholder="Enter reporting period">
-        </div>
-        <div>
-            <label for="notes">Notes:</label>
-            <textarea id="notes" placeholder="Enter notes"></textarea>
-        </div>
-        <button onclick="saveAndPrintReport()">Print</button>
-    </div>
-</div>
+            <!-- Print Report Modal -->
+            <div id="printDialogModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="hidePrintDialogModal()">&times;</span>
+                    <h2>Select Sections to Print</h2>
+                    <div>Please select a goal:</div>
+                    <div id="goalSelectionContainer" class="selection-container"></div>
+                    <div>Select what you want to print in the report:</div>
+                    <div id="sectionSelectionContainer" class="selection-container">
+                        <div class="selector-item" data-section="printTable">Performance Table</div>
+                        <div class="selector-item" data-section="printLineChart">Line Chart</div>
+                        <div class="selector-item" data-section="printBarChart">Bar Chart</div>
+                        <div class="selector-item" data-section="printStatistics">Statistics</div>
+                    </div>
+                    <div>
+                        <label for="reporting_period">Reporting Period:</label>
+                        <input type="text" id="reporting_period" placeholder="Enter reporting period">
+                    </div>
+                    <div>
+                        <label for="notes">Notes:</label>
+                        <textarea id="notes" placeholder="Enter notes"></textarea>
+                    </div>
+                    <button onclick="saveAndPrintReport()">Print</button>
+                </div>
+            </div>
 
         </main>
     </div>
@@ -161,4 +202,3 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </script>
 </body>
 </html>
-
