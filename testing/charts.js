@@ -1381,9 +1381,7 @@ function generatePrintTable(selectedColumns) {
     });
 
     // Ensure Notes column is included in the printed table
-    if (!selectedColumns.some(col => col.getAttribute("data-column-name") === 'score10')) {
-        tableHTML += `<th>Notes</th>`;
-    }
+    tableHTML += `<th>Notes</th>`;
 
     tableHTML += `
                 </tr>
