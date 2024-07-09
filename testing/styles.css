@@ -1046,6 +1046,11 @@ input[type="text"] {
     margin: 10px 0;
 }
 
+.print-container-wrapper {
+    max-width: 1000px;
+    margin: 0 auto; /* Center the container */
+}
+
 .print-container {
     display: flex;
     flex-wrap: wrap;
@@ -1104,4 +1109,3 @@ input[type="text"] {
     flex: 1;
     text-align: center;
 }
-
