@@ -899,6 +899,7 @@ input[type="text"] {
         width: 100%;
         max-width: 1000px;
     }
+
 }
 
 /* Regular styles */
@@ -910,7 +911,7 @@ input[type="text"] {
     overflow-wrap: break-word;
     word-wrap: break-word;
     white-space: normal;
-    margin: 0 auto;
+    /*margin: 0 auto;*/
 }
 
 .goal-text {
