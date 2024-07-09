@@ -1298,7 +1298,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     printDiv.innerHTML = `<div class="print-container">${printContents}</div>`;
     document.body.appendChild(printDiv);
 
-    html2canvas(printDiv).then(canvas => {
+    html2canvas(printDiv, { width: 600, height: 600 }).then(canvas => {
         document.body.removeChild(printDiv);
         const dataUrl = canvas.toDataURL('image/png');
         const newTab = window.open();
