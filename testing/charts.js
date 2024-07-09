@@ -820,6 +820,8 @@ function calculateTrendline(data) {
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
+    console.log('Slope:', slope, 'Intercept:', intercept);
+
     return function (x) {
         return parseFloat((slope * x + intercept).toFixed(2)); // Round to 2 decimal places
     };
