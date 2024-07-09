@@ -1048,7 +1048,7 @@ input[type="text"] {
 
 .print-container {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
 }
@@ -1056,20 +1056,30 @@ input[type="text"] {
 .print-table-container,
 .print-graph {
     flex: 1;
-    min-width: 45%;
-    margin: 10px;
-    overflow: auto;
+    min-width: 45%; /* Ensure both elements have a minimum width */
+    max-width: 48%; /* Ensure both elements have a maximum width */
+    margin: 10px; /* Adjust as needed for spacing */
+    overflow: hidden;
+}
+
+@media (max-width: 1000px) {
+    .print-table-container,
+    .print-graph {
+        min-width: 100%; /* Full width on smaller screens */
+        max-width: 100%; /* Full width on smaller screens */
+        margin: 5px 0; /* Adjust as needed for spacing */
+    }
 }
 
 .print-table th, .print-table td, .print-graph th, .print-graph td {
     padding: 8px;
     border: 1px solid #ccc;
     text-align: center;
-    word-wrap: break-word;
+    word-wrap: break-word; /* Ensure long words are wrapped */
 }
 
 .statistics-table {
-    width: 75%;
+    width: 100%;
     box-sizing: border-box;
     border-collapse: collapse;
     margin-top: 20px;
@@ -1078,7 +1088,7 @@ input[type="text"] {
 .statistics-table th, .statistics-table td {
     padding: 8px;
     border: 1px solid #ccc;
-    /*text-align: center;*/
+    text-align: center;
 }
 
 .report-details {
@@ -1092,6 +1102,6 @@ input[type="text"] {
 
 .report-details div {
     flex: 1;
-    /*text-align: center;*/
+    text-align: center;
 }
 
