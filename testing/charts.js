@@ -1248,8 +1248,8 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Proceed to generate the report
-            generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
+            // Proceed to print the report
+            printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
         } else {
             console.error('Error saving notes:', data.message);
             alert('Failed to save notes: ' + data.message);
@@ -1368,40 +1368,38 @@ function generatePrintTable(selectedColumns) {
         return "<div>No data available to display.</div>";
     }
 
-    let tableHTML = `
-        <table class="print-table">
-            <thead>
-                <tr>
-                    <th>Date</th>`;
-    
+    // Create the table element
+    let tableHTML = '<table style="width: auto; max-width: 50%; margin: 0; table-layout: auto; border-collapse: collapse;">';
+
+    // Generate table header
+    tableHTML += '<thead><tr>';
+    // Add "Date" column header first
+    tableHTML += '<th>Date</th>';
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
         tableHTML += `<th>${columnName}</th>`;
     });
-    
-    tableHTML += `
-                </tr>
-            </thead>
-            <tbody>`;
-    
+    tableHTML += '</tr></thead>';
+
+    // Generate table body
+    tableHTML += '<tbody>';
     tableData.forEach(row => {
         tableHTML += '<tr>';
+        // Add "Date" column data first
         const dateValue = row['score_date'] !== null && row['score_date'] !== undefined ? row['score_date'] : '';
         tableHTML += `<td>${dateValue}</td>`;
-        
         selectedColumns.forEach(column => {
             const columnField = column.getAttribute("data-column-name");
             const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
             tableHTML += `<td>${cellData}</td>`;
         });
-        
         tableHTML += '</tr>';
     });
-    
-    tableHTML += `
-            </tbody>
-        </table>`;
-    
+    tableHTML += '</tbody>';
+
+    // Close the table element
+    tableHTML += '</table>';
+
     return tableHTML;
 }
 
