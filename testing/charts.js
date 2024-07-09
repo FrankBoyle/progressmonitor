@@ -1189,22 +1189,16 @@ function archiveGoal(goalId, goalItem) {
       });
 }
 
+// Function to check if a column is numeric and not "Notes"
 function isNumericColumn(columnName) {
-    const nonNumericColumns = ['score10']; // Add specific column names here
-    const isNumeric = !nonNumericColumns.includes(columnName);
-    console.log(`Checking if column is numeric - Column: ${columnName}, Is Numeric: ${isNumeric}`);
-    return isNumeric;
+    const nonNumericColumns = ['score10']; // Adjust based on your actual non-numeric column names
+    return !nonNumericColumns.includes(columnName);
 }
 
+// Function to get selected columns excluding non-numeric ones
 function getSelectedColumns() {
-    const selectedColumns = Array.from(document.querySelectorAll('.selector-item.selected'))
-        .filter(column => {
-            const isNumeric = isNumericColumn(column.getAttribute('data-column-name'));
-            console.log(`Selected Column: ${column.getAttribute('data-column-name')}, Is Numeric: ${isNumeric}`);
-            return isNumeric;
-        });
-    console.log('Filtered Selected Columns:', selectedColumns);
-    return selectedColumns;
+    return Array.from(document.querySelectorAll('.selector-item.selected'))
+        .filter(column => isNumericColumn(column.getAttribute('data-column-name')));
 }
 
 function saveAndPrintReport() {
