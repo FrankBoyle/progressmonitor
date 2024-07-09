@@ -1027,6 +1027,21 @@ input[type="text"] {
     white-space: normal; /* Allow text to wrap */
 }
 
+.goal-text {
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+
+#goals-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 #goals-container p {
     white-space: normal;
     overflow-wrap: break-word;
