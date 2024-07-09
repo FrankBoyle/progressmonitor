@@ -15,10 +15,7 @@ const seriesColors = [
 document.addEventListener('DOMContentLoaded', function() {
     setupInitialPageLoad();
     attachEventListeners();
-
-    // Ensure the charts are initialized after the DOM is fully loaded
-    setTimeout(initializeCharts, 0);
-
+    initializeCharts();
     fetchGoals(studentIdNew, metadataId);
 
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
@@ -28,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.selector-item').forEach(item => {
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
+            //console.log(`Toggled selection for ${item.getAttribute('data-section')}: ${item.classList.contains('selected')}`);
         });
     });
 });
@@ -351,23 +349,19 @@ function initializeCharts() {
 function initializeLineChart() {
     const chartOptions = getLineChartOptions([], []); // Empty data initially
     window.lineChart = new ApexCharts(document.querySelector("#chartContainer"), chartOptions);
-    window.lineChart.render().then(() => {
-        console.log('Line chart initialized');
-    }).catch((error) => {
-        console.error('Line chart initialization failed:', error);
-    });
+    window.lineChart.render();
 }
 
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
-    window.barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
-    window.barChart.render();
+    barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
+    barChart.render();
 }
 
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
-        console.log("Extracting chart data...");
+        //console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
 
@@ -399,7 +393,7 @@ function extractChartData() {
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
 
-        console.log("Charts updated successfully.");
+        //console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
@@ -441,12 +435,25 @@ function updateLineChart(categories, seriesData) {
             curve: 'smooth',
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
+        },
+        chart: {
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800,
+                animateGradually: {
+                    enabled: true,
+                    delay: 150
+                },
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350
+                }
+            }
         }
     }).then(() => {
+        // Force a full redraw
         window.lineChart.updateSeries(seriesData);
-        window.lineChart.render(); // Ensure the chart is fully rendered
-    }).catch((error) => {
-        console.error('Error updating line chart:', error);
     });
 }
 
@@ -459,7 +466,7 @@ function prepareChartData(rawData) {
 
 // Update Bar Chart
 function updateBarChart(categories, seriesData) {
-    if (!window.barChart) {
+    if (!barChart) {
         console.error('Bar chart is not initialized');
         return;
     }
@@ -474,7 +481,7 @@ function updateBarChart(categories, seriesData) {
     });
     const maxDataValue = Math.max(...maxStackHeight);
 
-    window.barChart.updateOptions({
+    barChart.updateOptions({
         xaxis: {
             categories: categories
         },
@@ -484,11 +491,6 @@ function updateBarChart(categories, seriesData) {
         },
         series: seriesData,
         colors: seriesData.map(s => s.color) // Ensure colors are correctly applied
-    }).then(() => {
-        window.barChart.updateSeries(seriesData);
-        window.barChart.render(); // Ensure the chart is fully rendered
-    }).catch((error) => {
-        console.error('Error updating bar chart:', error);
     });
 }
 
@@ -502,6 +504,19 @@ function getLineChartOptions(dates, seriesData) {
             background: '#fff',
             toolbar: {
                 show: true
+            },
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800,
+                animateGradually: {
+                    enabled: true,
+                    delay: 150
+                },
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350
+                }
             },
             dropShadow: {
                 enabled: true,
