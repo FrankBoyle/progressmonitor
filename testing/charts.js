@@ -861,7 +861,7 @@ function calculateStatistics(data) {
     let mean = data.reduce((acc, val) => acc + val, 0) / data.length;
     let median = calculateMedian(data);
     let stdDev = calculateStandardDeviation(data, mean);
-    let trendlineEquation = calculateTrendlineEquation(data);
+    let trendlineEquation = calculateTrendlineEquation();
 
     return {
         mean: mean.toFixed(2),
@@ -886,27 +886,8 @@ function calculateMedian(data) {
     return data.length % 2 !== 0 ? data[mid] : (data[mid - 1] + data[mid]) / 2;
 }
 
-function calculateTrendlineEquation(data) {
-    const validDataPoints = data
-        .map((val, idx) => ({ x: idx + 1, y: val }))
-        .filter(point => point.y !== null && !isNaN(point.y));
-
-    if (validDataPoints.length === 0) {
-        return "y = 0";
-    }
-
-    const n = validDataPoints.length;
-    const sumX = validDataPoints.reduce((acc, point) => acc + point.x, 0);
-    const sumY = validDataPoints.reduce((acc, point) => acc + point.y, 0);
-    const sumXY = validDataPoints.reduce((acc, point) => acc + point.x * point.y, 0);
-    const sumXX = validDataPoints.reduce((acc, point) => acc + point.x * point.x, 0);
-
-    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-    const intercept = (sumY - slope * sumX) / n;
-
-    console.log('Trendline Slope:', slope, 'Trendline Intercept:', intercept);
-
-    return `y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}`;
+function calculateTrendlineEquation() {
+    return `y = ${globalSlope.toFixed(2)}x + ${globalIntercept.toFixed(2)}`;
 }
 
 function updateStatisticsDisplay(columnField, columnName, tbody) {
