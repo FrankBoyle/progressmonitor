@@ -913,9 +913,10 @@ function calculateStandardDeviation(data, mean) {
 }
 
 function calculateMedian(data) {
-    data.sort((a, b) => a - b);
-    let mid = Math.floor(data.length / 2);
-    return data.length % 2 !== 0 ? data[mid] : (data[mid - 1] + data[mid]) / 2;
+    let dataCopy = [...data]; // Copy data to avoid modifying the original array
+    dataCopy.sort((a, b) => a - b);
+    let mid = Math.floor(dataCopy.length / 2);
+    return dataCopy.length % 2 !== 0 ? dataCopy[mid] : (dataCopy[mid - 1] + dataCopy[mid]) / 2;
 }
 
 function calculateTrendlineEquation() {
