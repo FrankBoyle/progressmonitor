@@ -872,7 +872,6 @@ function getTrendlineData(data) {
     };
 }
 
-
 function refreshStatisticsDisplay() {
     const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"));
     const tbody = document.getElementById('statsTable').getElementsByTagName('tbody')[0];
