@@ -360,7 +360,7 @@ function initializeBarChart() {
     barChart.render();
 }
 
-// Extract chart data based on selected columns
+// Adjust extractChartData to use the encapsulated getTrendlineData
 function extractChartData() {
     try {
         const data = table.getData();
@@ -369,23 +369,22 @@ function extractChartData() {
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => ({
                 field: item.getAttribute("data-column-name"),
-                name: item.textContent.trim()
+                name: item.textContent.trim()  // Use textContent of the item as the series name
             }));
 
         const series = selectedColumns.map(column => {
             let rawData = data.map(row => row[column.field]);
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
-            console.log(`Data for ${column.name}:`, interpolatedData); // Log data for verification
             return {
-                name: column.name,
+                name: column.name,  // Using the custom name for the series
                 data: interpolatedData,
-                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]
+                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
             };
         });
 
         const trendlineSeries = series.map(seriesData => {
-            let trendlineData = getTrendlineData(seriesData.data);
-            console.log(`Trendline data for ${seriesData.name}:`, trendlineData); // Log trendline data for verification
+            const { trendlineData, slope, intercept } = getTrendlineData(seriesData.data);
+            console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
             return {
                 name: `${seriesData.name} Trendline`,
                 data: trendlineData,
@@ -810,8 +809,12 @@ function calculateTrendline(data) {
         .filter(point => point.y !== null && !isNaN(point.y));
 
     if (validDataPoints.length === 0) {
-        return function (x) {
-            return 0;
+        return {
+            trendlineFunction: function (x) {
+                return 0;
+            },
+            slope: 0,
+            intercept: 0
         };
     }
 
@@ -821,23 +824,34 @@ function calculateTrendline(data) {
     const sumXY = validDataPoints.reduce((acc, point) => acc + point.x * point.y, 0);
     const sumXX = validDataPoints.reduce((acc, point) => acc + point.x * point.x, 0);
 
-    globalSlope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-    globalIntercept = (sumY - globalSlope * sumX) / n;
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
 
-    console.log('Slope:', globalSlope, 'Intercept:', globalIntercept);
+    console.log('Slope:', slope, 'Intercept:', intercept);
 
-    return function (x) {
-        return parseFloat((globalSlope * x + globalIntercept).toFixed(2)); // Round to 2 decimal places
+    const trendlineFunction = function (x) {
+        return parseFloat((slope * x + intercept).toFixed(2)); // Round to 2 decimal places
+    };
+
+    return {
+        trendlineFunction,
+        slope,
+        intercept
     };
 }
 
 function getTrendlineData(data) {
-    let trendlineFunction = calculateTrendline(data);
-    return data.map((_, idx) => {
+    const { trendlineFunction, slope, intercept } = calculateTrendline(data);
+    const trendlineData = data.map((_, idx) => {
         const x = idx + 1;
         const y = trendlineFunction(x);
         return y !== null && !isNaN(y) ? y : null;
     });
+    return {
+        trendlineData,
+        slope,
+        intercept
+    };
 }
 
 function refreshStatisticsDisplay() {
@@ -861,13 +875,14 @@ function calculateStatistics(data) {
     let mean = data.reduce((acc, val) => acc + val, 0) / data.length;
     let median = calculateMedian(data);
     let stdDev = calculateStandardDeviation(data, mean);
-    let trendlineEquation = calculateTrendlineEquation();
+    const { slope, intercept } = calculateTrendline(data);
 
     return {
         mean: mean.toFixed(2),
         median: median,
         stdDev: stdDev.toFixed(2),
-        trendlineEquation: trendlineEquation
+        slope,
+        intercept
     };
 }
 
@@ -895,7 +910,7 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 
     if (data.length > 0) {
         const stats = calculateStatistics(data);
-        const trendlineEquation = calculateTrendlineEquation(data);
+        const trendlineEquation = `y = ${stats.slope.toFixed(2)}x + ${stats.intercept.toFixed(2)}`;
         const row = tbody.insertRow();
         row.innerHTML = `
             <td>${columnName}</td>
