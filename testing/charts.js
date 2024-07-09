@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.selector-item').forEach(item => {
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
-            //console.log(`Toggled selection for ${item.getAttribute('data-section')}: ${item.classList.contains('selected')}`);
+            extractChartData();
+            refreshStatisticsDisplay();
         });
     });
 });
@@ -1111,6 +1112,14 @@ function displayGoals(goals) {
 
         window[`quillEditor${goal.goal_id}`] = quill; // Save the editor instance to a global variable for later use
     });
+
+    // Log the widths
+    setTimeout(() => {
+        console.log('Goals Container Width:', goalsContainer.offsetWidth);
+        document.querySelectorAll('.goal-item').forEach(item => {
+            console.log('Goal Item Width:', item.offsetWidth);
+        });
+    }, 100); // Delay to ensure elements are rendered
 }
 
 function initializeQuillEditor(goalId, content) {
