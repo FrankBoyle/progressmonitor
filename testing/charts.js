@@ -1197,7 +1197,6 @@ function isNumericColumn(columnName) {
     return isNumeric;
 }
 
-
 // Function to get selected columns excluding non-numeric ones
 function getSelectedColumns() {
     return Array.from(document.querySelectorAll('.selector-item.selected'))
