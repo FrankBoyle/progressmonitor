@@ -363,7 +363,7 @@ h3 {
 
 .goal-item {
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -1018,10 +1018,22 @@ input[type="text"] {
     white-space: normal; /* Allow text to wrap */
 }
 
+.goal-text-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: break-word; /* Ensures long words break and wrap */
+    word-wrap: break-word; /* Ensures long words break and wrap */
+    white-space: normal; /* Ensures text wraps normally */
+    padding: 10px;
+    box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+}
+
 .goal-text {
-    white-space: normal;
-    overflow-wrap: break-word;
-    word-break: break-all;
+    font-size: 14px; /* Adjust the font size as needed */
+    line-height: 1.5; /* Adjust the line height for better readability */
+    overflow-wrap: break-word; /* Ensures long words break and wrap */
+    word-wrap: break-word; /* Ensures long words break and wrap */
+    white-space: normal; /* Ensures text wraps normally */
 }
 
 .card.chart-card {
