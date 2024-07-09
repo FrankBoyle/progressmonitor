@@ -1359,6 +1359,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     }, 50);
 }
 
+// Function to generate the print table
 function generatePrintTable(selectedColumns) {
     const tableData = table.getData();
     if (!tableData || tableData.length === 0) {
@@ -1371,11 +1372,17 @@ function generatePrintTable(selectedColumns) {
                 <tr>
                     <th>Date</th>`;
     
+    // Add all columns including non-numeric ones for printing
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
         tableHTML += `<th>${columnName}</th>`;
     });
-    
+
+    // Ensure Notes column is included in the printed table
+    if (!selectedColumns.some(col => col.getAttribute("data-column-name") === 'score10')) {
+        tableHTML += `<th>Notes</th>`;
+    }
+
     tableHTML += `
                 </tr>
             </thead>
@@ -1391,7 +1398,13 @@ function generatePrintTable(selectedColumns) {
             const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
             tableHTML += `<td>${cellData}</td>`;
         });
-        
+
+        // Add Notes column data to the printed table
+        if (!selectedColumns.some(col => col.getAttribute("data-column-name") === 'score10')) {
+            const notesData = row['score10'] !== null && row['score10'] !== undefined ? row['score10'] : '';
+            tableHTML += `<td>${notesData}</td>`;
+        }
+
         tableHTML += '</tr>';
     });
     
