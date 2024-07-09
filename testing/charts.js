@@ -1360,6 +1360,8 @@ function generatePrintTable(selectedColumns) {
         return "<div>No data available to display.</div>";
     }
 
+    const excludeColumns = ['Performance Table', 'Line Chart', 'Bar Chart', 'Statistics'];
+
     let tableHTML = `
         <table class="print-table">
             <thead>
@@ -1369,7 +1371,9 @@ function generatePrintTable(selectedColumns) {
     // Add all columns including non-numeric ones for printing
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
-        tableHTML += `<th>${columnName}</th>`;
+        if (!excludeColumns.includes(columnName)) {
+            tableHTML += `<th>${columnName}</th>`;
+        }
     });
 
     // Ensure Notes column is included in the printed table
@@ -1389,8 +1393,11 @@ function generatePrintTable(selectedColumns) {
         
         selectedColumns.forEach(column => {
             const columnField = column.getAttribute("data-column-name");
-            const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
-            tableHTML += `<td>${cellData}</td>`;
+            const columnName = column.textContent.trim();
+            if (!excludeColumns.includes(columnName)) {
+                const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
+                tableHTML += `<td>${cellData}</td>`;
+            }
         });
 
         // Add Notes column data to the printed table
