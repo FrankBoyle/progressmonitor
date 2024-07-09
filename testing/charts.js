@@ -369,6 +369,7 @@ function extractChartData() {
         //console.log('Categories:', categories);
 
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
+            .filter(column => isNumericColumn(column.getAttribute("data-column-name")))
             .map(item => ({
                 field: item.getAttribute("data-column-name"),
                 name: item.textContent.trim()  // Use textContent of the item as the series name
@@ -1191,8 +1192,14 @@ function archiveGoal(goalId, goalItem) {
       });
 }
 
+function isNumericColumn(columnName) {
+    const nonNumericColumns = ['Notes']; // Add other non-numeric columns here if needed
+    return !nonNumericColumns.includes(columnName);
+}
+
 function getSelectedColumns() {
-    return Array.from(document.querySelectorAll("#columnSelector .selector-item.selected"));
+    return Array.from(document.querySelectorAll('.selector-item.selected'))
+        .filter(column => isNumericColumn(column.getAttribute('data-column-name')));
 }
 
 function saveAndPrintReport() {
