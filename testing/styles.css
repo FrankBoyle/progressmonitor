@@ -885,6 +885,21 @@ input[type="text"] {
         white-space: normal; /* Ensures text wraps normally */
         max-width: 100%; /* Ensure text does not overflow the container */
     }
+
+        /* Ensure that the main container also respects max-width */
+        .content, .dashboard {
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+            max-width: 1000px; /* Limit the width to prevent overflow */
+            padding: 0;
+        }
+
+            /* Ensure the goal text container within the goal item is also constrained */
+    .goal-item .goal-text-container {
+        width: 100%;
+        max-width: 1000px;
+    }
 }
 
 #chartContainer, #barChartContainer {
