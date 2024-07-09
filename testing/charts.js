@@ -889,18 +889,17 @@ function refreshStatisticsDisplay() {
     });
 }
 
+// Calculate statistics without altering the original data array
 function calculateStatistics(data) {
-    let mean = data.reduce((acc, val) => acc + val, 0) / data.length;
-    let median = calculateMedian(data);
-    let stdDev = calculateStandardDeviation(data, mean);
-    const { slope, intercept } = calculateTrendline(data);
+    let dataCopy = [...data]; // Copy data to avoid modifying the original array
+    let mean = dataCopy.reduce((acc, val) => acc + val, 0) / dataCopy.length;
+    let median = calculateMedian(dataCopy);
+    let stdDev = calculateStandardDeviation(dataCopy, mean);
 
     return {
         mean: mean.toFixed(2),
         median: median,
-        stdDev: stdDev.toFixed(2),
-        slope,
-        intercept
+        stdDev: stdDev.toFixed(2)
     };
 }
 
