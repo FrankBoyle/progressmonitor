@@ -990,7 +990,7 @@ input[type="text"] {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-top: 20px;
-    overflow-x: auto; /* Ensures the table can scroll horizontally if needed */
+   /* overflow-x: auto; /* Ensures the table can scroll horizontally if needed */
 }
 
 #statsTable {
@@ -1029,7 +1029,7 @@ input[type="text"] {
 
 .statistics-area {
     flex: 2; /* Takes up 2 parts of the available space, giving more space to statistics */
-    max-width: 600px; /* Maximum width of the statistics area */
+    /*max-width: 600px; /* Maximum width of the statistics area */
 }
 
 #printReportBtn {
