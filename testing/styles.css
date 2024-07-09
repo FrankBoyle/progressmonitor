@@ -1058,7 +1058,7 @@ input[type="text"] {
     flex: 1;
     min-width: 45%;
     margin: 10px;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .print-table th, .print-table td, .print-graph th, .print-graph td {
@@ -1078,7 +1078,7 @@ input[type="text"] {
 .statistics-table th, .statistics-table td {
     padding: 8px;
     border: 1px solid #ccc;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .report-details {
@@ -1092,6 +1092,6 @@ input[type="text"] {
 
 .report-details div {
     flex: 1;
-    text-align: center;
+    /*text-align: center;*/
 }
 
