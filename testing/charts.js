@@ -877,16 +877,20 @@ function calculateMedian(data) {
 }
 
 function calculateTrendlineEquation(data) {
-    const n = data.length;
+    const validDataPoints = data.filter(val => val !== null && !isNaN(val));
+    const n = validDataPoints.length;
     let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-    data.forEach((y, x) => {
-        sumX += x;
+    
+    validDataPoints.forEach((y, x) => {
+        sumX += x + 1;
         sumY += y;
-        sumXY += x * y;
-        sumXX += x * x;
+        sumXY += (x + 1) * y;
+        sumXX += (x + 1) * (x + 1);
     });
-    let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-    let intercept = (sumY - slope * sumX) / n;
+    
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
     return `y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}`;
 }
 
