@@ -1048,30 +1048,15 @@ input[type="text"] {
 
 .print-container {
     display: flex;
-    flex-wrap: wrap; /* Allow items to wrap within the container */
+    flex-wrap: wrap;
     justify-content: space-between;
-    width: 600px; /* Fixed width for the entire container */
-    height: 600px; /* Fixed height for the entire container */
-    overflow: hidden; /* Handle overflow */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .print-table-container,
 .print-graph {
-    flex: 1 1 50%; /* Ensure both items take up 50% of the container */
-    overflow: hidden; /* Handle overflow */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    margin: 0; /* Remove margin to fit exactly within the container */
-    padding: 10px; /* Optional: Add padding for better spacing */
-}
-
-.print-table-container {
-    max-width: 300px; /* Half of the container width */
-    max-height: 300px; /* Half of the container height */
-}
-
-.print-graph {
-    max-width: 300px; /* Half of the container width */
-    max-height: 300px; /* Half of the container height */
+    flex: 1;
+    min-width: 45%; /* Ensure both elements have a minimum width */
+    margin: 10px; /* Adjust as needed for spacing */
+    overflow: hidden;
 }
 
