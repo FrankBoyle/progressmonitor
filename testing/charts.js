@@ -368,17 +368,10 @@ function extractChartData() {
         const categories = data.map(row => row['score_date']);
         console.log('Categories:', categories);
 
-        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-            .filter(column => {
-                const columnName = column.getAttribute("data-column-name");
-                const isNumeric = isNumericColumn(columnName);
-                console.log(`Column: ${columnName}, Is Numeric: ${isNumeric}`);
-                return isNumeric;
-            })
-            .map(item => ({
-                field: item.getAttribute("data-column-name"),
-                name: item.textContent.trim()  // Use textContent of the item as the series name
-            }));
+        const selectedColumns = getSelectedColumns().map(item => ({
+            field: item.getAttribute("data-column-name"),
+            name: item.textContent.trim()  // Use textContent of the item as the series name
+        }));
         console.log('Selected Columns:', selectedColumns);
 
         const series = selectedColumns.map(column => {
