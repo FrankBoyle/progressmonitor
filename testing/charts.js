@@ -370,8 +370,9 @@ function extractChartData() {
 
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .filter(column => {
-                const isNumeric = isNumericColumn(column.getAttribute("data-column-name"));
-                console.log(`Column: ${column.getAttribute("data-column-name")}, Is Numeric: ${isNumeric}`);
+                const columnName = column.getAttribute("data-column-name");
+                const isNumeric = isNumericColumn(columnName);
+                console.log(`Column: ${columnName}, Is Numeric: ${isNumeric}`);
                 return isNumeric;
             })
             .map(item => ({
@@ -1196,7 +1197,7 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function isNumericColumn(columnName) {
-    const nonNumericColumns = ['Notes']; // Add non-numeric column names here
+    const nonNumericColumns = ['score10']; // Add specific column names here
     const isNumeric = !nonNumericColumns.includes(columnName);
     console.log(`Checking if column is numeric - Column: ${columnName}, Is Numeric: ${isNumeric}`);
     return isNumeric;
