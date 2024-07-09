@@ -1266,7 +1266,7 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div class="print-container">${selectedGoal.innerHTML}</div>`;
+    let printContents = `<div class="print-container"><div class="goal-text-container"><div class="print-goal-text">${selectedGoal.innerHTML}</div></div></div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
