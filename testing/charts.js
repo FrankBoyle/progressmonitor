@@ -859,11 +859,13 @@ function calculateStatistics(data) {
     let mean = data.reduce((acc, val) => acc + val, 0) / data.length;
     let median = calculateMedian(data);
     let stdDev = calculateStandardDeviation(data, mean);
+    let trendlineEquation = calculateTrendlineEquation(data);
 
     return {
         mean: mean.toFixed(2),
         median: median,
-        stdDev: stdDev.toFixed(2)
+        stdDev: stdDev.toFixed(2),
+        trendlineEquation: trendlineEquation
     };
 }
 
