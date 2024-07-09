@@ -361,39 +361,41 @@ function initializeBarChart() {
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
-        //console.log("Extracting chart data...");
         const data = table.getData();
         const categories = data.map(row => row['score_date']);
 
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => ({
                 field: item.getAttribute("data-column-name"),
-                name: item.textContent.trim()  // Use textContent of the item as the series name
+                name: item.textContent.trim()
             }));
 
         const series = selectedColumns.map(column => {
             let rawData = data.map(row => row[column.field]);
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
+            console.log(`Data for ${column.name}:`, interpolatedData); // Log data for verification
             return {
-                name: column.name,  // Using the custom name for the series
+                name: column.name,
                 data: interpolatedData,
-                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
+                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]
             };
         });
 
-        const trendlineSeries = series.map(seriesData => ({
-            name: `${seriesData.name} Trendline`,
-            data: getTrendlineData(seriesData.data),
-            type: 'line',
-            dashArray: 5,
-            stroke: { width: 2, curve: 'straight' },
-            color: seriesData.color
-        }));
+        const trendlineSeries = series.map(seriesData => {
+            let trendlineData = getTrendlineData(seriesData.data);
+            console.log(`Trendline data for ${seriesData.name}:`, trendlineData); // Log trendline data for verification
+            return {
+                name: `${seriesData.name} Trendline`,
+                data: trendlineData,
+                type: 'line',
+                dashArray: 5,
+                stroke: { width: 2, curve: 'straight' },
+                color: seriesData.color
+            };
+        });
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
-
-        //console.log("Charts updated successfully.");
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
