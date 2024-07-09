@@ -15,7 +15,10 @@ const seriesColors = [
 document.addEventListener('DOMContentLoaded', function() {
     setupInitialPageLoad();
     attachEventListeners();
-    initializeCharts();
+
+    // Ensure the charts are initialized after the DOM is fully loaded
+    setTimeout(initializeCharts, 0);
+
     fetchGoals(studentIdNew, metadataId);
 
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
@@ -25,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.selector-item').forEach(item => {
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
-            //console.log(`Toggled selection for ${item.getAttribute('data-section')}: ${item.classList.contains('selected')}`);
         });
     });
 });
