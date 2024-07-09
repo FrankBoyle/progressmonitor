@@ -93,7 +93,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
                     <div id="columnSelector" class="checkbox-container"></div>
                 </div>
-                <div id="reportContainer" class="print-container">
+                <div class="print-container">
                     <div class="print-table-container" id="printTableContainer"></div>
                     <div class="print-graph" id="printGraphContainer"></div>
                 </div>
