@@ -1074,7 +1074,6 @@ input[type="text"] {
 }
 
 .print-goal-text {
-    font-size: 14px; /* Adjust the font size as needed */
     line-height: 1.5; /* Adjust the line height for better readability */
     overflow-wrap: break-word; /* Ensures long words break and wrap */
     word-wrap: break-word; /* Ensures long words break and wrap */
