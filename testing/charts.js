@@ -1059,16 +1059,22 @@ function displayGoals(goals) {
         const goalItem = document.createElement('div');
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
-            <div class="print-container">  <!-- Wrap dynamic goal text in print-container -->
+            <div class="print-container">
                 <div class="goal-text-container">
-                    <div class="print-goal-text">${goal.goal_description}</div>
+                    <div class="print-goal-text" id="goal-content-${goal.goal_id}">${goal.goal_description}</div>
                     <button class="archive-btn">Archive</button>
+                </div>
+                <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
+                    <div id="editor-${goal.goal_id}" class="quill-editor"></div>
+                    <button class="btn btn-primary save-btn">Save</button>
+                    <button class="btn btn-secondary cancel-btn">Cancel</button>
                 </div>
             </div>
         `;
 
         goalsContainer.appendChild(goalItem);
 
+        // Initialize Quill editor after the element is added to the DOM
         const quill = new Quill(`#editor-${goal.goal_id}`, {
             theme: 'snow',
             modules: {
