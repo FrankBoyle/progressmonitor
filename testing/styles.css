@@ -1050,13 +1050,14 @@ input[type="text"] {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
+    width: 100%;
 }
 
 .print-table-container,
 .print-graph {
     flex: 1;
-    min-width: 45%; /* Ensure both elements have a minimum width */
-    margin: 10px; /* Adjust as needed for spacing */
+    min-width: 45%;
+    margin: 10px;
     overflow: hidden;
 }
 
@@ -1064,7 +1065,7 @@ input[type="text"] {
     padding: 8px;
     border: 1px solid #ccc;
     text-align: center;
-    word-wrap: break-word; /* Ensure long words are wrapped */
+    word-wrap: break-word;
 }
 
 .statistics-table {
@@ -1077,6 +1078,20 @@ input[type="text"] {
 .statistics-table th, .statistics-table td {
     padding: 8px;
     border: 1px solid #ccc;
+    text-align: center;
+}
+
+.report-details {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.report-details div {
+    flex: 1;
     text-align: center;
 }
 
