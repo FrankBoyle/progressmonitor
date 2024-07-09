@@ -1266,7 +1266,7 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div class="print-container"><div class="print-goal-text">${selectedGoal.innerHTML}</div></div>`;
+    let printContents = `<div class="print-container">${selectedGoal.innerHTML}</div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1288,7 +1288,6 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         printContents += `<div class="statistics-area">${statisticsContent}</div>`;
     }
 
-    // Include reporting period and notes in the print content
     printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
     printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
