@@ -360,21 +360,26 @@ function initializeBarChart() {
     barChart.render();
 }
 
-// Adjust extractChartData to use the encapsulated getTrendlineData
+// Extract chart data based on selected columns
 function extractChartData() {
     try {
         const data = table.getData();
+        console.log('Table Data:', data);
         const categories = data.map(row => row['score_date']);
+        console.log('Categories:', categories);
 
         const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
             .map(item => ({
                 field: item.getAttribute("data-column-name"),
                 name: item.textContent.trim()  // Use textContent of the item as the series name
             }));
+        console.log('Selected Columns:', selectedColumns);
 
         const series = selectedColumns.map(column => {
             let rawData = data.map(row => row[column.field]);
+            console.log(`Raw Data for ${column.name}:`, rawData);
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
+            console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
             return {
                 name: column.name,  // Using the custom name for the series
                 data: interpolatedData,
@@ -384,6 +389,7 @@ function extractChartData() {
 
         const trendlineSeries = series.map(seriesData => {
             const { trendlineData, slope, intercept } = getTrendlineData(seriesData.data);
+            console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
             console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
             return {
                 name: `${seriesData.name} Trendline`,
@@ -851,7 +857,8 @@ function calculateTrendline(data) {
 }
 
 function getTrendlineData(data) {
-    const { trendlineFunction, slope, intercept } = calculateTrendline(data);
+    const dataCopy = [...data]; // Create a copy of the data to prevent modification
+    const { trendlineFunction, slope, intercept } = calculateTrendline(dataCopy);
     const trendlineData = data.map((_, idx) => {
         const x = idx + 1;
         const y = trendlineFunction(x);
@@ -863,6 +870,7 @@ function getTrendlineData(data) {
         intercept
     };
 }
+
 
 function refreshStatisticsDisplay() {
     const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"));
@@ -920,14 +928,14 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 
     if (data.length > 0) {
         const stats = calculateStatistics(data);
-        const trendlineEquation = `y = ${stats.slope.toFixed(2)}x + ${stats.intercept.toFixed(2)}`;
+        const { slope, intercept } = calculateTrendline(data);
         const row = tbody.insertRow();
         row.innerHTML = `
             <td>${columnName}</td>
             <td>${stats.mean}</td>
             <td>${stats.median}</td>
             <td>${stats.stdDev}</td>
-            <td>${trendlineEquation}</td>
+            <td>y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}</td>
         `;
     } else {
         const row = tbody.insertRow();
