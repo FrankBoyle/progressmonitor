@@ -1073,12 +1073,14 @@ input[type="text"] {
     box-sizing: border-box;
     border-collapse: collapse;
     margin-top: 20px;
+    table-layout: fixed; /* Ensure table respects width constraints */
 }
 
 .statistics-table th, .statistics-table td {
     padding: 8px;
     border: 1px solid #ccc;
     text-align: center;
+    word-wrap: break-word; /* Ensure long words are wrapped */
 }
 
 .report-details {
@@ -1094,3 +1096,4 @@ input[type="text"] {
     flex: 1;
     text-align: center;
 }
+
