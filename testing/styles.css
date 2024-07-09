@@ -1056,9 +1056,11 @@ input[type="text"] {
 .print-table-container,
 .print-graph {
     flex: 1;
-    min-width: 45%; /* Ensure both elements have a minimum width */
+    min-width: 48%; /* Ensure both elements have a minimum width */
+    max-width: 48%; /* Ensure both elements have a maximum width */
     margin: 10px; /* Adjust as needed for spacing */
     overflow: hidden;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .print-table th, .print-table td, .print-graph th, .print-graph td {
@@ -1069,7 +1071,7 @@ input[type="text"] {
 }
 
 .statistics-table {
-    width: 48%;
+    width: 100%; /* Ensure it takes full width */
     box-sizing: border-box;
     border-collapse: collapse;
     margin-top: 20px;
@@ -1094,4 +1096,5 @@ input[type="text"] {
     flex: 1;
     text-align: center;
 }
+
 
