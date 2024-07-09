@@ -1196,7 +1196,7 @@ function archiveGoal(goalId, goalItem) {
 }
 
 function isNumericColumn(columnName) {
-    const nonNumericColumns = ['Notes']; // Add other non-numeric columns here if needed
+    const nonNumericColumns = ['Notes']; // Add non-numeric column names here
     const isNumeric = !nonNumericColumns.includes(columnName);
     console.log(`Column: ${columnName}, Is Numeric: ${isNumeric}`);
     return isNumeric;
