@@ -1052,12 +1052,12 @@ input[type="text"] {
     justify-content: space-between;
 }
 
-.print-table, .print-graph {
-    width: 48%;
-    box-sizing: border-box;
-    border-collapse: collapse;
-    margin: 0;
-    padding: 0;
+.print-table-container,
+.print-graph {
+    flex: 1;
+    min-width: 45%; /* Ensure both elements have a minimum width */
+    margin: 10px; /* Adjust as needed for spacing */
+    overflow: hidden;
 }
 
 .print-table th, .print-table td, .print-graph th, .print-graph td {
