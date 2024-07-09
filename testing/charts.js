@@ -397,6 +397,14 @@ function extractChartData() {
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
+
+        // Ensure the correct statistics are displayed
+        const tbody = document.getElementById('statsTable').getElementsByTagName('tbody')[0];
+        tbody.innerHTML = ''; // Clear existing rows
+        selectedColumns.forEach(column => {
+            updateStatisticsDisplay(column.field, column.name, tbody);
+        });
+
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
