@@ -1270,7 +1270,6 @@ function saveAndPrintReport() {
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
     
-    // Ensure print-container is created properly
     printContents += `<div class="print-container">`;
 
     if (selectedSections.includes('printTable')) {
@@ -1288,7 +1287,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         printContents += `<div class="print-graph">${barChartElement}</div>`;
     }
 
-    printContents += `</div>`; // Close print-container
+    printContents += `</div>`;
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
