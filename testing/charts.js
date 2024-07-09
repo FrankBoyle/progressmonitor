@@ -1324,7 +1324,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div>${statisticsContent}</div>`;
+        printContents += `<div class="statistics-container">${statisticsContent}</div>`;
     }
 
     // Include reporting period and notes in the print content
@@ -1344,7 +1344,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
             document.body.innerHTML = originalContents;
             enableChartInteractions();
         });
-    }, 50);
+    }, 500);
 }
 
 function generatePrintTable(selectedColumns) {
