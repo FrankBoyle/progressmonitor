@@ -1027,6 +1027,15 @@ input[type="text"] {
     white-space: normal; /* Allow text to wrap */
 }
 
+#goals-container p {
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
 .card.chart-card {
     display: flex;
     align-items: flex-start; /* Align items at the start of the flex container */
