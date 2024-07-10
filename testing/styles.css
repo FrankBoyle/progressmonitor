@@ -1135,3 +1135,7 @@ input[type="text"] {
 #reportingPeriodContainer {
     margin-top: 20px;
 }
+
+.goal-item img {
+    margin-left: 10px;
+}

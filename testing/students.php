@@ -1171,6 +1171,21 @@ function loadGoals(studentId) {
                         listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
                         listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
                         listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
+
+                        // Check if there is a report and add an icon
+                        if (goal.has_report) {
+                            const reportIcon = document.createElement('img');
+                            reportIcon.src = `fetch_image.php?goal_id=${goal.goal_id}`; // Fetch the image using the goal_id
+                            reportIcon.alt = 'Report Available';
+                            reportIcon.style.width = '20px'; // Adjust the size as needed
+                            reportIcon.style.height = '20px';
+                            reportIcon.style.cursor = 'pointer';
+                            reportIcon.addEventListener('click', () => {
+                                window.open(`fetch_image.php?goal_id=${goal.goal_id}`, '_blank');
+                            });
+                            listItem.appendChild(reportIcon);
+                        }
+
                         metadataContainer.appendChild(listItem);
                     }
                 });
