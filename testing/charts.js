@@ -1272,7 +1272,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     const commonWidth = '1000px'; // Adjust this width as needed to ensure consistency
 
     let printContents = `
-        <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0;">
+        <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
             <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
                 <div class="print-goal-text">${selectedGoal.innerHTML}</div>
             </div>`;
@@ -1298,8 +1298,8 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     }
 
     printContents += `
-        <div style="width: ${commonWidth}; margin: 0 auto;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
-        <div style="width: ${commonWidth}; margin: 0 auto;"><strong>Notes:</strong> ${notes}</div>
+        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
+        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Notes:</strong> ${notes}</div>
     </div>`;
 
     const printDiv = document.createElement('div');
@@ -1308,7 +1308,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     // Ensure styles are embedded within the printDiv
     const styles = `
         <style>
-            .print-container { width: ${commonWidth}; margin: 0 auto; padding: 0; }
+            .print-container { width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px; }
             .goal-text-container { width: ${commonWidth}; margin: 0 auto; }
             .print-goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
             .print-table-container { width: ${commonWidth}; margin: 0 auto; }
