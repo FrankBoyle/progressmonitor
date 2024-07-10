@@ -985,7 +985,7 @@ input[type="text"] {
 
 .checkbox-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Creates a responsive grid layout for checkboxes */
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Creates a responsive grid layout for checkboxes */
     gap: 10px; /* Space between grid items */
 }
 
