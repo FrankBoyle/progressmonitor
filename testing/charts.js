@@ -51,32 +51,32 @@ function setupInitialPageLoad() {
     fetchReportingPeriods(studentIdNew, metadataId); // Fetch reporting periods
 }
 
-function fetchReportingPeriods(studentIdNew, metadataId) {
-    fetch(`./users/fetch_reporting_periods.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+function fetchReportingPeriods(goalId) {
+    fetch(`./users/fetch_reporting_periods.php?student_id=${studentIdNew}&metadata_id=${metadataId}&goal_id=${goalId}`)
         .then(response => response.json())
         .then(data => {
             const reportingPeriodSelect = document.getElementById('reporting_period');
-            reportingPeriodSelect.innerHTML = ''; // Clear existing options
+            reportingPeriodSelect.innerHTML = ''; // Clear previous options
 
             if (data.length === 0) {
-                reportingPeriodSelect.innerHTML = '<option value="1">1</option>';
+                // No previous reports, start with 1
+                const option = document.createElement('option');
+                option.value = 1;
+                option.text = '1';
+                reportingPeriodSelect.appendChild(option);
             } else {
-                data.forEach(period => {
+                data.forEach((period, index) => {
                     const option = document.createElement('option');
-                    option.value = period.reporting_period;
-                    option.textContent = period.reporting_period;
+                    option.value = index + 1;
+                    option.text = period.reporting_period;
                     reportingPeriodSelect.appendChild(option);
                 });
 
-                // Add new reporting period option
-                const nextPeriod = Math.max(...data.map(p => p.reporting_period)) + 1;
-                const newOption = document.createElement('option');
-                newOption.value = nextPeriod;
-                newOption.textContent = nextPeriod;
-                reportingPeriodSelect.appendChild(newOption);
-
-                // Select the new reporting period by default
-                reportingPeriodSelect.value = nextPeriod;
+                // Add the next reporting period
+                const nextPeriod = document.createElement('option');
+                nextPeriod.value = data.length + 1;
+                nextPeriod.text = (data.length + 1).toString();
+                reportingPeriodSelect.appendChild(nextPeriod);
             }
         })
         .catch(error => {
@@ -1533,6 +1533,7 @@ function showPrintDialogModal() {
                 goalItem.addEventListener('click', function() {
                     document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
+                    fetchReportingPeriods(goal.goal_id); // Fetch reporting periods for the selected goal
                 });
                 goalContainer.appendChild(goalItem);
             });
@@ -1544,11 +1545,6 @@ function showPrintDialogModal() {
         });
 }
 
-function hidePrintDialogModal() {
-    document.getElementById('printDialogModal').style.display = 'none';
-}
-
-// Function to hide the print dialog modal
 function hidePrintDialogModal() {
     document.getElementById('printDialogModal').style.display = 'none';
 }
