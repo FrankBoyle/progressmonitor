@@ -856,23 +856,11 @@ input[type="text"] {
 
 @media print {
 
-    body {
-        max-width: 1000px;
-    }
-
     .print-container {
         max-width: 1000px;
         margin: 0 auto;
         padding: 20px;
         box-sizing: border-box;
-    }
-
-    .print-goal-text {
-        max-width: 1000px;
-        line-height: 1.5; /* Adjust the line height for better readability */
-        overflow-wrap: break-word; /* Ensures long words break and wrap */
-        word-wrap: break-word; /* Ensures long words break and wrap */
-        white-space: normal; /* Ensures text wraps normally */
     }
 
     .goal-text-container {
@@ -920,6 +908,7 @@ input[type="text"] {
     word-wrap: break-word;
     white-space: normal;
     max-width: 1000px; /* Ensure it does not exceed 1000px */
+    margin: 0 auto;
 }
 
 #chartContainer, #barChartContainer {
