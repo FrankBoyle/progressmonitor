@@ -1175,13 +1175,13 @@ function loadGoals(studentId) {
                         // Check if there is a report and add an icon
                         if (goal.has_report) {
                             const reportIcon = document.createElement('img');
-                            reportIcon.src = `./fetch_image.php?goal_id=${goal.goal_id}`; // Ensure the correct path
+                            reportIcon.src = `./fetch_image.php?goal_id=${encodeURIComponent(goal.goal_id)}`; // Ensure the correct path
                             reportIcon.alt = 'Report Available';
                             reportIcon.style.width = '20px'; // Adjust the size as needed
                             reportIcon.style.height = '20px';
                             reportIcon.style.cursor = 'pointer';
                             reportIcon.addEventListener('click', () => {
-                                window.open(`./fetch_image.php?goal_id=${goal.goal_id}`, '_blank');
+                                window.open(`./fetch_image.php?goal_id=${encodeURIComponent(goal.goal_id)}`, '_blank');
                             });
                             listItem.appendChild(reportIcon);
                         }
