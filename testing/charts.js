@@ -1342,6 +1342,11 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             const dataUrl = canvas.toDataURL('image/png');
             const newTab = window.open();
             newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
+        
+                // Refresh the specific part of the page
+                newTab.addEventListener('unload', () => {
+                    window.location.reload();
+                });
         });
     });
 }
