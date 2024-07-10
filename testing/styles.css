@@ -902,6 +902,29 @@ input[type="text"] {
         max-width: 1000px;
     }
 
+    .chart {
+        max-width: 1000px;
+        width: 100%; /* Make the chart take the full width of the wrapper */
+        height: auto; /* Set a fixed height for the charts */
+        border: 1px solid #ccc; /* Optional: Add a border for better visual separation */
+    
+    }
+    
+    .chart-card {
+        max-width: 1000px;
+        background-color: #c0c8c8; /* Same as other cards */
+        border: 1.5px solid #a3bbcf; /* Same border */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        width: auto; /* Ensure full width */
+        box-sizing: border-box;
+        overflow: hidden; /* Prevent overflow */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative; /* For positioning the minimize button */
+    }
+
 }
 
 
