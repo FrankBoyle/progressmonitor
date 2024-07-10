@@ -51,6 +51,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
         </header>
         <main class="content">
+        <div class="print-container">
+
             <div class="card" id="goalsCard">
                 <div class="card-header">
                     <h2>Goals</h2>
@@ -143,6 +145,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <button onclick="saveAndPrintReport()">Print</button>
                 </div>
             </div>
+        </div>
         </main>
     </div>
     <script src="charts.js"></script>
