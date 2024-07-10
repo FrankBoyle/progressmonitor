@@ -1535,8 +1535,9 @@ function showPrintDialogModal() {
                 goalItem.addEventListener('click', function() {
                     document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
-                    fetchReportingPeriods(goal.goal_id); // Fetch reporting periods for the selected goal
-                    document.getElementById('reportingPeriodContainer').style.display = 'block'; // Show reporting period dropdown
+
+                    // Fetch existing reports for the selected goal
+                    fetchExistingReports(goal.goal_id);
                 });
                 goalContainer.appendChild(goalItem);
             });
@@ -1545,6 +1546,49 @@ function showPrintDialogModal() {
         })
         .catch(error => {
             console.error('Error fetching goals:', error);
+        });
+}
+
+function fetchExistingReports(goalId) {
+    fetch(`./users/fetch_reports.php?goal_id=${goalId}`)
+        .then(response => response.json())
+        .then(data => {
+            const reportingPeriodDropdown = document.getElementById('reporting_period');
+            reportingPeriodDropdown.innerHTML = ''; // Clear previous options
+
+            let nextReportingPeriod = 1;
+
+            if (data.length > 0) {
+                data.forEach(report => {
+                    const option = document.createElement('option');
+                    option.value = report.reporting_period;
+                    option.textContent = report.reporting_period;
+                    reportingPeriodDropdown.appendChild(option);
+                    nextReportingPeriod = Math.max(nextReportingPeriod, parseInt(report.reporting_period, 10) + 1);
+                });
+
+                // Populate the notes field with the latest report notes
+                document.getElementById('notes').value = data[data.length - 1].notes;
+            }
+
+            // Add option for the next reporting period
+            const nextOption = document.createElement('option');
+            nextOption.value = nextReportingPeriod;
+            nextOption.textContent = nextReportingPeriod;
+            reportingPeriodDropdown.appendChild(nextOption);
+
+            // Set the dropdown to the next reporting period by default
+            reportingPeriodDropdown.value = nextReportingPeriod;
+
+            // Add event listener to populate notes based on selected period
+            reportingPeriodDropdown.addEventListener('change', function() {
+                const selectedPeriod = this.value;
+                const report = data.find(report => report.reporting_period == selectedPeriod);
+                document.getElementById('notes').value = report ? report.notes : '';
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching reports:', error);
         });
 }
 
