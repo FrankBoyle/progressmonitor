@@ -851,7 +851,6 @@ input[type="text"] {
 }
 
 @media print {
-
     .print-container {
         width: 100%;
         max-width: 1000px;
@@ -894,13 +893,106 @@ input[type="text"] {
         padding: 0;
     }
 
-            /* Ensure the goal text container within the goal item is also constrained */
+    /* Ensure the goal text container within the goal item is also constrained */
     .goal-item .goal-text-container {
         width: 100%;
         max-width: 1000px;
     }
 
+    /* Style for the statistical summary */
+    #statistics {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-top: 20px;
+        max-width: 1000px; /* Ensures the section stays within 1000px */
+        margin: 0 auto;
+    }
+
+    /* Style for the statistical summary table */
+    #statsTable {
+        width: 100%;
+        max-width: 1000px;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border-spacing: 0; /* Ensure there's no extra space between cells */
+    }
+
+    /* Ensure the charts are correctly sized and centered */
+    .chart-wrapper {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .chart {
+        width: 100%;
+        max-width: 1000px;
+        height: auto;
+    }
+
+    .chart-card {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .print-table-container,
+    .print-graph,
+    .statistics-area {
+        flex: 1 1 100%;
+        margin: 10px 0;
+        max-width: 1000px;
+    }
+
+    .print-table th, .print-table td, .print-graph th, .print-graph td {
+        padding: 8px;
+        border: 1px solid #ccc;
+        text-align: center;
+        word-wrap: break-word;
+    }
+
+    .statistics-table {
+        width: 100%;
+        box-sizing: border-box;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .statistics-table th, .statistics-table td {
+        padding: 8px;
+        border: 1px solid #ccc;
+        text-align: center;
+        word-wrap: break-word;
+    }
+
+    .statistics-area {
+        flex: 1 1 100%;
+        max-width: 1000px;
+        margin: 10px 0;
+    }
+
+    .report-details {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    .report-details div {
+        flex: 1;
+        text-align: center;
+        word-wrap: break-word;
+    }
+
+    #assign-students-form, #group-students-list-add, #metadataOptionSelector, #goal-description, #goal-date, #date-of-birth {
+        margin-bottom: 15px;
+    }
 }
+
 
 /* Regular styles */
 .goal-text-container {
