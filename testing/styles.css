@@ -1002,18 +1002,27 @@ input[type="text"] {
 }
 
 .selector-item {
-    cursor: pointer;
-    padding: 5px 5px;
+    display: inline-block;
+    padding: 10px 20px; /* Increased padding for better appearance */
+    margin: 5px; /* Add some margin around the buttons */
     background-color: #fff;
-    border: 1.5px solid #a3bbcf; /* Soft blue border */
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, color 0.3s;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visuals */
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
 }
 
 .selector-item.selected {
     background-color: #47A6E6; /* Light blue for selected items */
     color: #fff;
+    border-color: #47A6E6;
+}
+
+/* Hover effect for the buttons */
+.selector-item:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly larger shadow on hover */
 }
 
 #columnSelector {
