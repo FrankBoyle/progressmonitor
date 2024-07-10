@@ -10,8 +10,21 @@ if (isset($_GET['goal_id'])) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result && $result['report_image']) {
-        header('Content-Type: image/png'); // Adjust the content type based on your image format
-        echo $result['report_image'];
+        $imageData = $result['report_image'];
+
+        // Determine the image type
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_buffer($finfo, $imageData);
+        finfo_close($finfo);
+
+        // Log the mime type for debugging
+        error_log("Image mime type: " . $mimeType);
+
+        // Set the Content-Type header
+        header('Content-Type: ' . $mimeType);
+
+        // Output the image data
+        echo $imageData;
     } else {
         echo 'Image not found';
     }
@@ -19,4 +32,5 @@ if (isset($_GET['goal_id'])) {
     echo 'Invalid request';
 }
 ?>
+
 
