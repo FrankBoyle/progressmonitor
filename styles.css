@@ -42,16 +42,15 @@
     }
 }
 
-
-html {
-    scroll-behavior: smooth;
-}
-
 /* Basic Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 .logo img {
@@ -302,7 +301,7 @@ ul li:hover, ul li.selected-student, ul li.selected-group{
     border: none;
     color: inherit;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 20px;
     margin-left: 5px;
 }
 
@@ -332,7 +331,8 @@ h2 {
 }
 
 h3 {
-    margin-bottom: 0.5rem;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .close {
@@ -362,7 +362,7 @@ h3 {
 
 .goal-item {
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -851,36 +851,74 @@ input[type="text"] {
 }
 
 @media print {
-    .chart-wrapper-print,
-    .chart-print {
-        width: 800px;
-        height: auto;
-        overflow: visible;
-        border: none;
-        padding: 0;
-    }
 
-    body, html {
+    .print-container {
         width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
     }
 
+    .print-goal-text {
+        line-height: 1.5; /* Adjust the line height for better readability */
+        overflow-wrap: break-word; /* Ensures long words break and wrap */
+        word-wrap: break-word; /* Ensures long words break and wrap */
+        white-space: normal; /* Ensures text wraps normally */
+    }
+
+    .goal-text-container {
+        width: 100%;
+        max-width: 1000px;
+        overflow-wrap: break-word; /* Ensures long words break and wrap */
+        word-wrap: break-word; /* Ensures long words break and wrap */
+        white-space: normal; /* Ensures text wraps normally */
+        padding: 10px;
+        box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+    }
+
+    .goal-text {
+        line-height: 1.5; /* Adjust the line height for better readability */
+        overflow-wrap: break-word; /* Ensures long words break and wrap */
+        word-wrap: break-word; /* Ensures long words break and wrap */
+        white-space: normal; /* Ensures text wraps normally */
+        max-width: 100%; /* Ensure text does not overflow the container */
+    }
+
+    /* Ensure that the main container also respects max-width */
     .content, .dashboard {
         width: 100%;
         height: auto;
-        margin: 0;
+        margin: 0 auto;
+        max-width: 1000px; /* Limit the width to prevent overflow */
         padding: 0;
     }
 
-    .card {
-        box-shadow: none;
+            /* Ensure the goal text container within the goal item is also constrained */
+    .goal-item .goal-text-container {
+        width: 100%;
+        max-width: 1000px;
     }
 
-    #chartContainer, #barChartContainer {
-        width: 1000px;
-    }
+}
+
+/* Regular styles */
+.goal-text-container {
+    width: 100%;
+    max-width: 1000px;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    /*margin: 0 auto;*/
+}
+
+.goal-text {
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 #chartContainer, #barChartContainer {
@@ -947,7 +985,7 @@ input[type="text"] {
 
 .checkbox-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Creates a responsive grid layout for checkboxes */
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Creates a responsive grid layout for checkboxes */
     gap: 10px; /* Space between grid items */
 }
 
@@ -964,18 +1002,27 @@ input[type="text"] {
 }
 
 .selector-item {
-    cursor: pointer;
-    padding: 10px 15px;
+    display: inline-block;
+    padding: 5px 5px; /* Increased padding for better appearance */
+    margin: 5px; /* Add some margin around the buttons */
     background-color: #fff;
-    border: 1.5px solid #a3bbcf; /* Soft blue border */
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, color 0.3s;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visuals */
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
 }
 
 .selector-item.selected {
     background-color: #47A6E6; /* Light blue for selected items */
     color: #fff;
+    border-color: #47A6E6;
+}
+
+/* Hover effect for the buttons */
+.selector-item:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly larger shadow on hover */
 }
 
 #columnSelector {
@@ -990,11 +1037,13 @@ input[type="text"] {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-top: 20px;
-    overflow-x: auto; /* Ensures the table can scroll horizontally if needed */
+    max-width: 1000px; /* Ensures the section stays within 1000px */
+    margin: 0 auto;
 }
 
 #statsTable {
     width: 100%;
+    max-width: 1000px;
     border-collapse: collapse;
 }
 
@@ -1002,6 +1051,9 @@ input[type="text"] {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
+    white-space: normal; /* Allow text to wrap */
+    overflow-wrap: break-word; /* Break long words */
+    word-break: break-all; /* Ensure long words are wrapped */
 }
 
 #statsTable th {
@@ -1009,7 +1061,7 @@ input[type="text"] {
 }
 
 #statsTable td {
-    white-space: nowrap; /* Prevents wrapping and increases readability */
+    white-space: normal; /* Allow text to wrap */
 }
 
 .card.chart-card {
@@ -1027,11 +1079,6 @@ input[type="text"] {
     margin-right: 20px; /* Margin between selectors and statistics */
 }
 
-.statistics-area {
-    flex: 2; /* Takes up 2 parts of the available space, giving more space to statistics */
-    max-width: 600px; /* Maximum width of the statistics area */
-}
-
 #printReportBtn {
     position: relative;
     top: 0;
@@ -1045,3 +1092,58 @@ input[type="text"] {
     gap: 10px;
     margin: 10px 0;
 }
+
+.print-table-container,
+.print-graph,
+.statistics-area {
+    flex: 1 1 100%;
+    margin: 10px 0;
+    max-width: 1000px; /* Ensure maximum width is set */
+}
+
+.print-table th, .print-table td, .print-graph th, .print-graph td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    word-wrap: break-word; /* Ensure long words are wrapped */
+}
+
+.statistics-table {
+    width: 100%;
+    box-sizing: border-box;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.statistics-table th, .statistics-table td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    word-wrap: break-word; /* Ensure long words are wrapped */
+}
+
+.statistics-area {
+    flex: 1 1 100%;
+    max-width: 1000px;
+    margin: 10px 0;
+}
+
+.report-details {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.report-details div {
+    flex: 1;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+#assign-students-form, #group-students-list-add, #metadataOptionSelector, #goal-description, #goal-date, #date-of-birth {
+    margin-bottom: 15px;
+}
+
