@@ -1344,7 +1344,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
             newTab.document.close();
 
-            // Refresh the page after the print dialog is closed
+            // Add event listener to refresh the parent window when the new tab is closed
             newTab.addEventListener('unload', () => {
                 window.location.reload();
             });
