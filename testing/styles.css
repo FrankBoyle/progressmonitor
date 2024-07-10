@@ -920,15 +920,6 @@ input[type="text"] {
         border-spacing: 0; /* Ensure there's no extra space between cells */
     }
 
-    /* Style for the table headers and cells */
-    #statsTable th, #statsTable td {
-        border: 1px solid #ccc;
-        padding: 10px; /* Add padding for better spacing */
-        text-align: left;
-        white-space: normal; /* Allow text to wrap */
-        overflow-wrap: break-word; /* Break long words */
-        word-break: break-all; /* Ensure long words are wrapped */
-    }
 }
 
 /* Regular styles */
