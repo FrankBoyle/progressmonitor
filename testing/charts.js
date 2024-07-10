@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setupInitialPageLoad();
     attachEventListeners();
     initializeCharts();
-    fetchGoals(studentIdNew, metadataId);
 
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
     window.hidePrintDialogModal = hidePrintDialogModal;
@@ -48,7 +47,9 @@ function setupInitialPageLoad() {
     }
     
     fetchInitialData(studentIdNew, metadataId);
+    fetchGoals(studentIdNew, metadataId); // Ensure goals are fetched
 }
+
 
 function attachEventListeners() {
     const filterBtn = document.getElementById('filterData');
