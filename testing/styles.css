@@ -852,13 +852,6 @@ input[type="text"] {
 
 @media print {
 
-    body, html {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
     .print-container {
         width: 100%;
         max-width: 1000px;
@@ -868,131 +861,46 @@ input[type="text"] {
     }
 
     .print-goal-text {
-        line-height: 1.5;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        white-space: normal;
+        line-height: 1.5; /* Adjust the line height for better readability */
+        overflow-wrap: break-word; /* Ensures long words break and wrap */
+        word-wrap: break-word; /* Ensures long words break and wrap */
+        white-space: normal; /* Ensures text wraps normally */
     }
 
     .goal-text-container {
         width: 100%;
         max-width: 1000px;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        white-space: normal;
+        overflow-wrap: break-word; /* Ensures long words break and wrap */
+        word-wrap: break-word; /* Ensures long words break and wrap */
+        white-space: normal; /* Ensures text wraps normally */
         padding: 10px;
-        box-sizing: border-box;
+        box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
     }
 
     .goal-text {
-        line-height: 1.5;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        white-space: normal;
-        max-width: 100%;
+        line-height: 1.5; /* Adjust the line height for better readability */
+        overflow-wrap: break-word; /* Ensures long words break and wrap */
+        word-wrap: break-word; /* Ensures long words break and wrap */
+        white-space: normal; /* Ensures text wraps normally */
+        max-width: 100%; /* Ensure text does not overflow the container */
     }
 
+    /* Ensure that the main container also respects max-width */
     .content, .dashboard {
         width: 100%;
         height: auto;
         margin: 0 auto;
-        max-width: 1000px;
+        max-width: 1000px; /* Limit the width to prevent overflow */
         padding: 0;
-        box-sizing: border-box;
     }
 
+            /* Ensure the goal text container within the goal item is also constrained */
     .goal-item .goal-text-container {
         width: 100%;
         max-width: 1000px;
     }
 
-    #statistics {
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-top: 20px;
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    #statsTable {
-        width: 100%;
-        max-width: 1000px;
-        border-collapse: collapse;
-        margin-top: 20px;
-        border-spacing: 0;
-    }
-
-    .chart-wrapper {
-        width: 100%;
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    .chart {
-        width: 100%;
-        max-width: 1000px;
-    }
-
-    .chart-card {
-        width: 100%;
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-
-    .report-details {
-        width: 100%;
-        max-width: 1000px;
-        display: flex;
-        justify-content: space-between;
-        margin: 20px 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    .report-details div {
-        flex: 1;
-        text-align: center;
-        word-wrap: break-word;
-    }
-
-    .print-table-container,
-    .print-graph,
-    .statistics-area {
-        flex: 1 1 100%;
-        margin: 10px 0;
-        max-width: 1000px;
-    }
-
-    .print-table th, .print-table td, .print-graph th, .print-graph td {
-        padding: 8px;
-        border: 1px solid #ccc;
-        text-align: center;
-        word-wrap: break-word;
-    }
-
-    .statistics-table {
-        width: 100%;
-        box-sizing: border-box;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    .statistics-table th, .statistics-table td {
-        padding: 8px;
-        border: 1px solid #ccc;
-        text-align: center;
-        word-wrap: break-word;
-    }
-
-    .statistics-area {
-        flex: 1 1 100%;
-        max-width: 1000px;
-        margin: 10px 0;
-    }
 }
-
 
 /* Regular styles */
 .goal-text-container {
