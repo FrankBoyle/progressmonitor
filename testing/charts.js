@@ -1388,6 +1388,8 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
                 report_image: dataUrl.split(',')[1] // Get base64 string
             };
 
+            console.log("Payload being sent to save_notes.php:", payload);
+
             // Save notes with the image data
             fetch('./users/save_notes.php', {
                 method: 'POST',
@@ -1396,7 +1398,12 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
                 },
                 body: JSON.stringify(payload)
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.status === 'success') {
                     const newTab = window.open();
