@@ -32,6 +32,7 @@
     }
 
     .chart-card {
+        max-width: 1000px; /* Ensure the card does not exceed 1000px */
         width: 100%; /* Full width on smaller screens */
         margin-bottom: 20px; /* Space between stacked cards */
     }
