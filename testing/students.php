@@ -104,7 +104,7 @@ include('./users/auth_session.php');
 <div id="add-student-modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hideAddStudentModal()">&times;</span>
-        <h3>Assign Students to Group</h3>
+        <h2>Assign Students to Group</h2>
         <div style="margin-top: 20px;">
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
@@ -118,11 +118,11 @@ include('./users/auth_session.php');
                 </div>
             </form>
         </div>
-        <h3>Remove Students from Group</h3>
+        <h2>Remove Students from Group</h2>
         <div id="group-students-list-add">
             <!-- Students will be loaded here dynamically -->
         </div>
-        <h3>Add New Student</h3>
+        <h2>Add New Student</h2>
         <form id="add-student-form" onsubmit="addStudent(event)">
             <div class="form-group">
                 <label for="first-name">First Name:</label>
@@ -174,7 +174,7 @@ include('./users/auth_session.php');
             </div>
 
             <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
-                <h3>Column Names:</h3>
+                <h2>Column Names:</h2>
                 <ul id="columnNamesList"></ul>
             </div>
 
@@ -208,11 +208,11 @@ include('./users/auth_session.php');
             <button type="submit">Save Changes</button>
         </form>
         <button onclick="deleteGroup()">Delete Group</button>
-        <h3>Remove Students from Group</h3>
+        <h2>Remove Students from Group</h2>
         <div id="group-students-list-edit">
             <!-- Students will be loaded here dynamically -->
         </div>
-        <h3>Share Group</h3>
+        <h2>Share Group</h2>
         <form id="share-group-form" onsubmit="shareGroup(event)">
             <input type="hidden" id="share-group-id">
             <select id="share-teacher-id" name="shared_teacher_id">
