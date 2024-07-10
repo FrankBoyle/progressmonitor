@@ -1010,12 +1010,6 @@ input[type="text"] {
     border-color: #47A6E6;
 }
 
-/* Hover effect for the buttons */
-.selector-item:hover {
-    background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly larger shadow on hover */
-}
-
 #columnSelector {
     display: flex;
     flex-wrap: wrap; /* Allows items to wrap within the container */
