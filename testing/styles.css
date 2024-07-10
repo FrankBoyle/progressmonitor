@@ -989,15 +989,19 @@ input[type="text"] {
 }
 
 .selector-item {
-    display: inline-block;
-    padding: 5px 5px; /* Increased padding for better appearance */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; /* Increased padding for better appearance */
     margin: 5px; /* Add some margin around the buttons */
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 5px; /* Rounded corners */
+    border-radius: 8px; /* More rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visuals */
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+    text-align: center; /* Center text */
+    min-width: 100px; /* Ensure buttons are not too narrow */
 }
 
 .selector-item.selected {
