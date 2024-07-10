@@ -125,24 +125,26 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                 <div class="modal-content">
                     <span class="close" onclick="hidePrintDialogModal()">&times;</span>
                     <h2>Select Sections to Print</h2>
-                    <div id="goalSelectionContainer"></div>
-                    <div id="sectionSelectionContainer">
-                        <h3>Select what you want to print in the report:</h3>
+                    <div>Please select a goal:</div>
+                    <div id="goalSelectionContainer" class="selection-container"></div>
+                    <div>Select what you want to print in the report:</div>
+                    <div id="sectionSelectionContainer" class="selection-container">
                         <div class="selector-item" data-section="printTable">Performance Table</div>
                         <div class="selector-item" data-section="printLineChart">Line Chart</div>
                         <div class="selector-item" data-section="printBarChart">Bar Chart</div>
                         <div class="selector-item" data-section="printStatistics">Statistics</div>
                     </div>
-                    <div id="reportingPeriodContainer" style="display:none;">
+                    <div>
                         <label for="reporting_period">Reporting Period:</label>
-                        <select id="reporting_period"></select>
+                        <input type="text" id="reporting_period" placeholder="Enter reporting period">
                     </div>
-                    <label for="notes">Notes:</label>
-                    <textarea id="notes" placeholder="Enter notes"></textarea>
-                    <button id="printReportBtn" onclick="saveAndPrintReport()">Print</button>
+                    <div>
+                        <label for="notes">Notes:</label>
+                        <textarea id="notes" placeholder="Enter notes"></textarea>
+                    </div>
+                    <button onclick="saveAndPrintReport()">Print</button>
                 </div>
             </div>
-
         </div>
         </main>
     </div>
