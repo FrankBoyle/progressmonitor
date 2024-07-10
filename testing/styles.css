@@ -914,6 +914,7 @@ input[type="text"] {
 
     /* Style for the statistical summary table */
     #statsTable {
+        width: 100%;
         max-width: 1000px;
         border-collapse: collapse;
         margin-top: 20px;
@@ -937,8 +938,17 @@ input[type="text"] {
         padding: 20px;
         box-sizing: border-box;
     }
-}
 
+    /* Ensure that the main container also respects max-width */
+    .content, .dashboard {
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        max-width: 1000px; /* Limit the width to prevent overflow */
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+}
 
 /* Regular styles */
 .goal-text-container {
