@@ -1003,7 +1003,7 @@ input[type="text"] {
 
 .selector-item {
     cursor: pointer;
-    padding: 10px 15px;
+    padding: 2px 2px;
     background-color: #fff;
     border: 1.5px solid #a3bbcf; /* Soft blue border */
     border-radius: 4px;
