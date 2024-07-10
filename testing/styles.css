@@ -870,23 +870,23 @@ input[type="text"] {
     }
 
     .goal-text-container {
-        max-width: 1000px; /* Adjust as needed */
-        width: 100%; /* Ensure it takes the full width */
-        margin: 0 auto; /* Center the container */
-        overflow-wrap: break-word; /* Ensure long words break and wrap */
-        word-wrap: break-word; /* Ensure long words break and wrap */
-        white-space: normal; /* Ensure text wraps normally */
-        padding: 10px; /* Add padding if needed */
-        box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+        max-width: 1000px; /* Ensure it does not exceed 1000px */
+        width: 100%;
+        margin: 0 auto;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        white-space: normal;
+        padding: 10px;
+        box-sizing: border-box;
     }
 
     .goal-text {
-        max-width: 1000px;
-        line-height: 1.5; /* Adjust the line height for better readability */
-        overflow-wrap: break-word; /* Ensure long words break and wrap */
-        word-wrap: break-word; /* Ensure long words break and wrap */
-        white-space: normal; /* Ensure text wraps normally */
-        max-width: 100%; /* Ensure text does not overflow the container */
+        max-width: 1000px; /* Ensure it does not exceed 1000px */
+        width: 100%;
+        line-height: 1.5;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        white-space: normal;
     }
 
     /* Ensure that the main container also respects max-width */
@@ -894,7 +894,7 @@ input[type="text"] {
         width: 100%;
         height: auto;
         margin: 0 auto;
-        max-width: 1000px; /* Limit the width to prevent overflow */
+        max-width: 1000px;
         padding: 0;
     } 
 
@@ -903,22 +903,23 @@ input[type="text"] {
 
 /* Regular styles */
 .goal-text-container {
-    max-width: 1000px; /* Adjust as needed */
-    width: 100%; /* Ensure it takes the full width */
-    margin: 0 auto; /* Center the container */
-    overflow-wrap: break-word; /* Ensure long words break and wrap */
-    word-wrap: break-word; /* Ensure long words break and wrap */
-    white-space: normal; /* Ensure text wraps normally */
-    padding: 10px; /* Add padding if needed */
-    box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
+    max-width: 1000px; /* Ensure it does not exceed 1000px */
+    width: 100%;
+    margin: 0 auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .goal-text {
-    line-height: 1.5; /* Adjust the line height for better readability */
-    overflow-wrap: break-word; /* Ensure long words break and wrap */
-    word-wrap: break-word; /* Ensure long words break and wrap */
-    white-space: normal; /* Ensure text wraps normally */
-    max-width: 100%; /* Ensure text does not overflow the container */
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 1000px; /* Ensure it does not exceed 1000px */
+    width: 100%;
 }
 
 #chartContainer, #barChartContainer {
