@@ -865,7 +865,6 @@ input[type="text"] {
         overflow-wrap: break-word; /* Ensures long words break and wrap */
         word-wrap: break-word; /* Ensures long words break and wrap */
         white-space: normal; /* Ensures text wraps normally */
-        margin: 0 20px; /* Add margins for better spacing */
     }
 
     .goal-text-container {
@@ -876,7 +875,6 @@ input[type="text"] {
         white-space: normal; /* Ensures text wraps normally */
         padding: 10px;
         box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
-        margin: 0 20px; /* Add margins for better spacing */
     }
 
     .goal-text {
@@ -885,14 +883,13 @@ input[type="text"] {
         word-wrap: break-word; /* Ensures long words break and wrap */
         white-space: normal; /* Ensures text wraps normally */
         max-width: 100%; /* Ensure text does not overflow the container */
-        margin: 0 20px; /* Add margins for better spacing */
     }
 
     /* Ensure that the main container also respects max-width */
     .content, .dashboard {
         width: 100%;
         height: auto;
-        margin: 0 auto;
+        margin: 0;
         max-width: 1000px; /* Limit the width to prevent overflow */
         padding: 0;
     }
@@ -901,7 +898,6 @@ input[type="text"] {
     .goal-item .goal-text-container {
         width: 100%;
         max-width: 1000px;
-        margin: 0 20px; /* Add margins for better spacing */
     }
 
     /* Style for the statistical summary */
@@ -921,7 +917,6 @@ input[type="text"] {
         border-collapse: collapse;
         margin-top: 20px;
         border-spacing: 0; /* Ensure there's no extra space between cells */
-        margin: 0 20px; /* Add margins for better spacing */
     }
 
     /* Ensure the chart container respects the max-width */
@@ -934,7 +929,6 @@ input[type="text"] {
     .chart {
         width: 100%;
         max-width: 1000px;
-        margin: 0 20px; /* Add margins for better spacing */
     }
 
     .chart-card {
@@ -948,8 +942,8 @@ input[type="text"] {
         max-width: 1000px;
         display: flex;
         justify-content: space-between;
-        margin: 20px auto;
-        padding: 0 20px; /* Add padding for better spacing */
+        margin: 20px 0;
+        padding: 0; /* Remove padding to avoid white space */
         box-sizing: border-box;
     }
 
@@ -994,7 +988,6 @@ input[type="text"] {
         margin: 10px 0;
     }
 }
-
 
 /* Regular styles */
 .goal-text-container {
