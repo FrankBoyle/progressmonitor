@@ -369,7 +369,7 @@ h3 {
     border-radius: 8px;
     background-color: #f9f9f9;
     position: relative;
-    padding-right: 50px; /* Adjust the padding to fit the button */
+    padding-right: 90px; /* Adjust the padding to fit the button */
 }
 
 .goal-item.selected {
