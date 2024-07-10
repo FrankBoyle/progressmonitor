@@ -2,9 +2,6 @@
 session_start();
 include('auth_session.php');
 include('db.php');
-//echo '<pre>';
-//print_r($_SESSION);
-//echo '</pre>';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -12,11 +9,6 @@ error_reporting(E_ALL);
 
 // Assuming school_id is set in the session during login
 $schoolId = $_SESSION['school_id']; // Default to 1 if not set
-//$teacher_id = $SESSION['teacher_id'];
-//$schoolId = $_SESSION['school_id'];
-//$admin = $SESSION['is_admin'] == 1; // Assuming 'is_admin' is the column name
-
-// Other necessary PHP code...
 ?>
 
 <!DOCTYPE html>
@@ -37,15 +29,16 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script> <!-- Add Luxon -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
     <style>
-
+        /* Include your custom CSS here */
     </style>
 </head>
 <body>
+    
     <div class="dashboard">
         <header class="dashboard-header">
             <div class="logo">
@@ -58,7 +51,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
         </header>
         <main class="content">
-            <!-- New Goals Card -->
             <div class="card" id="goalsCard">
                 <div class="card-header">
                     <h3>Goals</h3>
@@ -76,7 +68,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <input type="date" id="newRowDate" style="display: none;">
                 </div>
                 <button id="editColumnsBtn" class="btn btn-primary">Edit Column Names</button>
-                <!-- Modal for Editing Column Names -->
                 <div id="editColumnNamesModal" class="modal">
                     <div class="modal-content">
                         <span class="close" onclick="hideEditColumnNamesModal()">&times;</span>
@@ -93,9 +84,16 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
                     <div id="columnSelector" class="checkbox-container"></div>
                 </div>
+                <div class="print-container">
+                    <div class="goal-text-container">
+                        <div id="goal-text"></div>
+                    </div>
+                    <div class="print-table-container" id="printTableContainer"></div>
+                    <div class="print-graph" id="printGraphContainer"></div>
+                </div>
                 <div id="statistics" class="statistics-area">
                     <h3>Statistical Summary</h3>
-                    <table id="statsTable">
+                    <table id="statsTable" class="statistics-table">
                         <thead>
                             <tr>
                                 <th>Variable</th>
@@ -111,7 +109,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     </table>
                 </div>
             </div>
-            <!-- Chart Containers -->
             <div class="card chart-card">
                 <div class="chart-wrapper">
                     <div id="chartContainer" class="chart"></div>
@@ -122,39 +119,35 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <div id="barChartContainer" class="chart"></div>
                 </div>
             </div>
-
-<!-- Print Report Modal -->
-<div id="printDialogModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-        <h2>Select Sections to Print</h2>
-        <div>Please select a goal:</div>
-        <div id="goalSelectionContainer" class="selection-container"></div>
-        <div>Select what you want to print in the report:</div>
-        <div id="sectionSelectionContainer" class="selection-container">
-            <div class="selector-item" data-section="printTable">Performance Table</div>
-            <div class="selector-item" data-section="printLineChart">Line Chart</div>
-            <div class="selector-item" data-section="printBarChart">Bar Chart</div>
-            <div class="selector-item" data-section="printStatistics">Statistics</div>
-        </div>
-        <div>
-            <label for="reporting_period">Reporting Period:</label>
-            <input type="text" id="reporting_period" placeholder="Enter reporting period">
-        </div>
-        <div>
-            <label for="notes">Notes:</label>
-            <textarea id="notes" placeholder="Enter notes"></textarea>
-        </div>
-        <button onclick="saveAndPrintReport()">Print</button>
-    </div>
-</div>
-
+            <div id="printDialogModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="hidePrintDialogModal()">&times;</span>
+                    <h2>Select Sections to Print</h2>
+                    <div>Please select a goal:</div>
+                    <div id="goalSelectionContainer" class="selection-container"></div>
+                    <div>Select what you want to print in the report:</div>
+                    <div id="sectionSelectionContainer" class="selection-container">
+                        <div class="selector-item" data-section="printTable">Performance Table</div>
+                        <div class="selector-item" data-section="printLineChart">Line Chart</div>
+                        <div class="selector-item" data-section="printBarChart">Bar Chart</div>
+                        <div class="selector-item" data-section="printStatistics">Statistics</div>
+                    </div>
+                    <div>
+                        <label for="reporting_period">Reporting Period:</label>
+                        <input type="text" id="reporting_period" placeholder="Enter reporting period">
+                    </div>
+                    <div>
+                        <label for="notes">Notes:</label>
+                        <textarea id="notes" placeholder="Enter notes"></textarea>
+                    </div>
+                    <button onclick="saveAndPrintReport()">Print</button>
+                </div>
+            </div>
         </main>
     </div>
-    <script src="charts.js"></script> <!-- Link to your external JS file that handles chart logic -->
+    <script src="charts.js"></script>
     <script>
         let schoolId = <?php echo json_encode($schoolId); ?>;
     </script>
 </body>
 </html>
-
