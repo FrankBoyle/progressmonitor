@@ -48,8 +48,41 @@ function setupInitialPageLoad() {
     
     fetchInitialData(studentIdNew, metadataId);
     fetchGoals(studentIdNew, metadataId); // Ensure goals are fetched
+    fetchReportingPeriods(studentIdNew, metadataId); // Fetch reporting periods
 }
 
+function fetchReportingPeriods(studentIdNew, metadataId) {
+    fetch(`./users/fetch_reporting_periods.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
+        .then(response => response.json())
+        .then(data => {
+            const reportingPeriodSelect = document.getElementById('reporting_period');
+            reportingPeriodSelect.innerHTML = ''; // Clear existing options
+
+            if (data.length === 0) {
+                reportingPeriodSelect.innerHTML = '<option value="1">1</option>';
+            } else {
+                data.forEach(period => {
+                    const option = document.createElement('option');
+                    option.value = period.reporting_period;
+                    option.textContent = period.reporting_period;
+                    reportingPeriodSelect.appendChild(option);
+                });
+
+                // Add new reporting period option
+                const nextPeriod = Math.max(...data.map(p => p.reporting_period)) + 1;
+                const newOption = document.createElement('option');
+                newOption.value = nextPeriod;
+                newOption.textContent = nextPeriod;
+                reportingPeriodSelect.appendChild(newOption);
+
+                // Select the new reporting period by default
+                reportingPeriodSelect.value = nextPeriod;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching reporting periods:', error);
+        });
+}
 
 function attachEventListeners() {
     const filterBtn = document.getElementById('filterData');
