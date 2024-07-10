@@ -900,7 +900,6 @@ input[type="text"] {
 /* Regular styles */
 .goal-text-container {
     max-width: 1000px; /* Ensure it does not exceed 1000px */
-    width: 100%;
     margin: 0 auto;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -915,7 +914,6 @@ input[type="text"] {
     word-wrap: break-word;
     white-space: normal;
     max-width: 1000px; /* Ensure it does not exceed 1000px */
-    width: 100%;
 }
 
 #chartContainer, #barChartContainer {
