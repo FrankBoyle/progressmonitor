@@ -1269,93 +1269,44 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    const commonWidth = '1000px'; // Fixed width for consistency
-
-    // Save original styles
-    const originalStyles = {
-        chartContainer: document.getElementById('chartContainer').style.cssText,
-        barChartContainer: document.getElementById('barChartContainer').style.cssText,
-        body: document.body.style.cssText
-    };
-
-    let printContents = `
-        <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
-            <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
-                <div class="print-goal-text">${selectedGoal.innerHTML}</div>
-            </div>`;
+    let printContents = `<div class="print-container"><div class="goal-text-container"><div class="print-goal-text">${selectedGoal.innerHTML}</div></div></div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container" style="width: ${commonWidth}; margin: 0 auto;">${tableContent}</div>`;
+        printContents += `<div class="print-table-container">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
-        lineChartElement.style.width = commonWidth;
-        lineChartElement.style.height = 'auto';
-        lineChartElement.style.overflow = 'visible';
-        lineChartElement.style.position = 'relative';
-        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${lineChartElement.outerHTML}</div>`;
+        const lineChartElement = document.getElementById('chartContainer').outerHTML;
+        printContents += `<div class="print-graph">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
-        barChartElement.style.width = commonWidth;
-        barChartElement.style.height = 'auto';
-        barChartElement.style.overflow = 'visible';
-        barChartElement.style.position = 'relative';
-        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${barChartElement.outerHTML}</div>`;
+        const barChartElement = document.getElementById('barChartContainer').outerHTML;
+        printContents += `<div class="print-graph">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics-area" style="width: ${commonWidth}; margin: 0 auto;">${statisticsContent}</div>`;
+        printContents += `<div class="statistics-area">${statisticsContent}</div>`;
     }
 
-    printContents += `
-        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
-        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Notes:</strong> ${notes}</div>
-    </div>`;
+    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
+    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
     const printDiv = document.createElement('div');
     printDiv.innerHTML = printContents;
-
-    // Ensure styles are embedded within the printDiv
-    const styles = `
-        <style>
-            .print-container { width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px; }
-            .goal-text-container { width: ${commonWidth}; margin: 0 auto; }
-            .print-goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
-            .print-table-container { width: ${commonWidth}; margin: 0 auto; }
-            .print-graph { width: ${commonWidth}; margin: 0 auto; overflow: visible; position: relative; }
-            .statistics-area { width: ${commonWidth}; margin: 0 auto; }
-            body { margin: 0; padding: 0; }
-            img { display: block; width: 100%; height: auto; }
-        </style>
-    `;
-    printDiv.insertAdjacentHTML('beforeend', styles);
-
     document.body.appendChild(printDiv);
 
-    // Resize the charts explicitly before capturing with html2canvas
-    resizeCharts(commonWidth).then(() => {
-        html2canvas(printDiv, {
-            width: parseInt(commonWidth),
-            windowWidth: parseInt(commonWidth),
-            scrollX: -window.scrollX,
-            scrollY: -window.scrollY
-        }).then(canvas => {
-            document.body.removeChild(printDiv);
+    html2canvas(printDiv).then(canvas => {
+        document.body.removeChild(printDiv);
+        const dataUrl = canvas.toDataURL('image/png');
+        const newTab = window.open();
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
+        newTab.document.close();
 
-            // Restore original styles
-            document.getElementById('chartContainer').style.cssText = originalStyles.chartContainer;
-            document.getElementById('barChartContainer').style.cssText = originalStyles.barChartContainer;
-            document.body.style.cssText = originalStyles.body;
-
-            const dataUrl = canvas.toDataURL('image/png');
-            const newTab = window.open();
-            newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
-        });
+        // Refresh the specific part of the page
+        refreshColumnSelectCard();
     });
 }
 
@@ -1368,6 +1319,15 @@ function resizeCharts(width) {
         });
         setTimeout(resolve, 500); // Give some time for the resize to take effect
     });
+}
+
+function refreshColumnSelectCard() {
+    const columnSelectCard = document.querySelector('.card.column-select-card');
+    const parent = columnSelectCard.parentNode;
+    const originalHTML = columnSelectCard.outerHTML;
+
+    columnSelectCard.remove(); // Remove the current card
+    parent.insertAdjacentHTML('beforeend', originalHTML); // Append a fresh copy of the card
 }
 
 function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
