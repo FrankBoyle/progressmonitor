@@ -1534,6 +1534,7 @@ function showPrintDialogModal() {
                     document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
                     fetchReportingPeriods(goal.goal_id); // Fetch reporting periods for the selected goal
+                    document.getElementById('reportingPeriodContainer').style.display = 'block'; // Show reporting period dropdown
                 });
                 goalContainer.appendChild(goalItem);
             });
