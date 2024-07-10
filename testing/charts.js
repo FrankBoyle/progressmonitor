@@ -1376,14 +1376,44 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         }).then(canvas => {
             document.body.removeChild(printDiv);
             const dataUrl = canvas.toDataURL('image/png');
-            const newTab = window.open();
-            newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
-            newTab.document.close();
 
-            // Set a timeout to reload the page after 2 seconds
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
+            // Update the notes object to include the image data
+            const payload = {
+                goal_id: selectedGoal.getAttribute('data-goal-id'),
+                student_id_new: window.studentIdNew,
+                school_id: window.schoolId,
+                metadata_id: window.metadataId,
+                reporting_period: reportingPeriod,
+                notes: notes,
+                report_image: dataUrl.split(',')[1] // Get base64 string
+            };
+
+            // Save notes with the image data
+            fetch('./users/save_notes.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const newTab = window.open();
+                    newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
+                    newTab.document.close();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    console.error('Error saving notes:', data.message);
+                    alert('Failed to save notes: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving notes.');
+            });
         });
     });
 }
