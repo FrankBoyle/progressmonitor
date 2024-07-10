@@ -1002,25 +1002,27 @@ input[type="text"] {
 }
 
 .selector-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px; /* Increased padding for better appearance */
+    display: inline-block;
+    padding: 5px 5px; /* Increased padding for better appearance */
     margin: 5px; /* Add some margin around the buttons */
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 8px; /* More rounded corners */
+    border-radius: 5px; /* Rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visuals */
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
-    text-align: center; /* Center text */
-    min-width: 100px; /* Ensure buttons are not too narrow */
 }
 
 .selector-item.selected {
     background-color: #47A6E6; /* Light blue for selected items */
     color: #fff;
     border-color: #47A6E6;
+}
+
+/* Hover effect for the buttons */
+.selector-item:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly larger shadow on hover */
 }
 
 #columnSelector {
@@ -1144,4 +1146,3 @@ input[type="text"] {
 #assign-students-form, #group-students-list-add, #metadataOptionSelector, #goal-description, #goal-date, #date-of-birth {
     margin-bottom: 15px;
 }
-
