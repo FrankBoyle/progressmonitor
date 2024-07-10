@@ -1269,43 +1269,49 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div class="print-container"><div class="goal-text-container"><div class="print-goal-text">${selectedGoal.innerHTML}</div></div></div>`;
+    const consistentWidth = 1000; // Define a consistent width
+
+    let printContents = `<div class="print-container" style="width:${consistentWidth}px;margin:0 auto;">
+                            <div class="goal-text-container" style="width:100%;">
+                                <div class="print-goal-text">${selectedGoal.innerHTML}</div>
+                            </div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container">${tableContent}</div>`;
+        printContents += `<div class="print-table-container" style="width:100%;">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph">${lineChartElement}</div>`;
+        printContents += `<div class="print-graph" style="width:100%;">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph">${barChartElement}</div>`;
+        printContents += `<div class="print-graph" style="width:100%;">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics-area">${statisticsContent}</div>`;
+        printContents += `<div class="statistics-area" style="width:100%;">${statisticsContent}</div>`;
     }
 
-    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+    printContents += `<div style="width:100%;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
+    printContents += `<div style="width:100%;"><strong>Notes:</strong> ${notes}</div>`;
+    printContents += `</div>`; // Close the print-container
 
     const printDiv = document.createElement('div');
     printDiv.innerHTML = printContents;
     document.body.appendChild(printDiv);
 
-    html2canvas(printDiv).then(canvas => {
+    html2canvas(printDiv, { width: consistentWidth }).then(canvas => {
         document.body.removeChild(printDiv);
         const dataUrl = canvas.toDataURL('image/png');
         const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="width:${consistentWidth}px;"/>`);
         newTab.document.close();
 
-        // Refresh the page after the print dialog is closed
+        // Refresh the specific part of the page
         newTab.addEventListener('unload', () => {
             window.location.reload();
         });
