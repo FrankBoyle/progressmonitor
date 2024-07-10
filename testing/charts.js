@@ -1271,6 +1271,13 @@ function saveAndPrintReport() {
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     const commonWidth = '1000px'; // Fixed width for consistency
 
+    // Save original styles
+    const originalStyles = {
+        chartContainer: document.getElementById('chartContainer').style.cssText,
+        barChartContainer: document.getElementById('barChartContainer').style.cssText,
+        body: document.body.style.cssText
+    };
+
     let printContents = `
         <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
             <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
@@ -1339,6 +1346,12 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             scrollY: -window.scrollY
         }).then(canvas => {
             document.body.removeChild(printDiv);
+
+            // Restore original styles
+            document.getElementById('chartContainer').style.cssText = originalStyles.chartContainer;
+            document.getElementById('barChartContainer').style.cssText = originalStyles.barChartContainer;
+            document.body.style.cssText = originalStyles.body;
+
             const dataUrl = canvas.toDataURL('image/png');
             const newTab = window.open();
             newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
