@@ -19,3 +19,4 @@ if (isset($_GET['goal_id'])) {
     echo 'Invalid request';
 }
 ?>
+
