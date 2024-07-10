@@ -1269,35 +1269,37 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+    const commonWidth = '1000px'; // Adjust this width as needed to ensure consistency
+
     let printContents = `
-        <div class="print-container" style="width: 100%; margin: 0; padding: 0;">
-            <div class="goal-text-container" style="width: 100%; margin: 0;">
+        <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0;">
+            <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
                 <div class="print-goal-text">${selectedGoal.innerHTML}</div>
             </div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container" style="width: 100%; margin: 0;">${tableContent}</div>`;
+        printContents += `<div class="print-table-container" style="width: ${commonWidth}; margin: 0 auto;">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="width: 100%; margin: 0;">${lineChartElement}</div>`;
+        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="width: 100%; margin: 0;">${barChartElement}</div>`;
+        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics-area" style="width: 100%; margin: 0;">${statisticsContent}</div>`;
+        printContents += `<div class="statistics-area" style="width: ${commonWidth}; margin: 0 auto;">${statisticsContent}</div>`;
     }
 
     printContents += `
-        <div style="width: 100%; margin: 0;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
-        <div style="width: 100%; margin: 0;"><strong>Notes:</strong> ${notes}</div>
+        <div style="width: ${commonWidth}; margin: 0 auto;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
+        <div style="width: ${commonWidth}; margin: 0 auto;"><strong>Notes:</strong> ${notes}</div>
     </div>`;
 
     const printDiv = document.createElement('div');
@@ -1306,12 +1308,12 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     // Ensure styles are embedded within the printDiv
     const styles = `
         <style>
-            .print-container { width: 100%; margin: 0; padding: 0; }
-            .goal-text-container { width: 100%; margin: 0; }
+            .print-container { width: ${commonWidth}; margin: 0 auto; padding: 0; }
+            .goal-text-container { width: ${commonWidth}; margin: 0 auto; }
             .print-goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
-            .print-table-container { width: 100%; margin: 0; }
-            .print-graph { width: 100%; margin: 0; }
-            .statistics-area { width: 100%; margin: 0; }
+            .print-table-container { width: ${commonWidth}; margin: 0 auto; }
+            .print-graph { width: ${commonWidth}; margin: 0 auto; }
+            .statistics-area { width: ${commonWidth}; margin: 0 auto; }
             body { margin: 0; padding: 0; }
             img { display: block; width: 100%; height: auto; }
         </style>
@@ -1320,12 +1322,17 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     document.body.appendChild(printDiv);
 
-    // Use html2canvas to generate the canvas with the full width
-    html2canvas(printDiv, { width: printDiv.scrollWidth, windowWidth: printDiv.scrollWidth }).then(canvas => {
+    // Use html2canvas to generate the canvas with specific width and no margins
+    html2canvas(printDiv, {
+        width: parseInt(commonWidth),
+        windowWidth: parseInt(commonWidth),
+        scrollX: -window.scrollX,
+        scrollY: -window.scrollY
+    }).then(canvas => {
         document.body.removeChild(printDiv);
         const dataUrl = canvas.toDataURL('image/png');
         const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0; width: 100%;"/>`);
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto;"/>`);
     });
 }
 
