@@ -154,8 +154,8 @@ include('./users/auth_session.php');
             <div class="selector-area">
                 <div id="columnSelectorTitle" class="selector-title">Goal Category Options:</div>
                 <div id="metadataOptionSelector" class="checkbox-container">
-                    <div class="selector-item" data-option="template">Use a Category Template</div>
-                    <div class="selector-item" data-option="existing">Link to a Used Category</div>
+                    <div class="selector-item" data-option="template">Category Template</div>
+                    <div class="selector-item" data-option="existing">Previously Used Category</div>
                 </div>
             </div>
 
