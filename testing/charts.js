@@ -1283,13 +1283,15 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     }
 
     if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${lineChartElement}</div>`;
+        const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
+        lineChartElement.style.width = commonWidth;
+        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${lineChartElement.outerHTML}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${barChartElement}</div>`;
+        const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
+        barChartElement.style.width = commonWidth;
+        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${barChartElement.outerHTML}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
