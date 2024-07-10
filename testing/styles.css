@@ -875,6 +875,7 @@ input[type="text"] {
         white-space: normal; /* Ensures text wraps normally */
         padding: 10px;
         box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+        margin: 0 auto; /* Center align within the container */
     }
 
     .goal-text {
@@ -894,12 +895,11 @@ input[type="text"] {
         padding: 0;
     }
 
-            /* Ensure the goal text container within the goal item is also constrained */
+    /* Ensure the goal text container within the goal item is also constrained */
     .goal-item .goal-text-container {
         width: 100%;
         max-width: 1000px;
     }
-
 
     /* Style for the statistical summary */
     #statistics {
@@ -920,7 +920,25 @@ input[type="text"] {
         border-spacing: 0; /* Ensure there's no extra space between cells */
     }
 
+    /* Ensure the chart respects max-width */
+    .chart {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* Adjust the margins and padding of the elements inside the chart wrapper */
+    .chart-wrapper {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
 }
+
 
 /* Regular styles */
 .goal-text-container {
