@@ -1261,47 +1261,11 @@ function saveAndPrintReport() {
     const notes = document.getElementById('notes').value.trim();
 
     if (!reportingPeriod) {
-        alert("Please select or enter the reporting period.");
+        alert("Please enter the reporting period.");
         return;
     }
 
-    const goalId = selectedGoal.getAttribute('data-goal-id');
-    const studentIdNew = window.studentIdNew;
-    const schoolId = window.schoolId;
-    const metadataId = window.metadataId;
-
-    const payload = {
-        goal_id: goalId,
-        student_id_new: studentIdNew,
-        school_id: schoolId,
-        metadata_id: metadataId,
-        reporting_period: reportingPeriod,
-        notes: notes
-    };
-
-    console.log("Payload being sent to save_notes.php:", payload); // Add logging for debugging
-
-    fetch('./users/save_notes.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            // Proceed to generate the report
-            generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
-        } else {
-            console.error('Error saving notes:', data.message);
-            alert('Failed to save notes: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while saving notes.');
-    });
+    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
@@ -1400,7 +1364,9 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json().then(error => {
+                        throw new Error(`HTTP error! status: ${response.status}, message: ${error.message}`);
+                    });
                 }
                 return response.json();
             })
@@ -1419,7 +1385,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred while saving notes.');
+                alert('An error occurred while saving notes: ' + error.message);
             });
         });
     });

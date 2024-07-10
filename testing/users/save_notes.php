@@ -27,10 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
     // Log the received data for debugging
-    error_log(print_r($data, true));
+    error_log('Received data: ' . print_r($data, true));
 
     // Validate that all required parameters are set
     if (!isset($data['goal_id'], $data['student_id_new'], $data['school_id'], $data['metadata_id'], $data['reporting_period'], $data['notes'], $data['report_image'])) {
+        error_log('Missing parameters: ' . print_r($data, true)); // Log missing parameters
         header('Content-Type: application/json');
         http_response_code(400);
         echo json_encode(['status' => 'error', 'message' => 'Missing required parameters.']);
