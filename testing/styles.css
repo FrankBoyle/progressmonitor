@@ -908,21 +908,22 @@ input[type="text"] {
 
 /* Regular styles */
 .goal-text-container {
-    width: 100%;
-    max-width: 1000px;
-    padding: 10px;
-    box-sizing: border-box;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    white-space: normal;
-    /*margin: 0 auto;*/
+    max-width: 1000px; /* Adjust as needed */
+    width: 100%; /* Ensure it takes the full width */
+    margin: 0 auto; /* Center the container */
+    overflow-wrap: break-word; /* Ensure long words break and wrap */
+    word-wrap: break-word; /* Ensure long words break and wrap */
+    white-space: normal; /* Ensure text wraps normally */
+    padding: 10px; /* Add padding if needed */
+    box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
 }
 
 .goal-text {
-    line-height: 1.5;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    white-space: normal;
+    line-height: 1.5; /* Adjust the line height for better readability */
+    overflow-wrap: break-word; /* Ensure long words break and wrap */
+    word-wrap: break-word; /* Ensure long words break and wrap */
+    white-space: normal; /* Ensure text wraps normally */
+    max-width: 100%; /* Ensure text does not overflow the container */
 }
 
 #chartContainer, #barChartContainer {
