@@ -863,6 +863,7 @@ input[type="text"] {
     }
 
     .print-goal-text {
+        max-width: 1000px;
         line-height: 1.5; /* Adjust the line height for better readability */
         overflow-wrap: break-word; /* Ensures long words break and wrap */
         word-wrap: break-word; /* Ensures long words break and wrap */
