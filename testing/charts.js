@@ -1269,7 +1269,11 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div class="print-container"><div class="goal-text-container"><div class="print-goal-text">${selectedGoal.innerHTML}</div></div>`;
+    let printContents = `
+        <div class="print-container">
+            <div class="goal-text-container">
+                <div class="print-goal-text">${selectedGoal.innerHTML}</div>
+            </div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
@@ -1291,28 +1295,26 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         printContents += `<div class="statistics-area">${statisticsContent}</div>`;
     }
 
-    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+    printContents += `
+        <div><strong>Reporting Period:</strong> ${reportingPeriod}</div>
+        <div><strong>Notes:</strong> ${notes}</div>
+    </div>`;
 
     const printDiv = document.createElement('div');
     printDiv.innerHTML = printContents;
-    document.body.appendChild(printDiv);
 
-    // Ensuring the styles are applied to the print container
+    // Ensure styles are embedded within the printDiv
     const styles = `
         <style>
-            @media print {
-                .print-container { max-width: 1000px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
-                .goal-text-container { max-width: 1000px; margin: 0 auto; padding: 10px; box-sizing: border-box; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
-                .goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; max-width: 1000px; }
-                .content, .dashboard { max-width: 1000px; margin: 0 auto; padding: 0; }
-            }
+            .print-container { max-width: 1000px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
             .goal-text-container { max-width: 1000px; margin: 0 auto; padding: 10px; box-sizing: border-box; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
-            .goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; max-width: 1000px; margin: 0 auto; }
+            .goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; max-width: 1000px; }
+            .content, .dashboard { max-width: 1000px; margin: 0 auto; padding: 0; }
         </style>
     `;
-
     printDiv.insertAdjacentHTML('beforeend', styles);
+
+    document.body.appendChild(printDiv);
 
     html2canvas(printDiv).then(canvas => {
         document.body.removeChild(printDiv);
