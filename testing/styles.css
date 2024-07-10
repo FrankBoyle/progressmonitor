@@ -1135,6 +1135,6 @@ input[type="text"] {
 }
 
 #assign-students-form, #group-students-list-add, #metadataOptionSelector, #goal-description, #goal-date, #date-of-birth {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
