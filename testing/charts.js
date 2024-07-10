@@ -1273,7 +1273,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     let printContents = `<div class="print-container" style="width:${consistentWidth}px;margin:0 auto;">
                             <div class="goal-text-container" style="width:100%;">
-                                <div class="print-goal-text">${selectedGoal.innerHTML}</div>
+                                <div class="print-goal-text" style="width:100%;">${selectedGoal.innerHTML}</div>
                             </div>`;
 
     if (selectedSections.includes('printTable')) {
@@ -1283,12 +1283,12 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="width:100%;">${lineChartElement}</div>`;
+        printContents += `<div class="print-graph" style="width:100%;text-align:center;">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="width:100%;">${barChartElement}</div>`;
+        printContents += `<div class="print-graph" style="width:100%;text-align:center;">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
@@ -1308,7 +1308,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         document.body.removeChild(printDiv);
         const dataUrl = canvas.toDataURL('image/png');
         const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="width:${consistentWidth}px;"/>`);
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="width:${consistentWidth}px;display:block;margin:0 auto;"/>`);
         newTab.document.close();
 
         // Refresh the specific part of the page
