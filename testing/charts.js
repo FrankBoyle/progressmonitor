@@ -1272,34 +1272,34 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     const commonWidth = '1000px'; // Adjust this width as needed to ensure consistency
 
     let printContents = `
-        <div class="print-container" style="max-width: ${commonWidth}; margin: 0 auto;">
-            <div class="goal-text-container" style="max-width: ${commonWidth}; margin: 0 auto;">
+        <div class="print-container" style="max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto; padding: 0;">
+            <div class="goal-text-container" style="max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto;">
                 <div class="print-goal-text">${selectedGoal.innerHTML}</div>
             </div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container" style="max-width: ${commonWidth}; margin: 0 auto;">${tableContent}</div>`;
+        printContents += `<div class="print-table-container" style="max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto;">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="max-width: ${commonWidth}; margin: 0 auto;">${lineChartElement}</div>`;
+        printContents += `<div class="print-graph" style="max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto;">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="max-width: ${commonWidth}; margin: 0 auto;">${barChartElement}</div>`;
+        printContents += `<div class="print-graph" style="max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto;">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics-area" style="max-width: ${commonWidth}; margin: 0 auto;">${statisticsContent}</div>`;
+        printContents += `<div class="statistics-area" style="max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto;">${statisticsContent}</div>`;
     }
 
     printContents += `
-        <div style="max-width: ${commonWidth}; margin: 0 auto;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
-        <div style="max-width: ${commonWidth}; margin: 0 auto;"><strong>Notes:</strong> ${notes}</div>
+        <div style="max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
+        <div style="max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto;"><strong>Notes:</strong> ${notes}</div>
     </div>`;
 
     const printDiv = document.createElement('div');
@@ -1308,23 +1308,24 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     // Ensure styles are embedded within the printDiv
     const styles = `
         <style>
-            .print-container { max-width: ${commonWidth}; margin: 0 auto; }
-            .goal-text-container { max-width: ${commonWidth}; margin: 0 auto; }
+            .print-container { max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto; padding: 0; }
+            .goal-text-container { max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto; }
             .print-goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
-            .print-table-container { max-width: ${commonWidth}; margin: 0 auto; }
-            .print-graph { max-width: ${commonWidth}; margin: 0 auto; }
-            .statistics-area { max-width: ${commonWidth}; margin: 0 auto; }
+            .print-table-container { max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto; }
+            .print-graph { max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto; }
+            .statistics-area { max-width: ${commonWidth}; width: ${commonWidth}; margin: 0 auto; }
         </style>
     `;
     printDiv.insertAdjacentHTML('beforeend', styles);
 
     document.body.appendChild(printDiv);
 
-    html2canvas(printDiv).then(canvas => {
+    // Use html2canvas to generate the canvas with specific width and no margins
+    html2canvas(printDiv, {width: parseInt(commonWidth), scale: 2}).then(canvas => {
         document.body.removeChild(printDiv);
         const dataUrl = canvas.toDataURL('image/png');
         const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto;"/>`);
     });
 }
 
