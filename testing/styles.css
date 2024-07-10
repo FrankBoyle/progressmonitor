@@ -1,4 +1,6 @@
 @media (max-width: 768px) {
+
+
     .content {
         padding: 10px; 
         flex-direction: column;
@@ -853,6 +855,10 @@ input[type="text"] {
 }
 
 @media print {
+
+    body {
+        max-width: 1000px;
+    }
 
     .print-container {
         max-width: 1000px;
