@@ -1271,33 +1271,34 @@ function saveAndPrintReport() {
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     const consistentWidth = 1000; // Define a consistent width
 
-    let printContents = `<div class="print-container" style="width:${consistentWidth}px;margin:0 auto;">
-                            <div class="goal-text-container" style="width:100%;">
-                                <div class="print-goal-text" style="width:100%;">${selectedGoal.innerHTML}</div>
-                            </div>`;
+    let printContents = `
+        <div class="print-container" style="width:${consistentWidth}px;margin:0 auto;box-sizing:border-box;padding:20px;">
+            <div class="goal-text-container" style="width:100%;box-sizing:border-box;">
+                <div class="print-goal-text" style="width:100%;box-sizing:border-box;">${selectedGoal.innerHTML}</div>
+            </div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container" style="width:100%;">${tableContent}</div>`;
+        printContents += `<div class="print-table-container" style="width:100%;box-sizing:border-box;">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="width:100%;text-align:center;">${lineChartElement}</div>`;
+        printContents += `<div class="print-graph" style="width:100%;text-align:center;box-sizing:border-box;">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph" style="width:100%;text-align:center;">${barChartElement}</div>`;
+        printContents += `<div class="print-graph" style="width:100%;text-align:center;box-sizing:border-box;">${barChartElement}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics-area" style="width:100%;">${statisticsContent}</div>`;
+        printContents += `<div class="statistics-area" style="width:100%;box-sizing:border-box;">${statisticsContent}</div>`;
     }
 
-    printContents += `<div style="width:100%;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div style="width:100%;"><strong>Notes:</strong> ${notes}</div>`;
+    printContents += `<div style="width:100%;box-sizing:border-box;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
+    printContents += `<div style="width:100%;box-sizing:border-box;"><strong>Notes:</strong> ${notes}</div>`;
     printContents += `</div>`; // Close the print-container
 
     const printDiv = document.createElement('div');
