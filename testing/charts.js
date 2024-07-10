@@ -1286,6 +1286,8 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
         lineChartElement.style.width = commonWidth;
         lineChartElement.style.height = 'auto';
+        lineChartElement.style.overflow = 'visible';
+        lineChartElement.style.position = 'relative';
         printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${lineChartElement.outerHTML}</div>`;
     }
 
@@ -1293,6 +1295,8 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
         barChartElement.style.width = commonWidth;
         barChartElement.style.height = 'auto';
+        barChartElement.style.overflow = 'visible';
+        barChartElement.style.position = 'relative';
         printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${barChartElement.outerHTML}</div>`;
     }
 
@@ -1316,7 +1320,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             .goal-text-container { width: ${commonWidth}; margin: 0 auto; }
             .print-goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
             .print-table-container { width: ${commonWidth}; margin: 0 auto; }
-            .print-graph { width: ${commonWidth}; margin: 0 auto; }
+            .print-graph { width: ${commonWidth}; margin: 0 auto; overflow: visible; position: relative; }
             .statistics-area { width: ${commonWidth}; margin: 0 auto; }
             body { margin: 0; padding: 0; }
             img { display: block; width: 100%; height: auto; }
@@ -1336,7 +1340,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         document.body.removeChild(printDiv);
         const dataUrl = canvas.toDataURL('image/png');
         const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: 1000px;"/>`);
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
     });
 }
 
