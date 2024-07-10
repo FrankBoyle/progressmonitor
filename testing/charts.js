@@ -1285,12 +1285,14 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
         lineChartElement.style.width = commonWidth;
+        lineChartElement.style.height = 'auto';
         printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${lineChartElement.outerHTML}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
         barChartElement.style.width = commonWidth;
+        barChartElement.style.height = 'auto';
         printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${barChartElement.outerHTML}</div>`;
     }
 
@@ -1334,7 +1336,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         document.body.removeChild(printDiv);
         const dataUrl = canvas.toDataURL('image/png');
         const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto;"/>`);
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: 1000px;"/>`);
     });
 }
 
