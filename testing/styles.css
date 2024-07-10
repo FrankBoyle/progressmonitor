@@ -993,7 +993,7 @@ input[type="text"] {
     align-items: center;
     justify-content: center;
     padding: 5px 5px; /* Increased padding for better appearance */
-    margin: 5px; /* Add some margin around the buttons */
+    margin: 0px; /* Add some margin around the buttons */
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px; /* More rounded corners */
@@ -1013,7 +1013,7 @@ input[type="text"] {
 #columnSelector {
     display: flex;
     flex-wrap: wrap; /* Allows items to wrap within the container */
-    gap: 10px; /* Space between checkboxes */
+    gap: 5px; /* Space between checkboxes */
 }
 
 #statistics {
