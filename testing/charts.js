@@ -1344,10 +1344,10 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
             newTab.document.close();
 
-            // Add event listener to refresh the parent window when the new tab is closed
-            newTab.addEventListener('unload', () => {
+            // Set a timeout to reload the page after 2 seconds
+            setTimeout(() => {
                 window.location.reload();
-            });
+            }, 2000);
         });
     });
 }
