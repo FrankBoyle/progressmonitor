@@ -1344,10 +1344,10 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
             newTab.document.close();
 
-                // Refresh the specific part of the page
-                newTab.addEventListener('unload', () => {
-                    window.location.reload();
-                });
+            // Refresh the page after the print dialog is closed
+            newTab.addEventListener('unload', () => {
+                window.location.reload();
+            });
         });
     });
 }
