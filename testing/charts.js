@@ -1305,8 +1305,10 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
         newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
         newTab.document.close();
 
-        // Refresh the specific part of the page
-        refreshColumnSelectCard();
+        // Refresh the page after the print dialog is closed
+        newTab.addEventListener('unload', () => {
+            window.location.reload();
+        });
     });
 }
 
@@ -1319,15 +1321,6 @@ function resizeCharts(width) {
         });
         setTimeout(resolve, 500); // Give some time for the resize to take effect
     });
-}
-
-function refreshColumnSelectCard() {
-    const columnSelectCard = document.querySelector('.card.column-select-card');
-    const parent = columnSelectCard.parentNode;
-    const originalHTML = columnSelectCard.outerHTML;
-
-    columnSelectCard.remove(); // Remove the current card
-    parent.insertAdjacentHTML('beforeend', originalHTML); // Append a fresh copy of the card
 }
 
 function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
