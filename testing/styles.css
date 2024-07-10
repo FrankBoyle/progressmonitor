@@ -875,7 +875,6 @@ input[type="text"] {
         white-space: normal; /* Ensures text wraps normally */
         padding: 10px;
         box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
-        margin: 0 auto; /* Center align within the container */
     }
 
     .goal-text {
@@ -895,59 +894,12 @@ input[type="text"] {
         padding: 0;
     }
 
-    /* Ensure the goal text container within the goal item is also constrained */
+            /* Ensure the goal text container within the goal item is also constrained */
     .goal-item .goal-text-container {
         width: 100%;
         max-width: 1000px;
     }
 
-    /* Style for the statistical summary */
-    #statistics {
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-top: 20px;
-        max-width: 1000px; /* Ensures the section stays within 1000px */
-        margin: 0 auto;
-    }
-
-    /* Style for the statistical summary table */
-    #statsTable {
-        width: 100%;
-        max-width: 1000px;
-        border-collapse: collapse;
-        margin-top: 20px;
-        border-spacing: 0; /* Ensure there's no extra space between cells */
-    }
-
-    /* Ensure the chart respects max-width */
-    .chart {
-        width: 100%;
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-
-    /* Adjust the margins and padding of the elements inside the chart wrapper */
-    .chart-wrapper {
-        width: 100%;
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-
-    /* Ensure that the main container also respects max-width */
-    .content, .dashboard {
-        width: 100%;
-        height: auto;
-        margin: 0 auto;
-        max-width: 1000px; /* Limit the width to prevent overflow */
-        padding: 0 20px;
-        box-sizing: border-box;
-    }
 }
 
 /* Regular styles */
