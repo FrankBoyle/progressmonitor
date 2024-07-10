@@ -6,6 +6,8 @@ let customColumnNames = {}; // This will store the custom names
 let metadataId; // Global metadataId
 let studentIdNew; // Global studentIdNew
 let performanceData = [];
+let globalSlope = 0;
+let globalIntercept = 0;
 
 // Define series colors
 const seriesColors = [
@@ -25,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.selector-item').forEach(item => {
         item.addEventListener('click', function() {
             item.classList.toggle('selected');
-            //console.log(`Toggled selection for ${item.getAttribute('data-section')}: ${item.classList.contains('selected')}`);
+
         });
     });
 });
@@ -361,19 +363,22 @@ function initializeBarChart() {
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
-        //console.log("Extracting chart data...");
         const data = table.getData();
+        console.log('Table Data:', data);
         const categories = data.map(row => row['score_date']);
+        console.log('Categories:', categories);
 
-        const selectedColumns = Array.from(document.querySelectorAll(".selector-item.selected"))
-            .map(item => ({
-                field: item.getAttribute("data-column-name"),
-                name: item.textContent.trim()  // Use textContent of the item as the series name
-            }));
+        const selectedColumns = getSelectedColumns().map(item => ({
+            field: item.getAttribute("data-column-name"),
+            name: item.textContent.trim()  // Use textContent of the item as the series name
+        }));
+        console.log('Selected Columns:', selectedColumns);
 
         const series = selectedColumns.map(column => {
             let rawData = data.map(row => row[column.field]);
+            console.log(`Raw Data for ${column.name}:`, rawData);
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
+            console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
             return {
                 name: column.name,  // Using the custom name for the series
                 data: interpolatedData,
@@ -381,19 +386,30 @@ function extractChartData() {
             };
         });
 
-        const trendlineSeries = series.map(seriesData => ({
-            name: `${seriesData.name} Trendline`,
-            data: getTrendlineData(seriesData.data),
-            type: 'line',
-            dashArray: 5,
-            stroke: { width: 2, curve: 'straight' },
-            color: seriesData.color
-        }));
+        const trendlineSeries = series.map(seriesData => {
+            const { trendlineData, slope, intercept } = getTrendlineData(seriesData.data);
+            console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
+            console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
+            return {
+                name: `${seriesData.name} Trendline`,
+                data: trendlineData,
+                type: 'line',
+                dashArray: 5,
+                stroke: { width: 2, curve: 'straight' },
+                color: seriesData.color
+            };
+        });
 
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
 
-        //console.log("Charts updated successfully.");
+        // Ensure the correct statistics are displayed
+        const tbody = document.getElementById('statsTable').getElementsByTagName('tbody')[0];
+        tbody.innerHTML = ''; // Clear existing rows
+        selectedColumns.forEach(column => {
+            updateStatisticsDisplay(column.field, column.name, tbody);
+        });
+
     } catch (error) {
         console.error("Error extracting chart data:", error);
     }
@@ -506,7 +522,7 @@ function getLineChartOptions(dates, seriesData) {
                 show: true
             },
             animations: {
-                enabled: true,
+                enabled: false,
                 easing: 'easeinout',
                 speed: 800,
                 animateGradually: {
@@ -514,7 +530,7 @@ function getLineChartOptions(dates, seriesData) {
                     delay: 150
                 },
                 dynamicAnimation: {
-                    enabled: true,
+                    enabled: false,
                     speed: 350
                 }
             },
@@ -614,25 +630,49 @@ function getLineChartOptions(dates, seriesData) {
 function getBarChartOptions(dates, seriesData) {
     return {
         chart: {
+            id: 'barChartContainer',
             type: 'bar',
             height: '500',
             background: '#fff',
             toolbar: {
                 show: true
             },
+            animations: {
+                enabled: false, // Disable animations
+                easing: 'easeinout',
+                speed: 800,
+                animateGradually: {
+                    enabled: false,
+                    delay: 150
+                },
+                dynamicAnimation: {
+                    enabled: false,
+                    speed: 350
+                }
+            },
             stacked: true
         },
         plotOptions: {
             bar: {
-                horizontal: false,
-                columnWidth: '80%', // Increase the bar width
-            },
+                horizontal: true, // Make the bar chart horizontal
+                barHeight: '95%', // Increase the bar height (can be adjusted as needed)
+                dataLabels: {
+                    total: {
+                        enabled: true,
+                        offsetX: 0,
+                        style: {
+                            fontSize: '13px',
+                            fontWeight: 900
+                        }
+                    }
+                }
+            }
         },
         colors: seriesColors,
         dataLabels: {
             enabled: true,
             enabledOnSeries: undefined, // Show dataLabels on all series
-            formatter: function (val, opts) {
+            formatter: function(val, opts) {
                 return val; // Keep the label text the same as the data value
             },
             textAnchor: 'middle',
@@ -668,25 +708,25 @@ function getBarChartOptions(dates, seriesData) {
         },
         stroke: {
             show: true,
-            width: 2,
-            colors: ['transparent']
+            width: 1,
+            colors: ['#fff'] // Add white stroke between bars
         },
         series: seriesData,
         xaxis: {
             categories: dates,
             title: {
-                text: 'Date',
+                text: 'Value',
                 offsetY: -10 // Move the axis title closer to the dates
+            },
+            labels: {
+                formatter: function(val) {
+                    return val; // No need to append 'K' dynamically, the values will match the data
+                }
             }
         },
         yaxis: {
             title: {
-                text: 'Value'
-            },
-            labels: {
-                formatter: function (val) {
-                    return val.toFixed(0);
-                }
+                text: undefined
             }
         },
         fill: {
@@ -694,15 +734,15 @@ function getBarChartOptions(dates, seriesData) {
         },
         tooltip: {
             y: {
-                formatter: function (val) {
-                    return val;
+                formatter: function(val) {
+                    return val; // No need to append 'K' dynamically, the values will match the data
                 }
             }
         },
         legend: {
-            position: 'bottom',
-            horizontalAlign: 'center',
-            showForSingleSeries: true // Always show the legend, even for a single series
+            position: 'top',
+            horizontalAlign: 'left',
+            offsetX: 40
         }
     };
 }
@@ -777,11 +817,19 @@ function enableChartInteractions() {
 }
 
 function calculateTrendline(data) {
-    const validDataPoints = data.map((val, idx) => ({ x: idx + 1, y: val })).filter(point => point.y !== null && !isNaN(point.y));
+    //console.log('Data for Trendline Calculation:', data);
+    
+    const validDataPoints = data
+        .map((val, idx) => ({ x: idx + 1, y: val }))
+        .filter(point => point.y !== null && !isNaN(point.y));
 
     if (validDataPoints.length === 0) {
-        return function(x) {
-            return 0;
+        return {
+            trendlineFunction: function (x) {
+                return 0;
+            },
+            slope: 0,
+            intercept: 0
         };
     }
 
@@ -794,18 +842,32 @@ function calculateTrendline(data) {
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    return function (x) {
+    //console.log('Slope:', slope, 'Intercept:', intercept);
+
+    const trendlineFunction = function (x) {
         return parseFloat((slope * x + intercept).toFixed(2)); // Round to 2 decimal places
+    };
+
+    return {
+        trendlineFunction,
+        slope,
+        intercept
     };
 }
 
 function getTrendlineData(data) {
-    let trendlineFunction = calculateTrendline(data);
-    return data.map((_, idx) => {
+    const dataCopy = [...data]; // Create a copy of the data to prevent modification
+    const { trendlineFunction, slope, intercept } = calculateTrendline(dataCopy);
+    const trendlineData = data.map((_, idx) => {
         const x = idx + 1;
         const y = trendlineFunction(x);
         return y !== null && !isNaN(y) ? y : null;
     });
+    return {
+        trendlineData,
+        slope,
+        intercept
+    };
 }
 
 function refreshStatisticsDisplay() {
@@ -825,10 +887,12 @@ function refreshStatisticsDisplay() {
     });
 }
 
+// Calculate statistics without altering the original data array
 function calculateStatistics(data) {
-    let mean = data.reduce((acc, val) => acc + val, 0) / data.length;
-    let median = calculateMedian(data);
-    let stdDev = calculateStandardDeviation(data, mean);
+    let dataCopy = [...data]; // Copy data to avoid modifying the original array
+    let mean = dataCopy.reduce((acc, val) => acc + val, 0) / dataCopy.length;
+    let median = calculateMedian(dataCopy);
+    let stdDev = calculateStandardDeviation(dataCopy, mean);
 
     return {
         mean: mean.toFixed(2),
@@ -847,23 +911,14 @@ function calculateStandardDeviation(data, mean) {
 }
 
 function calculateMedian(data) {
-    data.sort((a, b) => a - b);
-    let mid = Math.floor(data.length / 2);
-    return data.length % 2 !== 0 ? data[mid] : (data[mid - 1] + data[mid]) / 2;
+    let dataCopy = [...data]; // Copy data to avoid modifying the original array
+    dataCopy.sort((a, b) => a - b);
+    let mid = Math.floor(dataCopy.length / 2);
+    return dataCopy.length % 2 !== 0 ? dataCopy[mid] : (dataCopy[mid - 1] + dataCopy[mid]) / 2;
 }
 
-function calculateTrendlineEquation(data) {
-    const n = data.length;
-    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-    data.forEach((y, x) => {
-        sumX += x;
-        sumY += y;
-        sumXY += x * y;
-        sumXX += x * x;
-    });
-    let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-    let intercept = (sumY - slope * sumX) / n;
-    return `y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}`;
+function calculateTrendlineEquation() {
+    return `y = ${globalSlope.toFixed(2)}x + ${globalIntercept.toFixed(2)}`;
 }
 
 function updateStatisticsDisplay(columnField, columnName, tbody) {
@@ -871,14 +926,14 @@ function updateStatisticsDisplay(columnField, columnName, tbody) {
 
     if (data.length > 0) {
         const stats = calculateStatistics(data);
-        const trendlineEquation = calculateTrendlineEquation(data);
+        const { slope, intercept } = calculateTrendline(data);
         const row = tbody.insertRow();
         row.innerHTML = `
             <td>${columnName}</td>
             <td>${stats.mean}</td>
             <td>${stats.median}</td>
             <td>${stats.stdDev}</td>
-            <td>${trendlineEquation}</td>
+            <td>y = ${slope.toFixed(2)}x + ${intercept.toFixed(2)}</td>
         `;
     } else {
         const row = tbody.insertRow();
@@ -977,11 +1032,8 @@ function fetchGoals(studentIdNew, metadataId) {
     fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            //console.log('Goals data fetched:', data);
             if (data && Array.isArray(data)) {
-                // Filter goals by metadata_id before displaying
                 displayGoals(data.filter(goal => goal.metadata_id == metadataId));
-                populateGoalSelectionModal(data);
             } else {
                 console.error('Invalid or incomplete goals data:', data);
             }
@@ -1005,7 +1057,9 @@ function displayGoals(goals) {
         goalItem.classList.add('goal-item');
         goalItem.innerHTML = `
             <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
-                <div class="goal-text">${goal.goal_description}</div>
+                <div class="goal-text-container">
+                    <div class="goal-text">${goal.goal_description}</div>
+                </div>
                 <button class="archive-btn">Archive</button>
             </div>
             <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
@@ -1134,8 +1188,18 @@ function archiveGoal(goalId, goalItem) {
       });
 }
 
+// Function to check if a column is numeric and not "Notes"
+function isNumericColumn(columnName) {
+    const nonNumericColumns = ['score10']; // Add specific column names here
+    const isNumeric = !nonNumericColumns.includes(columnName);
+    console.log(`Checking if column is numeric - Column: ${columnName}, Is Numeric: ${isNumeric}`);
+    return isNumeric;
+}
+
+// Function to get selected columns excluding non-numeric ones
 function getSelectedColumns() {
-    return Array.from(document.querySelectorAll("#columnSelector .selector-item.selected"));
+    return Array.from(document.querySelectorAll('.selector-item.selected'))
+        .filter(column => isNumericColumn(column.getAttribute('data-column-name')));
 }
 
 function saveAndPrintReport() {
@@ -1191,8 +1255,8 @@ function saveAndPrintReport() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Proceed to print the report
-            printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
+            // Proceed to generate the report
+            generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
         } else {
             console.error('Error saving notes:', data.message);
             alert('Failed to save notes: ' + data.message);
@@ -1204,23 +1268,65 @@ function saveAndPrintReport() {
     });
 }
 
-function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+    let printContents = `<div class="print-container"><div class="goal-text-container"><div class="print-goal-text">${selectedGoal.innerHTML}</div></div></div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div>${tableContent}</div>`;
+        printContents += `<div class="print-table-container">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
         const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div id="printLineChartContainer" style="width: 100%; height: auto;">${lineChartElement}</div>`;
+        printContents += `<div class="print-graph">${lineChartElement}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
         const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div id="printBarChartContainer" style="width: 100%; height: auto;">${barChartElement}</div>`;
+        printContents += `<div class="print-graph">${barChartElement}</div>`;
     }
+
+    if (selectedSections.includes('printStatistics')) {
+        const statisticsContent = document.getElementById('statistics').innerHTML;
+        printContents += `<div class="statistics-area">${statisticsContent}</div>`;
+    }
+
+    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
+    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+
+    const printDiv = document.createElement('div');
+    printDiv.innerHTML = printContents;
+    document.body.appendChild(printDiv);
+
+    html2canvas(printDiv).then(canvas => {
+        document.body.removeChild(printDiv);
+        const dataUrl = canvas.toDataURL('image/png');
+        const newTab = window.open();
+        newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
+    });
+}
+
+function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+    let printContents = `<div>${selectedGoal.innerHTML}</div>`;
+    
+    printContents += `<div class="print-container">`;
+
+    if (selectedSections.includes('printTable')) {
+        const tableContent = generatePrintTable(selectedColumns);
+        printContents += `<div class="print-table-container">${tableContent}</div>`;
+    }
+
+    if (selectedSections.includes('printLineChart')) {
+        const lineChartElement = document.getElementById('chartContainer').outerHTML;
+        printContents += `<div class="print-graph">${lineChartElement}</div>`;
+    }
+
+    if (selectedSections.includes('printBarChart')) {
+        const barChartElement = document.getElementById('barChartContainer').outerHTML;
+        printContents += `<div class="print-graph">${barChartElement}</div>`;
+    }
+
+    printContents += `</div>`;
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
@@ -1235,50 +1341,75 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
     document.body.innerHTML = printContents;
 
     setTimeout(() => {
-        window.print();
-        document.body.innerHTML = originalContents;
-        enableChartInteractions();
-    }, 500);
+        html2canvas(document.body).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const newTab = window.open();
+            newTab.document.write('<img src="' + imgData + '" />');
+            newTab.document.close();
+
+            document.body.innerHTML = originalContents;
+            enableChartInteractions();
+        });
+    }, 50);
 }
 
+// Function to generate the print table
 function generatePrintTable(selectedColumns) {
     const tableData = table.getData();
     if (!tableData || tableData.length === 0) {
         return "<div>No data available to display.</div>";
     }
 
-    // Create the table element
-    let tableHTML = '<table style="width: auto; max-width: 50%; margin: 0; table-layout: auto; border-collapse: collapse;">';
+    const excludeColumns = ['Performance Table', 'Line Chart', 'Bar Chart', 'Statistics'];
 
-    // Generate table header
-    tableHTML += '<thead><tr>';
-    // Add "Date" column header first
-    tableHTML += '<th>Date</th>';
+    let tableHTML = `
+        <table class="print-table">
+            <thead>
+                <tr>
+                    <th>Date</th>`;
+    
+    // Add all columns including non-numeric ones for printing
     selectedColumns.forEach(column => {
         const columnName = column.textContent.trim();
-        tableHTML += `<th>${columnName}</th>`;
+        if (!excludeColumns.includes(columnName)) {
+            let splitColumnName = columnName.split('/').join('<br>'); // Splitting at "/" and joining with a line break
+            tableHTML += `<th>${splitColumnName}</th>`;
+        }
     });
-    tableHTML += '</tr></thead>';
 
-    // Generate table body
-    tableHTML += '<tbody>';
+    // Ensure Notes column is included in the printed table
+    tableHTML += `<th>Notes</th>`;
+
+    tableHTML += `
+                </tr>
+            </thead>
+            <tbody>`;
+    
     tableData.forEach(row => {
         tableHTML += '<tr>';
-        // Add "Date" column data first
         const dateValue = row['score_date'] !== null && row['score_date'] !== undefined ? row['score_date'] : '';
         tableHTML += `<td>${dateValue}</td>`;
+        
         selectedColumns.forEach(column => {
             const columnField = column.getAttribute("data-column-name");
-            const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
-            tableHTML += `<td>${cellData}</td>`;
+            const columnName = column.textContent.trim();
+            if (!excludeColumns.includes(columnName)) {
+                const cellData = row[columnField] !== null && row[columnField] !== undefined ? row[columnField] : '';
+                tableHTML += `<td>${cellData}</td>`;
+            }
         });
+
+        // Add Notes column data to the printed table
+        const notesData = row['score10'] !== null && row['score10'] !== undefined ? row['score10'] : '';
+        tableHTML += `<td>${notesData}</td>`;
+
         tableHTML += '</tr>';
     });
-    tableHTML += '</tbody>';
-
-    // Close the table element
-    tableHTML += '</table>';
-
+    
+    tableHTML += `
+            </tbody>
+        </table>`;
+    
     return tableHTML;
 }
 

@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('./users/db.php');
 include('./users/auth_session.php');
 ?>
@@ -18,7 +17,7 @@ include('./users/auth_session.php');
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Students</title>
+    <title>Dashboard Layout</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -65,7 +64,7 @@ include('./users/auth_session.php');
         </section>
 
         <section class="box students-list">
-            <h3>Students <button class="add-student-btn">+</button></h3>
+            <h2>Students <button class="add-student-btn">+</button></h2>
             <div class="message" id="students-message">Please use groups to see students.</div>
             <ul id="student-list" style="display: none;">
                 <?php foreach ($allStudents as $student): ?>
@@ -76,7 +75,7 @@ include('./users/auth_session.php');
 
         <!-- Add the new Edit Column Names button in the goal list section -->
         <section class="box existing-groups">
-            <h3>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h3>
+            <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
             <div class="message" id="goals-message">Click a student to see their goals.</div>
             <div id="goal-list" style="display: none;">
                 <!-- Goals will be loaded here and grouped by metadata_id -->
@@ -105,7 +104,7 @@ include('./users/auth_session.php');
 <div id="add-student-modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="hideAddStudentModal()">&times;</span>
-        <h3>Assign Students to Group</h3>
+        <h2>Assign Students to Group</h2>
         <div style="margin-top: 20px;">
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
@@ -119,11 +118,11 @@ include('./users/auth_session.php');
                 </div>
             </form>
         </div>
-        <h3>Remove Students from Group</h3>
+        <h2>Remove Students from Group</h2>
         <div id="group-students-list-add">
             <!-- Students will be loaded here dynamically -->
         </div>
-        <h3>Add New Student</h3>
+        <h2>Add New Student</h2>
         <form id="add-student-form" onsubmit="addStudent(event)">
             <div class="form-group">
                 <label for="first-name">First Name:</label>
@@ -155,8 +154,8 @@ include('./users/auth_session.php');
             <div class="selector-area">
                 <div id="columnSelectorTitle" class="selector-title">Goal Category Options:</div>
                 <div id="metadataOptionSelector" class="checkbox-container">
-                    <div class="selector-item" data-option="template">Use a Category Template</div>
-                    <div class="selector-item" data-option="existing">Link to a Used Category</div>
+                    <div class="selector-item" data-option="template">Category Template</div>
+                    <div class="selector-item" data-option="existing">Previously Used Category</div>
                 </div>
             </div>
 
@@ -175,7 +174,7 @@ include('./users/auth_session.php');
             </div>
 
             <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
-                <h3>Column Names:</h3>
+                <h2>Column Names:</h2>
                 <ul id="columnNamesList"></ul>
             </div>
 
@@ -209,11 +208,11 @@ include('./users/auth_session.php');
             <button type="submit">Save Changes</button>
         </form>
         <button onclick="deleteGroup()">Delete Group</button>
-        <h3>Remove Students from Group</h3>
+        <h2>Remove Students from Group</h2>
         <div id="group-students-list-edit">
             <!-- Students will be loaded here dynamically -->
         </div>
-        <h3>Share Group</h3>
+        <h2>Share Group</h2>
         <form id="share-group-form" onsubmit="shareGroup(event)">
             <input type="hidden" id="share-group-id">
             <select id="share-teacher-id" name="shared_teacher_id">
