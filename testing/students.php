@@ -64,7 +64,7 @@ include('./users/auth_session.php');
         </section>
 
         <section class="box students-list">
-            <h3>Students <button class="add-student-btn">+</button></h3>
+            <h2>Students <button class="add-student-btn">+</button></h2>
             <div class="message" id="students-message">Please use groups to see students.</div>
             <ul id="student-list" style="display: none;">
                 <?php foreach ($allStudents as $student): ?>
@@ -75,7 +75,7 @@ include('./users/auth_session.php');
 
         <!-- Add the new Edit Column Names button in the goal list section -->
         <section class="box existing-groups">
-            <h3>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h3>
+            <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
             <div class="message" id="goals-message">Click a student to see their goals.</div>
             <div id="goal-list" style="display: none;">
                 <!-- Goals will be loaded here and grouped by metadata_id -->
