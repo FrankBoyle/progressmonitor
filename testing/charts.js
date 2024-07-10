@@ -1261,7 +1261,7 @@ function saveAndPrintReport() {
     const notes = document.getElementById('notes').value.trim();
 
     if (!reportingPeriod) {
-        alert("Please enter the reporting period.");
+        alert("Please select or enter the reporting period.");
         return;
     }
 
@@ -1278,6 +1278,8 @@ function saveAndPrintReport() {
         reporting_period: reportingPeriod,
         notes: notes
     };
+
+    console.log("Payload being sent to save_notes.php:", payload); // Add logging for debugging
 
     fetch('./users/save_notes.php', {
         method: 'POST',
