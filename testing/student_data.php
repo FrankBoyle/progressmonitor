@@ -138,7 +138,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                         <label for="reporting_period">Reporting Period:</label>
                         <select id="reporting_period"></select>
                     </div>
-                    <div>
+                    <div id="notes-container">
                         <label for="notes">Notes:</label>
                         <textarea id="notes" placeholder="Enter notes"></textarea>
                     </div>

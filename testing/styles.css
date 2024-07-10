@@ -1128,7 +1128,7 @@ input[type="text"] {
     word-wrap: break-word;
 }
 
-#assign-students-form, #group-students-list-add, #metadataOptionSelector, #goal-description, #goal-date, #date-of-birth {
+#assign-students-form, #group-students-list-add, #metadataOptionSelector, #goal-description, #goal-date, #date-of-birth, #reportingPeriodContainer, #notes-container {
     margin-bottom: 15px;
 }
 
