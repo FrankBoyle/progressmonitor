@@ -919,6 +919,7 @@ input[type="text"] {
 }
 
 .goal-text {
+    max-width: 1000px;
     line-height: 1.5;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -937,7 +938,7 @@ input[type="text"] {
 }
 
 .chart-card {
-    max-width: 1000px; /* Adjust as needed */
+    /*max-width: 1000px; /* Adjust as needed */
     background-color: #c0c8c8; /* Same as other cards */
     border: 1.5px solid #a3bbcf; /* Same border */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
