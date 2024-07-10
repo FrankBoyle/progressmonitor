@@ -1538,6 +1538,8 @@ function showPrintDialogModal() {
 
                     // Fetch existing reports for the selected goal
                     fetchExistingReports(goal.goal_id);
+                    // Show the reporting period dropdown
+                    document.getElementById('reportingPeriodContainer').style.display = 'block';
                 });
                 goalContainer.appendChild(goalItem);
             });
