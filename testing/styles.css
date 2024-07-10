@@ -914,7 +914,6 @@ input[type="text"] {
 
     /* Style for the statistical summary table */
     #statsTable {
-        width: 100%;
         max-width: 1000px;
         border-collapse: collapse;
         margin-top: 20px;
