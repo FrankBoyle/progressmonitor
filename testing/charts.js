@@ -1269,7 +1269,7 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    const commonWidth = '1000px'; // Adjust this width as needed to ensure consistency
+    const commonWidth = '1000px'; // Fixed width for consistency
 
     let printContents = `
         <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
@@ -1330,17 +1330,30 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     document.body.appendChild(printDiv);
 
-    // Use html2canvas to generate the canvas with specific width and no margins
-    html2canvas(printDiv, {
-        width: parseInt(commonWidth),
-        windowWidth: parseInt(commonWidth),
-        scrollX: -window.scrollX,
-        scrollY: -window.scrollY
-    }).then(canvas => {
-        document.body.removeChild(printDiv);
-        const dataUrl = canvas.toDataURL('image/png');
-        const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
+    // Resize the charts explicitly before capturing with html2canvas
+    resizeCharts(commonWidth).then(() => {
+        html2canvas(printDiv, {
+            width: parseInt(commonWidth),
+            windowWidth: parseInt(commonWidth),
+            scrollX: -window.scrollX,
+            scrollY: -window.scrollY
+        }).then(canvas => {
+            document.body.removeChild(printDiv);
+            const dataUrl = canvas.toDataURL('image/png');
+            const newTab = window.open();
+            newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
+        });
+    });
+}
+
+function resizeCharts(width) {
+    return new Promise((resolve) => {
+        const chartContainers = document.querySelectorAll('.print-graph');
+        chartContainers.forEach(container => {
+            container.style.width = width;
+            container.style.height = 'auto';
+        });
+        setTimeout(resolve, 500); // Give some time for the resize to take effect
     });
 }
 
