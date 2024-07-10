@@ -10,10 +10,10 @@ try {
             $studentId = $_GET['student_id'];
 
             $stmt = $connection->prepare("
-                SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name,
-                       EXISTS (SELECT 1 FROM Goal_notes WHERE goal_id = g.goal_id) AS has_report
+                SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name, gn.note_id, gn.report_image
                 FROM Goals g
                 INNER JOIN Metadata gm ON g.metadata_id = gm.metadata_id
+                LEFT JOIN Goal_notes gn ON g.goal_id = gn.goal_id
                 WHERE g.student_id_new = ? AND g.archived = 0
             ");
             $stmt->execute([$studentId]);
@@ -42,5 +42,6 @@ try {
     echo json_encode(["status" => "error", "message" => "Error processing request: " . $e->getMessage()]);
 }
 ?>
+
 
 
