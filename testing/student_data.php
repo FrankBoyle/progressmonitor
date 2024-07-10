@@ -53,7 +53,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
         <main class="content">
             <div class="card" id="goalsCard">
                 <div class="card-header">
-                    <h3>Goals</h3>
+                    <h2>Goals</h2>
                 </div>
                 <div id="goals-container"></div>
             </div>
@@ -92,7 +92,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <div class="print-graph" id="printGraphContainer"></div>
                 </div>
                 <div id="statistics" class="statistics-area">
-                    <h3>Statistical Summary</h3>
+                    <h2>Statistical Summary</h2>
                     <table id="statsTable" class="statistics-table">
                         <thead>
                             <tr>
