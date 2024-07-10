@@ -25,3 +25,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['goal_id'])) {
 
 exit;
 ?>
+
