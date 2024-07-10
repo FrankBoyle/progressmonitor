@@ -1568,9 +1568,6 @@ function fetchExistingReports(goalId) {
                     reportingPeriodDropdown.appendChild(option);
                     nextReportingPeriod = Math.max(nextReportingPeriod, parseInt(report.reporting_period, 10) + 1);
                 });
-
-                // Populate the notes field with the latest report notes
-                document.getElementById('notes').value = data[data.length - 1].notes;
             }
 
             // Add option for the next reporting period
@@ -1581,6 +1578,8 @@ function fetchExistingReports(goalId) {
 
             // Set the dropdown to the next reporting period by default
             reportingPeriodDropdown.value = nextReportingPeriod;
+            // Clear the notes field initially
+            document.getElementById('notes').value = '';
 
             // Add event listener to populate notes based on selected period
             reportingPeriodDropdown.addEventListener('change', function() {
