@@ -855,7 +855,6 @@ input[type="text"] {
 @media print {
 
     .print-container {
-        width: 100%;
         max-width: 1000px;
         margin: 0 auto;
         padding: 20px;
@@ -872,7 +871,6 @@ input[type="text"] {
 
     .goal-text-container {
         max-width: 1000px; /* Ensure it does not exceed 1000px */
-        width: 100%;
         margin: 0 auto;
         overflow-wrap: break-word;
         word-wrap: break-word;
@@ -883,7 +881,6 @@ input[type="text"] {
 
     .goal-text {
         max-width: 1000px; /* Ensure it does not exceed 1000px */
-        width: 100%;
         line-height: 1.5;
         overflow-wrap: break-word;
         word-wrap: break-word;
@@ -892,12 +889,10 @@ input[type="text"] {
 
     /* Ensure that the main container also respects max-width */
     .content, .dashboard {
-        width: 100%;
-        height: auto;
-        margin: 0 auto;
         max-width: 1000px;
+        margin: 0 auto;
         padding: 0;
-    } 
+    }
 
 }
 
