@@ -1306,10 +1306,14 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
     // Ensure styles are embedded within the printDiv
     const styles = `
         <style>
-            .print-container { max-width: 1000px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
-            .goal-text-container { max-width: 1000px; margin: 0 auto; padding: 10px; box-sizing: border-box; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
-            .goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; max-width: 1000px; }
-            .content, .dashboard { max-width: 1000px; margin: 0 auto; padding: 0; }
+            @media print {
+                .print-container { max-width: 100%; margin: 0; padding: 20px; box-sizing: border-box; }
+                .goal-text-container { max-width: 100%; margin: 0 auto; padding: 10px; box-sizing: border-box; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
+                .goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; max-width: 100%; }
+                .content, .dashboard { max-width: 100%; margin: 0; padding: 0; }
+            }
+            .goal-text-container { max-width: 100%; margin: 0 auto; padding: 10px; box-sizing: border-box; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
+            .goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; max-width: 100%; margin: 0 auto; }
         </style>
     `;
     printDiv.insertAdjacentHTML('beforeend', styles);
