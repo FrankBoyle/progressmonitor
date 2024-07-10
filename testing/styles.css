@@ -865,6 +865,8 @@ input[type="text"] {
         overflow-wrap: break-word; /* Ensures long words break and wrap */
         word-wrap: break-word; /* Ensures long words break and wrap */
         white-space: normal; /* Ensures text wraps normally */
+        max-width: 1000px;
+
     }
 
     .goal-text-container {
@@ -883,6 +885,8 @@ input[type="text"] {
         word-wrap: break-word; /* Ensures long words break and wrap */
         white-space: normal; /* Ensures text wraps normally */
         max-width: 100%; /* Ensure text does not overflow the container */
+        max-width: 1000px;
+
     }
 
     /* Ensure that the main container also respects max-width */
