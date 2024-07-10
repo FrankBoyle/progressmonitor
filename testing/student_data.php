@@ -134,9 +134,9 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                         <div class="selector-item" data-section="printBarChart">Bar Chart</div>
                         <div class="selector-item" data-section="printStatistics">Statistics</div>
                     </div>
-                    <div>
+                    <div id="reportingPeriodContainer" style="display:none;">
                         <label for="reporting_period">Reporting Period:</label>
-                        <input type="text" id="reporting_period" placeholder="Enter reporting period">
+                        <select id="reporting_period"></select>
                     </div>
                     <div>
                         <label for="notes">Notes:</label>
