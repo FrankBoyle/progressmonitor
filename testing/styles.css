@@ -1134,7 +1134,7 @@ input[type="text"] {
     word-wrap: break-word;
 }
 
-#assign-students-form {
+#assign-students-form, #group-students-list-add {
     margin-bottom: 20px;
 }
 
