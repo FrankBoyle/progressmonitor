@@ -14,6 +14,9 @@ $query = $connection->prepare("
 $query->bindParam("account_id", $account_id, PDO::PARAM_INT);
 $query->execute();
 $schools = $query->fetchAll(PDO::FETCH_ASSOC);
+
+// Debugging: Print the schools array
+echo '<script>console.log(' . json_encode($schools) . ');</script>';
 ?>
 
 <!DOCTYPE html>
