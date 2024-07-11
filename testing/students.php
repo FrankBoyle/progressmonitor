@@ -3,20 +3,16 @@ session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
 
-// Fetch the schools associated with the logged-in account
+// Ensure account_id is in session
 $account_id = $_SESSION['account_id'];
-$query = $connection->prepare("
-    SELECT s.school_id, s.SchoolName 
-    FROM Schools s 
-    JOIN Teachers t ON s.school_id = t.school_id 
-    WHERE t.account_id = :account_id
-");
+$school_id = $_SESSION['school_id'];
+
+// Fetch the schools associated with the logged-in user
+$query = $connection->prepare("SELECT s.school_id, s.SchoolName FROM Schools s JOIN Teachers t ON s.school_id = t.school_id WHERE t.account_id = :account_id");
 $query->bindParam("account_id", $account_id, PDO::PARAM_INT);
 $query->execute();
 $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
-// Debugging: Print the schools array
-echo '<script>console.log(' . json_encode($schools) . ');</script>';
 ?>
 
 <!DOCTYPE html>
