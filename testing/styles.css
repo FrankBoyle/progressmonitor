@@ -426,7 +426,7 @@ h3 {
     opacity: 1;
 }
 
-.modal-content .save-btn {
+.save-btn {
     background-color: #007bff;
     color: white;
     border: none;
