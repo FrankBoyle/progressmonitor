@@ -1,6 +1,7 @@
 <?php
-include('./users/db.php');
+session_start();
 include('./users/auth_session.php');
+include('./users/db.php');
 ?>
 
 <!DOCTYPE html>

@@ -161,16 +161,22 @@ function loadArchivedStudents() {
                 return;
             }
 
+            // Define the table with editable columns
             const archivedStudentsTable = new Tabulator(archivedStudentsTableContainer, {
                 data: data,
                 layout: "fitDataStretch",
                 columns: [
-                    { title: "First Name", field: "first_name", widthGrow: 2 },
-                    { title: "Last Name", field: "last_name", widthGrow: 2 },
-                    { title: "Date of Birth", field: "date_of_birth", widthGrow: 2 },
-                    { title: "Grade Level", field: "grade_level", widthGrow: 2 }
+                    { title: "First Name", field: "first_name", widthGrow: 2, editor: "input" },
+                    { title: "Last Name", field: "last_name", widthGrow: 2, editor: "input" },
+                    { title: "Date of Birth", field: "date_of_birth", widthGrow: 2, editor: "input" },
+                    { title: "Grade Level", field: "grade_level", widthGrow: 2, editor: "input" }
                 ],
-                cellEditing: false
+                cellEdited: function(cell) {
+                    // This function triggers when a cell is edited
+                    var data = cell.getRow().getData();
+                    // Optionally send data back to server to update
+                    console.log('Updated Data:', data);
+                }
             });
         })
         .catch(error => {
