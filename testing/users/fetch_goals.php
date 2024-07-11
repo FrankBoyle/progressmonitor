@@ -8,6 +8,8 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         if (isset($_GET['student_id'])) {
             $studentId = $_GET['student_id'];
+            
+            error_log("Fetching goals for student_id: $studentId");
 
             $stmt = $connection->prepare("
                 SELECT g.goal_id, g.goal_description, gm.metadata_id, gm.category_name, gn.note_id, gn.report_image
@@ -18,6 +20,9 @@ try {
             ");
             $stmt->execute([$studentId]);
             $goals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            error_log("Goals fetched: " . print_r($goals, true));
+
             echo json_encode($goals);
         } else {
             echo json_encode(["error" => "Invalid request, missing student_id"]);
