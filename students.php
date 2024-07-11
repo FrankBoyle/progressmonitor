@@ -1144,7 +1144,7 @@ function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.text())
         .then(data => {
-            //console.log('Raw response:', data);
+            console.log('Raw response:', data);
             try {
                 const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {
@@ -1185,10 +1185,11 @@ function loadGoals(studentId) {
                                 <div class="progress-reports">
                                     <strong>Progress Reports:</strong>
                                     <div class="thumbnails">
-                                    ${goal.notes.map(note => note.report_image ? `
-                                        <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
+                                    ${goal.notes.map((note, index) => note.report_image ? `
+                                        <div class="thumbnail-container">
                                             <img src="${note.report_image}" alt="Report Available" class="thumbnail">
-                                        </a>
+                                            <div class="thumbnail-overlay">${index + 1}</div>
+                                        </div>
                                     ` : '').join('')}
                                     </div>
                                 </div>
