@@ -15,3 +15,4 @@ if (isset($_GET['token'])) {
 } else {
     echo "<p>Invalid token or token not provided.</p>";
 }
+?>

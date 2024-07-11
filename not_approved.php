@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKFCCN4XXS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-LKFCCN4XXS');
+    </script>
     <title>Not Approved</title>
     <style>
         body {
@@ -33,10 +41,22 @@
     </style>
 </head>
 <body>
+<div class="dashboard">
+        <header class="dashboard-header">
+            <div class="logo">
+                <img src="bFactor_logo.png" alt="Logo">
+            </div>
+            <div class="header-icons">
+                <button id="printReportBtn" class="btn btn-primary">Print Report</button>
+                <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
+                <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+            </div>
+        </header>
     <div class="container">
         <h1>Account Not Approved</h1>
         <p>Your account needs to be approved by an administrator before you can access this area. Please contact your administrator for more information.</p>
         <p class="contact-admin">Contact your administrator. <!--<a href="mailto:admin@example.com">admin@example.com</a>--></p>
     </div>
+</div>
 </body>
 </html>
