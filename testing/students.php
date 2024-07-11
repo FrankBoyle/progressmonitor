@@ -1175,7 +1175,7 @@ function loadGoals(studentId) {
                         listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
                         listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
 
-                        if (goal.notes && goal.notes.length > 0) {
+                        if (goal.notes && Array.isArray(goal.notes) && goal.notes.length > 0) {
                             goal.notes.forEach(note => {
                                 if (note.image_size > 0) {
                                     listItem.innerHTML += `
@@ -1211,6 +1211,10 @@ function loadGoals(studentId) {
             alert('There was an error fetching goals. Please try again.');
         });
 }
+
+$(document).ready(function() {
+    lightbox.init();
+});
 
 function archiveGoal(goalId) {
     if (!confirm('Are you sure you want to archive this goal?')) {
