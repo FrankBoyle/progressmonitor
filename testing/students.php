@@ -228,11 +228,13 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <h2>Edit Group</h2>
         <form id="edit-group-form" onsubmit="updateGroup(event)">
             <input type="hidden" id="edit-group-id">
-            <label for="edit-group-name">Group Name:</label>
-            <input type="text" id="edit-group-name" name="group_name" required>
+            <div class="form-group">
+                <label for="edit-group-name">Group Name:</label>
+                <input type="text" id="edit-group-name" name="group_name" required>
+            </div>
             <button type="submit">Save Changes</button>
         </form>
-        <button onclick="deleteGroup()">Delete Group</button>
+        <button class="delete-btn" onclick="deleteGroup()">Delete Group</button>
         <h2>Remove Students from Group</h2>
         <div id="group-students-list-edit">
             <!-- Students will be loaded here dynamically -->
@@ -240,20 +242,20 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <h2>Share Group</h2>
         <form id="share-group-form" onsubmit="shareGroup(event)">
             <input type="hidden" id="share-group-id">
-            <select id="share-teacher-id" name="shared_teacher_id">
-                <option value="">Select staff here</option>
-                <?php foreach ($teachers as $teacher): ?>
-                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>">
-                        <?= htmlspecialchars($teacher['fname'] . ' ' . $teacher['lname']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <div class="form-group">
+                <select id="share-teacher-id" name="shared_teacher_id">
+                    <option value="">Select staff here</option>
+                    <?php foreach ($teachers as $teacher): ?>
+                        <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>">
+                            <?= htmlspecialchars($teacher['fname'] . ' ' . $teacher['lname']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
             <button type="submit">Share</button>
         </form>
     </div>
 </div>
-
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
