@@ -118,23 +118,26 @@ function loadActiveStudents() {
                 return;
             }
 
-            const activeStudentsTable = new Tabulator(activeStudentsTableContainer, {
+            const activeStudentsTable = new Tabulator("#active-students-table-container", {
                 data: data,
-                layout: "fitDataStretch",
+                layout: "fitDataStretch", // This makes sure columns use up the available space
                 columns: [
-                    { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
-                    { title: "Last Name", field: "last_name", editor: "input", widthGrow: 2 },
-                    { title: "Date of Birth", field: "date_of_birth", editor: "input", widthGrow: 2 },
-                    { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 },
+                    { title: "First Name", field: "first_name", widthGrow: 2 },
+                    { title: "Last Name", field: "last_name", widthGrow: 2 },
+                    { title: "Date of Birth", field: "date_of_birth", widthGrow: 2 },
+                    { title: "Grade Level", field: "grade_level", widthGrow: 2 },
                     {
-                        title: "Archive", field: "student_id_new", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="archive-btn" onclick="archiveStudent(' + cell.getValue() + ')">Archive</button>';
+                        title: "Archive", 
+                        field: "student_id_new",
+                        hozAlign: "center", // Centers the button horizontally
+                        formatter: function(cell, formatterParams, onRendered) {
+                            return '<button class="btn btn-archive">Archive</button>'; // Adding a class for styling
                         },
-                        width: 100
+                        width: 100 // Set a fixed width for consistency
                     }
                 ],
             });
-
+            
             activeStudentsTable.on("cellEdited", function(cell) {
                 updateStudent(cell.getRow().getData());
             });
