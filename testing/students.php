@@ -877,23 +877,16 @@ function saveGoal(goalId, goalDescription) {
 }
 
 function showEditGroupModal(groupId, groupName) {
-    //console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
+    console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
+    document.getElementById('edit-group-id').value = groupId;
+    document.getElementById('edit-group-name').value = groupName || '';
+    document.getElementById('edit-group-modal').style.display = 'block';
 
-    const editGroupIdInput = document.getElementById('edit-group-id');
-    const editGroupNameInput = document.getElementById('edit-group-name');
-    const editGroupModal = document.getElementById('edit-group-modal');
+    // Ensure the share group hidden input is also set
+    document.getElementById('share-group-id').value = groupId;
+
+    // Hide the Edit Group button
     const editGroupButton = document.querySelector('.edit-group-btn');
-    
-    if (!editGroupIdInput || !editGroupNameInput || !editGroupModal) {
-        console.error("Required elements not found in the DOM");
-        return;
-    }
-
-    editGroupIdInput.value = groupId;
-    editGroupNameInput.value = groupName || '';
-    editGroupModal.style.display = 'block';
-
-    // Hide the Edit Group button if it exists
     if (editGroupButton) {
         editGroupButton.style.display = 'none';
     }
@@ -901,7 +894,6 @@ function showEditGroupModal(groupId, groupName) {
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
 
-    // Load staff
     loadStaff();
 }
 
