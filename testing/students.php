@@ -1182,7 +1182,7 @@ function loadGoals(studentId) {
                             // Add the thumbnail or icon for each report image with Lightbox2
                             if (goal.note_id && goal.report_image) {
                                 listItem.innerHTML += `
-                                    <a href="${goal.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image" data-note-id="${goal.note_id}" data-student-name="${studentId}">
+                                    <a href="${goal.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
                                         <img src="${goal.report_image}" alt="Report Available" style="width: 50px; height: 50px; cursor: pointer;">
                                     </a>`;
                             }
@@ -1204,20 +1204,6 @@ function loadGoals(studentId) {
                                 toolbar: false
                             }
                         });
-                    }
-                });
-
-                // Initialize Lightbox with custom options
-                lightbox.option({
-                    'alwaysShowNavOnTouchDevices': true,
-                    'wrapAround': true,
-                    'fadeDuration': 500,
-                    'imageFadeDuration': 500,
-                    'resizeDuration': 500,
-                    'disableScrolling': true,
-                    'showImageNumberLabel': false,
-                    'onOpen': function() {
-                        addSaveButton();
                     }
                 });
             } catch (error) {
@@ -1367,48 +1353,6 @@ function showColumnNames(type) {
             console.error('Error loading column names:', error);
         });
 }
-
-function addSaveButton() {
-    const lightboxContainer = document.querySelector('#lightbox');
-    const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
-    saveButton.style.position = 'absolute';
-    saveButton.style.top = '10px';
-    saveButton.style.right = '10px';
-    saveButton.style.padding = '10px';
-    saveButton.style.backgroundColor = 'white';
-    saveButton.style.border = '1px solid black';
-    saveButton.style.cursor = 'pointer';
-    saveButton.onclick = saveImage;
-
-    lightboxContainer.appendChild(saveButton);
-}
-
-function saveImage() {
-    const imageElement = document.querySelector('#lightbox img');
-    if (!imageElement) return;
-
-    const imageUrl = imageElement.src;
-    const noteId = imageElement.parentElement.getAttribute('data-note-id');
-    const studentName = imageElement.parentElement.getAttribute('data-student-name');
-    const fileName = `${studentName}_note_${noteId}.png`;
-
-    fetch(imageUrl)
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            alert('Your file has downloaded!');
-        })
-        .catch(() => alert('An error occurred while downloading the image.'));
-}
-
 </script>
 </body>
 </html>
