@@ -536,6 +536,10 @@ td .cell-input {
     border: 1px solid #888;
     width: 80%;
     z-index: 1001; /* Ensure it's higher than the button */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+
 }
 
 .close {
