@@ -81,7 +81,8 @@ function loadUsers() {
                         },
                         width: 100
                     },
-                    { title: "Name", field: "name", editor: "input", widthGrow: 2 },
+                    { title: "First Name", field: "fname", editor: "input", widthGrow: 2 },
+                    { title: "Last Name", field: "lname", editor: "input", widthGrow: 2 },
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
