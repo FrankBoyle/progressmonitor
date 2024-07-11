@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setupInitialPageLoad();
     attachEventListeners();
     initializeCharts();
-    fetchGoals(studentIdNew, metadataId);
 
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
     window.hidePrintDialogModal = hidePrintDialogModal;
@@ -48,6 +47,41 @@ function setupInitialPageLoad() {
     }
     
     fetchInitialData(studentIdNew, metadataId);
+    fetchGoals(studentIdNew, metadataId); // Ensure goals are fetched
+    fetchReportingPeriods(studentIdNew, metadataId); // Fetch reporting periods
+}
+
+function fetchReportingPeriods(goalId) {
+    fetch(`./users/fetch_reporting_periods.php?student_id=${studentIdNew}&metadata_id=${metadataId}&goal_id=${goalId}`)
+        .then(response => response.json())
+        .then(data => {
+            const reportingPeriodSelect = document.getElementById('reporting_period');
+            reportingPeriodSelect.innerHTML = ''; // Clear previous options
+
+            if (data.length === 0) {
+                // No previous reports, start with 1
+                const option = document.createElement('option');
+                option.value = 1;
+                option.text = '1';
+                reportingPeriodSelect.appendChild(option);
+            } else {
+                data.forEach((period, index) => {
+                    const option = document.createElement('option');
+                    option.value = index + 1;
+                    option.text = period.reporting_period;
+                    reportingPeriodSelect.appendChild(option);
+                });
+
+                // Add the next reporting period
+                const nextPeriod = document.createElement('option');
+                nextPeriod.value = data.length + 1;
+                nextPeriod.text = (data.length + 1).toString();
+                reportingPeriodSelect.appendChild(nextPeriod);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching reporting periods:', error);
+        });
 }
 
 function attachEventListeners() {
@@ -1231,78 +1265,140 @@ function saveAndPrintReport() {
         return;
     }
 
-    const goalId = selectedGoal.getAttribute('data-goal-id');
-    const studentIdNew = window.studentIdNew;
-    const schoolId = window.schoolId;
-    const metadataId = window.metadataId;
-
-    const payload = {
-        goal_id: goalId,
-        student_id_new: studentIdNew,
-        school_id: schoolId,
-        metadata_id: metadataId,
-        reporting_period: reportingPeriod,
-        notes: notes
-    };
-
-    fetch('./users/save_notes.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            // Proceed to generate the report
-            generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
-        } else {
-            console.error('Error saving notes:', data.message);
-            alert('Failed to save notes: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while saving notes.');
-    });
+    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
-    let printContents = `<div class="print-container"><div class="goal-text-container"><div class="print-goal-text">${selectedGoal.innerHTML}</div></div></div>`;
+    const commonWidth = '1000px'; // Fixed width for consistency
+
+    let printContents = `
+        <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
+            <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
+                <div class="print-goal-text">${selectedGoal.innerHTML}</div>
+            </div>`;
 
     if (selectedSections.includes('printTable')) {
         const tableContent = generatePrintTable(selectedColumns);
-        printContents += `<div class="print-table-container">${tableContent}</div>`;
+        printContents += `<div class="print-table-container" style="width: ${commonWidth}; margin: 0 auto;">${tableContent}</div>`;
     }
 
     if (selectedSections.includes('printLineChart')) {
-        const lineChartElement = document.getElementById('chartContainer').outerHTML;
-        printContents += `<div class="print-graph">${lineChartElement}</div>`;
+        const lineChartElement = document.getElementById('chartContainer').cloneNode(true);
+        lineChartElement.style.width = commonWidth;
+        lineChartElement.style.height = 'auto';
+        lineChartElement.style.overflow = 'visible';
+        lineChartElement.style.position = 'relative';
+        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${lineChartElement.outerHTML}</div>`;
     }
 
     if (selectedSections.includes('printBarChart')) {
-        const barChartElement = document.getElementById('barChartContainer').outerHTML;
-        printContents += `<div class="print-graph">${barChartElement}</div>`;
+        const barChartElement = document.getElementById('barChartContainer').cloneNode(true);
+        barChartElement.style.width = commonWidth;
+        barChartElement.style.height = 'auto';
+        barChartElement.style.overflow = 'visible';
+        barChartElement.style.position = 'relative';
+        printContents += `<div class="print-graph" style="width: ${commonWidth}; margin: 0 auto;">${barChartElement.outerHTML}</div>`;
     }
 
     if (selectedSections.includes('printStatistics')) {
         const statisticsContent = document.getElementById('statistics').innerHTML;
-        printContents += `<div class="statistics-area">${statisticsContent}</div>`;
+        printContents += `<div class="statistics-area" style="width: ${commonWidth}; margin: 0 auto;">${statisticsContent}</div>`;
     }
 
-    printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+    printContents += `
+        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
+        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Notes:</strong> ${notes}</div>
+    </div>`;
 
     const printDiv = document.createElement('div');
     printDiv.innerHTML = printContents;
+
+    // Ensure styles are embedded within the printDiv
+    const styles = `
+        <style>
+            .print-container { width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px; }
+            .goal-text-container { width: ${commonWidth}; margin: 0 auto; }
+            .print-goal-text { line-height: 1.5; overflow-wrap: break-word; word-wrap: break-word; white-space: normal; }
+            .print-table-container { width: ${commonWidth}; margin: 0 auto; }
+            .print-graph { width: ${commonWidth}; margin: 0 auto; overflow: visible; position: relative; }
+            .statistics-area { width: ${commonWidth}; margin: 0 auto; }
+            body { margin: 0; padding: 0; }
+            img { display: block; width: 100%; height: auto; }
+        </style>
+    `;
+    printDiv.insertAdjacentHTML('beforeend', styles);
+
     document.body.appendChild(printDiv);
 
-    html2canvas(printDiv).then(canvas => {
-        document.body.removeChild(printDiv);
-        const dataUrl = canvas.toDataURL('image/png');
-        const newTab = window.open();
-        newTab.document.write(`<img src="${dataUrl}" alt="Report Image"/>`);
+    // Resize the charts explicitly before capturing with html2canvas
+    resizeCharts(commonWidth).then(() => {
+        html2canvas(printDiv, {
+            width: parseInt(commonWidth),
+            windowWidth: parseInt(commonWidth),
+            scrollX: -window.scrollX,
+            scrollY: -window.scrollY
+        }).then(canvas => {
+            document.body.removeChild(printDiv);
+            const dataUrl = canvas.toDataURL('image/png');
+
+            // Update the notes object to include the image data
+            const payload = {
+                goal_id: selectedGoal.getAttribute('data-goal-id'),
+                student_id_new: window.studentIdNew,
+                school_id: window.schoolId,
+                metadata_id: window.metadataId,
+                reporting_period: reportingPeriod,
+                notes: notes,
+                report_image: dataUrl.split(',')[1] // Get base64 string
+            };
+
+            console.log("Payload being sent to save_notes.php:", payload);
+
+            // Save notes with the image data
+            fetch('./users/save_notes.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(error => {
+                        throw new Error(`HTTP error! status: ${response.status}, message: ${error.message}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    const newTab = window.open();
+                    newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
+                    newTab.document.close();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    console.error('Error saving notes:', data.message);
+                    alert('Failed to save notes: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving notes: ' + error.message);
+            });
+        });
+    });
+}
+
+function resizeCharts(width) {
+    return new Promise((resolve) => {
+        const chartContainers = document.querySelectorAll('.print-graph');
+        chartContainers.forEach(container => {
+            container.style.width = width;
+            container.style.height = 'auto';
+        });
+        setTimeout(resolve, 500); // Give some time for the resize to take effect
     });
 }
 
@@ -1442,6 +1538,11 @@ function showPrintDialogModal() {
                 goalItem.addEventListener('click', function() {
                     document.querySelectorAll('.goal-item').forEach(item => item.classList.remove('selected'));
                     goalItem.classList.add('selected');
+
+                    // Fetch existing reports for the selected goal
+                    fetchExistingReports(goal.goal_id);
+                    // Show the reporting period dropdown
+                    document.getElementById('reportingPeriodContainer').style.display = 'block';
                 });
                 goalContainer.appendChild(goalItem);
             });
@@ -1453,11 +1554,48 @@ function showPrintDialogModal() {
         });
 }
 
-function hidePrintDialogModal() {
-    document.getElementById('printDialogModal').style.display = 'none';
+function fetchExistingReports(goalId) {
+    fetch(`./users/fetch_reports.php?goal_id=${goalId}`)
+        .then(response => response.json())
+        .then(data => {
+            const reportingPeriodDropdown = document.getElementById('reporting_period');
+            reportingPeriodDropdown.innerHTML = ''; // Clear previous options
+
+            let nextReportingPeriod = 1;
+
+            if (data.length > 0) {
+                data.forEach(report => {
+                    const option = document.createElement('option');
+                    option.value = report.reporting_period;
+                    option.textContent = report.reporting_period;
+                    reportingPeriodDropdown.appendChild(option);
+                    nextReportingPeriod = Math.max(nextReportingPeriod, parseInt(report.reporting_period, 10) + 1);
+                });
+            }
+
+            // Add option for the next reporting period
+            const nextOption = document.createElement('option');
+            nextOption.value = nextReportingPeriod;
+            nextOption.textContent = nextReportingPeriod;
+            reportingPeriodDropdown.appendChild(nextOption);
+
+            // Set the dropdown to the next reporting period by default
+            reportingPeriodDropdown.value = nextReportingPeriod;
+            // Clear the notes field initially
+            document.getElementById('notes').value = '';
+
+            // Add event listener to populate notes based on selected period
+            reportingPeriodDropdown.addEventListener('change', function() {
+                const selectedPeriod = this.value;
+                const report = data.find(report => report.reporting_period == selectedPeriod);
+                document.getElementById('notes').value = report ? report.notes : '';
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching reports:', error);
+        });
 }
 
-// Function to hide the print dialog modal
 function hidePrintDialogModal() {
     document.getElementById('printDialogModal').style.display = 'none';
 }

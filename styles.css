@@ -1,4 +1,6 @@
 @media (max-width: 768px) {
+
+
     .content {
         padding: 10px; 
         flex-direction: column;
@@ -32,6 +34,7 @@
     }
 
     .chart-card {
+        max-width: 1000px; /* Ensure the card does not exceed 1000px */
         width: 100%; /* Full width on smaller screens */
         margin-bottom: 20px; /* Space between stacked cards */
     }
@@ -361,6 +364,7 @@ h3 {
 }
 
 .goal-item {
+    max-width: 1000px;
     cursor: pointer;
     margin-bottom: 20px;
     padding: 10px;
@@ -368,7 +372,7 @@ h3 {
     border-radius: 8px;
     background-color: #f9f9f9;
     position: relative;
-    padding-right: 100px; /* Adjust the padding to fit the button */
+    padding-right: 90px; /* Adjust the padding to fit the button */
 }
 
 .goal-item.selected {
@@ -850,68 +854,49 @@ input[type="text"] {
     flex-wrap: wrap;
 }
 
+/*
 @media print {
-
     .print-container {
-        width: 100%;
-        max-width: 1000px;
-        margin: 0 auto;
+        max-width: 100%;
+        margin: 0;
         padding: 20px;
         box-sizing: border-box;
     }
 
-    .print-goal-text {
-        line-height: 1.5; /* Adjust the line height for better readability */
-        overflow-wrap: break-word; /* Ensures long words break and wrap */
-        word-wrap: break-word; /* Ensures long words break and wrap */
-        white-space: normal; /* Ensures text wraps normally */
-    }
-
     .goal-text-container {
-        width: 100%;
-        max-width: 1000px;
-        overflow-wrap: break-word; /* Ensures long words break and wrap */
-        word-wrap: break-word; /* Ensures long words break and wrap */
-        white-space: normal; /* Ensures text wraps normally */
+        max-width: 100%;
+        margin: 0 auto;
         padding: 10px;
-        box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        white-space: normal;
     }
 
     .goal-text {
-        line-height: 1.5; /* Adjust the line height for better readability */
-        overflow-wrap: break-word; /* Ensures long words break and wrap */
-        word-wrap: break-word; /* Ensures long words break and wrap */
-        white-space: normal; /* Ensures text wraps normally */
-        max-width: 100%; /* Ensure text does not overflow the container */
+        line-height: 1.5;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        white-space: normal;
+        max-width: 100%;
     }
 
-    /* Ensure that the main container also respects max-width */
     .content, .dashboard {
-        width: 100%;
-        height: auto;
-        margin: 0 auto;
-        max-width: 1000px; /* Limit the width to prevent overflow */
+        max-width: 100%;
+        margin: 0;
         padding: 0;
     }
-
-            /* Ensure the goal text container within the goal item is also constrained */
-    .goal-item .goal-text-container {
-        width: 100%;
-        max-width: 1000px;
-    }
-
-}
+}*/
 
 /* Regular styles */
 .goal-text-container {
-    width: 100%;
-    max-width: 1000px;
-    padding: 10px;
-    box-sizing: border-box;
+    max-width: 1000px; /* Ensure it does not exceed 1000px */
+    margin: 0 auto;
     overflow-wrap: break-word;
     word-wrap: break-word;
     white-space: normal;
-    /*margin: 0 auto;*/
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .goal-text {
@@ -919,6 +904,8 @@ input[type="text"] {
     overflow-wrap: break-word;
     word-wrap: break-word;
     white-space: normal;
+    max-width: 1000px; /* Ensure it does not exceed 1000px */
+    margin: 0 auto;
 }
 
 #chartContainer, #barChartContainer {
@@ -1002,15 +989,19 @@ input[type="text"] {
 }
 
 .selector-item {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 5px 5px; /* Increased padding for better appearance */
-    margin: 5px; /* Add some margin around the buttons */
+    margin: 0px; /* Add some margin around the buttons */
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 5px; /* Rounded corners */
+    border-radius: 8px; /* More rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visuals */
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+    text-align: center; /* Center text */
+    min-width: 100px; /* Ensure buttons are not too narrow */
 }
 
 .selector-item.selected {
@@ -1019,16 +1010,10 @@ input[type="text"] {
     border-color: #47A6E6;
 }
 
-/* Hover effect for the buttons */
-.selector-item:hover {
-    background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slightly larger shadow on hover */
-}
-
 #columnSelector {
     display: flex;
     flex-wrap: wrap; /* Allows items to wrap within the container */
-    gap: 10px; /* Space between checkboxes */
+    gap: 5px; /* Space between checkboxes */
 }
 
 #statistics {
@@ -1143,7 +1128,38 @@ input[type="text"] {
     word-wrap: break-word;
 }
 
-#assign-students-form, #group-students-list-add, #metadataOptionSelector, #goal-description, #goal-date, #date-of-birth {
+#assign-students-form, #group-students-list-add, #metadataOptionSelector, #goal-description, #goal-date, #date-of-birth, #reportingPeriodContainer, #notes-container {
     margin-bottom: 15px;
+}
+
+#reportingPeriodContainer {
+    margin-top: 20px;
+}
+
+.thumbnail-image {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border: 2px solid black; /* Black outline */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Tiny shadow */
+    margin: 5px; /* Add some margin between thumbnails */
+}
+
+.progress-reports {
+    margin-top: 10px;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 10px;
+}
+
+.thumbnail {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border: 2px solid black;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    margin: 5px;
 }
 

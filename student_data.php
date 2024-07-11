@@ -3,9 +3,9 @@ session_start();
 include('auth_session.php');
 include('db.php');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 // Assuming school_id is set in the session during login
 $schoolId = $_SESSION['school_id']; // Default to 1 if not set
@@ -51,9 +51,11 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
         </header>
         <main class="content">
+        <div class="print-container">
+
             <div class="card" id="goalsCard">
                 <div class="card-header">
-                    <h3>Goals</h3>
+                    <h2>Goals</h2>
                 </div>
                 <div id="goals-container"></div>
             </div>
@@ -92,7 +94,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     <div class="print-graph" id="printGraphContainer"></div>
                 </div>
                 <div id="statistics" class="statistics-area">
-                    <h3>Statistical Summary</h3>
+                    <h2>Statistical Summary</h2>
                     <table id="statsTable" class="statistics-table">
                         <thead>
                             <tr>
@@ -132,17 +134,18 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                         <div class="selector-item" data-section="printBarChart">Bar Chart</div>
                         <div class="selector-item" data-section="printStatistics">Statistics</div>
                     </div>
-                    <div>
+                    <div id="reportingPeriodContainer" style="display:none;">
                         <label for="reporting_period">Reporting Period:</label>
-                        <input type="text" id="reporting_period" placeholder="Enter reporting period">
+                        <select id="reporting_period"></select>
                     </div>
-                    <div>
+                    <div id="notes-container">
                         <label for="notes">Notes:</label>
                         <textarea id="notes" placeholder="Enter notes"></textarea>
                     </div>
                     <button onclick="saveAndPrintReport()">Print</button>
                 </div>
             </div>
+        </div>
         </main>
     </div>
     <script src="charts.js"></script>

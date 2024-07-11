@@ -1,6 +1,7 @@
 <?php
-include('./users/db.php');
+session_start();
 include('./users/auth_session.php');
+include('./users/db.php');
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +22,8 @@ include('./users/auth_session.php');
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -229,6 +232,7 @@ include('./users/auth_session.php');
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
 <script>
 let quillInstances = {}; // Initialize quillInstances globally
@@ -238,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadStaff();
     loadTemplates();
     loadExistingCategories();
+    lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
@@ -1137,59 +1142,81 @@ function addGoal(event) {
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => {
-            if (data.error) {
-                alert(data.message);
-                return;
-            }
-
-            const goalList = document.getElementById('goal-list');
-            goalList.innerHTML = '';
-
-            const goalsByMetadata = data.reduce((acc, goal) => {
-                if (!acc[goal.metadata_id]) {
-                    acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
+            console.log('Raw response:', data);
+            try {
+                const jsonData = JSON.parse(data.trim());
+                if (jsonData.error) {
+                    alert(jsonData.message);
+                    return;
                 }
-                acc[goal.metadata_id].goals.push(goal);
-                return acc;
-            }, {});
 
-            for (const metadataId in goalsByMetadata) {
-                const metadataGoals = goalsByMetadata[metadataId];
+                const goalList = document.getElementById('goal-list');
+                goalList.innerHTML = '';
 
-                const metadataContainer = document.createElement('div');
-                const metadataLink = document.createElement('a');
-                metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
-                metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
-                metadataContainer.appendChild(metadataLink);
-
-                metadataGoals.goals.forEach(goal => {
-                    if (!goal.archived) {
-                        const listItem = document.createElement('div');
-                        listItem.classList.add('goal-item');
-                        listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
-                        listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
-                        listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
-                        metadataContainer.appendChild(listItem);
+                const goalsByMetadata = jsonData.reduce((acc, goal) => {
+                    if (!acc[goal.metadata_id]) {
+                        acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
                     }
-                });
+                    acc[goal.metadata_id].goals.push(goal);
+                    return acc;
+                }, {});
 
-                goalList.appendChild(metadataContainer);
-            }
+                for (const metadataId in goalsByMetadata) {
+                    const metadataGoals = goalsByMetadata[metadataId];
 
-            document.querySelectorAll('.quill-editor').forEach(editor => {
-                const goalId = editor.getAttribute('data-goal-id');
-                if (!quillInstances[goalId]) {
-                    quillInstances[goalId] = new Quill(editor, {
-                        theme: 'snow',
-                        readOnly: true,
-                        modules: {
-                            toolbar: false
+                    const metadataContainer = document.createElement('div');
+                    const metadataLink = document.createElement('a');
+                    metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
+                    metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
+                    metadataContainer.appendChild(metadataLink);
+
+                    metadataGoals.goals.forEach(goal => {
+                        if (!goal.archived) {
+                            const listItem = document.createElement('div');
+                            listItem.classList.add('goal-item');
+                            listItem.innerHTML = `
+                                <div class="goal-content">
+                                    <div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>
+                                    <button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>
+                                    <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
+                                </div>
+                                <div class="progress-reports">
+                                    <strong>Progress Reports:</strong>
+                                    <div class="thumbnails">
+                                    ${goal.notes.map(note => note.report_image ? `
+                                        <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
+                                            <img src="${note.report_image}" alt="Report Available" class="thumbnail">
+                                        </a>
+                                    ` : '').join('')}
+                                    </div>
+                                </div>
+                            `;
+
+                            metadataContainer.appendChild(listItem);
                         }
                     });
+
+                    goalList.appendChild(metadataContainer);
                 }
-            });
+
+                document.querySelectorAll('.quill-editor').forEach(editor => {
+                    const goalId = editor.getAttribute('data-goal-id');
+                    if (!quillInstances[goalId]) {
+                        quillInstances[goalId] = new Quill(editor, {
+                            theme: 'snow',
+                            readOnly: true,
+                            modules: {
+                                toolbar: false
+                            }
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                alert('Error processing the goals. Please try again.');
+            }
         })
         .catch(error => {
             console.error('Error:', error);
@@ -1233,7 +1260,6 @@ function toggleMetadataOption() {
 }
 
 // Function to load metadata templates
-
 function loadTemplates() {
     fetch('users/fetch_metadata_templates.php')
         .then(response => response.json())

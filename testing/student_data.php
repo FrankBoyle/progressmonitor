@@ -3,9 +3,9 @@ session_start();
 include('auth_session.php');
 include('db.php');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 // Assuming school_id is set in the session during login
 $schoolId = $_SESSION['school_id']; // Default to 1 if not set
