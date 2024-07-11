@@ -1172,18 +1172,9 @@ function loadGoals(studentId) {
                         listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
                         listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
 
-                        // Check if there is a report and add an icon
-                        if (goal.has_report) {
-                            const reportIcon = document.createElement('img');
-                            reportIcon.src = `./users/fetch_image.php?goal_id=${encodeURIComponent(goal.goal_id)}`; // Ensure the correct path
-                            reportIcon.alt = 'Report Available';
-                            reportIcon.style.width = '20px'; // Adjust the size as needed
-                            reportIcon.style.height = '20px';
-                            reportIcon.style.cursor = 'pointer';
-                            reportIcon.addEventListener('click', () => {
-                                window.open(`./users/fetch_image.php?goal_id=${encodeURIComponent(goal.goal_id)}`, '_blank');
-                            });
-                            listItem.appendChild(reportIcon);
+                        // Add the thumbnail or icon for each report image
+                        if (goal.report_image) {
+                            listItem.innerHTML += `<img src="users/fetch_image.php?note_id=${goal.note_id}" alt="Report Available" style="width: 50px; height: 50px;">`;
                         }
 
                         metadataContainer.appendChild(listItem);
