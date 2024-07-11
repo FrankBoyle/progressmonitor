@@ -12,19 +12,19 @@ $programId = $_SESSION['program_id'];
 $schoolId = $_SESSION['school_id'];
 
 try {
-    $stmt = $connection->prepare("
-        SELECT t.teacher_id, t.fname, t.lname, a.email 
-        FROM Teachers t 
-        JOIN accounts a ON t.account_id = a.id 
-        WHERE t.program_id = :programId AND t.school_id != :schoolId
+    $query = $connection->prepare("
+        SELECT t1.teacher_id, t1.fname, t1.lname, a.email 
+        FROM Teachers t1 
+        JOIN accounts a ON t1.account_id = a.id
+        WHERE t1.program_id = :programId
+        AND t1.school_id != :schoolId
     ");
-    $stmt->bindParam('programId', $programId, PDO::PARAM_INT);
-    $stmt->bindParam('schoolId', $schoolId, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    echo json_encode($result);
+    $query->bindParam("programId", $programId, PDO::PARAM_INT);
+    $query->bindParam("schoolId", $schoolId, PDO::PARAM_INT);
+    $query->execute();
+    
+    $results = $query->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($results);
 } catch (PDOException $e) {
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
 }
