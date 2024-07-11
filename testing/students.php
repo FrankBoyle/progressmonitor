@@ -40,16 +40,17 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
-            <div class="school-selector">
-                <label for="school-select">Select School:</label>
-                <select id="school-select">
-                    <?php foreach ($schools as $school): ?>
-                        <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($school['school_name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+        <div class="school-selector">
+    <label for="school-select">Select School:</label>
+    <select id="school-select">
+        <?php foreach ($schools as $school): ?>
+            <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($school['school_name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
+
 
             <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                 <a href="manage.php" class="nav-link">
