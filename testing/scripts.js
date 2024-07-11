@@ -121,10 +121,13 @@ function loadActiveStudents() {
             }
 
             const activeStudentsTable = new Tabulator("#active-students-table-container", {
-                data: data,
+                data: data, // Use the fetched data
                 layout: "fitDataStretch", // This makes sure columns use up the available space
+                pagination: "local", // Enable local pagination
+                paginationSize: 20, // Number of students per page
+                paginationSizeSelector: [10, 20, 50, 100], // Page size options
                 initialSort: [
-                    {column:"last_name", dir:"asc"} // Sort by last name ascending
+                    {column: "last_name", dir: "asc"} // Sort by last name ascending
                 ],
                 columns: [
                     { title: "First Name", field: "first_name", widthGrow: 2 },
@@ -132,11 +135,10 @@ function loadActiveStudents() {
                     { title: "Date of Birth", field: "date_of_birth", widthGrow: 2 },
                     { title: "Grade Level", field: "grade_level", widthGrow: 2 },
                     {
-                        title: "Archive", 
+                        title: "Archive",
                         field: "student_id_new",
                         hozAlign: "center", // Centers the button horizontally
                         formatter: function(cell, formatterParams, onRendered) {
-                            //console.log('Creating archive button for student ID:', cell.getValue()); // Debug log
                             return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>'; // Adding a class for styling
                         },
                         width: 100 // Set a fixed width for consistency
@@ -151,7 +153,7 @@ function loadActiveStudents() {
             // Add event listener to the Archive buttons
             setTimeout(() => { // Delay to ensure DOM is updated
                 document.querySelectorAll('.btn-archive').forEach(button => {
-                    //console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
+                    console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
                     button.addEventListener('click', function() {
                         const studentId = this.getAttribute('data-id');
                         archiveStudent(studentId);
