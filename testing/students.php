@@ -1183,7 +1183,7 @@ function loadGoals(studentId) {
                             if (goal.note_id && goal.report_image) {
                                 listItem.innerHTML += `
                                     <a href="${goal.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
-                                        <img src="${goal.report_image}" alt="Report Available" style="width: 50px; height: 50px; cursor: pointer; border: 2px solid black; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); margin: 5px;">
+                                        <img src="${goal.report_image}" alt="Report Available" class="thumbnail-image">
                                     </a>`;
                             }
 
