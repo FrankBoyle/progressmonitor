@@ -346,6 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('Response data:', data); // Debugging statement
                 if (data.success) {
+                    console.log('Reloading page'); // Debugging statement
                     location.reload(); // Reload the page to reflect the school change
                 } else {
                     console.error('Error updating school:', data.message);
