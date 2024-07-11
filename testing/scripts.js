@@ -433,6 +433,7 @@ function addUserToSchool(teacherId) {
         if (data.success) {
             alert('User added to school successfully');
             searchProgramUsers(); // Refresh the search results
+            loadUsers(); // Refresh the Manage Users table
         } else {
             console.error('Error adding user to school:', data.message);
         }
