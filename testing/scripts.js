@@ -121,6 +121,9 @@ function loadActiveStudents() {
             const activeStudentsTable = new Tabulator("#active-students-table-container", {
                 data: data,
                 layout: "fitDataStretch", // This makes sure columns use up the available space
+                initialSort: [
+                    {column:"last_name", dir:"asc"} // Sort by last name ascending
+                ],
                 columns: [
                     { title: "First Name", field: "first_name", widthGrow: 2 },
                     { title: "Last Name", field: "last_name", widthGrow: 2 },
@@ -167,6 +170,9 @@ function loadArchivedStudents() {
             const archivedStudentsTable = new Tabulator(archivedStudentsTableContainer, {
                 data: data,
                 layout: "fitDataStretch",
+                initialSort: [
+                    {column:"last_name", dir:"asc"} // Sort by last name ascending
+                ],
                 columns: [
                     { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
                     { title: "Last Name", field: "last_name", editor: "input", widthGrow: 2 },
