@@ -36,7 +36,7 @@
     <div class="container">
         <h1>Account Not Approved</h1>
         <p>Your account needs to be approved by an administrator before you can access this area. Please contact your administrator for more information.</p>
-        <p class="contact-admin">Contact your administrator: <a href="mailto:admin@example.com">admin@example.com</a></p>
+        <p class="contact-admin">Contact your administrator. <!--<a href="mailto:admin@example.com">admin@example.com</a>--></p>
     </div>
 </body>
 </html>
