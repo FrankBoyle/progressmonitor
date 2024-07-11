@@ -173,7 +173,10 @@ function loadArchivedStudents() {
                     { title: "Date of Birth", field: "date_of_birth", editor: "input", widthGrow: 2 },
                     { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 },
                     {
-                        title: "Activate", field: "student_id_new", formatter: function(cell, formatterParams, onRendered) {
+                        title: "Activate", 
+                        field: "student_id_new", 
+                        hozAlign: "center", // Centers the button horizontally
+                        formatter: function(cell, formatterParams, onRendered) {
                             return '<button onclick="activateStudent(' + cell.getValue() + ')">Activate</button>';
                         },
                         width: 100
