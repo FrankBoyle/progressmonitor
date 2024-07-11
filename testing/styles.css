@@ -192,12 +192,10 @@ body {
 
 .create-group {
     width: auto;
-    max-width: 20%;
 }
 
 .students-list {
     width: auto;
-    max-width: 20%;
 }
 
 .existing-groups, .details {
