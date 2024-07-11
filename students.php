@@ -218,10 +218,12 @@ include('./users/db.php');
         <h2>Share Group</h2>
         <form id="share-group-form" onsubmit="shareGroup(event)">
             <input type="hidden" id="share-group-id">
-            <select id="share-teacher-id" name="shared_teacher_id">
+			<select id="share-teacher-id" name="shared_teacher_id">
                 <option value="">Select staff here</option>
                 <?php foreach ($teachers as $teacher): ?>
-                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
+                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>">
+                        <?= htmlspecialchars($teacher['fname'] . ' ' . $teacher['lname']) ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
             <button type="submit">Share</button>
@@ -314,7 +316,7 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
     }
 });
 
-    function populateStudentsAndGoals() {
+function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
     const studentsMessage = document.getElementById('students-message');
     if (studentList.children.length > 0) {
@@ -406,12 +408,16 @@ function loadStaff() {
                 // Populate select options
                 const option = document.createElement('option');
                 option.value = staff.teacher_id;
-                option.textContent = staff.name;
+                option.textContent = `${staff.fname} ${staff.lname}`; // Correctly concatenate first name and last name
                 staffSelect.appendChild(option);
             });
 
-            // Reinitialize the select2 element
-            $('.select2').select2();
+            // Reinitialize the select2 element if needed
+            if ($.fn.select2) {
+                $('.select2').select2();
+            } else {
+                console.warn("Select2 is not defined, ensure Select2 library is correctly included.");
+            }
         })
         .catch(error => {
             console.error('Error:', error);
