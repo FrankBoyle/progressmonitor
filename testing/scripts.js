@@ -201,7 +201,7 @@ function activateStudent(studentId) {
     .then(data => {
         if (data.success) {
             console.log('Student activated successfully');
-            // Assume data.student represents the full student record
+            // Assuming data.student represents the full student record
             if (data.student) {
                 // Add the activated student to the active students table
                 var activeStudentsTable = Tabulator.findTable("#active-students-table-container")[0]; // find the Tabulator instance
@@ -209,10 +209,15 @@ function activateStudent(studentId) {
                     activeStudentsTable.addData([data.student], true); // true to add data at the top of the table
                 }
 
-                // Optionally remove the student from the archived students table
+                // Remove the student from the archived students table
                 var archivedStudentsTable = Tabulator.findTable("#archived-students-table-container")[0];
                 if (archivedStudentsTable) {
-                    archivedStudentsTable.deleteRow(studentId); // assuming student_id_new is the row index or has some unique row identifier
+                    var row = archivedStudentsTable.getRow(studentId); // Get the row by student ID
+                    if (row) {
+                        row.delete(); // Delete the row if it exists
+                    } else {
+                        console.error("No matching row found for deletion:", studentId);
+                    }
                 }
             }
         } else {
