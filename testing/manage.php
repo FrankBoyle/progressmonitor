@@ -2,6 +2,12 @@
 session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
+
+// Debugging: Output session variables
+echo '<pre>';
+echo 'Session Variables:';
+print_r($_SESSION);
+echo '</pre>';
 ?>
 
 <!DOCTYPE html>
