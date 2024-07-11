@@ -398,21 +398,21 @@ function initializeBarChart() {
 function extractChartData() {
     try {
         const data = table.getData();
-        console.log('Table Data:', data);
+        //console.log('Table Data:', data);
         const categories = data.map(row => row['score_date']);
-        console.log('Categories:', categories);
+        //console.log('Categories:', categories);
 
         const selectedColumns = getSelectedColumns().map(item => ({
             field: item.getAttribute("data-column-name"),
             name: item.textContent.trim()  // Use textContent of the item as the series name
         }));
-        console.log('Selected Columns:', selectedColumns);
+        //console.log('Selected Columns:', selectedColumns);
 
         const series = selectedColumns.map(column => {
             let rawData = data.map(row => row[column.field]);
-            console.log(`Raw Data for ${column.name}:`, rawData);
+            //console.log(`Raw Data for ${column.name}:`, rawData);
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
-            console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
+            //console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
             return {
                 name: column.name,  // Using the custom name for the series
                 data: interpolatedData,
@@ -422,8 +422,8 @@ function extractChartData() {
 
         const trendlineSeries = series.map(seriesData => {
             const { trendlineData, slope, intercept } = getTrendlineData(seriesData.data);
-            console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
-            console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
+            //console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
+            //console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
             return {
                 name: `${seriesData.name} Trendline`,
                 data: trendlineData,
@@ -1226,7 +1226,7 @@ function archiveGoal(goalId, goalItem) {
 function isNumericColumn(columnName) {
     const nonNumericColumns = ['score10']; // Add specific column names here
     const isNumeric = !nonNumericColumns.includes(columnName);
-    console.log(`Checking if column is numeric - Column: ${columnName}, Is Numeric: ${isNumeric}`);
+    //console.log(`Checking if column is numeric - Column: ${columnName}, Is Numeric: ${isNumeric}`);
     return isNumeric;
 }
 
@@ -1352,7 +1352,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
                 report_image: dataUrl.split(',')[1] // Get base64 string
             };
 
-            console.log("Payload being sent to save_notes.php:", payload);
+            //console.log("Payload being sent to save_notes.php:", payload);
 
             // Save notes with the image data
             fetch('./users/save_notes.php', {
