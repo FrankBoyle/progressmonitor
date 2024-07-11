@@ -317,7 +317,7 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
     }
 });
 
-    function populateStudentsAndGoals() {
+function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
     const studentsMessage = document.getElementById('students-message');
     if (studentList.children.length > 0) {
@@ -409,12 +409,16 @@ function loadStaff() {
                 // Populate select options
                 const option = document.createElement('option');
                 option.value = staff.teacher_id;
-                option.textContent = staff.name;
+                option.textContent = `${staff.fname} ${staff.lname}`; // Correctly concatenate first name and last name
                 staffSelect.appendChild(option);
             });
 
-            // Reinitialize the select2 element
-            $('.select2').select2();
+            // Reinitialize the select2 element if needed
+            if ($.fn.select2) {
+                $('.select2').select2();
+            } else {
+                console.warn("Select2 is not defined, ensure Select2 library is correctly included.");
+            }
         })
         .catch(error => {
             console.error('Error:', error);
