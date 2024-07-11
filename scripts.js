@@ -136,6 +136,7 @@ function loadActiveStudents() {
                         field: "student_id_new",
                         hozAlign: "center", // Centers the button horizontally
                         formatter: function(cell, formatterParams, onRendered) {
+                            console.log('Creating archive button for student ID:', cell.getValue()); // Debug log
                             return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>'; // Adding a class for styling
                         },
                         width: 100 // Set a fixed width for consistency
@@ -148,12 +149,15 @@ function loadActiveStudents() {
             });
 
             // Add event listener to the Archive buttons
-            document.querySelectorAll('.btn-archive').forEach(button => {
-                button.addEventListener('click', function() {
-                    const studentId = this.getAttribute('data-id');
-                    archiveStudent(studentId);
+            setTimeout(() => { // Delay to ensure DOM is updated
+                document.querySelectorAll('.btn-archive').forEach(button => {
+                    console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
+                    button.addEventListener('click', function() {
+                        const studentId = this.getAttribute('data-id');
+                        archiveStudent(studentId);
+                    });
                 });
-            });
+            }, 500); // Adjust delay if necessary
         })
         .catch(error => {
             console.error('Error:', error);
