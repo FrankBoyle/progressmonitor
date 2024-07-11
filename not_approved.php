@@ -43,7 +43,6 @@
     </style>
 </head>
 <body>
-<div class="dashboard">
         <header class="dashboard-header">
             <div class="logo">
                 <img src="bFactor_logo.png" alt="Logo">
@@ -59,6 +58,5 @@
         <p>Your account needs to be approved by an administrator before you can access this area. Please contact your administrator for more information.</p>
         <p class="contact-admin">Contact your administrator. <!--<a href="mailto:admin@example.com">admin@example.com</a>--></p>
     </div>
-</div>
 </body>
 </html>
