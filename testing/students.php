@@ -2,13 +2,6 @@
 session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
-
-// Fetch the schools associated with the logged-in user
-$teacher_id = $_SESSION['teacher_id'];
-$query = $connection->prepare("SELECT school_id, school_name FROM Schools WHERE school_id IN (SELECT school_id FROM Teachers WHERE teacher_id = :teacher_id)");
-$query->bindParam("teacher_id", $teacher_id, PDO::PARAM_INT);
-$query->execute();
-$schools = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
