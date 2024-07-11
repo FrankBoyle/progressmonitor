@@ -6,7 +6,6 @@ include('./users/db.php');
 // Ensure account_id is in session
 $account_id = $_SESSION['account_id'];
 $school_id = $_SESSION['school_id'];
-$teacher_id = $_SESSION['teacher_id'];
 
 // Fetch the schools associated with the logged-in user
 $query = $connection->prepare("SELECT s.school_id, s.SchoolName FROM Schools s JOIN Teachers t ON s.school_id = t.school_id WHERE t.account_id = :account_id");
@@ -14,17 +13,6 @@ $query->bindParam("account_id", $account_id, PDO::PARAM_INT);
 $query->execute();
 $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch groups based on school_id
-$groupsQuery = $connection->prepare("SELECT * FROM Groups WHERE school_id = :school_id");
-$groupsQuery->bindParam("school_id", $school_id, PDO::PARAM_INT);
-$groupsQuery->execute();
-$groups = $groupsQuery->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch students based on school_id
-$studentsQuery = $connection->prepare("SELECT * FROM Students WHERE school_id = :school_id");
-$studentsQuery->bindParam("school_id", $school_id, PDO::PARAM_INT);
-$studentsQuery->execute();
-$allStudents = $studentsQuery->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -357,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('Reloading page in 3 seconds'); // Debugging statement
                     setTimeout(function() {
                         location.reload(); // Reload the page to reflect the school change
-                    }, 8000); // 3 seconds delay
+                    }, 10000); // 3 seconds delay
                 } else {
                     console.error('Error updating school:', data.message);
                 }
