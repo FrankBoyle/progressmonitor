@@ -1260,3 +1260,20 @@ input[type="text"] {
     margin-bottom: 10px;
 }
 
+/* Add this to your CSS file or within a <style> tag in your HTML */
+.modal-content button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-content .delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.modal-content .delete-btn:hover {
+    background-color: darkred;
+}
