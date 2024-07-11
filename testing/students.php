@@ -235,7 +235,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <button class="save-btn" type="submit">Save Changes</button>
         </form>
         <button class="delete-btn" onclick="deleteGroup()">Delete Group</button>
-        <h2>Remove Students from Group</h2>
         <div id="group-students-list-edit">
             <!-- Students will be loaded here dynamically -->
         </div>
