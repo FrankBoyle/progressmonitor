@@ -1194,8 +1194,10 @@ function loadGoals(studentId) {
                                     <div class="thumbnails">
                                     ${goal.notes.map((note, index) => note.report_image ? `
                                         <div class="thumbnail-container">
-                                            <img src="${note.report_image}" alt="Report Available" class="thumbnail">
-                                            <div class="thumbnail-overlay">${index + 1}</div>
+                                            <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
+                                                <img src="${note.report_image}" alt="Report Available" class="thumbnail">
+                                                <div class="thumbnail-overlay">${index + 1}</div>
+                                            </a>
                                         </div>
                                     ` : '').join('')}
                                     </div>
