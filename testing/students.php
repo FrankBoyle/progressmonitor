@@ -878,19 +878,8 @@ function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('edit-group-modal').style.display = 'block';
 
-    // Ensure the share group hidden input is also set
-    document.getElementById('share-group-id').value = groupId;
-
-    // Hide the Edit Group button
-    const editGroupButton = document.querySelector('.edit-group-btn');
-    if (editGroupButton) {
-        editGroupButton.style.display = 'none';
-    }
-
-    // Ensure the select2 is properly refreshed
-    $('.select2').select2();
-
-    loadStaff();
+    // Load students for the selected group
+    loadGroupStudents(groupId, 'group-students-list-edit');
 }
 
 function hideEditGroupModal() {
@@ -918,6 +907,7 @@ function loadGroupStudents(groupId, targetElementId = 'group-students-list-edit'
                 return;
             }
 
+            // Clear old student list
             groupStudentsList.innerHTML = '';
 
             if (data.error) {
@@ -982,12 +972,7 @@ function removeStudentFromGroup(studentId, groupId) {
             alert('Student removed from group successfully.');
             console.log('Student removed, now reloading group students for groupId:', groupId);
             setTimeout(() => {
-                // Ensure the modal is updated by reloading the students list
-                const groupStudentsList = document.getElementById('group-students-list-edit');
-                if (groupStudentsList) {
-                    groupStudentsList.innerHTML = ''; // Clear the current list
-                    loadGroupStudents(groupId);
-                }
+                loadGroupStudents(groupId);
                 console.log('Reloaded group students for groupId:', groupId); // Debugging statement
             }, 500); // Adding a slight delay to ensure the list updates
         } else {
