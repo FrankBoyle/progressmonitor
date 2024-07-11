@@ -232,7 +232,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                 <label for="edit-group-name">Group Name:</label>
                 <input type="text" id="edit-group-name" name="group_name" required>
             </div>
-            <button type="submit">Save Changes</button>
+            <button class="save-btn" type="submit">Save Changes</button>
         </form>
         <button class="delete-btn" onclick="deleteGroup()">Delete Group</button>
         <h2>Remove Students from Group</h2>
