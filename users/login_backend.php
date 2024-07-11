@@ -44,7 +44,7 @@ if (isset($_POST['login'])) {
                     $_SESSION['is_approved'] = $teacherResult['approved'] == 1;
                     
                     if (!$_SESSION['is_approved']) {
-                        header("Location: not_approved.php");
+                        header("Location: ../not_approved.php");
                         exit();
                     }
                 } else {
