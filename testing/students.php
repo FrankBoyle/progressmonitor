@@ -1253,7 +1253,6 @@ function toggleMetadataOption() {
 }
 
 // Function to load metadata templates
-
 function loadTemplates() {
     fetch('users/fetch_metadata_templates.php')
         .then(response => response.json())
