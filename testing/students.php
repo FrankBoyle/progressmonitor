@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('Reloading page in 3 seconds'); // Debugging statement
                     setTimeout(function() {
                         location.reload(); // Reload the page to reflect the school change
-                    }, 10000); // 3 seconds delay
+                    }, 0); // 3 seconds delay
                 } else {
                     console.error('Error updating school:', data.message);
                 }
