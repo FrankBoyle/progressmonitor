@@ -29,6 +29,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
         });
     });
+
+    const schoolSelect = document.getElementById('school-select');
+    if (schoolSelect) {
+        schoolSelect.addEventListener('change', function() {
+            const selectedSchoolId = this.value;
+            fetch('./users/update_school_session.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `school_id=${encodeURIComponent(selectedSchoolId)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Reload the page to reflect the school change
+                } else {
+                    console.error('Error updating school:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
 });
 
 function setupInitialPageLoad() {

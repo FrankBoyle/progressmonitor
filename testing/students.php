@@ -2,6 +2,13 @@
 session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
+
+// Fetch the schools associated with the logged-in user
+$teacher_id = $_SESSION['teacher_id'];
+$query = $connection->prepare("SELECT school_id, school_name FROM Schools WHERE school_id IN (SELECT school_id FROM Teachers WHERE teacher_id = :teacher_id)");
+$query->bindParam("teacher_id", $teacher_id, PDO::PARAM_INT);
+$query->execute();
+$schools = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +40,17 @@ include('./users/db.php');
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
+            <div class="school-selector">
+                <label for="school-select">Select School:</label>
+                <select id="school-select">
+                    <?php foreach ($schools as $school): ?>
+                        <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($school['school_name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            
             <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                 <a href="manage.php" class="nav-link">
                     <button class="btn btn-primary">Manage</button>
