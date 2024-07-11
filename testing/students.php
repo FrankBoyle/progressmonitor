@@ -1179,7 +1179,10 @@ function loadGoals(studentId) {
                             listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
                             listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
 
-                            // Add the thumbnails or icons for each report image
+                            // Sort the notes by reporting period
+                            goal.notes.sort((a, b) => a.reporting_period - b.reporting_period);
+
+                            // Add the thumbnails or icons for each report image with Lightbox2
                             goal.notes.forEach(note => {
                                 if (note.report_image) {
                                     listItem.innerHTML += `
