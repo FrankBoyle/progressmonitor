@@ -1177,7 +1177,7 @@ function loadGoals(studentId) {
 
                             // Add the thumbnail or icon for each report image
                             if (goal.note_id && goal.report_image) {
-                                listItem.innerHTML += `<img src="users/fetch_image.php?note_id=${goal.note_id}" alt="Report Available" style="width: 50px; height: 50px;">`;
+                                listItem.innerHTML += `<img src="${goal.report_image}" alt="Report Available" style="width: 50px; height: 50px;">`;
                             }
 
                             metadataContainer.appendChild(listItem);
