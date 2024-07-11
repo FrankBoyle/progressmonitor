@@ -2,12 +2,14 @@
 include('auth_session.php');
 include('db.php');
 
-if (isset($_GET['goal_id']) && isset($_GET['note_id'])) {
-    $goalId = $_GET['goal_id'];
-    $noteId = $_GET['note_id'];
+header('Content-Type: application/json'); // Default to JSON
 
-    $stmt = $connection->prepare("SELECT report_image FROM Goal_notes WHERE goal_id = ? AND note_id = ?");
-    $stmt->execute([$goalId, $noteId]);
+if (isset($_GET['note_id'])) {
+    $noteId = $_GET['note_id'];
+    error_log("Fetching image for note_id: " . $noteId);
+
+    $stmt = $connection->prepare("SELECT report_image FROM Goal_notes WHERE note_id = ?");
+    $stmt->execute([$noteId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result && $result['report_image']) {
@@ -18,19 +20,21 @@ if (isset($_GET['goal_id']) && isset($_GET['note_id'])) {
         $mimeType = finfo_buffer($finfo, $imageData);
         finfo_close($finfo);
 
+        // Log the mime type for debugging
+        error_log("Image mime type: " . $mimeType);
+
         // Set the Content-Type header and send the image data
         header('Content-Type: ' . $mimeType);
         echo $imageData;
     } else {
-        http_response_code(404);
+        error_log("Image not found for note_id: " . $noteId);
         echo json_encode(['error' => 'Image not found']);
     }
 } else {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid request, missing goal_id or note_id']);
+    error_log("Invalid request, missing note_id");
+    echo json_encode(['error' => 'Invalid request, missing note_id']);
 }
 ?>
-
 
 
 
