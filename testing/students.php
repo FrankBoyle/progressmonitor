@@ -227,38 +227,32 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <span class="close" onclick="hideEditGroupModal()">&times;</span>
         <h2>Edit Group</h2>
         <form id="edit-group-form" onsubmit="updateGroup(event)">
-            <div class="form-group">
-                <label for="edit-group-name">Group Name:</label>
-                <input type="text" id="edit-group-name" name="group_name" required>
-            </div>
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-                <button type="button" class="btn btn-danger" onclick="deleteGroup()">Delete Group</button>
-            </div>
+            <input type="hidden" id="edit-group-id">
+            <label for="edit-group-name">Group Name:</label>
+            <input type="text" id="edit-group-name" name="group_name" required>
+            <button type="submit">Save Changes</button>
         </form>
-        <div class="group-section">
-            <h2>Remove Students from Group</h2>
-            <div id="group-students-list-edit">
-                <!-- Students will be loaded here dynamically -->
-            </div>
+        <button onclick="deleteGroup()">Delete Group</button>
+        <h2>Remove Students from Group</h2>
+        <div id="group-students-list-edit">
+            <!-- Students will be loaded here dynamically -->
         </div>
-        <div class="group-section">
-            <h2>Share Group</h2>
-            <form id="share-group-form" onsubmit="shareGroup(event)">
-                <input type="hidden" id="share-group-id">
-                <select id="share-teacher-id" name="shared_teacher_id">
-                    <option value="">Select staff here</option>
-                    <?php foreach ($teachers as $teacher): ?>
-                        <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>">
-                            <?= htmlspecialchars($teacher['fname'] . ' ' . $teacher['lname']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <button type="submit" class="btn btn-primary">Share</button>
-            </form>
-        </div>
+        <h2>Share Group</h2>
+        <form id="share-group-form" onsubmit="shareGroup(event)">
+            <input type="hidden" id="share-group-id">
+            <select id="share-teacher-id" name="shared_teacher_id">
+                <option value="">Select staff here</option>
+                <?php foreach ($teachers as $teacher): ?>
+                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>">
+                        <?= htmlspecialchars($teacher['fname'] . ' ' . $teacher['lname']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit">Share</button>
+        </form>
     </div>
 </div>
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
