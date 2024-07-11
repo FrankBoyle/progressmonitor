@@ -1185,10 +1185,10 @@ function loadGoals(studentId) {
                                 <div class="progress-reports">
                                     <strong>Progress Reports:</strong>
                                     <div class="thumbnails">
-                                    ${goal.notes.map(note => note.report_image ? `
+                                    ${goal.notes.map((note, index) => note.report_image ? `
                                         <div class="thumbnail-container">
                                             <img src="${note.report_image}" alt="Report Available" class="thumbnail">
-                                            <div class="thumbnail-overlay">${note.reporting_period}</div>
+                                            <div class="thumbnail-overlay">${index + 1}</div>
                                         </div>
                                     ` : '').join('')}
                                     </div>
