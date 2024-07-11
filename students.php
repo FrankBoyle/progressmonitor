@@ -1144,7 +1144,7 @@ function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.text())
         .then(data => {
-            console.log('Raw response:', data);
+            //console.log('Raw response:', data);
             try {
                 const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {
