@@ -10,6 +10,8 @@
         gtag('config', 'G-LKFCCN4XXS');
     </script>
     <title>Not Approved</title>
+    <link rel="stylesheet" href="styles.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
