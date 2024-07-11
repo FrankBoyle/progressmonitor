@@ -136,15 +136,23 @@ function loadActiveStudents() {
                         field: "student_id_new",
                         hozAlign: "center", // Centers the button horizontally
                         formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="btn btn-archive">Archive</button>'; // Adding a class for styling
+                            return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>'; // Adding a class for styling
                         },
                         width: 100 // Set a fixed width for consistency
                     }
                 ],
             });
-            
+
             activeStudentsTable.on("cellEdited", function(cell) {
                 updateStudent(cell.getRow().getData());
+            });
+
+            // Add event listener to the Archive buttons
+            document.querySelectorAll('.btn-archive').forEach(button => {
+                button.addEventListener('click', function() {
+                    const studentId = this.getAttribute('data-id');
+                    archiveStudent(studentId);
+                });
             });
         })
         .catch(error => {
@@ -272,6 +280,7 @@ function deleteUser(teacherId) {
 }
 
 function archiveStudent(studentId) {
+    console.log('Archiving student with ID:', studentId); // Debug log
     fetch('./users/archive_student.php', {
         method: 'POST',
         headers: {
@@ -282,6 +291,7 @@ function archiveStudent(studentId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            console.log('Student archived successfully');
             loadActiveStudents(); // Reload the active students to reflect the change
             loadArchivedStudents(); // Reload the archived students to reflect the change
         } else {
@@ -289,7 +299,7 @@ function archiveStudent(studentId) {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        console.error('Error archiving student:', error);
     });
 }
 
