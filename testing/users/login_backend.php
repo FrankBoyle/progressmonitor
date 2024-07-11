@@ -31,7 +31,7 @@ if (isset($_POST['login'])) {
                 // Fetching additional information now that the user is verified
                 $accountId = $result['id'];
                 
-                $teacherQuery = $connection->prepare("SELECT teacher_id, school_id, is_admin, approved FROM Teachers WHERE account_id = :accountId");
+                $teacherQuery = $connection->prepare("SELECT teacher_id, school_id, is_admin, approved, program_id FROM Teachers WHERE account_id = :accountId");
                 $teacherQuery->bindParam("accountId", $accountId, PDO::PARAM_INT);
                 $teacherQuery->execute();
                 
@@ -42,6 +42,7 @@ if (isset($_POST['login'])) {
                     $_SESSION['school_id'] = $teacherResult['school_id'];
                     $_SESSION['is_admin'] = $teacherResult['is_admin'] == 1; // Assuming 'is_admin' is the column name
                     $_SESSION['is_approved'] = $teacherResult['approved'] == 1;
+                    $_SESSION['program_id'] = $teacherResult['program_id']; // Set program_id in session
                     
                     if (!$_SESSION['is_approved']) {
                         header("Location: ../not_approved.php");
