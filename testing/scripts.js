@@ -155,7 +155,7 @@ function loadActiveStudents() {
             // Add event listener to the Archive buttons
             setTimeout(() => { // Delay to ensure DOM is updated
                 document.querySelectorAll('.btn-archive').forEach(button => {
-                    console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
+                    //console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
                     button.addEventListener('click', function() {
                         const studentId = this.getAttribute('data-id');
                         archiveStudent(studentId);
@@ -213,7 +213,7 @@ function loadArchivedStudents() {
 
             archivedStudentsTable.on("cellEdited", function(cell) {
                 // Update logic here
-                console.log('Cell edited', cell.getRow().getData());
+                //console.log('Cell edited', cell.getRow().getData());
             });
 
             // Add event listener to the Activate buttons
