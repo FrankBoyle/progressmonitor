@@ -1141,7 +1141,7 @@ function loadGoals(studentId) {
         .then(data => {
             console.log('Raw response:', data); // Log the raw response
             try {
-                const jsonData = JSON.parse(data);
+                const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {
                     alert(jsonData.message);
                     return;
@@ -1176,7 +1176,7 @@ function loadGoals(studentId) {
                             listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
 
                             // Add the thumbnail or icon for each report image
-                            if (goal.report_image) {
+                            if (goal.note_id && goal.report_image) {
                                 listItem.innerHTML += `<img src="users/fetch_image.php?note_id=${goal.note_id}" alt="Report Available" style="width: 50px; height: 50px;">`;
                             }
 
