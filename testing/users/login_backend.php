@@ -27,7 +27,8 @@ if (isset($_POST['login'])) {
                 session_regenerate_id(true);
                 
                 $_SESSION['user'] = $result['email'];
-                
+                $_SESSION['account_id'] = $result['id']; // Add account_id to session
+
                 // Fetching additional information now that the user is verified
                 $accountId = $result['id'];
                 
@@ -65,4 +66,3 @@ if (isset($_POST['login'])) {
     }
 }
 ?>
-
