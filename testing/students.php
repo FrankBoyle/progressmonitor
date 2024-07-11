@@ -1141,9 +1141,9 @@ function addGoal(event) {
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
-        .then(response => response.text())
+        .then(response => response.text()) // Change to .text() to log the raw response
         .then(data => {
-            console.log('Raw response:', data);
+            console.log('Raw response:', data); // Log the raw response
             try {
                 const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {
@@ -1179,18 +1179,13 @@ function loadGoals(studentId) {
                             listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
                             listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
 
-                            // Sort the notes by reporting period
-                            goal.notes.sort((a, b) => a.reporting_period - b.reporting_period);
-
-                            // Add the thumbnails or icons for each report image with Lightbox2
-                            goal.notes.forEach(note => {
-                                if (note.report_image) {
-                                    listItem.innerHTML += `
-                                        <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
-                                            <img src="${note.report_image}" alt="Report Available" style="width: 50px; height: 50px; cursor: pointer;">
-                                        </a>`;
-                                }
-                            });
+                            // Add the thumbnail or icon for each report image with Lightbox2
+                            if (goal.note_id && goal.report_image) {
+                                listItem.innerHTML += `
+                                    <a href="${goal.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
+                                        <img src="${goal.report_image}" alt="Report Available" style="width: 50px; height: 50px; cursor: pointer; border: 2px solid black; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); margin: 5px;">
+                                    </a>`;
+                            }
 
                             metadataContainer.appendChild(listItem);
                         }
