@@ -1181,17 +1181,30 @@ input[type="text"] {
     font-weight: bold;
 }
 
-.btn-archive, .btn-activate {
-    padding: 8px 16px; /* Provides padding around the text */
-    margin: auto; /* Centers the button in the column */
-    display: block; /* Makes the button take up the full width of the column */
-    text-align: center; /* Ensures text within the button is centered */
-    background-color: #007bff; /* Example background color */
-    color: white; /* Text color */
-    border: none; /* No borders */
-    border-radius: 4px; /* Rounded corners for the button */
-    cursor: pointer; /* Pointer cursor on hover */
+.btn-archive {
+    padding: 8px 16px; 
+    margin: auto; 
+    display: block; 
+    text-align: center; 
+    background-color: #dc3545
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
 }
+
+.btn-activate {
+    padding: 8px 16px;
+    margin: auto;
+    display: block;
+    text-align: center;
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 
 
 
