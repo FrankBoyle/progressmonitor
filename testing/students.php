@@ -241,6 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadStaff();
     loadTemplates();
     loadExistingCategories();
+    lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
@@ -1178,9 +1179,12 @@ function loadGoals(studentId) {
                             listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
                             listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
 
-                            // Add the thumbnail or icon for each report image
+                            // Add the thumbnail or icon for each report image with Lightbox2
                             if (goal.note_id && goal.report_image) {
-                                listItem.innerHTML += `<img src="${goal.report_image}" alt="Report Available" style="width: 50px; height: 50px;">`;
+                                listItem.innerHTML += `
+                                    <a href="${goal.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
+                                        <img src="${goal.report_image}" alt="Report Available" style="width: 50px; height: 50px; cursor: pointer;">
+                                    </a>`;
                             }
 
                             metadataContainer.appendChild(listItem);
