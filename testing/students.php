@@ -908,15 +908,20 @@ function hideEditGroupModal() {
     }
 }
 
-function loadGroupStudents(groupId, targetElementId) {
-    //console.log('Loading students for group:', groupId); // Debug log
+function loadGroupStudents(groupId, targetElementId = 'group-students-list-edit') {
+    console.log('Loading students for group:', groupId); // Debug log
 
     fetch(`./users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            //console.log('Fetched group students:', data); // Debug log
+            console.log('Fetched group students:', data); // Debug log
 
             const groupStudentsList = document.getElementById(targetElementId);
+            if (!groupStudentsList) {
+                console.error('Target element not found:', targetElementId);
+                return;
+            }
+
             groupStudentsList.innerHTML = '';
 
             if (data.error) {
@@ -976,6 +981,7 @@ function removeStudentFromGroup(studentId, groupId) {
     .then(data => {
         if (data.status === 'success') {
             alert('Student removed from group successfully.');
+            console.log('Student removed, now reloading group students for groupId:', groupId);
             loadGroupStudents(groupId); // Refresh the group students list
         } else {
             alert('There was an error removing the student from the group. Please try again.');
