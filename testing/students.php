@@ -346,8 +346,10 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('Response data:', data); // Debugging statement
                 if (data.success) {
-                    console.log('Reloading page'); // Debugging statement
-                    location.reload(); // Reload the page to reflect the school change
+                    console.log('Reloading page in 3 seconds'); // Debugging statement
+                    setTimeout(function() {
+                        location.reload(); // Reload the page to reflect the school change
+                    }, 10000); // 3 seconds delay
                 } else {
                     console.error('Error updating school:', data.message);
                 }
