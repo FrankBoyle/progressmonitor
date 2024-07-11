@@ -18,6 +18,9 @@ try {
         JOIN accounts a ON t1.account_id = a.id
         WHERE t1.program_id = :programId
         AND t1.school_id != :schoolId
+        AND t1.account_id NOT IN (
+            SELECT t2.account_id FROM Teachers t2 WHERE t2.school_id = :schoolId
+        )
     ");
     $query->bindParam("programId", $programId, PDO::PARAM_INT);
     $query->bindParam("schoolId", $schoolId, PDO::PARAM_INT);
