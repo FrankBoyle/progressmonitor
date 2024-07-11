@@ -883,7 +883,7 @@ function saveGoal(goalId, goalDescription) {
 
 function showEditGroupModal(groupId, groupName) {
     console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
-    
+
     const editGroupIdInput = document.getElementById('edit-group-id');
     const editGroupNameInput = document.getElementById('edit-group-name');
     const editGroupModal = document.getElementById('edit-group-modal');
