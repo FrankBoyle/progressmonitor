@@ -958,6 +958,8 @@ function loadGroupStudents(groupId, targetElementId = 'group-students-list-edit'
                 studentItem.appendChild(removeButton);
                 groupStudentsList.appendChild(studentItem);
             });
+
+            console.log('Updated DOM with new student list.');
         })
         .catch(error => {
             console.error('Error fetching group students:', error);
