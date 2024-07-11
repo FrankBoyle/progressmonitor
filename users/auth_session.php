@@ -9,15 +9,26 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Check if the user is a teacher and is approved
-$user_id = $_SESSION['user']['id'];
-$query = $connection->prepare("SELECT approved FROM Teachers WHERE account_id = :account_id");
-$query->bindParam(":account_id", $user_id, PDO::PARAM_INT);
+$user_email = $_SESSION['user'];
+$query = $connection->prepare("SELECT id FROM accounts WHERE email = :email");
+$query->bindParam(":email", $user_email, PDO::PARAM_STR);
 $query->execute();
-$teacher = $query->fetch(PDO::FETCH_ASSOC);
+$account = $query->fetch(PDO::FETCH_ASSOC);
 
-if (!$teacher || $teacher['approved'] == 0) {
-    $_SESSION['is_approved'] = false;
+if ($account) {
+    $account_id = $account['id'];
+    $teacherQuery = $connection->prepare("SELECT approved FROM Teachers WHERE account_id = :account_id");
+    $teacherQuery->bindParam(":account_id", $account_id, PDO::PARAM_INT);
+    $teacherQuery->execute();
+    $teacher = $teacherQuery->fetch(PDO::FETCH_ASSOC);
+
+    if (!$teacher || $teacher['approved'] == 0) {
+        $_SESSION['is_approved'] = false;
+    } else {
+        $_SESSION['is_approved'] = true;
+    }
 } else {
-    $_SESSION['is_approved'] = true;
+    header("Location: login.php");
+    exit();
 }
 ?>
