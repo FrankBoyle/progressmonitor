@@ -136,7 +136,7 @@ function loadActiveStudents() {
                         field: "student_id_new",
                         hozAlign: "center", // Centers the button horizontally
                         formatter: function(cell, formatterParams, onRendered) {
-                            console.log('Creating archive button for student ID:', cell.getValue()); // Debug log
+                            //console.log('Creating archive button for student ID:', cell.getValue()); // Debug log
                             return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>'; // Adding a class for styling
                         },
                         width: 100 // Set a fixed width for consistency
@@ -151,7 +151,7 @@ function loadActiveStudents() {
             // Add event listener to the Archive buttons
             setTimeout(() => { // Delay to ensure DOM is updated
                 document.querySelectorAll('.btn-archive').forEach(button => {
-                    console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
+                    //console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
                     button.addEventListener('click', function() {
                         const studentId = this.getAttribute('data-id');
                         archiveStudent(studentId);
@@ -206,7 +206,7 @@ function loadArchivedStudents() {
 
             archivedStudentsTable.on("cellEdited", function(cell) {
                 // Update logic here
-                console.log('Cell edited', cell.getRow().getData());
+                //console.log('Cell edited', cell.getRow().getData());
             });
         })
         .catch(error => {
@@ -215,7 +215,7 @@ function loadArchivedStudents() {
 }
 
 function activateStudent(studentId) {
-    console.log('Activating student with ID:', studentId);
+    //console.log('Activating student with ID:', studentId);
     fetch('./users/activate_student.php', {
         method: 'POST',
         headers: {
@@ -226,7 +226,7 @@ function activateStudent(studentId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            console.log('Student activated successfully');
+            //console.log('Student activated successfully');
             // Reload both tables to reflect changes
             loadActiveStudents(); // Reload the active students table
             loadArchivedStudents(); // Reload the archived students table
@@ -284,7 +284,7 @@ function deleteUser(teacherId) {
 }
 
 function archiveStudent(studentId) {
-    console.log('Archiving student with ID:', studentId); // Debug log
+    //console.log('Archiving student with ID:', studentId); // Debug log
     fetch('./users/archive_student.php', {
         method: 'POST',
         headers: {
@@ -295,7 +295,7 @@ function archiveStudent(studentId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            console.log('Student archived successfully');
+            //console.log('Student archived successfully');
             loadActiveStudents(); // Reload the active students to reflect the change
             loadArchivedStudents(); // Reload the archived students to reflect the change
         } else {
