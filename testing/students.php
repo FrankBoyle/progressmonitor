@@ -982,7 +982,12 @@ function removeStudentFromGroup(studentId, groupId) {
             alert('Student removed from group successfully.');
             console.log('Student removed, now reloading group students for groupId:', groupId);
             setTimeout(() => {
-                loadGroupStudents(groupId);
+                // Ensure the modal is updated by reloading the students list
+                const groupStudentsList = document.getElementById('group-students-list-edit');
+                if (groupStudentsList) {
+                    groupStudentsList.innerHTML = ''; // Clear the current list
+                    loadGroupStudents(groupId);
+                }
                 console.log('Reloaded group students for groupId:', groupId); // Debugging statement
             }, 500); // Adding a slight delay to ensure the list updates
         } else {
