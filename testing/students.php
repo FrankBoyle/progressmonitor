@@ -1186,9 +1186,12 @@ function loadGoals(studentId) {
                                     <strong>Progress Reports:</strong>
                                     <div class="thumbnails">
                                     ${goal.notes.map(note => note.report_image ? `
-                                        <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
-                                            <img src="${note.report_image}" alt="Report Available" class="thumbnail">
-                                        </a>
+                                        <div class="thumbnail-container">
+                                            <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
+                                                <img src="${note.report_image}" alt="Report Available" class="thumbnail">
+                                                <div class="thumbnail-overlay">${note.reporting_period}</div>
+                                            </a>
+                                        </div>
                                     ` : '').join('')}
                                     </div>
                                 </div>
