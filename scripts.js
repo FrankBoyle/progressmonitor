@@ -46,7 +46,8 @@ function loadUsers() {
                         },
                         width: 100
                     },
-                    { title: "Name", field: "name", editor: "input", widthGrow: 2 },
+                    { title: "First Name", field: "fname", editor: "input", widthGrow: 2 },
+                    { title: "Last Name", field: "lname", editor: "input", widthGrow: 2 },
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Delete", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
@@ -80,7 +81,8 @@ function loadUsers() {
                         },
                         width: 100
                     },
-                    { title: "Name", field: "name", editor: "input", widthGrow: 2 },
+                    { title: "First Name", field: "fname", editor: "input", widthGrow: 2 },
+                    { title: "Last Name", field: "lname", editor: "input", widthGrow: 2 },
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
@@ -118,23 +120,29 @@ function loadActiveStudents() {
                 return;
             }
 
-            const activeStudentsTable = new Tabulator(activeStudentsTableContainer, {
+            const activeStudentsTable = new Tabulator("#active-students-table-container", {
                 data: data,
-                layout: "fitDataStretch",
+                layout: "fitDataStretch", // This makes sure columns use up the available space
+                initialSort: [
+                    {column:"last_name", dir:"asc"} // Sort by last name ascending
+                ],
                 columns: [
-                    { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
-                    { title: "Last Name", field: "last_name", editor: "input", widthGrow: 2 },
-                    { title: "Date of Birth", field: "date_of_birth", editor: "input", widthGrow: 2 },
-                    { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 },
+                    { title: "First Name", field: "first_name", widthGrow: 2 },
+                    { title: "Last Name", field: "last_name", widthGrow: 2 },
+                    { title: "Date of Birth", field: "date_of_birth", widthGrow: 2 },
+                    { title: "Grade Level", field: "grade_level", widthGrow: 2 },
                     {
-                        title: "Archive", field: "student_id_new", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="archive-btn" onclick="archiveStudent(' + cell.getValue() + ')">Archive</button>';
+                        title: "Archive", 
+                        field: "student_id_new",
+                        hozAlign: "center", // Centers the button horizontally
+                        formatter: function(cell, formatterParams, onRendered) {
+                            return '<button class="btn btn-archive">Archive</button>'; // Adding a class for styling
                         },
-                        width: 100
+                        width: 100 // Set a fixed width for consistency
                     }
                 ],
             });
-
+            
             activeStudentsTable.on("cellEdited", function(cell) {
                 updateStudent(cell.getRow().getData());
             });
@@ -164,18 +172,59 @@ function loadArchivedStudents() {
             const archivedStudentsTable = new Tabulator(archivedStudentsTableContainer, {
                 data: data,
                 layout: "fitDataStretch",
-                columns: [
-                    { title: "First Name", field: "first_name", widthGrow: 2 },
-                    { title: "Last Name", field: "last_name", widthGrow: 2 },
-                    { title: "Date of Birth", field: "date_of_birth", widthGrow: 2 },
-                    { title: "Grade Level", field: "grade_level", widthGrow: 2 }
+                initialSort: [
+                    {column:"last_name", dir:"asc"} // Sort by last name ascending
                 ],
-                cellEditing: false
+                columns: [
+                    { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
+                    { title: "Last Name", field: "last_name", editor: "input", widthGrow: 2 },
+                    { title: "Date of Birth", field: "date_of_birth", editor: "input", widthGrow: 2 },
+                    { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 },
+                    {
+                        title: "Activate", 
+                        field: "student_id_new", 
+                        hozAlign: "center", // Centers the button horizontally
+                        formatter: function(cell, formatterParams, onRendered) {
+                            return '<button onclick="activateStudent(' + cell.getValue() + ')">Activate</button>';
+                        },
+                        width: 100
+                    }
+                ]
+            });
+
+            archivedStudentsTable.on("cellEdited", function(cell) {
+                // Update logic here
+                console.log('Cell edited', cell.getRow().getData());
             });
         })
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function activateStudent(studentId) {
+    console.log('Activating student with ID:', studentId);
+    fetch('./users/activate_student.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ studentId: studentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Student activated successfully');
+            // Reload both tables to reflect changes
+            loadActiveStudents(); // Reload the active students table
+            loadArchivedStudents(); // Reload the archived students table
+        } else {
+            console.error('Failed to activate student:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error activating student:', error);
+    });
 }
 
 function toggleApproval(teacherId, newStatus) {
