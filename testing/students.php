@@ -885,9 +885,7 @@ function showEditGroupModal(groupId, groupName) {
     // Ensure the select2 is properly refreshed
     $('.select2').select2();
 
-    // Load students for the selected group
-    loadGroupStudents(groupId, 'group-students-list-edit');
-    
+    // Load staff for the selected group
     loadStaff();
 }
 
