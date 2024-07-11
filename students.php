@@ -430,7 +430,7 @@ function showAddGroupModal() {
 }
 
 function showAddStudentModal(groupId) {
-    console.log('showAddStudentModal called with groupId:', groupId); // Debug log
+    //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
     const modal = document.getElementById('add-student-modal');
 
     if (modal) {
@@ -809,7 +809,7 @@ function saveGoal(goalId, goalDescription) {
 }
 
 function showEditGroupModal(groupId, groupName) {
-    console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
+    //console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
     document.getElementById('edit-group-id').value = groupId;
     document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('edit-group-modal').style.display = 'block';
@@ -841,12 +841,12 @@ function hideEditGroupModal() {
 }
 
 function loadGroupStudents(groupId, targetElementId) {
-    console.log('Loading students for group:', groupId); // Debug log
+    //console.log('Loading students for group:', groupId); // Debug log
 
     fetch(`./users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched group students:', data); // Debug log
+            //console.log('Fetched group students:', data); // Debug log
 
             const groupStudentsList = document.getElementById(targetElementId);
             groupStudentsList.innerHTML = '';
@@ -1144,7 +1144,7 @@ function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.text())
         .then(data => {
-            console.log('Raw response:', data);
+            //console.log('Raw response:', data);
             try {
                 const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {
