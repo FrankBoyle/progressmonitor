@@ -266,10 +266,10 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     // Check if the elements exist in the DOM
-    console.log('Checking elements in the DOM...');
-    console.log(document.getElementById('edit-group-id'));
-    console.log(document.getElementById('edit-group-name'));
-    console.log(document.getElementById('edit-group-modal'));
+    //console.log('Checking elements in the DOM...');
+    //console.log(document.getElementById('edit-group-id'));
+    //console.log(document.getElementById('edit-group-name'));
+    //console.log(document.getElementById('edit-group-modal'));
 
     loadGroups();
     loadStaff();
@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
-            console.log('School selected:', selectedSchoolId); // Debugging statement
+            //console.log('School selected:', selectedSchoolId); // Debugging statement
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -344,13 +344,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: `school_id=${encodeURIComponent(selectedSchoolId)}`
             })
             .then(response => {
-                console.log('Response status:', response.status); // Debugging statement
+                //console.log('Response status:', response.status); // Debugging statement
                 return response.json();
             })
             .then(data => {
-                console.log('Response data:', data); // Debugging statement
+                //console.log('Response data:', data); // Debugging statement
                 if (data.success) {
-                    console.log('Reloading page'); // Debugging statement
+                    //console.log('Reloading page'); // Debugging statement
                     location.reload(); // Reload the page to reflect the school change
                 } else {
                     console.error('Error updating school:', data.message);
@@ -498,7 +498,7 @@ function showAddGroupModal() {
 }
 
 function showAddStudentModal(groupId) {
-    console.log('showAddStudentModal called with groupId:', groupId); // Debug log
+    //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
     const modal = document.getElementById('add-student-modal');
 
     if (modal) {
@@ -877,7 +877,7 @@ function saveGoal(goalId, goalDescription) {
 }
 
 function showEditGroupModal(groupId, groupName) {
-    console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
+    //console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
 
     const editGroupIdInput = document.getElementById('edit-group-id');
     const editGroupNameInput = document.getElementById('edit-group-name');
@@ -917,12 +917,12 @@ function hideEditGroupModal() {
 }
 
 function loadGroupStudents(groupId, targetElementId) {
-    console.log('Loading students for group:', groupId); // Debug log
+    //console.log('Loading students for group:', groupId); // Debug log
 
     fetch(`./users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched group students:', data); // Debug log
+            //console.log('Fetched group students:', data); // Debug log
 
             const groupStudentsList = document.getElementById(targetElementId);
             groupStudentsList.innerHTML = '';
@@ -1220,7 +1220,7 @@ function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.text())
         .then(data => {
-            console.log('Raw response:', data);
+            //console.log('Raw response:', data);
             try {
                 const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {
