@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.collapsible-content').forEach(content => content.style.display = 'none');
+
     loadUsers();
     loadActiveStudents();
     loadArchivedStudents();
@@ -358,4 +360,17 @@ function updateUser(userData) {
     .catch(error => {
         console.error('Error:', error);
     });
+}
+
+function toggleSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const button = section.previousElementSibling.querySelector('.toggle-btn');
+
+    if (section.style.display === "none" || section.style.display === "") {
+        section.style.display = "block";
+        button.textContent = "-";
+    } else {
+        section.style.display = "none";
+        button.textContent = "+";
+    }
 }

@@ -1205,6 +1205,27 @@ input[type="text"] {
     cursor: pointer;
 }
 
+.collapsible-content {
+    display: none;
+    overflow: hidden;
+    padding: 0 15px;
+    margin-top: 10px;
+}
+
+.toggle-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 3px;
+    margin-left: 10px;
+}
+
+.toggle-btn:hover {
+    background-color: #0056b3;
+}
 
 
 
