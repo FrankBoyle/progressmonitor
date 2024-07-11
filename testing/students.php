@@ -50,7 +50,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                 <select id="school-select">
                     <?php foreach ($schools as $school): ?>
                         <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($school['school_name']) ?>
+                            <?= htmlspecialchars($school['SchoolName']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
