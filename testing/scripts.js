@@ -168,18 +168,49 @@ function loadArchivedStudents() {
                     { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
                     { title: "Last Name", field: "last_name", editor: "input", widthGrow: 2 },
                     { title: "Date of Birth", field: "date_of_birth", editor: "input", widthGrow: 2 },
-                    { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 }
+                    { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 },
+                    {
+                        title: "Activate", field: "student_id_new", formatter: function(cell, formatterParams, onRendered) {
+                            return '<button onclick="activateStudent(' + cell.getValue() + ')">Activate</button>';
+                        },
+                        width: 100
+                    }
                 ]
             });
 
             archivedStudentsTable.on("cellEdited", function(cell) {
-                // Implement your update logic here
+                // Update logic here
                 console.log('Cell edited', cell.getRow().getData());
             });
         })
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function activateStudent(studentId) {
+    console.log('Activating student with ID:', studentId);
+    // Implement AJAX request to send this ID to your server and change the student's status
+    fetch('./users/activate_student.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ studentId: studentId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Student activated successfully');
+            // Optionally refresh the table or update the UI accordingly
+            loadArchivedStudents();
+        } else {
+            console.error('Failed to activate student:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error activating student:', error);
+    });
 }
 
 function toggleApproval(teacherId, newStatus) {
