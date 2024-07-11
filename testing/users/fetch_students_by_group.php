@@ -1,13 +1,14 @@
 <?php
+session_start();
 include('auth_session.php');
 include('db.php');
 
 // Enable PHP error logging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('log_errors', 1);
+//ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
 
 if (!isset($connection)) {
     error_log("Database connection is not set.");

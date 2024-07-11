@@ -1,9 +1,10 @@
 <?php
+session_start();
 include('auth_session.php');
 include('db.php');
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 // Set headers to expect JSON response
 header('Content-Type: application/json');

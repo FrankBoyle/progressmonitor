@@ -1,10 +1,11 @@
 <?php
+session_start();
 include('auth_session.php');
 
 // Error Reporting
-ini_set('display_errors', 1); // Enable display errors
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1); // Enable display errors
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 include('db.php');
 

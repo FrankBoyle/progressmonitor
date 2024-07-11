@@ -1,4 +1,6 @@
 <?php
+session_start();
+include('auth_session.php');
 include('db.php');
 
 if (isset($_GET['student_id']) && isset($_GET['metadata_id'])) {
