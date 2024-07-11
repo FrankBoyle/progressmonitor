@@ -374,3 +374,70 @@ function toggleSection(sectionId) {
         button.textContent = "+";
     }
 }
+
+function searchProgramUsers() {
+    const searchTerm = document.getElementById('program-users-search').value;
+    fetch('./users/fetch_users_by_program.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error fetching users:', data.error);
+                return;
+            }
+
+            const filteredData = data.filter(user => 
+                user.fname.includes(searchTerm) || user.lname.includes(searchTerm) || user.email.includes(searchTerm)
+            );
+
+            const programUsersTableContainer = document.getElementById('program-users-table-container');
+            if (programUsersTableContainer) {
+                programUsersTableContainer.innerHTML = '';
+            } else {
+                console.error('Table container element not found');
+                return;
+            }
+
+            const programUsersTable = new Tabulator(programUsersTableContainer, {
+                data: filteredData,
+                layout: "fitDataStretch",
+                columns: [
+                    { title: "First Name", field: "fname", widthGrow: 2 },
+                    { title: "Last Name", field: "lname", widthGrow: 2 },
+                    { title: "Email", field: "email", widthGrow: 2 },
+                    {
+                        title: "Add to School", 
+                        field: "teacher_id", 
+                        formatter: function(cell, formatterParams, onRendered) {
+                            return '<button onclick="addUserToSchool(' + cell.getValue() + ')">Add</button>';
+                        },
+                        width: 150
+                    }
+                ],
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function addUserToSchool(teacherId) {
+    fetch('./users/add_user_to_school.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ teacher_id: teacherId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User added to school successfully');
+            searchProgramUsers(); // Refresh the search results
+        } else {
+            console.error('Error adding user to school:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}

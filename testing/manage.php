@@ -62,6 +62,19 @@ include('./users/db.php');
                 <div id="archived-students-table-container"></div>
             </div>
         </section>
+
+        <section class="box manage-section">
+            <h2>Assign Users to School <button class="toggle-btn" onclick="toggleSection('assign-users-section')">+</button></h2>
+            <div id="assign-users-section" class="collapsible-content">
+                <div>
+                    <label for="program-users-search">Search Users by Program:</label>
+                    <input type="text" id="program-users-search" placeholder="Enter user's name or email">
+                    <button onclick="searchProgramUsers()">Search</button>
+                </div>
+                <div id="program-users-table-container"></div>
+            </div>
+        </section>
+
     </main>
 </div>
 
