@@ -15,8 +15,6 @@ const seriesColors = [
 ];
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("DOMContentLoaded event triggered");
-
     setupInitialPageLoad();
     attachEventListeners();
     initializeCharts();
