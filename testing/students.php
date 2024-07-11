@@ -221,9 +221,12 @@ include('./users/db.php');
             <select id="share-teacher-id" name="shared_teacher_id">
                 <option value="">Select staff here</option>
                 <?php foreach ($teachers as $teacher): ?>
-                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>"><?= htmlspecialchars($teacher['name']) ?></option>
+                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>">
+                        <?= htmlspecialchars($teacher['fname'] . ' ' . $teacher['lname']) ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
+
             <button type="submit">Share</button>
         </form>
     </div>
