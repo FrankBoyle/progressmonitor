@@ -201,21 +201,9 @@ function activateStudent(studentId) {
     .then(data => {
         if (data.success) {
             console.log('Student activated successfully');
-            // Update Active Students Table
-            var activeStudentsTable = Tabulator.findTable("#active-students-table-container")[0];
-            if (activeStudentsTable && data.student) {
-                activeStudentsTable.addData([data.student], true); // Optionally, position this entry
-            }
-            // Update Archived Students Table
-            var archivedStudentsTable = Tabulator.findTable("#archived-students-table-container")[0];
-            if (archivedStudentsTable) {
-                var row = archivedStudentsTable.getRow(studentId);
-                if (row) {
-                    row.delete();
-                } else {
-                    console.error("No matching row found for deletion:", studentId);
-                }
-            }
+            // Reload both tables to reflect changes
+            loadActiveStudents(); // Reload the active students table
+            loadArchivedStudents(); // Reload the archived students table
         } else {
             console.error('Failed to activate student:', data.message);
         }
