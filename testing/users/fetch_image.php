@@ -4,12 +4,12 @@ include('db.php');
 
 header('Content-Type: application/json'); // Default to JSON
 
-if (isset($_GET['goal_id'])) {
-    $goalId = $_GET['goal_id'];
-    error_log("Fetching image for goal_id: " . $goalId);
+if (isset($_GET['note_id'])) {
+    $noteId = $_GET['note_id'];
+    error_log("Fetching image for note_id: " . $noteId);
 
-    $stmt = $connection->prepare("SELECT report_image FROM Goal_notes WHERE goal_id = ?");
-    $stmt->execute([$goalId]);
+    $stmt = $connection->prepare("SELECT report_image FROM Goal_notes WHERE note_id = ?");
+    $stmt->execute([$noteId]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result && $result['report_image']) {
@@ -27,13 +27,14 @@ if (isset($_GET['goal_id'])) {
         header('Content-Type: ' . $mimeType);
         echo $imageData;
     } else {
-        error_log("Image not found for goal_id: " . $goalId);
+        error_log("Image not found for note_id: " . $noteId);
         echo json_encode(['error' => 'Image not found']);
     }
 } else {
-    error_log("Invalid request, missing goal_id");
-    echo json_encode(['error' => 'Invalid request, missing goal_id']);
+    error_log("Invalid request, missing note_id");
+    echo json_encode(['error' => 'Invalid request, missing note_id']);
 }
 ?>
+
 
 
