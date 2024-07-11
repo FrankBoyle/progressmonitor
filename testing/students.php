@@ -2,6 +2,30 @@
 session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
+
+// Ensure the teacher_id is set in the session
+if (!isset($_SESSION['teacher_id'])) {
+    die("Teacher ID is not set in the session.");
+}
+
+$teacher_id = $_SESSION['teacher_id'];
+
+try {
+    // Prepare and execute the query to fetch schools
+    $query = $connection->prepare("
+        SELECT s.school_id, s.school_name 
+        FROM Schools s
+        INNER JOIN Teachers t ON s.school_id = t.school_id
+        WHERE t.teacher_id = :teacher_id
+    ");
+    $query->bindParam("teacher_id", $teacher_id, PDO::PARAM_INT);
+    $query->execute();
+    
+    // Fetch all the results
+    $schools = $query->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
