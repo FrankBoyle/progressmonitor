@@ -426,7 +426,7 @@ h3 {
     opacity: 1;
 }
 
-.save-btn {
+.modal-content .save-btn {
     background-color: #007bff;
     color: white;
     border: none;
@@ -540,6 +540,11 @@ td .cell-input {
     flex-direction: column;
     align-items: flex-start; /* Align items to the start */
 
+}
+
+.modal-content form {
+    width: 100%;
+    margin-bottom: 15px;
 }
 
 .close {
