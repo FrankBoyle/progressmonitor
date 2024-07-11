@@ -33,10 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const schoolSelect = document.getElementById('school-select');
     if (schoolSelect) {
-        console.log("school-select element found");
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
-            console.log(`Selected school ID: ${selectedSchoolId}`);
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -44,25 +42,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: `school_id=${encodeURIComponent(selectedSchoolId)}`
             })
-            .then(response => {
-                console.log("Response received");
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log("Response data:", data);
                 if (data.success) {
-                    console.log("School updated successfully");
                     location.reload(); // Reload the page to reflect the school change
                 } else {
                     console.error('Error updating school:', data.message);
                 }
             })
             .catch(error => {
-                console.error('Fetch error:', error);
+                console.error('Error:', error);
             });
         });
-    } else {
-        console.error("school-select element not found");
     }
 });
 
