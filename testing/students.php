@@ -13,7 +13,7 @@ $teacher_id = $_SESSION['teacher_id'];
 try {
     // Prepare and execute the query to fetch schools
     $query = $connection->prepare("
-        SELECT s.school_id, s.school_name 
+        SELECT s.school_id, s.SchoolName 
         FROM Schools s
         INNER JOIN Teachers t ON s.school_id = t.school_id
         WHERE t.teacher_id = :teacher_id
