@@ -555,6 +555,8 @@ input[type="text"] {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-bottom: 20px;
+
 }
 
 .filter-section .form-group {
@@ -576,6 +578,10 @@ input[type="text"] {
 
 .form-group .form-control {
     flex: 1;
+}
+
+.form-actions {
+    margin-bottom: 20px;
 }
 
 .header-icons .nav-link i {
@@ -1203,6 +1209,22 @@ input[type="text"] {
     cursor: pointer;
 }
 
+.btn-danger {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: darkred;
+}
+
+.group-section {
+    margin-bottom: 20px;
+}
+
 .collapsible-content {
     display: none;
     overflow: hidden;
@@ -1225,5 +1247,16 @@ input[type="text"] {
     background-color: #0056b3;
 }
 
+#edit-group-form {
+    display: flex;
+    flex-direction: column;
+}
 
+#edit-group-form .btn-primary {
+    margin-right: 10px;
+}
+
+#share-group-form select {
+    margin-bottom: 10px;
+}
 
