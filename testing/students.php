@@ -270,6 +270,12 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if the elements exist in the DOM
+    console.log('Checking elements in the DOM...');
+    console.log(document.getElementById('edit-group-id'));
+    console.log(document.getElementById('edit-group-name'));
+    console.log(document.getElementById('edit-group-modal'));
+
     loadGroups();
     loadStaff();
     loadTemplates();
@@ -349,10 +355,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('Response data:', data); // Debugging statement
                 if (data.success) {
-                    console.log('Reloading page in 3 seconds'); // Debugging statement
-                    setTimeout(function() {
-                        location.reload(); // Reload the page to reflect the school change
-                    }, 0); // 3 seconds delay
+                    console.log('Reloading page'); // Debugging statement
+                    location.reload(); // Reload the page to reflect the school change
                 } else {
                     console.error('Error updating school:', data.message);
                 }
