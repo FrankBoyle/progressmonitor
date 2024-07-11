@@ -981,10 +981,14 @@ function removeStudentFromGroup(studentId, groupId) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log('Remove student response data:', data); // Debugging statement
         if (data.status === 'success') {
             alert('Student removed from group successfully.');
             console.log('Student removed, now reloading group students for groupId:', groupId);
-            setTimeout(() => loadGroupStudents(groupId), 500); // Refresh the group students list after a delay
+            setTimeout(() => {
+                loadGroupStudents(groupId);
+                console.log('Reloaded group students for groupId:', groupId); // Debugging statement
+            }, 500); // Adding a slight delay to ensure the list updates
         } else {
             alert('There was an error removing the student from the group. Please try again.');
         }
