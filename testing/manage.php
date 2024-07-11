@@ -21,53 +21,55 @@ include('./users/db.php');
     <title>Manage Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.0.0/dist/js/tabulator.min.js"></script>
-
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
 </head>
 <body>
 <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="logo">
-                <img src="bFactor_logo.png" alt="Logo">
-            </div>
-            <div class="header-icons">
-                <a href="students.php" class="nav-link">
-                    <i class="nav-icon"></i>
-                    <p>Home</p>
-                </a>
-                <a href="./users/logout.php" class="nav-link">
-                    <i class="nav-icon"></i>
-                    <p>Sign Out</p>
-                </a>
-            </div>
-        </header>
+    <header class="dashboard-header">
+        <div class="logo">
+            <img src="bFactor_logo.png" alt="Logo">
+        </div>
+        <div class="header-icons">
+            <a href="students.php" class="nav-link">
+                <i class="nav-icon"></i>
+                <p>Home</p>
+            </a>
+            <a href="./users/logout.php" class="nav-link">
+                <i class="nav-icon"></i>
+                <p>Sign Out</p>
+            </a>
+        </div>
+    </header>
 
-        <main class="content-students">
-            <!-- Existing Users Management Section -->
-            <section class="box manage-section">
-                <h2>Manage Users</h2>
+    <main class="content-students">
+        <!-- Existing Users Management Section -->
+        <section class="box manage-section">
+            <h2>Manage Users <button class="toggle-btn" onclick="toggleSection('users-section')">+</button></h2>
+            <div id="users-section" class="collapsible-content">
                 <div id="approved-users-table-container"></div>
                 <div id="waiting-approval-table-container"></div>
-            </section>
+            </div>
+        </section>
 
-            <!-- New Students Management Section -->
-            <section class="box manage-section">
-                <h2>Manage Students</h2>
+        <!-- New Students Management Section -->
+        <section class="box manage-section">
+            <h2>Manage Students <button class="toggle-btn" onclick="toggleSection('students-section')">+</button></h2>
+            <div id="students-section" class="collapsible-content">
                 <div id="active-students-table-container"></div>
                 <div id="archived-students-table-container"></div>
-            </section>
-        </main>
-    </div>
+            </div>
+        </section>
+    </main>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <script src="https://unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator.min.js"></script>
-    <script src="scripts.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script src="https://unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator.min.js"></script>
+<script src="scripts.js"></script>
 </body>
 </html>
 
