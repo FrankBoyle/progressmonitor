@@ -209,16 +209,12 @@ function activateStudent(studentId) {
             // Update Archived Students Table
             var archivedStudentsTable = Tabulator.findTable("#archived-students-table-container")[0];
             if (archivedStudentsTable) {
-                // Ensure the ID is in the correct format (number or string as needed)
-                archivedStudentsTable.getRow(studentId).then(row => {
-                    if (row) {
-                        row.delete();
-                    } else {
-                        console.error("No matching row found for deletion:", studentId);
-                    }
-                }).catch(error => {
-                    console.error("Error finding row:", error);
-                });
+                var row = archivedStudentsTable.getRow(studentId);
+                if (row) {
+                    row.delete();
+                } else {
+                    console.error("No matching row found for deletion:", studentId);
+                }
             }
         } else {
             console.error('Failed to activate student:', data.message);
