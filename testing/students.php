@@ -1175,22 +1175,23 @@ function loadGoals(studentId) {
                         if (!goal.archived) {
                             const listItem = document.createElement('div');
                             listItem.classList.add('goal-item');
-                            listItem.innerHTML = `<div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>`;
-                            listItem.innerHTML += `<button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>`;
-                            listItem.innerHTML += `<button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>`;
-
-                            // Sort the notes by reporting period
-                            goal.notes.sort((a, b) => a.reporting_period - b.reporting_period);
-
-                            // Add the thumbnails or icons for each report image with Lightbox2
-                            goal.notes.forEach(note => {
-                                if (note.report_image) {
-                                    listItem.innerHTML += `
+                            listItem.innerHTML = `
+                                <div class="goal-content">
+                                    <div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>
+                                    <button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>
+                                    <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
+                                </div>
+                                <div class="progress-reports">
+                                    <strong>Progress Reports:</strong>
+                                    <div class="thumbnails">
+                                    ${goal.notes.map(note => note.report_image ? `
                                         <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
-                                            <img src="${note.report_image}" alt="Report Available" class="thumbnail-image">
-                                        </a>`;
-                                }
-                            });
+                                            <img src="${note.report_image}" alt="Report Available" class="thumbnail">
+                                        </a>
+                                    ` : '').join('')}
+                                    </div>
+                                </div>
+                            `;
 
                             metadataContainer.appendChild(listItem);
                         }
