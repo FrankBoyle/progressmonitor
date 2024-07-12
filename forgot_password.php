@@ -36,7 +36,7 @@ if (isset($_POST['forgot_password'])) {
                 'html' => $message,
                 'text' => strip_tags($message),
                 'subject' => $subject,
-                'from_email' => 'noreply@iepreport.com',
+                'from_email' => 'info@iepreport.com',
                 'from_name' => 'Fran Boyle',
                 'to' => [['email' => $email, 'type' => 'to']]
             ]
