@@ -575,9 +575,9 @@ input[type="text"] {
     border: 1px solid #ccc;
 }
 
-.filter-section .form-group {
+.form-group {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 10px;
 }
 
