@@ -150,7 +150,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </div>
     <script src="charts.js"></script>
     <script>
-        let schoolId = <?php json_encode($schoolId); ?>;
+        let schoolId = <?php echo json_encode($schoolId); ?>;
     </script>
 </body>
 </html>
