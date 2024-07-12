@@ -38,7 +38,9 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </style>
 </head>
 <body>
-    
+
+<input type="hidden" id="school-id" value="<?php echo htmlspecialchars($schoolId, ENT_QUOTES, 'UTF-8'); ?>">
+
     <div class="dashboard">
         <header class="dashboard-header">
             <div class="logo">
@@ -150,7 +152,10 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     </div>
     <script src="charts.js"></script>
     <script>
-        let schoolId = <?php echo json_encode($schoolId); ?>;
+        document.addEventListener('DOMContentLoaded', function() {
+            let schoolId = document.getElementById('school-id').value;
+            console.log(schoolId); // Use the schoolId variable as needed
+        });
     </script>
 </body>
 </html>

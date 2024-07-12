@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     attachEventListeners();
     initializeCharts();
 
+
     document.getElementById('printReportBtn').addEventListener('click', showPrintDialogModal);
     window.hidePrintDialogModal = hidePrintDialogModal;
     window.printReport = printReport;
