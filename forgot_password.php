@@ -25,21 +25,34 @@ if (isset($_POST['forgot_password'])) {
         $query->bindParam("expiry", $expiry, PDO::PARAM_STR);
         $query->bindParam("email", $email, PDO::PARAM_STR);
         $query->execute();
-
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= 'From: Your Site Name <noreply@iepreport.com>' . "\r\n";
-        $headers .= 'Reply-To: noreply@iepreport.com' . "\r\n";
-        $headers .= 'X-Mailer: PHP/' . phpversion();
-
+    
         $subject = "Password Reset Request";
-        $message = "<html><body>";
-        $message .= "<h1>Password Reset Request</h1>";
-        $message .= "<p>Click on the following link to reset your password:</p>";
-        $message .= "<a href='https://iepreport.com/reset_password.php?token=$token'>Reset Password</a>";
-        $message .= "</body></html>";
-
-        if (mail($email, $subject, $message, $headers)) {
+        $message = "<html><body><h1>Password Reset Request</h1><p>Click on the following link to reset your password:</p><a href='https://iepreport.com/reset_password.php?token=$token'>Reset Password</a></body></html>";
+    
+        // Prepare to send email via Mailchimp API
+        $postData = [
+            'key' => 'Md-sQF74EnSZM1adKIeRSVsSw',
+            'message' => [
+                'html' => $message,
+                'text' => strip_tags($message),
+                'subject' => $subject,
+                'from_email' => 'noreply@iepreport.com',
+                'from_name' => 'Fran Boyle',
+                'to' => [['email' => $email, 'type' => 'to']]
+            ]
+        ];
+    
+        $ch = curl_init('https://mandrillapp.com/api/1.0/messages/send.json');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    
+        $result = curl_exec($ch);
+        curl_close($ch);
+    
+        if ($result) {
             echo '<p class="success">Password reset link has been sent to your email.</p>';
             header("Location: login.php?reset=1");
             exit();
@@ -49,5 +62,5 @@ if (isset($_POST['forgot_password'])) {
     } else {
         echo "<p class='error'>No account found with that email address.</p>";
     }
-}
+}    
 ?>
