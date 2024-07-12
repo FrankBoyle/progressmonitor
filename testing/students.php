@@ -134,7 +134,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
                     <div style="margin-right: 10px;">
-                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here">
+                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here" multiple>
                             <option></option>
                             <!-- Options will be dynamically populated -->
                         </select>
