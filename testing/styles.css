@@ -1025,9 +1025,11 @@ input[type="text"] {
     border-radius: 8px; /* More rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visuals */
     cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+    transition: background-color 0.1s, box-shadow 0.1s; /* Smooth transitions */
     text-align: center; /* Center text */
     min-width: 100px; /* Ensure buttons are not too narrow */
+    width: 200px; /* Set a fixed width for the buttons */
+
 }
 
 .selector-item.selected {
