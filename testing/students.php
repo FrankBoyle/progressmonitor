@@ -766,7 +766,7 @@ function assignStudentsToGroup(event) {
         return;
     }
 
-    //console.log('Assigning students to group:', groupId, studentIds); // Debug log
+    console.log('Assigning students to group:', groupId, studentIds); // Debug log
 
     fetch('./users/assign_students_to_group.php', {
         method: 'POST',
@@ -777,10 +777,11 @@ function assignStudentsToGroup(event) {
     })
     .then(response => response.json())
     .then(data => {
-        //console.log('Response:', data); // Debug log
+        console.log('Response:', data); // Debug log
         if (data.status === "success") {
             alert(data.message);
-            hideEditGroupModal();
+            loadGroupStudents(groupId, 'group-students-list-add'); // Reload the student list
+            console.log('Student assigned, now reloading group students for groupId:', groupId); // Debug log
         } else {
             alert(data.error);
         }
@@ -969,7 +970,7 @@ function removeStudentFromGroup(studentId, groupId) {
             setTimeout(() => {
                 loadGroupStudents(groupId, 'group-students-list-add'); // Explicitly target the correct element
                 console.log('Reloaded group students for groupId:', groupId); // Debugging statement
-            }, 500); // Adding a slight delay to ensure the list updates
+            }, 0); // Adding a slight delay to ensure the list updates
         } else {
             alert('There was an error removing the student from the group. Please try again.');
         }
