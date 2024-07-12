@@ -903,7 +903,6 @@ function loadGroupStudents(groupId, targetElementId = 'group-students-list-add')
                 return;
             }
 
-            // Clear old student list
             groupStudentsList.innerHTML = '';
 
             if (data.error) {
