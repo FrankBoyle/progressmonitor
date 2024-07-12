@@ -46,9 +46,9 @@ if (isset($_POST['forgot_password'])) {
             $mail->isSMTP();
             $mail->Host       = 'smtp.mandrillapp.com'; // Specify main and backup SMTP servers
             $mail->SMTPAuth   = true;
-            $mail->Username   = 'iepreport.com'; // SMTP username
+            $mail->Username   = 'info@iepreport.com'; // SMTP username
             $mail->Password   = 'Md-sQF74EnSZM1adKIeRSVsSw'; // SMTP password
-            $mail->SMTPSecure = 'ssl'; // Enable TLS encryption, `ssl` also accepted
+            $mail->SMTPSecure = 'tls'; // Enable TLS encryption, `ssl` also accepted
             $mail->Port       = 587;
 
             $mail->setFrom('info@iepreport.com', 'Mailer');
