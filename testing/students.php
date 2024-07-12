@@ -876,7 +876,7 @@ function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-modal').style.display = 'block';
 
     // Load students for the selected group
-    loadGroupStudents(groupId, 'group-students-list-edit');
+    //loadGroupStudents(groupId, 'group-students-list-edit');
 }
 
 function hideEditGroupModal() {
