@@ -1082,7 +1082,7 @@ input[type="text"] {
 
 .selector-area {
     flex: 1; /* Takes up 1 part of the available space */
-    margin-right: 20px; /* Margin between selectors and statistics */
+    /*margin-right: 20px; /* Margin between selectors and statistics */
 }
 
 #printReportBtn {
