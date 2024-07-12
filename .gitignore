@@ -72,4 +72,5 @@ ad.js
 
 # Database Files
 users/db.php
-testing/users/db.php
+/testing/users/db.php
+forgot_password.php
