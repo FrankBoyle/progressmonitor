@@ -592,10 +592,6 @@ input[type="text"] {
     box-sizing: border-box;
 }
 
-.form-group .form-control {
-    flex: 1;
-}
-
 .form-actions {
     margin-bottom: 20px;
 }
