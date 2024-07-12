@@ -5,33 +5,32 @@ include('db.php');
 
 header('Content-Type: application/json');
 
-try {
-    if (isset($_POST['group_id']) && isset($_POST['student_ids'])) {
-        $groupId = $_POST['group_id'];
-        $studentIds = explode(',', $_POST['student_ids']); // Assuming student_ids is a comma-separated string
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $groupId = isset($_POST['group_id']) ? intval($_POST['group_id']) : null;
+    $studentIds = isset($_POST['student_ids']) ? explode(',', $_POST['student_ids']) : [];
 
-        // Prepare statement to insert each student into the group
-        $stmt = $connection->prepare("INSERT INTO StudentGroup (group_id, student_id_new) VALUES (?, ?)");
+    if (!$groupId || empty($studentIds)) {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid input.']);
+        exit;
+    }
 
+    try {
+        $connection->beginTransaction();
+
+        $stmt = $connection->prepare("INSERT INTO StudentGroup (student_id_new, group_id) VALUES (?, ?)");
         foreach ($studentIds as $studentId) {
-            // Verify the student_id_new exists in Students_new
-            $checkStmt = $connection->prepare("SELECT COUNT(*) FROM Students_new WHERE student_id_new = ?");
-            $checkStmt->execute([$studentId]);
-            if ($checkStmt->fetchColumn() == 0) {
-                throw new Exception("Student ID $studentId does not exist in Students_new.");
-            }
-
-            // Insert the student into the group
-            $stmt->execute([$groupId, $studentId]);
+            $stmt->execute([$studentId, $groupId]);
         }
 
-        echo json_encode(["status" => "success", "message" => "Students assigned to group successfully."]);
-    } else {
-        echo json_encode(["error" => "Invalid request, group_id or student_ids not set"]);
+        $connection->commit();
+        echo json_encode(['status' => 'success', 'message' => 'Students assigned to the group successfully.']);
+    } catch (PDOException $e) {
+        $connection->rollBack();
+        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
     }
-} catch (Exception $e) {
-    error_log("Error assigning students to group: " . $e->getMessage());
-    echo json_encode(["error" => "Error assigning students to group: " . $e->getMessage()]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
 ?>
+
 

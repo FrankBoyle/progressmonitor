@@ -2,6 +2,17 @@
 session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
+
+// Ensure account_id is in session
+$account_id = $_SESSION['account_id'];
+$school_id = $_SESSION['school_id'];
+
+// Fetch the schools associated with the logged-in user
+$query = $connection->prepare("SELECT s.school_id, s.SchoolName FROM Schools s JOIN Teachers t ON s.school_id = t.school_id WHERE t.account_id = :account_id");
+$query->bindParam("account_id", $account_id, PDO::PARAM_INT);
+$query->execute();
+$schools = $query->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +29,7 @@ include('./users/db.php');
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Layout</title>
+    <title>Group Managment</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -33,6 +44,17 @@ include('./users/db.php');
             <img src="bFactor_logo.png" alt="Logo">
         </div>
         <div class="header-icons">
+            <div class="school-selector">
+                <label for="school-select">Select School:</label>
+                <select id="school-select">
+                    <?php foreach ($schools as $school): ?>
+                        <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($school['SchoolName']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
             <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                 <a href="manage.php" class="nav-link">
                     <button class="btn btn-primary">Manage</button>
@@ -112,7 +134,7 @@ include('./users/db.php');
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
                     <div style="margin-right: 10px;">
-                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here">
+                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here" multiple>
                             <option></option>
                             <!-- Options will be dynamically populated -->
                         </select>
@@ -206,26 +228,29 @@ include('./users/db.php');
         <h2>Edit Group</h2>
         <form id="edit-group-form" onsubmit="updateGroup(event)">
             <input type="hidden" id="edit-group-id">
-            <label for="edit-group-name">Group Name:</label>
-            <input type="text" id="edit-group-name" name="group_name" required>
-            <button type="submit">Save Changes</button>
+            <div class="form-group">
+                <label for="edit-group-name">Group Name:</label>
+                <input type="text" id="edit-group-name" name="group_name" required>
+            </div>
+            <button class="save-btn" type="submit">Save Changes</button>
         </form>
-        <button onclick="deleteGroup()">Delete Group</button>
-        <h2>Remove Students from Group</h2>
+        <button class="delete-btn" onclick="deleteGroup()">Delete Group</button>
         <div id="group-students-list-edit">
             <!-- Students will be loaded here dynamically -->
         </div>
         <h2>Share Group</h2>
         <form id="share-group-form" onsubmit="shareGroup(event)">
             <input type="hidden" id="share-group-id">
-			<select id="share-teacher-id" name="shared_teacher_id">
-                <option value="">Select staff here</option>
-                <?php foreach ($teachers as $teacher): ?>
-                    <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>">
-                        <?= htmlspecialchars($teacher['fname'] . ' ' . $teacher['lname']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <div class="form-group">
+                <select id="share-teacher-id" name="shared_teacher_id">
+                    <option value="">Select staff here</option>
+                    <?php foreach ($teachers as $teacher): ?>
+                        <option value="<?= htmlspecialchars($teacher['teacher_id']) ?>">
+                            <?= htmlspecialchars($teacher['fname'] . ' ' . $teacher['lname']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
             <button type="submit">Share</button>
         </form>
     </div>
@@ -299,6 +324,39 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+    
+    const schoolSelect = document.getElementById('school-select');
+    if (schoolSelect) {
+        schoolSelect.addEventListener('change', function() {
+            const selectedSchoolId = this.value;
+            //console.log('School selected:', selectedSchoolId); // Debugging statement
+            fetch('./users/update_school_session.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `school_id=${encodeURIComponent(selectedSchoolId)}`
+            })
+            .then(response => {
+                //console.log('Response status:', response.status); // Debugging statement
+                return response.json();
+            })
+            .then(data => {
+                //console.log('Response data:', data); // Debugging statement
+                if (data.success) {
+                    //console.log('Reloading page in 3 seconds'); // Debugging statement
+                    setTimeout(function() {
+                        location.reload(); // Reload the page to reflect the school change
+                    }, 0); // 3 seconds delay
+                } else {
+                    console.error('Error updating school:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
 });
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
@@ -437,14 +495,10 @@ function showAddGroupModal() {
 
 function showAddStudentModal(groupId) {
     //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
-    const modal = document.getElementById('add-student-modal');
+    document.getElementById('add-student-modal').style.display = 'block';
 
-    if (modal) {
-        modal.style.display = 'block';
-        loadGroupStudents(groupId, 'group-students-list-add');
-    } else {
-        console.error("Modal element not found");
-    }
+    // Load students for the selected group
+    loadGroupStudents(groupId, 'group-students-list-add');
 }
 
 // Function to hide the modal
@@ -725,8 +779,9 @@ function assignStudentsToGroup(event) {
     .then(data => {
         //console.log('Response:', data); // Debug log
         if (data.status === "success") {
-            alert(data.message);
-            hideEditGroupModal();
+            //alert(data.message);
+            loadGroupStudents(groupId, 'group-students-list-add'); // Reload the student list
+            //console.log('Student assigned, now reloading group students for groupId:', groupId); // Debug log
         } else {
             alert(data.error);
         }
@@ -820,19 +875,8 @@ function showEditGroupModal(groupId, groupName) {
     document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('edit-group-modal').style.display = 'block';
 
-    // Hide the Edit Group button
-    const editGroupButton = document.querySelector('.edit-group-btn');
-    if (editGroupButton) {
-        editGroupButton.style.display = 'none';
-    }
-
-    // Ensure the select2 is properly refreshed
-    $('.select2').select2();
-
     // Load students for the selected group
-    loadGroupStudents(groupId, 'group-students-list-edit');
-    
-    loadStaff();
+    //loadGroupStudents(groupId, 'group-students-list-edit');
 }
 
 function hideEditGroupModal() {
@@ -846,7 +890,7 @@ function hideEditGroupModal() {
     }
 }
 
-function loadGroupStudents(groupId, targetElementId) {
+function loadGroupStudents(groupId, targetElementId = 'group-students-list-add') {
     //console.log('Loading students for group:', groupId); // Debug log
 
     fetch(`./users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
@@ -855,6 +899,11 @@ function loadGroupStudents(groupId, targetElementId) {
             //console.log('Fetched group students:', data); // Debug log
 
             const groupStudentsList = document.getElementById(targetElementId);
+            if (!groupStudentsList) {
+                console.error('Target element not found:', targetElementId);
+                return;
+            }
+
             groupStudentsList.innerHTML = '';
 
             if (data.error) {
@@ -866,6 +915,9 @@ function loadGroupStudents(groupId, targetElementId) {
                 groupStudentsList.innerHTML = '<p>No students in this group.</p>';
                 return;
             }
+
+            // Sort students by last name
+            data.sort((a, b) => a.last_name.localeCompare(b.last_name));
 
             data.forEach(student => {
                 const studentItem = document.createElement('div');
@@ -891,6 +943,8 @@ function loadGroupStudents(groupId, targetElementId) {
                 studentItem.appendChild(removeButton);
                 groupStudentsList.appendChild(studentItem);
             });
+
+            //console.log('Updated DOM with new student list.');
         })
         .catch(error => {
             console.error('Error fetching group students:', error);
@@ -912,9 +966,14 @@ function removeStudentFromGroup(studentId, groupId) {
     })
     .then(response => response.json())
     .then(data => {
+        //console.log('Remove student response data:', data); // Debugging statement
         if (data.status === 'success') {
-            alert('Student removed from group successfully.');
-            loadGroupStudents(groupId); // Refresh the group students list
+            //alert('Student removed from group successfully.');
+            //console.log('Student removed, now reloading group students for groupId:', groupId);
+            setTimeout(() => {
+                loadGroupStudents(groupId, 'group-students-list-add'); // Explicitly target the correct element
+                //console.log('Reloaded group students for groupId:', groupId); // Debugging statement
+            }, 0); // Adding a slight delay to ensure the list updates
         } else {
             alert('There was an error removing the student from the group. Please try again.');
         }
@@ -1150,7 +1209,7 @@ function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.text())
         .then(data => {
-            console.log('Raw response:', data);
+            //console.log('Raw response:', data);
             try {
                 const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {

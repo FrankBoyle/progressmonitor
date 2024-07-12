@@ -1,23 +1,25 @@
 <?php
 session_start();
-include('auth_session.php');
-include('db.php');
+include('auth_session.php'); // Ensure the user is authenticated
+include('db.php'); // Include the database connection
 
-$input = json_decode(file_get_contents('php://input'), true);
-$student_id_new = $input['student_id_new'] ?? null;
+$data = json_decode(file_get_contents("php://input"), true);
 
-if ($student_id_new === null) {
-    echo json_encode(['success' => false, 'message' => 'Invalid student ID']);
-    exit();
-}
+if (isset($data['student_id_new'])) {
+    $studentId = $data['student_id_new'];
+    $schoolId = $_SESSION['school_id'];
 
-try {
-    $stmt = $connection->prepare("UPDATE Students_new SET archived = 1 WHERE student_id_new = :student_id_new");
-    $stmt->bindParam(':student_id_new', $student_id_new, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $query = $connection->prepare("UPDATE Students_new SET archived = 1 WHERE student_id_new = :student_id AND school_id = :school_id");
+        $query->bindParam(':student_id', $studentId, PDO::PARAM_INT);
+        $query->bindParam(':school_id', $schoolId, PDO::PARAM_INT);
+        $query->execute();
 
-    echo json_encode(['success' => true]);
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+        echo json_encode(['success' => true]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    }
+} else {
+    echo json_encode(['success' => false, 'message' => 'Invalid data']);
 }
 ?>
