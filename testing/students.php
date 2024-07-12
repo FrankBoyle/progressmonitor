@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
-            console.log('School selected:', selectedSchoolId); // Debugging statement
+            //console.log('School selected:', selectedSchoolId); // Debugging statement
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -338,13 +338,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: `school_id=${encodeURIComponent(selectedSchoolId)}`
             })
             .then(response => {
-                console.log('Response status:', response.status); // Debugging statement
+                //console.log('Response status:', response.status); // Debugging statement
                 return response.json();
             })
             .then(data => {
-                console.log('Response data:', data); // Debugging statement
+                //console.log('Response data:', data); // Debugging statement
                 if (data.success) {
-                    console.log('Reloading page in 3 seconds'); // Debugging statement
+                    //console.log('Reloading page in 3 seconds'); // Debugging statement
                     setTimeout(function() {
                         location.reload(); // Reload the page to reflect the school change
                     }, 0); // 3 seconds delay
@@ -494,7 +494,7 @@ function showAddGroupModal() {
 }
 
 function showAddStudentModal(groupId) {
-    console.log('showAddStudentModal called with groupId:', groupId); // Debug log
+    //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
     document.getElementById('add-student-modal').style.display = 'block';
 
     // Load students for the selected group
@@ -766,7 +766,7 @@ function assignStudentsToGroup(event) {
         return;
     }
 
-    console.log('Assigning students to group:', groupId, studentIds); // Debug log
+    //console.log('Assigning students to group:', groupId, studentIds); // Debug log
 
     fetch('./users/assign_students_to_group.php', {
         method: 'POST',
@@ -777,11 +777,11 @@ function assignStudentsToGroup(event) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Response:', data); // Debug log
+        //console.log('Response:', data); // Debug log
         if (data.status === "success") {
             alert(data.message);
             loadGroupStudents(groupId, 'group-students-list-add'); // Reload the student list
-            console.log('Student assigned, now reloading group students for groupId:', groupId); // Debug log
+            //console.log('Student assigned, now reloading group students for groupId:', groupId); // Debug log
         } else {
             alert(data.error);
         }
@@ -870,7 +870,7 @@ function saveGoal(goalId, goalDescription) {
 }
 
 function showEditGroupModal(groupId, groupName) {
-    console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
+    //console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
     document.getElementById('edit-group-id').value = groupId;
     document.getElementById('edit-group-name').value = groupName || '';
     document.getElementById('edit-group-modal').style.display = 'block';
@@ -891,12 +891,12 @@ function hideEditGroupModal() {
 }
 
 function loadGroupStudents(groupId, targetElementId = 'group-students-list-add') {
-    console.log('Loading students for group:', groupId); // Debug log
+    //console.log('Loading students for group:', groupId); // Debug log
 
     fetch(`./users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched group students:', data); // Debug log
+            //console.log('Fetched group students:', data); // Debug log
 
             const groupStudentsList = document.getElementById(targetElementId);
             if (!groupStudentsList) {
@@ -915,6 +915,9 @@ function loadGroupStudents(groupId, targetElementId = 'group-students-list-add')
                 groupStudentsList.innerHTML = '<p>No students in this group.</p>';
                 return;
             }
+
+            // Sort students by last name
+            data.sort((a, b) => a.last_name.localeCompare(b.last_name));
 
             data.forEach(student => {
                 const studentItem = document.createElement('div');
@@ -941,7 +944,7 @@ function loadGroupStudents(groupId, targetElementId = 'group-students-list-add')
                 groupStudentsList.appendChild(studentItem);
             });
 
-            console.log('Updated DOM with new student list.');
+            //console.log('Updated DOM with new student list.');
         })
         .catch(error => {
             console.error('Error fetching group students:', error);
@@ -963,13 +966,13 @@ function removeStudentFromGroup(studentId, groupId) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Remove student response data:', data); // Debugging statement
+        //console.log('Remove student response data:', data); // Debugging statement
         if (data.status === 'success') {
             alert('Student removed from group successfully.');
-            console.log('Student removed, now reloading group students for groupId:', groupId);
+            //console.log('Student removed, now reloading group students for groupId:', groupId);
             setTimeout(() => {
                 loadGroupStudents(groupId, 'group-students-list-add'); // Explicitly target the correct element
-                console.log('Reloaded group students for groupId:', groupId); // Debugging statement
+                //console.log('Reloaded group students for groupId:', groupId); // Debugging statement
             }, 0); // Adding a slight delay to ensure the list updates
         } else {
             alert('There was an error removing the student from the group. Please try again.');
