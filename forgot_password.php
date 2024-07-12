@@ -44,24 +44,26 @@ if (isset($_POST['forgot_password'])) {
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host       = 'mail.spacemail.com'; // Specify main and backup SMTP servers
-            $mail->SMTPAuth   = true;
+            $mail->Host       = 'mail.spacemail.com'; // Set the SMTP server to send through
+            $mail->SMTPAuth   = true; // Enable SMTP authentication
             $mail->Username   = 'info@iepreport.com'; // SMTP username
             $mail->Password   = '502524d9-7990-4770-8945-992fCD18761A'; // SMTP password
-            $mail->SMTPSecure = 'ssl'; // Enable TLS encryption, `ssl` also accepted
-            $mail->Port       = 465;
-
-            $mail->setFrom('info@iepreport.com', 'Mailer');
+            $mail->SMTPSecure = 'ssl'; // Enable SSL encryption; PHPMailer has 'ssl' also
+            $mail->Port       = 465; // TCP port to connect to
+        
+            $mail->setFrom('info@iepreport.com', 'IEP Report');
             $mail->addAddress($email); // Add a recipient
-
+        
             $mail->isHTML(true); // Set email format to HTML
             $mail->Subject = 'Password Reset Request';
             $mail->Body    = "Click the link to reset your password: <a href='https://iepreport.com/reset_password.php?token=$token'>Reset Password</a>";
-
+        
             $mail->send();
+            echo 'Password reset email has been sent.';
         } catch (Exception $e) {
             echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
         }
+        
         
         header("Location: login.php?reset=1");
         exit();
