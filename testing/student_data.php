@@ -8,7 +8,7 @@ include('db.php');
 //error_reporting(E_ALL);
 
 // Assuming school_id is set in the session during login
-$schoolId = isset($_SESSION['school_id']) ? $_SESSION['school_id'] : 1;
+$schoolId = $_SESSION['school_id']; // Default to 1 if not set
 ?>
 
 <!DOCTYPE html>
@@ -152,10 +152,7 @@ $schoolId = isset($_SESSION['school_id']) ? $_SESSION['school_id'] : 1;
     </div>
     <script src="charts.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let schoolId = document.getElementById('school-id').value;
-            console.log(schoolId); // Use the schoolId variable as needed
-        });
+        let schoolId = <?php echo json_encode($schoolId); ?>;
     </script>
 </body>
 </html>
