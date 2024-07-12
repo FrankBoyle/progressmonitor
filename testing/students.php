@@ -779,7 +779,7 @@ function assignStudentsToGroup(event) {
     .then(data => {
         //console.log('Response:', data); // Debug log
         if (data.status === "success") {
-            alert(data.message);
+            //alert(data.message);
             loadGroupStudents(groupId, 'group-students-list-add'); // Reload the student list
             //console.log('Student assigned, now reloading group students for groupId:', groupId); // Debug log
         } else {
@@ -968,7 +968,7 @@ function removeStudentFromGroup(studentId, groupId) {
     .then(data => {
         //console.log('Remove student response data:', data); // Debugging statement
         if (data.status === 'success') {
-            alert('Student removed from group successfully.');
+            //alert('Student removed from group successfully.');
             //console.log('Student removed, now reloading group students for groupId:', groupId);
             setTimeout(() => {
                 loadGroupStudents(groupId, 'group-students-list-add'); // Explicitly target the correct element
