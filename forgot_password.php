@@ -1,6 +1,7 @@
 <?php
 include('./users/db.php');
 
+// Error Reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -12,62 +13,56 @@ if (isset($_POST['forgot_password'])) {
         echo '<p class="error">Invalid email format!</p>';
         exit;
     }
-
+    
+    // Check if the email exists
     $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
     $query->bindParam("email", $email, PDO::PARAM_STR);
     $query->execute();
     
     if ($query->rowCount() > 0) {
+        // Generate a unique token
         $token = bin2hex(random_bytes(50));
+
+        // Set token expiry
         $expiry = date("Y-m-d H:i:s", strtotime("+15 minutes"));
+
+        // Update the user record with the token
         $query = $connection->prepare("UPDATE accounts SET reset_token=:token, reset_token_expiry=:expiry WHERE email=:email");
         $query->bindParam("token", $token, PDO::PARAM_STR);
         $query->bindParam("expiry", $expiry, PDO::PARAM_STR);
         $query->bindParam("email", $email, PDO::PARAM_STR);
         $query->execute();
-    
-        $subject = "Password Reset Request";
-        $message = "<html><body><h1>Password Reset Request</h1><p>Click on the following link to reset your password:</p><a href='https://iepreport.com/reset_password.php?token=$token'>Reset Password</a></body></html>";
-    
-        // Prepare to send email via Mailchimp API
-        $postData = [
-            'key' => 'Md-sQF74EnSZM1adKIeRSVsSw',
-            'message' => [
-                'html' => $message,
-                'text' => strip_tags($message),
-                'subject' => $subject,
-                'from_email' => 'info@iepreport.com',
-                'from_name' => 'Fran Boyle',
-                'to' => [['email' => $email, 'type' => 'to']]
-            ]
-        ];
-    
-        $ch = curl_init('https://mandrillapp.com/api/1.0/messages/send.json');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    
-        $result = curl_exec($ch);
-        $info = curl_getinfo($ch);
-        if (curl_errno($ch)) {
-            echo 'Curl error: ' . curl_error($ch);
-        }
-        curl_close($ch);
+
+        // Send the reset link to the user's email
+        $resetLink = "https://iepreport.com/reset_password.php?token=$token";
+        mail($email, "Password Reset Request", "Click the link to reset your password: $resetLink");
         
-        if ($result) {
-            $response = json_decode($result, true);
-            if (isset($response[0]['status']) && $response[0]['status'] == 'sent') {
-                echo '<p class="success">Password reset link has been sent to your email.</p>';
-                header("Location: login.php?reset=1");
-                exit;
-            } else {
-                echo '<p class="error">Failed to send password reset email. Response: ' . htmlspecialchars($result) . '</p>';
-            }
-        } else {
-            echo '<p class="error">Failed to send password reset email. No response from server.</p>';
-        }
-    }  
-}    
+        header("Location: login.php?reset=1");
+        exit();
+    }  // This closing brace was missing
+}
+
+if (isset($_POST['reset_password'])) {
+    $token = $_POST['token'];
+    $newPassword = $_POST['newPassword'];
+    $password_hash = password_hash($newPassword, PASSWORD_BCRYPT);
+
+    // Check token validity
+    $query = $connection->prepare("SELECT * FROM accounts WHERE reset_token=:token AND reset_token_expiry > NOW()");
+    $query->bindParam("token", $token, PDO::PARAM_STR);
+    $query->execute();
+
+    if ($query->rowCount() > 0) {
+        // Update the password and clear the reset token
+        $query = $connection->prepare("UPDATE accounts SET password=:password_hash, reset_token=NULL, reset_token_expiry=NULL WHERE reset_token=:token");
+        $query->bindParam("password_hash", $password_hash, PDO::PARAM_STR);
+        $query->bindParam("token", $token, PDO::PARAM_STR);
+        $query->execute();
+        
+        echo '<p class="success">Password reset successful!</p>';
+    } else {
+        echo '<p class="error">Invalid or expired token!</p>';
+    }
+}
 ?>
+
