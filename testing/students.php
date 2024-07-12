@@ -893,7 +893,7 @@ function hideEditGroupModal() {
     }
 }
 
-function loadGroupStudents(groupId, targetElementId = 'group-students-list-edit') {
+function loadGroupStudents(groupId, targetElementId = 'group-students-list-add') {
     console.log('Loading students for group:', groupId); // Debug log
 
     fetch(`./users/fetch_group_students.php?group_id=${encodeURIComponent(groupId)}`)
@@ -972,7 +972,7 @@ function removeStudentFromGroup(studentId, groupId) {
             alert('Student removed from group successfully.');
             console.log('Student removed, now reloading group students for groupId:', groupId);
             setTimeout(() => {
-                loadGroupStudents(groupId);
+                loadGroupStudents(groupId, 'group-students-list-add'); // Explicitly target the correct element
                 console.log('Reloaded group students for groupId:', groupId); // Debugging statement
             }, 500); // Adding a slight delay to ensure the list updates
         } else {
