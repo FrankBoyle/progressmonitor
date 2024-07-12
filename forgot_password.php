@@ -50,17 +50,24 @@ if (isset($_POST['forgot_password'])) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     
         $result = curl_exec($ch);
-        curl_close($ch);
-    
-        if ($result) {
-            echo '<p class="success">Password reset link has been sent to your email.</p>';
-            header("Location: login.php?reset=1");
-            exit();
-        } else {
-            echo '<p class="error">Failed to send password reset email.</p>';
+        $info = curl_getinfo($ch);
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
         }
-    } else {
-        echo "<p class='error'>No account found with that email address.</p>";
-    }
+        curl_close($ch);
+        
+        if ($result) {
+            $response = json_decode($result, true);
+            if (isset($response[0]['status']) && $response[0]['status'] == 'sent') {
+                echo '<p class="success">Password reset link has been sent to your email.</p>';
+                header("Location: login.php?reset=1");
+                exit;
+            } else {
+                echo '<p class="error">Failed to send password reset email. Response: ' . htmlspecialchars($result) . '</p>';
+            }
+        } else {
+            echo '<p class="error">Failed to send password reset email. No response from server.</p>';
+        }
+        
 }    
 ?>
