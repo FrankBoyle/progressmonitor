@@ -44,12 +44,12 @@ if (isset($_POST['forgot_password'])) {
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
-            $mail->Host       = 'smtp.mandrillapp.com'; // Specify main and backup SMTP servers
+            $mail->Host       = 'mail.spacemail.com'; // Specify main and backup SMTP servers
             $mail->SMTPAuth   = true;
             $mail->Username   = 'info@iepreport.com'; // SMTP username
-            $mail->Password   = 'Md-sQF74EnSZM1adKIeRSVsSw'; // SMTP password
-            $mail->SMTPSecure = 'tls'; // Enable TLS encryption, `ssl` also accepted
-            $mail->Port       = 587;
+            $mail->Password   = '502524d9-7990-4770-8945-992fCD18761A'; // SMTP password
+            $mail->SMTPSecure = 'ssl'; // Enable TLS encryption, `ssl` also accepted
+            $mail->Port       = 465;
 
             $mail->setFrom('info@iepreport.com', 'Mailer');
             $mail->addAddress($email); // Add a recipient
