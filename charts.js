@@ -854,8 +854,8 @@ function calculateTrendline(data) {
     console.log('Data for Trendline Calculation:', data);
 
     const validDataPoints = data
-        .map((val, idx) => ({ x: idx + 1, y: val }))
-        .filter(point => point.y !== null && !isNaN(point.y));
+        .map((val, idx) => ({ x: idx + 1, y: parseFloat(val) }))  // Ensure y-values are parsed as numbers
+        .filter(point => !isNaN(point.y));
 
     if (validDataPoints.length === 0) {
         return {
@@ -873,11 +873,10 @@ function calculateTrendline(data) {
     const sumXY = validDataPoints.reduce((acc, point) => acc + point.x * point.y, 0);
     const sumXX = validDataPoints.reduce((acc, point) => acc + point.x * point.x, 0);
 
-    console.log('SumX:', sumX, 'SumY:', sumY, 'SumXY:', sumXY, 'SumXX:', sumXX);
-
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
+    console.log('SumX:', sumX, 'SumY:', sumY, 'SumXY:', sumXY, 'SumXX:', sumXX);
     console.log('Slope:', slope, 'Intercept:', intercept);
 
     const trendlineFunction = function (x) {
@@ -892,18 +891,13 @@ function calculateTrendline(data) {
 }
 
 function getTrendlineData(data) {
-    const dataCopy = [...data]; // Create a copy of the data to prevent modification
+    const dataCopy = data.map(val => parseFloat(val)); // Ensure data is parsed as numbers
     const { trendlineFunction, slope, intercept } = calculateTrendline(dataCopy);
     const trendlineData = data.map((_, idx) => {
         const x = idx + 1;
         const y = trendlineFunction(x);
         return y !== null && !isNaN(y) ? y : null;
     });
-    
-    console.log('Original Data:', data);
-    console.log('Trendline Data:', trendlineData);
-    console.log('Slope:', slope, 'Intercept:', intercept);
-    
     return {
         trendlineData,
         slope,
