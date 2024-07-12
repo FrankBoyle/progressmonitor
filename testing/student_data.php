@@ -8,7 +8,7 @@ include('db.php');
 //error_reporting(E_ALL);
 
 // Assuming school_id is set in the session during login
-$schoolId = $_SESSION['school_id']; // Default to 1 if not set
+$schoolId = isset($_SESSION['school_id']) ? $_SESSION['school_id'] : 1;
 ?>
 
 <!DOCTYPE html>
