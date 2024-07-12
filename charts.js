@@ -610,7 +610,7 @@ function getLineChartOptions(dates, seriesData) {
             dashArray: seriesData.map(series => series.name.includes('Trendline') ? 5 : 0),
             colors: seriesColors
         },
-        series: seriesData,
+        series: [],
         grid: {
             borderColor: '#a8a8a8',
             strokeDashArray: 0,

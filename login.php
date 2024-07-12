@@ -50,7 +50,7 @@
         <div class="center-content">
             <div class="login-box">
                 <h1 class="login-box-msg">Sign in</h1>
-                <form method="post" action="./users/login_backend.php" name="login">
+                <form method="post" action="users/login_backend.php" name="login">
                     <div style="position: relative;">
                         <input type="text" class="form-control" name="email" placeholder="E-mail" required>
                         <span class="fas fa-envelope"></span>
