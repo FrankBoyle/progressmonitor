@@ -1028,7 +1028,6 @@ input[type="text"] {
     transition: background-color 0.1s, box-shadow 0.1s; /* Smooth transitions */
     text-align: center; /* Center text */
     min-width: 100px; /* Ensure buttons are not too narrow */
-    width: 200px; /* Set a fixed width for the buttons */
 
 }
 
