@@ -68,6 +68,6 @@ if (isset($_POST['forgot_password'])) {
         } else {
             echo '<p class="error">Failed to send password reset email. No response from server.</p>';
         }
-        
+    }  
 }    
 ?>
