@@ -494,15 +494,11 @@ function showAddGroupModal() {
 }
 
 function showAddStudentModal(groupId) {
-    //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
-    const modal = document.getElementById('add-student-modal');
+    console.log('showAddStudentModal called with groupId:', groupId); // Debug log
+    document.getElementById('add-student-modal').style.display = 'block';
 
-    if (modal) {
-        modal.style.display = 'block';
-        loadGroupStudents(groupId, 'group-students-list-add');
-    } else {
-        console.error("Modal element not found");
-    }
+    // Load students for the selected group
+    loadGroupStudents(groupId, 'group-students-list-add');
 }
 
 // Function to hide the modal
