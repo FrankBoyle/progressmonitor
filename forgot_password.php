@@ -6,6 +6,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/PHPMailer/src/Exception.php';
+require 'vendor/PHPMailer/src/PHPMailer.php';
+require 'vendor/PHPMailer/src/SMTP.php';
+
 if (isset($_POST['forgot_password'])) {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     
@@ -33,13 +40,32 @@ if (isset($_POST['forgot_password'])) {
         $query->bindParam("email", $email, PDO::PARAM_STR);
         $query->execute();
 
-        // Send the reset link to the user's email
-        $resetLink = "https://iepreport.com/reset_password.php?token=$token";
-        mail($email, "Password Reset Request", "Click the link to reset your password: $resetLink");
+        // Send the reset link to the user's email using PHPMailer
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.mandrillapp.com'; // Specify main and backup SMTP servers
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'iepreport.com'; // SMTP username
+            $mail->Password   = 'Md-sQF74EnSZM1adKIeRSVsSw'; // SMTP password
+            $mail->SMTPSecure = 'ssl'; // Enable TLS encryption, `ssl` also accepted
+            $mail->Port       = 587;
+
+            $mail->setFrom('info@iepreport.com', 'Mailer');
+            $mail->addAddress($email); // Add a recipient
+
+            $mail->isHTML(true); // Set email format to HTML
+            $mail->Subject = 'Password Reset Request';
+            $mail->Body    = "Click the link to reset your password: <a href='https://iepreport.com/reset_password.php?token=$token'>Reset Password</a>";
+
+            $mail->send();
+        } catch (Exception $e) {
+            echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+        }
         
         header("Location: login.php?reset=1");
         exit();
-    }  // This closing brace was missing
+    }
 }
 
 if (isset($_POST['reset_password'])) {
