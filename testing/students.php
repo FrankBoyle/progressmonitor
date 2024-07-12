@@ -182,34 +182,31 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                     <div class="selector-item" data-option="template">Category Template</div>
                     <div class="selector-item" data-option="existing">Previously Used Category</div>
                 </div>
-            </div>
-
-            <div id="templateDropdown" class="form-group" style="display: none;">
-                <label for="template-metadata-select">Select Category Template:</label>
-                <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')">
-                    <option value="" disabled selected>Select a category to see column options</option>
-                </select>
-            </div>
-
-            <div id="existingDropdown" class="form-group" style="display: none;">
-                <label for="existing-metadata-select">Select Existing Category:</label>
-                <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')">
-                    <option value="" disabled selected>Select a category to see column options</option>
-                </select>
-            </div>
-
-            <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
-                <h2>Column Names:</h2>
-                <ul id="columnNamesList"></ul>
-            </div>
-
-            <div class="form-group">
-                <label for="goal-description">Goal Description:</label>
-                <textarea id="goal-description" name="goal_description" required></textarea>
+                <div id="templateDropdown" class="form-group" style="display: none;">
+                    <label for="templateSelect">Select Category Template:</label>
+                    <select id="templateSelect" name="template">
+                        <option value="">Select a category to see column options</option>
+                        <!-- Options will be dynamically populated -->
+                    </select>
+                </div>
+                <div id="existingDropdown" class="form-group" style="display: none;">
+                    <label for="existingSelect">Select Existing Category:</label>
+                    <select id="existingSelect" name="existing">
+                        <option value="">Select a category to see column options</option>
+                        <!-- Options will be dynamically populated -->
+                    </select>
+                </div>
+                <div id="columnNamesDisplay" class="form-group" style="display: none; margin-top: 10px;">
+                    <!-- Column names will be dynamically displayed here -->
+                </div>
             </div>
             <div class="form-group">
-                <label for="goal-date">Goal Date:</label>
-                <input type="date" id="goal-date" name="goal_date" required>
+                <label for="goalDescription">Goal Description:</label>
+                <textarea id="goalDescription" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="goalDate">Goal Date:</label>
+                <input type="date" id="goalDate" name="date" required>
             </div>
             <button type="submit">Add Goal</button>
         </form>
