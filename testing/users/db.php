@@ -1,9 +1,9 @@
 <?php
 
-    define('USER', 'AndersonSchool');
+    define('USER', 'ifnuhymnak_AndersonSchool');
     define('PASSWORD', 'SpecialEd69$');
     define('HOST', '127.0.0.1');
-    define('DATABASE', 'bFactor-test');
+    define('DATABASE', 'ifnuhymnak_IEP_Report');
 
     try {
         $connection = new PDO("mysql:host=".HOST.";dbname=".DATABASE, USER, PASSWORD);
@@ -14,3 +14,4 @@
         exit("Error: " . $e->getMessage());
     }
     ?>
+
