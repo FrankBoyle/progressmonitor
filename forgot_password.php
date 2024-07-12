@@ -1,7 +1,6 @@
 <?php
 include('./users/db.php');
 
-// Error Reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -14,32 +13,41 @@ if (isset($_POST['forgot_password'])) {
         exit;
     }
 
-    // Check if the email exists
     $query = $connection->prepare("SELECT * FROM accounts WHERE email=:email");
     $query->bindParam("email", $email, PDO::PARAM_STR);
     $query->execute();
     
     if ($query->rowCount() > 0) {
-        // Generate a unique token
         $token = bin2hex(random_bytes(50));
-        // Set token expiry
         $expiry = date("Y-m-d H:i:s", strtotime("+15 minutes"));
-        // Update the user record with the token
         $query = $connection->prepare("UPDATE accounts SET reset_token=:token, reset_token_expiry=:expiry WHERE email=:email");
         $query->bindParam("token", $token, PDO::PARAM_STR);
         $query->bindParam("expiry", $expiry, PDO::PARAM_STR);
         $query->bindParam("email", $email, PDO::PARAM_STR);
         $query->execute();
 
-        // Send the reset link to the user's email
-        $resetLink = "https://iepreport.com/reset_password.php?token=$token";
-        mail($email, "Password Reset Request", "Click the link to reset your password: $resetLink");
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= 'From: Your Site Name <noreply@iepreport.com>' . "\r\n";
+        $headers .= 'Reply-To: noreply@iepreport.com' . "\r\n";
+        $headers .= 'X-Mailer: PHP/' . phpversion();
 
-        header("Location: login.php?reset=1");
-        exit();
+        $subject = "Password Reset Request";
+        $message = "<html><body>";
+        $message .= "<h1>Password Reset Request</h1>";
+        $message .= "<p>Click on the following link to reset your password:</p>";
+        $message .= "<a href='https://iepreport.com/reset_password.php?token=$token'>Reset Password</a>";
+        $message .= "</body></html>";
+
+        if (mail($email, $subject, $message, $headers)) {
+            echo '<p class="success">Password reset link has been sent to your email.</p>';
+            header("Location: login.php?reset=1");
+            exit();
+        } else {
+            echo '<p class="error">Failed to send password reset email.</p>';
+        }
     } else {
         echo "<p class='error'>No account found with that email address.</p>";
     }
 }
 ?>
-
