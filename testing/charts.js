@@ -236,10 +236,40 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             },
             editorParams: {
                 elementAttributes: {
-                    type: "date",
+                    type: "text",
                 },
-                mask: "MM/DD/YYYY",
-                format: "MM/DD/YYYY",
+                editor: function(cell, onRendered, success, cancel) {
+                    // Create input element
+                    var input = document.createElement("input");
+                    input.setAttribute("type", "text");
+
+                    // Apply any attributes to the input
+                    Object.keys(cell.getColumn().getDefinition().editorParams || {}).forEach(function (key) {
+                        input.setAttribute(key, cell.getColumn().getDefinition().editorParams[key]);
+                    });
+
+                    // Set the initial value of the input to the current cell value
+                    input.value = cell.getValue() || "";
+
+                    // Flatpickr date picker
+                    flatpickr(input, {
+                        defaultDate: input.value,
+                        onChange: function(selectedDates, dateStr, instance) {
+                            success(dateStr);
+                        },
+                        onClose: function(selectedDates, dateStr, instance) {
+                            cancel();
+                        }
+                    });
+
+                    // Attach input to cell
+                    onRendered(function() {
+                        input.focus();
+                        input.style.css = "100%";
+                    });
+
+                    return input;
+                }
             },
             width: 120,
             frozen: false,
