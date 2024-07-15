@@ -27,7 +27,31 @@ try {
         $stmt = $connection->prepare($updateQuery);
         $stmt->execute($params);
 
-        echo json_encode(["message" => "Custom column names updated successfully."]);
+        // Fetch the updated column definitions
+        $fetchQuery = "SELECT * FROM Metadata WHERE metadata_id = ?";
+        $fetchStmt = $connection->prepare($fetchQuery);
+        $fetchStmt->execute([$metadataId]);
+        $metadata = $fetchStmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($metadata) {
+            // Construct column definitions from the fetched metadata
+            $columns = [];
+            foreach ($customColumnNames as $key => $value) {
+                $columns[] = [
+                    'title' => $value,
+                    'field' => $key,
+                    'editor' => 'input',
+                    'width' => 100
+                ];
+            }
+
+            echo json_encode([
+                "message" => "Custom column names updated successfully.",
+                "columns" => $columns // Include the updated columns in the response
+            ]);
+        } else {
+            throw new Exception('Failed to fetch updated column definitions.');
+        }
     } else {
         throw new Exception('Invalid request, missing required parameters.');
     }
