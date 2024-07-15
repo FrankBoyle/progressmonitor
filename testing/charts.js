@@ -232,14 +232,16 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             formatter: function(cell, formatterParams, onRendered) {
                 const DateTime = luxon.DateTime;
                 let date = DateTime.fromISO(cell.getValue());
+                console.log("Formatting date:", cell.getValue(), "->", date.toFormat("MM/dd/yyyy"));
                 return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
             },
             editorParams: {
-                format: "MM/dd/yyyy",
+                format: "yyyy-MM-dd",
                 elementAttributes: {
                     placeholder: "MM/DD/YYYY",
                     required: true,
-                }
+                },
+                mask: "MM/DD/YYYY"
             },
             width: 120,
             frozen: false,
@@ -291,6 +293,8 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         updatedData[field] = value;
         updatedData.student_id_new = studentIdNew;
         updatedData.metadata_id = metadataId;
+
+        console.log("Updating data:", updatedData);
 
         fetch('./users/update_performance.php', {
             method: 'POST',
