@@ -1067,22 +1067,6 @@ function updateColumnNamesOnServer(newColumnNames) {
     });
 }
 
-function submitColumnNames(event) {
-    event.preventDefault();
-    const inputs = event.target.querySelectorAll('input[type="text"]');
-    let updatedNames = {};
-
-    inputs.forEach(input => {
-        let field = input.dataset.columnField;
-        let newValue = input.value;
-        updatedNames[field] = newValue;
-    });
-
-    hideEditColumnNamesModal(); // Optionally close the modal after submit
-    updateColumnNamesOnServer(updatedNames); // Send new titles to server
-}
-
-
 function fetchGoals(studentIdNew, metadataId) {
     fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
