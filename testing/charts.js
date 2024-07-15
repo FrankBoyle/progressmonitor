@@ -1051,10 +1051,7 @@ function updateColumnNamesOnServer(newColumnNames) {
     .then(data => {
         if (data.message) {
             alert('Column names updated successfully!');
-            if (table && data.columns) {
-                // Update the table columns
-                table.setColumns(data.columns);
-            }
+            fetchInitialData(studentIdNew, metadataId); // Refresh the table data
         } else if (data.error) {
             console.error('Error updating column names:', data.error);
             alert('Failed to update column names: ' + data.error);
