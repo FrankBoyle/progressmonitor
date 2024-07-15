@@ -229,19 +229,17 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             title: "Date",
             field: "score_date",
             editor: "date", // Use the date editor
-            formatter: function(cell, formatterParams, onRendered) {
-                const DateTime = luxon.DateTime;
-                let date = DateTime.fromISO(cell.getValue());
-                console.log("Formatting date:", cell.getValue(), "->", date.toFormat("MM/dd/yyyy"));
-                return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-            },
             editorParams: {
-                format: "yyyy-MM-dd",
+                format: "yyyy-MM-dd", // Specify the format for the date picker
                 elementAttributes: {
                     placeholder: "MM/DD/YYYY",
                     required: true,
-                },
-                mask: "MM/DD/YYYY"
+                }
+            },
+            formatter: function(cell, formatterParams, onRendered) {
+                const DateTime = luxon.DateTime;
+                let date = DateTime.fromISO(cell.getValue());
+                return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
             },
             width: 120,
             frozen: false,
