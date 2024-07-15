@@ -1050,8 +1050,12 @@ function updateColumnNamesOnServer(newColumnNames) {
     .then(response => response.json())
     .then(data => {
         if (data.message) {
-            //console.log('Column names updated successfully:', data.message);
             alert('Column names updated successfully!');
+            // Assuming data.columns contains the updated column definitions
+            if (table && data.columns) {
+                // Update the table columns
+                table.setColumns(data.columns);
+            }
         } else if (data.error) {
             console.error('Error updating column names:', data.error);
             alert('Failed to update column names: ' + data.error);
@@ -1062,6 +1066,22 @@ function updateColumnNamesOnServer(newColumnNames) {
         alert('Network or server error occurred.');
     });
 }
+
+function submitColumnNames(event) {
+    event.preventDefault();
+    const inputs = event.target.querySelectorAll('input[type="text"]');
+    let updatedNames = {};
+
+    inputs.forEach(input => {
+        let field = input.dataset.columnField;
+        let newValue = input.value;
+        updatedNames[field] = newValue;
+    });
+
+    hideEditColumnNamesModal(); // Optionally close the modal after submit
+    updateColumnNamesOnServer(updatedNames); // Send new titles to server
+}
+
 
 function fetchGoals(studentIdNew, metadataId) {
     fetch(`./users/fetch_goals.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
