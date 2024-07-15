@@ -527,6 +527,7 @@ function updateBarChart(categories, seriesData) {
         return;
     }
 
+    // Check if seriesData is empty
     if (seriesData.length === 0) {
         seriesData.push({ name: "No Data", data: [] });
     }
@@ -543,6 +544,11 @@ function updateBarChart(categories, seriesData) {
     console.log("Max Stack Height:", maxStackHeight);
     console.log("Max Data Value:", maxDataValue);
 
+    // Check the format of the series data
+    seriesData.forEach((series, index) => {
+        console.log(`Series ${index} Data:`, series.data);
+    });
+
     barChart.updateOptions({
         xaxis: {
             categories: categories
@@ -552,7 +558,7 @@ function updateBarChart(categories, seriesData) {
             max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData,
-        colors: seriesData.map(s => s.color) // Ensure colors are correctly applied
+        colors: seriesData.map(s => s.color || seriesColors[index % seriesColors.length]) // Ensure colors are correctly applied
     });
 }
 
