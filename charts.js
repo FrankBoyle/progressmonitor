@@ -190,8 +190,8 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         table.destroy();
     }
 
+    // Define default columns
     const columns = [
-        // Add Actions column with delete button
         {
             title: "Actions",
             field: "actions",
@@ -199,13 +199,10 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                 return '<button class="delete-row-btn" data-performance-id="' + cell.getRow().getData().performance_id + '">Delete</button>';
             },
             width: 100,
-            hozAlign: "center", // Correct option for horizontal alignment
+            hozAlign: "center",
             cellClick: function(e, cell) {
                 const performanceId = cell.getRow().getData().performance_id;
-
-                // Confirm before delete
                 if (confirm('Are you sure you want to delete this row?')) {
-                    // Send a request to delete the data from the server
                     fetch('./users/delete_performance.php', {
                         method: 'POST',
                         headers: {
@@ -216,7 +213,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Remove the row from the table
                             cell.getRow().delete();
                         } else {
                             alert('Failed to delete data. Please try again.');
@@ -247,6 +243,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         }
     ];
 
+    // Add custom columns from scoreNames
     Object.keys(scoreNames).forEach((key, index) => {
         columns.push({
             title: scoreNames[key],
@@ -257,7 +254,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table = new Tabulator("#performance-table", {
-        height: "500px", // Limit table height to 500px
+        height: "500px",
         data: performanceData,
         columns: columns,
         layout: "fitDataStretch",
@@ -279,48 +276,38 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         selectableRangeColumns: false,
         selectableRangeRows: false,
         selectableRangeClearCells: false,
-        virtualDomBuffer: 300, // Increase virtual DOM buffer size
+        virtualDomBuffer: 300,
     });
 
-    // Add cellEdited event listener inside initializeTable after declaring table
     table.on("cellEdited", function(cell) {
         const field = cell.getField();
         let value = cell.getValue();
-
-        if (value === "") {
-            value = null;
-        }
+        if (value === "") value = null;
 
         const updatedData = cell.getRow().getData();
         updatedData[field] = value;
-        updatedData.student_id_new = studentIdNew;  // Ensure student_id_new is included
-        updatedData.metadata_id = metadataId;  // Ensure metadata_id is included
+        updatedData.student_id_new = studentIdNew;
+        updatedData.metadata_id = metadataId;
 
-        // Log the updated data for debugging
-        //console.log("Updated data:", updatedData);
-
-        // Update the cell data in the backend (make AJAX call)
         fetch('./users/update_performance.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(updatedData)
-        }).then(response => response.json())
-          .then(result => {
-              if (result.success) {
-                  //console.log('Data updated successfully');
-              } else {
-                  alert('Failed to update data: ' + result.message);
-                  console.error('Error info:', result.errorInfo); // Log detailed error info
-              }
-          })
-          .catch(error => console.error('Error:', error));
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (!result.success) {
+                alert('Failed to update data: ' + result.message);
+                console.error('Error info:', result.errorInfo);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     });
 
-    // Ensure the table is fully initialized and rendered before allowing selection
     table.on("tableBuilt", function() {
-        //console.log("Table fully built and ready for interaction.");
+        console.log("Table fully built and ready for interaction.");
     });
 }
 
@@ -1050,8 +1037,8 @@ function updateColumnNamesOnServer(newColumnNames) {
     .then(response => response.json())
     .then(data => {
         if (data.message) {
-            //console.log('Column names updated successfully:', data.message);
             alert('Column names updated successfully!');
+            fetchInitialData(studentIdNew, metadataId); // Refresh the table data
         } else if (data.error) {
             console.error('Error updating column names:', data.error);
             alert('Failed to update column names: ' + data.error);
