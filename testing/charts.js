@@ -282,10 +282,19 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         editTriggerEvent: "dblclick",
         editorEmptyValue: null,
         clipboard: true,
-        clipboardCopyRowRange: "active",
-        clipboardPasteAction: "replace",
+        clipboardCopyRowRange: "range",
+        clipboardPasteParser: "range",
+        clipboardPasteAction: "range",
+        clipboardCopyConfig: {
+            rowHeaders: false,
+            columnHeaders: true,
+        },
+        clipboardCopyStyled: false,
+        selectableRange: 1,
+        selectableRangeColumns: false,
+        selectableRangeRows: false,
+        selectableRangeClearCells: false,
         history: true,
-        selectable: true,
         virtualDomBuffer: 300,
     });
 
