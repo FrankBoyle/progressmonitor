@@ -6,13 +6,14 @@
 <html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKFCCN4XXS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9YXLSJ50NV"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-LKFCCN4XXS');
+    gtag('config', 'G-9YXLSJ50NV');
+    </script>
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +51,7 @@
         <div class="center-content">
             <div class="login-box">
                 <h1 class="login-box-msg">Sign in</h1>
-                <form method="post" action="./users/login_backend.php" name="login">
+                <form method="post" action="users/login_backend.php" name="login">
                     <div style="position: relative;">
                         <input type="text" class="form-control" name="email" placeholder="E-mail" required>
                         <span class="fas fa-envelope"></span>

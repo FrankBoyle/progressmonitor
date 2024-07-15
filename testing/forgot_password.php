@@ -6,6 +6,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/PHPMailer/src/Exception.php';
+require 'vendor/PHPMailer/src/PHPMailer.php';
+require 'vendor/PHPMailer/src/SMTP.php';
+
 if (isset($_POST['forgot_password'])) {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     
@@ -33,13 +40,34 @@ if (isset($_POST['forgot_password'])) {
         $query->bindParam("email", $email, PDO::PARAM_STR);
         $query->execute();
 
-        // Send the reset link to the user's email
-        $resetLink = "https://bfactor.org/reset_password.php?token=$token";
-        mail($email, "Password Reset Request", "Click the link to reset your password: $resetLink");
+        // Send the reset link to the user's email using PHPMailer
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host       = 'mail.spacemail.com'; // Set the SMTP server to send through
+            $mail->SMTPAuth   = true; // Enable SMTP authentication
+            $mail->Username   = 'info@iepreport.com'; // SMTP username
+            $mail->Password   = '502524d9-7990-4770-8945-992fCD18761A'; // SMTP password
+            $mail->SMTPSecure = 'ssl'; // Enable SSL encryption; PHPMailer has 'ssl' also
+            $mail->Port       = 465; // TCP port to connect to
+        
+            $mail->setFrom('info@iepreport.com', 'IEP Report');
+            $mail->addAddress($email); // Add a recipient
+        
+            $mail->isHTML(true); // Set email format to HTML
+            $mail->Subject = 'Password Reset Request';
+            $mail->Body    = "Click the link to reset your password: <a href='https://iepreport.com/reset_password.php?token=$token'>Reset Password</a>";
+        
+            $mail->send();
+            echo 'Password reset email has been sent.';
+        } catch (Exception $e) {
+            echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+        }
+        
         
         header("Location: login.php?reset=1");
         exit();
-    }  // This closing brace was missing
+    }
 }
 
 if (isset($_POST['reset_password'])) {
