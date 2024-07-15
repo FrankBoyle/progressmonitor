@@ -532,6 +532,12 @@ function updateBarChart(categories, seriesData) {
         seriesData.push({ name: "No Data", data: [] });
     }
 
+    // Convert data to numbers
+    seriesData = seriesData.map(series => ({
+        ...series,
+        data: series.data.map(value => Number(value)) // Convert each value to a number
+    }));
+
     // Calculate the maximum stack height for each category
     const maxStackHeight = categories.map((_, i) => {
         return seriesData.reduce((acc, series) => acc + (series.data[i] || 0), 0);
