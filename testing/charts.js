@@ -236,14 +236,14 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
 
                 input.value = cell.getValue() || "";
 
-                onRendered(function(){
-                    flatpickr(input, {
-                        dateFormat: "Y-m-d",
-                        defaultDate: input.value,
-                        onChange: function(selectedDates, dateStr) {
-                            input.value = dateStr;
-                        }
-                    });
+                // Initialize Flatpickr when the cell is rendered
+                cell.getElement().appendChild(input);
+                flatpickr(input, {
+                    dateFormat: "Y-m-d",
+                    defaultDate: input.value,
+                    onChange: function(selectedDates, dateStr) {
+                        input.value = dateStr;
+                    }
                 });
 
                 input.focus();
