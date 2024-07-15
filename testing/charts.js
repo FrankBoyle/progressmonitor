@@ -229,47 +229,32 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             title: "Date",
             field: "score_date",
             editor: "input",
+            editorParams: function(cell) {
+                let input = document.createElement("input");
+                input.setAttribute("type", "text");
+                input.style.cssText = "width:100%; height:100%; padding:0px; margin:0px; border:1px solid grey; box-sizing:border-box;";
+
+                input.value = cell.getValue() || "";
+
+                onRendered(function(){
+                    flatpickr(input, {
+                        dateFormat: "Y-m-d",
+                        defaultDate: input.value,
+                        onChange: function(selectedDates, dateStr) {
+                            input.value = dateStr;
+                        }
+                    });
+                });
+
+                input.focus();
+                input.style.cssText = "width:100%; height:100%;";
+
+                return input;
+            },
             formatter: function(cell, formatterParams, onRendered) {
                 const DateTime = luxon.DateTime;
                 let date = DateTime.fromISO(cell.getValue());
                 return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-            },
-            editorParams: {
-                elementAttributes: {
-                    type: "text",
-                },
-                editor: function(cell, onRendered, success, cancel) {
-                    // Create input element
-                    var input = document.createElement("input");
-                    input.setAttribute("type", "text");
-
-                    // Apply any attributes to the input
-                    Object.keys(cell.getColumn().getDefinition().editorParams || {}).forEach(function (key) {
-                        input.setAttribute(key, cell.getColumn().getDefinition().editorParams[key]);
-                    });
-
-                    // Set the initial value of the input to the current cell value
-                    input.value = cell.getValue() || "";
-
-                    // Flatpickr date picker
-                    flatpickr(input, {
-                        defaultDate: input.value,
-                        onChange: function(selectedDates, dateStr, instance) {
-                            success(dateStr);
-                        },
-                        onClose: function(selectedDates, dateStr, instance) {
-                            cancel();
-                        }
-                    });
-
-                    // Attach input to cell
-                    onRendered(function() {
-                        input.focus();
-                        input.style.css = "100%";
-                    });
-
-                    return input;
-                }
             },
             width: 120,
             frozen: false,
