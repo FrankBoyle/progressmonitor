@@ -1051,7 +1051,6 @@ function updateColumnNamesOnServer(newColumnNames) {
     .then(data => {
         if (data.message) {
             alert('Column names updated successfully!');
-            // Assuming data.columns contains the updated column definitions
             if (table && data.columns) {
                 // Update the table columns
                 table.setColumns(data.columns);
