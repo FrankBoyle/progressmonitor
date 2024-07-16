@@ -546,14 +546,14 @@ function updateBarChart(categories, seriesData) {
     const maxDataValue = Math.max(...maxStackHeight);
 
     // Console logging for debugging
-    console.log("Categories:", categories);
-    console.log("Series Data:", seriesData);
-    console.log("Max Stack Height:", maxStackHeight);
-    console.log("Max Data Value:", maxDataValue);
+    //console.log("Categories:", categories);
+    //console.log("Series Data:", seriesData);
+    //console.log("Max Stack Height:", maxStackHeight);
+    //console.log("Max Data Value:", maxDataValue);
 
     // Check the format of the series data
     seriesData.forEach((series, index) => {
-        console.log(`Series ${index} Data:`, series.data);
+        //console.log(`Series ${index} Data:`, series.data);
     });
 
     barChart.updateOptions({
@@ -688,9 +688,9 @@ function getLineChartOptions(dates, seriesData) {
 // Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
     // Console logging for debugging
-    console.log("Initializing Bar Chart Options");
-    console.log("Dates:", dates);
-    console.log("Series Data:", seriesData);
+    //console.log("Initializing Bar Chart Options");
+    //console.log("Dates:", dates);
+    //console.log("Series Data:", seriesData);
 
     return {
         chart: {
