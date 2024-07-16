@@ -287,7 +287,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         clipboardPasteAction: "range",
         clipboardCopyConfig: {
             rowHeaders: false,
-            columnHeaders: true,
         },
         clipboardCopyStyled: false,
         selectableRange: 1,

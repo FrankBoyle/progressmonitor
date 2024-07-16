@@ -85,9 +85,6 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                         </form>
                     </div>
                 </div>
-                <button id="undoBtn">Undo</button>
-<button id="redoBtn">Redo</button>
-
                 <div id="performance-table"></div>
             </div>
             <div class="card column-select-card">
