@@ -279,7 +279,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         tooltips: true,
         movableColumns: false,
         resizableRows: false,
-        editTriggerEvent: "dblclick",
+        editTriggerEvent: "click",
         editorEmptyValue: null,
         clipboard: true,
         clipboardCopyRowRange: "range",
