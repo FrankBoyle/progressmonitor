@@ -229,14 +229,32 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             title: "Date",
             field: "score_date",
             editor: "input",
+            editorParams: function(cell) {
+                let input = document.createElement("input");
+                input.setAttribute("type", "text");
+                input.style.cssText = "width:100%; height:100%; padding:0px; margin:0px; border:1px solid grey; box-sizing:border-box;";
+
+                input.value = cell.getValue() || "";
+
+                // Initialize Flatpickr when the cell is rendered
+                cell.getElement().appendChild(input);
+                flatpickr(input, {
+                    dateFormat: "Y-m-d",
+                    defaultDate: input.value,
+                    onChange: function(selectedDates, dateStr) {
+                        input.value = dateStr;
+                    }
+                });
+
+                input.focus();
+                input.style.cssText = "width:100%; height:100%;";
+
+                return input;
+            },
             formatter: function(cell, formatterParams, onRendered) {
                 const DateTime = luxon.DateTime;
                 let date = DateTime.fromISO(cell.getValue());
                 return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-            },
-            editorParams: {
-                mask: "MM/DD/YYYY",
-                format: "MM/DD/YYYY",
             },
             width: 120,
             frozen: false,
@@ -267,14 +285,15 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         clipboardCopyRowRange: "range",
         clipboardPasteParser: "range",
         clipboardPasteAction: "range",
+        history: true,
         clipboardCopyConfig: {
             rowHeaders: false,
-            columnHeaders: true,
+            columnHeaders: false,
         },
         clipboardCopyStyled: false,
         selectableRange: 1,
-        selectableRangeColumns: false,
-        selectableRangeRows: false,
+        selectableRangeColumns: true,
+        selectableRangeRows: true,
         selectableRangeClearCells: false,
         virtualDomBuffer: 300,
     });
@@ -307,7 +326,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table.on("tableBuilt", function() {
-        console.log("Table fully built and ready for interaction.");
+        //console.log("Table fully built and ready for interaction.");
     });
 }
 
@@ -375,6 +394,7 @@ function initializeLineChart() {
     window.lineChart.render();
 }
 
+// Initialize Bar Chart
 function initializeBarChart() {
     const barChartOptions = getBarChartOptions([], []); // Empty data initially
     barChart = new ApexCharts(document.querySelector("#barChartContainer"), barChartOptions);
@@ -385,21 +405,21 @@ function initializeBarChart() {
 function extractChartData() {
     try {
         const data = table.getData();
-        console.log('Table Data:', data);
+        //console.log('Table Data:', data);
         const categories = data.map(row => row['score_date']);
-        console.log('Categories:', categories);
+        //console.log('Categories:', categories);
 
         const selectedColumns = getSelectedColumns().map(item => ({
             field: item.getAttribute("data-column-name"),
             name: item.textContent.trim()  // Use textContent of the item as the series name
         }));
-        console.log('Selected Columns:', selectedColumns);
+        //console.log('Selected Columns:', selectedColumns);
 
         const series = selectedColumns.map(column => {
             let rawData = data.map(row => row[column.field]);
-            console.log(`Raw Data for ${column.name}:`, rawData);
+            //console.log(`Raw Data for ${column.name}:`, rawData);
             let interpolatedData = interpolateData(rawData); // Interpolate missing values
-            console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
+            //console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
             return {
                 name: column.name,  // Using the custom name for the series
                 data: interpolatedData,
@@ -409,8 +429,8 @@ function extractChartData() {
 
         const trendlineSeries = series.map(seriesData => {
             const { trendlineData, slope, intercept } = getTrendlineData(seriesData.data);
-            console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
-            console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
+            //console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
+            //console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
             return {
                 name: `${seriesData.name} Trendline`,
                 data: trendlineData,
@@ -508,15 +528,33 @@ function updateBarChart(categories, seriesData) {
         return;
     }
 
+    // Check if seriesData is empty
     if (seriesData.length === 0) {
         seriesData.push({ name: "No Data", data: [] });
     }
+
+    // Convert data to numbers
+    seriesData = seriesData.map(series => ({
+        ...series,
+        data: series.data.map(value => Number(value)) // Convert each value to a number
+    }));
 
     // Calculate the maximum stack height for each category
     const maxStackHeight = categories.map((_, i) => {
         return seriesData.reduce((acc, series) => acc + (series.data[i] || 0), 0);
     });
     const maxDataValue = Math.max(...maxStackHeight);
+
+    // Console logging for debugging
+    console.log("Categories:", categories);
+    console.log("Series Data:", seriesData);
+    console.log("Max Stack Height:", maxStackHeight);
+    console.log("Max Data Value:", maxDataValue);
+
+    // Check the format of the series data
+    seriesData.forEach((series, index) => {
+        console.log(`Series ${index} Data:`, series.data);
+    });
 
     barChart.updateOptions({
         xaxis: {
@@ -527,7 +565,7 @@ function updateBarChart(categories, seriesData) {
             max: maxDataValue + 10 // Add some padding to the max value
         },
         series: seriesData,
-        colors: seriesData.map(s => s.color) // Ensure colors are correctly applied
+        colors: seriesData.map(s => s.color || seriesColors[index % seriesColors.length]) // Ensure colors are correctly applied
     });
 }
 
@@ -649,6 +687,11 @@ function getLineChartOptions(dates, seriesData) {
 
 // Function to get options for Bar Chart
 function getBarChartOptions(dates, seriesData) {
+    // Console logging for debugging
+    console.log("Initializing Bar Chart Options");
+    console.log("Dates:", dates);
+    console.log("Series Data:", seriesData);
+
     return {
         chart: {
             id: 'barChartContainer',
@@ -838,7 +881,7 @@ function enableChartInteractions() {
 }
 
 function calculateTrendline(data) {
-    console.log('Data for Trendline Calculation:', data);
+    //console.log('Data for Trendline Calculation:', data);
 
     const validDataPoints = data
         .map((val, idx) => ({ x: idx + 1, y: parseFloat(val) }))  // Ensure y-values are parsed as numbers
@@ -863,8 +906,8 @@ function calculateTrendline(data) {
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
 
-    console.log('SumX:', sumX, 'SumY:', sumY, 'SumXY:', sumXY, 'SumXX:', sumXX);
-    console.log('Slope:', slope, 'Intercept:', intercept);
+    //console.log('SumX:', sumX, 'SumY:', sumY, 'SumXY:', sumXY, 'SumXX:', sumXX);
+    //console.log('Slope:', slope, 'Intercept:', intercept);
 
     const trendlineFunction = function (x) {
         return parseFloat((slope * x + intercept).toFixed(2)); // Round to 2 decimal places
@@ -1340,7 +1383,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
                 report_image: dataUrl.split(',')[1] // Get base64 string
             };
 
-            console.log("Payload being sent to save_notes.php:", payload);
+            //console.log("Payload being sent to save_notes.php:", payload);
 
             // Save notes with the image data
             fetch('./users/save_notes.php', {
