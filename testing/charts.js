@@ -287,45 +287,14 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         clipboardPasteAction: "range",
         clipboardCopyConfig: {
             rowHeaders: false,
+            columnHeaders: true,
         },
         clipboardCopyStyled: false,
         selectableRange: 1,
         selectableRangeColumns: false,
         selectableRangeRows: false,
         selectableRangeClearCells: false,
-        history: true,
         virtualDomBuffer: 300,
-    });
-
-    // Undo/Redo Buttons
-    document.getElementById("undoBtn").addEventListener("click", function(){
-        table.undo();
-    });
-
-    document.getElementById("redoBtn").addEventListener("click", function(){
-        table.redo();
-    });
-
-    // History Events
-    table.on("historyUndo", function(action, component, data){
-        console.log("Undo action:", action, component, data);
-    });
-
-    table.on("historyRedo", function(action, component, data){
-        console.log("Redo action:", action, component, data);
-    });
-
-    // Clipboard Events
-    table.on("clipboardCopied", function(clipboard){
-        console.log("Data copied to clipboard:", clipboard);
-    });
-
-    table.on("clipboardPasted", function(clipboard, rowData, rows){
-        console.log("Data pasted into table:", clipboard, rowData, rows);
-    });
-
-    table.on("clipboardPasteError", function(clipboard){
-        console.log("Data paste into table failed:", clipboard);
     });
 
     table.on("cellEdited", function(cell) {
