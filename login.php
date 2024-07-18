@@ -29,7 +29,7 @@
 
        <header class="dashboard-header">
           <div class="logo">
-            <img src="bFactor_logo.png" alt="Logo">
+            <img src="IEPreport_lgo.jpg" alt="Logo">
           </div>
 
           <div class="header-icons">
