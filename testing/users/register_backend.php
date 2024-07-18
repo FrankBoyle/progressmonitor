@@ -19,9 +19,11 @@ if (isset($_POST['register'])) {
             exit;
         }
 
-        // Insert the new school into the Schools table
+        // Generate a new UUID for the new school
         $school_uuid = uuid_generate();
-        $query = $connection->prepare("INSERT INTO Schools (school_uuid, school_name) VALUES (:school_uuid, :school_name)");
+
+        // Insert the new school into the Schools table
+        $query = $connection->prepare("INSERT INTO Schools (school_uuid, SchoolName) VALUES (:school_uuid, :school_name)");
         $query->bindParam(":school_uuid", $school_uuid, PDO::PARAM_STR);
         $query->bindParam(":school_name", $school_name, PDO::PARAM_STR);
         $query->execute();
