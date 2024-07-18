@@ -42,7 +42,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 <div class="dashboard">
     <header class="dashboard-header">
         <div class="logo">
-            <img src="IEPreport_lgo.jpg" alt="Logo">
+            <img src="IEPreport_logo.jpg" alt="Logo">
         </div>
         <div class="header-icons">
             <div class="school-selector">
