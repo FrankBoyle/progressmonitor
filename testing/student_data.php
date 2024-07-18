@@ -48,7 +48,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <div class="dashboard">
         <header class="dashboard-header">
             <div class="logo">
-                <img src="bFactor_logo.png" alt="Logo">
+                <img src="IEPreport_logo.jpg" alt="Logo">
             </div>
             <div class="header-icons">
                 <button id="printReportBtn" class="btn btn-primary">Print Report</button>

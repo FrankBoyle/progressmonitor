@@ -57,7 +57,8 @@ html {
 }
 
 .logo img {
-    max-height: 50px; /* Adjust as needed */
+    max-height: 63px; /* Adjust as needed */
+    max-width: 60px;
 }
 
 body {
