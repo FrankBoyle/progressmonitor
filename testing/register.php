@@ -47,8 +47,13 @@
                         <span class="fas fa-user"></span>
                     </div>
                     <div style="position: relative;">
-                        <input type="text" class="form-control" name="school_uuid" id="school_uuid" placeholder="School UUID" required>
+                        <input type="text" class="form-control" name="school_uuid" id="school_uuid" placeholder="School UUID">
                         <span class="fas fa-school"></span>
+                    </div>
+                    <div style="position: relative;" id="new_school_container" style="display: none;">
+                        <input type="text" class="form-control" name="school_name" id="school_name" placeholder="New School Name">
+                        <span class="fas fa-school"></span>
+                        <small>Please take care while naming your school. You will need to email us to change it later.</small>
                     </div>
                     <div style="position: relative;">
                         <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
@@ -74,5 +79,15 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('school_uuid').addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                document.getElementById('new_school_container').style.display = 'block';
+            } else {
+                document.getElementById('new_school_container').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
