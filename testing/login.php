@@ -74,10 +74,10 @@
                         <a href="register.php" class="text-center"><h2>Register a new membership</h2></a>
                     </p>
                 </div>
-                <div class="grid-item">
+                <div class="grid-item testimonials">
                     <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
                 </div>
-                <div class="grid-item">
+                <div class="grid-item sample-reports">
                     <h3>Sample Reports</h3>
                     <img src="sample_report1.png" alt="Sample Report 1">
                 </div>
@@ -96,10 +96,10 @@
                         While our ultimate goal is to offer this invaluable resource to a wider audience, we remain focused on supporting and uplifting educators, ensuring they have the resources they need to succeed. Join us on our journey to transform special education progress monitoring, and experience the difference that comes from a tool designed by those who know the field best.
                     </p>
                 </div>
-                <div class="grid-item">
+                <div class="grid-item testimonials">
                     <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - Joe Dattilo</p>
                 </div>
-                <div class="grid-item">
+                <div class="grid-item sample-reports">
                     <img src="sample_report2.png" alt="Sample Report 2">
                 </div>
             </div>
