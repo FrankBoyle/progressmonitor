@@ -698,18 +698,7 @@ p em {
     text-align: center;
 }
 
-
-.login-box .form-control, .login-box .btn-primary {
-    width: 100%; /* Ensure full width */
-    padding: 0.75rem; /* Adjust padding for consistent size */
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem; /* Consistent font size */
-}
-
-.forgot-password .form-control, .forgot-password .btn-primary {
-    position: relative;
+.login-box .form-control, .login-box .btn-primary, .forgot-password .form-control, .forgot-password .btn-primary {
     width: 100%; /* Ensure full width */
     padding: 0.75rem; /* Adjust padding for consistent size */
     margin-bottom: 1rem;
