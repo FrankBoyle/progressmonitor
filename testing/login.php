@@ -67,6 +67,7 @@
                             </div>
                             <button type="submit" value="login" name="login" class="btn btn-primary">Sign In</button>
                         </form>
+                        <div style="position: relative;">
 
                         <div class="forgot-password">
                             <p class="mb-1">
@@ -81,6 +82,7 @@
                                     <input type="submit" class="btn btn-primary" name="forgot_password" value="Request Password Reset">
                                 </form>
                             </p>
+                        </div>
                         </div>
 
                         <p class="mb-0">
