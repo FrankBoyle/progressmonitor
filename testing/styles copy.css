@@ -134,14 +134,14 @@ body {
 .content {
     display: flex;
     flex-direction: column;
-    margin-top: 75px; /* Adjust this value to match the height of the navbar */
+    margin-top: 60px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
     transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
 
 .content-students {
     display: flex;
-    margin-top: 75px; /* Adjust this value to match the height of the navbar */
+    margin-top: 60px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
     transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
