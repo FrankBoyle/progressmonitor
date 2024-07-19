@@ -41,21 +41,6 @@
                     <li class="luxbar-item"><a href="students.php">Home</a></li>
                     <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
 
-                    <!--
-                    <div class="header-icons">
-                        <a href="mailto:dan@iepreport.com" class="nav-link">
-                            <p>Support</p>
-                        </a>
-                        <a href="students.php" class="nav-link">
-                            <i class="nav-icon"></i>
-                            <p>Home</p>
-                        </a>             
-                        <a href="./users/logout.php" class="nav-link">
-                            <i class="nav-icon"></i>
-                            <p>Sign Out</p>
-                        </a> 
-                    </div>
-                    -->
                 </ul>
             </div>
         </header>

@@ -31,7 +31,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Group Managment</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles copy.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
@@ -40,37 +40,44 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <div class="dashboard">
-    <header class="dashboard-header">
-        <div class="logo">
-            <img src="IEPreport_logo.jpg" alt="Logo">
-        </div>
-        <div class="header-icons">
-            <div class="school-selector">
-                <label for="school-select">Select School:</label>
-                <select id="school-select">
-                    <?php foreach ($schools as $school): ?>
-                        <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($school['SchoolName']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
 
-            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
-                <a href="manage.php" class="nav-link">
-                    <button class="btn btn-primary">Manage</button>
-                </a>
-            <?php endif; ?>
-            <a href="students.php" class="nav-link">
-                <i class="nav-icon"></i>
-                <p>Home</p>
-            </a>
-            <a href="./users/logout.php" class="nav-link">
-                <i class="nav-icon"></i>
-                <p>Sign Out</p>
-            </a>
-        </div>
-    </header>
+        <header class="dashboard-header luxbar-fixed" id="luxbar">
+            <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+
+            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
+                <ul class="luxbar-navigation">
+                    <li class="luxbar-header">
+                        <div class="logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
+                        </div>
+
+                        <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                    </li>
+                     <li>   <div class="school-selector">
+                            <label for="school-select">Select School:</label>
+                            <select id="school-select">
+                                <?php foreach ($schools as $school): ?>
+                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($school['SchoolName']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </li>
+                    <li>
+                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+                            <a href="manage.php" class="nav-link">
+                                <button class="btn btn-primary">Manage</button>
+                            </a>
+                        <?php endif; ?>
+                    </li>
+                    <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
+                    <li class="luxbar-item"><a href="students.php">Home</a></li>
+                    <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
+
+                </ul>
+            </div>
+        </header>
 
     <main class="content-students">
     <input type="hidden" id="selected-student-id" value="">
