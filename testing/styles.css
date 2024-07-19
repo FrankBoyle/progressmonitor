@@ -1,13 +1,7 @@
 @media (max-width: 768px) {
     
-    .content {
-        padding: 10px; 
-        flex-direction: column;
-    }
-
-    .content-students {
-        padding: 10px; 
-        flex-direction: column;
+    .content, .content-students {
+        margin-top: calc(75px + 4rem); /* Adjust this value if necessary */
     }
 
     .create-group,
@@ -88,6 +82,22 @@
         display: block; /* Ensure about-us is displayed in the new order */
     }
 
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-icons {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-icons a.nav-link, .header-icons .btn {
+        width: 100%;
+        text-align: left;
+    }
+
 }
 
 /* Basic Reset */
@@ -119,13 +129,14 @@ body {
     flex-direction: column;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
+    transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
 
 .content-students {
     display: flex;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
-    /*align-items: center;*/
+    transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
 
 .content-column {
@@ -135,10 +146,12 @@ body {
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
     padding-top: 3rem; /* Adjust this value to match the height of the fixed header */
+    transition: padding-top 0.3s ease; /* Smooth transition for padding changes */
 }
 
 .content-header {
     margin-top: 2rem; /* Optional: add additional margin if needed */
+    transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
 
 .logo {
