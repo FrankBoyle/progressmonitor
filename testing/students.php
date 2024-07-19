@@ -43,7 +43,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <img src="IEPreport_logo.jpg" alt="Logo">
         </div>
         <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Add this line -->
-        <div class="header-icons" id="headerMenu"> <!-- Add id to this div -->
+        <div id="headerMenu" class="header-icons">
             <div class="school-selector">
                 <label for="school-select">Select School:</label>
                 <select id="school-select">
@@ -54,7 +54,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                     <?php endforeach; ?>
                 </select>
             </div>
-
             <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                 <a href="manage.php" class="nav-link">
                     <button class="btn btn-primary">Manage</button>
@@ -70,6 +69,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             </a>
         </div>
     </header>
+
 
     <main class="content-students">
         <input type="hidden" id="selected-student-id" value="">
