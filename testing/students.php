@@ -56,15 +56,16 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
                     <li>
-                        <select id="school-select" name="school_id">
-                            <option value="">Select a school</option>
-                            <?php foreach ($schools as $school): ?>
-                                <option value="<?= htmlspecialchars($school['school_id']); ?>" <?= $school['school_id'] == $school_id ? 'selected' : ''; ?>>
-                                    <?= htmlspecialchars($school['SchoolName']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-
+                        <div class="school-selector">
+                            <label for="school-select">Select School:</label>
+                            <select id="school-select">
+                                <?php foreach ($schools as $school): ?>
+                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($school['SchoolName']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </li>
                     <li>
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
