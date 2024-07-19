@@ -688,8 +688,6 @@ p em {
     max-width: 100%; /* Ensure it takes the full width of its grid cell */
     height: 100%; /* Ensure it takes the full height of its grid cell */
     width: 100%;
-    grid-column: 2;
-    grid-row: 2;
 }
 
 .login-box-msg {
@@ -708,14 +706,10 @@ p em {
 }
 
 .testimonials {
-    grid-column: 2;
-    grid-row: 1;
     text-align: center;
 }
 
 .sample-reports {
-    grid-column: 2;
-    grid-row: 3;
     text-align: center;
 }
 
