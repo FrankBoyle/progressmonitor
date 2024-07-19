@@ -634,6 +634,7 @@ input[type="text"] {
     align-items: center;
     height: 100vh;
     background-color: #f5f5f5;
+    padding-top: 4rem; /* Adjust for fixed header */
 }
 
 .login-box {
@@ -650,6 +651,27 @@ input[type="text"] {
     margin-bottom: 1rem;
     color: #333;
     text-align: center;
+}
+
+/* Additional Styles for Testimonials and Sample Reports */
+.landing-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    height: calc(100vh - 4rem); /* Adjust for fixed header */
+    padding-top: 4rem; /* Adjust for fixed header */
+}
+
+.additional-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    background-color: #e9ecef;
+}
+
+.testimonials, .sample-reports {
+    margin: 10px 0;
 }
 
 .form-control {
