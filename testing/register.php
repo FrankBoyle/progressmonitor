@@ -47,7 +47,7 @@
                         <span class="fas fa-user"></span>
                     </div>
                     <div style="position: relative;">
-                        <input type="text" class="form-control" name="school_uuid" id="school_uuid" placeholder="Leave blank if registering as an individual.">
+                        <input type="text" class="form-control" name="school_uuid" id="school_uuid" placeholder="blank if registering as an individual or School ID.">
                         <span class="fas fa-school"></span>
                     </div>
                     <div style="position: relative;" id="new_school_container" style="display: none;">
