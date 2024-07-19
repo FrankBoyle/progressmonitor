@@ -27,7 +27,7 @@
         <header class="dashboard-header luxbar-fixed" id="luxbar">
             <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
 
-            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-cyan">
+            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
                 <ul class="luxbar-navigation">
                     <li class="luxbar-header">
                         <div class="logo">
