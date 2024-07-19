@@ -98,7 +98,7 @@ html {
 }
 
 .logo img {
-    max-height:50px; /* Adjust as needed */
+    max-height:55px; /* Adjust as needed */
 }
 
 body {
@@ -137,10 +137,6 @@ body {
 .content-header {
     margin-top: 2rem; /* Optional: add additional margin if needed */
     transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
-}
-
-.logo {
-    font-weight: bold;
 }
 
 .card {
