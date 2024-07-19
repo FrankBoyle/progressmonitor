@@ -30,7 +30,7 @@
             <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-cyan">
                 <ul class="luxbar-navigation">
                     <li class="luxbar-header">
-                        <a href="#" class="luxbar-brand"><img src="IEPreport_logo.jpg" alt="Logo"></a>
+                        <a href="#" class="luxbar-brand">IEPreport</a>
 
                         <div class="logo">
                             <img src="IEPreport_logo.jpg" alt="Logo">
