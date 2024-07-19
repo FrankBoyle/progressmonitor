@@ -659,7 +659,7 @@ input[type="text"] {
 .about-us p {
     font-size: 1.1rem;
     line-height: 1.6;
-    margin: 1rem 0;
+    margin: 0.5rem 0; /* Reduce the margin to make spacing smaller */
     text-align: justify;
 }
 
@@ -668,6 +668,7 @@ input[type="text"] {
     margin-bottom: 1rem;
     font-weight: bold;
 }
+
 
 p strong {
     font-weight: bold;
