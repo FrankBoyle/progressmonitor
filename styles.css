@@ -783,10 +783,6 @@ p em {
     margin-bottom: 1rem;
 }
 
-.testimonials p:last-child {
-    margin-bottom: 0; /* Removes the bottom margin from the last paragraph */
-}
-
 .sample-reports {
     text-align: center;
 }
