@@ -264,6 +264,21 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
 <script>
+function toggleMenu() {
+    var menu = document.getElementById('headerMenu');
+    console.log('Menu toggle triggered'); // Log when the function is called
+    console.log('Current menu display style:', menu.style.display); // Log the current display style
+    if (menu.style.display === 'flex') {
+        menu.style.display = 'none';
+        console.log('Menu hidden'); // Log when the menu is hidden
+    } else {
+        menu.style.display = 'flex';
+        console.log('Menu shown'); // Log when the menu is shown
+    }
+}
+</script>
+
+<script>
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -375,15 +390,6 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
         console.error('No group is selected.');
     }
 });
-
-function toggleMenu() {
-    var menu = document.getElementById('headerMenu');
-    if (menu.style.display === 'flex') {
-        menu.style.display = 'none';
-    } else {
-        menu.style.display = 'flex';
-    }
-}
 
 function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
