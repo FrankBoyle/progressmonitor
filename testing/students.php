@@ -55,7 +55,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
-                    <li class="luxbar-item">
+                    <li>
                         <div class="school-selector">
                             <label for="school-select">Select School:</label>
                             <select id="school-select">
