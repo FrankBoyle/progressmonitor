@@ -88,6 +88,11 @@
         display: block; /* Ensure about-us is displayed in the new order */
     }
 
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     .header-icons {
         display: none;
         flex-direction: column;
