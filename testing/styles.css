@@ -670,6 +670,7 @@ input[type="text"] {
 
 .login-box-msg {
     font-size: 1.5rem;
+    align-items: left;
     margin-bottom: 1rem;
     color: #333;
     text-align: left;
