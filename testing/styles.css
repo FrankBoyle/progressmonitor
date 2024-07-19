@@ -87,6 +87,21 @@
         grid-area: about-us;
         display: block; /* Ensure about-us is displayed in the new order */
     }
+
+    .header-icons {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        background-color: #1A3E55;
+        width: 100%;
+        position: absolute;
+        top: 60px; /* Adjust based on the height of your header */
+        left: 0;
+    }
+
+    .menu-icon {
+        display: block;
+    }
 }
 
 /* Basic Reset */
@@ -667,6 +682,12 @@ input[type="text"] {
 .header-icons {
     display: flex;
     align-items: center;
+}
+
+.menu-icon {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 /* Additional styles for login form */
