@@ -52,11 +52,11 @@
 
     .grid-container {
         display: grid;
-        grid-template-columns: 1fr; /* Single column layout */
-        grid-template-rows: auto; /* Ensure rows adjust to content size */
-        gap: 1rem; /* Add some gap between items */
+        grid-template-columns: 1fr !important; /* Add !important to ensure override */
+        grid-template-rows: auto !important; /* Add !important to ensure override */
+        gap: 1rem;
         width: 100%;
-        height: auto; /* Adjust height to auto */
+        height: auto;
     }
 
     .grid-item {
