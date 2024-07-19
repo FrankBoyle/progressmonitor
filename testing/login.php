@@ -66,16 +66,14 @@
                     </p>
                 </div>
                 <div class="grid-item">
-                    <h2>Testimonials 1</h2>
-                    <p>"This service has transformed our IEP reporting process!" - Educator A</p>
+                    <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
                 </div>
                 <div class="grid-item">
                     <h2>Sample Report 1</h2>
                     <img src="sample_report1.png" alt="Sample Report 1">
                 </div>
                 <div class="grid-item">
-                    <h2>Testimonials 2</h2>
-                    <p>Testimonial 2 content goes here.</p>
+                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - Joe Dattilo</p>
                 </div>
                 <div class="grid-item login-box">
                     <h1 class="login-box-msg">Sign in</h1>
