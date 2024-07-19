@@ -67,7 +67,7 @@
                     <p>"This service has transformed our IEP reporting process!" - Educator A</p>
                 </div>
                 <div class="grid-item">
-                    <h2>Sample Report 1</h2>
+                    <h2>Sample Reports</h2>
                     <img src="sample_report1.png" alt="Sample Report 1">
                 </div>
                 <div class="grid-item">
@@ -112,7 +112,6 @@
                     </p>
                 </div>
                 <div class="grid-item">
-                    <h2>Sample Report 2</h2>
                     <img src="sample_report2.png" alt="Sample Report 2">
                 </div>
             </div>
