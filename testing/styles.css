@@ -640,17 +640,15 @@ input[type="text"] {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 20px;
+    gap: 0;
     width: 100%;
-    max-width: 1200px; /* Adjust as needed */
-    height: 100%;
+    height: calc(100vh - 70px); /* Adjust height to account for the header */
 }
 
 .grid-item {
     background-color: white;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd; /* Add border to see the separation */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -701,28 +699,6 @@ p em {
 
 .login-box .form-control, .login-box .btn-primary {
     width: 100%; /* Ensure full width */
-    padding: 0.75rem; /* Adjust padding for consistent size */
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem; /* Consistent font size */
-}
-
-.forgot-password .form-control, .forgot-password .btn-primary {
-    width: 100%; /* Ensure full width */
-    padding: 0.75rem; /* Adjust padding for consistent size */
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem; /* Consistent font size */
-}
-
-.forgot-password form {
-    width: 100%;
-}
-
-.forgot-password input[type="email"] {
-    margin-bottom: 1rem;
 }
 
 .testimonials, .sample-reports {
