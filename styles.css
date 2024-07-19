@@ -275,9 +275,11 @@ button:hover {
     font-weight: bold;
 }
 
-ul {
-    list-style-type: none;
+p, ul {
+    margin: 0;
     padding: 0;
+    list-style: none;
+    text-align: left; /* Align text to the left for better readability */
 }
 
 ul li {
@@ -326,10 +328,7 @@ ul li:hover, ul li.selected-student, ul li.selected-group{
 }
 
 h2 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 h3 {
@@ -632,16 +631,63 @@ input[type="text"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: calc(100vh - 70px); /* Adjust height to account for the header */
+    margin-top: 70px; /* Push the grid layout down to avoid overlap with the header */
     background-color: #f5f5f5;
+    padding: 2rem; /* Add padding to ensure the content is not too close to the edges */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0;
+    width: 100%;
+    height: calc(100vh - 70px); /* Adjust height to account for the header */
+}
+
+.grid-item {
+    background-color: white;
+    padding: 2rem;
+    border: 1px solid #ddd; /* Add border to see the separation */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.about-us p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0.5rem 0; /* Reduce the margin to make spacing smaller */
+    text-align: justify;
+}
+
+.about-us h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+
+p strong {
+    font-weight: bold;
+}
+
+p em {
+    font-style: italic;
 }
 
 .login-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: white;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    max-width: 100%; /* Ensure it takes the full width of its grid cell */
+    height: 100%; /* Ensure it takes the full height of its grid cell */
     width: 100%;
 }
 
@@ -650,6 +696,41 @@ input[type="text"] {
     margin-bottom: 1rem;
     color: #333;
     text-align: center;
+}
+
+.login-box .form-control, .login-box .btn-primary, .forgot-password .form-control, .forgot-password .btn-primary {
+    width: 100%; /* Ensure full width */
+    padding: 0.75rem; /* Adjust padding for consistent size */
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem; /* Consistent font size */
+}
+
+.forgot-password input[type="email"], .forgot-password input[type="submit"] {
+    margin-bottom: 1rem;
+    width: 100%; /* Ensure full width */
+    padding: 0.75rem; /* Adjust padding for consistent size */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem; /* Consistent font size */
+}
+
+.testimonials, .sample-reports {
+    padding: 1rem; /* Add padding for better spacing */
+}
+
+.testimonials {
+    text-align: center;
+}
+
+.sample-reports {
+    text-align: center;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 .form-control {
@@ -707,20 +788,6 @@ input[type="text"] {
 }
 
 .mb-1, .mb-0 {
-    margin-bottom: 1rem;
-}
-
-.forgot-password {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.forgot-password form {
-    width: 100%;
-}
-
-.forgot-password input[type="email"] {
     margin-bottom: 1rem;
 }
 
