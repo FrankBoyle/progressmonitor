@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="grid-item">
-                        <h2>Sample Reports</h2>
+                        <h3>Sample Reports</h3>
                         <img src="sample_report1.png" alt="Sample Report 1">
                     </div>
 
