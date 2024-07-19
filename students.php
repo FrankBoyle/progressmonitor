@@ -431,7 +431,7 @@ function addStudent(event) {
     const lastName = document.getElementById('last-name').value;
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
-    const groupId = document.getElementById('group-select').value;
+    //const groupId = document.getElementById('group-select').value;
 
     fetch('./users/add_student.php', {
         method: 'POST',
