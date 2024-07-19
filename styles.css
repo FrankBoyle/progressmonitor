@@ -1,14 +1,7 @@
 @media (max-width: 768px) {
-
-
-    .content {
-        padding: 10px; 
-        flex-direction: column;
-    }
-
-    .content-students {
-        padding: 10px; 
-        flex-direction: column;
+    
+    .content, .content-students {
+        margin-top: calc(75px + 4rem) !important; /* Adjust this value if necessary */
     }
 
     .create-group,
@@ -43,6 +36,52 @@
         padding: 10px;
         margin: 10px;
     }
+
+    .center-content {
+        margin-top: 0;
+        height: auto;
+        padding: 1rem;
+        flex-direction: column;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: 1fr !important; /* Add !important to ensure override */
+        grid-template-rows: auto !important; /* Add !important to ensure override */
+        grid-template-areas: 
+        "login"
+        "testimonials"
+        "sample-reports"
+        "about-us"; /* Define the order of the elements */
+        gap: 1rem;
+        width: 100%;
+        height: auto;
+    }
+
+    .grid-item {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .login-box {
+        max-width: 400px;
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .testimonials {
+        grid-area: testimonials;
+    }
+
+    .sample-reports {
+        grid-area: sample-reports;
+    }
+
+    .about-us {
+        grid-area: about-us;
+        display: block; /* Ensure about-us is displayed in the new order */
+    }
+
 }
 
 /* Basic Reset */
@@ -69,38 +108,19 @@ body {
 
 }
 
-.dashboard {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-
-}
-
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem; /* Adjusted padding to reduce height */
-    background-color: #1A3E55; /* Very dark blue for more prominent navbar */
-    color: white;
-    position: fixed; /* Make the navbar fixed */
-    width: 100%;
-    top: 0;
-    z-index: 1000; /* Ensure it stays above other content */
-}
-
 .content {
     display: flex;
     flex-direction: column;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
+    transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
 
 .content-students {
     display: flex;
     margin-top: 75px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
-    /*align-items: center;*/
+    transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
 
 .content-column {
@@ -110,19 +130,16 @@ body {
 /* Adjust content-wrapper and content-header to account for the fixed header */
 .content-wrapper {
     padding-top: 3rem; /* Adjust this value to match the height of the fixed header */
+    transition: padding-top 0.3s ease; /* Smooth transition for padding changes */
 }
 
 .content-header {
     margin-top: 2rem; /* Optional: add additional margin if needed */
+    transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
 
 .logo {
     font-weight: bold;
-}
-
-.header-icons span {
-    margin-right: 10px;
-    cursor: pointer;
 }
 
 .card {
@@ -600,15 +617,51 @@ input[type="text"] {
     margin-bottom: 20px;
 }
 
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #1A3E55;
+    color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: height 0.3s ease; /* Smooth transition for height changes */
+}
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+}
+
 .header-icons .nav-link i {
     margin-right: 5px;
 }
 
-/* Navbar link hover effect */
+.header-icons span, .header-icons .nav-link {
+    margin-right: 20px;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
 .header-icons span:hover, .header-icons .nav-link:hover {
-    background-color: #45A0DD; /* Lighter blue for hover */
-    padding: 10px; /* Add padding to increase the hover area */
-    border-radius: 5px; /* Optional: adds rounded corners */
+    background-color: #45A0DD;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .header-icons .nav-link:hover {
@@ -620,9 +673,9 @@ input[type="text"] {
     align-items: center;
 }
 
-.header-icons {
-    display: flex;
-    align-items: center;
+.header-icons span {
+    margin-right: 10px;
+    cursor: pointer;
 }
 
 /* Additional styles for login form */
@@ -631,10 +684,10 @@ input[type="text"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 70px); /* Adjust height to account for the header */
-    margin-top: 70px; /* Push the grid layout down to avoid overlap with the header */
+    min-height: calc(100vh - 70px);
+    margin-top: 70px;
     background-color: #f5f5f5;
-    padding: 2rem; /* Add padding to ensure the content is not too close to the edges */
+    padding: 2rem;
 }
 
 .grid-container {
@@ -643,13 +696,13 @@ input[type="text"] {
     grid-template-rows: repeat(2, 1fr);
     gap: 0;
     width: 100%;
-    height: calc(100vh - 70px); /* Adjust height to account for the header */
+    height: calc(100vh - 70px);
 }
 
 .grid-item {
     background-color: white;
     padding: 2rem;
-    border: 1px solid #ddd; /* Add border to see the separation */
+    border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -658,10 +711,10 @@ input[type="text"] {
 }
 
 .about-us p {
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0.5rem 0; /* Reduce the margin to make spacing smaller */
-    text-align: justify;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 0.5rem 0;
+    text-align: left;
 }
 
 .about-us h2 {
@@ -669,7 +722,6 @@ input[type="text"] {
     margin-bottom: 1rem;
     font-weight: bold;
 }
-
 
 p strong {
     font-weight: bold;
@@ -789,35 +841,6 @@ img {
 
 .mb-1, .mb-0 {
     margin-bottom: 1rem;
-}
-
-.header-icons {
-    display: flex;
-    align-items: center;
-}
-
-/* General style for navbar links */
-.header-icons span, .header-icons .nav-link {
-    margin-right: 20px;
-    font-size: 1.2rem;
-    color: white;
-    text-decoration: none;
-    padding: 10px; /* Padding for spacing and better hover effect */
-    border-radius: 5px; /* Optional: rounded corners */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-}
-
-.header-icons .nav-link i {
-    margin-right: 5px;
-}
-
-.header-icons .nav-link:hover {
-    color: #f0f0f0;
-}
-
-.header-icons .nav-link {
-    display: flex;
-    align-items: center;
 }
 
 .message {
