@@ -31,7 +31,7 @@
                 <ul class="luxbar-navigation">
                     <li class="luxbar-header">
                         <div class="logo">
-                            <img src="IEPreport_logo.jpg" alt="Logo" class="luxbar-brand">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
                         </div>
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
