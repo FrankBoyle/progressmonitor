@@ -135,7 +135,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
                     <div style="margin-right: 10px;">
-                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here" multiple>
+                        <select id="group-select" name="group_id" class="select2" style="width: 200px;" data-placeholder="Group name here" multiple>
                             <option></option>
                             <!-- Options will be dynamically populated -->
                         </select>
@@ -165,6 +165,12 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-group">
                 <label for="grade-level">Grade Level:</label>
                 <input type="text" id="grade-level" name="grade_level" required>
+            </div>
+            <div class="form-group">
+                <label for="group-select">Group:</label>
+                <select id="group-select" name="group_id" required>
+                    <!-- Options will be dynamically populated -->
+                </select>
             </div>
             <button type="submit">Add Student</button>
         </form>
@@ -427,19 +433,16 @@ function addGroup(event) {
 
 function addStudent(event) {
     event.preventDefault();
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const dateOfBirth = document.getElementById('date-of-birth').value;
+    const gradeLevel = document.getElementById('grade-level').value;
+    const groupIdElement = document.getElementById('group-select');
 
-    // Debugging: Log element existence
-    console.log(document.getElementById('first-name'));
-    console.log(document.getElementById('last-name'));
-    console.log(document.getElementById('date-of-birth'));
-    console.log(document.getElementById('grade-level'));
-    console.log(document.getElementById('group-select'));
+    // Debugging: Log the group-select element
+    console.log('Group Select Element:', groupIdElement);
 
-    const firstName = document.getElementById('first-name')?.value;
-    const lastName = document.getElementById('last-name')?.value;
-    const dateOfBirth = document.getElementById('date-of-birth')?.value;
-    const gradeLevel = document.getElementById('grade-level')?.value;
-    const groupId = document.getElementById('group-select')?.value;
+    const groupId = groupIdElement ? groupIdElement.value : null;
 
     // Debugging: Log values
     console.log({ firstName, lastName, dateOfBirth, gradeLevel, groupId });
