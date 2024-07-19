@@ -104,12 +104,12 @@
                     </div>
 
                     <div class="grid-item">
-                        <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
+                        <h2>Sample Reports</h2>
+                        <img src="sample_report1.png" alt="Sample Report 1">
                     </div>
 
                     <div class="grid-item">
-                        <h2>Sample Reports</h2>
-                        <img src="sample_report1.png" alt="Sample Report 1">
+                        <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
                     </div>
                     
                     <div class="grid-item">
