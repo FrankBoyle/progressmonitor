@@ -62,7 +62,9 @@
     }
 
     .login-box {
-        max-width: 400px; /* Keep login section at a usable size */
+        max-width: 400px;
+        width: 100%;
+        padding: 1rem;
     }
 
     .about-us p {
@@ -656,25 +658,25 @@ input[type="text"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 70px); /* Adjust height to account for the header */
-    margin-top: 70px; /* Push the grid layout down to avoid overlap with the header */
+    min-height: calc(100vh - 70px);
+    margin-top: 70px;
     background-color: #f5f5f5;
-    padding: 2rem; /* Add padding to ensure the content is not too close to the edges */
+    padding: 2rem;
 }
 
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto;
-    gap: 1rem; /* Add some gap between items */
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0;
     width: 100%;
-    height: auto; /* Adjust height to auto */
+    height: calc(100vh - 70px);
 }
 
 .grid-item {
     background-color: white;
     padding: 2rem;
-    border: 1px solid #ddd; /* Add border to see the separation */
+    border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -685,7 +687,7 @@ input[type="text"] {
 .about-us p {
     font-size: 1rem;
     line-height: 1.4;
-    margin: 0.5rem 0; /* Reduce the margin to make spacing smaller */
+    margin: 0.5rem 0;
     text-align: left;
 }
 
