@@ -63,16 +63,14 @@
                     Join us on our journey to transform special education progress monitoring, and experience the difference that comes from a tool designed by those who know the field best.</p>
                 </div>
                 <div class="grid-item">
-                    <h2>Testimonials 1</h2>
-                    <p>"This service has transformed our IEP reporting process!" - Educator A</p>
+                    <p>"It makes progress monitoring so much easier." - Joe Dattilo</p>
                 </div>
                 <div class="grid-item">
                     <h2>Sample Reports</h2>
                     <img src="sample_report1.png" alt="Sample Report 1">
                 </div>
                 <div class="grid-item">
-                    <h2>Testimonials 2</h2>
-                    <p>Testimonial 2 content goes here.</p>
+                    <p>"I use it myself for all my progress reporting needs." - Fran Boyle</p>
                 </div>
                 <div class="grid-item login-box">
                     <h1 class="login-box-msg">Sign in</h1>
