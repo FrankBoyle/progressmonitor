@@ -376,6 +376,15 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
     }
 });
 
+function toggleMenu() {
+    var menu = document.getElementById('headerMenu');
+    if (menu.style.display === 'flex') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'flex';
+    }
+}
+
 function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
     const studentsMessage = document.getElementById('students-message');
