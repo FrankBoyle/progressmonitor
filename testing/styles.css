@@ -708,6 +708,7 @@ p em {
 }
 
 .forgot-password .form-control, .forgot-password .btn-primary {
+    position: relative;
     width: 100%; /* Ensure full width */
     padding: 0.75rem; /* Adjust padding for consistent size */
     margin-bottom: 1rem;
