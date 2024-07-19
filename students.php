@@ -427,11 +427,28 @@ function addGroup(event) {
 
 function addStudent(event) {
     event.preventDefault();
-    const firstName = document.getElementById('first-name').value;
-    const lastName = document.getElementById('last-name').value;
-    const dateOfBirth = document.getElementById('date-of-birth').value;
-    const gradeLevel = document.getElementById('grade-level').value;
-    const groupId = document.getElementById('group-select').value;
+
+    // Debugging: Log element existence
+    console.log(document.getElementById('first-name'));
+    console.log(document.getElementById('last-name'));
+    console.log(document.getElementById('date-of-birth'));
+    console.log(document.getElementById('grade-level'));
+    console.log(document.getElementById('group-select'));
+
+    const firstName = document.getElementById('first-name')?.value;
+    const lastName = document.getElementById('last-name')?.value;
+    const dateOfBirth = document.getElementById('date-of-birth')?.value;
+    const gradeLevel = document.getElementById('grade-level')?.value;
+    const groupId = document.getElementById('group-select')?.value;
+
+    // Debugging: Log values
+    console.log({ firstName, lastName, dateOfBirth, gradeLevel, groupId });
+
+    if (!firstName || !lastName || !dateOfBirth || !gradeLevel || !groupId) {
+        console.error('One or more form fields are missing.');
+        alert('Please fill out all fields.');
+        return;
+    }
 
     fetch('./users/add_student.php', {
         method: 'POST',
