@@ -139,13 +139,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1rem; /* Adjusted padding to reduce height */
-    background-color: #1A3E55; /* Very dark blue for more prominent navbar */
+    padding: 0.5rem 1rem;
+    background-color: #1A3E55;
     color: white;
-    position: fixed; /* Make the navbar fixed */
+    position: fixed;
     width: 100%;
     top: 0;
-    z-index: 1000; /* Ensure it stays above other content */
+    z-index: 1000;
 }
 
 .content {
@@ -177,11 +177,6 @@ body {
 
 .logo {
     font-weight: bold;
-}
-
-.header-icons span {
-    margin-right: 10px;
-    cursor: pointer;
 }
 
 .card {
@@ -684,6 +679,11 @@ input[type="text"] {
     align-items: center;
 }
 
+.header-icons span {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
 .menu-icon {
     display: none;
     font-size: 1.5rem;
@@ -853,35 +853,6 @@ img {
 
 .mb-1, .mb-0 {
     margin-bottom: 1rem;
-}
-
-.header-icons {
-    display: flex;
-    align-items: center;
-}
-
-/* General style for navbar links */
-.header-icons span, .header-icons .nav-link {
-    margin-right: 20px;
-    font-size: 1.2rem;
-    color: white;
-    text-decoration: none;
-    padding: 10px; /* Padding for spacing and better hover effect */
-    border-radius: 5px; /* Optional: rounded corners */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-}
-
-.header-icons .nav-link i {
-    margin-right: 5px;
-}
-
-.header-icons .nav-link:hover {
-    color: #f0f0f0;
-}
-
-.header-icons .nav-link {
-    display: flex;
-    align-items: center;
 }
 
 .message {
