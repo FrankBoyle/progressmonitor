@@ -47,6 +47,7 @@
         margin-top: 0;
         height: auto;
         padding: 1rem;
+        flex-direction: column;
     }
 
     .grid-container {
@@ -58,6 +59,10 @@
     .grid-item {
         width: 100%;
         padding: 1rem;
+    }
+
+    .login-box {
+        max-width: 400px; /* Keep login section at a usable size */
     }
 
 }
@@ -648,7 +653,7 @@ input[type="text"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 70px); /* Adjust height to account for the header */
+    min-height: calc(100vh - 70px); /* Adjust height to account for the header */
     margin-top: 70px; /* Push the grid layout down to avoid overlap with the header */
     background-color: #f5f5f5;
     padding: 2rem; /* Add padding to ensure the content is not too close to the edges */
@@ -686,7 +691,6 @@ input[type="text"] {
     margin-bottom: 1rem;
     font-weight: bold;
 }
-
 
 p strong {
     font-weight: bold;
@@ -726,7 +730,7 @@ p em {
 
 .forgot-password input[type="email"], .forgot-password input[type="submit"] {
     margin-bottom: 1rem;
-    width: 80%; /* Ensure full width */
+    width: 100%; /* Ensure full width */
     padding: 0.75rem; /* Adjust padding for consistent size */
     border: 1px solid #ccc;
     border-radius: 4px;
