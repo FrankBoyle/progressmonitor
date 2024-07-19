@@ -631,7 +631,7 @@ input[type="text"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 100px); /* Adjust height to account for the header */
+    height: calc(100vh - 20px); /* Adjust height to account for the header */
     background-color: #f5f5f5;
     padding: 2rem; /* Add padding to ensure the content is not too close to the edges */
 }
