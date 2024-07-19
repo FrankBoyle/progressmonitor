@@ -54,6 +54,11 @@
         display: grid;
         grid-template-columns: 1fr !important; /* Add !important to ensure override */
         grid-template-rows: auto !important; /* Add !important to ensure override */
+        grid-template-areas: 
+        "login"
+        "testimonials"
+        "sample-reports"
+        "about-us"; /* Define the order of the elements */
         gap: 1rem;
         width: 100%;
         height: auto;
@@ -70,8 +75,17 @@
         padding: 1rem;
     }
 
-    .about-us p{
-        display: none;
+    .testimonials {
+        grid-area: testimonials;
+    }
+
+    .sample-reports {
+        grid-area: sample-reports;
+    }
+
+    .about-us {
+        grid-area: about-us;
+        display: block; /* Ensure about-us is displayed in the new order */
     }
 }
 
