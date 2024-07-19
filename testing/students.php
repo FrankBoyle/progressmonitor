@@ -260,14 +260,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 function toggleMenu() {
     var menu = document.getElementById('headerMenu');
     console.log('Menu toggle triggered'); // Log when the function is called
-    console.log('Current menu display style:', menu.style.display); // Log the current display style
-    if (menu.style.display === 'flex') {
-        menu.style.display = 'none';
-        console.log('Menu hidden'); // Log when the menu is hidden
-    } else {
-        menu.style.display = 'flex';
-        console.log('Menu shown'); // Log when the menu is shown
-    }
+    menu.classList.toggle('active');
+    console.log('Menu class list:', menu.classList); // Log the current class list of the menu
 }
 </script>
 
