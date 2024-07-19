@@ -293,7 +293,7 @@ button:hover {
     font-weight: bold;
 }
 
-p, ul {
+p {
     margin: 0;
     padding: 0;
     list-style: none;
