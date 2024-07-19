@@ -658,6 +658,17 @@ input[type="text"] {
     margin-right: 5px;
 }
 
+/* General style for navbar links */
+.header-icons span, .header-icons .nav-link {
+    margin-right: 20px;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+    padding: 10px; /* Padding for spacing and better hover effect */
+    border-radius: 5px; /* Optional: rounded corners */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
 /* Navbar link hover effect */
 .header-icons span:hover, .header-icons .nav-link:hover {
     background-color: #45A0DD; /* Lighter blue for hover */
