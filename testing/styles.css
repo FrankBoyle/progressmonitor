@@ -88,45 +88,6 @@
         display: block; /* Ensure about-us is displayed in the new order */
     }
 
-    .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .menu-icon {
-        display: block !important;
-        align-self: flex-end;
-    }
-
-    .header-icons {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        background-color: #1A3E55;
-        width: 100%;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        padding: 10px;
-        z-index: 1000;
-    }
-
-    .header-icons.active {
-        display: flex !important;
-    }
-
-    .header-icons a.nav-link {
-        display: block;
-        width: 100%;
-        text-align: left;
-    }
-
-    .header-icons .btn {
-        display: block;
-        width: 100%;
-        text-align: center;
-        margin-top: 10px;
-    }
 }
 
 /* Basic Reset */
