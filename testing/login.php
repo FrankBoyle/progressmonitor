@@ -32,7 +32,9 @@
                     <li class="luxbar-header">
                         <a href="#" class="luxbar-brand"><img src="IEPreport_logo.jpg" alt="Logo"></a>
 
-
+                        <div class="logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
+                        </div>
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
@@ -42,12 +44,6 @@
                     <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
 
                     <!--
-
-                                            <div class="logo">
-                            <img src="IEPreport_logo.jpg" alt="Logo">
-                        </div>
-
-                        
                     <div class="header-icons">
                         <a href="mailto:dan@iepreport.com" class="nav-link">
                             <p>Support</p>
