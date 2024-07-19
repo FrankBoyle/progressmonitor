@@ -1,7 +1,7 @@
 @media (max-width: 768px) {
     
     .content, .content-students {
-        margin-top: calc(75px + 4rem); /* Adjust this value if necessary */
+        margin-top: calc(75px + 4rem) !important; /* Adjust this value if necessary */
     }
 
     .create-group,
@@ -80,22 +80,6 @@
     .about-us {
         grid-area: about-us;
         display: block; /* Ensure about-us is displayed in the new order */
-    }
-
-    .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .header-icons {
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .header-icons a.nav-link, .header-icons .btn {
-        width: 100%;
-        text-align: left;
     }
 
 }
