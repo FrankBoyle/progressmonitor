@@ -102,6 +102,10 @@
     .menu-icon {
         display: block;
     }
+
+    .header-icons.active {
+        display: flex;
+    }
 }
 
 /* Basic Reset */
