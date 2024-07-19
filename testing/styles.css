@@ -91,6 +91,12 @@
     .dashboard-header {
         flex-direction: column;
         align-items: flex-start;
+        padding: 0.5rem;
+    }
+
+    .menu-icon {
+        display: block;
+        align-self: flex-end;
     }
 
     .header-icons {
@@ -100,14 +106,10 @@
         background-color: #1A3E55;
         width: 100%;
         position: absolute;
-        top: 60px;
+        top: 100%;
         left: 0;
         padding: 10px;
-        z-index: 1000; /* Ensure menu is above other content */
-    }
-
-    .menu-icon {
-        display: block !important;
+        z-index: 1000;
     }
 
     .header-icons.active {
@@ -115,16 +117,16 @@
     }
 
     .header-icons a.nav-link {
-        display: block; /* Ensure links are block elements for full width */
-        width: 100%; /* Make links full width */
-        text-align: left; /* Align text to the left */
+        display: block;
+        width: 100%;
+        text-align: left;
     }
 
     .header-icons .btn {
-        display: block; /* Ensure buttons are block elements for full width */
-        width: 100%; /* Make buttons full width */
-        text-align: center; /* Center align text in buttons */
-        margin-top: 10px; /* Add margin to separate buttons from links */
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
     }
 }
 
