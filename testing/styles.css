@@ -678,7 +678,7 @@ input[type="text"] {
 }
 
 .login-box .form-control, .login-box .btn-primary {
-    width: 80%; /* Ensure full width */
+    width: 100%; /* Ensure full width */
 }
 
 .testimonials, .sample-reports {
