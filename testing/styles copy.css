@@ -122,18 +122,23 @@ html {
     background-color: #163D4F; /* A slightly darker shade of the base color for hover effect */
 }
 
+.school-selector {
+    display: flex;
+    align-items: center; /* Ensures vertical centering */
+    margin: 0 10px; /* Adds horizontal margin for spacing */
+}
+
 .school-selector select {
-    width: auto; /* Adjust to fit content more naturally, or set a specific width like 200px */
-    padding: 4px 8px; /* Reduced padding */
-    border: 1px solid #ccc; /* Style the border as needed */
-    border-radius: 5px; /* Optional: rounded corners */
-    background-color: #f8f8f8; /* Light background to stand out or match your design */
-    color: #333; /* Text color */
-    font-size: 12px; /* Consistent font size */
-    cursor: pointer; /* Indicates the element is selectable */
-    -webkit-appearance: none; /* Removes default styling on WebKit browsers */
-    -moz-appearance: none; /* Removes default styling on Mozilla browsers */
-    appearance: none; /* Standard way to remove default browser styling */
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    color: #333;
+    font-size: 12px; /* Adjusted for better legibility */
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 body {
