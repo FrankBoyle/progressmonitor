@@ -30,12 +30,11 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Managment</title>
+    <title>Group Management</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
-
 </head>
 <body>
 
@@ -44,8 +43,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <div class="logo">
             <img src="IEPreport_logo.jpg" alt="Logo">
         </div>
-        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Add this line -->
-        <div class="header-icons" id="headerMenu"> <!-- Add id to this div -->
+        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+        <div class="header-icons" id="headerMenu">
             <div class="school-selector">
                 <label for="school-select">Select School:</label>
                 <select id="school-select">
@@ -74,7 +73,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     </header>
 
     <main class="content-students">
-    <input type="hidden" id="selected-student-id" value="">
+        <input type="hidden" id="selected-student-id" value="">
 
         <section class="box create-group">
             <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
