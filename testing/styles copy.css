@@ -99,6 +99,7 @@ html {
 
 .logo img {
     max-height:55px; /* Adjust as needed */
+    justify-content: center;
 }
 
 body {
