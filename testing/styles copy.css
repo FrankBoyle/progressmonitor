@@ -111,6 +111,18 @@ html {
     margin-left: 2px;    /* Adjust this value to move the logo to the right */
 }
 
+.luxbar-menu-material-indigo {
+    background-color: #1A3E55; /* Override background color */
+}
+
+.luxbar-menu-material-indigo a {
+    color: #FFFFFF; /* Assuming you want white text on the dark background, adjust if necessary */
+}
+
+.luxbar-menu-material-indigo a:hover {
+    background-color: #163D4F; /* A slightly darker shade of the base color for hover effect */
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #E5E5E5;
