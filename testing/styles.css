@@ -279,7 +279,7 @@ p, ul {
     margin: 0;
     padding: 0;
     list-style: none;
-    /*text-align: left; /* Align text to the left for better readability */
+    text-align: left; /* Align text to the left for better readability */
 }
 
 ul li {
@@ -632,6 +632,7 @@ input[type="text"] {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 70px); /* Adjust height to account for the header */
+    margin-top: 70px; /* Push the grid layout down to avoid overlap with the header */
     background-color: #f5f5f5;
 }
 
@@ -641,7 +642,7 @@ input[type="text"] {
     grid-template-rows: repeat(3, 1fr);
     gap: 0;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 70px); /* Adjust height to account for the header */
 }
 
 .grid-item {
@@ -658,7 +659,7 @@ input[type="text"] {
 .login-box {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     background-color: white;
     padding: 2rem;
     max-width: 400px;
@@ -671,7 +672,7 @@ input[type="text"] {
     font-size: 1.5rem;
     margin-bottom: 1rem;
     color: #333;
-    text-align: center;
+    text-align: left;
 }
 
 .login-box .form-control, .login-box .btn-primary {
