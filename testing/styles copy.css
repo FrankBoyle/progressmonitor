@@ -124,7 +124,6 @@ html {
 
 .luxbar-item a {
     color: #fff; /* Initial color, adjust if different */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and color */
 }
 
 .luxbar-item a:hover {
