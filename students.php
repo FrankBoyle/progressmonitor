@@ -587,12 +587,12 @@ function loadStudentsForGroupAssignment(groupId) {
                 $('.select2').select2();
             } else {
                 console.error('Expected an array but received:', data);
-                alert('There was an error loading students. Please try again.');
+                //alert('There was an error loading students. Please try again.');
             }
         })
         .catch(error => {
             console.error('Error fetching students for assignment:', error);
-            alert('There was an error loading students. Please try again.');
+            //alert('There was an error loading students. Please try again.');
         });
 }
 
@@ -674,7 +674,7 @@ function loadStudents() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('There was an error loading students. Please try again.');
+            //alert('There was an error loading students. Please try again.');
         });
 }
 
