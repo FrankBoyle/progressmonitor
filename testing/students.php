@@ -65,11 +65,9 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <li>
+                    <li class="luxbar-item">
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
-                            <a href="manage.php" class="nav-link">
-                                <button class="btn btn-primary">Manage</button>
-                            </a>
+                            <a href="manage.php" class="nav-link">Manage</a>
                         <?php endif; ?>
                     </li>
                     <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
