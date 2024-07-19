@@ -21,7 +21,7 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <style>
-        /* Combined CSS */
+        /* Combined and Revised CSS */
         .dashboard {
             display: flex;
             flex-direction: column;
@@ -48,6 +48,7 @@
             height: 100vh;
             background-color: #f5f5f5;
             padding-top: 4rem; /* Adjust for fixed header */
+            flex: 1; /* Make it take up remaining space */
         }
 
         .login-box {
@@ -81,6 +82,7 @@
             justify-content: center;
             padding: 20px;
             background-color: #e9ecef;
+            height: 100%;
         }
 
         .testimonials, .sample-reports {
