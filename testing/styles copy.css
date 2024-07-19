@@ -124,17 +124,18 @@ html {
 
 .school-selector {
     display: flex;
-    align-items: center; /* Ensures vertical centering */
-    margin: 0 10px; /* Adds horizontal margin for spacing */
+    align-items: center; /* Centering content within the selector */
+    height: 100%; /* Stretch to fill the height of the navbar */
 }
 
 .school-selector select {
-    padding: 4px 8px;
+    padding: 4px 10px; /* Slightly reduced padding */
+    height: auto; /* Let the browser determine the height based on content and padding */
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f8f8f8;
     color: #333;
-    font-size: 12px; /* Adjusted for better legibility */
+    font-size: 14px;
     cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
