@@ -642,7 +642,7 @@ input[type="text"] {
     grid-template-rows: repeat(3, 1fr);
     gap: 0;
     width: 100%;
-    height: calc(100vh - 70px); /* Adjust height to account for the header */
+    height: calc(100vh - 60px); /* Adjust height to account for the header */
 }
 
 .grid-item {
