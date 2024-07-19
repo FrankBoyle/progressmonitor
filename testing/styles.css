@@ -629,11 +629,41 @@ input[type="text"] {
 /* Additional styles for login form */
 /* Centering the content */
 .center-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-areas:
+        "testimonials login sample-reports"
+        "testimonials login sample-reports";
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto;
+    justify-items: center;
+    align-items: start;
+    gap: 20px;
     height: 100vh;
     background-color: #f5f5f5;
+    padding-top: 4rem; /* Adjust for fixed header */
+}
+
+.grid-container {
+    display: contents;
+}
+
+.grid-item {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.testimonials {
+    grid-area: testimonials;
+    max-width: 300px;
+}
+
+.sample-reports {
+    grid-area: sample-reports;
+    max-width: 300px;
 }
 
 .login-box {
@@ -643,6 +673,7 @@ input[type="text"] {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
+    grid-area: login;
 }
 
 .login-box-msg {
