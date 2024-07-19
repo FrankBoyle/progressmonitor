@@ -275,9 +275,11 @@ button:hover {
     font-weight: bold;
 }
 
-ul {
-    list-style-type: none;
+p, ul {
+    list-style: none;
     padding: 0;
+    text-align: left; /* Align text to the left for better readability */
+
 }
 
 ul li {
@@ -329,7 +331,7 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 h3 {
@@ -634,6 +636,7 @@ input[type="text"] {
     align-items: center;
     height: 100vh;
     background-color: #f5f5f5;
+    padding: 2rem; /* Add padding to ensure the content is not too close to the edges */
 }
 
 .grid-container {
@@ -652,8 +655,10 @@ input[type="text"] {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .testimonials {
@@ -669,6 +674,9 @@ input[type="text"] {
 }
 
 .login-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: white;
     padding: 2rem;
     border-radius: 8px;
@@ -684,6 +692,18 @@ input[type="text"] {
     margin-bottom: 1rem;
     color: #333;
     text-align: center;
+}
+
+.login-box .form-control {
+    width: 80%; /* Make the input fields narrower */
+}
+
+.login-box .btn-primary {
+    width: 80%; /* Make the button narrower */
+}
+
+.testimonials, .sample-reports {
+    padding: 1rem; /* Add padding for better spacing */
 }
 
 .form-control {
