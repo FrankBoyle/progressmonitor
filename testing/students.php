@@ -42,7 +42,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <div class="logo">
             <img src="IEPreport_logo.jpg" alt="Logo">
         </div>
-        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Add this line -->
+        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Hamburger icon -->
         <div id="headerMenu" class="header-icons">
             <div class="school-selector">
                 <label for="school-select">Select School:</label>
@@ -69,7 +69,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             </a>
         </div>
     </header>
-
 
     <main class="content-students">
         <input type="hidden" id="selected-student-id" value="">
@@ -263,6 +262,7 @@ function toggleMenu() {
     menu.classList.toggle('active');
     console.log('Menu class list:', menu.classList);
 }
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
