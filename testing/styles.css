@@ -94,7 +94,7 @@
     }
 
     .menu-icon {
-        display: block !important;
+        display: block;
         align-self: flex-end;
     }
 
