@@ -50,15 +50,23 @@
 
         <div class="center-content">
     <div class="grid-container">
-        <div class="grid-item"></div>
-        <div class="grid-item testimonials">
-            <h2>Testimonials</h2>
-            <p>"This service has transformed our IEP reporting process!" - Educator A</p>
-            <p>"An invaluable tool for special education teachers." - Educator B</p>
+        <div class="grid-item">
+            <h2>About Us</h2>
+            <p>About us content goes here.</p>
         </div>
-        <div class="grid-item"></div>
+        <div class="grid-item testimonials">
+            <h2>Testimonials 1</h2>
+            <p>"This service has transformed our IEP reporting process!" - Educator A</p>
+        </div>
+        <div class="grid-item">
+            <h2>PNG Report 1</h2>
+            <img src="path/to/report1.png" alt="PNG Report 1">
+        </div>
         
-        <div class="grid-item"></div>
+        <div class="grid-item testimonials">
+            <h2>Testimonials 2</h2>
+            <p>Testimonial 2 content goes here.</p>
+        </div>
         <div class="grid-item login-box">
             <h1 class="login-box-msg">Sign in</h1>
             <form method="post" action="users/login_backend.php" name="login">
@@ -96,21 +104,25 @@
                 <a href="register.php" class="text-center">Register a new membership</a>
             </p>
         </div>
-        <div class="grid-item"></div>
-        
-        <div class="grid-item"></div>
-        <div class="grid-item sample-reports">
-            <h2>Sample Reports</h2>
-            <p>Check out some sample reports to see what our system can do.</p>
-            <ul>
-                <li><a href="sample_report1.pdf">Sample Report 1</a></li>
-                <li><a href="sample_report2.pdf">Sample Report 2</a></li>
-            </ul>
+        <div class="grid-item">
+            <h2>PNG Report 2</h2>
+            <img src="path/to/report2.png" alt="PNG Report 2">
         </div>
-        <div class="grid-item"></div>
+        
+        <div class="grid-item testimonials">
+            <h2>Testimonials 3</h2>
+            <p>Testimonial 3 content goes here.</p>
+        </div>
+        <div class="grid-item">
+            <h2>PNG Report 3</h2>
+            <img src="path/to/report3.png" alt="PNG Report 3">
+        </div>
+        <div class="grid-item testimonials">
+            <h2>Testimonials 4</h2>
+            <p>Testimonial 4 content goes here.</p>
+        </div>
     </div>
 </div>
-
 
 </body>
 </html>
