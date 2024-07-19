@@ -67,8 +67,8 @@
         padding: 1rem;
     }
 
-    .about-us p {
-        font-size: 0.875rem; /* Adjust font size for smaller screens */
+    .about-us {
+        display: none;
     }
 }
 
