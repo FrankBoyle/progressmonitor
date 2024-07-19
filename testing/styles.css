@@ -648,12 +648,33 @@ input[type="text"] {
 .grid-item {
     background-color: white;
     padding: 2rem;
-    border: 1px solid #ddd; /* Add border to see the separation */
+    border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+.about-us p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 1rem 0;
+    text-align: justify;
+}
+
+.about-us h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+p strong {
+    font-weight: bold;
+}
+
+p em {
+    font-style: italic;
 }
 
 .login-box {
