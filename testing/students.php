@@ -259,9 +259,9 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 <script>
 function toggleMenu() {
     var menu = document.getElementById('headerMenu');
-    console.log('Menu toggle triggered'); // Log when the function is called
+    console.log('Menu toggle triggered');
     menu.classList.toggle('active');
-    console.log('Menu class list:', menu.classList); // Log the current class list of the menu
+    console.log('Menu class list:', menu.classList);
 }
 </script>
 
@@ -283,6 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
 
+    document.querySelector('.menu-icon').addEventListener('click', toggleMenu);
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
 
