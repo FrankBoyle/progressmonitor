@@ -1,6 +1,5 @@
 @media (max-width: 768px) {
-
-
+    
     .content {
         padding: 10px; 
         flex-direction: column;
@@ -59,8 +58,8 @@
     .grid-item {
         width: 100%;
         padding: 1rem;
-
     }
+
 }
 
 /* Basic Reset */
