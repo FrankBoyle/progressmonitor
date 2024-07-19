@@ -451,7 +451,7 @@ function addStudent(event) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('There was an error adding the student. Please try again.');
+        //alert('There was an error adding the student. Please try again.');
     });
 }
 
