@@ -27,6 +27,10 @@
                 <img src="IEPreport_logo.jpg" alt="Logo">
             </div>
             <div class="header-icons">
+                <a href="mailto:dan@iepreport.com" class="nav-link">
+                    <i class="nav-icon fas fa-question-circle"></i>
+                    <p>Support</p>
+                </a>
                 <a href="students.php" class="nav-link">
                     <i class="nav-icon"></i>
                     <p>Home</p>
