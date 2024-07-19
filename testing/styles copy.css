@@ -106,10 +106,10 @@ html {
 }
 
 .logo img {
-    max-height: 55px; /* Adjust as needed */
-    width: auto;      /* Maintain aspect ratio */
+    max-height: 55px;     /* Adjust as needed */
+    width: auto;          /* Maintain aspect ratio */
+    margin-left: 20px;    /* Adjust this value to move the logo to the right */
 }
-
 
 body {
     font-family: 'Arial', sans-serif;
