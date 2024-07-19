@@ -431,18 +431,17 @@ function addStudent(event) {
     const lastName = document.getElementById('last-name').value;
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
-    const groupId = document.getElementById('group-select').value;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
     fetch('./users/add_student.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&group_id=${encodeURIComponent(groupId)}`
+        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&school_id=${encodeURIComponent(schoolId)}`
     })
     .then(response => response.json())
     .then(data => {
-        //console.log('Student added successfully:', data);
         if (data.status === 'success') {
             loadStudents();
             hideAddStudentModal();
@@ -452,7 +451,7 @@ function addStudent(event) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('There was an error adding the student. Please try again.');
+        //alert('There was an error adding the student. Please try again.');
     });
 }
 
@@ -588,12 +587,12 @@ function loadStudentsForGroupAssignment(groupId) {
                 $('.select2').select2();
             } else {
                 console.error('Expected an array but received:', data);
-                alert('There was an error loading students. Please try again.');
+                //alert('There was an error loading students. Please try again.');
             }
         })
         .catch(error => {
             console.error('Error fetching students for assignment:', error);
-            alert('There was an error loading students. Please try again.');
+            //alert('There was an error loading students. Please try again.');
         });
 }
 
@@ -675,7 +674,7 @@ function loadStudents() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('There was an error loading students. Please try again.');
+            //alert('There was an error loading students. Please try again.');
         });
 }
 
