@@ -98,7 +98,7 @@
                     </div>
 
                     <div class="grid-item about-us">
-                        <h3>Sample Reports</h3>
+                        <h3>About Us</h3>
                         <p>
                             <strong>IEPreport.com</strong> is a pioneering platform dedicated to empowering special education teachers through efficient and effective progress monitoring tools. Founded by educators for educators, our mission is to streamline the progress monitoring process, making it more intuitive and impactful for those in the field of special education.
                         </p>
