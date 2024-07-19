@@ -50,6 +50,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             <div class="logo">
                 <img src="IEPreport_logo.jpg" alt="Logo">
             </div>
+            <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Add this line -->
+            <div class="header-icons" id="headerMenu"> <!-- Add id to this div -->
             <div class="header-icons">
                 <button id="printReportBtn" class="btn btn-primary">Print Report</button>
                 <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>

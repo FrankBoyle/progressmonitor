@@ -44,7 +44,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <div class="logo">
             <img src="IEPreport_logo.jpg" alt="Logo">
         </div>
-        <div class="header-icons">
+        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Add this line -->
+        <div class="header-icons" id="headerMenu"> <!-- Add id to this div -->
             <div class="school-selector">
                 <label for="school-select">Select School:</label>
                 <select id="school-select">

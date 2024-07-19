@@ -22,6 +22,8 @@
             <div class="logo">
                 <img src="IEPreport_logo.jpg" alt="Logo">
             </div>
+            <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Add this line -->
+            <div class="header-icons" id="headerMenu"> <!-- Add id to this div -->
             <div class="header-icons">
                 <a href="students.php" class="nav-link">
                     <i class="nav-icon"></i>
