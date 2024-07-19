@@ -258,7 +258,9 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 <script>
     function toggleMenu() {
         var menu = document.getElementById('headerMenu');
+        console.log('Menu toggled');
         menu.classList.toggle('active');
+        console.log('Menu class list:', menu.classList);
     }
 </script>
 
