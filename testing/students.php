@@ -55,7 +55,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
-                    
+
                     <li class="luxbar-item dropdown">
                         <a href="#">Select School:</a>
                         <ul>
@@ -306,8 +306,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    $('.select2').select2();
-
+    $('#school-select').select2({
+        placeholder: "Select a school",
+        allowClear: true,
+        width: 'resolve' // This option helps to adjust the width automatically
+    });
+    
     const goalList = document.getElementById('goal-list');
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
