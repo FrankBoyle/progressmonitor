@@ -431,18 +431,17 @@ function addStudent(event) {
     const lastName = document.getElementById('last-name').value;
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
-    //const groupId = document.getElementById('group-select').value; group_id=${encodeURIComponent(groupId)}
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
     fetch('./users/add_student.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}`
+        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&school_id=${encodeURIComponent(schoolId)}`
     })
     .then(response => response.json())
     .then(data => {
-        //console.log('Student added successfully:', data);
         if (data.status === 'success') {
             loadStudents();
             hideAddStudentModal();
