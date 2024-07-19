@@ -122,6 +122,16 @@ html {
     background-color: #163D4F; /* A slightly darker shade of the base color for hover effect */
 }
 
+.luxbar-item a {
+    color: #fff; /* Initial color, adjust if different */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and color */
+}
+
+.luxbar-item a:hover {
+    background-color: #1A3E55; /* Darker shade of blue */
+    color: #ffffff; /* Optional: change text color on hover */
+}
+
 .school-selector {
     display: flex;
     align-items: center; /* Centering content within the selector */
