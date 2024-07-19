@@ -136,14 +136,6 @@ html {
     appearance: none; /* Standard way to remove default browser styling */
 }
 
-/* Optional: custom dropdown arrow */
-.school-selector select {
-    background-image: url('dropdown-arrow.svg');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-}
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: #E5E5E5;
