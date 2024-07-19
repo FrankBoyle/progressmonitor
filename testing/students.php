@@ -256,10 +256,10 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-        function toggleMenu() {
-            var menu = document.getElementById('headerMenu');
-            menu.classList.toggle('active');
-        }
+    function toggleMenu() {
+        var menu = document.getElementById('headerMenu');
+        menu.classList.toggle('active');
+    }
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
