@@ -68,7 +68,7 @@
                     <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
                 </div>
                 <div class="grid-item">
-                    <h2>Sample Report 1</h2>
+                    <h2>Sample Reports</h2>
                     <img src="sample_report1.png" alt="Sample Report 1">
                 </div>
                 <div class="grid-item">
@@ -112,7 +112,6 @@
                     </p>
                 </div>
                 <div class="grid-item">
-                    <h2>Sample Report 2</h2>
                     <img src="sample_report2.png" alt="Sample Report 2">
                 </div>
             </div>
