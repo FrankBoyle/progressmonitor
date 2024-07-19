@@ -681,6 +681,8 @@ input[type="text"] {
 .header-icons {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+
 }
 
 .header-icons .nav-link i {
