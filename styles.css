@@ -1,6 +1,8 @@
 @media (max-width: 768px) {
     
     .content, .content-students {
+        padding: 10px; 
+        flex-direction: column;
         margin-top: calc(75px + 4rem) !important; /* Adjust this value if necessary */
     }
 
