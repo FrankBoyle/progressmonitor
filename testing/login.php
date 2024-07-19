@@ -30,9 +30,7 @@
             <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
                 <ul class="luxbar-navigation">
                     <li class="luxbar-header">
-                        <div class="logo">
-                            <img src="IEPreport_logo.jpg" alt="Logo">
-                        </div>
+                        <img src="IEPreport_logo.jpg" alt="Logo" class="logo">
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
