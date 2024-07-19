@@ -659,10 +659,12 @@ input[type="text"] {
 .login-box {
     display: flex;
     flex-direction: column;
-    align-items: left;
+    justify-content: center;
+    align-items: center;
     background-color: white;
     padding: 2rem;
-    max-width: 400px;
+    max-width: 100%; /* Ensure it takes the full width of its grid cell */
+    height: 100%; /* Ensure it takes the full height of its grid cell */
     width: 100%;
     grid-column: 2;
     grid-row: 2;
@@ -670,14 +672,13 @@ input[type="text"] {
 
 .login-box-msg {
     font-size: 1.5rem;
-    align-items: left;
     margin-bottom: 1rem;
     color: #333;
-    text-align: left;
+    text-align: center;
 }
 
 .login-box .form-control, .login-box .btn-primary {
-    width: 100%; /* Ensure full width */
+    width: 80%; /* Ensure full width */
 }
 
 .testimonials, .sample-reports {
