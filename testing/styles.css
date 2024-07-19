@@ -43,6 +43,25 @@
         padding: 10px;
         margin: 10px;
     }
+
+    .center-content {
+        margin-top: 0;
+        height: auto;
+        padding: 1rem;
+    }
+
+    .grid-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .grid-item {
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 }
 
 /* Basic Reset */
@@ -658,8 +677,8 @@ input[type="text"] {
 }
 
 .about-us p {
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.4;
     margin: 0.5rem 0; /* Reduce the margin to make spacing smaller */
     text-align: justify;
 }
