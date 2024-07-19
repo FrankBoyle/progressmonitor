@@ -10,11 +10,11 @@
 
     gtag('config', 'G-9YXLSJ50NV');
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body>
     <div class="dashboard">
@@ -39,28 +39,28 @@
                 <h1 class="login-box-msg">Register</h1>
                 <form method="post" action="./users/register_backend.php" name="registration">
                     <div style="position: relative;">
-                        <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name" autocomplete="given-name" required>
+                        <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name" required>
                         <span class="fas fa-envelope"></span>
                     </div>
                     <div style="position: relative;">
-                        <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name" autocomplete="family-name" required>
+                        <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name" required>
                         <span class="fas fa-user"></span>
                     </div>
                     <div style="position: relative;">
-                        <input type="text" class="form-control" name="school_uuid" id="school_uuid" placeholder="blank if registering as an individual or School ID" autocomplete="off">
+                        <input type="text" class="form-control" name="school_uuid" id="school_uuid" placeholder="blank if registering as an individual or School ID.">
                         <span class="fas fa-school"></span>
                     </div>
                     <div style="position: relative;" id="new_school_container" style="display: none;">
-                        <input type="text" class="form-control" name="school_name" id="school_name" placeholder="New School Name" autocomplete="organization">
+                        <input type="text" class="form-control" name="school_name" id="school_name" placeholder="New School Name">
                         <span class="fas fa-school"></span>
                         <small>Please take care while naming your school. You will need to email us to change it later.</small>
                     </div>
                     <div style="position: relative;">
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" autocomplete="email" required>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
                         <span class="fas fa-envelope"></span>
                     </div>
                     <div style="position: relative;">
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" autocomplete="new-password" required>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
                         <span class="fas fa-lock"></span>
                     </div>
                     <div class="row">
