@@ -53,6 +53,7 @@
     .grid-container {
         display: grid;
         grid-template-columns: 1fr; /* Single column layout */
+        grid-template-rows: auto; /* Ensure rows adjust to content size */
         gap: 1rem; /* Add some gap between items */
         width: 100%;
         height: auto; /* Adjust height to auto */
