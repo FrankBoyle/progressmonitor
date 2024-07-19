@@ -282,8 +282,9 @@ document.addEventListener('DOMContentLoaded', function() {
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
 
-    document.querySelector('.menu-icon').addEventListener('click', toggleMenu);
-    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
+    console.log('DOM fully loaded and parsed');
+    var menu = document.getElementById('headerMenu');
+    console.log('Initial menu class list:', menu.classList);    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
 
     window.hideAddGroupModal = hideAddGroupModal;
