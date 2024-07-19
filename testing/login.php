@@ -88,6 +88,15 @@
                         </p>
                     </div>
 
+                    <div class="grid-item">
+                        <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
+                    </div>
+
+                    <div class="grid-item">
+                        <h2>Sample Reports</h2>
+                        <img src="sample_report1.png" alt="Sample Report 1">
+                    </div>
+
                     <div class="grid-item about-us">
                         <p>
                             <strong>IEPreport.com</strong> is a pioneering platform dedicated to empowering special education teachers through efficient and effective progress monitoring tools. Founded by educators for educators, our mission is to streamline the progress monitoring process, making it more intuitive and impactful for those in the field of special education.
@@ -101,15 +110,6 @@
                         <p>
                             While our ultimate goal is to offer this invaluable resource to a wider audience, we remain focused on supporting and uplifting educators, ensuring they have the resources they need to succeed. Join us on our journey to transform special education progress monitoring, and experience the difference that comes from a tool designed by those who know the field best.
                         </p>
-                    </div>
-
-                    <div class="grid-item">
-                        <h2>Sample Reports</h2>
-                        <img src="sample_report1.png" alt="Sample Report 1">
-                    </div>
-
-                    <div class="grid-item">
-                        <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
                     </div>
                     
                     <div class="grid-item">
