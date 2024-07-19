@@ -33,7 +33,7 @@
                         <a href="#" class="luxbar-brand">IEPreport</a>
 
                         <div class="logo">
-                            <img src="IEPreport_logo.jpg" alt="Logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo" class="luxbar-brand">
                         </div>
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
