@@ -112,7 +112,7 @@ html {
 }
 
 .luxbar-menu-material-indigo {
-    background-color: #1A3E55; /* Override background color */
+    background-color: #1A3E55 !important; /* Override background color */
 }
 
 .luxbar-menu-material-indigo a {
