@@ -55,8 +55,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
-                    <li>
-                        <div class="school-selector">
+                    <li class="luxbar-item dropdown">
                             <label for="school-select">Select School:</label>
                             <select id="school-select">
                                 <?php foreach ($schools as $school): ?>
@@ -65,7 +64,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-                        </div>
                     </li>
                     <li>
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
