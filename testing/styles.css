@@ -689,6 +689,11 @@ input[type="text"] {
     color: #f0f0f0;
 }
 
+.header-icons .nav-link {
+    display: flex;
+    align-items: center;
+}
+
 .header-icons span {
     margin-right: 10px;
     cursor: pointer;
