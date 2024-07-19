@@ -27,13 +27,15 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
     gtag('config', 'G-9YXLSJ50NV');
     </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Management</title>
+    <title>Group Managment</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -42,8 +44,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <div class="logo">
             <img src="IEPreport_logo.jpg" alt="Logo">
         </div>
-        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Hamburger icon -->
-        <div id="headerMenu" class="header-icons">
+        <div class="header-icons">
             <div class="school-selector">
                 <label for="school-select">Select School:</label>
                 <select id="school-select">
@@ -54,6 +55,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                     <?php endforeach; ?>
                 </select>
             </div>
+
             <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                 <a href="manage.php" class="nav-link">
                     <button class="btn btn-primary">Manage</button>
@@ -71,7 +73,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     </header>
 
     <main class="content-students">
-        <input type="hidden" id="selected-student-id" value="">
+    <input type="hidden" id="selected-student-id" value="">
 
         <section class="box create-group">
             <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
@@ -121,8 +123,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<!-- Place the Edit Group button here, outside the modal -->
-<!-- <button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>-->
+   <!-- Place the Edit Group button here, outside the modal -->
+   <!-- <button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>-->
 
 <!-- Add Student Modal -->
 <div id="add-student-modal" class="modal">
@@ -255,15 +257,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<script>
-    function toggleMenu() {
-        var menu = document.getElementById('headerMenu');
-        console.log('Menu toggled');
-        menu.classList.toggle('active');
-        console.log('Menu class list after toggle:', menu.classList);
-    }
-</script>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -282,9 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.showAddGoalModal = showAddGoalModal;
     window.hideAddGoalModal = hideAddGoalModal;
 
-    console.log('DOM fully loaded and parsed');
-    var menu = document.getElementById('headerMenu');
-    console.log('Initial menu class list:', menu.classList);    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
+    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
 
     window.hideAddGroupModal = hideAddGroupModal;
