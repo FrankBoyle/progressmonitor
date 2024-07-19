@@ -431,14 +431,14 @@ function addStudent(event) {
     const lastName = document.getElementById('last-name').value;
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
-    //const groupId = document.getElementById('group-select').value;
+    //const groupId = document.getElementById('group-select').value; group_id=${encodeURIComponent(groupId)}
 
     fetch('./users/add_student.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&group_id=${encodeURIComponent(groupId)}`
+        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}`
     })
     .then(response => response.json())
     .then(data => {
