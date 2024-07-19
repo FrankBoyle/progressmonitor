@@ -67,7 +67,7 @@
         padding: 1rem;
     }
 
-    .about-us {
+    .about-us p{
         display: none;
     }
 }
