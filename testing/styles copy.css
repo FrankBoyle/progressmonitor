@@ -122,6 +122,28 @@ html {
     background-color: #163D4F; /* A slightly darker shade of the base color for hover effect */
 }
 
+.school-selector select {
+    width: 100%; /* Full width of its container */
+    padding: 8px 12px;
+    border: 1px solid #ccc; /* Style the border as needed */
+    border-radius: 5px; /* Optional: rounded corners */
+    background-color: #f8f8f8; /* Light background to stand out or match your design */
+    color: #333; /* Text color */
+    font-size: 16px; /* Consistent font size */
+    cursor: pointer; /* Indicates the element is selectable */
+    -webkit-appearance: none; /* Removes default styling on WebKit browsers */
+    -moz-appearance: none; /* Removes default styling on Mozilla browsers */
+    appearance: none; /* Standard way to remove default browser styling */
+}
+
+/* Optional: custom dropdown arrow */
+.school-selector select {
+    background-image: url('dropdown-arrow.svg');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #E5E5E5;
