@@ -64,7 +64,7 @@
                                 }
                             ?>
                             <form action="forgot_password.php" method="post">
-                                <label for="email">Email:</label>
+                                <label for="email" id="email">Email:</label>
                                 <input type="email" class="form-control" name="email" required>
                                 <input type="submit" class="btn btn-primary" name="forgot_password" value="Request Password Reset">
                             </form>
