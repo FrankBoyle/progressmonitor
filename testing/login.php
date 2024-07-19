@@ -76,9 +76,9 @@
                 </div>
                 <div class="grid-item testimonials">
                     <h3>Testimonials</h3>
-                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - Joe Dattilo</p>
+                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - <strong>Joe Dattilo</strong></p>
 
-                    <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
+                    <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - <strong>Fran Boyle</strong></p>
                 </div>
                 <div class="grid-item sample-reports">
                     <h3>Sample Reports</h3>
