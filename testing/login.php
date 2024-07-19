@@ -113,7 +113,7 @@ Join us on our journey to transform special education progress monitoring, and e
             </p>
         </div>
         <div class="grid-item">
-            <h2>PNG Report 2</h2>
+            <h2></h2>
             <img src="sample_report2.png" alt="Sample Report 2">
         </div>
         
