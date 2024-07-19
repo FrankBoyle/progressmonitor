@@ -52,17 +52,9 @@
     <div class="grid-container">
         <div class="grid-item">
             <h2>About Us</h2>
-            <p>IEPreport.com is a pioneering platform dedicated to empowering special education teachers through efficient and effective progress monitoring tools. Founded by educators for educators, our mission is to streamline the progress monitoring process, making it more intuitive and impactful for those in the field of special education.
-
-Our platform is built on the belief that the best tools come from those who understand the unique challenges of education firsthand. At IEPreport.com, we harness the power of collaboration and innovation to create solutions that enhance the teaching and learning experience.
-
-Administrators will find IEPreport.com invaluable for gaining insights into classroom progress, ensuring that teachers are supported and that students' needs are being met. Our tools provide clear and comprehensive data that aids in informed decision-making without adding extra pressure on educators.
-
-While our ultimate goal is to offer this invaluable resource to a wider audience, we remain focused on supporting and uplifting educators, ensuring they have the resources they need to succeed.
-
-Join us on our journey to transform special education progress monitoring, and experience the difference that comes from a tool designed by those who know the field best.</p>
+            <p>About us content goes here.</p>
         </div>
-        <div class="grid-item testimonials">
+        <div class="grid-item">
             <h2>Testimonials 1</h2>
             <p>"This service has transformed our IEP reporting process!" - Educator A</p>
         </div>
@@ -71,7 +63,7 @@ Join us on our journey to transform special education progress monitoring, and e
             <img src="path/to/report1.png" alt="PNG Report 1">
         </div>
         
-        <div class="grid-item testimonials">
+        <div class="grid-item">
             <h2>Testimonials 2</h2>
             <p>Testimonial 2 content goes here.</p>
         </div>
@@ -117,7 +109,7 @@ Join us on our journey to transform special education progress monitoring, and e
             <img src="path/to/report2.png" alt="PNG Report 2">
         </div>
         
-        <div class="grid-item testimonials">
+        <div class="grid-item">
             <h2>Testimonials 3</h2>
             <p>Testimonial 3 content goes here.</p>
         </div>
@@ -125,7 +117,7 @@ Join us on our journey to transform special education progress monitoring, and e
             <h2>PNG Report 3</h2>
             <img src="path/to/report3.png" alt="PNG Report 3">
         </div>
-        <div class="grid-item testimonials">
+        <div class="grid-item">
             <h2>Testimonials 4</h2>
             <p>Testimonial 4 content goes here.</p>
         </div>
