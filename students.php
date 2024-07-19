@@ -135,7 +135,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
                     <div style="margin-right: 10px;">
-                        <select id="group-select" name="group_id" class="select2" style="width: 200px;" data-placeholder="Group name here" multiple>
+                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here" multiple>
                             <option></option>
                             <!-- Options will be dynamically populated -->
                         </select>
@@ -165,12 +165,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-group">
                 <label for="grade-level">Grade Level:</label>
                 <input type="text" id="grade-level" name="grade_level" required>
-            </div>
-            <div class="form-group">
-                <label for="group-select">Group:</label>
-                <select id="group-select" name="group_id" required>
-                    <!-- Options will be dynamically populated -->
-                </select>
             </div>
             <button type="submit">Add Student</button>
         </form>
