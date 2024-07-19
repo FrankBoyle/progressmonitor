@@ -634,6 +634,7 @@ input[type="text"] {
     height: calc(100vh - 70px); /* Adjust height to account for the header */
     margin-top: 70px; /* Push the grid layout down to avoid overlap with the header */
     background-color: #f5f5f5;
+    padding: 2rem; /* Add padding to ensure the content is not too close to the edges */
 }
 
 .grid-container {
