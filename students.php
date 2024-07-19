@@ -125,8 +125,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
    <!-- Place the Edit Group button here, outside the modal -->
    <!-- <button class="edit-group-btn" onclick="showEditGroupModal()">Edit Group</button>-->
-<!-- Hidden input to store the selected group ID -->
-<input type="hidden" id="edit-group-id" name="edit_group_id">
 
 <!-- Add Student Modal -->
 <div id="add-student-modal" class="modal">
@@ -137,7 +135,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <form id="assign-students-form" onsubmit="assignStudentsToGroup(event)">
                 <div style="display: flex; align-items: center;">
                     <div style="margin-right: 10px;">
-                        <select id="group-select" name="group_id" class="select2" style="width: 200px;" data-placeholder="Group name here" multiple>
+                        <select name="student_id" class="select2" style="width: 200px;" data-placeholder="Student name here" multiple>
                             <option></option>
                             <!-- Options will be dynamically populated -->
                         </select>
@@ -433,16 +431,7 @@ function addStudent(event) {
     const lastName = document.getElementById('last-name').value;
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
-    const groupId = document.getElementById('edit-group-id').value; // Use the hidden input for groupId
-
-    // Debugging: Log the values
-    console.log({ firstName, lastName, dateOfBirth, gradeLevel, groupId });
-
-    if (!firstName || !lastName || !dateOfBirth || !gradeLevel || !groupId) {
-        console.error('One or more form fields are missing.');
-        alert('Please fill out all fields.');
-        return;
-    }
+    const groupId = document.getElementById('group-select').value;
 
     fetch('./users/add_student.php', {
         method: 'POST',
@@ -453,6 +442,7 @@ function addStudent(event) {
     })
     .then(response => response.json())
     .then(data => {
+        //console.log('Student added successfully:', data);
         if (data.status === 'success') {
             loadStudents();
             hideAddStudentModal();
@@ -691,9 +681,6 @@ function loadStudents() {
 
 function selectGroup(element) {
     const groupId = element.getAttribute('data-group-id');
-    
-    // Debugging: Log the selected group ID
-    console.log('Selected Group ID:', groupId);
     
     // Update the hidden input with the selected groupId
     document.getElementById('edit-group-id').value = groupId;
