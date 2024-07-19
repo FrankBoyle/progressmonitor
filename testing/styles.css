@@ -675,6 +675,7 @@ input[type="text"] {
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: calc(100vh - 70px);
     margin-top: 70px;
     background-color: #f5f5f5;
     padding: 2rem;
