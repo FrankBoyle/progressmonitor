@@ -123,8 +123,8 @@ html {
 }
 
 .school-selector select {
-    width: 100%; /* Full width of its container */
-    padding: 8px 12px;
+    width: auto; /* Adjust to fit content more naturally, or set a specific width like 200px */
+    padding: 4px 8px; /* Reduced padding */
     border: 1px solid #ccc; /* Style the border as needed */
     border-radius: 5px; /* Optional: rounded corners */
     background-color: #f8f8f8; /* Light background to stand out or match your design */
