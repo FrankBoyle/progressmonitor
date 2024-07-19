@@ -75,6 +75,9 @@
                     </p>
                 </div>
                 <div class="grid-item testimonials">
+                    <h3>Testimonials</h3>
+                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - Joe Dattilo</p>
+
                     <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle</p>
                 </div>
                 <div class="grid-item sample-reports">
@@ -84,20 +87,14 @@
                 <div class="grid-item about-us">
                     <h3>About Us</h3>
                     <p>
-                        <strong>IEPreport.com</strong> is a pioneering platform dedicated to empowering special education teachers through efficient and effective progress monitoring tools. Founded by educators for educators, our mission is to streamline the progress monitoring process, making it more intuitive and impactful for those in the field of special education.
+                        <strong>IEPreport.com</strong> was created by teachers, for teachers. As two Special Ed Teachers with a combined 40 years of experience, we saw a need for a better way to progress monitor. We understand the struggle to find smarter, more efficient methods. We've tried various tools, adapted hand-me-down spreadsheets, and dealt with inconsistent data, all of which were unsustainable, even for tech-savvy educators like us. Recognizing that not all teachers are tech-savvy, we created IEPreport.com to offer a user-friendly solution for reporting accurate data.
                     </p>
                     <p>
-                        Our platform is built on the belief that the best tools come from those who understand the unique challenges of education firsthand. At IEPreport.com, we harness the power of collaboration and innovation to create solutions that enhance the teaching and learning experience.
-                    </p>
-                    <p>
-                        Administrators will find IEPreport.com invaluable for gaining insights into classroom progress, ensuring that teachers are supported and that students' needs are being met. Our tools provide clear and comprehensive data that aids in informed decision-making without adding extra pressure on educators.
-                    </p>
-                    <p>
-                        While our ultimate goal is to offer this invaluable resource to a wider audience, we remain focused on supporting and uplifting educators, ensuring they have the resources they need to succeed. Join us on our journey to transform special education progress monitoring, and experience the difference that comes from a tool designed by those who know the field best.
+                        Our mission is to provide a tool that anyone can use to enter goals—whether in Math, ELA, Behavior, or any other area—and easily generate reports with beautiful, accurate graphs. No matter your level of tech proficiency, our tool simplifies the process while ensuring high-quality data representation. Check us out and see how our tool, while appearing simple, is powered by robust technology to meet your needs.
                     </p>
                 </div>
-                <div class="grid-item testimonials">
-                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - Joe Dattilo</p>
+                <div class="grid-item sample-reports">
+                    <img src="sample_report3.png" alt="Sample Report 3">
                 </div>
                 <div class="grid-item sample-reports">
                     <img src="sample_report2.png" alt="Sample Report 2">
