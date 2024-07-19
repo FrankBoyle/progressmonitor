@@ -777,6 +777,16 @@ p em {
     text-align: center;
 }
 
+.testimonials p {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.testimonials p:last-child {
+    margin-bottom: 0; /* Removes the bottom margin from the last paragraph */
+}
+
 .sample-reports {
     text-align: center;
 }
