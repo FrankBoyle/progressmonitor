@@ -55,24 +55,15 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
-
-                    <li class="luxbar-item dropdown">
-                        <a href="#">Select School:</a>
-                        <ul>
-                            <li class="luxbar-item">
-                                <div class="select-wrapper">
-                                    <select id="school-select" class="luxbar-item-select">
-                                        <?php foreach ($schools as $school): ?>
-                                            <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                                                <?= htmlspecialchars($school['SchoolName']) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </li>
-                        </ul>
+                    <li class="luxbar-item dropdown"><a href="#">Select School</a>
+                            <select id="school-select">
+                                <?php foreach ($schools as $school): ?>
+                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($school['SchoolName']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                     </li>
-
                     <li>
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                             <a href="manage.php" class="nav-link">
@@ -306,12 +297,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    $('#school-select').select2({
-        placeholder: "Select a school",
-        allowClear: true,
-        width: 'resolve' // This option helps to adjust the width automatically
-    });
-    
+    $('.select2').select2();
+
     const goalList = document.getElementById('goal-list');
     const observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
