@@ -707,8 +707,13 @@ p em {
     font-size: 1rem; /* Consistent font size */
 }
 
-.forgot-password input[type="email"] {
+.forgot-password input[type="email"], .forgot-password input[type="submit"] {
     margin-bottom: 1rem;
+    width: 100%; /* Ensure full width */
+    padding: 0.75rem; /* Adjust padding for consistent size */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem; /* Consistent font size */
 }
 
 .testimonials, .sample-reports {
