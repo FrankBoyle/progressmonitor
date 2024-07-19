@@ -122,15 +122,27 @@ html {
     background-color: #163D4F; /* A slightly darker shade of the base color for hover effect */
 }
 
+/* Ensure this rule is not being overridden */
 .luxbar-item a {
-    color: #fff; /* Initial color, adjust if different */
+    padding: 18px 24px;
+    display: block;
+    text-decoration: none;
+    color: #fff; /* Ensuring color is set directly here */
+    cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and color */
 }
 
+/* Specific hover state rule to change the background and text color */
 .luxbar-item a:hover {
-    background-color: #1A3E55; /* Darker shade of blue */
-    color: #ffffff; /* Optional: change text color on hover */
+    background-color: #1A3E55; /* Darker shade of blue for the background */
+    color: #ffffff; /* Ensures text color changes on hover and persists */
 }
+
+/* Overriding potential conflicting inheritance */
+.luxbar-menu a, .luxbar-item a {
+    color: #fff; /* Override inherit with specific color definition */
+}
+
 
 .school-selector {
     display: flex;
