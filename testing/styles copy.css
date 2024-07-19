@@ -97,10 +97,19 @@ html {
     scroll-behavior: smooth;
 }
 
-.logo img {
-    max-height:55px; /* Adjust as needed */
-    justify-content: center;
+.logo {
+    display: flex;        /* Makes .logo a flex container */
+    justify-content: center; /* Center horizontally */
+    align-items: center;  /* Center vertically */
+    height: 70px;         /* Set a specific height, adjust as needed */
+    background-color: transparent; /* Ensure no background color is applied here */
 }
+
+.logo img {
+    max-height: 55px; /* Adjust as needed */
+    width: auto;      /* Maintain aspect ratio */
+}
+
 
 body {
     font-family: 'Arial', sans-serif;
