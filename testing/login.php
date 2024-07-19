@@ -86,7 +86,7 @@
                         </div>
 
                         <p class="mb-0">
-                            <a href="register.php" class="text-center">Register a new membership</a>
+                            <a href="register.php" class="text-center"><h2>Register a new membership</h2></a>
                         </p>
                     </div>
 
