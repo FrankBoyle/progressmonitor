@@ -97,7 +97,8 @@
         position: absolute;
         top: 60px;
         left: 0;
-        padding: 10px; /* Adjust padding for better appearance */
+        padding: 10px;
+        z-index: 1000; /* Ensure menu is above other content */
     }
 
     .menu-icon {
@@ -106,6 +107,19 @@
 
     .header-icons.active {
         display: flex;
+    }
+
+    .header-icons a.nav-link {
+        display: block; /* Ensure links are block elements for full width */
+        width: 100%; /* Make links full width */
+        text-align: left; /* Align text to the left */
+    }
+
+    .header-icons .btn {
+        display: block; /* Ensure buttons are block elements for full width */
+        width: 100%; /* Make buttons full width */
+        text-align: center; /* Center align text in buttons */
+        margin-top: 10px; /* Add margin to separate buttons from links */
     }
 }
 
