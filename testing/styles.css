@@ -132,26 +132,6 @@ body {
 
 }
 
-.dashboard {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-
-}
-
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    background-color: #1A3E55;
-    color: white;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-}
-
 .content {
     display: flex;
     flex-direction: column;
@@ -656,6 +636,26 @@ input[type="text"] {
 
 .form-actions {
     margin-bottom: 20px;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #1A3E55;
+    color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
 }
 
 .header-icons {
