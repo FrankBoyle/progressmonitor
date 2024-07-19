@@ -631,7 +631,7 @@ input[type="text"] {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 70px); /* Adjust height to account for the header */
+    height: calc(100vh - 60px); /* Adjust height to account for the header */
     margin-top: 70px; /* Push the grid layout down to avoid overlap with the header */
     background-color: #f5f5f5;
 }
