@@ -195,14 +195,14 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div id="templateDropdown" class="form-group" style="display: none;">
-                <label for="template-metadata-select">Choose a template rubric:</label>
+                <label for="template-metadata-select"><strong>Choose a template rubric:</strong></label>
                 <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')">
                     <option value="" disabled selected>Select one</option>
                 </select>
             </div>
 
             <div id="existingDropdown" class="form-group">
-                <label for="existing-metadata-select">Choose a previously used rubric:</label>
+                <label for="existing-metadata-select"><strong>Choose a template rubric:</strong></label>
                 <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')">
                     <option value="" disabled selected>Select one</option>
                 </select>
@@ -1122,7 +1122,7 @@ function loadMetadata() {
             //console.log('Fetched used metadata:', data);
             const metadataSelect = document.getElementById('existing-metadata-select');
             if (metadataSelect) {
-                metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
+                metadataSelect.innerHTML = '<option value="" disabled selected>Choose one</option>';
 
                 data.forEach(metadata => {
                     //console.log(`Adding metadata to existing: ${metadata.category_name}`);
@@ -1385,7 +1385,7 @@ function loadTemplates() {
                 console.error('Template metadata select element not found.');
                 return;
             }
-            templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
+            templateSelect.innerHTML = '<option value="" disabled selected>Choose one</option>';
 
             data.forEach(template => {
                 if (template.category_name.includes('Template')) {

@@ -1156,6 +1156,13 @@ img {
     gap: 10px; /* Space between grid items */
 }
 
+.checkbox-container-students {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Adjust number of columns as needed */
+    gap: 10px; /* Space between grid items */
+}
+
+
 .checkbox-container label {
     display: flex;
     align-items: center;
