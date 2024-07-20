@@ -281,28 +281,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
     console.log("School ID:", schoolId);
 
-    // Call loadTemplates on page load
     loadGroups();
     loadStaff();
-    loadTemplates();
     lightbox.init();
 
-    // Ensure add-goal-btn and add-group-btn have event listeners attached
-    const addGoalBtn = document.querySelector('.add-goal-btn');
-    if (addGoalBtn) {
-        addGoalBtn.addEventListener('click', showAddGoalModal);
-    } else {
-        console.error("Add Goal button not found");
-    }
+    window.showAddGoalModal = showAddGoalModal;
+    window.hideAddGoalModal = hideAddGoalModal;
 
-    const addGroupBtn = document.querySelector('.add-group-btn');
-    if (addGroupBtn) {
-        addGroupBtn.addEventListener('click', showAddGroupModal);
-    } else {
-        console.error("Add Group button not found");
-    }
+    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
+    document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
 
-    // Monitor mutations in the goal list
+    window.hideAddGroupModal = hideAddGroupModal;
+    window.hideAddStudentModal = hideAddStudentModal;
+
+    document.addEventListener('click', function(event) {
+        const optionsMenu = document.getElementById('group-options');
+        if (optionsMenu && !optionsMenu.contains(event.target)) {
+            optionsMenu.style.display = 'none';
+        }
+    });
+
+    $('.select2').select2();
+
     const goalList = document.getElementById('goal-list');
     if (goalList) {
         const observer = new MutationObserver(function(mutations) {
@@ -319,7 +319,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
-    // Metadata Option Selector
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     const templateDropdown = document.getElementById('templateDropdown');
     const existingDropdown = document.getElementById('existingDropdown');
@@ -381,7 +380,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("School select not found");
     }
 });
-
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
     const selectedGroup = document.querySelector('.selected-group');
