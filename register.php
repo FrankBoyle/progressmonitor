@@ -44,7 +44,7 @@
         <div class="center-content">
             <div class="login-box">
                 <h1 class="login-box-msg">Register</h1>
-                <form method="post" action="./users/register_backend.php" name="registration">
+                <form method="post" action="users/register_backend.php" name="registration">
                     <div style="position: relative;">
                         <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name" autocomplete="given-name" required>
                         <span class="fas fa-envelope"></span>
