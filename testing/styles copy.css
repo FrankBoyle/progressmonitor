@@ -197,7 +197,7 @@ body {
     margin: 0; /* Ensure no margin that could disrupt the full width */
     width: 100%; /* Ensure li takes full width of ul */
     transition: background-color 0.3s; /* Smooth transition for background color changes */
-    background-color: #97b2d4; /* Subtle light grey background color as default */
+    background-color: #b6c2cf; /* Subtle light grey background color as default */
 
 }
 
