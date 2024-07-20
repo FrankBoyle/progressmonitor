@@ -123,13 +123,13 @@ function loadActiveStudents() {
             }
 
             const activeStudentsTable = new Tabulator("#active-students-table-container", {
-                data: data,
+                data: data, // use the fetched data
                 layout: "fitDataStretch",
                 pagination: "local",
                 paginationSize: 30,
                 paginationSizeSelector: [10, 20, 50, 100],
                 initialSort: [
-                    {column: "last_name", dir: "asc"}
+                    {column: "last_name", dir: "asc"} // Sort by last name ascending
                 ],
                 columns: [
                     { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
@@ -146,10 +146,12 @@ function loadActiveStudents() {
                         width: 100
                     }
                 ],
-                cellEdited: function(cell) {
-                    updateStudent(cell.getRow().getData());
-                }
             });
+            
+            // Attach the cellEdited event after table initialization
+            activeStudentsTable.on("cellEdited", function(cell) {
+                updateStudent(cell.getRow().getData());
+            });            
 
             // Attach event listeners for archive buttons
             setTimeout(() => {
