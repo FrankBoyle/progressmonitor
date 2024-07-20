@@ -192,19 +192,23 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <div class="selector-area">
                 <div id="columnSelectorTitle" class="selector-title">Goal Category Options:</div>
                 <div id="metadataOptionSelector" class="checkbox-container">
-                    <div class="selector-item" data-option="template">Category Template</div>
-                    <div class="selector-item" data-option="existing">Previously Used Category</div>
+                    <div class="selector-item">
+                        <input type="radio" name="metadata_option" value="template" onclick="toggleMetadataOption()"> Category Template
+                    </div>
+                    <div class="selector-item">
+                        <input type="radio" name="metadata_option" value="existing" onclick="toggleMetadataOption()"> Previously Used Category
+                    </div>
                 </div>
             </div>
 
-            <div id="templateDropdown" class="form-group" style="display: none;">
+            <div id="template-dropdown" class="form-group" style="display: none;">
                 <label for="template-metadata-select">Select Category Template:</label>
                 <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')">
                     <option value="" disabled selected>Select a category to see column options</option>
                 </select>
             </div>
 
-            <div id="existingDropdown" class="form-group" style="display: none;">
+            <div id="existing-dropdown" class="form-group" style="display: none;">
                 <label for="existing-metadata-select">Select Existing Category:</label>
                 <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')">
                     <option value="" disabled selected>Select a category to see column options</option>
@@ -228,7 +232,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         </form>
     </div>
 </div>
-
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
