@@ -522,10 +522,10 @@ function hideAddGroupModal() {
 }
 
 function hideAddStudentModal() {
-        const modal = document.getElementById('add-student-modal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
+    const modal = document.getElementById('add-student-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 
 function loadStudentsByGroup(groupId) {
