@@ -232,6 +232,8 @@ body {
     border-radius: 5px; /* Rounded corners for the list */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
     width: 100%; /* Ensures the list takes full width of its container */
+    background-color: hwb(189 94% 3%); /* Subtle light grey background color as default */
+
 }
 
 #columnNamesDisplay ul li {
@@ -249,7 +251,7 @@ body {
 }
 
 #columnNamesDisplay ul li:hover {
-    background-color: #e9e9e9; /* Highlight effect on hover */
+    background-color: #D6E4F0;
 }
 
 
