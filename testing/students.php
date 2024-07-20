@@ -1067,27 +1067,27 @@ function resetStudentList() {
 }
 
 function loadMetadata() {
-        fetch('users/fetch_metadata.php')
-            .then(response => response.json())
-            .then(data => {
-                const metadataSelect = document.getElementById('existing-metadata-select');
-                if (metadataSelect) {
-                    metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
+    fetch('users/fetch_metadata.php')
+        .then(response => response.json())
+        .then(data => {
+            const metadataSelect = document.getElementById('existing-metadata-select');
+            if (metadataSelect) {
+                metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
-                    data.forEach(metadata => {
-                        const option = document.createElement('option');
-                        option.value = metadata.metadata_id;
-                        option.textContent = metadata.category_name;
-                        metadataSelect.appendChild(option);
-                    });
-                } else {
-                    console.error('Metadata select element not found.');
-                }
-            })
-            .catch(error => {
-                console.error('Error loading metadata:', error);
-                alert('There was an error loading metadata. Please try again.');
-            });
+                data.forEach(metadata => {
+                    const option = document.createElement('option');
+                    option.value = metadata.metadata_id;
+                    option.textContent = metadata.category_name;
+                    metadataSelect.appendChild(option);
+                });
+            } else {
+                console.error('Metadata select element not found.');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading metadata:', error);
+            alert('There was an error loading metadata. Please try again.');
+        });
 }
 
 function showAddGoalModal() {
@@ -1327,12 +1327,17 @@ function archiveGoal(goalId) {
     });
 }
 
-function toggleMetadataOption() {
-    const templateOption = document.querySelector('input[name="metadata_option"][value="template"]').checked;
-    const existingOption = document.querySelector('input[name="metadata_option"][value="existing"]').checked;
-
-    document.getElementById('template-dropdown').style.display = templateOption ? 'block' : 'none';
-    document.getElementById('existing-dropdown').style.display = existingOption ? 'block' : 'none';
+function selectOption(option) {
+    const templateDropdown = document.getElementById('template-dropdown');
+    const existingDropdown = document.getElementById('existing-dropdown');
+    
+    if (option === 'template') {
+        templateDropdown.style.display = 'block';
+        existingDropdown.style.display = 'none';
+    } else if (option === 'existing') {
+        templateDropdown.style.display = 'none';
+        existingDropdown.style.display = 'block';
+    }
 }
 
 // Function to load metadata templates
