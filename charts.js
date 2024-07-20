@@ -1236,6 +1236,7 @@ function getSelectedColumns() {
 }
 
 function saveAndPrintReport() {
+    console.log('Attempting to save and print the report. Current studentName:', window.studentName);
     const selectedGoal = document.querySelector('.goal-item.selected');
     if (!selectedGoal) {
         alert("Please select a goal.");
@@ -1243,18 +1244,8 @@ function saveAndPrintReport() {
     }
 
     const selectedColumns = getSelectedColumns();
-    if (selectedColumns.length === 0) {
-        alert("Please select at least one column.");
-        return;
-    }
-
     const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
         .map(item => item.getAttribute('data-section'));
-
-    if (selectedSections.length === 0) {
-        alert("Please select at least one section to print.");
-        return;
-    }
 
     const reportingPeriod = document.getElementById('reporting_period').value.trim();
     const notes = window.quillInstances['notes'].root.innerHTML;
@@ -1263,10 +1254,8 @@ function saveAndPrintReport() {
         alert("Please enter the reporting period.");
         return;
     }
-    const studentName = window.studentName || "fran@iepreport.com"; // Default if not set
 
-
-    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
+    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns, window.studentName);
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns, studentName) {
@@ -1274,7 +1263,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     let printContents = `
         <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
-            <h2 style="text-align: left; font-weight: bold; font-size: 24px;">${studentName}</h2> <!-- Display student name in bold and top left -->
+            <h2 style="text-align: left; font-weight: bold; font-size: 24px;">${studentName}</h2>
             <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
                 <div class="print-goal-text">${selectedGoal.innerHTML}</div>
             </div>`;
