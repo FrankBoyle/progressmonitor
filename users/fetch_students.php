@@ -1,11 +1,14 @@
 <?php
 session_start();
+include('auth_session.php');
+include('db.php');
+
+// Enable PHP error logging
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL);
-
-include('auth_session.php');
-include('db.php');
+//ini_set('log_errors', 1);
+//ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
 
 $schoolId = $_SESSION['school_id'];
 $teacherId = $_SESSION['teacher_id'];

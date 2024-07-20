@@ -1,11 +1,14 @@
 <?php
 session_start();
-//file_put_contents('post_log.txt', print_r($_POST, true));
-//error_reporting(E_ALL);
-//ini_set('display_errors', 1);
-
 include('auth_session.php');
 include('db.php');
+
+// Enable PHP error logging
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('log_errors', 1);
+//ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
 
 $response = ['success' => false];
 

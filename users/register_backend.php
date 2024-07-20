@@ -1,10 +1,13 @@
 <?php
-// register_backend.php
 session_start();
 include('db.php');
 
-//error_reporting(E_ALL);
+// Enable PHP error logging
 //ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('log_errors', 1);
+//ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
 
 function log_message($message) {
     file_put_contents('register_debug.log', $message . PHP_EOL, FILE_APPEND);

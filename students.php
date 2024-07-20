@@ -1120,18 +1120,18 @@ function resetStudentList() {
 }
 
 function loadMetadata() {
-    console.log('Loading existing categories...');
+    //console.log('Loading existing categories...');
     const studentId = document.getElementById('selected-student-id').value;
     fetch(`users/fetch_metadata.php?student_id=${studentId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched used metadata:', data);
+            //console.log('Fetched used metadata:', data);
             const metadataSelect = document.getElementById('existing-metadata-select');
             if (metadataSelect) {
                 metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
                 data.forEach(metadata => {
-                    console.log(`Adding metadata to existing: ${metadata.category_name}`);
+                    //console.log(`Adding metadata to existing: ${metadata.category_name}`);
                     const option = document.createElement('option');
                     option.value = metadata.metadata_id;
                     option.textContent = metadata.category_name;
@@ -1363,7 +1363,7 @@ function selectOption(option) {
         return;
     }
 
-    console.log(`Option selected: ${option}`);
+    //console.log(`Option selected: ${option}`);
     if (option === 'template') {
         templateDropdown.style.display = 'block';
         existingDropdown.style.display = 'none';
@@ -1377,12 +1377,12 @@ function selectOption(option) {
 
 // Function to load metadata templates
 function loadTemplates() {
-    console.log('Loading templates...');
+    //console.log('Loading templates...');
     const studentId = document.getElementById('selected-student-id').value;
     fetch(`users/fetch_metadata_templates.php?student_id=${studentId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched unused templates:', data);
+            //console.log('Fetched unused templates:', data);
             if (data.error) {
                 throw new Error(data.error);
             }
@@ -1396,7 +1396,7 @@ function loadTemplates() {
 
             data.forEach(template => {
                 if (template.category_name.includes('Template')) {
-                    console.log(`Adding template: ${template.category_name}`);
+                    //console.log(`Adding template: ${template.category_name}`);
                     const option = document.createElement('option');
                     option.value = template.metadata_id;
                     option.textContent = template.category_name;
@@ -1452,7 +1452,7 @@ function showColumnNames(type) {
         return;
     }
 
-    console.log(`Showing column names for ${type} with ID: ${selectedId}`);
+    //console.log(`Showing column names for ${type} with ID: ${selectedId}`);
     fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
         .then(response => response.json())
         .then(data => {
@@ -1470,7 +1470,7 @@ function showColumnNames(type) {
             for (let i = 1; i <= 10; i++) {
                 const scoreName = data[`score${i}_name`];
                 if (scoreName) {
-                    console.log(`Adding column name: ${scoreName}`);
+                    //console.log(`Adding column name: ${scoreName}`);
                     const listItem = document.createElement('li');
                     listItem.textContent = scoreName;
                     columnNamesList.appendChild(listItem);
