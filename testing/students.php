@@ -1391,32 +1391,24 @@ function loadExistingCategories() {
 }
 
 function showColumnNames(type) {
-        let selectedId;
-        if (type === 'template') {
-            selectedId = document.getElementById('template-metadata-select').value;
-        } else if (type === 'existing') {
-            selectedId = document.getElementById('existing-metadata-select').value;
-        }
+    let selectedId;
+    if (type === 'template') {
+        selectedId = document.getElementById('template-metadata-select').value;
+    } else if (type === 'existing') {
+        selectedId = document.getElementById('existing-metadata-select').value;
+    }
 
-        if (!selectedId) {
-            document.getElementById('columnNamesDisplay').style.display = 'none';
-            return;
-        }
+    if (!selectedId) {
+        document.getElementById('columnNamesDisplay').style.display = 'none';
+        return;
+    }
 
-        fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-
-                const columnNamesList = document.getElementById('columnNamesList');
-                if (!columnNamesList) {
-                    console.error('Column names list element not found.');
-                    return;
-                }
+    fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
+        .then(response => response.json())
+        .then(data => {
+            const columnNamesList = document.getElementById('columnNamesList');
+            if (columnNamesList) {
                 columnNamesList.innerHTML = '';
-
                 for (let i = 1; i <= 10; i++) {
                     const scoreName = data[`score${i}_name`];
                     if (scoreName) {
@@ -1425,12 +1417,14 @@ function showColumnNames(type) {
                         columnNamesList.appendChild(listItem);
                     }
                 }
-
                 document.getElementById('columnNamesDisplay').style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Error loading column names:', error);
-            });
+            } else {
+                console.error('Column names list element not found.');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading column names:', error);
+        });
 }
 </script>
 </body>
