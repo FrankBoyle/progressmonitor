@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
-    // Metadata Option Selector
+    // Metadata Option Selector - I don't even know and I don't want to remove it
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     metadataOptionSelector.addEventListener('click', function(event) {
         if (event.target.classList.contains('selector-item')) {
