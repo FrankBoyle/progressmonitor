@@ -1399,7 +1399,6 @@ function loadExistingCategories() {
             });
 }
 
-
 function showColumnNames(type) {
         let selectedId;
         if (type === 'template') {
