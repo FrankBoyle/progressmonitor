@@ -1367,7 +1367,7 @@ function loadTemplates() {
 }
 
 function loadExistingCategories() {
-    fetch('users/fetch_existing_metadata.php')
+    fetch('users/fetch_existing_categories.php')
         .then(response => response.json())
         .then(data => {
             const metadataSelect = document.getElementById('existing-metadata-select');
