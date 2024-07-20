@@ -5,17 +5,38 @@ include('db.php');
 
 header('Content-Type: application/json');
 
+$school_id = $_SESSION['school_id'];
+$student_id = isset($_GET['student_id']) ? intval($_GET['student_id']) : 0;
+
 try {
-    $schoolId = $_SESSION['school_id'];
-    
-    // Fetch only metadata templates (where metadata_template is 1)
-    $stmt = $connection->prepare("SELECT * FROM Metadata WHERE school_id = ? AND metadata_template = 1");
-    $stmt->execute([$schoolId]);
+    // Fetch metadata IDs that have been used in the Goals table for the selected student
+    $stmt = $connection->prepare("
+        SELECT metadata_id 
+        FROM Goals 
+        WHERE school_id = :school_id 
+        AND student_id_new = :student_id
+    ");
+    $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
+    $stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $usedMetadata = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+    // Convert the array of used metadata IDs to a comma-separated string for the next query
+    $usedMetadataIds = implode(',', array_map('intval', $usedMetadata));
+
+    // Fetch metadata that is not used in the Goals table for the selected student
+    $query = "SELECT metadata_id, category_name FROM Metadata WHERE school_id = :school_id";
+    if (!empty($usedMetadataIds)) {
+        $query .= " AND metadata_id NOT IN ($usedMetadataIds)";
+    }
+
+    $stmt = $connection->prepare($query);
+    $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
+    $stmt->execute();
     $templates = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     echo json_encode($templates);
-} catch (Exception $e) {
-    error_log("Error fetching metadata templates: " . $e->getMessage());
+} catch (PDOException $e) {
     echo json_encode(["error" => "Error fetching metadata templates: " . $e->getMessage()]);
 }
 ?>
