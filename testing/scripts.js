@@ -129,7 +129,7 @@ function loadActiveStudents() {
                 paginationSize: 30,
                 paginationSizeSelector: [10, 20, 50, 100],
                 initialSort: [
-                    {column: "last_name", dir: "asc"} // Sort by last name ascending
+                    { column: "last_name", dir: "asc" } // Sort by last name ascending
                 ],
                 columns: [
                     { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
@@ -140,33 +140,31 @@ function loadActiveStudents() {
                         title: "Archive",
                         field: "student_id_new",
                         hozAlign: "center",
-                        formatter: function(cell, formatterParams, onRendered) {
+                        formatter: function (cell, formatterParams, onRendered) {
                             return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>';
                         },
                         width: 100
                     }
                 ],
-            });
-            
-            // Attach the cellEdited event after table initialization
-            activeStudentsTable.on("cellEdited", function(cell) {
-                updateStudent(cell.getRow().getData());
-            });            
-
-            // Attach event listeners for archive buttons
-            setTimeout(() => {
-                document.querySelectorAll('.btn-archive').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const studentId = this.getAttribute('data-id');
+                rowClick: function (e, row) {
+                    const target = e.target;
+                    if (target.classList.contains('btn-archive')) {
+                        const studentId = target.getAttribute('data-id');
                         archiveStudent(studentId);
-                    });
-                });
-            }, 500);
+                    }
+                }
+            });
+
+            // Attach the cellEdited event after table initialization
+            activeStudentsTable.on("cellEdited", function (cell) {
+                updateStudent(cell.getRow().getData());
+            });
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
+
 
 function loadArchivedStudents() {
     fetch('./users/fetch_archived_students.php')
