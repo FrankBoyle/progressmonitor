@@ -276,6 +276,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 let quillInstances = {}; // Initialize quillInstances globally
+let studentId = null; // Initialize studentId globally
 
 document.addEventListener('DOMContentLoaded', function() {
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
@@ -284,7 +285,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Call loadTemplates on page load
     loadGroups();
     loadStaff();
-    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
@@ -328,14 +328,16 @@ document.addEventListener('DOMContentLoaded', function() {
             event.target.classList.add('selected');
 
             const selectedOption = event.target.getAttribute('data-option');
+            const studentId = document.getElementById('selected-student-id').value;
+            console.log('Selected option:', selectedOption);
+
             if (selectedOption === 'template') {
                 console.log('Loading templates...');
-                loadTemplates();
+                loadTemplates(schoolId);
                 templateDropdown.style.display = 'block';
                 existingDropdown.style.display = 'none';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
             } else if (selectedOption === 'existing') {
-                const studentId = document.getElementById('selected-student-id').value;
                 if (studentId && schoolId) {
                     console.log(`Loading existing categories for student ID: ${studentId}, school ID: ${schoolId}`);
                     loadExistingCategories(studentId, schoolId);
