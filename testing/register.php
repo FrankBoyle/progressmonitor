@@ -86,29 +86,6 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function() {
-        $('form[name="registration"]').on('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
-
-            $.ajax({
-                type: "POST",
-                url: "./users/register_backend.php",
-                data: $(this).serialize(),
-                success: function(response) {
-                    const data = JSON.parse(response);
-                    if (data.success) {
-                        alert("Registration successful!");
-                        window.location.href = "login.php"; // Redirect to login page or any other page
-                    } else {
-                        alert("Registration failed: " + data.message); // Show error message from server
-                    }
-                },
-                error: function() {
-                    alert("There was an error processing your registration.");
-                }
-            });
-        });
-    });
 
     document.getElementById('school_uuid').addEventListener('blur', function() {
             if (this.value.trim() === '') {
