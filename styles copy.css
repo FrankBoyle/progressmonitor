@@ -1175,8 +1175,8 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px; /* Increased padding for better appearance */
-    margin: 0px; /* Add some margin around the buttons */
+    padding: 10px; /* Increased padding for better appearance */
+    margin: 5px; /* Add some margin around the buttons */
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px; /* More rounded corners */
