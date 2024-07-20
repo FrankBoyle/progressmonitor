@@ -1335,30 +1335,30 @@ function selectOption(option) {
 
 // Function to load metadata templates
 function loadTemplates() {
-        fetch('users/fetch_metadata_templates.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
+    fetch('users/fetch_metadata_templates.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
 
-                const templateSelect = document.getElementById('template-metadata-select');
-                if (!templateSelect) {
-                    console.error('Template metadata select element not found.');
-                    return;
-                }
-                templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
+            const templateSelect = document.getElementById('template-metadata-select');
+            if (!templateSelect) {
+                console.error('Template metadata select element not found.');
+                return;
+            }
+            templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
-                data.forEach(template => {
-                    const option = document.createElement('option');
-                    option.value = template.metadata_id;
-                    option.textContent = template.category_name;
-                    templateSelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading metadata templates:', error);
+            data.forEach(template => {
+                const option = document.createElement('option');
+                option.value = template.metadata_id;
+                option.textContent = template.category_name;
+                templateSelect.appendChild(option);
             });
+        })
+        .catch(error => {
+            console.error('Error loading metadata templates:', error);
+        });
 }
 
 function loadExistingCategories() {
