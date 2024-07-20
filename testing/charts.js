@@ -190,24 +190,19 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         table.destroy();
     }
 
-    // Define default columns
     const columns = [
         {
             title: "Actions",
             field: "actions",
-            formatter: function(cell, formatterParams, onRendered) {
-                return '<button class="delete-row-btn" data-performance-id="' + cell.getRow().getData().performance_id + '">Delete</button>';
-            },
+            formatter: cell => '<button class="delete-row-btn" data-performance-id="' + cell.getRow().getData().performance_id + '">Delete</button>',
             width: 100,
             hozAlign: "center",
-            cellClick: function(e, cell) {
+            cellClick: (e, cell) => {
                 const performanceId = cell.getRow().getData().performance_id;
                 if (confirm('Are you sure you want to delete this row?')) {
                     fetch('./users/delete_performance.php', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                        headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({ performance_id: performanceId })
                     })
                     .then(response => response.json())
@@ -229,46 +224,36 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             title: "Date",
             field: "score_date",
             editor: "input",
-            editorParams: function(cell) {
+            editorParams: cell => {
                 let input = document.createElement("input");
                 input.setAttribute("type", "text");
                 input.style.cssText = "width:100%; height:100%; padding:0px; margin:0px; border:1px solid grey; box-sizing:border-box;";
-
                 input.value = cell.getValue() || "";
-
-                // Initialize Flatpickr when the cell is rendered
-                cell.getElement().appendChild(input);
-                flatpickr(input, {
-                    dateFormat: "Y-m-d",
-                    defaultDate: input.value,
-                    onChange: function(selectedDates, dateStr) {
-                        input.value = dateStr;
-                    }
-                });
-
-                input.focus();
-                input.style.cssText = "width:100%; height:100%;";
-
+                flatpickr(input, { dateFormat: "Y-m-d", defaultDate: input.value });
                 return input;
             },
-            formatter: function(cell, formatterParams, onRendered) {
-                const DateTime = luxon.DateTime;
-                let date = DateTime.fromISO(cell.getValue());
-                return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-            },
-            width: 120,
-            frozen: false,
+            formatter: cell => luxon.DateTime.fromISO(cell.getValue()).toFormat("MM/dd/yyyy") || "(invalid date)",
+            width: 120
         }
     ];
 
-    // Add custom columns from scoreNames
+    // Handle custom columns, apply a special editor for the 'score10' column
     Object.keys(scoreNames).forEach((key, index) => {
-        columns.push({
-            title: scoreNames[key],
-            field: `score${index + 1}`,
-            editor: "input",
-            width: 100
-        });
+        if (scoreNames[key] === 'score10') {
+            columns.push({
+                title: scoreNames[key],
+                field: `score${index + 1}`,
+                editor: textEditor, // custom editor for text inputs
+                width: 100
+            });
+        } else {
+            columns.push({
+                title: scoreNames[key],
+                field: `score${index + 1}`,
+                editor: "input",
+                width: 100
+            });
+        }
     });
 
     table = new Tabulator("#performance-table", {
@@ -280,39 +265,19 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         movableColumns: false,
         resizableRows: false,
         editTriggerEvent: "dblclick",
-        editorEmptyValue: null,
         clipboard: true,
-        clipboardCopyRowRange: "range",
-        clipboardPasteParser: "range",
-        clipboardPasteAction: "range",
         history: true,
-        clipboardCopyConfig: {
-            rowHeaders: false,
-            columnHeaders: false,
-        },
-        clipboardCopyStyled: false,
         selectableRange: 1,
-        selectableRangeColumns: true,
-        selectableRangeRows: true,
-        selectableRangeClearCells: false,
-        virtualDomBuffer: 300,
+        virtualDomBuffer: 300
     });
 
-    table.on("cellEdited", function(cell) {
-        const field = cell.getField();
-        let value = cell.getValue();
-        if (value === "") value = null;
-
-        const updatedData = cell.getRow().getData();
-        updatedData[field] = value;
+    table.on("cellEdited", cell => {
+        const updatedData = {...cell.getRow().getData(), [cell.getField()]: cell.getValue() || null};
         updatedData.student_id_new = studentIdNew;
         updatedData.metadata_id = metadataId;
-
         fetch('./users/update_performance.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(updatedData)
         })
         .then(response => response.json())
@@ -324,11 +289,8 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         })
         .catch(error => console.error('Error:', error));
     });
-
-    table.on("tableBuilt", function() {
-        //console.log("Table fully built and ready for interaction.");
-    });
 }
+
 
 function isDateDuplicate(date) {
     const data = table.getData();
@@ -1289,7 +1251,7 @@ function saveAndPrintReport() {
     }
 
     const reportingPeriod = document.getElementById('reporting_period').value.trim();
-    const notes = document.getElementById('notes').value.trim();
+    const notes = window.quillInstances['notes'].root.innerHTML;
 
     if (!reportingPeriod) {
         alert("Please enter the reporting period.");
@@ -1583,6 +1545,8 @@ function showPrintDialogModal() {
         .catch(error => {
             console.error('Error fetching goals:', error);
         });
+        initializeNotesQuill(); // Initialize Quill for notes when the print dialog is shown
+
 }
 
 function fetchExistingReports(goalId) {
@@ -1619,7 +1583,11 @@ function fetchExistingReports(goalId) {
             reportingPeriodDropdown.addEventListener('change', function() {
                 const selectedPeriod = this.value;
                 const report = data.find(report => report.reporting_period == selectedPeriod);
-                document.getElementById('notes').value = report ? report.notes : '';
+                if (report && window.quillInstances['notes']) {
+                    window.quillInstances['notes'].root.innerHTML = report.notes ? report.notes : '';
+                } else {
+                    window.quillInstances['notes'].root.innerHTML = '';
+                }
             });
         })
         .catch(error => {
@@ -1696,3 +1664,97 @@ function populateGoalSelectionModal(goals) {
         window[`quillEditorModal${goal.goal_id}`] = quill;
     });
 }
+
+function initializeNotesQuill() {
+    if (!window.quillInstances) {
+        window.quillInstances = {};
+        console.log("Initializing window.quillInstances object");
+    }
+    if (!window.quillInstances['notes']) {
+        window.quillInstances['notes'] = new Quill('#notes', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'header': 1 }, { 'header': 2 }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+                    ['clean'],
+                    ['link', 'image', 'video']
+                ]
+            }
+        });
+        console.log("Quill instance for 'notes' initialized");
+    } else {
+        console.log("Quill instance for 'notes' already exists");
+    }
+}
+
+// Custom editor for handling text inputs more gracefully
+function textEditor(cell, onRendered, success, cancel, editorParams) {
+    var input = document.createElement("input");
+    input.style.padding = "4px";
+    input.style.width = "100%";
+    input.style.boxSizing = "border-box";
+    input.value = cell.getValue();
+
+    onRendered(function(){
+        input.focus();
+        input.style.height = "100%";
+        // Set cursor at the end of text
+        input.setSelectionRange(input.value.length, input.value.length);
+    });
+
+    function onChange(){
+        if (input.value !== cell.getValue()) {
+            success(input.value);
+        } else {
+            cancel();
+        }
+    }
+
+    input.addEventListener("blur", onChange);
+
+    // Enhance keyboard navigation
+    input.addEventListener("keydown", function(e){
+        var cursorPosition = input.selectionStart;
+        var handleKeys = ["ArrowLeft", "ArrowRight"];
+        var textLength = input.value.length;
+
+        if (handleKeys.includes(e.key)) {
+            if (e.key === "ArrowLeft" && cursorPosition === 0) {
+                // If cursor is at the start, allow Tabulator to move left
+                cancel();
+            } else if (e.key === "ArrowRight" && cursorPosition === textLength) {
+                // If cursor is at the end, allow Tabulator to move right
+                cancel();
+            } else {
+                // Prevent Tabulator from taking over left and right keys within the input
+                e.stopPropagation();
+            }
+        }
+    });
+
+    input.addEventListener("mousedown", function(e){
+        e.stopPropagation();
+    });
+
+    input.addEventListener("click", function(e){
+        e.stopPropagation();
+    });
+
+    return input;
+}
+
+
+
+
+

@@ -147,25 +147,33 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
             </div>
             <div id="printDialogModal" class="modal">
                 <div class="modal-content">
+                    
                     <span class="close" onclick="hidePrintDialogModal()">&times;</span>
-                    <h2>Select Sections to Print</h2>
+                    
+                    <h2>Selection to Print</h2>
                     <div>Please select a goal:</div>
+
                     <div id="goalSelectionContainer" class="selection-container"></div>
+
                     <div>Select what you want to print in the report:</div>
+
                     <div id="sectionSelectionContainer" class="selection-container">
                         <div class="selector-item" data-section="printTable">Performance Table</div>
                         <div class="selector-item" data-section="printLineChart">Line Chart</div>
                         <div class="selector-item" data-section="printBarChart">Bar Chart</div>
                         <div class="selector-item" data-section="printStatistics">Statistics</div>
                     </div>
+
                     <div id="reportingPeriodContainer" style="display:none;">
                         <label for="reporting_period">Reporting Period:</label>
                         <select id="reporting_period"></select>
                     </div>
+
                     <div id="notes-container">
                         <label for="notes">Notes:</label>
-                        <textarea id="notes" placeholder="Enter notes"></textarea>
+                        <div id="notes" style="height: 200px;" placeholder="Enter notes"></div> <!-- Quill will be initialized here -->
                     </div>
+
                     <button onclick="saveAndPrintReport()">Print</button>
                 </div>
             </div>
