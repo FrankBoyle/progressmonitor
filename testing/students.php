@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 templateDropdown.style.display = 'none';
                 existingDropdown.style.display = 'block';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
-                loadMetadata();
+                loadExistingCategories();
             }
         }
     });
