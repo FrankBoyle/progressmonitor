@@ -869,6 +869,18 @@ function displayGoals(goals) {
 }
 */
 
+function editGoal(goalId) {
+    const quill = window.quillInstances[goalId];
+    if (!quill) {
+        console.error('Quill editor instance not found for goal ID:', goalId);
+        return;
+    }
+    quill.enable(true);
+    quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
+    document.getElementById(`goal-content-${goalId}`).style.display = 'none';
+    document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
+}
+
 function saveGoal(goalId, updatedContent, saveButton) {
     fetch('./users/update_goal.php', {
         method: 'POST',
