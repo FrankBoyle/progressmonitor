@@ -1726,8 +1726,13 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
         }
     }
 
-    // Attach event listeners to handle the completion of editing
-    input.addEventListener("blur", onChange);
+    // Prevent automatic closing on blur by checking if it's an actual user-driven blur
+    input.addEventListener("blur", function (e) {
+        console.log("Blur event triggered.");
+        if (document.activeElement !== input) {
+            onChange();
+        }
+    });
 
     input.addEventListener("click", function (e) {
         console.log("Input clicked.");
@@ -1746,3 +1751,4 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
 
     return input;
 }
+
