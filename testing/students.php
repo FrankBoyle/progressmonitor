@@ -879,52 +879,41 @@ function displayGoals(goals) {
 }
 
 function editGoal(goalId) {
-    const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
-    const quill = quillInstances[goalId];
+    const quill = window[`quillEditor${goalId}`];
+    if (!quill) {
+        console.error('Quill editor instance not found for goal ID:', goalId);
+        return;
+    }
     quill.enable(true);
-    quill.root.setAttribute('contenteditable', true);
-
-    // Remove any existing save buttons
-    document.querySelectorAll('.save-btn').forEach(btn => btn.remove());
-
-    const saveBtn = document.createElement('button');
-    saveBtn.textContent = 'Save';
-    saveBtn.className = 'save-btn';
-    saveBtn.onclick = function() {
-        saveGoal(goalId, quill.root.innerHTML);
-    };
-    editor.parentNode.appendChild(saveBtn);
+    document.getElementById(`goal-content-${goalId}`).style.display = 'none';
+    document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
 }
 
-function saveGoal(goalId, goalDescription) {
-    fetch('users/fetch_goals.php', {
+function saveGoal(goalId, updatedContent, goalItem) {
+    fetch('./users/update_goal.php', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json'
         },
-        body: `goal_id=${encodeURIComponent(goalId)}&goal_description=${encodeURIComponent(goalDescription)}`
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            const quill = quillInstances[goalId];
-            quill.enable(false);
-            quill.root.setAttribute('contenteditable', false);
-            document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').remove();
-            alert('Goal updated successfully.');
-        } else {
-            alert('There was an error updating the goal. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error updating the goal. Please try again.');
-    });
+        body: JSON.stringify({
+            goal_id: goalId,
+            new_text: updatedContent
+        })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              goalItem.querySelector('.goal-text').innerHTML = updatedContent;
+              const quill = window[`quillEditor${goalId}`];
+              quill.enable(false);
+              document.getElementById(`goal-content-${goalId}`).style.display = 'block';
+              document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
+          } else {
+              alert('Failed to save goal. Please try again.');
+          }
+      }).catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while saving the goal.');
+      });
 }
 
 function showEditGroupModal(groupId, groupName) {
@@ -1272,7 +1261,6 @@ function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.text())
         .then(data => {
-            //console.log('Raw response:', data);
             try {
                 const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {
@@ -1306,22 +1294,13 @@ function loadGoals(studentId) {
                             listItem.classList.add('goal-item');
                             listItem.innerHTML = `
                                 <div class="goal-content">
-                                    <div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>
-                                    <button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>
+                                    <div class="goal-text" data-goal-id="${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">${goal.goal_description}</div>
                                     <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
                                 </div>
-                                <div class="progress-reports">
-                                    <strong>Progress Reports:</strong>
-                                    <div class="thumbnails">
-                                    ${goal.notes.map((note, index) => note.report_image ? `
-                                        <div class="thumbnail-container">
-                                            <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
-                                                <img src="${note.report_image}" alt="Report Available" class="thumbnail">
-                                                <div class="thumbnail-overlay">${index + 1}</div>
-                                            </a>
-                                        </div>
-                                    ` : '').join('')}
-                                    </div>
+                                <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
+                                    <div id="editor-${goal.goal_id}" class="quill-editor"></div>
+                                    <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, quill.root.innerHTML, goalItem)">Save</button>
+                                    <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, goal.goal_description)">Cancel</button>
                                 </div>
                             `;
 
@@ -1353,6 +1332,14 @@ function loadGoals(studentId) {
             console.error('Error:', error);
             alert('There was an error fetching goals. Please try again.');
         });
+}
+
+function cancelEdit(goalId, originalContent) {
+    const quill = window[`quillEditor${goalId}`];
+    quill.root.innerHTML = originalContent;
+    quill.enable(false);
+    document.getElementById(`goal-content-${goalId}`).style.display = 'block';
+    document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
 }
 
 function archiveGoal(goalId) {
