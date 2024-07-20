@@ -146,12 +146,15 @@ function loadActiveStudents() {
                         width: 100
                     }
                 ],
-                rowClick: function (e, row) {
-                    const target = e.target;
-                    if (target.classList.contains('btn-archive')) {
-                        const studentId = target.getAttribute('data-id');
-                        archiveStudent(studentId);
-                    }
+                rowFormatter: function(row) {
+                    // This function is called whenever a row is added to the table
+                    const rowElement = row.getElement();
+                    rowElement.querySelectorAll('.btn-archive').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const studentId = this.getAttribute('data-id');
+                            archiveStudent(studentId);
+                        });
+                    });
                 }
             });
 
@@ -164,7 +167,6 @@ function loadActiveStudents() {
             console.error('Error:', error);
         });
 }
-
 
 function loadArchivedStudents() {
     fetch('./users/fetch_archived_students.php')
