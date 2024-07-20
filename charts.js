@@ -322,14 +322,19 @@ function saveIEPDate(iepDate, studentIdNew) {
 }
 
 function fetchInitialData(studentIdNew, metadataId) {
+    console.log('Fetching initial data with studentId:', studentIdNew, 'and metadataId:', metadataId);
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            //console.log('Initial data fetched:', data);
+            console.log('Data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
+                window.studentName = data.studentName; // Set the global studentName variable
+                console.log('Student Name set as:', window.studentName);
+
                 createColumnCheckboxes(data.scoreNames);
                 customColumnNames = data.scoreNames; // Store the names
                 initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
+                
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
                 }
@@ -344,6 +349,7 @@ function fetchInitialData(studentIdNew, metadataId) {
             console.error('Error fetching initial data:', error);
         });
 }
+
 
 function initializeCharts() {
     initializeLineChart();
