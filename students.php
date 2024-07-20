@@ -187,24 +187,24 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <h2>Add New Goal</h2>
         <form id="add-goal-form" onsubmit="addGoal(event)">
             <div class="selector-area">
-                <div id="columnSelectorTitle" class="selector-title">Goal Category Options:</div>
+                <div id="columnSelectorTitle" class="selector-title">Goal Rubric Options:</div>
                 <div id="metadataOptionSelector" class="checkbox-container">
-                    <div class="selector-item" data-option="template" onclick="selectOption('template')">Category Template</div>
-                    <div class="selector-item" data-option="existing" onclick="selectOption('existing')">Previously Used Category</div>
+                    <div class="selector-item" data-option="template" onclick="selectOption('template')">Template Rubric</div>
+                    <div class="selector-item" data-option="existing" onclick="selectOption('existing')">Previously Used Rubric</div>
                 </div>
             </div>
 
             <div id="templateDropdown" class="form-group" style="display: none;">
-                <label for="template-metadata-select">Select Category Template:</label>
+                <label for="template-metadata-select">Choose a template rubric:</label>
                 <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')">
-                    <option value="" disabled selected>Select a category to see column options</option>
+                    <option value="" disabled selected>Select one</option>
                 </select>
             </div>
 
             <div id="existingDropdown" class="form-group">
-                <label for="existing-metadata-select">Select Existing Category:</label>
+                <label for="existing-metadata-select">Choose a previously used rubric:</label>
                 <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')">
-                    <option value="" disabled selected>Select a category to see column options</option>
+                    <option value="" disabled selected>Select one</option>
                 </select>
             </div>
 
