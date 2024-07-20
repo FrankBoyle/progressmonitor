@@ -1712,8 +1712,9 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
     onRendered(function(){
         input.focus();
         input.style.height = "100%";
-        input.select();  // Automatically select the text to make it ready for editing
-        console.log("Editor rendered and input focused.");
+        // Set cursor at the end of text
+        input.setSelectionRange(input.value.length, input.value.length);
+        console.log("Editor rendered and input focused at the end of text.");
     });
 
     // Function to handle changes and end editing
@@ -1753,6 +1754,7 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
 
     return input;
 }
+
 
 
 
