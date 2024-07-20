@@ -40,3 +40,4 @@ try {
     echo json_encode(["error" => "Error fetching metadata templates: " . $e->getMessage()]);
 }
 ?>
+

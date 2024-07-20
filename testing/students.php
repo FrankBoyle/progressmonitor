@@ -1053,15 +1053,17 @@ function resetStudentList() {
 
 function loadMetadata() {
     console.log('Loading existing categories...');
-    fetch('users/fetch_metadata.php')
+    const studentId = document.getElementById('selected-student-id').value;
+    fetch(`users/fetch_metadata.php?student_id=${studentId}`)
         .then(response => response.json())
         .then(data => {
+            console.log('Fetched used metadata:', data);
             const metadataSelect = document.getElementById('existing-metadata-select');
             if (metadataSelect) {
                 metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
                 data.forEach(metadata => {
-                    console.log(`Adding metadata: ${metadata.category_name}`);
+                    console.log(`Adding metadata to existing: ${metadata.category_name}`);
                     const option = document.createElement('option');
                     option.value = metadata.metadata_id;
                     option.textContent = metadata.category_name;
