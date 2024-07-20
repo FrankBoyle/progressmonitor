@@ -1622,7 +1622,7 @@ function fetchExistingReports(goalId) {
                 const selectedPeriod = this.value;
                 const report = data.find(report => report.reporting_period == selectedPeriod);
                 if (report && window.quillInstances['notes']) {
-                    window.quillInstances['notes'].root.innerHTML = report.notesHtml ? report.notes : '';
+                    window.quillInstances['notes'].root.innerHTML = report.notesHtml ? report.notesHtml : '';
                 } else {
                     window.quillInstances['notes'].root.innerHTML = '';
                 }
