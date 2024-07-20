@@ -116,6 +116,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 </main>
 
 
+
 </div>
 
 <!-- Add Group Modal -->
