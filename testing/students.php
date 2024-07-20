@@ -1354,6 +1354,7 @@ function loadTemplates() {
     fetch('users/fetch_metadata_templates.php')
         .then(response => response.json())
         .then(data => {
+            console.log('Templates Data:', data); // Log the response data
             const templateSelect = document.getElementById('template-metadata-select');
             if (templateSelect) {
                 templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
@@ -1373,10 +1374,15 @@ function loadTemplates() {
 }
 
 function loadExistingCategories(studentId, schoolId) {
+    if (!studentId || !schoolId) {
+        console.error('Missing studentId or schoolId');
+        return;
+    }
+
     fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Response data:', data); // Log the response data
+            console.log('Existing Categories Data:', data); // Log the response data
             const metadataSelect = document.getElementById('existing-metadata-select');
             if (metadataSelect) {
                 metadataSelect.innerHTML = '<option value="">Select a category to see column options</option>';
