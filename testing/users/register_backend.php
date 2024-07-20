@@ -1,13 +1,13 @@
 <?php
 include('db.php');
 
+// Enable error logging and set the error log file path
 ini_set('log_errors', 1);
-ini_set('error_log', 'my_php_errors.log');
+ini_set('error_log', __DIR__ . '/my_php_errors.log'); // __DIR__ ensures the log file is created in the same directory as the script
 error_reporting(E_ALL);
 
-
 function log_message($message) {
-    file_put_contents('register_debug.log', $message . PHP_EOL, FILE_APPEND);
+    file_put_contents(__DIR__ . '/register_debug.log', $message . PHP_EOL, FILE_APPEND); // Ensure log file is created in the script directory
 }
 
 header('Content-Type: application/json');
