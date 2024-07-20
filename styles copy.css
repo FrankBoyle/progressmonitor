@@ -1173,17 +1173,23 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 5px;
-    margin: 0px;
-    background-color: #47A6E6; /* Blue background */
-    color: #fff; /* White text */
-    border: 1px solid #47A6E6; /* Blue border */
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 5px 5px; /* Increased padding for better appearance */
+    margin: 0px; /* Add some margin around the buttons */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px; /* More rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visuals */
     cursor: pointer;
-    transition: background-color 0.1s, box-shadow 0.1s;
-    text-align: center;
-    min-width: 100px;
+    transition: background-color 0.1s, box-shadow 0.1s; /* Smooth transitions */
+    text-align: center; /* Center text */
+    min-width: 100px; /* Ensure buttons are not too narrow */
+
+}
+
+.selector-item.selected {
+    background-color: #47A6E6; /* Light blue for selected items */
+    color: #fff;
+    border-color: #47A6E6;
 }
 
 #columnSelector {
