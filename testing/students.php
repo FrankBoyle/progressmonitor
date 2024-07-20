@@ -809,6 +809,7 @@ function shareGroup(event) {
     });
 }
 
+/*
 function displayGoals(goals) {
     const goalList = document.getElementById('goal-list');
     goalList.innerHTML = ''; // Clear existing goals
@@ -865,6 +866,7 @@ function displayGoals(goals) {
         window.quillInstances[goal.goal_id] = quill;
     });
 }
+*/
 
 function editGoal(goalId) {
     const quill = window.quillInstances[goalId];
@@ -1248,77 +1250,73 @@ function addGoal(event) {
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            try {
-                const jsonData = JSON.parse(data.trim());
-                if (jsonData.error) {
-                    alert(jsonData.message);
-                    return;
+            if (data.error) {
+                alert(data.message);
+                return;
+            }
+
+            const goalList = document.getElementById('goal-list');
+            goalList.innerHTML = '';
+
+            const goalsByMetadata = data.reduce((acc, goal) => {
+                if (!acc[goal.metadata_id]) {
+                    acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
                 }
+                acc[goal.metadata_id].goals.push(goal);
+                return acc;
+            }, {});
 
-                const goalList = document.getElementById('goal-list');
-                goalList.innerHTML = '';
+            for (const metadataId in goalsByMetadata) {
+                const metadataGoals = goalsByMetadata[metadataId];
 
-                const goalsByMetadata = jsonData.reduce((acc, goal) => {
-                    if (!acc[goal.metadata_id]) {
-                        acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
-                    }
-                    acc[goal.metadata_id].goals.push(goal);
-                    return acc;
-                }, {});
+                const metadataContainer = document.createElement('div');
+                const metadataLink = document.createElement('a');
+                metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
+                metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
+                metadataContainer.appendChild(metadataLink);
 
-                for (const metadataId in goalsByMetadata) {
-                    const metadataGoals = goalsByMetadata[metadataId];
-
-                    const metadataContainer = document.createElement('div');
-                    const metadataLink = document.createElement('a');
-                    metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
-                    metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
-                    metadataContainer.appendChild(metadataLink);
-
-                    metadataGoals.goals.forEach(goal => {
-                        if (!goal.archived) {
-                            const listItem = document.createElement('div');
-                            listItem.classList.add('goal-item');
-                            listItem.innerHTML = `
-                                <div class="goal-content">
-                                    <div class="goal-text" data-goal-id="${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">${goal.goal_description}</div>
-                                    <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
+                metadataGoals.goals.forEach(goal => {
+                    if (!goal.archived) {
+                        const listItem = document.createElement('div');
+                        listItem.classList.add('goal-item');
+                        listItem.innerHTML = `
+                            <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
+                                <div class="goal-text-container">
+                                    <div class="goal-text" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>
                                 </div>
-                                <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
-                                    <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                                    <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, window.quillInstances['${goal.goal_id}'].root.innerHTML, this)">Save</button>
-                                    <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
-                                </div>
-                            `;
+                                <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
+                            </div>
+                            <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
+                                <div id="editor-${goal.goal_id}" class="quill-editor"></div>
+                                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, window.quillInstances['${goal.goal_id}'].root.innerHTML, this)">Save</button>
+                                <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
+                            </div>
+                        `;
 
-                            metadataContainer.appendChild(listItem);
-                        }
-                    });
-
-                    goalList.appendChild(metadataContainer);
-                }
-
-                document.querySelectorAll('.quill-editor').forEach(editor => {
-                    const goalId = editor.getAttribute('data-goal-id');
-                    if (!window.quillInstances) {
-                        window.quillInstances = {};
-                    }
-                    if (!window.quillInstances[goalId]) {
-                        window.quillInstances[goalId] = new Quill(editor, {
-                            theme: 'snow',
-                            readOnly: true,
-                            modules: {
-                                toolbar: false
-                            }
-                        });
+                        metadataContainer.appendChild(listItem);
                     }
                 });
-            } catch (error) {
-                console.error('Error parsing JSON:', error);
-                alert('Error processing the goals. Please try again.');
+
+                goalList.appendChild(metadataContainer);
             }
+
+            document.querySelectorAll('.quill-editor').forEach(editor => {
+                const goalId = editor.getAttribute('data-goal-id');
+                if (!window.quillInstances) {
+                    window.quillInstances = {};
+                }
+                if (!window.quillInstances[goalId]) {
+                    window.quillInstances[goalId] = new Quill(editor, {
+                        theme: 'snow',
+                        readOnly: true,
+                        modules: {
+                            toolbar: false
+                        }
+                    });
+                }
+            });
         })
         .catch(error => {
             console.error('Error:', error);
