@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('./users/login_backend.php');
 ?>
 
@@ -112,21 +111,6 @@ include('./users/login_backend.php');
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-    document.getElementById('school_uuid').addEventListener('blur', function() {
-        if (this.value.trim() === '') {
-            document.getElementById('new_school_container').style.display = 'block';
-        } else {
-            document.getElementById('new_school_container').style.display = 'none';
-        }
-    });
 
-    <?php if (isset($_SESSION['registration_success'])): ?>
-        $(document).ready(function() {
-            alert('Your registration was successful! Welcome to IEPreport.com!');
-            <?php unset($_SESSION['registration_success']); ?>
-        });
-    <?php endif; ?>
-    </script>
 </body>
 </html>
