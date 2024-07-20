@@ -350,25 +350,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    if (!window.quillInstances['goal-description']) {
-        window.quillInstances['goal-description'] = new Quill('#goal-description', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-                    [{size: []}],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'script': 'sub'}, { 'script': 'super' }],
-                    ['blockquote', 'code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
-                    ['link', 'image', 'video'],
-                    ['clean']  
-                ]
-            }
-        });
-    }
 });
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
