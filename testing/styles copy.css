@@ -110,37 +110,26 @@ html {
     margin-left: 2px;    /* Adjust this value to move the logo to the right */
 }
 
-.luxbar-menu-material-indigo {
-    background-color: #1A3E55 !important; /* Override background color */
-}
-
-.luxbar-menu-material-indigo a {
-    color: #FFFFFF; /* Assuming you want white text on the dark background, adjust if necessary */
-}
-
-.luxbar-menu-material-indigo a:hover {
-    background-color: #163D4F; /* A slightly darker shade of the base color for hover effect */
-}
-
-/* Ensure this rule is not being overridden */
-.luxbar-item a {
+/* Base styles for navigation links */
+.luxbar-menu-material-indigo .luxbar-item a {
     padding: 18px 24px;
     display: block;
     text-decoration: none;
-    color: #fff; /* Ensuring color is set directly here */
+    color: #fff;  /* Ensures text color is white */
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and color */
+    transition: background-color 0.3s ease, color 0.3s ease;  /* Smooth transition for both properties */
+    background-color: #1A3E55;  /* Default background color */
 }
 
-/* Specific hover state rule to change the background and text color */
-.luxbar-item a:hover {
-    background-color: #1A3E55; /* Darker shade of blue for the background */
-    color: #ffffff; /* Ensures text color changes on hover and persists */
+/* Hover effects for navigation links */
+.luxbar-menu-material-indigo .luxbar-item a:hover {
+    background-color: #163D4F;  /* Darker shade for hover */
+    color: #ffffff;  /* Ensures text color is white on hover */
 }
 
-/* Overriding potential conflicting inheritance */
-.luxbar-menu a, .luxbar-item a {
-    color: #fff; /* Override inherit with specific color definition */
+/* To avoid any flash-back, ensure all links within luxbar-menu-material-indigo have the same default styles */
+.luxbar-menu-material-indigo a {
+    color: #FFFFFF;  /* White text for all links within the indigo menu */
 }
 
 
