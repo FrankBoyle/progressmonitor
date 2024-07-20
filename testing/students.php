@@ -280,8 +280,6 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
-    loadTemplates();
-    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
@@ -339,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-    
+
     const schoolSelect = document.getElementById('school-select');
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
