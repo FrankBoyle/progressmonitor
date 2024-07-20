@@ -280,6 +280,7 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
+    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
@@ -312,7 +313,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
-    // Metadata Option Selector
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     const templateDropdown = document.getElementById('templateDropdown');
     const existingDropdown = document.getElementById('existingDropdown');
@@ -325,15 +325,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const selectedOption = event.target.getAttribute('data-option');
             if (selectedOption === 'template') {
+                loadTemplates();
                 templateDropdown.style.display = 'block';
                 existingDropdown.style.display = 'none';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
-                loadTemplates();
             } else if (selectedOption === 'existing') {
+                loadExistingCategories();
                 templateDropdown.style.display = 'none';
                 existingDropdown.style.display = 'block';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
-                loadExistingCategories();
             }
         }
     });
