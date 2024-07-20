@@ -35,6 +35,5 @@ try {
     error_log("Error: " . $e->getMessage());
     echo json_encode(["error" => "Error: " . $e->getMessage()]);
 }
-
 ?>
 
