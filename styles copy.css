@@ -1186,12 +1186,6 @@ img {
     min-width: 100px;
 }
 
-.selector-item.selected {
-    background-color: #47A6E6; /* Light blue for selected items */
-    color: #fff;
-    border-color: #47A6E6;
-}
-
 #columnSelector {
     display: flex;
     flex-wrap: wrap; /* Allows items to wrap within the container */
