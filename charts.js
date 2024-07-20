@@ -190,24 +190,19 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         table.destroy();
     }
 
-    // Define default columns
     const columns = [
         {
             title: "Actions",
             field: "actions",
-            formatter: function(cell, formatterParams, onRendered) {
-                return '<button class="delete-row-btn" data-performance-id="' + cell.getRow().getData().performance_id + '">Delete</button>';
-            },
+            formatter: cell => '<button class="delete-row-btn" data-performance-id="' + cell.getRow().getData().performance_id + '">Delete</button>',
             width: 100,
             hozAlign: "center",
-            cellClick: function(e, cell) {
+            cellClick: (e, cell) => {
                 const performanceId = cell.getRow().getData().performance_id;
                 if (confirm('Are you sure you want to delete this row?')) {
                     fetch('./users/delete_performance.php', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                        headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({ performance_id: performanceId })
                     })
                     .then(response => response.json())
@@ -229,46 +224,36 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             title: "Date",
             field: "score_date",
             editor: "input",
-            editorParams: function(cell) {
+            editorParams: cell => {
                 let input = document.createElement("input");
                 input.setAttribute("type", "text");
                 input.style.cssText = "width:100%; height:100%; padding:0px; margin:0px; border:1px solid grey; box-sizing:border-box;";
-
                 input.value = cell.getValue() || "";
-
-                // Initialize Flatpickr when the cell is rendered
-                cell.getElement().appendChild(input);
-                flatpickr(input, {
-                    dateFormat: "Y-m-d",
-                    defaultDate: input.value,
-                    onChange: function(selectedDates, dateStr) {
-                        input.value = dateStr;
-                    }
-                });
-
-                input.focus();
-                input.style.cssText = "width:100%; height:100%;";
-
+                flatpickr(input, { dateFormat: "Y-m-d", defaultDate: input.value });
                 return input;
             },
-            formatter: function(cell, formatterParams, onRendered) {
-                const DateTime = luxon.DateTime;
-                let date = DateTime.fromISO(cell.getValue());
-                return date.isValid ? date.toFormat("MM/dd/yyyy") : "(invalid date)";
-            },
-            width: 120,
-            frozen: false,
+            formatter: cell => luxon.DateTime.fromISO(cell.getValue()).toFormat("MM/dd/yyyy") || "(invalid date)",
+            width: 120
         }
     ];
 
-    // Add custom columns from scoreNames
+    // Handle custom columns, apply a special editor for the 'score10' column
     Object.keys(scoreNames).forEach((key, index) => {
-        columns.push({
-            title: scoreNames[key],
-            field: `score${index + 1}`,
-            editor: "input",
-            width: 100
-        });
+        if (scoreNames[key] === 'score10') {
+            columns.push({
+                title: scoreNames[key],
+                field: `score${index + 1}`,
+                editor: textEditor, // custom editor for text inputs
+                width: 100
+            });
+        } else {
+            columns.push({
+                title: scoreNames[key],
+                field: `score${index + 1}`,
+                editor: "input",
+                width: 100
+            });
+        }
     });
 
     table = new Tabulator("#performance-table", {
@@ -280,39 +265,19 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         movableColumns: false,
         resizableRows: false,
         editTriggerEvent: "dblclick",
-        editorEmptyValue: null,
         clipboard: true,
-        clipboardCopyRowRange: "range",
-        clipboardPasteParser: "range",
-        clipboardPasteAction: "range",
         history: true,
-        clipboardCopyConfig: {
-            rowHeaders: false,
-            columnHeaders: false,
-        },
-        clipboardCopyStyled: false,
         selectableRange: 1,
-        selectableRangeColumns: true,
-        selectableRangeRows: true,
-        selectableRangeClearCells: false,
-        virtualDomBuffer: 300,
+        virtualDomBuffer: 300
     });
 
-    table.on("cellEdited", function(cell) {
-        const field = cell.getField();
-        let value = cell.getValue();
-        if (value === "") value = null;
-
-        const updatedData = cell.getRow().getData();
-        updatedData[field] = value;
+    table.on("cellEdited", cell => {
+        const updatedData = {...cell.getRow().getData(), [cell.getField()]: cell.getValue() || null};
         updatedData.student_id_new = studentIdNew;
         updatedData.metadata_id = metadataId;
-
         fetch('./users/update_performance.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(updatedData)
         })
         .then(response => response.json())
@@ -324,11 +289,8 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         })
         .catch(error => console.error('Error:', error));
     });
-
-    table.on("tableBuilt", function() {
-        //console.log("Table fully built and ready for interaction.");
-    });
 }
+
 
 function isDateDuplicate(date) {
     const data = table.getData();
@@ -1768,51 +1730,31 @@ function initializeNotesQuill() {
     }
 }
 
-// Custom editor for handling text inputs more gracefully
-function textEditor(cell, onRendered, success, cancel, editorParams){
-    // Create and append the input element
+function customTextEditor(cell, onRendered, success, cancel){
+    // Create the input element
     var input = document.createElement("input");
-    input.style.padding = "4px";
     input.style.width = "100%";
-    input.style.boxSizing = "border-box";
     input.value = cell.getValue();
 
-    // Set focus on the input element with a slight delay to handle transitions
-    onRendered(function(){
+    // Set focus on the input element when it is displayed
+    onRendered(() => {
         input.focus();
-        input.style.height = "100%";
-        // Move cursor to end of text
-        input.value = input.value;
-        input.focus();
+        input.select();
     });
 
-    function onChange(){
-        if(input.value !== cell.getValue()){
-            success(input.value);
-        }else{
-            cancel();
-        }
+    // When the value has been changed, and the input is blurred, save the value
+    function onSave() {
+        success(input.value);
     }
 
-    // Attach event listeners to handle the completion of editing
-    input.addEventListener("blur", onChange);
-    input.addEventListener("keydown", function(e){
-        if(e.keyCode == 13){ // For Enter
-            onChange();
-        }
-        if(e.keyCode == 27){ // For ESC
+    input.addEventListener("blur", onSave);
+    input.addEventListener("keydown", (e) => {
+        if (e.keyCode === 13) { // Enter key
+            onSave();
+        } else if (e.keyCode === 27) { // ESC key
             cancel();
         }
     });
 
     return input;
 }
-
-// Add this custom editor to your specific score column
-columns.push({
-    title: scoreNames['score10'], // Assuming 'score10' is the key for the column you're having issues with
-    field: "score10",
-    editor: textEditor, // Use the custom editor
-    width: 100
-});
-
