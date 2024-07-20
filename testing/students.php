@@ -192,12 +192,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <div class="selector-area">
                 <div id="columnSelectorTitle" class="selector-title">Goal Category Options:</div>
                 <div id="metadataOptionSelector" class="checkbox-container">
-                    <div class="selector-item">
-                        <input type="radio" name="metadata_option" value="template" onclick="toggleMetadataOption()"> Category Template
-                    </div>
-                    <div class="selector-item">
-                        <input type="radio" name="metadata_option" value="existing" onclick="toggleMetadataOption()"> Previously Used Category
-                    </div>
+                    <div class="selector-item" data-option="template" onclick="selectOption('template')">Category Template</div>
+                    <div class="selector-item" data-option="existing" onclick="selectOption('existing')">Previously Used Category</div>
                 </div>
             </div>
 
@@ -232,6 +228,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         </form>
     </div>
 </div>
+
 <!-- Group Options -->
 <div id="group-options" class="group-options">
     <button onclick="editGroup()">Edit Group</button>
