@@ -196,6 +196,9 @@ body {
     padding: 10px; /* Adjust padding here if needed */
     margin: 0; /* Ensure no margin that could disrupt the full width */
     width: 100%; /* Ensure li takes full width of ul */
+    transition: background-color 0.3s; /* Smooth transition for background color changes */
+    background-color: #97b2d4; /* Subtle light grey background color as default */
+
 }
 
 .content-students ul li:hover, .content-students ul li.selected-student, .content-students ul li.selected-group {
