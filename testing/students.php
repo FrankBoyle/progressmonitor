@@ -278,6 +278,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+
     loadGroups();
     loadStaff();
     loadExistingCategories();
