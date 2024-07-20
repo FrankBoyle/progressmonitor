@@ -1280,7 +1280,37 @@ function showAddGoalModal() {
     document.getElementById('templateDropdown').style.display = 'none';
     document.getElementById('existingDropdown').style.display = 'none';
     document.getElementById('columnNamesDisplay').style.display = 'none';
+
+    // Ensure Quill is initialized for the 'goal-description' after the modal is displayed
+    setTimeout(function() {
+        if (!window.quillInstances) {
+            window.quillInstances = {}; // Ensure the global object for Quill instances exists
+        }
+        if (!window.quillInstances['goal-description']) {
+            window.quillInstances['goal-description'] = new Quill('#goal-description', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                        [{size: []}],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        ['blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
+                        ['link', 'image', 'video'],
+                        ['clean']  
+                    ]
+                }
+            });
+        } else {
+            // If already initialized, just update the editor's content to empty or default
+            window.quillInstances['goal-description'].setText('');
+        }
+    }, 0); // A minimal timeout to ensure the modal and its contents are fully visible
 }
+
 
 function hideAddGoalModal() {
     const modal = document.getElementById('add-goal-modal');
