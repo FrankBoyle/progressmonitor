@@ -1731,7 +1731,7 @@ function initializeNotesQuill() {
 }
 
 // Custom editor for handling text inputs more gracefully
-function textEditor(cell, onRendered, success, cancel, editorParams){
+function textEditor(cell, onRendered, success, cancel, editorParams) {
     // Create and append the input element
     var input = document.createElement("input");
     input.style.padding = "4px";
@@ -1740,29 +1740,30 @@ function textEditor(cell, onRendered, success, cancel, editorParams){
     input.value = cell.getValue();
 
     // Set focus on the input element with a slight delay to handle transitions
-    onRendered(function(){
+    onRendered(function () {
         input.focus();
         input.style.height = "100%";
-        // Move cursor to end of text
-        input.value = input.value;
-        input.focus();
+        input.select(); // Select all text to make editing easier
     });
 
-    function onChange(){
-        if(input.value !== cell.getValue()){
+    function onChange() {
+        if (input.value !== cell.getValue()) {
             success(input.value);
-        }else{
+        } else {
             cancel();
         }
     }
 
     // Attach event listeners to handle the completion of editing
     input.addEventListener("blur", onChange);
-    input.addEventListener("keydown", function(e){
-        if(e.keyCode == 13){ // For Enter
+    input.addEventListener("click", function (e) {
+        e.stopPropagation(); // Prevent the editor from closing on a click
+    });
+    input.addEventListener("keydown", function (e) {
+        if (e.keyCode == 13) { // For Enter
             onChange();
         }
-        if(e.keyCode == 27){ // For ESC
+        if (e.keyCode == 27) { // For ESC
             cancel();
         }
     });
