@@ -1366,8 +1366,8 @@ function loadTemplates() {
         });
 }
 
-function loadExistingCategories() {
-    fetch('users/fetch_existing_categories.php')
+function loadExistingCategories(studentId, schoolId) {
+    fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
             console.log('Response data:', data); // Log the response data
