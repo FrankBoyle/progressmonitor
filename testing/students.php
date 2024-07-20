@@ -1366,7 +1366,8 @@ function toggleMetadataOption() {
 
 // Function to load metadata templates
 function loadTemplates() {
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>; // Include school_id in fetch
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>; 
+    console.log("Loading templates for school ID:", schoolId);
 
     fetch(`users/fetch_metadata_templates.php?school_id=${schoolId}`)
         .then(response => response.json())
@@ -1396,6 +1397,7 @@ function loadExistingCategories(studentId, schoolId) {
         return;
     }
 
+    console.log(`Loading existing categories for student ID: ${studentId}, school ID: ${schoolId}`);
     fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
