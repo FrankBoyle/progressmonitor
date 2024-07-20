@@ -273,6 +273,22 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 let quillInstances = {}; // Initialize quillInstances globally
+const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],
+    ['blockquote', 'code-block'],
+    [{ 'header': 1 }, { 'header': 2 }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],
+    [{ 'indent': '-1'}, { 'indent': '+1' }],
+    [{ 'direction': 'rtl' }],
+    [{ 'size': ['small', false, 'large', 'huge'] }],
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'font': [] }],
+    [{ 'align': [] }],
+    ['link', 'image', 'video'],
+    ['clean']
+];
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
@@ -869,18 +885,6 @@ function displayGoals(goals) {
 }
 */
 
-function editGoal(goalId) {
-    const quill = window.quillInstances[goalId];
-    if (!quill) {
-        console.error('Quill editor instance not found for goal ID:', goalId);
-        return;
-    }
-    quill.enable(true);
-    quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
-    document.getElementById(`goal-content-${goalId}`).style.display = 'none';
-    document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
-}
-
 function saveGoal(goalId, updatedContent, saveButton) {
     fetch('./users/update_goal.php', {
         method: 'POST',
@@ -1125,39 +1129,6 @@ function loadMetadata() {
             alert('There was an error loading metadata. Please try again.');
         });
 }
-
-function showAddGoalModal() {
-    const selectedStudent = document.querySelector('.selected-student');
-    if (!selectedStudent) {
-        alert('Please select a student first.');
-        return;
-    }
-    const modal = document.getElementById('add-goal-modal');
-    modal.style.display = 'block';
-
-    // Reset dropdowns
-    document.getElementById('templateDropdown').style.display = 'none';
-    document.getElementById('existingDropdown').style.display = 'none';
-    document.getElementById('columnNamesDisplay').style.display = 'none';
-}
-
-function hideAddGoalModal() {
-    const modal = document.getElementById('add-goal-modal');
-    modal.style.display = 'none';
-}
-
-function editGoal(goalId) {
-    const quill = window.quillInstances[goalId];
-    if (!quill) {
-        console.error('Quill editor instance not found for goal ID:', goalId);
-        return;
-    }
-    quill.enable(true);
-    quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
-    document.getElementById(`goal-content-${goalId}`).style.display = 'none';
-    document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
-}
-
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
@@ -1235,6 +1206,38 @@ function loadGoals(studentId) {
             console.error('Error:', error);
             alert('There was an error fetching goals. Please try again.');
         });
+}
+
+function showAddGoalModal() {
+    const selectedStudent = document.querySelector('.selected-student');
+    if (!selectedStudent) {
+        alert('Please select a student first.');
+        return;
+    }
+    const modal = document.getElementById('add-goal-modal');
+    modal.style.display = 'block';
+
+    // Reset dropdowns
+    document.getElementById('templateDropdown').style.display = 'none';
+    document.getElementById('existingDropdown').style.display = 'none';
+    document.getElementById('columnNamesDisplay').style.display = 'none';
+}
+
+function hideAddGoalModal() {
+    const modal = document.getElementById('add-goal-modal');
+    modal.style.display = 'none';
+}
+
+function editGoal(goalId) {
+    const quill = window.quillInstances[goalId];
+    if (!quill) {
+        console.error('Quill editor instance not found for goal ID:', goalId);
+        return;
+    }
+    quill.enable(true);
+    quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
+    document.getElementById(`goal-content-${goalId}`).style.display = 'none';
+    document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
 }
 
 function cancelEdit(goalId, originalContent) {
