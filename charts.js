@@ -325,9 +325,17 @@ function fetchInitialData(studentIdNew, metadataId) {
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
+            //console.log('Initial data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
-                window.studentName = data.studentName; // Set the global studentName variable
-                // Remainder of your function...
+                createColumnCheckboxes(data.scoreNames);
+                customColumnNames = data.scoreNames; // Store the names
+                initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
+                if (data.iepDate) {
+                    document.getElementById('iep_date').value = data.iepDate;
+                }
+                if (data.studentName && data.categoryName) {
+                    document.title = `${data.studentName} - ${data.categoryName}`;
+                }
             } else {
                 console.error('Invalid or incomplete initial data:', data);
             }
@@ -336,7 +344,6 @@ function fetchInitialData(studentIdNew, metadataId) {
             console.error('Error fetching initial data:', error);
         });
 }
-
 
 function initializeCharts() {
     initializeLineChart();
