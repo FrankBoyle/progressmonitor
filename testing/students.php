@@ -1209,81 +1209,112 @@ function loadMetadata() {
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => {
-            if (data.error) {
-                alert(data.message);
-                return;
-            }
-
-            const goalList = document.getElementById('goal-list');
-            goalList.innerHTML = '';
-
-            const goalsByMetadata = data.reduce((acc, goal) => {
-                if (!acc[goal.metadata_id]) {
-                    acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
+            try {
+                const jsonData = JSON.parse(data.trim());
+                if (jsonData.error) {
+                    alert(jsonData.message);
+                    return;
                 }
-                acc[goal.metadata_id].goals.push(goal);
-                return acc;
-            }, {});
 
-            for (const metadataId in goalsByMetadata) {
-                const metadataGoals = goalsByMetadata[metadataId];
+                const goalList = document.getElementById('goal-list');
+                goalList.innerHTML = '';
 
-                const metadataContainer = document.createElement('div');
-                const metadataLink = document.createElement('a');
-                metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
-                metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
-                metadataContainer.appendChild(metadataLink);
-
-                metadataGoals.goals.forEach(goal => {
-                    if (!goal.archived) {
-                        const listItem = document.createElement('div');
-                        listItem.classList.add('goal-item');
-                        listItem.innerHTML = `
-                            <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
-                                <div class="goal-text-container">
-                                    <div class="goal-text" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>
-                                </div>
-                                <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
-                            </div>
-                            <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
-                                <div id="editor-${goal.goal_id}" class="quill-editor" data-goal-id="${goal.goal_id}"></div>
-                                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, this)">Save</button>
-                                <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
-                            </div>
-                        `;
-
-                        metadataContainer.appendChild(listItem);
+                const goalsByMetadata = jsonData.reduce((acc, goal) => {
+                    if (!acc[goal.metadata_id]) {
+                        acc[goal.metadata_id] = { category_name: goal.category_name, goals: [] };
                     }
-                });
+                    acc[goal.metadata_id].goals.push(goal);
+                    return acc;
+                }, {});
 
-                goalList.appendChild(metadataContainer);
-            }
+                for (const metadataId in goalsByMetadata) {
+                    const metadataGoals = goalsByMetadata[metadataId];
 
-            document.querySelectorAll('.quill-editor').forEach(editor => {
-                const goalId = editor.getAttribute('data-goal-id');
-                if (!window.quillInstances) {
-                    window.quillInstances = {};
-                }
-                if (!window.quillInstances[goalId]) {
-                    const quill = new Quill(editor, {
-                        theme: 'snow',
-                        readOnly: true,
-                        modules: {
-                            toolbar: toolbarOptions
+                    const metadataContainer = document.createElement('div');
+                    const metadataLink = document.createElement('a');
+                    metadataLink.href = `student_data.php?student_id=${studentId}&metadata_id=${metadataId}`;
+                    metadataLink.innerHTML = `<h4 class="goal-category">${metadataGoals.category_name}</h4>`;
+                    metadataContainer.appendChild(metadataLink);
+
+                    metadataGoals.goals.forEach(goal => {
+                        if (!goal.archived) {
+                            const listItem = document.createElement('div');
+                            listItem.classList.add('goal-item');
+                            listItem.innerHTML = `
+                                <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
+                                    <div class="goal-text-container">
+                                        <div class="goal-text" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>
+                                    </div>
+                                    <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
+                                </div>
+                                <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
+                                    <div id="editor-${goal.goal_id}" class="quill-editor" data-goal-id="${goal.goal_id}"></div>
+                                    <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, this)">Save</button>
+                                    <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
+                                </div>
+                                <div class="progress-reports">
+                                    <strong>Progress Reports:</strong>
+                                    <div class="thumbnails">
+                                        ${goal.notes.map((note, index) => note.report_image ? `
+                                            <div class="thumbnail-container">
+                                                <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
+                                                    <img src="${note.report_image}" alt="Report Available" class="thumbnail">
+                                                    <div class="thumbnail-overlay">${index + 1}</div>
+                                                </a>
+                                            </div>
+                                        ` : '').join('')}
+                                    </div>
+                                </div>
+                            `;
+
+                            metadataContainer.appendChild(listItem);
                         }
                     });
-                    quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
-                    window.quillInstances[goalId] = quill;
+
+                    goalList.appendChild(metadataContainer);
                 }
-            });
+
+                document.querySelectorAll('.quill-editor').forEach(editor => {
+                    const goalId = editor.getAttribute('data-goal-id');
+                    if (!window.quillInstances) {
+                        window.quillInstances = {};
+                    }
+                    if (!window.quillInstances[goalId]) {
+                        const quill = new Quill(editor, {
+                            theme: 'snow',
+                            readOnly: true,
+                            modules: {
+                                toolbar: [
+                                    [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                                    [{size: []}],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'color': [] }, { 'background': [] }],
+                                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                                    ['blockquote', 'code-block'],
+                                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                    [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
+                                    ['link', 'image', 'video'],
+                                    ['clean']
+                                ]
+                            }
+                        });
+                        quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
+                        window.quillInstances[goalId] = quill;
+                    }
+                });
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                alert('Error processing the goals. Please try again.');
+            }
         })
         .catch(error => {
             console.error('Error:', error);
             alert('There was an error fetching goals. Please try again.');
         });
 }
+
 
 function showAddGoalModal() {
     const selectedStudent = document.querySelector('.selected-student');
