@@ -867,7 +867,7 @@ function displayGoals(goals) {
 }
 
 function editGoal(goalId) {
-    const quill = window[`quillEditor${goalId}`];
+    const quill = window.quillInstances[goalId];
     if (!quill) {
         console.error('Quill editor instance not found for goal ID:', goalId);
         return;
@@ -877,7 +877,7 @@ function editGoal(goalId) {
     document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
 }
 
-function saveGoal(goalId, updatedContent, goalItem) {
+function saveGoal(goalId, updatedContent, saveButton) {
     fetch('./users/update_goal.php', {
         method: 'POST',
         headers: {
@@ -890,8 +890,9 @@ function saveGoal(goalId, updatedContent, goalItem) {
     }).then(response => response.json())
       .then(data => {
           if (data.success) {
+              const goalItem = saveButton.closest('.goal-item');
               goalItem.querySelector('.goal-text').innerHTML = updatedContent;
-              const quill = window[`quillEditor${goalId}`];
+              const quill = window.quillInstances[goalId];
               quill.enable(false);
               document.getElementById(`goal-content-${goalId}`).style.display = 'block';
               document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
@@ -1287,8 +1288,8 @@ function loadGoals(studentId) {
                                 </div>
                                 <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
                                     <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                                    <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, quill.root.innerHTML, goalItem)">Save</button>
-                                    <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, goal.goal_description)">Cancel</button>
+                                    <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, window.quillInstances['${goal.goal_id}'].root.innerHTML, this)">Save</button>
+                                    <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
                                 </div>
                             `;
 
@@ -1301,8 +1302,11 @@ function loadGoals(studentId) {
 
                 document.querySelectorAll('.quill-editor').forEach(editor => {
                     const goalId = editor.getAttribute('data-goal-id');
-                    if (!quillInstances[goalId]) {
-                        quillInstances[goalId] = new Quill(editor, {
+                    if (!window.quillInstances) {
+                        window.quillInstances = {};
+                    }
+                    if (!window.quillInstances[goalId]) {
+                        window.quillInstances[goalId] = new Quill(editor, {
                             theme: 'snow',
                             readOnly: true,
                             modules: {
@@ -1323,7 +1327,7 @@ function loadGoals(studentId) {
 }
 
 function cancelEdit(goalId, originalContent) {
-    const quill = window[`quillEditor${goalId}`];
+    const quill = window.quillInstances[goalId];
     quill.root.innerHTML = originalContent;
     quill.enable(false);
     document.getElementById(`goal-content-${goalId}`).style.display = 'block';
