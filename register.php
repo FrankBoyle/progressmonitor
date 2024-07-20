@@ -92,7 +92,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> <!-- SweetAlert for nice popups -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> <!-- SweetAlert for nice popups -->
 
 <script>
 $(document).ready(function() {
@@ -104,29 +104,32 @@ $(document).ready(function() {
             type: 'POST',
             url: 'users/register_backend.php',
             data: formData,
+            dataType: 'json', // Expect a JSON response from the server
             success: function(response) {
-                // Check response from server, you might need to adjust based on your backend response
+                // Check response from the server, adjust based on your backend response
                 if (response.success) {
                     swal({
                         title: "Registration Successful!",
                         text: "You have been registered successfully.",
                         icon: "success",
-                        button: "Ok",
+                        button: "Ok"
                     }).then((willRedirect) => {
                         if (willRedirect) {
                             window.location.href = 'login.php'; // Redirect to login page
                         }
                     });
                 } else {
-                    swal("Error!", response.message, "error"); // Show error message
+                    swal("Error", response.message || "There was a problem with your registration. Please try again.", "error");
                 }
             },
-            error: function() {
-                swal("Error!", "There was a problem with your registration. Please try again.", "error");
+            error: function(xhr, status, error) {
+                // Handle errors here
+                swal("Error", "Failed to process your request. Please try again.", "error");
             }
         });
     });
 });
+
 </script>
 
 </body>
