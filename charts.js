@@ -1289,17 +1289,17 @@ function saveAndPrintReport() {
     }
 
     const reportingPeriod = document.getElementById('reporting_period').value.trim();
-    const notesHtml = window.quillInstances['notes'].root.innerHTML;
+    const notes = window.quillInstances['notes'].root.innerHTML;
 
     if (!reportingPeriod) {
         alert("Please enter the reporting period.");
         return;
     }
 
-    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notesHtml, selectedColumns);
+    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
 }
 
-function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notesHtml, selectedColumns) {
+function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     const commonWidth = '1000px'; // Fixed width for consistency
 
     let printContents = `
@@ -1338,7 +1338,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     printContents += `
         <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
-        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Notes:</strong> ${notesHtml}</div>
+        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Notes:</strong> ${notes}</div>
     </div>`;
 
     const printDiv = document.createElement('div');
@@ -1379,7 +1379,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
                 school_id: window.schoolId,
                 metadata_id: window.metadataId,
                 reporting_period: reportingPeriod,
-                notes: notesHtml,
+                notes: notes,
                 report_image: dataUrl.split(',')[1] // Get base64 string
             };
 
@@ -1433,7 +1433,7 @@ function resizeCharts(width) {
     });
 }
 
-function printReport(selectedGoal, selectedSections, reportingPeriod, notesHtml, selectedColumns) {
+function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
     
     printContents += `<div class="print-container">`;
@@ -1462,7 +1462,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notesHtml,
 
     // Include reporting period and notes in the print content
     printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notesHtml}</div>`;
+    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
 
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
@@ -1622,7 +1622,7 @@ function fetchExistingReports(goalId) {
                 const selectedPeriod = this.value;
                 const report = data.find(report => report.reporting_period == selectedPeriod);
                 if (report && window.quillInstances['notes']) {
-                    window.quillInstances['notes'].root.innerHTML = report.notesHtml ? report.notesHtml : '';
+                    window.quillInstances['notes'].root.innerHTML = report.notes ? report.notes : '';
                 } else {
                     window.quillInstances['notes'].root.innerHTML = '';
                 }
