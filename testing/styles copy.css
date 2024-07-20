@@ -127,7 +127,7 @@ html {
 
 /* Hover effects for navigation links */
 .luxbar-menu-material-indigo .luxbar-item a:hover {
-    background-color: #163D4F;  /* Darker shade for hover */
+    background-color: #041c27;  /* Darker shade for hover */
     color: #ffffff;  /* Ensures text color is white on hover */
 }
 
