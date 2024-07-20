@@ -1700,8 +1700,6 @@ function initializeNotesQuill() {
 
 // Custom editor for handling text inputs more gracefully
 function textEditor(cell, onRendered, success, cancel, editorParams) {
-    let editing = true;  // Flag to manage whether we're still editing
-
     // Create and append the input element
     var input = document.createElement("input");
     input.type = 'text';
@@ -1710,22 +1708,16 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
     input.style.boxSizing = "border-box";
     input.value = cell.getValue();
 
-    // Ensure the input takes focus when editing starts
-    onRendered(function () {
+    // Set focus on the input element with a slight delay to handle transitions
+    onRendered(function(){
         input.focus();
-        input.select();  // Select text to make editing immediate
+        input.style.height = "100%";
+        input.select();  // Automatically select the text to make it ready for editing
         console.log("Editor rendered and input focused.");
     });
 
-    // Handle blur conditionally based on editing status
-    function handleBlur() {
-        if (editing) {
-            onChange();
-        }
-    }
-
-    // Function to handle when input changes
-    function onChange() {
+    // Function to handle changes and end editing
+    function onChange(){
         if (input.value !== cell.getValue()) {
             console.log("Input changed and value is different from initial, saving new value.");
             success(input.value);
@@ -1733,35 +1725,35 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
             console.log("Input changed but value is the same as initial, canceling edit.");
             cancel();
         }
-        editing = false;  // End editing once we process the change
     }
 
     // Attach event listeners to handle the completion of editing
-    input.addEventListener("blur", handleBlur);
+    input.addEventListener("blur", onChange);
 
-    input.addEventListener("keydown", function (e) {
+    input.addEventListener("keydown", function(e){
         console.log(`Key down: ${e.key}`);
-        if (e.keyCode == 13) { // Enter
+        if(e.keyCode == 13){ // Enter
             onChange();
-        } else if (e.keyCode == 27) { // ESC
-            editing = false;  // Set editing false to allow blur to handle cancel
+        }
+        if(e.keyCode == 27){ // ESC
             cancel();
         }
     });
 
-    // Prevent blur when interacting within the input
-    input.addEventListener("mousedown", function (e) {
-        e.preventDefault();  // Prevent default to avoid focus issues
-        e.stopImmediatePropagation();  // Stop propagation to prevent external effects
-        editing = true;  // Ensure we stay in editing mode
+    // Allow normal mouse interaction without capturing clicks
+    input.addEventListener("mousedown", function(e){
+        e.stopPropagation();  // Stop the event from bubbling up to prevent Tabulator from taking action
+        console.log("Mouse down inside input, allowing normal interaction.");
     });
 
-    input.addEventListener("click", function (e) {
-        e.stopImmediatePropagation();  // Additional stop to prevent any click issues
+    input.addEventListener("click", function(e){
+        e.stopPropagation();  // Ensure clicks within the input do not bubble up
+        console.log("Click inside input, should allow normal text editing.");
     });
 
     return input;
 }
+
 
 
 
