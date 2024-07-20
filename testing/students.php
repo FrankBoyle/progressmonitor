@@ -1084,9 +1084,10 @@ function showAddGoalModal() {
     const modal = document.getElementById('add-goal-modal');
     modal.style.display = 'block';
 
-    // Load templates and existing categories when modal is shown
-    loadTemplates();
-    loadExistingCategories();
+    // Reset dropdowns
+    document.getElementById('templateDropdown').style.display = 'none';
+    document.getElementById('existingDropdown').style.display = 'none';
+    document.getElementById('columnNamesDisplay').style.display = 'none';
 }
 
 function hideAddGoalModal() {
