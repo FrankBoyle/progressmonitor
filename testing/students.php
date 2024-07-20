@@ -280,7 +280,6 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
-    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
