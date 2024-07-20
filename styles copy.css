@@ -245,7 +245,7 @@ body {
 }
 
 #columnNamesDisplay ul li:last-child {
-    margin-bottom: 5px; /* Removes border from the last item */
+    margin-bottom: 1rem;
 }
 
 #columnNamesDisplay ul li:hover {
