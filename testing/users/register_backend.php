@@ -1,8 +1,10 @@
 <?php
 include('db.php');
 
+ini_set('log_errors', 1);
+ini_set('error_log', 'my_php_errors.log');
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 
 function log_message($message) {
     file_put_contents('register_debug.log', $message . PHP_EOL, FILE_APPEND);
