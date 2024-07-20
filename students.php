@@ -80,40 +80,40 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         </header>
 
         <main class="content-students">
-    <input type="hidden" id="selected-student-id" value="">
+            <input type="hidden" id="selected-student-id" value="">
 
-    <section class="box create-group">
-        <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
-        <div id="group-list">
-            <ul>
-                <?php foreach ($groups as $group): ?>
-                    <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
-                        <?= htmlspecialchars($group['group_name']) ?>
-                        <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </section>
+            <section class="box create-group">
+                <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
+                <div id="group-list">
+                    <ul>
+                        <?php foreach ($groups as $group): ?>
+                            <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
+                                <?= htmlspecialchars($group['group_name']) ?>
+                                <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </section>
 
-    <section class="box students-list">
-        <h2>Students <button class="add-student-btn">+</button></h2>
-        <div class="message" id="students-message">Please use groups to see students.</div>
-        <ul id="student-list" style="display: none;">
-            <?php foreach ($allStudents as $student): ?>
-                <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </section>
+            <section class="box students-list">
+                <h2>Students <button class="add-student-btn">+</button></h2>
+                <div class="message" id="students-message">Please use groups to see students.</div>
+                <ul id="student-list" style="display: none;">
+                    <?php foreach ($allStudents as $student): ?>
+                        <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
 
-    <section class="box existing-groups">
-        <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
-        <div class="message" id="goals-message">Click a student to see their goals.</div>
-        <div id="goal-list" style="display: none;">
-            <!-- Goals will be loaded here and grouped by metadata_id -->
-        </div>
-    </section>
-</main>
+            <section class="box existing-groups">
+                <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
+                <div class="message" id="goals-message">Click a student to see their goals.</div>
+                <div id="goal-list" style="display: none;">
+                    <!-- Goals will be loaded here and grouped by metadata_id -->
+                </div>
+            </section>
+        </main>
 
 
 
@@ -500,20 +500,20 @@ function showAddGroupModal() {
         }
 }
 
-function showAddStudentModal(groupId) {
-    //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
-    document.getElementById('add-student-modal').style.display = 'block';
-
-    // Load students for the selected group
-    loadGroupStudents(groupId, 'group-students-list-add');
-}
-
 // Function to hide the modal
 function hideAddGroupModal() {
     const modal = document.getElementById('add-group-modal');
         if (modal) {
             modal.style.display = 'none';
         }
+}
+
+function showAddStudentModal(groupId) {
+    //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
+    document.getElementById('add-student-modal').style.display = 'block';
+
+    // Load students for the selected group
+    loadGroupStudents(groupId, 'group-students-list-add');
 }
 
 function hideAddStudentModal() {
@@ -784,11 +784,9 @@ function assignStudentsToGroup(event) {
     })
     .then(response => response.json())
     .then(data => {
-        //console.log('Response:', data); // Debug log
         if (data.status === "success") {
-            //alert(data.message);
-            loadGroupStudents(groupId, 'group-students-list-add'); // Reload the student list
-            //console.log('Student assigned, now reloading group students for groupId:', groupId); // Debug log
+            loadGroupStudents(groupId, 'group-students-list-add'); // Refresh the student list in the modal
+            loadStudentsByGroup(groupId); // Refresh the student list on the main page
         } else {
             alert(data.error);
         }
