@@ -1336,31 +1336,36 @@ function toggleMetadataOption() {
 }
 
 // Function to load metadata templates
-function loadTemplates() {
-        fetch('users/fetch_metadata_templates.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
+function loadTemplates(schoolId) {
+    console.log("Loading templates for school ID:", schoolId);
 
-                const templateSelect = document.getElementById('template-metadata-select');
-                if (!templateSelect) {
-                    console.error('Template metadata select element not found.');
-                    return;
+    fetch(`users/fetch_metadata_templates.php?school_id=${schoolId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Templates Data:', data);
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            const templateSelect = document.getElementById('template-metadata-select');
+            if (templateSelect) {
+                templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
+                if (Array.isArray(data)) {
+                    data.forEach(template => {
+                        const option = document.createElement('option');
+                        option.value = template.metadata_id;
+                        option.textContent = template.category_name;
+                        templateSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Unexpected response format:', data);
                 }
-                templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
-
-                data.forEach(template => {
-                    const option = document.createElement('option');
-                    option.value = template.metadata_id;
-                    option.textContent = template.category_name;
-                    templateSelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading metadata templates:', error);
-            });
+            } else {
+                console.error('Template metadata select element not found.');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading metadata templates:', error);
+        });
 }
 
 function loadExistingCategories() {
