@@ -353,7 +353,9 @@ function updateUser(userData) {
     })
     .then(response => response.json())
     .then(data => {
-        if (!data.success) {
+        if (data.success) {
+            console.log('User updated successfully');
+        } else {
             console.error('Error updating user:', data.message);
         }
     })
