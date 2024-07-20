@@ -280,8 +280,6 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
-    loadTemplates();
-    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
@@ -316,9 +314,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Metadata Option Selector
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
-    const templateDropdown = document.getElementById('templateDropdown');
-    const existingDropdown = document.getElementById('existingDropdown');
-
     metadataOptionSelector.addEventListener('click', function(event) {
         if (event.target.classList.contains('selector-item')) {
             const items = metadataOptionSelector.querySelectorAll('.selector-item');
@@ -326,20 +321,10 @@ document.addEventListener('DOMContentLoaded', function() {
             event.target.classList.add('selected');
 
             const selectedOption = event.target.getAttribute('data-option');
-            if (selectedOption === 'template') {
-                templateDropdown.style.display = 'block';
-                existingDropdown.style.display = 'none';
-                document.getElementById('columnNamesDisplay').style.display = 'none';
-                loadTemplates();
-            } else if (selectedOption === 'existing') {
-                templateDropdown.style.display = 'none';
-                existingDropdown.style.display = 'block';
-                document.getElementById('columnNamesDisplay').style.display = 'none';
-                loadMetadata();
-            }
+            selectOption(selectedOption);
         }
     });
-    
+
     const schoolSelect = document.getElementById('school-select');
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
