@@ -181,31 +181,28 @@ body {
 }
 
 .content-students ul {
-    /* Style for all ul elements within content-students */
-    background-color: #f0f0f0; /* Very light grey for list items */
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    border-radius: 5px;
+    padding: 0; /* Removes padding from the ul element */
+    list-style-type: none; /* Removes bullets */
+    width: 100%; /* Ensures the ul takes full width */
 }
 
 .content-students ul li {
-    /* Style specifically for li elements in content-students ul */
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    border-bottom: 1px solid #D6E4F0; /* Soft blue line separator */
+    border-bottom: 1px solid #D6E4F0;
+    padding: 10px; /* Adjust padding here if needed */
+    margin: 0; /* Ensure no margin that could disrupt the full width */
+    width: 100%; /* Ensure li takes full width of ul */
 }
 
-.content-students ul li:hover, 
-.content-students ul li.selected-student, 
-.content-students ul li.selected-group {
-    /* Specific hover and selected styles */
-    background-color: #D6E4F0; /* Soft blue for selected item */
+.content-students ul li:hover, .content-students ul li.selected-student, .content-students ul li.selected-group {
+    background-color: #D6E4F0;
     font-weight: bold;
     color: #333;
+    width: 100%; /* Cover full width on hover */
 }
-
 
 .content-column {
     flex-direction: column;
