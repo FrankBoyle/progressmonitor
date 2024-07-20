@@ -1,13 +1,22 @@
 <?php
-// register_backend.php
-session_start();
 include('db.php');
 
-//error_reporting(E_ALL);
-//ini_set('display_errors', 1);
+header('Content-Type: application/json');  // Ensure the output is in JSON format
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 function log_message($message) {
     file_put_contents('register_debug.log', $message . PHP_EOL, FILE_APPEND);
+}
+
+function uuid_generate() {
+    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0x0fff) | 0x4000,
+        mt_rand(0, 0x3fff) | 0x8000,
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+    );
 }
 
 if (isset($_POST['register'])) {
@@ -24,7 +33,7 @@ if (isset($_POST['register'])) {
     if (empty($school_uuid)) {
         if (empty($school_name)) {
             log_message("No UUID or school name provided");
-            echo '<p class="error">Please provide a school name if you do not have a UUID!</p>';
+            echo json_encode(['success' => false, 'message' => 'Please provide a school name if you do not have a UUID!']);
             exit;
         }
 
@@ -32,7 +41,11 @@ if (isset($_POST['register'])) {
         $query = $connection->prepare("INSERT INTO Schools (school_uuid, SchoolName) VALUES (:school_uuid, :school_name)");
         $query->bindParam(":school_uuid", $school_uuid, PDO::PARAM_STR);
         $query->bindParam(":school_name", $school_name, PDO::PARAM_STR);
-        $query->execute();
+        if (!$query->execute()) {
+            log_message("Database error while inserting school");
+            echo json_encode(['success' => false, 'message' => 'Database error while inserting school.']);
+            exit;
+        }
         $school_id = $connection->lastInsertId();
         log_message("New school created with ID $school_id");
     } else {
@@ -42,7 +55,7 @@ if (isset($_POST['register'])) {
 
         if ($query->rowCount() == 0) {
             log_message("Invalid School UUID: $school_uuid");
-            echo '<p class="error">Invalid School UUID!</p>';
+            echo json_encode(['success' => false, 'message' => 'Invalid School UUID!']);
             exit;
         }
 
@@ -57,7 +70,7 @@ if (isset($_POST['register'])) {
 
     if ($query->rowCount() > 0) {
         log_message("Email already registered: $email");
-        echo '<p class="error">The email address is already registered!</p>';
+        echo json_encode(['success' => false, 'message' => 'The email address is already registered!']);
         exit;
     }
 
@@ -67,27 +80,13 @@ if (isset($_POST['register'])) {
     $query->bindParam(":lname", $lname, PDO::PARAM_STR);
     $query->bindParam(":email", $email, PDO::PARAM_STR);
     $query->bindParam(":password_hash", $password_hash, PDO::PARAM_STR);
-    $result = $query->execute();
-
-    if ($result) {
-        log_message("Registration successful for $email");
-        $_SESSION['registration_success'] = true; // Set session variable
-        header("Location: ../login.php");
-        exit; // Ensure script stops executing after redirect
+    if ($query->execute()) {
+        echo json_encode(['success' => true]);
     } else {
         log_message("Registration failed for $email");
-        echo '<p class="error">Something went wrong!</p>';
+        echo json_encode(['success' => false, 'message' => 'Registration failed. Please try again.']);
     }
-}
-
-function uuid_generate() {
-    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-        mt_rand(0, 0xffff),
-        mt_rand(0, 0x0fff) | 0x4000,
-        mt_rand(0, 0x3fff) | 0x8000,
-        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-    );
+} else {
+    echo json_encode(['success' => false, 'message' => 'No registration data submitted.']);
 }
 ?>
-
