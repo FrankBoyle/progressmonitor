@@ -1700,56 +1700,55 @@ function initializeNotesQuill() {
 
 // Custom editor for handling text inputs more gracefully
 function textEditor(cell, onRendered, success, cancel, editorParams) {
-    // Create and append the input element
     var input = document.createElement("input");
-    input.type = 'text';
     input.style.padding = "4px";
     input.style.width = "100%";
     input.style.boxSizing = "border-box";
     input.value = cell.getValue();
 
-    // Set focus on the input element with a slight delay to handle transitions
     onRendered(function(){
         input.focus();
         input.style.height = "100%";
         // Set cursor at the end of text
         input.setSelectionRange(input.value.length, input.value.length);
-        console.log("Editor rendered and input focused at the end of text.");
     });
 
-    // Function to handle changes and end editing
     function onChange(){
         if (input.value !== cell.getValue()) {
-            console.log("Input changed and value is different from initial, saving new value.");
             success(input.value);
         } else {
-            console.log("Input changed but value is the same as initial, canceling edit.");
             cancel();
         }
     }
 
-    // Attach event listeners to handle the completion of editing
     input.addEventListener("blur", onChange);
 
+    // Enhance keyboard navigation
     input.addEventListener("keydown", function(e){
-        console.log(`Key down: ${e.key}`);
-        if(e.keyCode == 13){ // Enter
-            onChange();
-        }
-        if(e.keyCode == 27){ // ESC
-            cancel();
+        var cursorPosition = input.selectionStart;
+        var handleKeys = ["ArrowLeft", "ArrowRight"];
+        var textLength = input.value.length;
+
+        if (handleKeys.includes(e.key)) {
+            if (e.key === "ArrowLeft" && cursorPosition === 0) {
+                // If cursor is at the start, allow Tabulator to move left
+                cancel();
+            } else if (e.key === "ArrowRight" && cursorPosition === textLength) {
+                // If cursor is at the end, allow Tabulator to move right
+                cancel();
+            } else {
+                // Prevent Tabulator from taking over left and right keys within the input
+                e.stopPropagation();
+            }
         }
     });
 
-    // Allow normal mouse interaction without capturing clicks
     input.addEventListener("mousedown", function(e){
-        e.stopPropagation();  // Stop the event from bubbling up to prevent Tabulator from taking action
-        console.log("Mouse down inside input, allowing normal interaction.");
+        e.stopPropagation();
     });
 
     input.addEventListener("click", function(e){
-        e.stopPropagation();  // Ensure clicks within the input do not bubble up
-        console.log("Click inside input, should allow normal text editing.");
+        e.stopPropagation();
     });
 
     return input;
