@@ -12,16 +12,25 @@ include('./users/login_backend.php');
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-9YXLSJ50NV');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Special Education IEP Progress Reporting | IEPreport.com</title>
+    <meta name="description" content="IEPreport.com specializes in IEP progress monitoring and reporting for special education, helping educators track and report student progress effectively.">
+    <meta name="keywords" content="IEP, Special Education, Progress Reporting, Progress Monitoring, Education Technology, Student Reporting">
     <link rel="stylesheet" href="styles copy.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="IEP Progress Reporting for Special Education">
+    <meta property="og:description" content="Discover comprehensive solutions for IEP progress monitoring at IEPreport.com. Dedicated to improving special education through technology.">
+    <meta property="og:image" content="path_to_image.jpg">
+    <meta property="og:url" content="https://www.iepreport.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- End Social Media Meta Tags -->
 </head>
+
 <body>
     <div class="dashboard">
         <header class="dashboard-header luxbar-fixed" id="luxbar">
