@@ -36,7 +36,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
-    
+
 </head>
 <body>
 
@@ -81,43 +81,42 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-    <main class="content-students">
-        <input type="hidden" id="selected-student-id" value="">
+<main class="content-students">
+    <input type="hidden" id="selected-student-id" value="">
 
-        <section class="box create-group">
-            <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
-            <div id="group-list">
-                <ul>
-                    <?php foreach ($groups as $group): ?>
-                        <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
-                            <?= htmlspecialchars($group['group_name']) ?>
-                            <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </section>
-
-        <section class="box students-list">
-            <h2>Students <button class="add-student-btn">+</button></h2>
-            <div class="message" id="students-message">Please use groups to see students.</div>
-            <ul id="student-list" style="display: none;">
-                <?php foreach ($allStudents as $student): ?>
-                    <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
+    <section class="box create-group">
+        <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
+        <div id="group-list">
+            <ul>
+                <?php foreach ($groups as $group): ?>
+                    <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
+                        <?= htmlspecialchars($group['group_name']) ?>
+                        <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
+                    </li>
                 <?php endforeach; ?>
             </ul>
-        </section>
+        </div>
+    </section>
 
-        <!-- Add the new Edit Column Names button in the goal list section -->
-        <section class="box existing-groups">
-            <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
-            <div class="message" id="goals-message">Click a student to see their goals.</div>
-            <div id="goal-list" style="display: none;">
-                <!-- Goals will be loaded here and grouped by metadata_id -->
-            </div>
-        </section>
-        
-    </main>
+    <section class="box students-list">
+        <h2>Students <button class="add-student-btn">+</button></h2>
+        <div class="message" id="students-message">Please use groups to see students.</div>
+        <ul id="student-list" style="display: none;">
+            <?php foreach ($allStudents as $student): ?>
+                <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </section>
+
+    <section class="box existing-groups">
+        <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
+        <div class="message" id="goals-message">Click a student to see their goals.</div>
+        <div id="goal-list" style="display: none;">
+            <!-- Goals will be loaded here and grouped by metadata_id -->
+        </div>
+    </section>
+</main>
+
 
 </div>
 
