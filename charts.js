@@ -1621,7 +1621,11 @@ function fetchExistingReports(goalId) {
             reportingPeriodDropdown.addEventListener('change', function() {
                 const selectedPeriod = this.value;
                 const report = data.find(report => report.reporting_period == selectedPeriod);
-                document.getElementById('notes').value = report ? report.notesHtml : '';
+                if (report && window.quillInstances['notes']) {
+                    window.quillInstances['notes'].root.innerHTML = report.notesHtml ? report.notes : '';
+                } else {
+                    window.quillInstances['notes'].root.innerHTML = '';
+                }
             });
         })
         .catch(error => {
