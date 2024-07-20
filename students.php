@@ -195,14 +195,14 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div id="templateDropdown" class="form-group" style="display: none;">
-                <label for="template-metadata-select">Choose a template rubric:</label>
+                <label for="template-metadata-select"><strong>Choose a template rubric:</strong></label>
                 <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')">
                     <option value="" disabled selected>Select one</option>
                 </select>
             </div>
 
             <div id="existingDropdown" class="form-group">
-                <label for="existing-metadata-select">Choose a previously used rubric:</label>
+                <label for="existing-metadata-select"><strong>Choose a template rubric:</strong></label>
                 <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')">
                     <option value="" disabled selected>Select one</option>
                 </select>
