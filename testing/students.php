@@ -1370,15 +1370,20 @@ function loadExistingCategories() {
     fetch('users/fetch_existing_categories.php')
         .then(response => response.json())
         .then(data => {
+            console.log('Response data:', data); // Log the response data
             const metadataSelect = document.getElementById('existing-metadata-select');
             if (metadataSelect) {
                 metadataSelect.innerHTML = '<option value="">Select a category to see column options</option>';
-                data.forEach(metadata => {
-                    const option = document.createElement('option');
-                    option.value = metadata.metadata_id;
-                    option.textContent = metadata.category_name;
-                    metadataSelect.appendChild(option);
-                });
+                if (Array.isArray(data)) {
+                    data.forEach(metadata => {
+                        const option = document.createElement('option');
+                        option.value = metadata.metadata_id;
+                        option.textContent = metadata.category_name;
+                        metadataSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Unexpected response format:', data);
+                }
             } else {
                 console.error('Metadata select element not found.');
             }
