@@ -989,36 +989,6 @@ function addGoal(event) {
     });
 }
 
-function saveGoal(goalId, saveButton) {
-    const quill = window.quillInstances[goalId];
-    const updatedContent = quill.root.innerHTML;
-    
-    fetch('./users/update_goal.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            goal_id: goalId,
-            new_text: updatedContent
-        })
-    }).then(response => response.json())
-      .then(data => {
-          if (data.success) {
-              const goalItem = saveButton.closest('.goal-item');
-              goalItem.querySelector('.goal-text').innerHTML = updatedContent;
-              quill.enable(false);
-              document.getElementById(`goal-content-${goalId}`).style.display = 'block';
-              document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
-          } else {
-              alert('Failed to save goal. Please try again.');
-          }
-      }).catch(error => {
-          console.error('Error:', error);
-          alert('An error occurred while saving the goal.');
-      });
-}
-
 function showEditGroupModal(groupId, groupName) {
     //console.log('showEditGroupModal called with groupId:', groupId, 'and groupName:', groupName); // Debug log
     document.getElementById('edit-group-id').value = groupId;
@@ -1353,6 +1323,36 @@ function cancelEdit(goalId, originalContent) {
     quill.enable(false);
     document.getElementById(`goal-content-${goalId}`).style.display = 'block';
     document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
+}
+
+function saveGoal(goalId, saveButton) {
+    const quill = window.quillInstances[goalId];
+    const updatedContent = quill.root.innerHTML;
+    
+    fetch('./users/update_goal.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            goal_id: goalId,
+            new_text: updatedContent
+        })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              const goalItem = saveButton.closest('.goal-item');
+              goalItem.querySelector('.goal-text').innerHTML = updatedContent;
+              quill.enable(false);
+              document.getElementById(`goal-content-${goalId}`).style.display = 'block';
+              document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
+          } else {
+              alert('Failed to save goal. Please try again.');
+          }
+      }).catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while saving the goal.');
+      });
 }
 
 function archiveGoal(goalId) {
