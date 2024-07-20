@@ -826,7 +826,7 @@ function shareGroup(event) {
     });
 }
 
-
+/*
 function displayGoals(goals) {
     const goalList = document.getElementById('goal-list');
     goalList.innerHTML = ''; // Clear existing goals
@@ -884,6 +884,7 @@ function displayGoals(goals) {
     });
 }
 
+*/
 
 function saveGoal(goalId, updatedContent, saveButton) {
     fetch('./users/update_goal.php', {
@@ -904,12 +905,13 @@ function saveGoal(goalId, updatedContent, saveButton) {
               quill.enable(false);
               document.getElementById(`goal-content-${goalId}`).style.display = 'block';
               document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
+              alert('Goal successfully saved!'); // Success notification
           } else {
-              alert('Failed to save goal. Please try again.');
+              alert('Failed to save goal: ' + data.message); // Show error message
           }
       }).catch(error => {
           console.error('Error:', error);
-          alert('An error occurred while saving the goal.');
+          alert('An error occurred while saving the goal: ' + error.message); // Show error on fetch failure
       });
 }
 
@@ -1129,6 +1131,7 @@ function loadMetadata() {
             alert('There was an error loading metadata. Please try again.');
         });
 }
+
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
