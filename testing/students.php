@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
-    // Metadata Option Selector - I don't even know and I don't want to remove it
+    // Metadata Option Selector
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     metadataOptionSelector.addEventListener('click', function(event) {
         if (event.target.classList.contains('selector-item')) {
@@ -826,7 +826,7 @@ function shareGroup(event) {
     });
 }
 
-/*
+
 function displayGoals(goals) {
     const goalList = document.getElementById('goal-list');
     goalList.innerHTML = ''; // Clear existing goals
@@ -884,7 +884,7 @@ function displayGoals(goals) {
     });
 }
 
-*/
+
 
 function saveGoal(goalId, saveButton) {
     const quill = window.quillInstances[goalId];
