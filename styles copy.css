@@ -1189,7 +1189,7 @@ img {
     cursor: pointer;
     transition: background-color 0.1s, box-shadow 0.1s; /* Smooth transitions */
     text-align: center; /* Center text */
-    min-width: auto; /* Ensure buttons are not too narrow */
+    width: auto; /* Ensure buttons are not too narrow */
 
 }
 
