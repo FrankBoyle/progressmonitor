@@ -1309,13 +1309,15 @@ function loadGoals(studentId) {
                     window.quillInstances = {};
                 }
                 if (!window.quillInstances[goalId]) {
-                    window.quillInstances[goalId] = new Quill(editor, {
+                    const quill = new Quill(editor, {
                         theme: 'snow',
                         readOnly: true,
                         modules: {
                             toolbar: false
                         }
                     });
+                    quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
+                    window.quillInstances[goalId] = quill;
                 }
             });
         })
