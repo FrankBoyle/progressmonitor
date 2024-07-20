@@ -886,7 +886,10 @@ function displayGoals(goals) {
 
 */
 
-function saveGoal(goalId, updatedContent, saveButton) {
+function saveGoal(goalId, saveButton) {
+    const quill = window.quillInstances[goalId];
+    const updatedContent = quill.root.innerHTML;
+    
     fetch('./users/update_goal.php', {
         method: 'POST',
         headers: {
@@ -901,17 +904,15 @@ function saveGoal(goalId, updatedContent, saveButton) {
           if (data.success) {
               const goalItem = saveButton.closest('.goal-item');
               goalItem.querySelector('.goal-text').innerHTML = updatedContent;
-              const quill = window.quillInstances[goalId];
               quill.enable(false);
               document.getElementById(`goal-content-${goalId}`).style.display = 'block';
               document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
-              alert('Goal successfully saved!'); // Success notification
           } else {
-              alert('Failed to save goal: ' + data.message); // Show error message
+              alert('Failed to save goal. Please try again.');
           }
       }).catch(error => {
           console.error('Error:', error);
-          alert('An error occurred while saving the goal: ' + error.message); // Show error on fetch failure
+          alert('An error occurred while saving the goal.');
       });
 }
 
