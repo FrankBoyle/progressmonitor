@@ -1171,6 +1171,7 @@ img {
 }
 
 .selector-item {
+    flex: 1; /* Each item will take equal space */
     display: flex;
     align-items: center;
     justify-content: center;
