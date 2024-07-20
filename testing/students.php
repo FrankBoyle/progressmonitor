@@ -280,6 +280,7 @@ let quillInstances = {}; // Initialize quillInstances globally
 document.addEventListener('DOMContentLoaded', function() {
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
+    // Call loadTemplates on page load
     loadGroups();
     loadStaff();
     loadExistingCategories();
@@ -1351,7 +1352,9 @@ function toggleMetadataOption() {
 
 // Function to load metadata templates
 function loadTemplates() {
-    fetch('users/fetch_metadata_templates.php')
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>; // Include school_id in fetch
+
+    fetch(`users/fetch_metadata_templates.php?school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
             console.log('Templates Data:', data); // Log the response data
