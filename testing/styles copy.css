@@ -110,6 +110,10 @@ html {
     margin-left: 2px;    /* Adjust this value to move the logo to the right */
 }
 
+.luxbar-menu-material-indigo {
+    background-color: #1A3E55 !important; /* Override background color */
+}
+
 /* Base styles for navigation links */
 .luxbar-menu-material-indigo .luxbar-item a {
     padding: 18px 24px;
