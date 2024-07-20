@@ -1210,14 +1210,13 @@ function addGoal(event) {
 }
 
 function showAddGoalModal() {
-        loadTemplates(); // Populate the template dropdown when modal is shown
-        loadMetadata(); // Populate the existing categories dropdown
-        document.getElementById('add-goal-modal').style.display = 'block';
+    loadTemplates();
+    loadExistingCategories();
+    document.getElementById('add-goal-modal').style.display = 'block';
 }
 
 function hideAddGoalModal() {
-        document.getElementById('add-goal-modal').style.display = 'none';
-        document.getElementById('add-goal-form').reset(); // Reset the form
+    document.getElementById('add-goal-modal').style.display = 'none';
 }
 
 // Add the loadGoals function definition somewhere in your script
@@ -1367,7 +1366,7 @@ function loadTemplates() {
 }
 
 function loadExistingCategories() {
-    fetch('users/fetch_metadata.php')
+    fetch('users/fetch_existing_metadata.php')
         .then(response => response.json())
         .then(data => {
             const metadataSelect = document.getElementById('existing-metadata-select');
