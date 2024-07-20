@@ -1242,6 +1242,27 @@ img {
     outline: none; /* Removes the default focus outline */
 }
 
+#existing-metadata-select {
+    width: 100%; /* Full width to match container */
+    height: 40px; /* Fixed height for a better click area */
+    padding: 0 10px; /* Padding inside the select box */
+    border: 1px solid #ccc; /* Subtle border around the dropdown */
+    border-radius: 5px; /* Rounded corners to match the form group */
+    background-color: #fff; /* White background for the dropdown */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Inner shadow for a subtle inset effect */
+    appearance: none; /* Removes default system styling */
+    cursor: pointer; /* Cursor pointer to indicate it's selectable */
+}
+
+#existing-metadata-select:hover {
+    border-color: #888; /* Changes border color on hover for interaction feedback */
+}
+
+#existing-metadata-select:focus {
+    border-color: #0056b3; /* Blue border on focus for accessibility and visibility */
+    outline: none; /* Removes the default focus outline */
+}
+
 #statistics {
     padding: 10px;
     background-color: #f9f9f9;
