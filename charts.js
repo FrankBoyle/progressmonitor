@@ -1730,28 +1730,39 @@ function initializeNotesQuill() {
     }
 }
 
-function customTextEditor(cell, onRendered, success, cancel){
-    // Create the input element
+// Custom editor for handling text inputs more gracefully
+function textEditor(cell, onRendered, success, cancel, editorParams){
+    // Create and append the input element
     var input = document.createElement("input");
+    input.style.padding = "4px";
     input.style.width = "100%";
+    input.style.boxSizing = "border-box";
     input.value = cell.getValue();
 
-    // Set focus on the input element when it is displayed
-    onRendered(() => {
+    // Set focus on the input element with a slight delay to handle transitions
+    onRendered(function(){
         input.focus();
-        input.select();
+        input.style.height = "100%";
+        // Move cursor to end of text
+        input.value = input.value;
+        input.focus();
     });
 
-    // When the value has been changed, and the input is blurred, save the value
-    function onSave() {
-        success(input.value);
+    function onChange(){
+        if(input.value !== cell.getValue()){
+            success(input.value);
+        }else{
+            cancel();
+        }
     }
 
-    input.addEventListener("blur", onSave);
-    input.addEventListener("keydown", (e) => {
-        if (e.keyCode === 13) { // Enter key
-            onSave();
-        } else if (e.keyCode === 27) { // ESC key
+    // Attach event listeners to handle the completion of editing
+    input.addEventListener("blur", onChange);
+    input.addEventListener("keydown", function(e){
+        if(e.keyCode == 13){ // For Enter
+            onChange();
+        }
+        if(e.keyCode == 27){ // For ESC
             cancel();
         }
     });
