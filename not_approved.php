@@ -11,7 +11,9 @@
     gtag('config', 'G-9YXLSJ50NV');
     </script>
     <title>Not Approved</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles_copy.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
+
 
     <style>
         body {
@@ -44,14 +46,26 @@
     </style>
 </head>
 <body>
-        <header class="dashboard-header">
-            <div class="logo">
-                <img src="IEPreport_logo.jpg" alt="Logo">
-            </div>
-            <div class="header-icons">
-                <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
-            </div>
-        </header>
+            <header class="dashboard-header luxbar-fixed" id="luxbar">
+                <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+
+                <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
+                    <ul class="luxbar-navigation">
+                        <li class="luxbar-header">
+                            <div class="logo">
+                                <img src="IEPreport_logo.jpg" alt="Logo">
+                            </div>
+
+                            <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                        </li>
+                        
+                        <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
+                        <li class="luxbar-item"><a href="students.php">Home</a></li>
+                        <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
+
+                    </ul>
+                </div>
+            </header>
     <div class="container">
         <h1>Account Not Approved</h1>
         <p>Your account needs to be approved by an administrator before you can access this area. Please contact your administrator for more information.</p>
