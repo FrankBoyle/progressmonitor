@@ -809,6 +809,75 @@ function shareGroup(event) {
     });
 }
 
+function displayGoals(goals) {
+    const goalList = document.getElementById('goal-list');
+    goalList.innerHTML = ''; // Clear existing goals
+
+    goals.forEach(goal => {
+        if (!goal.goal_id || !goal.goal_description) {
+            console.error('Invalid goal structure:', goal);
+            return;
+        }
+
+        const goalItem = document.createElement('div');
+        goalItem.classList.add('goal-item');
+        goalItem.innerHTML = `
+            <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
+                <div class="goal-text-container">
+                    <div class="goal-text">${goal.goal_description}</div>
+                </div>
+                <button class="archive-btn">Archive</button>
+            </div>
+            <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
+                <div id="editor-${goal.goal_id}" class="quill-editor"></div>
+                <button class="btn btn-primary save-btn">Save</button>
+                <button class="btn btn-secondary cancel-btn">Cancel</button>
+            </div>
+        `;
+
+        goalList.appendChild(goalItem);
+
+        const quill = new Quill(`#editor-${goal.goal_id}`, {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                    [{size: []}],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']  
+                ]
+            }
+        });
+
+        quill.root.innerHTML = goal.goal_description; // Load the goal content
+
+        // Set up button actions
+        goalItem.querySelector('.archive-btn').addEventListener('click', () => {
+            archiveGoal(goal.goal_id, goalItem);
+        });
+
+        goalItem.querySelector('.save-btn').addEventListener('click', () => {
+            const updatedContent = quill.root.innerHTML;
+            saveGoal(goal.goal_id, updatedContent, goalItem);
+        });
+
+        goalItem.querySelector('.cancel-btn').addEventListener('click', () => {
+            quill.root.innerHTML = goal.goal_description;
+            quill.enable(false);
+            document.getElementById(`goal-content-${goal.goal_id}`).style.display = 'block';
+            document.getElementById(`goal-edit-${goal.goal_id}`).style.display = 'none';
+        });
+
+        window[`quillEditor${goal.goal_id}`] = quill; // Save the editor instance to a global variable for later use
+    });
+}
+
 function editGoal(goalId) {
     const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
     const quill = quillInstances[goalId];
