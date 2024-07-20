@@ -278,10 +278,11 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+    console.log("School ID:", schoolId);
+
     loadGroups();
     loadStaff();
-    loadTemplates();
-    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
@@ -314,7 +315,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
-    // Metadata Option Selector
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     const templateDropdown = document.getElementById('templateDropdown');
     const existingDropdown = document.getElementById('existingDropdown');
@@ -326,20 +326,29 @@ document.addEventListener('DOMContentLoaded', function() {
             event.target.classList.add('selected');
 
             const selectedOption = event.target.getAttribute('data-option');
+            const studentId = document.getElementById('selected-student-id').value;
+            console.log('Selected option:', selectedOption);
+
             if (selectedOption === 'template') {
+                console.log('Loading templates...');
+                loadTemplates(schoolId);
                 templateDropdown.style.display = 'block';
                 existingDropdown.style.display = 'none';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
-                loadTemplates();
             } else if (selectedOption === 'existing') {
+                if (studentId && schoolId) {
+                    console.log(`Loading existing categories for student ID: ${studentId}, school ID: ${schoolId}`);
+                    loadExistingCategories(studentId, schoolId);
+                } else {
+                    console.error('Missing studentId or schoolId');
+                }
                 templateDropdown.style.display = 'none';
                 existingDropdown.style.display = 'block';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
-                loadMetadata();
             }
         }
     });
-    
+
     const schoolSelect = document.getElementById('school-select');
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
