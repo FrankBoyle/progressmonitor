@@ -9,6 +9,14 @@ include('db.php');
 
 // Assuming school_id is set in the session during login
 $schoolId = $_SESSION['school_id']; // Default to 1 if not set
+
+// Example PHP code to fetch the student's name, assumed to be stored in a session or retrieved from the database
+$studentName = "John Doe";  // This should be dynamically fetched based on your application logic
+
+echo "<script type='text/javascript'>";
+echo "let studentName = " . json_encode($studentName) . ";";  // Safely encode the student's name for JavaScript usage
+echo "</script>";
+
 ?>
 
 <!DOCTYPE html>
@@ -183,6 +191,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <script src="charts.js"></script>
     <script>
         let schoolId = <?php echo json_encode($schoolId); ?>;
+        let studentName = <?php echo json_encode($studentName); ?>;
+
     </script>
 </body>
 </html>
