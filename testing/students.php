@@ -276,15 +276,12 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 let quillInstances = {}; // Initialize quillInstances globally
-let studentId = null; // Initialize studentId globally
 
 document.addEventListener('DOMContentLoaded', function() {
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-    console.log("School ID:", schoolId); // Log school ID for debugging
-
-    // Call loadTemplates on page load
     loadGroups();
     loadStaff();
+    loadTemplates();
+    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
@@ -317,6 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
+    // Metadata Option Selector
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     const templateDropdown = document.getElementById('templateDropdown');
     const existingDropdown = document.getElementById('existingDropdown');
@@ -328,33 +326,23 @@ document.addEventListener('DOMContentLoaded', function() {
             event.target.classList.add('selected');
 
             const selectedOption = event.target.getAttribute('data-option');
-            const studentId = document.getElementById('selected-student-id').value;
-            console.log('Selected option:', selectedOption);
-
             if (selectedOption === 'template') {
-                console.log('Loading templates...');
-                loadTemplates(schoolId);
                 templateDropdown.style.display = 'block';
                 existingDropdown.style.display = 'none';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
             } else if (selectedOption === 'existing') {
-                if (studentId && schoolId) {
-                    console.log(`Loading existing categories for student ID: ${studentId}, school ID: ${schoolId}`);
-                    loadExistingCategories(studentId, schoolId);
-                } else {
-                    console.error('Missing studentId or schoolId');
-                }
                 templateDropdown.style.display = 'none';
                 existingDropdown.style.display = 'block';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
             }
         }
     });
-
+    
     const schoolSelect = document.getElementById('school-select');
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
+            //console.log('School selected:', selectedSchoolId); // Debugging statement
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -362,12 +350,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: `school_id=${encodeURIComponent(selectedSchoolId)}`
             })
-            .then(response => response.json())
+            .then(response => {
+                //console.log('Response status:', response.status); // Debugging statement
+                return response.json();
+            })
             .then(data => {
+                //console.log('Response data:', data); // Debugging statement
                 if (data.success) {
+                    //console.log('Reloading page in 3 seconds'); // Debugging statement
                     setTimeout(function() {
-                        location.reload();
-                    }, 0);
+                        location.reload(); // Reload the page to reflect the school change
+                    }, 0); // 3 seconds delay
                 } else {
                     console.error('Error updating school:', data.message);
                 }
@@ -715,11 +708,7 @@ function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
     document.getElementById('selected-student-id').value = studentId;
 
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-
     loadGoals(studentId);
-    loadExistingCategories(studentId, schoolId); // Pass both studentId and schoolId
-    loadTemplates(); // Templates are not dependent on studentId, only on schoolId
 
     const studentItems = document.getElementById('student-list').querySelectorAll('li');
     studentItems.forEach(student => student.classList.remove('selected-student'));
@@ -1081,29 +1070,28 @@ function resetStudentList() {
     }
 }
 
-    // Function to load existing metadata
 function loadMetadata() {
-        fetch('users/fetch_metadata.php')
-            .then(response => response.json())
-            .then(data => {
-                const metadataSelect = document.getElementById('existing-metadata-select');
-                if (metadataSelect) {
-                    metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
+    fetch('users/fetch_metadata.php')
+        .then(response => response.json())
+        .then(data => {
+            const metadataSelect = document.getElementById('existing-metadata-id');
+            if (metadataSelect) {
+                metadataSelect.innerHTML = '';
 
-                    data.forEach(metadata => {
-                        const option = document.createElement('option');
-                        option.value = metadata.metadata_id;
-                        option.textContent = metadata.category_name;
-                        metadataSelect.appendChild(option);
-                    });
-                } else {
-                    console.error('Metadata select element not found.');
-                }
-            })
-            .catch(error => {
-                console.error('Error loading metadata:', error);
-                alert('There was an error loading metadata. Please try again.');
-            });
+                data.forEach(metadata => {
+                    const option = document.createElement('option');
+                    option.value = metadata.metadata_id;
+                    option.textContent = metadata.category_name;
+                    metadataSelect.appendChild(option);
+                });
+            } else {
+                console.error('Metadata select element not found.');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading metadata:', error);
+            alert('There was an error loading metadata. Please try again.');
+        });
 }
 
 function showAddGoalModal() {
@@ -1154,6 +1142,7 @@ function addGoal(event) {
             return;
         }
 
+        // If using a template, copy the template to create a new metadata entry
         fetch(`users/fetch_metadata_details.php?metadata_id=${metadataId}`)
             .then(response => response.json())
             .then(template => {
@@ -1184,7 +1173,7 @@ function addGoal(event) {
 
                 alert('Goal added successfully!');
                 hideAddGoalModal();
-                loadGoals(studentId);
+                loadGoals(studentId); // Refresh the goals list
             })
             .catch(error => {
                 console.error('Error adding goal:', error);
@@ -1219,22 +1208,12 @@ function addGoal(event) {
 
         alert('Goal added successfully!');
         hideAddGoalModal();
-        loadGoals(studentId);
+        loadGoals(studentId); // Refresh the goals list
     })
     .catch(error => {
         console.error('Error adding goal:', error);
         alert('Error adding goal: ' + error.message);
     });
-}
-
-function showAddGoalModal() {
-    loadTemplates();
-    loadExistingCategories();
-    document.getElementById('add-goal-modal').style.display = 'block';
-}
-
-function hideAddGoalModal() {
-    document.getElementById('add-goal-modal').style.display = 'none';
 }
 
 // Add the loadGoals function definition somewhere in your script
@@ -1362,68 +1341,59 @@ function toggleMetadataOption() {
 
 // Function to load metadata templates
 function loadTemplates() {
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-    console.log("Loading templates for school ID:", schoolId);
-
-    fetch(`users/fetch_metadata_templates.php?school_id=${schoolId}`)
+    fetch('users/fetch_metadata_templates.php')
         .then(response => response.json())
         .then(data => {
-            console.log('Templates Data:', data); // Log the response data
             if (data.error) {
                 throw new Error(data.error);
             }
+
             const templateSelect = document.getElementById('template-metadata-select');
-            if (templateSelect) {
-                templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
-                if (Array.isArray(data)) {
-                    data.forEach(template => {
-                        const option = document.createElement('option');
-                        option.value = template.metadata_id;
-                        option.textContent = template.category_name;
-                        templateSelect.appendChild(option);
-                    });
-                } else {
-                    console.error('Unexpected response format:', data);
-                }
-            } else {
+            if (!templateSelect) {
                 console.error('Template metadata select element not found.');
+                return;
             }
+            templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
+
+            data.forEach(template => {
+                const option = document.createElement('option');
+                option.value = template.metadata_id;
+                option.textContent = template.category_name;
+                templateSelect.appendChild(option);
+            });
         })
         .catch(error => {
             console.error('Error loading metadata templates:', error);
         });
 }
 
-function loadExistingCategories(studentId, schoolId) {
-    if (!studentId || !schoolId) {
-        console.error('Missing studentId or schoolId');
-        return;
-    }
+function loadExistingCategories() {
+    const studentId = document.getElementById('selected-student-id').value;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
-    console.log(`Loading existing categories for student ID: ${studentId}, school ID: ${schoolId}`);
     fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Existing Categories Data:', data); // Log the response data
-            const metadataSelect = document.getElementById('existing-metadata-select');
-            if (metadataSelect) {
-                metadataSelect.innerHTML = '<option value="">Select a category to see column options</option>';
-                if (Array.isArray(data)) {
-                    data.forEach(metadata => {
-                        const option = document.createElement('option');
-                        option.value = metadata.metadata_id;
-                        option.textContent = metadata.category_name;
-                        metadataSelect.appendChild(option);
-                    });
-                } else {
-                    console.error('Unexpected response format:', data);
-                }
-            } else {
-                console.error('Metadata select element not found.');
+            if (data.error) {
+                throw new Error(data.error);
             }
+
+            const existingSelect = document.getElementById('existing-metadata-select');
+            if (!existingSelect) {
+                console.error('Existing metadata select element not found.');
+                return;
+            }
+            existingSelect.innerHTML = '<option value="">Select a category to see column options</option>';
+
+            data.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.metadata_id;
+                option.textContent = category.category_name;
+                existingSelect.appendChild(option);
+            });
         })
         .catch(error => {
-            console.error('Error loading metadata:', error);
+            console.error('Error loading existing categories:', error);
         });
 }
 
@@ -1440,11 +1410,9 @@ function showColumnNames(type) {
         return;
     }
 
-    console.log(`Fetching metadata details for metadata_id: ${selectedId}`);
     fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Metadata Details:', data); // Log metadata details
             if (data.error) {
                 throw new Error(data.error);
             }
