@@ -1414,9 +1414,11 @@ function showColumnNames(type) {
         return;
     }
 
+    console.log(`Fetching metadata details for metadata_id: ${selectedId}`);
     fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
         .then(response => response.json())
         .then(data => {
+            console.log('Metadata Details:', data);
             if (data.error) {
                 throw new Error(data.error);
             }
