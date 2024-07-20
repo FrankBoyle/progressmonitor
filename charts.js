@@ -1703,6 +1703,7 @@ function populateGoalSelectionModal(goals) {
     });
 }
 
+/*
 function initializeNotesQuill() {
     if (!window.quillInstances) {
         window.quillInstances = {};
@@ -1729,5 +1730,40 @@ function initializeNotesQuill() {
                 ]
             }
         });
+    }
+}
+*/
+
+
+function initializeNotesQuill() {
+    if (!window.quillInstances) {
+        window.quillInstances = {};
+        console.log("Initializing window.quillInstances object");
+    }
+    if (!window.quillInstances['notes']) {
+        window.quillInstances['notes'] = new Quill('#notes', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'header': 1 }, { 'header': 2 }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+                    ['clean'],
+                    ['link', 'image', 'video']
+                ]
+            }
+        });
+        console.log("Quill instance for 'notes' initialized");
+    } else {
+        console.log("Quill instance for 'notes' already exists");
     }
 }
