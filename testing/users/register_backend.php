@@ -68,14 +68,54 @@ if (isset($_POST['register'])) {
     $result = $query->execute();
 
     if ($result) {
-        log_message("Registration successful for $email");
+        // Assuming template school_id is '8'
+        copyGoalTemplates(8, $school_id, $connection);
+        log_message("Goal templates copied to new school with ID: $school_id");
+    
         header("Location: ../login.php");
         echo '<p class="success">Your registration was successful!</p>';
     } else {
         log_message("Registration failed for $email");
         echo '<p class="error">Something went wrong!</p>';
     }
+    
 }
+
+function copyGoalTemplates($templateSchoolId, $newSchoolId, $connection) {
+    try {
+        // Prepare the query to select template metadata entries from the template school
+        $selectQuery = $connection->prepare("SELECT metadata_template, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE school_id = :templateSchoolId");
+        $selectQuery->bindParam(':templateSchoolId', $templateSchoolId, PDO::PARAM_INT);
+        $selectQuery->execute();
+        $templates = $selectQuery->fetchAll(PDO::FETCH_ASSOC);
+
+        // Prepare the query to insert copied metadata entries for the new school
+        $insertQuery = $connection->prepare("INSERT INTO Metadata (school_id, metadata_template, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name) VALUES (:newSchoolId, :metadata_template, :category_name, :score1_name, :score2_name, :score3_name, :score4_name, :score5_name, :score6_name, :score7_name, :score8_name, :score9_name, :score10_name)");
+
+        // Execute insert for each template
+        foreach ($templates as $template) {
+            $insertQuery->bindParam(':newSchoolId', $newSchoolId, PDO::PARAM_INT);
+            $insertQuery->bindParam(':metadata_template', $template['metadata_template'], PDO::PARAM_INT);
+            $insertQuery->bindParam(':category_name', $template['category_name'], PDO::PARAM_STR);
+            // Repeat for all score fields
+            $insertQuery->bindParam(':score1_name', $template['score1_name'], PDO::PARAM_STR);
+            $insertQuery->bindParam(':score2_name', $template['score2_name'], PDO::PARAM_STR);
+            // Bind all other parameters similarly
+            $insertQuery->bindParam(':score3_name', $template['score3_name'], PDO::PARAM_STR);
+            $insertQuery->bindParam(':score4_name', $template['score4_name'], PDO::PARAM_STR);
+            $insertQuery->bindParam(':score5_name', $template['score5_name'], PDO::PARAM_STR);
+            $insertQuery->bindParam(':score6_name', $template['score6_name'], PDO::PARAM_STR);
+            $insertQuery->bindParam(':score7_name', $template['score7_name'], PDO::PARAM_STR);
+            $insertQuery->bindParam(':score8_name', $template['score8_name'], PDO::PARAM_STR);
+            $insertQuery->bindParam(':score9_name', $template['score9_name'], PDO::PARAM_STR);
+            $insertQuery->bindParam(':score10_name', $template['score10_name'], PDO::PARAM_STR);
+            $insertQuery->execute();
+        }
+    } catch (PDOException $e) {
+        echo 'Database error: ' . $e->getMessage();
+    }
+}
+
 
 function uuid_generate() {
     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
