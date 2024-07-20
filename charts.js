@@ -1665,38 +1665,6 @@ function populateGoalSelectionModal(goals) {
     });
 }
 
-/*
-function initializeNotesQuill() {
-    if (!window.quillInstances) {
-        window.quillInstances = {};
-    }
-    if (!window.quillInstances['notes']) {
-        window.quillInstances['notes'] = new Quill('#notes', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'],
-                    ['blockquote', 'code-block'],
-                    [{ 'header': 1 }, { 'header': 2 }],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'script': 'sub'}, { 'script': 'super' }],
-                    [{ 'indent': '-1'}, { 'indent': '+1' }],
-                    [{ 'direction': 'rtl' }],
-                    [{ 'size': ['small', false, 'large', 'huge'] }],
-                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'font': [] }],
-                    [{ 'align': [] }],
-                    ['clean'],
-                    ['link', 'image', 'video']
-                ]
-            }
-        });
-    }
-}
-*/
-
-
 function initializeNotesQuill() {
     if (!window.quillInstances) {
         window.quillInstances = {};
@@ -1744,13 +1712,16 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
     onRendered(function () {
         input.focus();
         input.style.height = "100%";
+        console.log("Editor rendered and input focused.");
     });
 
     // Function to handle when input changes
     function onChange() {
         if (input.value !== cell.getValue()) {
+            console.log("Input changed and value is different from initial, saving new value.");
             success(input.value);
         } else {
+            console.log("Input changed but value is the same as initial, canceling edit.");
             cancel();
         }
     }
@@ -1759,10 +1730,12 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
     input.addEventListener("blur", onChange);
 
     input.addEventListener("click", function (e) {
+        console.log("Input clicked.");
         e.stopPropagation(); // Prevent the editor from closing on a click
     });
 
     input.addEventListener("keydown", function (e) {
+        console.log(`Key down: ${e.key}`);
         if (e.keyCode == 13) { // For Enter
             onChange();
         }
