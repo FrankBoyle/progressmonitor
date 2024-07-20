@@ -46,14 +46,40 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 <input type="hidden" id="school-id" value="<?php echo htmlspecialchars($schoolId, ENT_QUOTES, 'UTF-8'); ?>">
 
     <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="logo">
-                <img src="IEPreport_logo.jpg" alt="Logo">
-            </div>
-            <div class="header-icons">
-                <button id="printReportBtn" class="btn btn-primary">Print Report</button>
-                <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-                <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+    <header class="dashboard-header luxbar-fixed" id="luxbar">
+            <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+
+            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
+                <ul class="luxbar-navigation">
+                    <li class="luxbar-header">
+                        <div class="logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
+                        </div>
+
+                        <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                    </li>
+                    <li>
+                        <div class="school-selector">
+                            <label for="school-select">Select School:</label>
+                            <select id="school-select">
+                                <?php foreach ($schools as $school): ?>
+                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($school['SchoolName']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </li>
+                    <li class="luxbar-item">
+                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+                            <a href="manage.php" class="nav-link">Manage</a>
+                        <?php endif; ?>
+                    </li>
+                    <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
+                    <li class="luxbar-item"><a href="students.php">Home</a></li>
+                    <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
+
+                </ul>
             </div>
         </header>
         <main class="content">
