@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.success) {
                     setTimeout(function() {
-                        location.reload();
+                        //location.reload();
                     }, 0);
                 } else {
                     console.error('Error updating school:', data.message);
