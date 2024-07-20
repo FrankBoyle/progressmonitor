@@ -1322,6 +1322,7 @@ function selectOption(option) {
         return;
     }
 
+    console.log(`Option selected: ${option}`);
     if (option === 'template') {
         templateDropdown.style.display = 'block';
         existingDropdown.style.display = 'none';
