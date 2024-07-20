@@ -68,16 +68,16 @@ if (isset($_POST['register'])) {
     $result = $query->execute();
 
     if ($result) {
-        // Assuming template school_id is '8'
+        // Successful registration
         copyGoalTemplates(8, $school_id, $connection);
         log_message("Goal templates copied to new school with ID: $school_id");
-    
-        header("Location: ../login.php");
-        echo '<p class="success">Your registration was successful!</p>';
+        echo json_encode(['success' => true, 'message' => 'Your registration was successful!']);
+        exit; // Ensure no further output corrupts the JSON
     } else {
         log_message("Registration failed for $email");
-        echo '<p class="error">Something went wrong!</p>';
-    }
+        echo json_encode(['success' => false, 'message' => 'Something went wrong!']);
+        exit;
+    }    
     
 }
 
