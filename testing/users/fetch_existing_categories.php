@@ -23,9 +23,12 @@ try {
     $stmt->execute([$studentId, $schoolId]);
     $existingCategories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    error_log("Existing Categories: " . json_encode($existingCategories)); // Log data
+
     echo json_encode($existingCategories);
 } catch (Exception $e) {
     error_log("Error fetching existing categories: " . $e->getMessage());
     echo json_encode(["error" => "Error fetching existing categories: " . $e->getMessage()]);
 }
 ?>
+

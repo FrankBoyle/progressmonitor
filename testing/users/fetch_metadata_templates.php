@@ -13,8 +13,11 @@ try {
     $stmt->execute();
     $templates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    error_log("Templates: " . json_encode($templates)); // Log data
+
     echo json_encode($templates);
 } catch (PDOException $e) {
     echo json_encode(["error" => "Error fetching metadata templates: " . $e->getMessage()]);
 }
 ?>
+
