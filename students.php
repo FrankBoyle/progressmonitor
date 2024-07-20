@@ -459,7 +459,6 @@ function addStudent(event) {
     });
 }
 
-
 function loadStaff() {
     fetch('users/fetch_staff.php')
         .then(response => response.json())
