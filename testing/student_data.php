@@ -37,6 +37,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
+
     <style>
         /* Include your custom CSS here */
     </style>
@@ -58,18 +60,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
-                    <li>
-                        <div class="school-selector">
-                            <label for="school-select">Select School:</label>
-                            <select id="school-select">
-                                <?php foreach ($schools as $school): ?>
-                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($school['SchoolName']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </li>
+
                     <li class="luxbar-item">
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                             <a href="manage.php" class="nav-link">Manage</a>
