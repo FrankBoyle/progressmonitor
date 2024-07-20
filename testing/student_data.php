@@ -57,6 +57,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                         <div class="logo">
                             <img src="IEPreport_logo.jpg" alt="Logo">
                         </div>
+                        <button id="printReportBtn" class="btn btn-primary">Print Report</button>
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
