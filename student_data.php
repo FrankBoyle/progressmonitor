@@ -27,7 +27,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Data</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles copy.css">
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
@@ -37,6 +37,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
+
     <style>
         /* Include your custom CSS here */
     </style>
@@ -46,14 +48,30 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 <input type="hidden" id="school-id" value="<?php echo htmlspecialchars($schoolId, ENT_QUOTES, 'UTF-8'); ?>">
 
     <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="logo">
-                <img src="IEPreport_logo.jpg" alt="Logo">
-            </div>
-            <div class="header-icons">
-                <button id="printReportBtn" class="btn btn-primary">Print Report</button>
-                <a href="students.php" class="nav-link"><i class="nav-icon"></i>Home</a>
-                <a href="./users/logout.php" class="nav-link"><i class="nav-icon"></i>Sign Out</a>
+    <header class="dashboard-header luxbar-fixed" id="luxbar">
+            <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+
+            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
+                <ul class="luxbar-navigation">
+                    <li class="luxbar-header">
+                        <div class="logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
+                        </div>
+
+                        <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                    </li>
+                    <button id="printReportBtn" class="btn btn-primary">Print Report</button>
+
+                    <li class="luxbar-item">
+                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+                            <a href="manage.php" class="nav-link">Manage</a>
+                        <?php endif; ?>
+                    </li>
+                    <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
+                    <li class="luxbar-item"><a href="students.php">Home</a></li>
+                    <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
+
+                </ul>
             </div>
         </header>
         <main class="content">

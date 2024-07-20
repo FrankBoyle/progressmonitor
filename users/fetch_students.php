@@ -15,8 +15,8 @@ function fetchStudentsByTeacher($teacherId, $groupId, $archived = false) {
     global $connection;
     $archivedValue = $archived ? 1 : 0;
 
-    // Fetch all students assigned to the teacher and not archived
-    $stmt = $connection->prepare("SELECT s.student_id_new, s.first_name, s.last_name 
+    // Fetch all students assigned to the teacher and not archived including their date of birth and grade level
+    $stmt = $connection->prepare("SELECT s.student_id_new, s.first_name, s.last_name, s.date_of_birth, s.grade_level
                                   FROM Students_new s 
                                   INNER JOIN Teachers t ON s.school_id = t.school_id 
                                   WHERE t.teacher_id = ? AND s.archived = ?");

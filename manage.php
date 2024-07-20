@@ -26,30 +26,42 @@ include('./users/db.php');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles copy.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
+
 </head>
 <body>
 <div class="dashboard">
-    <header class="dashboard-header">
-        <div class="logo">
-            <img src="IEPreport_logo.jpg" alt="Logo">
-        </div>
-        <div class="header-icons">
-            <a href="students.php" class="nav-link">
-                <i class="nav-icon"></i>
-                <p>Home</p>
-            </a>
-            <a href="./users/logout.php" class="nav-link">
-                <i class="nav-icon"></i>
-                <p>Sign Out</p>
-            </a>
-        </div>
-    </header>
+        <header class="dashboard-header luxbar-fixed" id="luxbar">
+            <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+
+            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
+                <ul class="luxbar-navigation">
+                    <li class="luxbar-header">
+                        <div class="logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
+                        </div>
+
+                        <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                    </li>
+
+                    <li class="luxbar-item">
+                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+                            <a href="manage.php" class="nav-link">Manage</a>
+                        <?php endif; ?>
+                    </li>
+                    <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
+                    <li class="luxbar-item"><a href="students.php">Home</a></li>
+                    <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
+
+                </ul>
+            </div>
+        </header>
 
     <main class="content-students">
         <!-- Existing Users Management Section -->

@@ -30,84 +30,93 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Managment</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Group Management</title>
+    <link rel="stylesheet" href="styles copy.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
 
 </head>
 <body>
 
 <div class="dashboard">
-    <header class="dashboard-header">
-        <div class="logo">
-            <img src="IEPreport_logo.jpg" alt="Logo">
-        </div>
-        <div class="header-icons">
-            <div class="school-selector">
-                <label for="school-select">Select School:</label>
-                <select id="school-select">
-                    <?php foreach ($schools as $school): ?>
-                        <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($school['SchoolName']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
 
-            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
-                <a href="manage.php" class="nav-link">
-                    <button class="btn btn-primary">Manage</button>
-                </a>
-            <?php endif; ?>
-            <a href="students.php" class="nav-link">
-                <i class="nav-icon"></i>
-                <p>Home</p>
-            </a>
-            <a href="./users/logout.php" class="nav-link">
-                <i class="nav-icon"></i>
-                <p>Sign Out</p>
-            </a>
-        </div>
-    </header>
+        <header class="dashboard-header luxbar-fixed" id="luxbar">
+            <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
 
-    <main class="content-students">
-    <input type="hidden" id="selected-student-id" value="">
+            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
+                <ul class="luxbar-navigation">
+                    <li class="luxbar-header">
+                        <div class="logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
+                        </div>
 
-        <section class="box create-group">
-            <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
-            <div id="group-list">
-                <ul>
-                    <?php foreach ($groups as $group): ?>
-                        <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
-                            <?= htmlspecialchars($group['group_name']) ?>
-                            <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
-                        </li>
-                    <?php endforeach; ?>
+                        <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                    </li>
+                    <li>
+                        <div class="school-selector">
+                            <label for="school-select">Select School:</label>
+                            <select id="school-select">
+                                <?php foreach ($schools as $school): ?>
+                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($school['SchoolName']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </li>
+                    <li class="luxbar-item">
+                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+                            <a href="manage.php" class="nav-link">Manage</a>
+                        <?php endif; ?>
+                    </li>
+                    <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
+                    <li class="luxbar-item"><a href="students.php">Home</a></li>
+                    <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
+
                 </ul>
             </div>
-        </section>
+        </header>
 
-        <section class="box students-list">
-            <h2>Students <button class="add-student-btn">+</button></h2>
-            <div class="message" id="students-message">Please use groups to see students.</div>
-            <ul id="student-list" style="display: none;">
-                <?php foreach ($allStudents as $student): ?>
-                    <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
+        <main class="content-students">
+    <input type="hidden" id="selected-student-id" value="">
+
+    <section class="box create-group">
+        <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
+        <div id="group-list">
+            <ul>
+                <?php foreach ($groups as $group): ?>
+                    <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
+                        <?= htmlspecialchars($group['group_name']) ?>
+                        <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
+                    </li>
                 <?php endforeach; ?>
             </ul>
-        </section>
+        </div>
+    </section>
 
-        <!-- Add the new Edit Column Names button in the goal list section -->
-        <section class="box existing-groups">
-            <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
-            <div class="message" id="goals-message">Click a student to see their goals.</div>
-            <div id="goal-list" style="display: none;">
-                <!-- Goals will be loaded here and grouped by metadata_id -->
-            </div>
-        </section>
-    </main>
+    <section class="box students-list">
+        <h2>Students <button class="add-student-btn">+</button></h2>
+        <div class="message" id="students-message">Please use groups to see students.</div>
+        <ul id="student-list" style="display: none;">
+            <?php foreach ($allStudents as $student): ?>
+                <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </section>
+
+    <section class="box existing-groups">
+        <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
+        <div class="message" id="goals-message">Click a student to see their goals.</div>
+        <div id="goal-list" style="display: none;">
+            <!-- Goals will be loaded here and grouped by metadata_id -->
+        </div>
+    </section>
+</main>
+
+
+
 </div>
 
 <!-- Add Group Modal -->
@@ -180,8 +189,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             <div class="selector-area">
                 <div id="columnSelectorTitle" class="selector-title">Goal Category Options:</div>
                 <div id="metadataOptionSelector" class="checkbox-container">
-                    <div class="selector-item" data-option="template">Category Template</div>
-                    <div class="selector-item" data-option="existing">Previously Used Category</div>
+                    <div class="selector-item" data-option="template" onclick="selectOption('template')">Category Template</div>
+                    <div class="selector-item" data-option="existing" onclick="selectOption('existing')">Previously Used Category</div>
                 </div>
             </div>
 
@@ -263,13 +272,28 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
 <script>
-let quillInstances = {}; // Initialize quillInstances globally
+let quillInstances = {}; // Initialize variables globally
+
+const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],
+    ['blockquote', 'code-block'],
+    [{ 'header': 1 }, { 'header': 2 }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],
+    [{ 'indent': '-1'}, { 'indent': '+1' }],
+    [{ 'direction': 'rtl' }],
+    [{ 'size': ['small', false, 'large', 'huge'] }],
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'font': [] }],
+    [{ 'align': [] }],
+    ['link', 'image', 'video'],
+    ['clean']
+];
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
     loadStaff();
-    loadTemplates();
-    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
@@ -304,9 +328,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Metadata Option Selector
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
-    const templateDropdown = document.getElementById('templateDropdown');
-    const existingDropdown = document.getElementById('existingDropdown');
-
     metadataOptionSelector.addEventListener('click', function(event) {
         if (event.target.classList.contains('selector-item')) {
             const items = metadataOptionSelector.querySelectorAll('.selector-item');
@@ -314,23 +335,14 @@ document.addEventListener('DOMContentLoaded', function() {
             event.target.classList.add('selected');
 
             const selectedOption = event.target.getAttribute('data-option');
-            if (selectedOption === 'template') {
-                templateDropdown.style.display = 'block';
-                existingDropdown.style.display = 'none';
-                document.getElementById('columnNamesDisplay').style.display = 'none';
-            } else if (selectedOption === 'existing') {
-                templateDropdown.style.display = 'none';
-                existingDropdown.style.display = 'block';
-                document.getElementById('columnNamesDisplay').style.display = 'none';
-            }
+            selectOption(selectedOption);
         }
     });
-    
+
     const schoolSelect = document.getElementById('school-select');
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
-            //console.log('School selected:', selectedSchoolId); // Debugging statement
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -338,17 +350,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: `school_id=${encodeURIComponent(selectedSchoolId)}`
             })
-            .then(response => {
-                //console.log('Response status:', response.status); // Debugging statement
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                //console.log('Response data:', data); // Debugging statement
                 if (data.success) {
-                    //console.log('Reloading page in 3 seconds'); // Debugging statement
                     setTimeout(function() {
-                        location.reload(); // Reload the page to reflect the school change
-                    }, 0); // 3 seconds delay
+                        location.reload();
+                    }, 0);
                 } else {
                     console.error('Error updating school:', data.message);
                 }
@@ -510,10 +517,10 @@ function hideAddGroupModal() {
 }
 
 function hideAddStudentModal() {
-        const modal = document.getElementById('add-student-modal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
+    const modal = document.getElementById('add-student-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 
 function loadStudentsByGroup(groupId) {
@@ -820,52 +827,106 @@ function shareGroup(event) {
     });
 }
 
-function editGoal(goalId) {
-    const editor = document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`);
-    const quill = quillInstances[goalId];
-    quill.enable(true);
-    quill.root.setAttribute('contenteditable', true);
+function addGoal(event) {
+    event.preventDefault();
 
-    // Remove any existing save buttons
-    document.querySelectorAll('.save-btn').forEach(btn => btn.remove());
+    const studentId = document.getElementById('selected-student-id').value;
+    const goalDescription = document.getElementById('goal-description').value;
+    const goalDate = document.getElementById('goal-date').value;
+    const metadataOptionElement = document.querySelector('#metadataOptionSelector .selector-item.selected');
+    const metadataOption = metadataOptionElement ? metadataOptionElement.getAttribute('data-option') : null;
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+    let metadataId = null;
 
-    const saveBtn = document.createElement('button');
-    saveBtn.textContent = 'Save';
-    saveBtn.className = 'save-btn';
-    saveBtn.onclick = function() {
-        saveGoal(goalId, quill.root.innerHTML);
-    };
-    editor.parentNode.appendChild(saveBtn);
-}
+    if (!studentId || !goalDescription || !goalDate || !metadataOption || !schoolId) {
+        alert('Missing required parameters.');
+        return;
+    }
 
-function saveGoal(goalId, goalDescription) {
-    fetch('users/fetch_goals.php', {
+    if (metadataOption === 'existing') {
+        metadataId = document.getElementById('existing-metadata-select').value;
+        if (!metadataId) {
+            alert('Please select an existing category.');
+            return;
+        }
+    } else if (metadataOption === 'template') {
+        metadataId = document.getElementById('template-metadata-select').value;
+        if (!metadataId) {
+            alert('Please select a category template.');
+            return;
+        }
+
+        // If using a template, copy the template to create a new metadata entry
+        fetch(`users/fetch_metadata_details.php?metadata_id=${metadataId}`)
+            .then(response => response.json())
+            .then(template => {
+                if (template.error) {
+                    throw new Error(template.error);
+                }
+
+                return fetch('./users/add_goal.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        student_id: studentId,
+                        goal_description: goalDescription,
+                        goal_date: goalDate,
+                        metadata_option: metadataOption,
+                        template_id: metadataId,
+                        school_id: schoolId
+                    })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                alert('Goal added successfully!');
+                hideAddGoalModal();
+                loadGoals(studentId); // Refresh the goals list
+            })
+            .catch(error => {
+                console.error('Error adding goal:', error);
+                alert('Error adding goal: ' + error.message);
+            });
+
+        return;
+    } else {
+        alert('Invalid metadata option.');
+        return;
+    }
+
+    fetch('./users/add_goal.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `goal_id=${encodeURIComponent(goalId)}&goal_description=${encodeURIComponent(goalDescription)}`
+        body: new URLSearchParams({
+            student_id: studentId,
+            goal_description: goalDescription,
+            goal_date: goalDate,
+            metadata_option: metadataOption,
+            existing_category_id: metadataId,
+            school_id: schoolId
+        })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        if (data.status === 'success') {
-            const quill = quillInstances[goalId];
-            quill.enable(false);
-            quill.root.setAttribute('contenteditable', false);
-            document.querySelector(`.quill-editor[data-goal-id="${goalId}"]`).parentNode.querySelector('.save-btn').remove();
-            alert('Goal updated successfully.');
-        } else {
-            alert('There was an error updating the goal. Please try again.');
+        if (data.error) {
+            throw new Error(data.error);
         }
+
+        alert('Goal added successfully!');
+        hideAddGoalModal();
+        loadGoals(studentId); // Refresh the goals list
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error updating the goal. Please try again.');
+        console.error('Error adding goal:', error);
+        alert('Error adding goal: ' + error.message);
     });
 }
 
@@ -1059,14 +1120,18 @@ function resetStudentList() {
 }
 
 function loadMetadata() {
-    fetch('users/fetch_metadata.php')
+    console.log('Loading existing categories...');
+    const studentId = document.getElementById('selected-student-id').value;
+    fetch(`users/fetch_metadata.php?student_id=${studentId}`)
         .then(response => response.json())
         .then(data => {
-            const metadataSelect = document.getElementById('existing-metadata-id');
+            console.log('Fetched used metadata:', data);
+            const metadataSelect = document.getElementById('existing-metadata-select');
             if (metadataSelect) {
-                metadataSelect.innerHTML = '';
+                metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
                 data.forEach(metadata => {
+                    console.log(`Adding metadata to existing: ${metadata.category_name}`);
                     const option = document.createElement('option');
                     option.value = metadata.metadata_id;
                     option.textContent = metadata.category_name;
@@ -1082,134 +1147,11 @@ function loadMetadata() {
         });
 }
 
-function showAddGoalModal() {
-    const selectedStudent = document.querySelector('.selected-student');
-    if (!selectedStudent) {
-        alert('Please select a student first.');
-        return;
-    }
-    const modal = document.getElementById('add-goal-modal');
-    modal.style.display = 'block';
-
-    // Load templates and existing categories when modal is shown
-    loadTemplates();
-    loadExistingCategories();
-}
-
-function hideAddGoalModal() {
-    const modal = document.getElementById('add-goal-modal');
-    modal.style.display = 'none';
-}
-
-function addGoal(event) {
-    event.preventDefault();
-
-    const studentId = document.getElementById('selected-student-id').value;
-    const goalDescription = document.getElementById('goal-description').value;
-    const goalDate = document.getElementById('goal-date').value;
-    const metadataOptionElement = document.querySelector('#metadataOptionSelector .selector-item.selected');
-    const metadataOption = metadataOptionElement ? metadataOptionElement.getAttribute('data-option') : null;
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-    let metadataId = null;
-
-    if (!studentId || !goalDescription || !goalDate || !metadataOption || !schoolId) {
-        alert('Missing required parameters.');
-        return;
-    }
-
-    if (metadataOption === 'existing') {
-        metadataId = document.getElementById('existing-metadata-select').value;
-        if (!metadataId) {
-            alert('Please select an existing category.');
-            return;
-        }
-    } else if (metadataOption === 'template') {
-        metadataId = document.getElementById('template-metadata-select').value;
-        if (!metadataId) {
-            alert('Please select a category template.');
-            return;
-        }
-
-        // If using a template, copy the template to create a new metadata entry
-        fetch(`users/fetch_metadata_details.php?metadata_id=${metadataId}`)
-            .then(response => response.json())
-            .then(template => {
-                if (template.error) {
-                    throw new Error(template.error);
-                }
-
-                return fetch('./users/add_goal.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        student_id: studentId,
-                        goal_description: goalDescription,
-                        goal_date: goalDate,
-                        metadata_option: metadataOption,
-                        template_id: metadataId,
-                        school_id: schoolId
-                    })
-                });
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-
-                alert('Goal added successfully!');
-                hideAddGoalModal();
-                loadGoals(studentId); // Refresh the goals list
-            })
-            .catch(error => {
-                console.error('Error adding goal:', error);
-                alert('Error adding goal: ' + error.message);
-            });
-
-        return;
-    } else {
-        alert('Invalid metadata option.');
-        return;
-    }
-
-    fetch('./users/add_goal.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-            student_id: studentId,
-            goal_description: goalDescription,
-            goal_date: goalDate,
-            metadata_option: metadataOption,
-            existing_category_id: metadataId,
-            school_id: schoolId
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            throw new Error(data.error);
-        }
-
-        alert('Goal added successfully!');
-        hideAddGoalModal();
-        loadGoals(studentId); // Refresh the goals list
-    })
-    .catch(error => {
-        console.error('Error adding goal:', error);
-        alert('Error adding goal: ' + error.message);
-    });
-}
-
 // Add the loadGoals function definition somewhere in your script
 function loadGoals(studentId) {
     fetch(`users/fetch_goals.php?student_id=${encodeURIComponent(studentId)}`)
         .then(response => response.text())
         .then(data => {
-            //console.log('Raw response:', data);
             try {
                 const jsonData = JSON.parse(data.trim());
                 if (jsonData.error) {
@@ -1242,22 +1184,28 @@ function loadGoals(studentId) {
                             const listItem = document.createElement('div');
                             listItem.classList.add('goal-item');
                             listItem.innerHTML = `
-                                <div class="goal-content">
-                                    <div class="quill-editor" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>
-                                    <button class="edit-btn" onclick="editGoal(${goal.goal_id})">✏️</button>
+                                <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
+                                    <div class="goal-text-container">
+                                        <div class="goal-text" data-goal-id="${goal.goal_id}">${goal.goal_description}</div>
+                                    </div>
                                     <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
+                                </div>
+                                <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
+                                    <div id="editor-${goal.goal_id}" class="quill-editor" data-goal-id="${goal.goal_id}"></div>
+                                    <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, this)">Save</button>
+                                    <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
                                 </div>
                                 <div class="progress-reports">
                                     <strong>Progress Reports:</strong>
                                     <div class="thumbnails">
-                                    ${goal.notes.map((note, index) => note.report_image ? `
-                                        <div class="thumbnail-container">
-                                            <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
-                                                <img src="${note.report_image}" alt="Report Available" class="thumbnail">
-                                                <div class="thumbnail-overlay">${index + 1}</div>
-                                            </a>
-                                        </div>
-                                    ` : '').join('')}
+                                        ${goal.notes.map((note, index) => note.report_image ? `
+                                            <div class="thumbnail-container">
+                                                <a href="${note.report_image}" data-lightbox="goal-${goal.goal_id}" data-title="Report Image">
+                                                    <img src="${note.report_image}" alt="Report Available" class="thumbnail">
+                                                    <div class="thumbnail-overlay">${index + 1}</div>
+                                                </a>
+                                            </div>
+                                        ` : '').join('')}
                                     </div>
                                 </div>
                             `;
@@ -1271,14 +1219,30 @@ function loadGoals(studentId) {
 
                 document.querySelectorAll('.quill-editor').forEach(editor => {
                     const goalId = editor.getAttribute('data-goal-id');
-                    if (!quillInstances[goalId]) {
-                        quillInstances[goalId] = new Quill(editor, {
+                    if (!window.quillInstances) {
+                        window.quillInstances = {};
+                    }
+                    if (!window.quillInstances[goalId]) {
+                        const quill = new Quill(editor, {
                             theme: 'snow',
                             readOnly: true,
                             modules: {
-                                toolbar: false
+                                toolbar: [
+                                    [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                                    [{size: []}],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'color': [] }, { 'background': [] }],
+                                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                                    ['blockquote', 'code-block'],
+                                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                    [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
+                                    ['link', 'image', 'video'],
+                                    ['clean']
+                                ]
                             }
                         });
+                        quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
+                        window.quillInstances[goalId] = quill;
                     }
                 });
             } catch (error) {
@@ -1290,6 +1254,77 @@ function loadGoals(studentId) {
             console.error('Error:', error);
             alert('There was an error fetching goals. Please try again.');
         });
+}
+
+
+function showAddGoalModal() {
+    const selectedStudent = document.querySelector('.selected-student');
+    if (!selectedStudent) {
+        alert('Please select a student first.');
+        return;
+    }
+    const modal = document.getElementById('add-goal-modal');
+    modal.style.display = 'block';
+
+    // Reset dropdowns
+    document.getElementById('templateDropdown').style.display = 'none';
+    document.getElementById('existingDropdown').style.display = 'none';
+    document.getElementById('columnNamesDisplay').style.display = 'none';
+}
+
+function hideAddGoalModal() {
+    const modal = document.getElementById('add-goal-modal');
+    modal.style.display = 'none';
+}
+
+function editGoal(goalId) {
+    const quill = window.quillInstances[goalId];
+    if (!quill) {
+        console.error('Quill editor instance not found for goal ID:', goalId);
+        return;
+    }
+    quill.enable(true);
+    quill.root.innerHTML = document.querySelector(`.goal-text[data-goal-id="${goalId}"]`).innerHTML;
+    document.getElementById(`goal-content-${goalId}`).style.display = 'none';
+    document.getElementById(`goal-edit-${goalId}`).style.display = 'block';
+}
+
+function cancelEdit(goalId, originalContent) {
+    const quill = window.quillInstances[goalId];
+    quill.root.innerHTML = originalContent;
+    quill.enable(false);
+    document.getElementById(`goal-content-${goalId}`).style.display = 'block';
+    document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
+}
+
+function saveGoal(goalId, saveButton) {
+    const quill = window.quillInstances[goalId];
+    const updatedContent = quill.root.innerHTML;
+    
+    fetch('./users/update_goal.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            goal_id: goalId,
+            new_text: updatedContent
+        })
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              const goalItem = saveButton.closest('.goal-item');
+              goalItem.querySelector('.goal-text').innerHTML = updatedContent;
+              quill.enable(false);
+              document.getElementById(`goal-content-${goalId}`).style.display = 'block';
+              document.getElementById(`goal-edit-${goalId}`).style.display = 'none';
+          } else {
+              alert('Failed to save goal. Please try again.');
+          }
+      }).catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while saving the goal.');
+      });
 }
 
 function archiveGoal(goalId) {
@@ -1319,19 +1354,35 @@ function archiveGoal(goalId) {
     });
 }
 
-function toggleMetadataOption() {
-    const templateOption = document.querySelector('input[name="metadata_option"][value="template"]').checked;
-    const existingOption = document.querySelector('input[name="metadata_option"][value="existing"]').checked;
+function selectOption(option) {
+    const templateDropdown = document.getElementById('templateDropdown');
+    const existingDropdown = document.getElementById('existingDropdown');
 
-    document.getElementById('template-dropdown').style.display = templateOption ? 'block' : 'none';
-    document.getElementById('existing-dropdown').style.display = existingOption ? 'block' : 'none';
+    if (!templateDropdown || !existingDropdown) {
+        console.error('Dropdown elements not found.');
+        return;
+    }
+
+    console.log(`Option selected: ${option}`);
+    if (option === 'template') {
+        templateDropdown.style.display = 'block';
+        existingDropdown.style.display = 'none';
+        loadTemplates();
+    } else if (option === 'existing') {
+        templateDropdown.style.display = 'none';
+        existingDropdown.style.display = 'block';
+        loadMetadata();
+    }
 }
 
 // Function to load metadata templates
 function loadTemplates() {
-    fetch('users/fetch_metadata_templates.php')
+    console.log('Loading templates...');
+    const studentId = document.getElementById('selected-student-id').value;
+    fetch(`users/fetch_metadata_templates.php?student_id=${studentId}`)
         .then(response => response.json())
         .then(data => {
+            console.log('Fetched unused templates:', data);
             if (data.error) {
                 throw new Error(data.error);
             }
@@ -1341,13 +1392,16 @@ function loadTemplates() {
                 console.error('Template metadata select element not found.');
                 return;
             }
-            templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
+            templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
             data.forEach(template => {
-                const option = document.createElement('option');
-                option.value = template.metadata_id;
-                option.textContent = template.category_name;
-                templateSelect.appendChild(option);
+                if (template.category_name.includes('Template')) {
+                    console.log(`Adding template: ${template.category_name}`);
+                    const option = document.createElement('option');
+                    option.value = template.metadata_id;
+                    option.textContent = template.category_name;
+                    templateSelect.appendChild(option);
+                }
             });
         })
         .catch(error => {
@@ -1398,6 +1452,7 @@ function showColumnNames(type) {
         return;
     }
 
+    console.log(`Showing column names for ${type} with ID: ${selectedId}`);
     fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
         .then(response => response.json())
         .then(data => {
@@ -1415,6 +1470,7 @@ function showColumnNames(type) {
             for (let i = 1; i <= 10; i++) {
                 const scoreName = data[`score${i}_name`];
                 if (scoreName) {
+                    console.log(`Adding column name: ${scoreName}`);
                     const listItem = document.createElement('li');
                     listItem.textContent = scoreName;
                     columnNamesList.appendChild(listItem);

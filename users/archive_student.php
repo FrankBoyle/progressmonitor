@@ -3,6 +3,12 @@ session_start();
 include('auth_session.php'); // Ensure the user is authenticated
 include('db.php'); // Include the database connection
 
+// Debugging: Output session variables
+// echo '<pre>';
+// echo 'Session Variables:';
+// print_r($_SESSION);
+// echo '</pre>';
+
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (isset($data['student_id_new'])) {

@@ -55,9 +55,10 @@
                         <span class="fas fa-school"></span>
                     </div>
                     <div style="position: relative;" id="new_school_container" style="display: none;">
+                    <small>Please take care while naming your school. You will need to email us to change it later.</small>
                         <input type="text" class="form-control" name="school_name" id="school_name" placeholder="New School Name" autocomplete="organization">
                         <span class="fas fa-school"></span>
-                        <small>Please take care while naming your school. You will need to email us to change it later.</small>
+
                     </div>
                     <div style="position: relative;">
                         <input type="email" class="form-control" name="email" id="email" placeholder="Email" autocomplete="email" required>
@@ -83,15 +84,20 @@
             </div>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.getElementById('school_uuid').addEventListener('blur', function() {
+
+    document.getElementById('school_uuid').addEventListener('blur', function() {
             if (this.value.trim() === '') {
                 document.getElementById('new_school_container').style.display = 'block';
             } else {
                 document.getElementById('new_school_container').style.display = 'none';
             }
         });
+    </script>
+
+    <script>
+
     </script>
 </body>
 </html>

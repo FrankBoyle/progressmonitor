@@ -1,5 +1,6 @@
 <?php
-    include('./users/login_backend.php');
+session_start();
+include('./users/login_backend.php');
 ?>
 
 <!DOCTYPE html>
@@ -17,30 +18,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles copy.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
 </head>
 <body>
     <div class="dashboard">
-        <header class="dashboard-header">
-            <div class="logo">
-                <img src="IEPreport_logo.jpg" alt="Logo">
-            </div>
-            <div class="header-icons">
-                <a href="mailto:dan@iepreport.com" class="nav-link">
-                    <i class="nav-icon fas fa-question-circle"></i>
-                    <p>Support</p>
-                </a>
-                <a href="students.php" class="nav-link">
-                    <i class="nav-icon"></i>
-                    <p>Home</p>
-                </a>             
-                <a href="./users/logout.php" class="nav-link">
-                    <i class="nav-icon"></i>
-                    <p>Sign Out</p>
-                </a> 
+        <header class="dashboard-header luxbar-fixed" id="luxbar">
+            <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+
+            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
+                <ul class="luxbar-navigation">
+                    <li class="luxbar-header">
+                        <div class="logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
+                        </div>
+
+                        <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                    </li>
+                    
+                    <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
+                    <li class="luxbar-item"><a href="students.php">Home</a></li>
+                    <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
+
+                </ul>
             </div>
         </header>
+
         <div class="center-content">
             <div class="grid-container">
                 <div class="grid-item login-box">
@@ -106,5 +110,23 @@
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    document.getElementById('school_uuid').addEventListener('blur', function() {
+        if (this.value.trim() === '') {
+            document.getElementById('new_school_container').style.display = 'block';
+        } else {
+            document.getElementById('new_school_container').style.display = 'none';
+        }
+    });
+
+    <?php if (isset($_SESSION['registration_success'])): ?>
+        $(document).ready(function() {
+            alert('Your registration was successful! Welcome to IEPreport.com!');
+            <?php unset($_SESSION['registration_success']); ?>
+        });
+    <?php endif; ?>
+    </script>
 </body>
 </html>

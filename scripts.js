@@ -123,45 +123,45 @@ function loadActiveStudents() {
             }
 
             const activeStudentsTable = new Tabulator("#active-students-table-container", {
-                data: data, // Use the fetched data
-                layout: "fitDataStretch", // This makes sure columns use up the available space
-                pagination: "local", // Enable local pagination
-                paginationSize: 20, // Number of students per page
-                paginationSizeSelector: [10, 20, 50, 100], // Page size options
+                data: data, // use the fetched data
+                layout: "fitDataStretch",
+                pagination: "local",
+                paginationSize: 30,
+                paginationSizeSelector: [10, 20, 50, 100],
                 initialSort: [
-                    {column: "last_name", dir: "asc"} // Sort by last name ascending
+                    { column: "last_name", dir: "asc" } // Sort by last name ascending
                 ],
                 columns: [
-                    { title: "First Name", field: "first_name", widthGrow: 2 },
-                    { title: "Last Name", field: "last_name", widthGrow: 2 },
-                    { title: "Date of Birth", field: "date_of_birth", widthGrow: 2 },
-                    { title: "Grade Level", field: "grade_level", widthGrow: 2 },
+                    { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
+                    { title: "Last Name", field: "last_name", editor: "input", widthGrow: 2 },
+                    { title: "Date of Birth", field: "date_of_birth", editor: "input", widthGrow: 2 },
+                    { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 },
                     {
                         title: "Archive",
                         field: "student_id_new",
-                        hozAlign: "center", // Centers the button horizontally
-                        formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>'; // Adding a class for styling
+                        hozAlign: "center",
+                        formatter: function (cell, formatterParams, onRendered) {
+                            return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>';
                         },
-                        width: 100 // Set a fixed width for consistency
+                        width: 100
                     }
                 ],
+                rowFormatter: function(row) {
+                    // This function is called whenever a row is added to the table
+                    const rowElement = row.getElement();
+                    rowElement.querySelectorAll('.btn-archive').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const studentId = this.getAttribute('data-id');
+                            archiveStudent(studentId);
+                        });
+                    });
+                }
             });
 
-            activeStudentsTable.on("cellEdited", function(cell) {
+            // Attach the cellEdited event after table initialization
+            activeStudentsTable.on("cellEdited", function (cell) {
                 updateStudent(cell.getRow().getData());
             });
-
-            // Add event listener to the Archive buttons
-            setTimeout(() => { // Delay to ensure DOM is updated
-                document.querySelectorAll('.btn-archive').forEach(button => {
-                    //console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
-                    button.addEventListener('click', function() {
-                        const studentId = this.getAttribute('data-id');
-                        archiveStudent(studentId);
-                    });
-                });
-            }, 500); // Adjust delay if necessary
         })
         .catch(error => {
             console.error('Error:', error);
@@ -301,7 +301,7 @@ function deleteUser(teacherId) {
 }
 
 function archiveStudent(studentId) {
-    //console.log('Archiving student with ID:', studentId); // Debug log
+    console.log('Archiving student with ID:', studentId); // Debug log
     fetch('./users/archive_student.php', {
         method: 'POST',
         headers: {
@@ -309,10 +309,14 @@ function archiveStudent(studentId) {
         },
         body: JSON.stringify({ student_id_new: studentId })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status); // Debug log
+        return response.json();
+    })
     .then(data => {
+        console.log('Response data:', data); // Debug log
         if (data.success) {
-            //console.log('Student archived successfully');
+            console.log('Student archived successfully');
             loadActiveStudents(); // Reload the active students to reflect the change
             loadArchivedStudents(); // Reload the archived students to reflect the change
         } else {
@@ -353,7 +357,9 @@ function updateUser(userData) {
     })
     .then(response => response.json())
     .then(data => {
-        if (!data.success) {
+        if (data.success) {
+            console.log('User updated successfully');
+        } else {
             console.error('Error updating user:', data.message);
         }
     })

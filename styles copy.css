@@ -3,7 +3,6 @@
     .content, .content-students {
         padding: 10px; 
         flex-direction: column;
-        margin-top: calc(75px + 4rem) !important; /* Adjust this value if necessary */
     }
 
     .create-group,
@@ -97,9 +96,65 @@ html {
     scroll-behavior: smooth;
 }
 
+.logo {
+    display: flex;        /* Makes .logo a flex container */
+    justify-content: center; /* Center horizontally */
+    align-items: center;  /* Center vertically */
+    height: 70px;         /* Set a specific height, adjust as needed */
+    background-color: transparent; /* Ensure no background color is applied here */
+}
+
 .logo img {
-    max-height: 63px; /* Adjust as needed */
-    max-width: 60px;
+    max-height: 55px;     /* Adjust as needed */
+    width: auto;          /* Maintain aspect ratio */
+    margin-left: 2px;    /* Adjust this value to move the logo to the right */
+}
+
+.luxbar-menu-material-indigo {
+    background-color: #1A3E55 !important; /* Override background color */
+}
+
+/* Base styles for navigation links */
+.luxbar-menu-material-indigo .luxbar-item a {
+    padding: 18px 24px;
+    display: block;
+    text-decoration: none;
+    color: #fff;  /* Ensures text color is white */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;  /* Smooth transition for both properties */
+    background-color: #1A3E55;  /* Default background color */
+}
+
+/* Hover effects for navigation links */
+.luxbar-menu-material-indigo .luxbar-item a:hover {
+    background-color: #041c27;  /* Darker shade for hover */
+    color: #ffffff;  /* Ensures text color is white on hover */
+}
+
+/* To avoid any flash-back, ensure all links within luxbar-menu-material-indigo have the same default styles */
+.luxbar-menu-material-indigo a {
+    color: #FFFFFF;  /* White text for all links within the indigo menu */
+}
+
+
+.school-selector {
+    display: flex;
+    align-items: center; /* Centering content within the selector */
+    height: 100%; /* Stretch to fill the height of the navbar */
+}
+
+.school-selector select {
+    padding: 4px 10px; /* Slightly reduced padding */
+    height: auto; /* Let the browser determine the height based on content and padding */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 body {
@@ -113,16 +168,44 @@ body {
 .content {
     display: flex;
     flex-direction: column;
-    margin-top: 75px; /* Adjust this value to match the height of the navbar */
+    margin-top: 60px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
     transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
 }
 
 .content-students {
     display: flex;
-    margin-top: 75px; /* Adjust this value to match the height of the navbar */
+    margin-top: 60px; /* Adjust this value to match the height of the navbar */
     width: 100%; /* Ensure it takes full width */
     transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
+}
+
+.content-students ul {
+    padding: 0; /* Removes padding from the ul element */
+    list-style-type: none; /* Removes bullets */
+    width: 100%; /* Ensures the ul takes full width */
+}
+
+.content-students ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid #D6E4F0;
+    border-radius: 5px; /* Adjust radius to get the desired roundness */
+    padding: 10px; /* Adjust padding here if needed */
+    margin: 0; /* Ensure no margin that could disrupt the full width */
+    width: 100%; /* Ensure li takes full width of ul */
+    transition: background-color 0.3s; /* Smooth transition for background color changes */
+    background-color: hwb(189 94% 3%); /* Subtle light grey background color as default */
+
+}
+
+.content-students ul li:hover, .content-students ul li.selected-student, .content-students ul li.selected-group {
+    background-color: #D6E4F0;
+    font-weight: bold;
+    color: #333;
+    width: 100%; /* Cover full width on hover */
 }
 
 .content-column {
@@ -138,10 +221,6 @@ body {
 .content-header {
     margin-top: 2rem; /* Optional: add additional margin if needed */
     transition: margin-top 0.3s ease; /* Smooth transition for margin changes */
-}
-
-.logo {
-    font-weight: bold;
 }
 
 .card {
@@ -294,29 +373,11 @@ button:hover {
     font-weight: bold;
 }
 
-p, ul {
+p {
     margin: 0;
     padding: 0;
     list-style: none;
     text-align: left; /* Align text to the left for better readability */
-}
-
-ul li {
-    background-color: #f0f0f0; /* Very light grey for list items */
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    border-bottom: 1px solid #D6E4F0; /* Soft blue line separator */
-}
-
-ul li:hover, ul li.selected-student, ul li.selected-group{
-    background-color: #D6E4F0; /* Soft blue for selected item */
-    font-weight: bold;
-    color: #333;
 }
 
 .add-group-btn {
@@ -689,7 +750,7 @@ input[type="text"] {
     justify-content: center;
     align-items: top;
     min-height: calc(100vh - 70px);
-    margin-top: 70px;
+    margin-top: 60px;
     background-color: #f5f5f5;
     padding: 2rem;
 }
@@ -776,7 +837,13 @@ p em {
 }
 
 .testimonials {
-    text-align: center;
+    text-align: left;
+}
+
+.testimonials p {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
 }
 
 .sample-reports {
