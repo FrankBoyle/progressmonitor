@@ -1,13 +1,8 @@
 <?php
-session_start();
 include('db.php');
 
- Enable PHP error logging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'error_log.log');  // Ensure this file is writable by the server
+ini_set('display_errors', 1);
 
 function log_message($message) {
     file_put_contents('register_debug.log', $message . PHP_EOL, FILE_APPEND);
@@ -74,9 +69,8 @@ if (isset($_POST['register'])) {
 
     if ($result) {
         log_message("Registration successful for $email");
-        $_SESSION['registration_success'] = true; // Set session variable
         header("Location: ../login.php");
-        exit; // Ensure script stops executing after redirect
+        echo '<p class="success">Your registration was successful!</p>';
     } else {
         log_message("Registration failed for $email");
         echo '<p class="error">Something went wrong!</p>';
@@ -93,4 +87,3 @@ function uuid_generate() {
     );
 }
 ?>
-
