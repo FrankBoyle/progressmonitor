@@ -826,17 +826,18 @@ function displayGoals(goals) {
                 <div class="goal-text-container">
                     <div class="goal-text">${goal.goal_description}</div>
                 </div>
-                <button class="archive-btn">Archive</button>
+                <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
             </div>
             <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
                 <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                <button class="btn btn-primary save-btn">Save</button>
-                <button class="btn btn-secondary cancel-btn">Cancel</button>
+                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, window.quillInstances['${goal.goal_id}'].root.innerHTML, this)">Save</button>
+                <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
             </div>
         `;
 
         goalList.appendChild(goalItem);
 
+        // Initialize Quill editor for this goal
         const quill = new Quill(`#editor-${goal.goal_id}`, {
             theme: 'snow',
             modules: {
@@ -850,31 +851,18 @@ function displayGoals(goals) {
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                     [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
                     ['link', 'image', 'video'],
-                    ['clean']  
+                    ['clean']
                 ]
             }
         });
 
         quill.root.innerHTML = goal.goal_description; // Load the goal content
 
-        // Set up button actions
-        goalItem.querySelector('.archive-btn').addEventListener('click', () => {
-            archiveGoal(goal.goal_id, goalItem);
-        });
-
-        goalItem.querySelector('.save-btn').addEventListener('click', () => {
-            const updatedContent = quill.root.innerHTML;
-            saveGoal(goal.goal_id, updatedContent, goalItem);
-        });
-
-        goalItem.querySelector('.cancel-btn').addEventListener('click', () => {
-            quill.root.innerHTML = goal.goal_description;
-            quill.enable(false);
-            document.getElementById(`goal-content-${goal.goal_id}`).style.display = 'block';
-            document.getElementById(`goal-edit-${goal.goal_id}`).style.display = 'none';
-        });
-
-        window[`quillEditor${goal.goal_id}`] = quill; // Save the editor instance to a global variable for later use
+        // Save the editor instance to a global variable for later use
+        if (!window.quillInstances) {
+            window.quillInstances = {};
+        }
+        window.quillInstances[goal.goal_id] = quill;
     });
 }
 
