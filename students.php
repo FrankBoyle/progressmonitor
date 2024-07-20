@@ -209,7 +209,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div id="columnNamesDisplay" style="display: none; margin-top: 10px;">
-                <h2>Column Names:</h2>
+                <h3>Starting column names for rubric:</h3>
                 <ul id="columnNamesList"></ul>
             </div>
 
