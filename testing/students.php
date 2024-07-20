@@ -279,10 +279,12 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
-    console.log("School ID:", schoolId);
+    console.log("School ID:", schoolId); // Log school ID for debugging
 
+    // Call loadTemplates on page load
     loadGroups();
     loadStaff();
+    loadExistingCategories();
     lightbox.init();
 
     window.showAddGoalModal = showAddGoalModal;
@@ -304,18 +306,14 @@ document.addEventListener('DOMContentLoaded', function() {
     $('.select2').select2();
 
     const goalList = document.getElementById('goal-list');
-    if (goalList) {
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.addedNodes.length) {
-                    populateStudentsAndGoals();
-                }
-            });
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length) {
+                populateStudentsAndGoals();
+            }
         });
-        observer.observe(goalList, { childList: true, subtree: true });
-    } else {
-        console.error("Goal list not found");
-    }
+    });
+    observer.observe(goalList, { childList: true, subtree: true });
 
     populateStudentsAndGoals();
 
@@ -323,38 +321,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const templateDropdown = document.getElementById('templateDropdown');
     const existingDropdown = document.getElementById('existingDropdown');
 
-    if (metadataOptionSelector) {
-        metadataOptionSelector.addEventListener('click', function(event) {
-            if (event.target.classList.contains('selector-item')) {
-                const items = metadataOptionSelector.querySelectorAll('.selector-item');
-                items.forEach(item => item.classList.remove('selected'));
-                event.target.classList.add('selected');
+    metadataOptionSelector.addEventListener('click', function(event) {
+        if (event.target.classList.contains('selector-item')) {
+            const items = metadataOptionSelector.querySelectorAll('.selector-item');
+            items.forEach(item => item.classList.remove('selected'));
+            event.target.classList.add('selected');
 
-                const selectedOption = event.target.getAttribute('data-option');
-                if (selectedOption === 'template') {
-                    loadTemplates();
-                    templateDropdown.style.display = 'block';
-                    existingDropdown.style.display = 'none';
-                    document.getElementById('columnNamesDisplay').style.display = 'none';
-                } else if (selectedOption === 'existing') {
-                    const studentId = document.getElementById('selected-student-id').value;
-                    console.log("Selected student ID for existing categories:", studentId);
+            const selectedOption = event.target.getAttribute('data-option');
+            if (selectedOption === 'template') {
+                console.log('Loading templates...');
+                loadTemplates();
+                templateDropdown.style.display = 'block';
+                existingDropdown.style.display = 'none';
+                document.getElementById('columnNamesDisplay').style.display = 'none';
+            } else if (selectedOption === 'existing') {
+                const studentId = document.getElementById('selected-student-id').value;
+                if (studentId && schoolId) {
+                    console.log(`Loading existing categories for student ID: ${studentId}, school ID: ${schoolId}`);
                     loadExistingCategories(studentId, schoolId);
-                    templateDropdown.style.display = 'none';
-                    existingDropdown.style.display = 'block';
-                    document.getElementById('columnNamesDisplay').style.display = 'none';
+                } else {
+                    console.error('Missing studentId or schoolId');
                 }
+                templateDropdown.style.display = 'none';
+                existingDropdown.style.display = 'block';
+                document.getElementById('columnNamesDisplay').style.display = 'none';
             }
-        });
-    } else {
-        console.error("Metadata option selector not found");
-    }
-    
+        }
+    });
+
     const schoolSelect = document.getElementById('school-select');
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
-            console.log("Selected school ID:", selectedSchoolId);
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -376,8 +374,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error:', error);
             });
         });
-    } else {
-        console.error("School select not found");
     }
 });
 
@@ -1364,22 +1360,29 @@ function toggleMetadataOption() {
 
 // Function to load metadata templates
 function loadTemplates() {
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>; 
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
     console.log("Loading templates for school ID:", schoolId);
 
     fetch(`users/fetch_metadata_templates.php?school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
             console.log('Templates Data:', data); // Log the response data
+            if (data.error) {
+                throw new Error(data.error);
+            }
             const templateSelect = document.getElementById('template-metadata-select');
             if (templateSelect) {
                 templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
-                data.forEach(template => {
-                    const option = document.createElement('option');
-                    option.value = template.metadata_id;
-                    option.textContent = template.category_name;
-                    templateSelect.appendChild(option);
-                });
+                if (Array.isArray(data)) {
+                    data.forEach(template => {
+                        const option = document.createElement('option');
+                        option.value = template.metadata_id;
+                        option.textContent = template.category_name;
+                        templateSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Unexpected response format:', data);
+                }
             } else {
                 console.error('Template metadata select element not found.');
             }
@@ -1435,24 +1438,32 @@ function showColumnNames(type) {
         return;
     }
 
+    console.log(`Fetching metadata details for metadata_id: ${selectedId}`);
     fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
         .then(response => response.json())
         .then(data => {
-            const columnNamesList = document.getElementById('columnNamesList');
-            if (columnNamesList) {
-                columnNamesList.innerHTML = '';
-                for (let i = 1; i <= 10; i++) {
-                    const scoreName = data[`score${i}_name`];
-                    if (scoreName) {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = scoreName;
-                        columnNamesList.appendChild(listItem);
-                    }
-                }
-                document.getElementById('columnNamesDisplay').style.display = 'block';
-            } else {
-                console.error('Column names list element not found.');
+            console.log('Metadata Details:', data); // Log metadata details
+            if (data.error) {
+                throw new Error(data.error);
             }
+
+            const columnNamesList = document.getElementById('columnNamesList');
+            if (!columnNamesList) {
+                console.error('Column names list element not found.');
+                return;
+            }
+            columnNamesList.innerHTML = '';
+
+            for (let i = 1; i <= 10; i++) {
+                const scoreName = data[`score${i}_name`];
+                if (scoreName) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = scoreName;
+                    columnNamesList.appendChild(listItem);
+                }
+            }
+
+            document.getElementById('columnNamesDisplay').style.display = 'block';
         })
         .catch(error => {
             console.error('Error loading column names:', error);

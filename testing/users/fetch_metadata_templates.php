@@ -6,29 +6,26 @@ include('db.php');
 header('Content-Type: application/json');
 
 try {
-    if (!isset($_GET['metadata_id'])) {
-        throw new Exception('Missing required parameter: metadata_id.');
+    if (!isset($_SESSION['school_id'])) {
+        throw new Exception('Missing required session parameter: school_id.');
     }
 
-    $metadataId = $_GET['metadata_id'];
-
-    error_log("Fetching metadata details for metadata_id: " . $metadataId); // Log metadata_id
-
-    $stmt = $connection->prepare("SELECT * FROM Metadata WHERE metadata_id = :metadata_id");
-    $stmt->bindParam(':metadata_id', $metadataId, PDO::PARAM_INT);
+    $school_id = $_SESSION['school_id'];
+    $stmt = $connection->prepare("SELECT metadata_id, category_name FROM Metadata WHERE school_id = :school_id AND metadata_template = 1");
+    $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
     $stmt->execute();
-    $metadata = $stmt->fetch(PDO::FETCH_ASSOC);
+    $templates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if (!$metadata) {
-        throw new Exception('Metadata not found.');
-    }
+    error_log("Templates: " . json_encode($templates)); // Log data
 
-    error_log("Metadata Details: " . json_encode($metadata)); // Log data
-    echo json_encode($metadata);
+    echo json_encode($templates);
+} catch (PDOException $e) {
+    error_log("Error fetching metadata templates: " . $e->getMessage()); // Log error
+    echo json_encode(["error" => "Error fetching metadata templates: " . $e->getMessage()]);
 } catch (Exception $e) {
-    error_log("Error fetching metadata details: " . $e->getMessage());
-    echo json_encode(["error" => "Error fetching metadata details: " . $e->getMessage()]);
+    error_log("Error: " . $e->getMessage()); // Log error
+    echo json_encode(["error" => "Error: " . $e->getMessage()]);
 }
-
 ?>
+
 
