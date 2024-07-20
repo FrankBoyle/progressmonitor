@@ -192,6 +192,7 @@ body {
     align-items: center;
     cursor: pointer;
     border-bottom: 1px solid #D6E4F0;
+    border-radius: 5px; /* Adjust radius to get the desired roundness */
     padding: 10px; /* Adjust padding here if needed */
     margin: 0; /* Ensure no margin that could disrupt the full width */
     width: 100%; /* Ensure li takes full width of ul */
