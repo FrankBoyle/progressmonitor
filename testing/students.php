@@ -1175,7 +1175,7 @@ function loadGoals(studentId) {
                             </div>
                             <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
                                 <div id="editor-${goal.goal_id}" class="quill-editor" data-goal-id="${goal.goal_id}"></div>
-                                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, window.quillInstances['${goal.goal_id}'].root.innerHTML, this)">Save</button>
+                                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, this)">Save</button>
                                 <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
                             </div>
                         `;
