@@ -79,9 +79,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </header>
 
-
-
-<main class="content-students">
+        <main class="content-students">
     <input type="hidden" id="selected-student-id" value="">
 
     <section class="box create-group">
