@@ -702,7 +702,11 @@ function selectStudent(element) {
     const studentId = element.getAttribute('data-student-id');
     document.getElementById('selected-student-id').value = studentId;
 
+    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+
     loadGoals(studentId);
+    loadExistingCategories(studentId, schoolId); // Pass both studentId and schoolId
+    loadTemplates(); // Templates are not dependent on studentId, only on schoolId
 
     const studentItems = document.getElementById('student-list').querySelectorAll('li');
     studentItems.forEach(student => student.classList.remove('selected-student'));
