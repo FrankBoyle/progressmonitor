@@ -451,7 +451,7 @@ function updateLineChart(categories, seriesData) {
         series: seriesData,
         colors: seriesData.map(s => s.color), // Apply specific colors to series
         stroke: {
-            curve: 'smooth',
+            curve: seriesData.map(s => s.name.includes('Trendline') ? 'straight' : 'smooth'),
             width: seriesData.map(s => s.name.includes('Trendline') ? 2 : 5),
             dashArray: seriesData.map(s => s.name.includes('Trendline') ? 5 : 0)
         },
