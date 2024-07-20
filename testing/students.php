@@ -330,10 +330,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 templateDropdown.style.display = 'block';
                 existingDropdown.style.display = 'none';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
+                loadTemplates();
             } else if (selectedOption === 'existing') {
                 templateDropdown.style.display = 'none';
                 existingDropdown.style.display = 'block';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
+                loadMetadata();
             }
         }
     });
@@ -342,7 +344,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
-            //console.log('School selected:', selectedSchoolId); // Debugging statement
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -350,17 +351,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: `school_id=${encodeURIComponent(selectedSchoolId)}`
             })
-            .then(response => {
-                //console.log('Response status:', response.status); // Debugging statement
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                //console.log('Response data:', data); // Debugging statement
                 if (data.success) {
-                    //console.log('Reloading page in 3 seconds'); // Debugging statement
                     setTimeout(function() {
-                        location.reload(); // Reload the page to reflect the school change
-                    }, 0); // 3 seconds delay
+                        location.reload();
+                    }, 0);
                 } else {
                     console.error('Error updating school:', data.message);
                 }
