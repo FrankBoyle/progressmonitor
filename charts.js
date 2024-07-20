@@ -1702,16 +1702,17 @@ function initializeNotesQuill() {
 function textEditor(cell, onRendered, success, cancel, editorParams) {
     // Create and append the input element
     var input = document.createElement("input");
-    input.setAttribute('type', 'text');
+    input.type = 'text';
     input.style.padding = "4px";
     input.style.width = "100%";
     input.style.boxSizing = "border-box";
     input.value = cell.getValue();
 
-    // Set focus on the input element with a slight delay to handle transitions
+    // Ensure the input takes focus when editing starts
     onRendered(function () {
         input.focus();
         input.style.height = "100%";
+        input.select();  // Select text to make editing immediate
         console.log("Editor rendered and input focused.");
     });
 
@@ -1726,29 +1727,32 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
         }
     }
 
-    // Prevent automatic closing on blur by checking if it's an actual user-driven blur
+    // Handle blur events cautiously
     input.addEventListener("blur", function (e) {
         console.log("Blur event triggered.");
-        if (document.activeElement !== input) {
-            onChange();
-        }
+        setTimeout(() => {  // Delay handling to check if focus is truly lost
+            if (document.activeElement !== input) {
+                onChange();
+            }
+        }, 100);
     });
 
-    input.addEventListener("click", function (e) {
-        console.log("Input clicked.");
-        e.stopPropagation(); // Prevent the editor from closing on a click
+    // Prevent default and stop propagation on mouse down to avoid blur
+    input.addEventListener("mousedown", function (e) {
+        e.preventDefault();
+        console.log("Mouse down inside input prevented default behavior.");
     });
 
     input.addEventListener("keydown", function (e) {
         console.log(`Key down: ${e.key}`);
-        if (e.keyCode == 13) { // For Enter
+        if (e.keyCode == 13) { // Enter
             onChange();
-        }
-        if (e.keyCode == 27) { // For ESC
+        } else if (e.keyCode == 27) { // ESC
             cancel();
         }
     });
 
     return input;
 }
+
 
