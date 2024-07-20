@@ -418,33 +418,47 @@ function addGroup(event) {
 
 function addStudent(event) {
     event.preventDefault();
-    const firstName = document.getElementById('first-name').value;
-    const lastName = document.getElementById('last-name').value;
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
-    fetch('./users/add_student.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&school_id=${encodeURIComponent(schoolId)}`
-    })
+    // Check for duplicate names before adding a new student
+    fetch(`./users/check_duplicate_student.php?first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&school_id=${encodeURIComponent(schoolId)}`)
     .then(response => response.json())
     .then(data => {
-        if (data.status === 'success') {
-            loadStudents();
-            hideAddStudentModal();
-        } else {
-            alert('Error adding student: ' + data.message);
+        if (data.duplicate) {
+            if (!confirm("A student with the same name already exists. Are you sure you want to add another?")) {
+                return; // Stop the function if user cancels
+            }
         }
+        // Proceed to add the student if not duplicate or if user confirms
+        fetch('./users/add_student.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&school_id=${encodeURIComponent(schoolId)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                loadStudents();
+                hideAddStudentModal();
+            } else {
+                alert('Error adding student: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     })
     .catch(error => {
-        console.error('Error:', error);
-        //alert('There was an error adding the student. Please try again.');
+        console.error('Error checking for duplicates:', error);
     });
 }
+
 
 function loadStaff() {
     fetch('users/fetch_staff.php')
