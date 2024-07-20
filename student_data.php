@@ -10,11 +10,25 @@ include('db.php');
 // Assuming school_id is set in the session during login
 $schoolId = $_SESSION['school_id']; // Default to 1 if not set
 
-// Example PHP code to fetch the student's name, assumed to be stored in a session or retrieved from the database
-$studentName = "John Doe";  // This should be dynamically fetched based on your application logic
+// Get the studentId from the URL and ensure it's an integer
+$studentId = isset($_GET['studentId']) ? (int)$_GET['studentId'] : 0;
 
+$studentName = "";  // Default empty name
+
+if ($studentId > 0) {
+    // Prepared statement to fetch the student's name
+    if ($stmt = $db->prepare("SELECT name FROM students WHERE id = ?")) {
+        $stmt->bind_param("i", $studentId);
+        $stmt->execute();
+        $stmt->bind_result($studentName);
+        $stmt->fetch();
+        $stmt->close();
+    }
+}
+
+// Pass the student's name to JavaScript
 echo "<script type='text/javascript'>";
-echo "let studentName = " . json_encode($studentName) . ";";  // Safely encode the student's name for JavaScript usage
+echo "let studentName = " . json_encode($studentName) . ";";
 echo "</script>";
 
 ?>

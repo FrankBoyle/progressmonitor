@@ -1264,9 +1264,9 @@ function saveAndPrintReport() {
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
     const commonWidth = '1000px'; // Fixed width for consistency
 
+    
     let printContents = `
         <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
-            <h2 style="text-align: left; font-weight: bold; font-size: 24px;">${studentName}</h2> <!-- Display student name in bold and top left -->
             <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
                 <div class="print-goal-text">${selectedGoal.innerHTML}</div>
             </div>`;
