@@ -1122,7 +1122,7 @@ function loadMetadata() {
             //console.log('Fetched used metadata:', data);
             const metadataSelect = document.getElementById('existing-metadata-select');
             if (metadataSelect) {
-                metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
+                metadataSelect.innerHTML = '<option value="" disabled selected>Choose one</option>';
 
                 data.forEach(metadata => {
                     //console.log(`Adding metadata to existing: ${metadata.category_name}`);
@@ -1385,7 +1385,7 @@ function loadTemplates() {
                 console.error('Template metadata select element not found.');
                 return;
             }
-            templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
+            templateSelect.innerHTML = '<option value="" disabled selected>Choose one</option>';
 
             data.forEach(template => {
                 if (template.category_name.includes('Template')) {
