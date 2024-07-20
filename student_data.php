@@ -170,8 +170,8 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
                     </div>
 
                     <div id="notes-container">
-                        <label for="notes">Notes:</label>
-                        <div id="notes" style="height: 200px;" placeholder="Enter notes"></div> <!-- Quill will be initialized here -->
+                        <label for="notesHtml">Notes:</label>
+                        <div id="notesHtml" style="height: 200px;" placeholder="Enter notes"></div> <!-- Quill will be initialized here -->
                     </div>
 
                     <button onclick="saveAndPrintReport()">Print</button>
