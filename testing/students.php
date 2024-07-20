@@ -279,72 +279,81 @@ let quillInstances = {}; // Initialize quillInstances globally
 
 document.addEventListener('DOMContentLoaded', function() {
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+    console.log("School ID:", schoolId);
 
     // Call loadTemplates on page load
-    loadGroups();
-    loadStaff();
-    loadExistingCategories();
+    loadTemplates();
     lightbox.init();
 
-    window.showAddGoalModal = showAddGoalModal;
-    window.hideAddGoalModal = hideAddGoalModal;
+    // Ensure add-goal-btn and add-group-btn have event listeners attached
+    const addGoalBtn = document.querySelector('.add-goal-btn');
+    if (addGoalBtn) {
+        addGoalBtn.addEventListener('click', showAddGoalModal);
+    } else {
+        console.error("Add Goal button not found");
+    }
 
-    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
-    document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
+    const addGroupBtn = document.querySelector('.add-group-btn');
+    if (addGroupBtn) {
+        addGroupBtn.addEventListener('click', showAddGroupModal);
+    } else {
+        console.error("Add Group button not found");
+    }
 
-    window.hideAddGroupModal = hideAddGroupModal;
-    window.hideAddStudentModal = hideAddStudentModal;
-
-    document.addEventListener('click', function(event) {
-        const optionsMenu = document.getElementById('group-options');
-        if (optionsMenu && !optionsMenu.contains(event.target)) {
-            optionsMenu.style.display = 'none';
-        }
-    });
-
-    $('.select2').select2();
-
+    // Monitor mutations in the goal list
     const goalList = document.getElementById('goal-list');
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.addedNodes.length) {
-                populateStudentsAndGoals();
-            }
+    if (goalList) {
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length) {
+                    populateStudentsAndGoals();
+                }
+            });
         });
-    });
-    observer.observe(goalList, { childList: true, subtree: true });
+        observer.observe(goalList, { childList: true, subtree: true });
+    } else {
+        console.error("Goal list not found");
+    }
 
     populateStudentsAndGoals();
 
+    // Metadata Option Selector
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     const templateDropdown = document.getElementById('templateDropdown');
     const existingDropdown = document.getElementById('existingDropdown');
 
-    metadataOptionSelector.addEventListener('click', function(event) {
-        if (event.target.classList.contains('selector-item')) {
-            const items = metadataOptionSelector.querySelectorAll('.selector-item');
-            items.forEach(item => item.classList.remove('selected'));
-            event.target.classList.add('selected');
+    if (metadataOptionSelector) {
+        metadataOptionSelector.addEventListener('click', function(event) {
+            if (event.target.classList.contains('selector-item')) {
+                const items = metadataOptionSelector.querySelectorAll('.selector-item');
+                items.forEach(item => item.classList.remove('selected'));
+                event.target.classList.add('selected');
 
-            const selectedOption = event.target.getAttribute('data-option');
-            if (selectedOption === 'template') {
-                loadTemplates();
-                templateDropdown.style.display = 'block';
-                existingDropdown.style.display = 'none';
-                document.getElementById('columnNamesDisplay').style.display = 'none';
-            } else if (selectedOption === 'existing') {
-                loadExistingCategories();
-                templateDropdown.style.display = 'none';
-                existingDropdown.style.display = 'block';
-                document.getElementById('columnNamesDisplay').style.display = 'none';
+                const selectedOption = event.target.getAttribute('data-option');
+                if (selectedOption === 'template') {
+                    loadTemplates();
+                    templateDropdown.style.display = 'block';
+                    existingDropdown.style.display = 'none';
+                    document.getElementById('columnNamesDisplay').style.display = 'none';
+                } else if (selectedOption === 'existing') {
+                    const studentId = document.getElementById('selected-student-id').value;
+                    console.log("Selected student ID for existing categories:", studentId);
+                    loadExistingCategories(studentId, schoolId);
+                    templateDropdown.style.display = 'none';
+                    existingDropdown.style.display = 'block';
+                    document.getElementById('columnNamesDisplay').style.display = 'none';
+                }
             }
-        }
-    });
-
+        });
+    } else {
+        console.error("Metadata option selector not found");
+    }
+    
     const schoolSelect = document.getElementById('school-select');
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
+            console.log("Selected school ID:", selectedSchoolId);
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -366,6 +375,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error:', error);
             });
         });
+    } else {
+        console.error("School select not found");
     }
 });
 
