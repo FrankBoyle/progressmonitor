@@ -188,7 +188,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <form id="add-goal-form" onsubmit="addGoal(event)">
             <div class="selector-area">
                 <div id="columnSelectorTitle" class="selector-title">Goal Rubric Options:</div>
-                <div id="metadataOptionSelector" class="checkbox-container">
+                <div id="metadataOptionSelector" class="checkbox-container-students">
                     <div class="selector-item" data-option="template" onclick="selectOption('template')">Template Rubric</div>
                     <div class="selector-item" data-option="existing" onclick="selectOption('existing')">Previously Used Rubric</div>
                 </div>
