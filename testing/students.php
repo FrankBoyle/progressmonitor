@@ -215,8 +215,9 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="form-group">
                 <label for="goal-description">Goal Description:</label>
-                <textarea id="goal-description" name="goal_description" required></textarea>
+                <div id="goal-description" style="height: 200px;"></div>
             </div>
+
             <div class="form-group">
                 <label for="goal-date">Goal Date:</label>
                 <input type="date" id="goal-date" name="goal_date" required>
@@ -273,7 +274,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 let quillInstances = {}; // Initialize variables globally
-
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
@@ -349,6 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
 });
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
@@ -826,7 +827,7 @@ function addGoal(event) {
     event.preventDefault();
 
     const studentId = document.getElementById('selected-student-id').value;
-    const goalDescription = document.getElementById('goal-description').value;
+    const goalDescription = window.quillInstances['goal-description'].root.innerHTML;
     const goalDate = document.getElementById('goal-date').value;
     const metadataOptionElement = document.querySelector('#metadataOptionSelector .selector-item.selected');
     const metadataOption = metadataOptionElement ? metadataOptionElement.getAttribute('data-option') : null;
@@ -1260,7 +1261,37 @@ function showAddGoalModal() {
     document.getElementById('templateDropdown').style.display = 'none';
     document.getElementById('existingDropdown').style.display = 'none';
     document.getElementById('columnNamesDisplay').style.display = 'none';
+
+    // Ensure Quill is initialized for the 'goal-description' after the modal is displayed
+    setTimeout(function() {
+        if (!window.quillInstances) {
+            window.quillInstances = {}; // Ensure the global object for Quill instances exists
+        }
+        if (!window.quillInstances['goal-description']) {
+            window.quillInstances['goal-description'] = new Quill('#goal-description', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                        [{size: []}],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        ['blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
+                        ['link', 'image', 'video'],
+                        ['clean']  
+                    ]
+                }
+            });
+        } else {
+            // If already initialized, just update the editor's content to empty or default
+            window.quillInstances['goal-description'].setText('');
+        }
+    }, 0); // A minimal timeout to ensure the modal and its contents are fully visible
 }
+
 
 function hideAddGoalModal() {
     const modal = document.getElementById('add-goal-modal');

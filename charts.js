@@ -1289,17 +1289,17 @@ function saveAndPrintReport() {
     }
 
     const reportingPeriod = document.getElementById('reporting_period').value.trim();
-    const notes = document.getElementById('notes').value.trim();
+    const notesHtml = window.quillInstances['notes'].root.innerHTML;
 
     if (!reportingPeriod) {
         alert("Please enter the reporting period.");
         return;
     }
 
-    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
+    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notesHtml, selectedColumns);
 }
 
-function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notesHtml, selectedColumns) {
     const commonWidth = '1000px'; // Fixed width for consistency
 
     let printContents = `
@@ -1338,7 +1338,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     printContents += `
         <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Reporting Period:</strong> ${reportingPeriod}</div>
-        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Notes:</strong> ${notes}</div>
+        <div style="width: ${commonWidth}; margin: 0 auto; padding-bottom: 20px;"><strong>Notes:</strong> ${notesHtml}</div>
     </div>`;
 
     const printDiv = document.createElement('div');
@@ -1379,7 +1379,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
                 school_id: window.schoolId,
                 metadata_id: window.metadataId,
                 reporting_period: reportingPeriod,
-                notes: notes,
+                notes: notesHtml,
                 report_image: dataUrl.split(',')[1] // Get base64 string
             };
 
@@ -1433,7 +1433,7 @@ function resizeCharts(width) {
     });
 }
 
-function printReport(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+function printReport(selectedGoal, selectedSections, reportingPeriod, notesHtml, selectedColumns) {
     let printContents = `<div>${selectedGoal.innerHTML}</div>`;
     
     printContents += `<div class="print-container">`;
@@ -1462,7 +1462,7 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
 
     // Include reporting period and notes in the print content
     printContents += `<div><strong>Reporting Period:</strong> ${reportingPeriod}</div>`;
-    printContents += `<div><strong>Notes:</strong> ${notes}</div>`;
+    printContents += `<div><strong>Notes:</strong> ${notesHtml}</div>`;
 
     const originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;
@@ -1583,6 +1583,8 @@ function showPrintDialogModal() {
         .catch(error => {
             console.error('Error fetching goals:', error);
         });
+        initializeNotesQuill(); // Initialize Quill for notes when the print dialog is shown
+
 }
 
 function fetchExistingReports(goalId) {
@@ -1619,7 +1621,7 @@ function fetchExistingReports(goalId) {
             reportingPeriodDropdown.addEventListener('change', function() {
                 const selectedPeriod = this.value;
                 const report = data.find(report => report.reporting_period == selectedPeriod);
-                document.getElementById('notes').value = report ? report.notes : '';
+                document.getElementById('notes').value = report ? report.notesHtml : '';
             });
         })
         .catch(error => {
@@ -1695,4 +1697,33 @@ function populateGoalSelectionModal(goals) {
         quill.root.innerHTML = goal.goal_description;
         window[`quillEditorModal${goal.goal_id}`] = quill;
     });
+}
+
+function initializeNotesQuill() {
+    if (!window.quillInstances) {
+        window.quillInstances = {};
+    }
+    if (!window.quillInstances['notes']) {
+        window.quillInstances['notes'] = new Quill('#notes', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'header': 1 }, { 'header': 2 }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+                    ['clean'],
+                    ['link', 'image', 'video']
+                ]
+            }
+        });
+    }
 }
