@@ -784,11 +784,9 @@ function assignStudentsToGroup(event) {
     })
     .then(response => response.json())
     .then(data => {
-        //console.log('Response:', data); // Debug log
         if (data.status === "success") {
-            //alert(data.message);
-            loadGroupStudents(groupId, 'group-students-list-add'); // Reload the student list
-            //console.log('Student assigned, now reloading group students for groupId:', groupId); // Debug log
+            loadGroupStudents(groupId, 'group-students-list-add'); // Refresh the student list in the modal
+            loadStudentsByGroup(groupId); // Refresh the student list on the main page
         } else {
             alert(data.error);
         }
@@ -1027,14 +1025,10 @@ function removeStudentFromGroup(studentId, groupId) {
     })
     .then(response => response.json())
     .then(data => {
-        //console.log('Remove student response data:', data); // Debugging statement
         if (data.status === 'success') {
-            //alert('Student removed from group successfully.');
-            //console.log('Student removed, now reloading group students for groupId:', groupId);
-            setTimeout(() => {
-                loadGroupStudents(groupId, 'group-students-list-add'); // Explicitly target the correct element
-                //console.log('Reloaded group students for groupId:', groupId); // Debugging statement
-            }, 0); // Adding a slight delay to ensure the list updates
+            // Refresh student lists both in modal and main page
+            loadGroupStudents(groupId, 'group-students-list-add'); // Refresh modal list
+            loadStudentsByGroup(groupId); // Refresh main page list if applicable, ensure this function updates the main UI properly
         } else {
             alert('There was an error removing the student from the group. Please try again.');
         }

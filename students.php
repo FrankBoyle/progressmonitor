@@ -1250,7 +1250,6 @@ function loadGoals(studentId) {
         });
 }
 
-
 function showAddGoalModal() {
     const selectedStudent = document.querySelector('.selected-student');
     if (!selectedStudent) {
