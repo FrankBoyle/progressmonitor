@@ -1,7 +1,6 @@
 <?php
 include('db.php');
 
-// Set error reporting for development (disable in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -9,11 +8,7 @@ function log_message($message) {
     file_put_contents('register_debug.log', $message . PHP_EOL, FILE_APPEND);
 }
 
-function sendJsonResponse($status, $message) {
-    header('Content-Type: application/json');
-    echo json_encode(['success' => $status, 'message' => $message]);
-    exit;
-}
+header('Content-Type: application/json');
 
 if (isset($_POST['register'])) {
     $fname = $_POST['fname'];
@@ -27,12 +22,9 @@ if (isset($_POST['register'])) {
     log_message("Starting registration process for $email");
 
     try {
-        if (empty($school_uuid) && empty($school_name)) {
-            log_message("No UUID or school name provided");
-            sendJsonResponse(false, "Please provide a school name if you do not have a UUID!");
-        }
+        $connection->beginTransaction();
 
-        if (empty($school_uuid)) {
+        if (empty($school_uuid) && !empty($school_name)) {
             $school_uuid = uuid_generate();
             $query = $connection->prepare("INSERT INTO Schools (school_uuid, SchoolName) VALUES (:school_uuid, :school_name)");
             $query->bindParam(":school_uuid", $school_uuid, PDO::PARAM_STR);
@@ -40,26 +32,22 @@ if (isset($_POST['register'])) {
             $query->execute();
             $school_id = $connection->lastInsertId();
             log_message("New school created with ID $school_id");
-        } else {
+
+            // Copy metadata templates
+            copyGoalTemplates(8, $school_id, $connection);
+        } elseif (!empty($school_uuid)) {
             $query = $connection->prepare("SELECT school_id FROM Schools WHERE school_uuid = :school_uuid");
             $query->bindParam(":school_uuid", $school_uuid, PDO::PARAM_STR);
             $query->execute();
+            $school = $query->fetch(PDO::FETCH_ASSOC);
 
-            if ($query->rowCount() == 0) {
-                log_message("Invalid School UUID: $school_uuid");
-                sendJsonResponse(false, "Invalid School UUID!");
+            if (!$school) {
+                throw new Exception("Invalid School UUID: $school_uuid");
             }
 
-            $school_id = $query->fetch(PDO::FETCH_ASSOC)['school_id'];
-        }
-
-        $query = $connection->prepare("SELECT * FROM accounts WHERE email = :email");
-        $query->bindParam(":email", $email, PDO::PARAM_STR);
-        $query->execute();
-
-        if ($query->rowCount() > 0) {
-            log_message("Email already registered: $email");
-            sendJsonResponse(false, "The email address is already registered!");
+            $school_id = $school['school_id'];
+        } else {
+            throw new Exception("No school information provided.");
         }
 
         $query = $connection->prepare("INSERT INTO accounts (school_id, fname, lname, email, password) VALUES (:school_id, :fname, :lname, :email, :password_hash)");
@@ -68,56 +56,43 @@ if (isset($_POST['register'])) {
         $query->bindParam(":lname", $lname, PDO::PARAM_STR);
         $query->bindParam(":email", $email, PDO::PARAM_STR);
         $query->bindParam(":password_hash", $password_hash, PDO::PARAM_STR);
-        $result = $query->execute();
+        $query->execute();
 
-        if ($result) {
-            copyGoalTemplates(8, $school_id, $connection);
-            log_message("Goal templates copied to new school with ID: $school_id");
-            sendJsonResponse(true, "Your registration was successful!");
-        } else {
-            throw new Exception("Failed to register user.");
-        }
+        $connection->commit();
+        echo json_encode(['success' => true, 'message' => 'Your registration was successful!']);
     } catch (Exception $e) {
+        $connection->rollBack();
         log_message("Error: " . $e->getMessage());
-        sendJsonResponse(false, "Server error occurred: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => 'Registration failed: ' . $e->getMessage()]);
     }
+    exit;
 }
 
 function copyGoalTemplates($templateSchoolId, $newSchoolId, $connection) {
-    try {
-        // Prepare the query to select template metadata entries from the template school
-        $selectQuery = $connection->prepare("SELECT metadata_template, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name FROM Metadata WHERE school_id = :templateSchoolId");
-        $selectQuery->bindParam(':templateSchoolId', $templateSchoolId, PDO::PARAM_INT);
-        $selectQuery->execute();
-        $templates = $selectQuery->fetchAll(PDO::FETCH_ASSOC);
+    $query = $connection->prepare("SELECT * FROM Metadata WHERE school_id = :templateSchoolId");
+    $query->bindParam(':templateSchoolId', $templateSchoolId, PDO::PARAM_INT);
+    $query->execute();
+    $templates = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        // Prepare the query to insert copied metadata entries for the new school
-        $insertQuery = $connection->prepare("INSERT INTO Metadata (school_id, metadata_template, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name) VALUES (:newSchoolId, :metadata_template, :category_name, :score1_name, :score2_name, :score3_name, :score4_name, :score5_name, :score6_name, :score7_name, :score8_name, :score9_name, :score10_name)");
+    $insertQuery = $connection->prepare("INSERT INTO Metadata (school_id, metadata_template, category_name, score1_name, score2_name, score3_name, score4_name, score5_name, score6_name, score7_name, score8_name, score9_name, score10_name) VALUES (:newSchoolId, :metadata_template, :category_name, :score1_name, :score2_name, :score3_name, :score4_name, :score5_name, :score6_name, :score7_name, :score8_name, :score9_name, :score10_name)");
 
-        // Execute insert for each template
-        foreach ($templates as $template) {
-            $insertQuery->bindParam(':newSchoolId', $newSchoolId, PDO::PARAM_INT);
-            $insertQuery->bindParam(':metadata_template', $template['metadata_template'], PDO::PARAM_INT);
-            $insertQuery->bindParam(':category_name', $template['category_name'], PDO::PARAM_STR);
-            // Repeat for all score fields
-            $insertQuery->bindParam(':score1_name', $template['score1_name'], PDO::PARAM_STR);
-            $insertQuery->bindParam(':score2_name', $template['score2_name'], PDO::PARAM_STR);
-            // Bind all other parameters similarly
-            $insertQuery->bindParam(':score3_name', $template['score3_name'], PDO::PARAM_STR);
-            $insertQuery->bindParam(':score4_name', $template['score4_name'], PDO::PARAM_STR);
-            $insertQuery->bindParam(':score5_name', $template['score5_name'], PDO::PARAM_STR);
-            $insertQuery->bindParam(':score6_name', $template['score6_name'], PDO::PARAM_STR);
-            $insertQuery->bindParam(':score7_name', $template['score7_name'], PDO::PARAM_STR);
-            $insertQuery->bindParam(':score8_name', $template['score8_name'], PDO::PARAM_STR);
-            $insertQuery->bindParam(':score9_name', $template['score9_name'], PDO::PARAM_STR);
-            $insertQuery->bindParam(':score10_name', $template['score10_name'], PDO::PARAM_STR);
-            $insertQuery->execute();
-        }
-    } catch (PDOException $e) {
-        echo 'Database error: ' . $e->getMessage();
+    foreach ($templates as $template) {
+        $insertQuery->bindParam(':newSchoolId', $newSchoolId, PDO::PARAM_INT);
+        $insertQuery->bindParam(':metadata_template', $template['metadata_template'], PDO::PARAM_INT);
+        $insertQuery->bindParam(':category_name', $template['category_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score1_name', $template['score1_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score2_name', $template['score2_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score3_name', $template['score3_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score4_name', $template['score4_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score5_name', $template['score5_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score6_name', $template['score6_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score7_name', $template['score7_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score8_name', $template['score8_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score9_name', $template['score9_name'], PDO::PARAM_STR);
+        $insertQuery->bindParam(':score10_name', $template['score10_name'], PDO::PARAM_STR);
+        $insertQuery->execute();
     }
 }
-
 
 function uuid_generate() {
     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
