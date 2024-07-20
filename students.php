@@ -846,7 +846,7 @@ function addGoal(event) {
     event.preventDefault();
 
     const studentId = document.getElementById('selected-student-id').value;
-    const goalDescription = document.getElementById('goal-description').value;
+    const goalDescription = window.quillInstances['goal-description'].root.innerHTML;
     const goalDate = document.getElementById('goal-date').value;
     const metadataOptionElement = document.querySelector('#metadataOptionSelector .selector-item.selected');
     const metadataOption = metadataOptionElement ? metadataOptionElement.getAttribute('data-option') : null;
