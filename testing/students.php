@@ -826,7 +826,7 @@ function shareGroup(event) {
     });
 }
 
-/*
+
 function displayGoals(goals) {
     const goalList = document.getElementById('goal-list');
     goalList.innerHTML = ''; // Clear existing goals
@@ -883,7 +883,7 @@ function displayGoals(goals) {
         window.quillInstances[goal.goal_id] = quill;
     });
 }
-*/
+
 
 function saveGoal(goalId, updatedContent, saveButton) {
     fetch('./users/update_goal.php', {
