@@ -123,45 +123,43 @@ function loadActiveStudents() {
             }
 
             const activeStudentsTable = new Tabulator("#active-students-table-container", {
-                data: data, // Use the fetched data
-                layout: "fitDataStretch", // This makes sure columns use up the available space
-                pagination: "local", // Enable local pagination
-                paginationSize: 20, // Number of students per page
-                paginationSizeSelector: [10, 20, 50, 100], // Page size options
+                data: data,
+                layout: "fitDataStretch",
+                pagination: "local",
+                paginationSize: 30,
+                paginationSizeSelector: [10, 20, 50, 100],
                 initialSort: [
-                    {column: "last_name", dir: "asc"} // Sort by last name ascending
+                    {column: "last_name", dir: "asc"}
                 ],
                 columns: [
-                    { title: "First Name", field: "first_name", widthGrow: 2 },
-                    { title: "Last Name", field: "last_name", widthGrow: 2 },
-                    { title: "Date of Birth", field: "date_of_birth", widthGrow: 2 },
-                    { title: "Grade Level", field: "grade_level", widthGrow: 2 },
+                    { title: "First Name", field: "first_name", editor: "input", widthGrow: 2 },
+                    { title: "Last Name", field: "last_name", editor: "input", widthGrow: 2 },
+                    { title: "Date of Birth", field: "date_of_birth", editor: "input", widthGrow: 2 },
+                    { title: "Grade Level", field: "grade_level", editor: "input", widthGrow: 2 },
                     {
                         title: "Archive",
                         field: "student_id_new",
-                        hozAlign: "center", // Centers the button horizontally
+                        hozAlign: "center",
                         formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>'; // Adding a class for styling
+                            return '<button class="btn btn-archive" data-id="' + cell.getValue() + '">Archive</button>';
                         },
-                        width: 100 // Set a fixed width for consistency
+                        width: 100
                     }
                 ],
+                cellEdited: function(cell) {
+                    updateStudent(cell.getRow().getData());
+                }
             });
 
-            activeStudentsTable.on("cellEdited", function(cell) {
-                updateStudent(cell.getRow().getData());
-            });
-
-            // Add event listener to the Archive buttons
-            setTimeout(() => { // Delay to ensure DOM is updated
+            // Attach event listeners for archive buttons
+            setTimeout(() => {
                 document.querySelectorAll('.btn-archive').forEach(button => {
-                    //console.log('Attaching event listener to archive button with data-id:', button.getAttribute('data-id')); // Debug log
                     button.addEventListener('click', function() {
                         const studentId = this.getAttribute('data-id');
                         archiveStudent(studentId);
                     });
                 });
-            }, 500); // Adjust delay if necessary
+            }, 500);
         })
         .catch(error => {
             console.error('Error:', error);
