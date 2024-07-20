@@ -1734,6 +1734,7 @@ function initializeNotesQuill() {
 function textEditor(cell, onRendered, success, cancel, editorParams) {
     // Create and append the input element
     var input = document.createElement("input");
+    input.setAttribute('type', 'text');
     input.style.padding = "4px";
     input.style.width = "100%";
     input.style.boxSizing = "border-box";
@@ -1743,9 +1744,9 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
     onRendered(function () {
         input.focus();
         input.style.height = "100%";
-        input.select(); // Select all text to make editing easier
     });
 
+    // Function to handle when input changes
     function onChange() {
         if (input.value !== cell.getValue()) {
             success(input.value);
@@ -1756,9 +1757,11 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
 
     // Attach event listeners to handle the completion of editing
     input.addEventListener("blur", onChange);
+
     input.addEventListener("click", function (e) {
         e.stopPropagation(); // Prevent the editor from closing on a click
     });
+
     input.addEventListener("keydown", function (e) {
         if (e.keyCode == 13) { // For Enter
             onChange();
