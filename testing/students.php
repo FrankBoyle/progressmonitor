@@ -1376,34 +1376,29 @@ function loadTemplates() {
 }
 
 function loadExistingCategories() {
-    const studentId = document.getElementById('selected-student-id').value;
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+        fetch('users/fetch_metadata.php')
+            .then(response => response.json())
+            .then(data => {
+                const metadataSelect = document.getElementById('existing-metadata-select');
+                if (metadataSelect) {
+                    metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
-    fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                throw new Error(data.error);
-            }
-
-            const existingSelect = document.getElementById('existing-metadata-select');
-            if (!existingSelect) {
-                console.error('Existing metadata select element not found.');
-                return;
-            }
-            existingSelect.innerHTML = '<option value="">Select a category to see column options</option>';
-
-            data.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.metadata_id;
-                option.textContent = category.category_name;
-                existingSelect.appendChild(option);
+                    data.forEach(metadata => {
+                        const option = document.createElement('option');
+                        option.value = metadata.metadata_id;
+                        option.textContent = metadata.category_name;
+                        metadataSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Metadata select element not found.');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading metadata:', error);
+                alert('There was an error loading metadata. Please try again.');
             });
-        })
-        .catch(error => {
-            console.error('Error loading existing categories:', error);
-        });
 }
+
 
 function showColumnNames(type) {
         let selectedId;
