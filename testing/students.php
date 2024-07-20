@@ -282,6 +282,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log("School ID:", schoolId);
 
     // Call loadTemplates on page load
+    loadGroups();
+    loadStaff();
     loadTemplates();
     lightbox.init();
 
@@ -379,6 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("School select not found");
     }
 });
+
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
     const selectedGroup = document.querySelector('.selected-group');
