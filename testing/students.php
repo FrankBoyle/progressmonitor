@@ -1052,6 +1052,7 @@ function resetStudentList() {
 }
 
 function loadMetadata() {
+    console.log('Loading existing categories...');
     fetch('users/fetch_metadata.php')
         .then(response => response.json())
         .then(data => {
@@ -1060,6 +1061,7 @@ function loadMetadata() {
                 metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
                 data.forEach(metadata => {
+                    console.log(`Adding metadata: ${metadata.category_name}`);
                     const option = document.createElement('option');
                     option.value = metadata.metadata_id;
                     option.textContent = metadata.category_name;
@@ -1407,6 +1409,7 @@ function showColumnNames(type) {
         return;
     }
 
+    console.log(`Showing column names for ${type} with ID: ${selectedId}`);
     fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
         .then(response => response.json())
         .then(data => {
@@ -1424,6 +1427,7 @@ function showColumnNames(type) {
             for (let i = 1; i <= 10; i++) {
                 const scoreName = data[`score${i}_name`];
                 if (scoreName) {
+                    console.log(`Adding column name: ${scoreName}`);
                     const listItem = document.createElement('li');
                     listItem.textContent = scoreName;
                     columnNamesList.appendChild(listItem);
