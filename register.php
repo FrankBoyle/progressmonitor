@@ -91,20 +91,43 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> <!-- SweetAlert for nice popups -->
 
-    document.getElementById('school_uuid').addEventListener('blur', function() {
-            if (this.value.trim() === '') {
-                document.getElementById('new_school_container').style.display = 'block';
-            } else {
-                document.getElementById('new_school_container').style.display = 'none';
+<script>
+$(document).ready(function() {
+    $('form[name="registration"]').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
+        var formData = $(this).serialize(); // Serialize form data
+
+        $.ajax({
+            type: 'POST',
+            url: 'users/register_backend.php',
+            data: formData,
+            success: function(response) {
+                // Check response from server, you might need to adjust based on your backend response
+                if (response.success) {
+                    swal({
+                        title: "Registration Successful!",
+                        text: "You have been registered successfully.",
+                        icon: "success",
+                        button: "Ok",
+                    }).then((willRedirect) => {
+                        if (willRedirect) {
+                            window.location.href = 'login.php'; // Redirect to login page
+                        }
+                    });
+                } else {
+                    swal("Error!", response.message, "error"); // Show error message
+                }
+            },
+            error: function() {
+                swal("Error!", "There was a problem with your registration. Please try again.", "error");
             }
         });
-    </script>
+    });
+});
+</script>
 
-    <script>
-
-    </script>
 </body>
 </html>

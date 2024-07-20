@@ -68,9 +68,7 @@ if (isset($_POST['register'])) {
     $result = $query->execute();
 
     if ($result) {
-        log_message("Registration successful for $email");
-        header("Location: ../login.php");
-        echo '<p class="success">Your registration was successful!</p>';
+        echo json_encode(['success' => true]);
     } else {
         log_message("Registration failed for $email");
         echo '<p class="error">Something went wrong!</p>';
