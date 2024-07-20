@@ -1,8 +1,10 @@
 <?php
+// register_backend.php
+session_start();
 include('db.php');
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
 
 function log_message($message) {
     file_put_contents('register_debug.log', $message . PHP_EOL, FILE_APPEND);
@@ -69,8 +71,9 @@ if (isset($_POST['register'])) {
 
     if ($result) {
         log_message("Registration successful for $email");
+        $_SESSION['registration_success'] = true; // Set session variable
         header("Location: ../login.php");
-        echo '<p class="success">Your registration was successful!</p>';
+        exit; // Ensure script stops executing after redirect
     } else {
         log_message("Registration failed for $email");
         echo '<p class="error">Something went wrong!</p>';
