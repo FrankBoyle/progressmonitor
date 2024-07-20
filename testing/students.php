@@ -1328,9 +1328,14 @@ function archiveGoal(goalId) {
 }
 
 function selectOption(option) {
-    const templateDropdown = document.getElementById('template-dropdown');
-    const existingDropdown = document.getElementById('existing-dropdown');
-    
+    const templateDropdown = document.getElementById('templateDropdown');
+    const existingDropdown = document.getElementById('existingDropdown');
+
+    if (!templateDropdown || !existingDropdown) {
+        console.error('Dropdown elements not found.');
+        return;
+    }
+
     if (option === 'template') {
         templateDropdown.style.display = 'block';
         existingDropdown.style.display = 'none';
