@@ -1325,9 +1325,11 @@ function selectOption(option) {
     if (option === 'template') {
         templateDropdown.style.display = 'block';
         existingDropdown.style.display = 'none';
+        loadTemplates();
     } else if (option === 'existing') {
         templateDropdown.style.display = 'none';
         existingDropdown.style.display = 'block';
+        loadMetadata();
     }
 }
 
