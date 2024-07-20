@@ -827,65 +827,6 @@ function shareGroup(event) {
     });
 }
 
-/*
-function displayGoals(goals) {
-    const goalList = document.getElementById('goal-list');
-    goalList.innerHTML = ''; // Clear existing goals
-
-    goals.forEach(goal => {
-        if (!goal.goal_id || !goal.goal_description) {
-            console.error('Invalid goal structure:', goal);
-            return;
-        }
-
-        const goalItem = document.createElement('div');
-        goalItem.classList.add('goal-item');
-        goalItem.innerHTML = `
-            <div class="goal-content" id="goal-content-${goal.goal_id}" ondblclick="editGoal(${goal.goal_id})">
-                <div class="goal-text-container">
-                    <div class="goal-text">${goal.goal_description}</div>
-                </div>
-                <button class="archive-btn" onclick="archiveGoal(${goal.goal_id})">Archive</button>
-            </div>
-            <div class="goal-edit" id="goal-edit-${goal.goal_id}" style="display: none;">
-                <div id="editor-${goal.goal_id}" class="quill-editor"></div>
-                <button class="btn btn-primary save-btn" onclick="saveGoal(${goal.goal_id}, this)">Save</button>
-                <button class="btn btn-secondary cancel-btn" onclick="cancelEdit(${goal.goal_id}, '${goal.goal_description}')">Cancel</button>
-            </div>
-        `;
-
-        goalList.appendChild(goalItem);
-
-        // Initialize Quill editor for this goal
-        const quill = new Quill(`#editor-${goal.goal_id}`, {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-                    [{size: []}],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'script': 'sub'}, { 'script': 'super' }],
-                    ['blockquote', 'code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
-                    ['link', 'image', 'video'],
-                    ['clean']
-                ]
-            }
-        });
-
-        quill.root.innerHTML = goal.goal_description; // Load the goal content
-
-        // Save the editor instance to a global variable for later use
-        if (!window.quillInstances) {
-            window.quillInstances = {};
-        }
-        window.quillInstances[goal.goal_id] = quill;
-    });
-}
-*/
-
 function addGoal(event) {
     event.preventDefault();
 

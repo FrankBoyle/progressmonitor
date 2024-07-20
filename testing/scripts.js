@@ -301,7 +301,7 @@ function deleteUser(teacherId) {
 }
 
 function archiveStudent(studentId) {
-    //console.log('Archiving student with ID:', studentId); // Debug log
+    console.log('Archiving student with ID:', studentId); // Debug log
     fetch('./users/archive_student.php', {
         method: 'POST',
         headers: {
@@ -309,10 +309,14 @@ function archiveStudent(studentId) {
         },
         body: JSON.stringify({ student_id_new: studentId })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status); // Debug log
+        return response.json();
+    })
     .then(data => {
+        console.log('Response data:', data); // Debug log
         if (data.success) {
-            //console.log('Student archived successfully');
+            console.log('Student archived successfully');
             loadActiveStudents(); // Reload the active students to reflect the change
             loadArchivedStudents(); // Reload the archived students to reflect the change
         } else {
