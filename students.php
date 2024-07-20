@@ -215,8 +215,9 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="form-group">
                 <label for="goal-description">Goal Description:</label>
-                <textarea id="goal-description" name="goal_description" required></textarea>
+                <div id="goal-description" style="height: 200px;"></div>
             </div>
+
             <div class="form-group">
                 <label for="goal-date">Goal Date:</label>
                 <input type="date" id="goal-date" name="goal_date" required>
@@ -273,7 +274,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 let quillInstances = {}; // Initialize variables globally
-
 
 document.addEventListener('DOMContentLoaded', function() {
     loadGroups();
@@ -347,6 +347,26 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('Error:', error);
             });
+        });
+    }
+
+    if (!window.quillInstances['goal-description']) {
+        window.quillInstances['goal-description'] = new Quill('#goal-description', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                    [{size: []}],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }, { 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']  
+                ]
+            }
         });
     }
 });
