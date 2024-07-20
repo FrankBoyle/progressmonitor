@@ -83,7 +83,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
 
     <main class="content-students">
-    <input type="hidden" id="selected-student-id" value="">
+        <input type="hidden" id="selected-student-id" value="">
 
         <section class="box create-group">
             <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
@@ -117,7 +117,9 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                 <!-- Goals will be loaded here and grouped by metadata_id -->
             </div>
         </section>
+        
     </main>
+
 </div>
 
 <!-- Add Group Modal -->
