@@ -97,35 +97,41 @@
 <script>
 $(document).ready(function() {
     $('form[name="registration"]').on('submit', function(e) {
-        e.preventDefault();  // Prevent the default form submission
-        var formData = $(this).serialize();  // Serialize the form data
+        e.preventDefault(); // This line prevents the form's default submission method
+
+        var formData = $(this).serialize(); // This captures all form data
+
+        // Optional: Append the 'register' button value manually if not included
+        formData += '&register=Register';
 
         $.ajax({
             type: 'POST',
-            url: 'users/register_backend.php',
+            url: 'users/register_backend.php', // Endpoint where the form data should be submitted
             data: formData,
-            dataType: 'json',  // Expect a JSON response from the server
+            dataType: 'json', // Specify that you expect a JSON response
             success: function(response) {
+                // SweetAlert to handle success
                 if (response.success) {
                     swal({
-                        title: "Success!",
-                        text: "Your registration was successful!",
+                        title: "Registration Successful!",
+                        text: "You have been registered successfully.",
                         icon: "success",
                         button: "Ok",
                     }).then((value) => {
-                        window.location.href = 'login.php';  // Redirect to login on confirmation
+                        window.location.href = 'login.php'; // Redirect on confirmation
                     });
                 } else {
-                    swal("Failed!", response.message, "error");
+                    swal("Error", response.message || "There was a problem with your registration. Please try again.", "error");
                 }
             },
-            error: function() {
-                swal("Failed!", "Failed to process your request. Please try again.", "error");
+            error: function(xhr, status, error) {
+                swal("Error", "Failed to process your request. Please try again.", "error");
             }
         });
     });
 });
 </script>
+
 
 
 </script>
