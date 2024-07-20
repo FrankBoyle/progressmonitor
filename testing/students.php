@@ -1368,33 +1368,36 @@ function loadTemplates(schoolId) {
         });
 }
 
-function loadExistingCategories() {
-    const studentId = document.getElementById('selected-student-id').value;
-    const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
+function loadExistingCategories(studentId, schoolId) {
+    if (!studentId || !schoolId) {
+        console.error('Missing studentId or schoolId');
+        return;
+    }
 
+    console.log(`Loading existing categories for student ID: ${studentId}, school ID: ${schoolId}`);
     fetch(`users/fetch_existing_categories.php?student_id=${studentId}&school_id=${schoolId}`)
         .then(response => response.json())
         .then(data => {
-            if (data.error) {
-                throw new Error(data.error);
+            console.log('Existing Categories Data:', data);
+            const metadataSelect = document.getElementById('existing-metadata-select');
+            if (metadataSelect) {
+                metadataSelect.innerHTML = '<option value="">Select a category to see column options</option>';
+                if (Array.isArray(data)) {
+                    data.forEach(metadata => {
+                        const option = document.createElement('option');
+                        option.value = metadata.metadata_id;
+                        option.textContent = metadata.category_name;
+                        metadataSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Unexpected response format:', data);
+                }
+            } else {
+                console.error('Metadata select element not found.');
             }
-
-            const existingSelect = document.getElementById('existing-metadata-select');
-            if (!existingSelect) {
-                console.error('Existing metadata select element not found.');
-                return;
-            }
-            existingSelect.innerHTML = '<option value="">Select a category to see column options</option>';
-
-            data.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.metadata_id;
-                option.textContent = category.category_name;
-                existingSelect.appendChild(option);
-            });
         })
         .catch(error => {
-            console.error('Error loading existing categories:', error);
+            console.error('Error loading metadata:', error);
         });
 }
 
