@@ -80,40 +80,40 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         </header>
 
         <main class="content-students">
-    <input type="hidden" id="selected-student-id" value="">
+            <input type="hidden" id="selected-student-id" value="">
 
-    <section class="box create-group">
-        <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
-        <div id="group-list">
-            <ul>
-                <?php foreach ($groups as $group): ?>
-                    <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
-                        <?= htmlspecialchars($group['group_name']) ?>
-                        <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </section>
+            <section class="box create-group">
+                <h2>Groups <button class="add-group-btn" onclick="showAddGroupModal()">+</button></h2>
+                <div id="group-list">
+                    <ul>
+                        <?php foreach ($groups as $group): ?>
+                            <li data-group-id="<?= htmlspecialchars($group['group_id']) ?>" data-group-name="<?= htmlspecialchars($group['group_name']) ?>">
+                                <?= htmlspecialchars($group['group_name']) ?>
+                                <button class="options-btn" onclick="showGroupOptions(event, '<?= htmlspecialchars($group['group_id']) ?>', '<?= htmlspecialchars(addslashes($group['group_name'])) ?>')">Options</button>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </section>
 
-    <section class="box students-list">
-        <h2>Students <button class="add-student-btn">+</button></h2>
-        <div class="message" id="students-message">Please use groups to see students.</div>
-        <ul id="student-list" style="display: none;">
-            <?php foreach ($allStudents as $student): ?>
-                <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </section>
+            <section class="box students-list">
+                <h2>Students <button class="add-student-btn">+</button></h2>
+                <div class="message" id="students-message">Please use groups to see students.</div>
+                <ul id="student-list" style="display: none;">
+                    <?php foreach ($allStudents as $student): ?>
+                        <li data-student-id="<?= htmlspecialchars($student['student_id']) ?>"><?= htmlspecialchars($student['first_name'] . ' ' . $student['last_name']) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </section>
 
-    <section class="box existing-groups">
-        <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
-        <div class="message" id="goals-message">Click a student to see their goals.</div>
-        <div id="goal-list" style="display: none;">
-            <!-- Goals will be loaded here and grouped by metadata_id -->
-        </div>
-    </section>
-</main>
+            <section class="box existing-groups">
+                <h2>Goals <button class="add-goal-btn" onclick="showAddGoalModal()">+</button></h2>
+                <div class="message" id="goals-message">Click a student to see their goals.</div>
+                <div id="goal-list" style="display: none;">
+                    <!-- Goals will be loaded here and grouped by metadata_id -->
+                </div>
+            </section>
+        </main>
 
 
 
@@ -187,24 +187,24 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
         <h2>Add New Goal</h2>
         <form id="add-goal-form" onsubmit="addGoal(event)">
             <div class="selector-area">
-                <div id="columnSelectorTitle" class="selector-title">Goal Category Options:</div>
+                <div id="columnSelectorTitle" class="selector-title">Goal Rubric Options:</div>
                 <div id="metadataOptionSelector" class="checkbox-container">
-                    <div class="selector-item" data-option="template" onclick="selectOption('template')">Category Template</div>
-                    <div class="selector-item" data-option="existing" onclick="selectOption('existing')">Previously Used Category</div>
+                    <div class="selector-item" data-option="template" onclick="selectOption('template')">Template Rubric</div>
+                    <div class="selector-item" data-option="existing" onclick="selectOption('existing')">Previously Used Rubric</div>
                 </div>
             </div>
 
             <div id="templateDropdown" class="form-group" style="display: none;">
-                <label for="template-metadata-select">Select Category Template:</label>
+                <label for="template-metadata-select">Choose a template rubric:</label>
                 <select id="template-metadata-select" name="template_id" onchange="showColumnNames('template')">
-                    <option value="" disabled selected>Select a category to see column options</option>
+                    <option value="" disabled selected>Select one</option>
                 </select>
             </div>
 
             <div id="existingDropdown" class="form-group">
-                <label for="existing-metadata-select">Select Existing Category:</label>
+                <label for="existing-metadata-select">Choose a previously used rubric:</label>
                 <select id="existing-metadata-select" name="existing_category_id" onchange="showColumnNames('existing')">
-                    <option value="" disabled selected>Select a category to see column options</option>
+                    <option value="" disabled selected>Select one</option>
                 </select>
             </div>
 
@@ -500,20 +500,20 @@ function showAddGroupModal() {
         }
 }
 
-function showAddStudentModal(groupId) {
-    //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
-    document.getElementById('add-student-modal').style.display = 'block';
-
-    // Load students for the selected group
-    loadGroupStudents(groupId, 'group-students-list-add');
-}
-
 // Function to hide the modal
 function hideAddGroupModal() {
     const modal = document.getElementById('add-group-modal');
         if (modal) {
             modal.style.display = 'none';
         }
+}
+
+function showAddStudentModal(groupId) {
+    //console.log('showAddStudentModal called with groupId:', groupId); // Debug log
+    document.getElementById('add-student-modal').style.display = 'block';
+
+    // Load students for the selected group
+    loadGroupStudents(groupId, 'group-students-list-add');
 }
 
 function hideAddStudentModal() {
@@ -1114,18 +1114,18 @@ function resetStudentList() {
 }
 
 function loadMetadata() {
-    console.log('Loading existing categories...');
+    //console.log('Loading existing categories...');
     const studentId = document.getElementById('selected-student-id').value;
     fetch(`users/fetch_metadata.php?student_id=${studentId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched used metadata:', data);
+            //console.log('Fetched used metadata:', data);
             const metadataSelect = document.getElementById('existing-metadata-select');
             if (metadataSelect) {
                 metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
                 data.forEach(metadata => {
-                    console.log(`Adding metadata to existing: ${metadata.category_name}`);
+                    //console.log(`Adding metadata to existing: ${metadata.category_name}`);
                     const option = document.createElement('option');
                     option.value = metadata.metadata_id;
                     option.textContent = metadata.category_name;
@@ -1250,7 +1250,6 @@ function loadGoals(studentId) {
         });
 }
 
-
 function showAddGoalModal() {
     const selectedStudent = document.querySelector('.selected-student');
     if (!selectedStudent) {
@@ -1357,7 +1356,7 @@ function selectOption(option) {
         return;
     }
 
-    console.log(`Option selected: ${option}`);
+    //console.log(`Option selected: ${option}`);
     if (option === 'template') {
         templateDropdown.style.display = 'block';
         existingDropdown.style.display = 'none';
@@ -1371,12 +1370,12 @@ function selectOption(option) {
 
 // Function to load metadata templates
 function loadTemplates() {
-    console.log('Loading templates...');
+    //console.log('Loading templates...');
     const studentId = document.getElementById('selected-student-id').value;
     fetch(`users/fetch_metadata_templates.php?student_id=${studentId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Fetched unused templates:', data);
+            //console.log('Fetched unused templates:', data);
             if (data.error) {
                 throw new Error(data.error);
             }
@@ -1390,7 +1389,7 @@ function loadTemplates() {
 
             data.forEach(template => {
                 if (template.category_name.includes('Template')) {
-                    console.log(`Adding template: ${template.category_name}`);
+                    //console.log(`Adding template: ${template.category_name}`);
                     const option = document.createElement('option');
                     option.value = template.metadata_id;
                     option.textContent = template.category_name;
@@ -1446,7 +1445,7 @@ function showColumnNames(type) {
         return;
     }
 
-    console.log(`Showing column names for ${type} with ID: ${selectedId}`);
+    //console.log(`Showing column names for ${type} with ID: ${selectedId}`);
     fetch(`users/fetch_metadata_details.php?metadata_id=${selectedId}`)
         .then(response => response.json())
         .then(data => {
@@ -1464,7 +1463,7 @@ function showColumnNames(type) {
             for (let i = 1; i <= 10; i++) {
                 const scoreName = data[`score${i}_name`];
                 if (scoreName) {
-                    console.log(`Adding column name: ${scoreName}`);
+                    //console.log(`Adding column name: ${scoreName}`);
                     const listItem = document.createElement('li');
                     listItem.textContent = scoreName;
                     columnNamesList.appendChild(listItem);
