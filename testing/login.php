@@ -18,14 +18,13 @@ include('./users/login_backend.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Special Education IEP Progress Reporting | IEPreport.com</title>
     <meta name="description" content="IEPreport.com specializes in IEP progress monitoring and reporting for special education, helping educators track and report student progress effectively.">
-    <meta name="keywords" content="IEP, Special Education, Progress Reporting, Progress Monitoring, Education Technology, Student Reporting">
+    <meta name="keywords" content="IEP, Special Education, Progress Reporting, Progress Monitoring, Education Technology, Student Reporting, IEP report, IEPreport">
     <link rel="stylesheet" href="styles copy.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
     <!-- Social Media Meta Tags -->
     <meta property="og:title" content="IEP Progress Reporting for Special Education">
     <meta property="og:description" content="Discover comprehensive solutions for IEP progress monitoring at IEPreport.com. Dedicated to improving special education through technology.">
-    <meta property="og:image" content="path_to_image.jpg">
     <meta property="og:url" content="https://www.iepreport.com">
     <meta name="twitter:card" content="summary_large_image">
     <!-- End Social Media Meta Tags -->
