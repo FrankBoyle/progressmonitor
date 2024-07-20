@@ -49,18 +49,7 @@ include('./users/db.php');
 
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
-                    <li>
-                        <div class="school-selector">
-                            <label for="school-select">Select School:</label>
-                            <select id="school-select">
-                                <?php foreach ($schools as $school): ?>
-                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($school['SchoolName']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </li>
+
                     <li class="luxbar-item">
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                             <a href="manage.php" class="nav-link">Manage</a>
