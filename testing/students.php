@@ -1336,6 +1336,7 @@ function selectOption(option) {
 
 // Function to load metadata templates
 function loadTemplates() {
+    console.log('Loading templates...');
     fetch('users/fetch_metadata_templates.php')
         .then(response => response.json())
         .then(data => {
@@ -1351,6 +1352,7 @@ function loadTemplates() {
             templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
             data.forEach(template => {
+                console.log(`Adding template: ${template.category_name}`);
                 const option = document.createElement('option');
                 option.value = template.metadata_id;
                 option.textContent = template.category_name;
