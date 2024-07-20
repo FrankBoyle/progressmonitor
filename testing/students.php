@@ -330,10 +330,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 templateDropdown.style.display = 'block';
                 existingDropdown.style.display = 'none';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
+                loadTemplates();
             } else if (selectedOption === 'existing') {
                 templateDropdown.style.display = 'none';
                 existingDropdown.style.display = 'block';
                 document.getElementById('columnNamesDisplay').style.display = 'none';
+                loadMetadata();
             }
         }
     });
@@ -342,7 +344,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
             const selectedSchoolId = this.value;
-            //console.log('School selected:', selectedSchoolId); // Debugging statement
             fetch('./users/update_school_session.php', {
                 method: 'POST',
                 headers: {
@@ -350,17 +351,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: `school_id=${encodeURIComponent(selectedSchoolId)}`
             })
-            .then(response => {
-                //console.log('Response status:', response.status); // Debugging statement
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                //console.log('Response data:', data); // Debugging statement
                 if (data.success) {
-                    //console.log('Reloading page in 3 seconds'); // Debugging statement
                     setTimeout(function() {
-                        location.reload(); // Reload the page to reflect the school change
-                    }, 0); // 3 seconds delay
+                        location.reload();
+                    }, 0);
                 } else {
                     console.error('Error updating school:', data.message);
                 }
@@ -1071,27 +1067,27 @@ function resetStudentList() {
 }
 
 function loadMetadata() {
-    fetch('users/fetch_metadata.php')
-        .then(response => response.json())
-        .then(data => {
-            const metadataSelect = document.getElementById('existing-metadata-id');
-            if (metadataSelect) {
-                metadataSelect.innerHTML = '';
+        fetch('users/fetch_metadata.php')
+            .then(response => response.json())
+            .then(data => {
+                const metadataSelect = document.getElementById('existing-metadata-select');
+                if (metadataSelect) {
+                    metadataSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
-                data.forEach(metadata => {
-                    const option = document.createElement('option');
-                    option.value = metadata.metadata_id;
-                    option.textContent = metadata.category_name;
-                    metadataSelect.appendChild(option);
-                });
-            } else {
-                console.error('Metadata select element not found.');
-            }
-        })
-        .catch(error => {
-            console.error('Error loading metadata:', error);
-            alert('There was an error loading metadata. Please try again.');
-        });
+                    data.forEach(metadata => {
+                        const option = document.createElement('option');
+                        option.value = metadata.metadata_id;
+                        option.textContent = metadata.category_name;
+                        metadataSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Metadata select element not found.');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading metadata:', error);
+                alert('There was an error loading metadata. Please try again.');
+            });
 }
 
 function showAddGoalModal() {
@@ -1341,30 +1337,30 @@ function toggleMetadataOption() {
 
 // Function to load metadata templates
 function loadTemplates() {
-    fetch('users/fetch_metadata_templates.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                throw new Error(data.error);
-            }
+        fetch('users/fetch_metadata_templates.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
 
-            const templateSelect = document.getElementById('template-metadata-select');
-            if (!templateSelect) {
-                console.error('Template metadata select element not found.');
-                return;
-            }
-            templateSelect.innerHTML = '<option value="">Select a category to see column options</option>';
+                const templateSelect = document.getElementById('template-metadata-select');
+                if (!templateSelect) {
+                    console.error('Template metadata select element not found.');
+                    return;
+                }
+                templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
-            data.forEach(template => {
-                const option = document.createElement('option');
-                option.value = template.metadata_id;
-                option.textContent = template.category_name;
-                templateSelect.appendChild(option);
+                data.forEach(template => {
+                    const option = document.createElement('option');
+                    option.value = template.metadata_id;
+                    option.textContent = template.category_name;
+                    templateSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading metadata templates:', error);
             });
-        })
-        .catch(error => {
-            console.error('Error loading metadata templates:', error);
-        });
 }
 
 function loadExistingCategories() {
