@@ -205,7 +205,6 @@ echo "</script>";
     <script src="charts.js"></script>
     <script>
         let schoolId = <?php echo json_encode($schoolId); ?>;
-        //let studentName = < ? php echo json_encode($studentName); ?>;
  
     </script>
 </body>
