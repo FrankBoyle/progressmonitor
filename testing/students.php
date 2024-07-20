@@ -1341,9 +1341,11 @@ function selectOption(option) {
 // Function to load metadata templates
 function loadTemplates() {
     console.log('Loading templates...');
-    fetch('users/fetch_metadata_templates.php')
+    const studentId = document.getElementById('selected-student-id').value;
+    fetch(`users/fetch_metadata_templates.php?student_id=${studentId}`)
         .then(response => response.json())
         .then(data => {
+            console.log('Fetched unused templates:', data);
             if (data.error) {
                 throw new Error(data.error);
             }
@@ -1356,11 +1358,13 @@ function loadTemplates() {
             templateSelect.innerHTML = '<option value="" disabled selected>Select a category to see column options</option>';
 
             data.forEach(template => {
-                console.log(`Adding template: ${template.category_name}`);
-                const option = document.createElement('option');
-                option.value = template.metadata_id;
-                option.textContent = template.category_name;
-                templateSelect.appendChild(option);
+                if (template.category_name.includes('Template')) {
+                    console.log(`Adding template: ${template.category_name}`);
+                    const option = document.createElement('option');
+                    option.value = template.metadata_id;
+                    option.textContent = template.category_name;
+                    templateSelect.appendChild(option);
+                }
             });
         })
         .catch(error => {
