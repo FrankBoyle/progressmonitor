@@ -444,37 +444,41 @@ function addStudent(event, groupId) {
         })
         .then(response => response.json())
         .then(data => {
+            const messageDiv = document.getElementById('student-add-message');
             if (data.status === 'success') {
                 // Add the new student to the select list
                 const studentSelect = document.querySelector('[name="student_id"]');
-                const option = document.createElement('option');
-                option.value = data.student_id;
-                option.textContent = `${firstName} ${lastName}`;
-                studentSelect.appendChild(option);
+                const option = new Option(`${firstName} ${lastName}`, data.student_id);
+                studentSelect.add(option);
+                $('.select2').select2(); // Reinitialize select2 to reflect the new options
+                $('.select2').trigger('change'); // Refresh the select2 display
 
-                // Reinitialize the select2 element
-                $('.select2').select2();
-                $('.select2').trigger('change'); // Ensure the new option is selectable
-
-                // Optionally, display a success message
-                alert("Student added successfully!");
-
-                // Reload the student list for the current group
-                loadStudentsForGroupAssignment(groupId);
+                // Display success message
+                messageDiv.textContent = 'Student added successfully!';
+                messageDiv.className = 'alert success'; // Add any classes for success styling
+                messageDiv.style.display = 'block';
             } else {
-                alert('Error adding student: ' + data.message);
+                // Display error message
+                messageDiv.textContent = 'Error adding student: ' + data.message;
+                messageDiv.className = 'alert error'; // Add any classes for error styling
+                messageDiv.style.display = 'block';
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred while adding the student.');
+            messageDiv.textContent = 'An error occurred while adding the student.';
+            messageDiv.className = 'alert error'; // Add any classes for error styling
+            messageDiv.style.display = 'block';
         });
     })
     .catch(error => {
         console.error('Error checking for duplicates:', error);
-        alert('Failed to check for duplicate students.');
+        messageDiv.textContent = 'Failed to check for duplicate students.';
+        messageDiv.className = 'alert error'; // Add any classes for error styling
+        messageDiv.style.display = 'block';
     });
 }
+
 
 function loadStaff() {
     fetch('users/fetch_staff.php')
