@@ -176,6 +176,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                 <input type="text" id="grade-level" name="grade_level" required>
             </div>
             <button type="submit">Add Student</button>
+                    <!-- Message area for notifications -->
+            <div id="student-add-message" class="alert" style="display: none;"></div>
         </form>
     </div>
 </div>
@@ -418,7 +420,7 @@ function addGroup(event) {
 }
 
 function addStudent(event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault();
     const firstName = document.getElementById('first-name').value.trim();
     const lastName = document.getElementById('last-name').value.trim();
     const dateOfBirth = document.getElementById('date-of-birth').value;
@@ -430,10 +432,9 @@ function addStudent(event) {
     .then(data => {
         if (data.duplicate) {
             if (!confirm("A student with the same name already exists. Are you sure you want to add another?")) {
-                return; // Stop the function if user cancels
+                return;
             }
         }
-
         fetch('./users/add_student.php', {
             method: 'POST',
             headers: {
@@ -446,16 +447,16 @@ function addStudent(event) {
             if (data.status === 'success') {
                 const studentSelect = document.querySelector('[name="student_id"]');
                 const option = document.createElement('option');
-                option.value = data.student_id; // Make sure your backend provides the new student ID
+                option.value = data.student_id;
                 option.textContent = `${firstName} ${lastName}`;
-                option.selected = true; // Optionally select the newly added student
                 studentSelect.appendChild(option);
-
-                // Update the select2 element to reflect changes
                 $('.select2').select2();
-                $('.select2').trigger('change'); // Trigger change to update select2 display
+                $('.select2').trigger('change');
 
-                hideAddStudentModal(); // Optionally hide the modal if needed
+                const messageDiv = document.getElementById('student-add-message');
+                messageDiv.style.display = 'block';
+                messageDiv.textContent = 'Student added successfully!';
+                messageDiv.className = 'alert success'; // Adjust classes as needed
             } else {
                 alert('Error adding student: ' + data.message);
             }
@@ -470,7 +471,6 @@ function addStudent(event) {
         alert('Failed to check for duplicate students.');
     });
 }
-
 
 function loadStaff() {
     fetch('users/fetch_staff.php')
