@@ -1259,6 +1259,8 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns, studentName) {
+    const commonWidth = '1000px'; // Fixed width for consistency
+
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleString(); // Formats the date and time in a readable format
 
