@@ -421,55 +421,75 @@ function addGroup(event) {
 
 function addStudent(event) {
     event.preventDefault();
+
+    // Collect form data
     const firstName = document.getElementById('first-name').value.trim();
     const lastName = document.getElementById('last-name').value.trim();
     const dateOfBirth = document.getElementById('date-of-birth').value;
     const gradeLevel = document.getElementById('grade-level').value;
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
-    fetch(`./users/check_duplicate_student.php?first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&school_id=${encodeURIComponent(schoolId)}`)
+    // URL for checking duplicate students
+    const checkUrl = `./users/check_duplicate_student.php?first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&school_id=${encodeURIComponent(schoolId)}`;
+
+    fetch(checkUrl)
     .then(response => response.json())
     .then(data => {
-        if (data.duplicate) {
-            if (!confirm("A student with the same name already exists. Are you sure you want to add another?")) {
-                return;
-            }
+        if (data.duplicate && !confirm("A student with the same name already exists. Are you sure you want to add another?")) {
+            throw new Error('Duplicate student not added by user choice.');
         }
-        fetch('./users/add_student.php', {
+
+        // Prepare data for adding a student
+        const addUrl = './users/add_student.php';
+        const formData = new URLSearchParams();
+        formData.append('first_name', firstName);
+        formData.append('last_name', lastName);
+        formData.append('date_of_birth', dateOfBirth);
+        formData.append('grade_level', gradeLevel);
+        formData.append('school_id', schoolId);
+
+        return fetch(addUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&date_of_birth=${encodeURIComponent(dateOfBirth)}&grade_level=${encodeURIComponent(gradeLevel)}&school_id=${encodeURIComponent(schoolId)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                const studentSelect = document.querySelector('[name="student_id"]');
-                const option = document.createElement('option');
-                option.value = data.student_id;
-                option.textContent = `${firstName} ${lastName}`;
-                studentSelect.appendChild(option);
-                $('.select2').select2();
-                $('.select2').trigger('change');
-
-                const messageDiv = document.getElementById('student-add-message');
-                messageDiv.style.display = 'block';
-                messageDiv.textContent = 'Student added successfully!';
-                messageDiv.className = 'alert success'; // Adjust classes as needed
-            } else {
-                alert('Error adding student: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while adding the student.');
+            body: formData
         });
     })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            updateStudentDropdown(firstName, lastName, data.student_id);
+            displaySuccessMessage('Student added successfully!');
+        } else {
+            throw new Error('Error adding student: ' + data.message);
+        }
+    })
     .catch(error => {
-        console.error('Error checking for duplicates:', error);
-        alert('Failed to check for duplicate students.');
+        console.error('Error:', error);
+        displayErrorMessage(error.message);
     });
+}
+
+function updateStudentDropdown(firstName, lastName, studentId) {
+    const studentSelect = document.querySelector('[name="student_id"]');
+    const option = document.createElement('option');
+    option.value = studentId;
+    option.textContent = `${firstName} ${lastName}`;
+    studentSelect.appendChild(option);
+    $(studentSelect).select2(); // Re-initialize select2
+    $(studentSelect).val(studentId).trigger('change'); // Optionally select the newly added student
+}
+
+function displaySuccessMessage(message) {
+    const messageDiv = document.getElementById('student-add-message');
+    messageDiv.textContent = message;
+    messageDiv.className = 'alert alert-success'; // Use your actual success alert classes
+    messageDiv.style.display = 'block';
+}
+
+function displayErrorMessage(message) {
+    alert(message); // Or update this to display in a dedicated error message area
 }
 
 function loadStaff() {
