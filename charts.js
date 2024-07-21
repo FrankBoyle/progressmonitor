@@ -1263,7 +1263,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     let printContents = `
         <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
-            <h2 style="text-align: right; font-weight: bold; font-size: 24px; margin-right: 20px;">${studentName}</h2> <!-- Right aligned -->
+            <h2 style="text-align: left; font-weight: bold; font-size: 24px;">${studentName}</h2>
             <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
                 <div class="print-goal-text">${selectedGoal.innerHTML}</div>
             </div>`;
