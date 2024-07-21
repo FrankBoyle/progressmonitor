@@ -1520,3 +1520,18 @@ img {
 .modal-content .delete-btn:hover {
     background-color: darkred;
 }
+
+
+.alert {
+    padding: 10px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.alert.success {
+    background-color: #4CAF50; /* Green for success messages */
+}
+
+.alert.error {
+    background-color: #f44336; /* Red for error messages */
+}

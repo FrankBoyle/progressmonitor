@@ -176,6 +176,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                 <input type="text" id="grade-level" name="grade_level" required>
             </div>
             <button type="submit">Add Student</button>
+                    <!-- Message area for notifications -->
+            <div id="student-add-message" class="alert" style="display: none;"></div>
         </form>
     </div>
 </div>
@@ -310,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
-    // Metadata Option Selector
+    // Metadata Option Selector - for picking templates or prior used goals in goal addition
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     metadataOptionSelector.addEventListener('click', function(event) {
         if (event.target.classList.contains('selector-item')) {
@@ -425,16 +427,14 @@ function addStudent(event) {
     const gradeLevel = document.getElementById('grade-level').value;
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
-    // Check for duplicate names before adding a new student
     fetch(`./users/check_duplicate_student.php?first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&school_id=${encodeURIComponent(schoolId)}`)
     .then(response => response.json())
     .then(data => {
         if (data.duplicate) {
             if (!confirm("A student with the same name already exists. Are you sure you want to add another?")) {
-                return; // Stop the function if user cancels
+                return;
             }
         }
-        // Proceed to add the student if not duplicate or if user confirms
         fetch('./users/add_student.php', {
             method: 'POST',
             headers: {
@@ -445,18 +445,30 @@ function addStudent(event) {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                loadStudents();
-                hideAddStudentModal();
+                const studentSelect = document.querySelector('[name="student_id"]');
+                const option = document.createElement('option');
+                option.value = data.student_id;
+                option.textContent = `${firstName} ${lastName}`;
+                studentSelect.appendChild(option);
+                $('.select2').select2();
+                $('.select2').trigger('change');
+
+                const messageDiv = document.getElementById('student-add-message');
+                messageDiv.style.display = 'block';
+                messageDiv.textContent = 'Student added successfully!';
+                messageDiv.className = 'alert success'; // Adjust classes as needed
             } else {
                 alert('Error adding student: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Error:', error);
+            alert('An error occurred while adding the student.');
         });
     })
     .catch(error => {
         console.error('Error checking for duplicates:', error);
+        alert('Failed to check for duplicate students.');
     });
 }
 
