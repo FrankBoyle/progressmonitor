@@ -291,36 +291,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 }
 
-
-function isDateDuplicate(date) {
-    const data = table.getData();
-    return data.some(row => row['score_date'] === date);
-}
-
-function saveIEPDate(iepDate, studentIdNew) {
-    //console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentIdNew}`);
-    fetch('./users/save_iep_date.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            iep_date: iepDate,
-            student_id: studentIdNew
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        //console.log('IEP date saved:', data);
-        if (data.success) {
-            fetchInitialData(studentIdNew, metadataId);
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => console.error('Error saving IEP date:', error));
-}
-
 function fetchInitialData(studentIdNew, metadataId) {
     //console.log('Fetching initial data with studentId:', studentIdNew, 'and metadataId:', metadataId);
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
@@ -350,6 +320,34 @@ function fetchInitialData(studentIdNew, metadataId) {
         });
 }
 
+function isDateDuplicate(date) {
+    const data = table.getData();
+    return data.some(row => row['score_date'] === date);
+}
+
+function saveIEPDate(iepDate, studentIdNew) {
+    //console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentIdNew}`);
+    fetch('./users/save_iep_date.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            iep_date: iepDate,
+            student_id: studentIdNew
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        //console.log('IEP date saved:', data);
+        if (data.success) {
+            fetchInitialData(studentIdNew, metadataId);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error saving IEP date:', error));
+}
 
 function initializeCharts() {
     initializeLineChart();
