@@ -1221,7 +1221,7 @@ img {
     font-weight: bold; /* Bold font weight for the label */
 }
 
-#template-metadata-select, #reportingPeriodContainer {
+#template-metadata-select, #reporting_period {
     width: 100%; /* Full width to match container */
     height: 40px; /* Fixed height for a better click area */
     padding: 0 10px; /* Padding inside the select box */
