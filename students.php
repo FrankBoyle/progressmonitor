@@ -427,6 +427,8 @@ function addStudent(event, groupId) {
     const gradeLevel = document.getElementById('grade-level').value;
     const schoolId = <?= json_encode($_SESSION['school_id']); ?>;
 
+    const messageDiv = document.getElementById('student-add-message'); // Reference the message div
+
     fetch(`./users/check_duplicate_student.php?first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}&school_id=${encodeURIComponent(schoolId)}`)
     .then(response => response.json())
     .then(data => {
@@ -444,41 +446,44 @@ function addStudent(event, groupId) {
         })
         .then(response => response.json())
         .then(data => {
-            const messageDiv = document.getElementById('student-add-message');
             if (data.status === 'success') {
-                // Add the new student to the select list
                 const studentSelect = document.querySelector('[name="student_id"]');
-                const option = new Option(`${firstName} ${lastName}`, data.student_id);
-                studentSelect.add(option);
-                $('.select2').select2(); // Reinitialize select2 to reflect the new options
-                $('.select2').trigger('change'); // Refresh the select2 display
+                const option = document.createElement('option');
+                option.value = data.student_id;
+                option.textContent = `${firstName} ${lastName}`;
+                studentSelect.appendChild(option);
+
+                $('.select2').select2(); // Reinitialize select2
+                $('.select2').trigger('change'); // Update UI
 
                 // Display success message
                 messageDiv.textContent = 'Student added successfully!';
-                messageDiv.className = 'alert success'; // Add any classes for success styling
+                messageDiv.className = 'alert success'; // Use appropriate classes for success
                 messageDiv.style.display = 'block';
+
+                // Reload the student list for the current group
+                loadStudentsForGroupAssignment(groupId);
             } else {
                 // Display error message
                 messageDiv.textContent = 'Error adding student: ' + data.message;
-                messageDiv.className = 'alert error'; // Add any classes for error styling
+                messageDiv.className = 'alert error'; // Use appropriate classes for errors
                 messageDiv.style.display = 'block';
             }
         })
         .catch(error => {
             console.error('Error:', error);
             messageDiv.textContent = 'An error occurred while adding the student.';
-            messageDiv.className = 'alert error'; // Add any classes for error styling
+            messageDiv.className = 'alert error';
             messageDiv.style.display = 'block';
         });
     })
     .catch(error => {
         console.error('Error checking for duplicates:', error);
         messageDiv.textContent = 'Failed to check for duplicate students.';
-        messageDiv.className = 'alert error'; // Add any classes for error styling
+        messageDiv.className = 'alert error';
         messageDiv.style.display = 'block';
     });
 }
-
 
 function loadStaff() {
     fetch('users/fetch_staff.php')
