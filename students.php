@@ -419,7 +419,7 @@ function addGroup(event) {
         });
 }
 
-function addStudent(event) {
+function addStudent(event, groupId) {
     event.preventDefault();
     const firstName = document.getElementById('first-name').value.trim();
     const lastName = document.getElementById('last-name').value.trim();
@@ -445,18 +445,22 @@ function addStudent(event) {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
+                // Add the new student to the select list
                 const studentSelect = document.querySelector('[name="student_id"]');
                 const option = document.createElement('option');
                 option.value = data.student_id;
                 option.textContent = `${firstName} ${lastName}`;
                 studentSelect.appendChild(option);
-                $('.select2').select2();
-                $('.select2').trigger('change');
 
-                const messageDiv = document.getElementById('student-add-message');
-                messageDiv.style.display = 'block';
-                messageDiv.textContent = 'Student added successfully!';
-                messageDiv.className = 'alert success'; // Adjust classes as needed
+                // Reinitialize the select2 element
+                $('.select2').select2();
+                $('.select2').trigger('change'); // Ensure the new option is selectable
+
+                // Optionally, display a success message
+                alert("Student added successfully!");
+
+                // Reload the student list for the current group
+                loadStudentsForGroupAssignment(groupId);
             } else {
                 alert('Error adding student: ' + data.message);
             }
@@ -470,7 +474,6 @@ function addStudent(event) {
         console.error('Error checking for duplicates:', error);
         alert('Failed to check for duplicate students.');
     });
-    loadStudentsForGroupAssignment(groupId);
 }
 
 function loadStaff() {
