@@ -239,6 +239,8 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
 
     // Handle custom columns, apply a special editor for the 'score10' column
     Object.keys(scoreNames).forEach((key, index) => {
+        if (!scoreNames[key]) return; // Skip adding columns where the name is null or empty
+        
         if (scoreNames[key] === 'score10') {
             columns.push({
                 title: scoreNames[key],
