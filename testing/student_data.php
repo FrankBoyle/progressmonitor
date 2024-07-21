@@ -9,6 +9,28 @@ include('db.php');
 
 // Assuming school_id is set in the session during login
 $schoolId = $_SESSION['school_id']; // Default to 1 if not set
+
+// Get the studentId from the URL and ensure it's an integer
+$studentId = isset($_GET['studentId']) ? (int)$_GET['studentId'] : 0;
+
+$studentName = "";  // Default empty name
+
+if ($studentId > 0) {
+    // Prepared statement to fetch the student's name
+    if ($stmt = $db->prepare("SELECT name FROM students WHERE id = ?")) {
+        $stmt->bind_param("i", $studentId);
+        $stmt->execute();
+        $stmt->bind_result($studentName);
+        $stmt->fetch();
+        $stmt->close();
+    }
+}
+
+// Pass the student's name to JavaScript
+echo "<script type='text/javascript'>";
+echo "let studentName = " . json_encode($studentName) . ";";
+echo "</script>";
+
 ?>
 
 <!DOCTYPE html>
@@ -183,6 +205,7 @@ $schoolId = $_SESSION['school_id']; // Default to 1 if not set
     <script src="charts.js"></script>
     <script>
         let schoolId = <?php echo json_encode($schoolId); ?>;
+ 
     </script>
 </body>
 </html>

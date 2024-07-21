@@ -322,14 +322,19 @@ function saveIEPDate(iepDate, studentIdNew) {
 }
 
 function fetchInitialData(studentIdNew, metadataId) {
+    console.log('Fetching initial data with studentId:', studentIdNew, 'and metadataId:', metadataId);
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            //console.log('Initial data fetched:', data);
+            console.log('Data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
+                window.studentName = data.studentName; // Set the global studentName variable
+                console.log('Student Name set as:', window.studentName);
+
                 createColumnCheckboxes(data.scoreNames);
                 customColumnNames = data.scoreNames; // Store the names
                 initializeTable(data.performanceData, data.scoreNames, studentIdNew, metadataId);
+                
                 if (data.iepDate) {
                     document.getElementById('iep_date').value = data.iepDate;
                 }
@@ -344,6 +349,7 @@ function fetchInitialData(studentIdNew, metadataId) {
             console.error('Error fetching initial data:', error);
         });
 }
+
 
 function initializeCharts() {
     initializeLineChart();
@@ -1230,6 +1236,7 @@ function getSelectedColumns() {
 }
 
 function saveAndPrintReport() {
+    console.log('Attempting to save and print the report. Current studentName:', window.studentName);
     const selectedGoal = document.querySelector('.goal-item.selected');
     if (!selectedGoal) {
         alert("Please select a goal.");
@@ -1237,18 +1244,8 @@ function saveAndPrintReport() {
     }
 
     const selectedColumns = getSelectedColumns();
-    if (selectedColumns.length === 0) {
-        alert("Please select at least one column.");
-        return;
-    }
-
     const selectedSections = Array.from(document.querySelectorAll('#sectionSelectionContainer .selector-item.selected'))
         .map(item => item.getAttribute('data-section'));
-
-    if (selectedSections.length === 0) {
-        alert("Please select at least one section to print.");
-        return;
-    }
 
     const reportingPeriod = document.getElementById('reporting_period').value.trim();
     const notes = window.quillInstances['notes'].root.innerHTML;
@@ -1258,14 +1255,15 @@ function saveAndPrintReport() {
         return;
     }
 
-    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns);
+    generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns, window.studentName);
 }
 
-function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns) {
+function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns, studentName) {
     const commonWidth = '1000px'; // Fixed width for consistency
 
     let printContents = `
         <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
+            <h2 style="text-align: left; font-weight: bold; font-size: 24px;">${studentName}</h2>
             <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
                 <div class="print-goal-text">${selectedGoal.innerHTML}</div>
             </div>`;
