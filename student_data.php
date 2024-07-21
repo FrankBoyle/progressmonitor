@@ -186,8 +186,8 @@ echo "</script>";
                         <div class="selector-item" data-section="printStatistics">Statistics</div>
                     </div>
 
-                    <div id="reportingPeriodContainer" class="form-group" style="display:none;">
-                        <label for="reporting_period">Reporting Period:</label>
+                    <div id="reportingPeriodContainer" style="display:none;">
+                        <label for="reporting_period"><strong>Reporting Period:</strong></label>
                         <select id="reporting_period"></select>
                     </div>
 
