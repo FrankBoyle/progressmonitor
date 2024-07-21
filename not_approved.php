@@ -11,7 +11,7 @@
     gtag('config', 'G-9YXLSJ50NV');
     </script>
     <title>Not Approved</title>
-    <link rel="stylesheet" href="styles_copy.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
 
 
