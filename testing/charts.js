@@ -322,14 +322,14 @@ function saveIEPDate(iepDate, studentIdNew) {
 }
 
 function fetchInitialData(studentIdNew, metadataId) {
-    console.log('Fetching initial data with studentId:', studentIdNew, 'and metadataId:', metadataId);
+    //console.log('Fetching initial data with studentId:', studentIdNew, 'and metadataId:', metadataId);
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
         .then(response => response.json())
         .then(data => {
-            console.log('Data fetched:', data);
+            //console.log('Data fetched:', data);
             if (data && data.performanceData && data.scoreNames) {
                 window.studentName = data.studentName; // Set the global studentName variable
-                console.log('Student Name set as:', window.studentName);
+                //console.log('Student Name set as:', window.studentName);
 
                 createColumnCheckboxes(data.scoreNames);
                 customColumnNames = data.scoreNames; // Store the names
@@ -1236,7 +1236,7 @@ function getSelectedColumns() {
 }
 
 function saveAndPrintReport() {
-    console.log('Attempting to save and print the report. Current studentName:', window.studentName);
+    //console.log('Attempting to save and print the report. Current studentName:', window.studentName);
     const selectedGoal = document.querySelector('.goal-item.selected');
     if (!selectedGoal) {
         alert("Please select a goal.");
@@ -1666,7 +1666,7 @@ function populateGoalSelectionModal(goals) {
 function initializeNotesQuill() {
     if (!window.quillInstances) {
         window.quillInstances = {};
-        console.log("Initializing window.quillInstances object");
+        //console.log("Initializing window.quillInstances object");
     }
     if (!window.quillInstances['notes']) {
         window.quillInstances['notes'] = new Quill('#notes', {
@@ -1690,9 +1690,9 @@ function initializeNotesQuill() {
                 ]
             }
         });
-        console.log("Quill instance for 'notes' initialized");
+        //console.log("Quill instance for 'notes' initialized");
     } else {
-        console.log("Quill instance for 'notes' already exists");
+        //console.log("Quill instance for 'notes' already exists");
     }
 }
 
