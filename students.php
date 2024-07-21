@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
-    // Metadata Option Selector
+    // Metadata Option Selector - for picking templates or prior used goals in goal addition
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     metadataOptionSelector.addEventListener('click', function(event) {
         if (event.target.classList.contains('selector-item')) {
