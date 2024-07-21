@@ -1259,13 +1259,17 @@ function saveAndPrintReport() {
 }
 
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns, studentName) {
-    const commonWidth = '1000px'; // Fixed width for consistency
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleString(); // Formats the date and time in a readable format
 
     let printContents = `
         <div class="print-container" style="width: ${commonWidth}; margin: 0 auto; padding: 0; padding-bottom: 20px;">
-            <h2 style="text-align: right; font-weight: bold; font-size: 24px; margin-right: 20px;">${studentName}</h2> <!-- Right aligned -->
+            <h2 style="text-align: right; font-weight: bold; font-size: 24px; margin-right: 20px;">${studentName}</h2>
             <div class="goal-text-container" style="width: ${commonWidth}; margin: 0 auto;">
                 <div class="print-goal-text">${selectedGoal.innerHTML}</div>
+            </div>
+            <div style="text-align: right; font-size: 12px; position: absolute; bottom: 10px; right: 10px;">
+                ${formattedDate}
             </div>`;
 
     if (selectedSections.includes('printTable')) {
