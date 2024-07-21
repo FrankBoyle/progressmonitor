@@ -1233,16 +1233,16 @@ img {
     cursor: pointer; /* Cursor pointer to indicate it's selectable */
 }
 
-#template-metadata-select:hover {
+#template-metadata-select:hover, #reporting_period:hover {
     border-color: #888; /* Changes border color on hover for interaction feedback */
 }
 
-#template-metadata-select:focus {
+#template-metadata-select:focus, #reporting_period:focus {
     border-color: #0056b3; /* Blue border on focus for accessibility and visibility */
     outline: none; /* Removes the default focus outline */
 }
 
-#existing-metadata-select {
+#existing-metadata-select, #reporting_period {
     width: 100%; /* Full width to match container */
     height: 40px; /* Fixed height for a better click area */
     padding: 0 10px; /* Padding inside the select box */
