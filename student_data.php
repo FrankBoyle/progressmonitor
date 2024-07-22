@@ -128,10 +128,12 @@ echo "</script>";
                 <div id="performance-table"></div>
             </div>
             <div class="card column-select-card">
+
                 <div class="selector-area">
                     <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
                     <div id="columnSelector" class="checkbox-container"></div>
                 </div>
+
                 <div class="print-container">
                     <div class="goal-text-container">
                         <div id="goal-text"></div>
@@ -139,6 +141,7 @@ echo "</script>";
                     <div class="print-table-container" id="printTableContainer"></div>
                     <div class="print-graph" id="printGraphContainer"></div>
                 </div>
+
                 <div id="statistics" class="statistics-area">
                     <h2>Statistical Summary</h2>
                     <table id="statsTable" class="statistics-table">
@@ -156,6 +159,7 @@ echo "</script>";
                         </tbody>
                     </table>
                 </div>
+                
             </div>
             <div class="card chart-card">
                 <div class="chart-wrapper">
