@@ -54,8 +54,8 @@ echo "</script>";
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.1/luxon.min.js"></script>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.3/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -128,10 +128,12 @@ echo "</script>";
                 <div id="performance-table"></div>
             </div>
             <div class="card column-select-card">
+
                 <div class="selector-area">
                     <div id="columnSelectorTitle" class="selector-title">Click columns to include in graph:</div>
                     <div id="columnSelector" class="checkbox-container"></div>
                 </div>
+
                 <div class="print-container">
                     <div class="goal-text-container">
                         <div id="goal-text"></div>
@@ -139,6 +141,7 @@ echo "</script>";
                     <div class="print-table-container" id="printTableContainer"></div>
                     <div class="print-graph" id="printGraphContainer"></div>
                 </div>
+
                 <div id="statistics" class="statistics-area">
                     <h2>Statistical Summary</h2>
                     <table id="statsTable" class="statistics-table">
@@ -156,6 +159,7 @@ echo "</script>";
                         </tbody>
                     </table>
                 </div>
+
             </div>
             <div class="card chart-card">
                 <div class="chart-wrapper">
@@ -187,7 +191,7 @@ echo "</script>";
                     </div>
 
                     <div id="reportingPeriodContainer" style="display:none;">
-                        <label for="reporting_period">Reporting Period:</label>
+                        <label for="reporting_period"><strong>Reporting Period:</strong></label>
                         <select id="reporting_period"></select>
                     </div>
 
