@@ -306,7 +306,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 }
 
-
 function fetchInitialData(studentIdNew, metadataId) {
     //console.log('Fetching initial data with studentId:', studentIdNew, 'and metadataId:', metadataId);
     fetch(`./users/fetch_data.php?student_id=${studentIdNew}&metadata_id=${metadataId}`)
