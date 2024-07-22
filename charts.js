@@ -1705,18 +1705,25 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
     input.style.boxSizing = "border-box";
     input.value = cell.getValue();
 
+    // Log initial setup
+    console.log('Editor initialized for cell:', cell.getField(), 'with value:', cell.getValue());
+
     // Focus the input and place cursor at the end of text on render
     onRendered(() => {
         input.focus();
         input.style.height = "100%";
         input.setSelectionRange(input.value.length, input.value.length);
+        console.log('Input focused and cursor placed at the end.');
     });
 
     // Function to handle changes
     function onChange() {
+        console.log('Input blurred or Enter pressed. New value:', input.value);
         if (input.value !== cell.getValue()) {
+            console.log('Value changed:', input.value);
             success(input.value);
         } else {
+            console.log('Value unchanged, cancel edit.');
             cancel();
         }
     }
@@ -1726,20 +1733,29 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
 
     // Handling keydown events for Enter and navigation keys
     input.addEventListener("keydown", function(e) {
+        console.log('Keydown event:', e.key);
         if (e.key === "Enter") {
             onChange(); // Save on Enter
             e.preventDefault(); // Prevent default form submit behavior
         } else if (e.key === "Escape") {
+            console.log('Escape key pressed, cancel edit.');
             cancel(); // Cancel on Escape
         }
     });
 
     // Stop propagation for mousedown and click events
-    input.addEventListener("mousedown", e => e.stopPropagation());
-    input.addEventListener("click", e => e.stopPropagation());
+    input.addEventListener("mousedown", e => {
+        console.log('Mousedown event on input.');
+        e.stopPropagation();
+    });
+    input.addEventListener("click", e => {
+        console.log('Click event on input.');
+        e.stopPropagation();
+    });
 
     return input;
 }
+
 
 
 
