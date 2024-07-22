@@ -186,10 +186,14 @@ window.addEventListener('scroll', function(event) {
 
 // Function to initialize the table
 function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) {
+    console.log("initializeTable called with studentIdNew:", studentIdNew, "and metadataId:", metadataId);
+
     if (table) {
+        console.log("Existing table found, destroying...");
         table.destroy();
     }
 
+    console.log("Preparing columns based on scoreNames...");
     const columns = [
         {
             title: "Actions",
@@ -198,6 +202,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             width: 100,
             hozAlign: "center",
             cellClick: (e, cell) => {
+                console.log("Delete button clicked for performance_id:", cell.getRow().getData().performance_id);
                 const performanceId = cell.getRow().getData().performance_id;
                 if (confirm('Are you sure you want to delete this row?')) {
                     fetch('./users/delete_performance.php', {
@@ -207,8 +212,10 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                     })
                     .then(response => response.json())
                     .then(data => {
+                        console.log("Delete response:", data);
                         if (data.success) {
                             cell.getRow().delete();
+                            console.log("Row deleted successfully.");
                         } else {
                             alert('Failed to delete data. Please try again.');
                         }
@@ -237,19 +244,20 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         }
     ];
 
-    // Handle custom columns, apply a special editor for the 'score10' column
     Object.keys(scoreNames).forEach((key, index) => {
-        if (!scoreNames[key]) return; // Skip adding columns where the name is null or empty
+        if (!scoreNames[key]) {
+            console.log(`Skipping column ${index + 1} as the name is null or empty`);
+            return; // Skip adding columns where the name is null or empty
+        }
         
+        console.log(`Adding column for scoreNames[${key}]:`, scoreNames[key]);
         if (scoreNames[key] === 'score10') {
-            console.log(`Adding text editor for field: score${index + 1}`);
             columns.push({
                 title: scoreNames[key],
                 field: `score${index + 1}`,
                 editor: textEditor, // custom editor for text inputs
                 width: 100
             });
-
         } else {
             columns.push({
                 title: scoreNames[key],
@@ -260,6 +268,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         }
     });
 
+    console.log("Initializing Tabulator with columns:", columns);
     table = new Tabulator("#performance-table", {
         height: "500px",
         data: performanceData,
@@ -276,9 +285,11 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table.on("cellEdited", cell => {
+        console.log("Cell edited for field:", cell.getField(), "New value:", cell.getValue());
         const updatedData = {...cell.getRow().getData(), [cell.getField()]: cell.getValue() || null};
         updatedData.student_id_new = studentIdNew;
         updatedData.metadata_id = metadataId;
+        console.log("Sending update to server with data:", updatedData);
         fetch('./users/update_performance.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -294,6 +305,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         .catch(error => console.error('Error:', error));
     });
 }
+
 
 function fetchInitialData(studentIdNew, metadataId) {
     //console.log('Fetching initial data with studentId:', studentIdNew, 'and metadataId:', metadataId);
