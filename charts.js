@@ -242,13 +242,14 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         if (!scoreNames[key]) return; // Skip adding columns where the name is null or empty
         
         if (scoreNames[key] === 'score10') {
+            console.log(`Adding text editor for field: score${index + 1}`);
             columns.push({
                 title: scoreNames[key],
                 field: `score${index + 1}`,
                 editor: textEditor, // custom editor for text inputs
                 width: 100
             });
-                    
+
         } else {
             columns.push({
                 title: scoreNames[key],
@@ -1699,6 +1700,8 @@ function initializeNotesQuill() {
 
 // Custom editor for handling text inputs more gracefully
 function textEditor(cell, onRendered, success, cancel, editorParams) {
+    console.log("Initializing text editor for cell", cell.getField());
+
     var input = document.createElement("input");
     input.setAttribute("type", "text");
     input.style.padding = "4px";
