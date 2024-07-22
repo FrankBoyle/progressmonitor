@@ -1535,3 +1535,15 @@ img {
 .alert.error {
     background-color: #f44336; /* Red for error messages */
 }
+
+.notification-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f44336; /* Red */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    z-index: 1000;
+}

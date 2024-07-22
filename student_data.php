@@ -78,6 +78,10 @@ if ($studentId > 0) {
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
                     <button id="printReportBtn" class="btn btn-primary">Print Report</button>
+                        <!-- Notification Bar -->
+                        <div id="notificationBar" class="notification-bar">
+                            Popup was blocked. Please enable pop-ups for this site in your browser settings.
+                        </div>
 
                     <li class="luxbar-item">
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>

@@ -1278,23 +1278,6 @@ function saveAndPrintReport() {
     generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns, window.studentName);
 }
 
-function showModal() {
-    const modal = document.getElementById("popupModal");
-    const span = document.getElementsByClassName("close")[0];
-
-    modal.style.display = "block";
-
-    span.onclick = function() {
-        modal.style.display = "none";
-    };
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
-}
-
 function generateReportImage(selectedGoal, selectedSections, reportingPeriod, notes, selectedColumns, studentName) {
     const commonWidth = '1000px'; // Fixed width for consistency
 
@@ -1401,15 +1384,11 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             .then(data => {
                 if (data.status === 'success') {
                     const newTab = window.open();
-                    if (!newTab || newTab.closed || typeof newTab.closed == 'undefined') {
-                        showModal();
-                    } else {
-                        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
-                        newTab.document.close();
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                    }
+                    newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
+                    newTab.document.close();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 } else {
                     console.error('Error saving notes:', data.message);
                     alert('Failed to save notes: ' + data.message);
