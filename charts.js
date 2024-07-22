@@ -248,6 +248,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                 editor: textEditor, // custom editor for text inputs
                 width: 100
             });
+                    
         } else {
             columns.push({
                 title: scoreNames[key],
