@@ -816,7 +816,6 @@ function createColumnCheckboxes(scoreNames) {
     });
 }
 
-
 function disableChartInteractions() {
     if (window.lineChart) {
         window.lineChart.updateOptions({
@@ -1783,7 +1782,22 @@ function textEditor(cell, onRendered, success, cancel) {
     return input;
 }
 
+function openReportWindow() {
+    // Attempt to open a new window
+    const newWindow = window.open('about:blank', '_blank');
 
+    // Check if the pop-up was blocked
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        // Pop-up was blocked, provide instructions to the user
+        alert('Pop-up was blocked. Please enable pop-ups for this site in your browser settings.');
+    } else {
+        // Pop-up allowed, you can load your content here
+        newWindow.document.write('<p>Loading your report...</p>'); // Modify as necessary
+        newWindow.document.close();
+    }
+}
+
+document.getElementById('printReportBtn').addEventListener('click', openReportWindow);
 
 
 
