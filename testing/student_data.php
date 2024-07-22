@@ -26,11 +26,6 @@ if ($studentId > 0) {
     }
 }
 
-// Pass the student's name to JavaScript
-echo "<script type='text/javascript'>";
-echo "let studentName = " . json_encode($studentName) . ";";
-echo "</script>";
-
 ?>
 
 <!DOCTYPE html>

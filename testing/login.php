@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('./users/login_backend.php');
 ?>
 
@@ -12,24 +11,16 @@ include('./users/login_backend.php');
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
+
     gtag('config', 'G-9YXLSJ50NV');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Education IEP Progress Reporting | IEPreport.com</title>
-    <meta name="description" content="IEPreport.com specializes in IEP progress monitoring and reporting for special education, helping educators track and report student progress effectively.">
-    <meta name="keywords" content="IEP, Special Education, Progress Reporting, Progress Monitoring, Education Technology, Student Reporting, IEP report, IEPreport">
+    <title>Login</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
-    <!-- Social Media Meta Tags -->
-    <meta property="og:title" content="IEP Progress Reporting for Special Education">
-    <meta property="og:description" content="Discover comprehensive solutions for IEP progress monitoring at IEPreport.com. Dedicated to improving special education through technology.">
-    <meta property="og:url" content="https://www.iepreport.com">
-    <meta name="twitter:card" content="summary_large_image">
-    <!-- End Social Media Meta Tags -->
 </head>
-
 <body>
     <div class="dashboard">
         <header class="dashboard-header luxbar-fixed" id="luxbar">
@@ -120,21 +111,6 @@ include('./users/login_backend.php');
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-    document.getElementById('school_uuid').addEventListener('blur', function() {
-        if (this.value.trim() === '') {
-            document.getElementById('new_school_container').style.display = 'block';
-        } else {
-            document.getElementById('new_school_container').style.display = 'none';
-        }
-    });
 
-    <?php if (isset($_SESSION['registration_success'])): ?>
-        $(document).ready(function() {
-            alert('Your registration was successful! Welcome to IEPreport.com!');
-            <?php unset($_SESSION['registration_success']); ?>
-        });
-    <?php endif; ?>
-    </script>
 </body>
 </html>
