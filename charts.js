@@ -1699,18 +1699,20 @@ function initializeNotesQuill() {
 // Custom editor for handling text inputs more gracefully
 function textEditor(cell, onRendered, success, cancel, editorParams) {
     var input = document.createElement("input");
+    input.setAttribute("type", "text");
     input.style.padding = "4px";
     input.style.width = "100%";
     input.style.boxSizing = "border-box";
     input.value = cell.getValue();
 
-    onRendered(function() {
+    // Focus the input and place cursor at the end of text on render
+    onRendered(() => {
         input.focus();
         input.style.height = "100%";
-        // Set cursor at the end of text
         input.setSelectionRange(input.value.length, input.value.length);
     });
 
+    // Function to handle changes
     function onChange() {
         if (input.value !== cell.getValue()) {
             success(input.value);
@@ -1719,42 +1721,26 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
         }
     }
 
+    // Apply change on blur
     input.addEventListener("blur", onChange);
 
-    // Enhance keyboard navigation
+    // Handling keydown events for Enter and navigation keys
     input.addEventListener("keydown", function(e) {
-        var cursorPosition = input.selectionStart;
-        var handleKeys = ["ArrowLeft", "ArrowRight", "Enter"];
-        var textLength = input.value.length;
-
         if (e.key === "Enter") {
-            // Save and stop propagation when Enter key is pressed
-            onChange();
-            e.preventDefault(); // Prevent any default action
-        } else if (handleKeys.includes(e.key)) {
-            if (e.key === "ArrowLeft" && cursorPosition === 0) {
-                // If cursor is at the start, allow Tabulator to move left
-                cancel();
-            } else if (e.key === "ArrowRight" && cursorPosition === textLength) {
-                // If cursor is at the end, allow Tabulator to move right
-                cancel();
-            } else {
-                // Prevent Tabulator from taking over left and right keys within the input
-                e.stopPropagation();
-            }
+            onChange(); // Save on Enter
+            e.preventDefault(); // Prevent default form submit behavior
+        } else if (e.key === "Escape") {
+            cancel(); // Cancel on Escape
         }
     });
 
-    input.addEventListener("mousedown", function(e) {
-        e.stopPropagation();
-    });
-
-    input.addEventListener("click", function(e) {
-        e.stopPropagation();
-    });
+    // Stop propagation for mousedown and click events
+    input.addEventListener("mousedown", e => e.stopPropagation());
+    input.addEventListener("click", e => e.stopPropagation());
 
     return input;
 }
+
 
 
 
