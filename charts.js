@@ -245,17 +245,19 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     ];
 
     Object.keys(scoreNames).forEach((key, index) => {
+        console.log(`Key: ${key}, Field: score${index + 1}, Name: ${scoreNames[key]}`);
         if (!scoreNames[key]) {
             console.log(`Skipping column ${index + 1} as the name is null or empty`);
             return; // Skip adding columns where the name is null or empty
         }
-        
-        console.log(`Adding column for scoreNames[${key}]:`, scoreNames[key]);
+    
+        // Check and log whether the condition for applying textEditor is met
         if (scoreNames[key] === 'score10') {
+            console.log(`Assigning custom textEditor to field: score${index + 1}`);
             columns.push({
                 title: scoreNames[key],
                 field: `score${index + 1}`,
-                editor: textEditor, // custom editor for text inputs
+                editor: textEditor,
                 width: 100
             });
         } else {
@@ -266,7 +268,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                 width: 100
             });
         }
-    });
+    });    
 
     console.log("Initializing Tabulator with columns:", columns);
     table = new Tabulator("#performance-table", {
@@ -277,7 +279,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         tooltips: true,
         movableColumns: false,
         resizableRows: false,
-        editTriggerEvent: "click",
+        editTriggerEvent: "dblclick",
         clipboard: true,
         history: true,
         selectableRange: 1,
