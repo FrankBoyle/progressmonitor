@@ -1384,8 +1384,14 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             .then(data => {
                 if (data.status === 'success') {
                     const newTab = window.open();
-                    newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
-                    newTab.document.close();
+                    const checkReady = setInterval(() => {
+                        if (newTab && newTab.document.readyState === 'complete') {
+                            clearInterval(checkReady);
+                            newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
+                            newTab.document.close();
+                        }
+                    }, 100); // Check every 100 milliseconds
+
                     setTimeout(() => {
                         window.location.reload();
                     }, 2000);
@@ -1451,11 +1457,15 @@ function printReport(selectedGoal, selectedSections, reportingPeriod, notes, sel
         html2canvas(document.body).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
             const newTab = window.open();
-            newTab.document.write('<img src="' + imgData + '" />');
-            newTab.document.close();
-
-            document.body.innerHTML = originalContents;
-            enableChartInteractions();
+            const checkReady = setInterval(() => {
+                if (newTab && newTab.document.readyState === 'complete') {
+                    clearInterval(checkReady);
+                    newTab.document.write('<img src="' + imgData + '" />');
+                    newTab.document.close();
+                    document.body.innerHTML = originalContents;
+                    enableChartInteractions();
+                }
+            }, 100); // Check every 100 milliseconds
         });
     }, 50);
 }
