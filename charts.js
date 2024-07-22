@@ -245,30 +245,31 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     ];
 
     Object.keys(scoreNames).forEach((key, index) => {
-        console.log(`Key: ${key}, Field: score${index + 1}, Name: ${scoreNames[key]}`);
+        console.log(`Processing: ${key}, index: ${index}, name: ${scoreNames[key]}`);
+        const fieldName = `score${index + 1}`;  // Consistent field naming
+    
         if (!scoreNames[key]) {
-            console.log(`Skipping column ${index + 1} as the name is null or empty`);
-            return; // Skip adding columns where the name is null or empty
+            console.log(`Skipping column ${index + 1} due to empty name`);
+            return; // Skip empty names
         }
     
-        // Check and log whether the condition for applying textEditor is met
-        if (scoreNames[key] === 'score10') {
-            console.log(`Assigning custom textEditor to field: score${index + 1}`);
+        if (key === 'score10_name') { // Ensure this is the exact key for 'score10'
+            console.log(`Assigning custom textEditor to ${fieldName}`);
             columns.push({
                 title: scoreNames[key],
-                field: `score${index + 1}`,
+                field: fieldName,
                 editor: textEditor,
                 width: 100
             });
         } else {
             columns.push({
                 title: scoreNames[key],
-                field: `score${index + 1}`,
+                field: fieldName,
                 editor: "input",
                 width: 100
             });
         }
-    });    
+    });       
 
     console.log("Initializing Tabulator with columns:", columns);
     table = new Tabulator("#performance-table", {
