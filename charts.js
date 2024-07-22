@@ -1713,61 +1713,65 @@ function initializeNotesQuill() {
 }
 
 // Custom editor for handling text inputs more gracefully
-function textEditor(cell, onRendered, success, cancel, editorParams) {
+function textEditor(cell, onRendered, success, cancel) {
     console.log("Initializing text editor for cell", cell.getField());
 
+    // Create a text input
     var input = document.createElement("input");
-    input.setAttribute("type", "text");
+    input.type = "text";
     input.style.padding = "4px";
     input.style.width = "100%";
     input.style.boxSizing = "border-box";
-    input.value = cell.getValue();
+    input.value = cell.getValue(); // Set the current value of the cell
 
-    // Log initial setup
+    // Log the initialization of the editor
     console.log('Editor initialized for cell:', cell.getField(), 'with value:', cell.getValue());
 
-    // Focus the input and place cursor at the end of text on render
-    onRendered(() => {
-        input.focus();
-        input.style.height = "100%";
-        input.setSelectionRange(input.value.length, input.value.length);
-        console.log('Input focused and cursor placed at the end.');
-    });
-
-    // Function to handle changes
-    function onChange() {
-        console.log('Input blurred or Enter pressed. New value:', input.value);
+    // Function to handle when the value is changed or confirmed
+    function saveValue() {
+        console.log('Input value to be saved:', input.value);
         if (input.value !== cell.getValue()) {
-            console.log('Value changed:', input.value);
+            console.log('Value changed, saving:', input.value);
             success(input.value);
         } else {
-            console.log('Value unchanged, cancel edit.');
+            console.log('Value unchanged, cancelling edit.');
             cancel();
         }
     }
 
-    // Apply change on blur
-    input.addEventListener("blur", onChange);
-
-    // Handling keydown events for Enter and navigation keys
-    input.addEventListener("keydown", function(e) {
-        console.log('Keydown event:', e.key);
-        if (e.key === "Enter") {
-            onChange(); // Save on Enter
-            e.preventDefault(); // Prevent default form submit behavior
-        } else if (e.key === "Escape") {
-            console.log('Escape key pressed, cancel edit.');
-            cancel(); // Cancel on Escape
-        }
+    // When the editor is rendered, focus the input and set cursor at the end
+    onRendered(() => {
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+        console.log('Input focused with cursor placed at the end.');
     });
 
-    // Stop propagation for mousedown and click events
+    // Event to handle value change on blur (when user clicks away)
+    input.addEventListener("blur", saveValue);
+
+    // Handling keyboard events
+    input.addEventListener("keydown", function(e) {
+        console.log('Keydown event detected:', e.key);
+        if (e.key === "Enter") {
+            // Save on Enter and prevent form submission
+            saveValue();
+            e.preventDefault(); // Prevent default to stop the Enter key from submitting forms
+        } else if (e.key === "Escape") {
+            // Cancel editing on Escape
+            console.log('Escape key pressed, cancelling edit.');
+            cancel();
+        }
+        // Allow left and right arrow keys to navigate text
+    });
+
+    // Prevent the input from losing focus on mousedown and click, which helps with selection issues
     input.addEventListener("mousedown", e => {
-        console.log('Mousedown event on input.');
+        console.log('Mousedown event on input, stopping propagation.');
         e.stopPropagation();
     });
+
     input.addEventListener("click", e => {
-        console.log('Click event on input.');
+        console.log('Click event on input, stopping propagation.');
         e.stopPropagation();
     });
 
