@@ -1704,14 +1704,14 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
     input.style.boxSizing = "border-box";
     input.value = cell.getValue();
 
-    onRendered(function(){
+    onRendered(function() {
         input.focus();
         input.style.height = "100%";
         // Set cursor at the end of text
         input.setSelectionRange(input.value.length, input.value.length);
     });
 
-    function onChange(){
+    function onChange() {
         if (input.value !== cell.getValue()) {
             success(input.value);
         } else {
@@ -1722,12 +1722,16 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
     input.addEventListener("blur", onChange);
 
     // Enhance keyboard navigation
-    input.addEventListener("keydown", function(e){
+    input.addEventListener("keydown", function(e) {
         var cursorPosition = input.selectionStart;
-        var handleKeys = ["ArrowLeft", "ArrowRight"];
+        var handleKeys = ["ArrowLeft", "ArrowRight", "Enter"];
         var textLength = input.value.length;
 
-        if (handleKeys.includes(e.key)) {
+        if (e.key === "Enter") {
+            // Save and stop propagation when Enter key is pressed
+            onChange();
+            e.preventDefault(); // Prevent any default action
+        } else if (handleKeys.includes(e.key)) {
             if (e.key === "ArrowLeft" && cursorPosition === 0) {
                 // If cursor is at the start, allow Tabulator to move left
                 cancel();
@@ -1741,11 +1745,11 @@ function textEditor(cell, onRendered, success, cancel, editorParams) {
         }
     });
 
-    input.addEventListener("mousedown", function(e){
+    input.addEventListener("mousedown", function(e) {
         e.stopPropagation();
     });
 
-    input.addEventListener("click", function(e){
+    input.addEventListener("click", function(e) {
         e.stopPropagation();
     });
 
