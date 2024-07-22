@@ -186,14 +186,14 @@ window.addEventListener('scroll', function(event) {
 
 // Function to initialize the table
 function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) {
-    console.log("initializeTable called with studentIdNew:", studentIdNew, "and metadataId:", metadataId);
+    //console.log("initializeTable called with studentIdNew:", studentIdNew, "and metadataId:", metadataId);
 
     if (table) {
-        console.log("Existing table found, destroying...");
+        //console.log("Existing table found, destroying...");
         table.destroy();
     }
 
-    console.log("Preparing columns based on scoreNames...");
+    //console.log("Preparing columns based on scoreNames...");
     const columns = [
         {
             title: "Actions",
@@ -202,7 +202,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             width: 100,
             hozAlign: "center",
             cellClick: (e, cell) => {
-                console.log("Delete button clicked for performance_id:", cell.getRow().getData().performance_id);
+                //console.log("Delete button clicked for performance_id:", cell.getRow().getData().performance_id);
                 const performanceId = cell.getRow().getData().performance_id;
                 if (confirm('Are you sure you want to delete this row?')) {
                     fetch('./users/delete_performance.php', {
@@ -212,10 +212,10 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log("Delete response:", data);
+                        //console.log("Delete response:", data);
                         if (data.success) {
                             cell.getRow().delete();
-                            console.log("Row deleted successfully.");
+                            //console.log("Row deleted successfully.");
                         } else {
                             alert('Failed to delete data. Please try again.');
                         }
@@ -245,16 +245,16 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     ];
 
     Object.keys(scoreNames).forEach((key, index) => {
-        console.log(`Processing: ${key}, index: ${index}, name: ${scoreNames[key]}`);
+        //console.log(`Processing: ${key}, index: ${index}, name: ${scoreNames[key]}`);
         const fieldName = `score${index + 1}`;  // Consistent field naming
     
         if (!scoreNames[key]) {
-            console.log(`Skipping column ${index + 1} due to empty name`);
+            //console.log(`Skipping column ${index + 1} due to empty name`);
             return; // Skip empty names
         }
     
         if (key === 'score10_name') { // Ensure this is the exact key for 'score10'
-            console.log(`Assigning custom textEditor to ${fieldName}`);
+            //console.log(`Assigning custom textEditor to ${fieldName}`);
             columns.push({
                 title: scoreNames[key],
                 field: fieldName,
@@ -271,7 +271,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         }
     });       
 
-    console.log("Initializing Tabulator with columns:", columns);
+    //console.log("Initializing Tabulator with columns:", columns);
     table = new Tabulator("#performance-table", {
         height: "500px",
         data: performanceData,
@@ -288,11 +288,11 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table.on("cellEdited", cell => {
-        console.log("Cell edited for field:", cell.getField(), "New value:", cell.getValue());
+        //console.log("Cell edited for field:", cell.getField(), "New value:", cell.getValue());
         const updatedData = {...cell.getRow().getData(), [cell.getField()]: cell.getValue() || null};
         updatedData.student_id_new = studentIdNew;
         updatedData.metadata_id = metadataId;
-        console.log("Sending update to server with data:", updatedData);
+        //console.log("Sending update to server with data:", updatedData);
         fetch('./users/update_performance.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -800,7 +800,7 @@ function createColumnCheckboxes(scoreNames) {
     columnSelector.innerHTML = ''; // Clear any existing checkboxes
     Object.keys(scoreNames).forEach((key, index) => {
         if (!scoreNames[key] || scoreNames[key].trim() === '') {
-            console.log(`Skipping checkbox creation for column ${index + 1} due to null or empty name.`);
+            //console.log(`Skipping checkbox creation for column ${index + 1} due to null or empty name.`);
             return; // Skip creating a checkbox if the name is null or empty
         }
         const item = document.createElement('div');
@@ -1719,7 +1719,7 @@ function initializeNotesQuill() {
 
 // Custom editor for handling text inputs more gracefully
 function textEditor(cell, onRendered, success, cancel) {
-    console.log("Initializing text editor for cell", cell.getField());
+    //console.log("Initializing text editor for cell", cell.getField());
 
     // Create a text input
     var input = document.createElement("input");
@@ -1730,16 +1730,16 @@ function textEditor(cell, onRendered, success, cancel) {
     input.value = cell.getValue(); // Set the current value of the cell
 
     // Log the initialization of the editor
-    console.log('Editor initialized for cell:', cell.getField(), 'with value:', cell.getValue());
+    //console.log('Editor initialized for cell:', cell.getField(), 'with value:', cell.getValue());
 
     // Function to handle when the value is changed or confirmed
     function saveValue() {
-        console.log('Input value to be saved:', input.value);
+        //console.log('Input value to be saved:', input.value);
         if (input.value !== cell.getValue()) {
-            console.log('Value changed, saving:', input.value);
+            //console.log('Value changed, saving:', input.value);
             success(input.value);
         } else {
-            console.log('Value unchanged, cancelling edit.');
+            //console.log('Value unchanged, cancelling edit.');
             cancel();
         }
     }
@@ -1748,7 +1748,7 @@ function textEditor(cell, onRendered, success, cancel) {
     onRendered(() => {
         input.focus();
         input.setSelectionRange(input.value.length, input.value.length);
-        console.log('Input focused with cursor placed at the end.');
+        //console.log('Input focused with cursor placed at the end.');
     });
 
     // Event to handle value change on blur (when user clicks away)
@@ -1756,14 +1756,14 @@ function textEditor(cell, onRendered, success, cancel) {
 
     // Handling keyboard events
     input.addEventListener("keydown", function(e) {
-        console.log('Keydown event detected:', e.key);
+        //console.log('Keydown event detected:', e.key);
         if (e.key === "Enter") {
             // Save on Enter and prevent form submission
             saveValue();
             e.preventDefault(); // Prevent default to stop the Enter key from submitting forms
         } else if (e.key === "Escape") {
             // Cancel editing on Escape
-            console.log('Escape key pressed, cancelling edit.');
+            //console.log('Escape key pressed, cancelling edit.');
             cancel();
         }
         // Allow left and right arrow keys to navigate text
@@ -1771,12 +1771,12 @@ function textEditor(cell, onRendered, success, cancel) {
 
     // Prevent the input from losing focus on mousedown and click, which helps with selection issues
     input.addEventListener("mousedown", e => {
-        console.log('Mousedown event on input, stopping propagation.');
+        //console.log('Mousedown event on input, stopping propagation.');
         e.stopPropagation();
     });
 
     input.addEventListener("click", e => {
-        console.log('Click event on input, stopping propagation.');
+        //console.log('Click event on input, stopping propagation.');
         e.stopPropagation();
     });
 
