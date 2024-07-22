@@ -1384,15 +1384,11 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             .then(data => {
                 if (data.status === 'success') {
                     const newTab = window.open();
-                    if (!newTab || newTab.closed || typeof newTab.closed == 'undefined') {
-                        showNotification();
-                    } else {
-                        newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
-                        newTab.document.close();
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                    }
+                    newTab.document.write(`<img src="${dataUrl}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
+                    newTab.document.close();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 } else {
                     console.error('Error saving notes:', data.message);
                     alert('Failed to save notes: ' + data.message);
@@ -1786,13 +1782,26 @@ function textEditor(cell, onRendered, success, cancel) {
     return input;
 }
 
-function showNotification() {
-    const notificationBar = document.getElementById("notificationBar");
-    notificationBar.style.display = "block";
-    setTimeout(() => {
-        notificationBar.style.display = "none";
-    }, 5000); // Hide after 5 seconds
+
+/*
+function openReportWindow() {
+    // Attempt to open a new window
+    const newWindow = window.open('about:blank', '_blank');
+
+    // Check if the pop-up was blocked
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        // Pop-up was blocked, provide instructions to the user
+        alert('Pop-up was blocked. Please enable pop-ups for this site in your browser settings.');
+    } else {
+        // Pop-up allowed, you can load your content here
+        newWindow.document.write('<p>Loading your report...</p>'); // Modify as necessary
+        newWindow.document.close();
+    }
 }
+
+document.getElementById('printReportBtn').addEventListener('click', openReportWindow);
+*/
+
 
 
 
