@@ -1341,41 +1341,27 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
 
     document.body.appendChild(printDiv);
 
-    // Resize and prepare charts if necessary
+    // Resize the charts explicitly before capturing with html2canvas
     resizeCharts(commonWidth).then(() => {
-        html2canvas(printDiv, { /* options */ }).then(canvas => {
+        html2canvas(printDiv, {
+            width: parseInt(commonWidth),
+            windowWidth: parseInt(commonWidth),
+            scrollX: -window.scrollX,
+            scrollY: -window.scrollY
+        }).then(canvas => {
             document.body.removeChild(printDiv);
-            const imgData = canvas.toDataURL('image/png');
+            const dataUrl = canvas.toDataURL('image/png');
 
-            // Attempt to open a new window and handle the case where pop-ups are blocked
-            const newTab = window.open();
-            if (!newTab) {
-                alert("Pop-up was blocked. Please enable pop-ups for this site in your browser settings.");
-            } else {
-                newTab.document.write(`<img src="${imgData}" alt="Report Image" style="display: block; margin: 0 auto; width: ${commonWidth};"/>`);
-                newTab.document.close();
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            }
-
-            // Save notes logic here
-            saveReportData(selectedGoal, reportingPeriod, notes, imgData);
-        });
-    });
-};
-
-function saveReportData(selectedGoal, reportingPeriod, notes, imageData) {
-    // Update the notes object to include the image data
-    const payload = {
-        goal_id: selectedGoal.getAttribute('data-goal-id'),
-        student_id_new: window.studentIdNew,
-        school_id: window.schoolId,
-        metadata_id: window.metadataId,
-        reporting_period: reportingPeriod,
-        notes: notes,
-        report_image: dataUrl.split(',')[1] // Get base64 string
-        };
+            // Update the notes object to include the image data
+            const payload = {
+                goal_id: selectedGoal.getAttribute('data-goal-id'),
+                student_id_new: window.studentIdNew,
+                school_id: window.schoolId,
+                metadata_id: window.metadataId,
+                reporting_period: reportingPeriod,
+                notes: notes,
+                report_image: dataUrl.split(',')[1] // Get base64 string
+            };
 
             //console.log("Payload being sent to save_notes.php:", payload);
 
@@ -1412,7 +1398,9 @@ function saveReportData(selectedGoal, reportingPeriod, notes, imageData) {
                 console.error('Error:', error);
                 alert('An error occurred while saving notes: ' + error.message);
             });
-        };
+        });
+    });
+}
 
 function resizeCharts(width) {
     return new Promise((resolve) => {
@@ -1794,6 +1782,8 @@ function textEditor(cell, onRendered, success, cancel) {
     return input;
 }
 
+
+/*
 function openReportWindow() {
     // Attempt to open a new window
     const newWindow = window.open('about:blank', '_blank');
@@ -1810,7 +1800,7 @@ function openReportWindow() {
 }
 
 document.getElementById('printReportBtn').addEventListener('click', openReportWindow);
-
+*/
 
 
 
