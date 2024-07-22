@@ -799,6 +799,10 @@ function createColumnCheckboxes(scoreNames) {
     const columnSelector = document.getElementById('columnSelector');
     columnSelector.innerHTML = ''; // Clear any existing checkboxes
     Object.keys(scoreNames).forEach((key, index) => {
+        if (!scoreNames[key] || scoreNames[key].trim() === '') {
+            console.log(`Skipping checkbox creation for column ${index + 1} due to null or empty name.`);
+            return; // Skip creating a checkbox if the name is null or empty
+        }
         const item = document.createElement('div');
         item.classList.add('selector-item');
         item.setAttribute("data-column-name", `score${index + 1}`);
@@ -811,6 +815,7 @@ function createColumnCheckboxes(scoreNames) {
         columnSelector.appendChild(item);
     });
 }
+
 
 function disableChartInteractions() {
     if (window.lineChart) {
