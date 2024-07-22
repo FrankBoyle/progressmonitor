@@ -186,10 +186,14 @@ window.addEventListener('scroll', function(event) {
 
 // Function to initialize the table
 function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) {
+    console.log("initializeTable called with studentIdNew:", studentIdNew, "and metadataId:", metadataId);
+
     if (table) {
+        console.log("Existing table found, destroying...");
         table.destroy();
     }
 
+    console.log("Preparing columns based on scoreNames...");
     const columns = [
         {
             title: "Actions",
@@ -198,6 +202,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
             width: 100,
             hozAlign: "center",
             cellClick: (e, cell) => {
+                console.log("Delete button clicked for performance_id:", cell.getRow().getData().performance_id);
                 const performanceId = cell.getRow().getData().performance_id;
                 if (confirm('Are you sure you want to delete this row?')) {
                     fetch('./users/delete_performance.php', {
@@ -207,8 +212,10 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                     })
                     .then(response => response.json())
                     .then(data => {
+                        console.log("Delete response:", data);
                         if (data.success) {
                             cell.getRow().delete();
+                            console.log("Row deleted successfully.");
                         } else {
                             alert('Failed to delete data. Please try again.');
                         }
@@ -237,25 +244,34 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         }
     ];
 
-    // Handle custom columns, apply a special editor for the 'score10' column
     Object.keys(scoreNames).forEach((key, index) => {
-        if (scoreNames[key] === 'score10') {
+        console.log(`Processing: ${key}, index: ${index}, name: ${scoreNames[key]}`);
+        const fieldName = `score${index + 1}`;  // Consistent field naming
+    
+        if (!scoreNames[key]) {
+            console.log(`Skipping column ${index + 1} due to empty name`);
+            return; // Skip empty names
+        }
+    
+        if (key === 'score10_name') { // Ensure this is the exact key for 'score10'
+            console.log(`Assigning custom textEditor to ${fieldName}`);
             columns.push({
                 title: scoreNames[key],
-                field: `score${index + 1}`,
-                editor: textEditor, // custom editor for text inputs
+                field: fieldName,
+                editor: textEditor,
                 width: 100
             });
         } else {
             columns.push({
                 title: scoreNames[key],
-                field: `score${index + 1}`,
+                field: fieldName,
                 editor: "input",
                 width: 100
             });
         }
-    });
+    });       
 
+    console.log("Initializing Tabulator with columns:", columns);
     table = new Tabulator("#performance-table", {
         height: "500px",
         data: performanceData,
@@ -272,9 +288,11 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table.on("cellEdited", cell => {
+        console.log("Cell edited for field:", cell.getField(), "New value:", cell.getValue());
         const updatedData = {...cell.getRow().getData(), [cell.getField()]: cell.getValue() || null};
         updatedData.student_id_new = studentIdNew;
         updatedData.metadata_id = metadataId;
+        console.log("Sending update to server with data:", updatedData);
         fetch('./users/update_performance.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -289,36 +307,6 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         })
         .catch(error => console.error('Error:', error));
     });
-}
-
-
-function isDateDuplicate(date) {
-    const data = table.getData();
-    return data.some(row => row['score_date'] === date);
-}
-
-function saveIEPDate(iepDate, studentIdNew) {
-    //console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentIdNew}`);
-    fetch('./users/save_iep_date.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            iep_date: iepDate,
-            student_id: studentIdNew
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        //console.log('IEP date saved:', data);
-        if (data.success) {
-            fetchInitialData(studentIdNew, metadataId);
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => console.error('Error saving IEP date:', error));
 }
 
 function fetchInitialData(studentIdNew, metadataId) {
@@ -350,6 +338,34 @@ function fetchInitialData(studentIdNew, metadataId) {
         });
 }
 
+function isDateDuplicate(date) {
+    const data = table.getData();
+    return data.some(row => row['score_date'] === date);
+}
+
+function saveIEPDate(iepDate, studentIdNew) {
+    //console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentIdNew}`);
+    fetch('./users/save_iep_date.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            iep_date: iepDate,
+            student_id: studentIdNew
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        //console.log('IEP date saved:', data);
+        if (data.success) {
+            fetchInitialData(studentIdNew, metadataId);
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error saving IEP date:', error));
+}
 
 function initializeCharts() {
     initializeLineChart();
@@ -1697,60 +1713,72 @@ function initializeNotesQuill() {
 }
 
 // Custom editor for handling text inputs more gracefully
-function textEditor(cell, onRendered, success, cancel, editorParams) {
+function textEditor(cell, onRendered, success, cancel) {
+    console.log("Initializing text editor for cell", cell.getField());
+
+    // Create a text input
     var input = document.createElement("input");
+    input.type = "text";
     input.style.padding = "4px";
     input.style.width = "100%";
     input.style.boxSizing = "border-box";
-    input.value = cell.getValue();
+    input.value = cell.getValue(); // Set the current value of the cell
 
-    onRendered(function(){
-        input.focus();
-        input.style.height = "100%";
-        // Set cursor at the end of text
-        input.setSelectionRange(input.value.length, input.value.length);
-    });
+    // Log the initialization of the editor
+    console.log('Editor initialized for cell:', cell.getField(), 'with value:', cell.getValue());
 
-    function onChange(){
+    // Function to handle when the value is changed or confirmed
+    function saveValue() {
+        console.log('Input value to be saved:', input.value);
         if (input.value !== cell.getValue()) {
+            console.log('Value changed, saving:', input.value);
             success(input.value);
         } else {
+            console.log('Value unchanged, cancelling edit.');
             cancel();
         }
     }
 
-    input.addEventListener("blur", onChange);
-
-    // Enhance keyboard navigation
-    input.addEventListener("keydown", function(e){
-        var cursorPosition = input.selectionStart;
-        var handleKeys = ["ArrowLeft", "ArrowRight"];
-        var textLength = input.value.length;
-
-        if (handleKeys.includes(e.key)) {
-            if (e.key === "ArrowLeft" && cursorPosition === 0) {
-                // If cursor is at the start, allow Tabulator to move left
-                cancel();
-            } else if (e.key === "ArrowRight" && cursorPosition === textLength) {
-                // If cursor is at the end, allow Tabulator to move right
-                cancel();
-            } else {
-                // Prevent Tabulator from taking over left and right keys within the input
-                e.stopPropagation();
-            }
-        }
+    // When the editor is rendered, focus the input and set cursor at the end
+    onRendered(() => {
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+        console.log('Input focused with cursor placed at the end.');
     });
 
-    input.addEventListener("mousedown", function(e){
+    // Event to handle value change on blur (when user clicks away)
+    input.addEventListener("blur", saveValue);
+
+    // Handling keyboard events
+    input.addEventListener("keydown", function(e) {
+        console.log('Keydown event detected:', e.key);
+        if (e.key === "Enter") {
+            // Save on Enter and prevent form submission
+            saveValue();
+            e.preventDefault(); // Prevent default to stop the Enter key from submitting forms
+        } else if (e.key === "Escape") {
+            // Cancel editing on Escape
+            console.log('Escape key pressed, cancelling edit.');
+            cancel();
+        }
+        // Allow left and right arrow keys to navigate text
+    });
+
+    // Prevent the input from losing focus on mousedown and click, which helps with selection issues
+    input.addEventListener("mousedown", e => {
+        console.log('Mousedown event on input, stopping propagation.');
         e.stopPropagation();
     });
 
-    input.addEventListener("click", function(e){
+    input.addEventListener("click", e => {
+        console.log('Click event on input, stopping propagation.');
         e.stopPropagation();
     });
 
     return input;
 }
+
+
 
 
 
