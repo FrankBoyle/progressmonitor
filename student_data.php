@@ -81,12 +81,12 @@ if ($studentId > 0) {
                     <li class="luxbar-item dropdown">
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
-                            <a href="IEP_Date_Walkthrough.jpg" class="dropdown-item" data-image="IEP_Date_Walkthrough.jpg">4 - Add an IEP date.</a>
-                            <a href="Column_Walkthrough.jpg" class="dropdown-item" data-image="Column_Walkthrough.jpg">5 - Customize column names.</a>
-                            <a href="Add_DataRow_Walkthrough.jpg" class="dropdown-item" data-image="Add_DataRow_Walkthrough.jpg">6 -  Add data rows.</a>
-                            <a href="Add_Data_Walkthrough.jpg" class="dropdown-item" data-image="Add_Data_Walkthrough.jpg">7 - Add data to rubric.</a>
-                            <a href="Graph_Data_Walkthrough.jpg" class="dropdown-item" data-image="Graph_Data_Walkthrough.jpg">6 - Graph your data.</a>
-                            <a href="Print_Walkthrough.jpg" class="dropdown-item" data-image="Print_Walkthrough.jpg">7 - Print the IEP Report.</a>
+                            <a href="IEP_Date_Walkthrough.jpg" class="dropdown-item" data-image="IEP_Date_Walkthrough.jpg">1 - Add an IEP date.</a>
+                            <a href="Column_Walkthrough.jpg" class="dropdown-item" data-image="Column_Walkthrough.jpg">2 - Customize column names.</a>
+                            <a href="Add_DataRow_Walkthrough.jpg" class="dropdown-item" data-image="Add_DataRow_Walkthrough.jpg">3 -  Add data rows.</a>
+                            <a href="Add_Data_Walkthrough.jpg" class="dropdown-item" data-image="Add_Data_Walkthrough.jpg">4 - Add data to rubric.</a>
+                            <a href="Graph_Data_Walkthrough.jpg" class="dropdown-item" data-image="Graph_Data_Walkthrough.jpg">5 - Graph your data.</a>
+                            <a href="Print_Walkthrough.jpg" class="dropdown-item" data-image="Print_Walkthrough.jpg">6 - Print the IEP Report.</a>
                         </div>
                     </li>
 
