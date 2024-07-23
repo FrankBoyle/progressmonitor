@@ -90,7 +90,7 @@ include('./users/login_backend.php');
                     </p>
                 </div>
                 <div class="grid-item sample-reports">
-                    <h3>How do I use IEP Report?</h3>
+                    <h3>How do I get started with IEP Report?</h3>
                     <img src="Instructions.jpg" alt="1)	Create a group with +.
                         a.	Select a group.
                         2)	Add students to school and/or groups with +. 
