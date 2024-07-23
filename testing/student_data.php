@@ -89,6 +89,8 @@ if ($studentId > 0) {
                             <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
                         </div>
                     </li>
+                    
+                    <button id="printReportBtn" class="btn btn-primary">Print Report</button>
 
                     <li class="luxbar-item">
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
