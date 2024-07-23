@@ -161,7 +161,7 @@ html {
 
 .question-mark {
     font-weight: bold;
-    color: #007bff;
+    color: #d0ff00;
     cursor: pointer;
 }
 
@@ -170,7 +170,7 @@ html {
 }
 
 .dropdown:hover .question-mark {
-    color: #d0ff00;
+    color: #f5ffc8;
 }
 
 .school-selector {
