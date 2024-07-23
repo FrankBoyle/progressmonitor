@@ -40,7 +40,7 @@ include('./users/login_backend.php');
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
                             <a href="Register_How_To.jpg" class="dropdown-item" data-image="Register_How_To.jpg">You have to register an account.</a>
-                            <a href="Password_Reset_Walkthrough.jpg" class="dropdown-item" data-image="Password_Reset_Walkthrough.jpg">Reset your password.</a>
+                            <a href="Reset_Password_Walkthrough.jpg" class="dropdown-item" data-image="Reset_Password_Walkthrough.jpg">Reset your password.</a>
                         </div>
                     </li>
 
@@ -91,13 +91,13 @@ include('./users/login_backend.php');
                 </div>
                 <div class="grid-item sample-reports">
                     <h3>How do I get started with IEP Report?</h3>
-                    <img src="Instructions.jpg" alt="1)	Create a group with +.
+                    <img src="Instructions.jpg" alt="
+                        1)	Create or add a group with +.
                         a.	Select a group.
-                        2)	Add students to school and/or groups with +. 
+                        2)	Create or add students with +.
                         a.	Select a student.
-                        3)	Add Goals with +.
-                        a.	Select a goal. 
-                        ">
+                        3)	Create or add goals with +.
+                        a.	Select a rubric.">
                 </div>
                 <div class="grid-item sample-reports">
                     <h3>Sample Reports</h3>

@@ -91,13 +91,13 @@ include('./users/login_backend.php');
                 </div>
                 <div class="grid-item sample-reports">
                     <h3>How do I get started with IEP Report?</h3>
-                    <img src="Instructions.jpg" alt="1)	Create a group with +.
+                    <img src="Instructions.jpg" alt="
+                        1)	Create or add a group with +.
                         a.	Select a group.
-                        2)	Add students to school and/or groups with +. 
+                        2)	Create or add students with +.
                         a.	Select a student.
-                        3)	Add Goals with +.
-                        a.	Select a goal. 
-                        ">
+                        3)	Create or add goals with +.
+                        a.	Select a rubric.">
                 </div>
                 <div class="grid-item sample-reports">
                     <h3>Sample Reports</h3>
