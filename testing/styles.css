@@ -159,6 +159,10 @@ html {
     text-align: left; /* Ensures text alignment is uniform */
 }
 
+.dropdown-menu a.sub-item {
+    padding-left: 32px; /* Adds indentation to sub-items */
+}
+
 .dropdown-menu a:hover {background-color: #f1f1f1}
 
 .question-mark {
