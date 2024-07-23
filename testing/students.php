@@ -387,17 +387,16 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
     item.addEventListener('mouseenter', function() {
         const imageUrl = this.getAttribute('data-image');
         if (imageUrl) {
-            const preview = document.createElement('div');
+            const preview = document.createElement('img');
+            preview.src = imageUrl;
             preview.className = 'image-preview';
-            preview.style.backgroundImage = `url(${imageUrl})`;
-            preview.style.width = '200px'; // Set a fixed width
-            preview.style.height = '150px'; // Set a fixed height
-            this.appendChild(preview);
+            document.body.appendChild(preview); // Append to the body to cover the full screen
+            preview.style.display = 'block';
         }
     });
 
     item.addEventListener('mouseleave', function() {
-        const preview = this.querySelector('.image-preview');
+        const preview = document.querySelector('.image-preview');
         if (preview) {
             preview.remove();
         }
