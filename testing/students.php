@@ -385,17 +385,23 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
 
 document.querySelectorAll('.dropdown-item').forEach(item => {
     let timer;
-    item.addEventListener('mouseenter', function() {
+    item.addEventListener('mouseenter', function(event) {
         const imageUrl = this.getAttribute('data-image');
         timer = setTimeout(() => {
             if (imageUrl) {
                 const preview = document.createElement('img');
                 preview.src = imageUrl;
                 preview.className = 'image-preview';
-                document.body.appendChild(preview); // Append to the body to cover the full screen
                 preview.style.display = 'block';
+                preview.style.position = 'absolute';
+                document.body.appendChild(preview); // Append to the body to cover the full screen
+                
+                // Calculate position
+                const rect = this.getBoundingClientRect();
+                preview.style.top = `${rect.bottom + window.scrollY}px`; // Position below the item
+                preview.style.left = `${rect.left + window.scrollX}px`; // Align with the left of the item
             }
-        }, 300); // Reduce delay to 300 milliseconds
+        }, 300); // Reduced delay to 300 milliseconds
     });
 
     item.addEventListener('mouseleave', function() {
