@@ -37,7 +37,7 @@
                     <li class="luxbar-item dropdown">
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
-                            <a href="Register_Walkthrough.jpg" class="dropdown-item" data-image="Register_Walkthrough.jpg">1 - Create or add a group with +.</a>
+                            <a href="Register_Walkthrough.jpg" class="dropdown-item" data-image="Register_Walkthrough.jpg">1 - Register your account.</a>
                         </div>
                     </li>
 
