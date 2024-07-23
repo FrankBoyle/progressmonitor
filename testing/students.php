@@ -392,13 +392,18 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
                 const preview = document.createElement('img');
                 preview.src = imageUrl;
                 preview.className = 'image-preview';
-                document.body.appendChild(preview); // Append to the body
+                document.body.appendChild(preview);
                 preview.style.display = 'block';
 
-                // Adjusted to offset the image slightly
+                // New positioning logic
                 const rect = this.getBoundingClientRect();
-                preview.style.top = `${rect.bottom + 10}px`; // Offset below the item by 10px
-                preview.style.left = `${rect.left + 10}px`; // Offset to the right by 10px
+                preview.style.top = `${window.innerHeight - preview.offsetHeight - 20}px`; // Place it 20px above the bottom of the viewport
+                preview.style.left = `${rect.right + 20}px`; // Place it 20px to the right of the hovered item
+
+                // Ensure it does not go off screen
+                if (preview.offsetLeft + preview.offsetWidth > window.innerWidth) {
+                    preview.style.left = `${window.innerWidth - preview.offsetWidth - 20}px`; // Adjust if it goes off the right edge
+                }
             }
         }, 300);
     });
