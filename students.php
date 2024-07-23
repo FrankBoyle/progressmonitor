@@ -47,13 +47,26 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
                 <ul class="luxbar-navigation">
+
                     <li class="luxbar-header">
                         <div class="logo">
                             <img src="IEPreport_logo.jpg" alt="Logo">
                         </div>
-
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
+
+                    <li class="luxbar-item dropdown">
+                        <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
+                        <div class="dropdown-menu" aria-labelledby="helpDropdown">
+                            <a href="#" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create a group with +.</a>
+                            <a href="#" class="dropdown-item sub-item" data-image="Group_Select.jpg">a - Select a group.</a>
+                            <a href="#" class="dropdown-item" data-image="Students_Walkthrough.jpg">2 - Add students to school and/or groups with +.</a>
+                            <a href="#" class="dropdown-item sub-item" data-image="Students_Select.jpg">a - Select a student.</a>
+                            <a href="#" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">3 - Add Goals with +.</a>
+                            <a href="#" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
+                        </div>
+                    </li>
+
                     <li>
                         <div class="school-selector">
                             <label for="school-select">Select School:</label>
@@ -66,6 +79,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                             </select>
                         </div>
                     </li>
+
                     <li class="luxbar-item">
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
                             <a href="manage.php" class="nav-link">Manage</a>
@@ -369,6 +383,34 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
     } else {
         console.error('No group is selected.');
     }
+});
+
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    let timer;
+    item.addEventListener('mouseenter', function(event) {
+        const imageUrl = this.getAttribute('data-image');
+        timer = setTimeout(() => {
+            if (imageUrl) {
+                const preview = document.createElement('img');
+                preview.src = imageUrl;
+                preview.className = 'image-preview';
+                document.body.appendChild(preview);
+                preview.style.display = 'block';
+
+                // Set position to the bottom left corner of the viewport
+                preview.style.bottom = '20px'; // 20px from the bottom
+                preview.style.left = '20px'; // 20px from the left
+            }
+        }, 300); // Delay of 300 milliseconds
+    });
+
+    item.addEventListener('mouseleave', function() {
+        clearTimeout(timer);
+        const preview = document.querySelector('.image-preview');
+        if (preview) {
+            preview.remove();
+        }
+    });
 });
 
 function populateStudentsAndGoals() {

@@ -136,6 +136,66 @@ html {
     color: #FFFFFF;  /* White text for all links within the indigo menu */
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-item {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.image-preview {
+    display: none;
+    position: fixed;
+    max-width: 55%;
+    max-height: 55%;
+    z-index: 1050;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    border: 1px solid #ccc;
+    object-fit: contain;
+}
+
+.dropdown-item:hover .image-preview {
+    display: block;
+}
+
+.dropdown-menu a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left; /* Ensures text alignment is uniform */
+}
+
+.dropdown-menu a.sub-item {
+    padding-left: 32px; /* Adds indentation to sub-items */
+}
+
+.dropdown-menu a:hover {background-color: #f1f1f1}
+
+.question-mark {
+    font-weight: bold;
+    color: #d0ff00;
+    cursor: pointer;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown:hover .question-mark {
+    color: #f5ffc8;
+}
 
 .school-selector {
     display: flex;
@@ -1534,16 +1594,4 @@ img {
 
 .alert.error {
     background-color: #f44336; /* Red for error messages */
-}
-
-.notification-bar {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #f44336; /* Red */
-    color: white;
-    text-align: center;
-    padding: 10px;
-    z-index: 1000;
 }
