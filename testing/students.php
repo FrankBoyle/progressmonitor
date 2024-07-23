@@ -395,17 +395,11 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
                 document.body.appendChild(preview);
                 preview.style.display = 'block';
 
-                // New positioning logic
-                const rect = this.getBoundingClientRect();
-                preview.style.top = `${window.innerHeight - preview.offsetHeight - 20}px`; // Place it 20px above the bottom of the viewport
-                preview.style.left = `${rect.right + 20}px`; // Place it 20px to the right of the hovered item
-
-                // Ensure it does not go off screen
-                if (preview.offsetLeft + preview.offsetWidth > window.innerWidth) {
-                    preview.style.left = `${window.innerWidth - preview.offsetWidth - 20}px`; // Adjust if it goes off the right edge
-                }
+                // Set position to the bottom left corner of the viewport
+                preview.style.bottom = '20px'; // 20px from the bottom
+                preview.style.left = '20px'; // 20px from the left
             }
-        }, 300);
+        }, 300); // Delay of 300 milliseconds
     });
 
     item.addEventListener('mouseleave', function() {
