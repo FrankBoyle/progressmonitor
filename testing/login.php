@@ -100,11 +100,14 @@ include('./users/login_backend.php');
                         Our mission is to provide a tool that anyone can use to enter goals—whether in Math, ELA, Behavior, or any other area—and easily generate reports with beautiful, accurate graphs. No matter your level of tech proficiency, our tool simplifies the process while ensuring high-quality data representation. Check us out and see how our tool, while appearing simple, is powered by robust technology to meet your needs.
                     </p>
                 </div>
-                <div class="grid-item sample-reports">
-                    <img src="sample_report3.png" alt="Sample Report 3">
+                <div class="grid-item testimonials">
+                    <h3>Testimonials</h3>
+                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - <strong>Joe Dattilo</strong></p>
+
+                    <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - <strong>Fran Boyle</strong></p>
                 </div>
                 <div class="grid-item sample-reports">
-                    <img src="sample_report2.png" alt="Sample Report 2">
+                    <img src="sample_report3.png" alt="Sample Report 3">
                 </div>
             </div>
         </div>
