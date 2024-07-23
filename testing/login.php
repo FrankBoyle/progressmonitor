@@ -129,7 +129,36 @@ include('./users/login_backend.php');
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    let timer;
+    item.addEventListener('mouseenter', function(event) {
+        const imageUrl = this.getAttribute('data-image');
+        timer = setTimeout(() => {
+            if (imageUrl) {
+                const preview = document.createElement('img');
+                preview.src = imageUrl;
+                preview.className = 'image-preview';
+                document.body.appendChild(preview);
+                preview.style.display = 'block';
+
+                // Set position to the bottom left corner of the viewport
+                preview.style.bottom = '20px'; // 20px from the bottom
+                preview.style.left = '20px'; // 20px from the left
+            }
+        }, 300); // Delay of 300 milliseconds
+    });
+
+    item.addEventListener('mouseleave', function() {
+        clearTimeout(timer);
+        const preview = document.querySelector('.image-preview');
+        if (preview) {
+            preview.remove();
+        }
+    });
+});
+</script>
 
 </body>
 </html>
