@@ -109,32 +109,28 @@
 
 <script>
 $(document).ready(function() {
-    // Function to toggle the display of the school name field based on the school UUID input
+    // Toggle School Name Input
     function toggleSchoolNameInput() {
         var uuid = $('#school_uuid').val().trim();
-        if (uuid.length > 0) {
-            $('#new_school_container').hide();
-        } else {
-            $('#new_school_container').show();
-        }
+        $('#new_school_container').toggle(uuid.length === 0);
     }
 
-    // Check and set the correct display state on page load
-    toggleSchoolNameInput();
-
-    // Set up the event listener for changes in the school UUID input
     $('#school_uuid').on('input', toggleSchoolNameInput);
+    toggleSchoolNameInput(); // Initial check
 
+    // Form Submission
     $('form[name="registration"]').on('submit', function(e) {
-        e.preventDefault(); // Prevent the form's default submission.
+        e.preventDefault();
 
-        var formData = $(this).serialize(); // Serialize the form data for submission.
+        var formData = new FormData(this);  // Use FormData to include file inputs and all form fields
+        formData.append('register', 'Register'); // Ensure the 'register' button value is included
 
-        // Make the AJAX request
         $.ajax({
             type: 'POST',
             url: 'users/register_backend.php',
             data: formData,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
@@ -143,8 +139,8 @@ $(document).ready(function() {
                         text: "You have been registered successfully.",
                         icon: "success",
                         button: "Ok",
-                    }).then((value) => {
-                        window.location.href = 'login.php'; // Redirect to login on success
+                    }).then(() => {
+                        window.location.href = 'login.php';
                     });
                 } else {
                     swal("Error", response.message || "There was a problem with your registration. Please try again.", "error");
