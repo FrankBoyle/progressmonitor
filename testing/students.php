@@ -56,7 +56,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                     </li>
 
                     <li class="luxbar-item dropdown">
-                        <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false">Help <span class="question-mark">?</span></a>
+                        <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
                             <a href="faq.php" class="dropdown-item">FAQs</a>
                             <a href="contact_support.php" class="dropdown-item">Contact Support</a>
