@@ -70,14 +70,25 @@ if ($studentId > 0) {
 
             <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
                 <ul class="luxbar-navigation">
+
                     <li class="luxbar-header">
                         <div class="logo">
                             <img src="IEPreport_logo.jpg" alt="Logo">
                         </div>
-
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
-                    <button id="printReportBtn" class="btn btn-primary">Print Report</button>
+
+                    <li class="luxbar-item dropdown">
+                        <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
+                        <div class="dropdown-menu" aria-labelledby="helpDropdown">
+                            <a href="Groups_Walkthrough.jpg" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create a group with +.</a>
+                            <a href="Group_Select.jpg" class="dropdown-item sub-item" data-image="Group_Select.jpg">a - Select a group.</a>
+                            <a href="Students_Walkthrough.jpg" class="dropdown-item" data-image="Students_Walkthrough.jpg">2 - Add students to school and/or groups with +.</a>
+                            <a href="Students_Select.jpg" class="dropdown-item sub-item" data-image="Students_Select.jpg">a - Select a student.</a>
+                            <a href="Goal_Create_Walkthrough.jpg" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">3 - Add Goals with +.</a>
+                            <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
+                        </div>
+                    </li>
 
                     <li class="luxbar-item">
                         <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
@@ -91,6 +102,7 @@ if ($studentId > 0) {
                 </ul>
             </div>
         </header>
+
         <main class="content">
         <div class="print-container">
 
@@ -201,10 +213,40 @@ if ($studentId > 0) {
         </div>
         </main>
     </div>
-    <script src="charts.js"></script>
-    <script>
-        let schoolId = <?php echo json_encode($schoolId); ?>;
- 
-    </script>
+<script src="charts.js"></script>
+<script>
+let schoolId = <?php echo json_encode($schoolId); ?>;
+
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    let timer;
+    item.addEventListener('mouseenter', function(event) {
+        const imageUrl = this.getAttribute('data-image');
+        timer = setTimeout(() => {
+            const preview = document.createElement('img');
+            preview.src = imageUrl;
+            preview.className = 'image-preview';
+            document.body.appendChild(preview);
+            preview.style.display = 'block';
+            preview.style.bottom = '20px'; // 20px from the bottom
+            preview.style.left = '20px'; // 20px from the left
+        }, 300); // Delay of 300 milliseconds
+    });
+
+    item.addEventListener('mouseleave', function() {
+        clearTimeout(timer);
+        const preview = document.querySelector('.image-preview');
+        if (preview) {
+            preview.remove();
+        }
+    });
+
+    // Prevent the default hover action if the user is clicking
+    item.addEventListener('click', function(event) {
+        event.preventDefault(); // This stops the default navigation when clicking
+        window.open(this.href, '_blank'); // Manually open the link in a new tab
+    });
+});
+
+</script>
 </body>
 </html>

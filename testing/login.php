@@ -39,12 +39,12 @@ include('./users/login_backend.php');
                     <li class="luxbar-item dropdown">
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
-                            <a href="#" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create a group with +.</a>
-                            <a href="#" class="dropdown-item sub-item" data-image="Group_Select.jpg">a - Select a group.</a>
-                            <a href="#" class="dropdown-item" data-image="Students_Walkthrough.jpg">2 - Add students to school and/or groups with +.</a>
-                            <a href="#" class="dropdown-item sub-item" data-image="Students_Select.jpg">a - Select a student.</a>
-                            <a href="#" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">3 - Add Goals with +.</a>
-                            <a href="#" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
+                            <a href="Groups_Walkthrough.jpg" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create a group with +.</a>
+                            <a href="Group_Select.jpg" class="dropdown-item sub-item" data-image="Group_Select.jpg">a - Select a group.</a>
+                            <a href="Students_Walkthrough.jpg" class="dropdown-item" data-image="Students_Walkthrough.jpg">2 - Add students to school and/or groups with +.</a>
+                            <a href="Students_Select.jpg" class="dropdown-item sub-item" data-image="Students_Select.jpg">a - Select a student.</a>
+                            <a href="Goal_Create_Walkthrough.jpg" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">3 - Add Goals with +.</a>
+                            <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
                         </div>
                     </li>
 
@@ -129,24 +129,20 @@ include('./users/login_backend.php');
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
 document.querySelectorAll('.dropdown-item').forEach(item => {
     let timer;
     item.addEventListener('mouseenter', function(event) {
         const imageUrl = this.getAttribute('data-image');
         timer = setTimeout(() => {
-            if (imageUrl) {
-                const preview = document.createElement('img');
-                preview.src = imageUrl;
-                preview.className = 'image-preview';
-                document.body.appendChild(preview);
-                preview.style.display = 'block';
-
-                // Set position to the bottom left corner of the viewport
-                preview.style.bottom = '20px'; // 20px from the bottom
-                preview.style.left = '20px'; // 20px from the left
-            }
+            const preview = document.createElement('img');
+            preview.src = imageUrl;
+            preview.className = 'image-preview';
+            document.body.appendChild(preview);
+            preview.style.display = 'block';
+            preview.style.bottom = '20px'; // 20px from the bottom
+            preview.style.left = '20px'; // 20px from the left
         }, 300); // Delay of 300 milliseconds
     });
 
@@ -157,7 +153,14 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
             preview.remove();
         }
     });
+
+    // Prevent the default hover action if the user is clicking
+    item.addEventListener('click', function(event) {
+        event.preventDefault(); // This stops the default navigation when clicking
+        window.open(this.href, '_blank'); // Manually open the link in a new tab
+    });
 });
+
 </script>
 
 </body>
