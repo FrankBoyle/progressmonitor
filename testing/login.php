@@ -81,11 +81,15 @@ include('./users/login_backend.php');
                         <a href="register.php" class="text-center"><h2>Register a new membership</h2></a>
                     </p>
                 </div>
-                <div class="grid-item testimonials">
-                    <h3>Testimonials</h3>
-                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - <strong>Joe Dattilo</strong></p>
-
-                    <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - <strong>Fran Boyle</strong></p>
+                <div class="grid-item sample-reports">
+                    <h3>How do I use iepReports?</h3>
+                    <img src="Instructions.jpg" alt="1)	Create a group with +.
+                        a.	Select a group.
+                        2)	Add students to school and/or groups with +. 
+                        a.	Select a student.
+                        3)	Add Goals with +.
+                        a.	Select a goal. 
+                        ">
                 </div>
                 <div class="grid-item sample-reports">
                     <h3>Sample Reports</h3>
