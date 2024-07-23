@@ -384,25 +384,28 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
 });
 
 document.querySelectorAll('.dropdown-item').forEach(item => {
+    let timer;
     item.addEventListener('mouseenter', function() {
         const imageUrl = this.getAttribute('data-image');
-        if (imageUrl) {
-            const preview = document.createElement('img');
-            preview.src = imageUrl;
-            preview.className = 'image-preview';
-            document.body.appendChild(preview); // Append to the body to cover the full screen
-            preview.style.display = 'block';
-        }
+        timer = setTimeout(() => {
+            if (imageUrl) {
+                const preview = document.createElement('img');
+                preview.src = imageUrl;
+                preview.className = 'image-preview';
+                document.body.appendChild(preview); // Append to the body to cover the full screen
+                preview.style.display = 'block';
+            }
+        }, 500); // Delay of 500 milliseconds before the image appears
     });
 
     item.addEventListener('mouseleave', function() {
+        clearTimeout(timer); // Clear the timer if the mouse leaves before the image displays
         const preview = document.querySelector('.image-preview');
         if (preview) {
             preview.remove();
         }
     });
 });
-
 
 function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
