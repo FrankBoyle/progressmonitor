@@ -40,7 +40,7 @@ include('./users/login_backend.php');
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
                             <a href="Register_How_To.jpg" class="dropdown-item" data-image="Register_How_To.jpg">You have to register an account.</a>
-                            <a href="Password_Reset_Walkthrough.jpg" class="dropdown-item" data-image="Password_Reset_Walkthrough.jpg">Reset your password.</a>
+                            <a href="Reset_Password_Walkthrough.jpg" class="dropdown-item" data-image="Reset_Password_Walkthrough.jpg">Reset your password.</a>
                         </div>
                     </li>
 
