@@ -82,7 +82,7 @@ include('./users/login_backend.php');
                     </p>
                 </div>
                 <div class="grid-item sample-reports">
-                    <h3>How do I use iepReports?</h3>
+                    <h3>How do I use IEP Report?</h3>
                     <img src="Instructions.jpg" alt="1)	Create a group with +.
                         a.	Select a group.
                         2)	Add students to school and/or groups with +. 
@@ -98,7 +98,7 @@ include('./users/login_backend.php');
                 <div class="grid-item about-us">
                     <h3>About Us</h3>
                     <p>
-                        <strong>IEPreport.com</strong> was created by teachers, for teachers. As two Special Ed Teachers with a combined 40 years of experience, we saw a need for a better way to progress monitor. We understand the struggle to find smarter, more efficient methods. We've tried various tools, adapted hand-me-down spreadsheets, and dealt with inconsistent data, all of which were unsustainable, even for tech-savvy educators like us. Recognizing that not all teachers are tech-savvy, we created IEPreport.com to offer a user-friendly solution for reporting accurate data.
+                        <strong>IEP report</strong> was created by teachers, for teachers. As two Special Ed Teachers with a combined 40 years of experience, we saw a need for a better way to progress monitor. We understand the struggle to find smarter, more efficient methods. We've tried various tools, adapted hand-me-down spreadsheets, and dealt with inconsistent data, all of which were unsustainable, even for tech-savvy educators like us. Recognizing that not all teachers are tech-savvy, we created IEPreport.com to offer a user-friendly solution for reporting accurate data.
                     </p>
                     <p>
                         Our mission is to provide a tool that anyone can use to enter goals—whether in Math, ELA, Behavior, or any other area—and easily generate reports with beautiful, accurate graphs. No matter your level of tech proficiency, our tool simplifies the process while ensuring high-quality data representation. Check us out and see how our tool, while appearing simple, is powered by robust technology to meet your needs.
