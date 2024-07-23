@@ -37,12 +37,7 @@
                     <li class="luxbar-item dropdown">
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
-                            <a href="Groups_Walkthrough.jpg" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create or add a group with +.</a>
-                            <a href="Group_Select.jpg" class="dropdown-item sub-item" data-image="Group_Select.jpg">a - Select a group.</a>
-                            <a href="Students_Walkthrough.jpg" class="dropdown-item" data-image="Students_Walkthrough.jpg">2 - Create or add students with +. </a>
-                            <a href="Students_Select.jpg" class="dropdown-item sub-item" data-image="Students_Select.jpg">a - Select a student.</a>
-                            <a href="Goal_Create_Walkthrough.jpg" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">3 - Create or add goals with +.</a>
-                            <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
+                            <a href="Register_Walkthrough.jpg" class="dropdown-item" data-image="Register_Walkthrough.jpg">1 - Register your account.</a>
                         </div>
                     </li>
 
@@ -109,41 +104,49 @@
 
 <script>
 $(document).ready(function() {
+    // Toggle School Name Input
+    function toggleSchoolNameInput() {
+        var uuid = $('#school_uuid').val().trim();
+        $('#new_school_container').toggle(uuid.length === 0);
+    }
+
+    $('#school_uuid').on('input', toggleSchoolNameInput);
+    toggleSchoolNameInput(); // Initial check
+
+    // Form Submission
     $('form[name="registration"]').on('submit', function(e) {
-        e.preventDefault(); // This line prevents the form's default submission method
+        e.preventDefault();
 
-        var formData = $(this).serialize(); // This captures all form data
-
-        // Optional: Append the 'register' button value manually if not included
-        formData += '&register=Register';
+        var formData = new FormData(this);  // Use FormData to include file inputs and all form fields
+        formData.append('register', 'Register'); // Ensure the 'register' button value is included
 
         $.ajax({
             type: 'POST',
-            url: 'users/register_backend.php', // Endpoint where the form data should be submitted
+            url: 'users/register_backend.php',
             data: formData,
-            dataType: 'json', // Specify that you expect a JSON response
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
+            dataType: 'json',
             success: function(response) {
-                // SweetAlert to handle success
                 if (response.success) {
                     swal({
                         title: "Registration Successful!",
                         text: "You have been registered successfully.",
                         icon: "success",
                         button: "Ok",
-                    }).then((value) => {
-                        window.location.href = 'login.php'; // Redirect on confirmation
+                    }).then(() => {
+                        window.location.href = 'login.php';
                     });
                 } else {
                     swal("Error", response.message || "There was a problem with your registration. Please try again.", "error");
                 }
             },
-            error: function(xhr, status, error) {
+            error: function() {
                 swal("Error", "Failed to process your request. Please try again.", "error");
             }
         });
     });
 });
-
 
 document.querySelectorAll('.dropdown-item').forEach(item => {
     let timer;
