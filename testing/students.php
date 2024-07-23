@@ -56,7 +56,7 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                     </li>
 
                     <li class="luxbar-item dropdown">
-                        <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span> Select School</a>
+                        <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
                             <a href="Groups_Walkthrough.jpg" class="dropdown-item">1 - Create a group with +.</a>
                             <a href="Group_Select.jpg" class="dropdown-item sub-item">a - Select a group.</a>
