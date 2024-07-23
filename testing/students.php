@@ -392,20 +392,19 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
                 const preview = document.createElement('img');
                 preview.src = imageUrl;
                 preview.className = 'image-preview';
+                document.body.appendChild(preview); // Append to the body
                 preview.style.display = 'block';
-                preview.style.position = 'absolute';
-                document.body.appendChild(preview); // Append to the body to cover the full screen
-                
-                // Calculate position
+
+                // Adjusted to offset the image slightly
                 const rect = this.getBoundingClientRect();
-                preview.style.top = `${rect.bottom + window.scrollY}px`; // Position below the item
-                preview.style.left = `${rect.left + window.scrollX}px`; // Align with the left of the item
+                preview.style.top = `${rect.bottom + 10}px`; // Offset below the item by 10px
+                preview.style.left = `${rect.left + 10}px`; // Offset to the right by 10px
             }
-        }, 300); // Reduced delay to 300 milliseconds
+        }, 300);
     });
 
     item.addEventListener('mouseleave', function() {
-        clearTimeout(timer); // Clear the timer if the mouse leaves before the image displays
+        clearTimeout(timer);
         const preview = document.querySelector('.image-preview');
         if (preview) {
             preview.remove();
