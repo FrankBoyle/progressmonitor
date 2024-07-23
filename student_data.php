@@ -89,7 +89,7 @@ if ($studentId > 0) {
                             <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
                         </div>
                     </li>
-                    
+
                     <button id="printReportBtn" class="btn btn-primary">Print Report</button>
 
                     <li class="luxbar-item">
@@ -215,10 +215,40 @@ if ($studentId > 0) {
         </div>
         </main>
     </div>
-    <script src="charts.js"></script>
-    <script>
-        let schoolId = <?php echo json_encode($schoolId); ?>;
- 
-    </script>
+<script src="charts.js"></script>
+<script>
+let schoolId = <?php echo json_encode($schoolId); ?>;
+
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    let timer;
+    item.addEventListener('mouseenter', function(event) {
+        const imageUrl = this.getAttribute('data-image');
+        timer = setTimeout(() => {
+            const preview = document.createElement('img');
+            preview.src = imageUrl;
+            preview.className = 'image-preview';
+            document.body.appendChild(preview);
+            preview.style.display = 'block';
+            preview.style.bottom = '20px'; // 20px from the bottom
+            preview.style.left = '20px'; // 20px from the left
+        }, 300); // Delay of 300 milliseconds
+    });
+
+    item.addEventListener('mouseleave', function() {
+        clearTimeout(timer);
+        const preview = document.querySelector('.image-preview');
+        if (preview) {
+            preview.remove();
+        }
+    });
+
+    // Prevent the default hover action if the user is clicking
+    item.addEventListener('click', function(event) {
+        event.preventDefault(); // This stops the default navigation when clicking
+        window.open(this.href, '_blank'); // Manually open the link in a new tab
+    });
+});
+
+</script>
 </body>
 </html>
