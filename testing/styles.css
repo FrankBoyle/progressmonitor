@@ -148,6 +148,7 @@ html {
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    white-space: nowrap; /* Prevents text from wrapping */
 }
 
 .dropdown-menu a {
@@ -155,6 +156,7 @@ html {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    text-align: left; /* Ensures text alignment is uniform */
 }
 
 .dropdown-menu a:hover {background-color: #f1f1f1}
