@@ -298,19 +298,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.hideAddGoalModal = hideAddGoalModal;
 
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
-
-<script>
-let quillInstances = {}; // Initialize variables globally
-
-document.addEventListener('DOMContentLoaded', function() {
-    loadGroups();
-    loadStaff();
-    lightbox.init();
-
-    window.showAddGoalModal = showAddGoalModal;
-    window.hideAddGoalModal = hideAddGoalModal;
-
-    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
 
     window.hideAddGroupModal = hideAddGroupModal;
