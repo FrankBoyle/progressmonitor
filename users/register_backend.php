@@ -1,4 +1,7 @@
 <?php
+
+log_message("Received POST: " . json_encode($_POST)); // This will log all POST data received
+
 include('db.php');
 
 header('Content-Type: application/json');  // Ensure the output is in JSON format
