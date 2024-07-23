@@ -299,6 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
 
+<script>
 let quillInstances = {}; // Initialize variables globally
 
 document.addEventListener('DOMContentLoaded', function() {
