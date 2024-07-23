@@ -395,7 +395,7 @@ document.querySelectorAll('.dropdown-item').forEach(item => {
                 document.body.appendChild(preview); // Append to the body to cover the full screen
                 preview.style.display = 'block';
             }
-        }, 500); // Delay of 500 milliseconds before the image appears
+        }, 300); // Reduce delay to 300 milliseconds
     });
 
     item.addEventListener('mouseleave', function() {

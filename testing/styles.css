@@ -159,7 +159,7 @@ html {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.65); /* Scale down to 65% */
     width: auto; /* Adjust based on image or screen size */
     max-width: 90%; /* Limit maximum size */
     max-height: 90%; /* Limit maximum height */
@@ -167,7 +167,6 @@ html {
     box-shadow: 0 8px 16px rgba(0,0,0,0.5);
     border: 1px solid #ccc; /* Optional border */
 }
-
 
 .dropdown-item:hover .image-preview {
     display: block;
