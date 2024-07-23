@@ -188,6 +188,7 @@ html {
     font-weight: bold; /* Make it bold */
     color: yellow; /* Bright yellow color */
     padding: 3px; /* Add some padding around the text */
+    text-align: center; /* Center the text */
 
 }
 
