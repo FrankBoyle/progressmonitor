@@ -184,9 +184,13 @@ html {
 .dropdown-menu a:hover {background-color: #f1f1f1}
 
 .question-mark {
-    font-weight: bold;
-    color: #d0ff00;
-    cursor: pointer;
+    font-size: 24px; /* Increase font size */
+    font-weight: bold; /* Make it bold */
+    color: yellow; /* Bright yellow color */
+    padding: 3px; /* Add some padding around the text */
+    border-radius: 50%; /* Optional: makes the background circular */
+    background-color: black; /* Optional: adds contrast */
+    box-shadow: 0 0 10px yellow; /* Adds a glow effect */
 }
 
 .dropdown:hover .dropdown-menu {
