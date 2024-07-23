@@ -28,14 +28,26 @@ include('./users/login_backend.php');
 
             <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
                 <ul class="luxbar-navigation">
+
                     <li class="luxbar-header">
                         <div class="logo">
                             <img src="IEPreport_logo.jpg" alt="Logo">
                         </div>
-
                         <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
                     </li>
-                    
+
+                    <li class="luxbar-item dropdown">
+                        <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
+                        <div class="dropdown-menu" aria-labelledby="helpDropdown">
+                            <a href="Groups_Walkthrough.jpg" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create a group with +.</a>
+                            <a href="Group_Select.jpg" class="dropdown-item sub-item" data-image="Group_Select.jpg">a - Select a group.</a>
+                            <a href="Students_Walkthrough.jpg" class="dropdown-item" data-image="Students_Walkthrough.jpg">2 - Add students to school and/or groups with +.</a>
+                            <a href="Students_Select.jpg" class="dropdown-item sub-item" data-image="Students_Select.jpg">a - Select a student.</a>
+                            <a href="Goal_Create_Walkthrough.jpg" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">3 - Add Goals with +.</a>
+                            <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
+                        </div>
+                    </li>
+
                     <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
                     <li class="luxbar-item"><a href="students.php">Home</a></li>
                     <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
@@ -81,11 +93,15 @@ include('./users/login_backend.php');
                         <a href="register.php" class="text-center"><h2>Register a new membership</h2></a>
                     </p>
                 </div>
-                <div class="grid-item testimonials">
-                    <h3>Testimonials</h3>
-                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - <strong>Joe Dattilo</strong></p>
-
-                    <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - <strong>Fran Boyle</strong></p>
+                <div class="grid-item sample-reports">
+                    <h3>How do I use IEP Report?</h3>
+                    <img src="Instructions.jpg" alt="1)	Create a group with +.
+                        a.	Select a group.
+                        2)	Add students to school and/or groups with +. 
+                        a.	Select a student.
+                        3)	Add Goals with +.
+                        a.	Select a goal. 
+                        ">
                 </div>
                 <div class="grid-item sample-reports">
                     <h3>Sample Reports</h3>
@@ -94,23 +110,58 @@ include('./users/login_backend.php');
                 <div class="grid-item about-us">
                     <h3>About Us</h3>
                     <p>
-                        <strong>IEPreport.com</strong> was created by teachers, for teachers. As two Special Ed Teachers with a combined 40 years of experience, we saw a need for a better way to progress monitor. We understand the struggle to find smarter, more efficient methods. We've tried various tools, adapted hand-me-down spreadsheets, and dealt with inconsistent data, all of which were unsustainable, even for tech-savvy educators like us. Recognizing that not all teachers are tech-savvy, we created IEPreport.com to offer a user-friendly solution for reporting accurate data.
+                        <strong>IEP report</strong> was created by teachers, for teachers. As two Special Ed Teachers with a combined 40 years of experience, we saw a need for a better way to progress monitor. We understand the struggle to find smarter, more efficient methods. We've tried various tools, adapted hand-me-down spreadsheets, and dealt with inconsistent data, all of which were unsustainable, even for tech-savvy educators like us. Recognizing that not all teachers are tech-savvy, we created IEPreport.com to offer a user-friendly solution for reporting accurate data.
                     </p>
                     <p>
                         Our mission is to provide a tool that anyone can use to enter goals—whether in Math, ELA, Behavior, or any other area—and easily generate reports with beautiful, accurate graphs. No matter your level of tech proficiency, our tool simplifies the process while ensuring high-quality data representation. Check us out and see how our tool, while appearing simple, is powered by robust technology to meet your needs.
                     </p>
                 </div>
-                <div class="grid-item sample-reports">
-                    <img src="sample_report3.png" alt="Sample Report 3">
+                <div class="grid-item testimonials">
+                    <h3>Testimonials</h3>
+                    <p>"It makes progress monitoring so much easier. It gives me the graphs and statistics I need to help make decisions for my IEP Goals." - <strong>Joe Dattilo</strong></p>
+
+                    <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - <strong>Fran Boyle</strong></p>
                 </div>
                 <div class="grid-item sample-reports">
-                    <img src="sample_report2.png" alt="Sample Report 2">
+                    <img src="sample_report3.png" alt="Sample Report 3">
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    let timer;
+    item.addEventListener('mouseenter', function(event) {
+        const imageUrl = this.getAttribute('data-image');
+        timer = setTimeout(() => {
+            const preview = document.createElement('img');
+            preview.src = imageUrl;
+            preview.className = 'image-preview';
+            document.body.appendChild(preview);
+            preview.style.display = 'block';
+            preview.style.bottom = '20px'; // 20px from the bottom
+            preview.style.left = '20px'; // 20px from the left
+        }, 300); // Delay of 300 milliseconds
+    });
+
+    item.addEventListener('mouseleave', function() {
+        clearTimeout(timer);
+        const preview = document.querySelector('.image-preview');
+        if (preview) {
+            preview.remove();
+        }
+    });
+
+    // Prevent the default hover action if the user is clicking
+    item.addEventListener('click', function(event) {
+        event.preventDefault(); // This stops the default navigation when clicking
+        window.open(this.href, '_blank'); // Manually open the link in a new tab
+    });
+});
+
+</script>
 
 </body>
 </html>
