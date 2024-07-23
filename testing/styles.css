@@ -156,13 +156,13 @@ html {
 
 .image-preview {
     display: none;
-    position: fixed; /* Changed to absolute in JavaScript dynamically */
-    max-width: 65%; /* Limit maximum size*/
-    max-height: 65%; /* Limit maximum height*/
-    z-index: 1050; /* Make sure it's above other content*/
+    position: fixed;
+    max-width: 65%;
+    max-height: 65%;
+    z-index: 1050;
     box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-    border: 1px solid #ccc; /* Optional border*/
-    object-fit: contain; /* Ensures the image fits within the dimensions*/
+    border: 1px solid #ccc;
+    object-fit: contain;
 }
 
 .dropdown-item:hover .image-preview {
