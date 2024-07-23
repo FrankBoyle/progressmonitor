@@ -164,7 +164,7 @@ html {
     border: 1px solid #ccc;
     object-fit: contain;
     transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
-    transform: scale(0.5); /* Reduce scale to make it smaller */
+    transform: scale(0.8); /* Reduce scale to make it smaller */
 }
 
 .dropdown-item:hover .image-preview {
