@@ -58,12 +58,12 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                     <li class="luxbar-item dropdown">
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
-                            <a href="Groups_Walkthrough.jpg" class="dropdown-item">1 - Create a group with +.</a>
-                            <a href="Group_Select.jpg" class="dropdown-item sub-item">a - Select a group.</a>
-                            <a href="Students_Walkthrough.jpg" class="dropdown-item">2 - Add students to school and/or groups with +.</a>
-                            <a href="Students_Select.jpg" class="dropdown-item sub-item">a - Select a student.</a>
-                            <a href="Goal_Create_Walkthrough.jpg" class="dropdown-item">3 - Add Goals with +.</a>
-                            <a href="Rubric_Select.jpg" class="dropdown-item sub-item">a - Select a rubric.</a>
+                            <a href="#" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create a group with +.</a>
+                            <a href="#" class="dropdown-item sub-item" data-image="Group_Select.jpg">a - Select a group.</a>
+                            <a href="#" class="dropdown-item" data-image="Students_Walkthrough.jpg">2 - Add students to school and/or groups with +.</a>
+                            <a href="#" class="dropdown-item sub-item" data-image="Students_Select.jpg">a - Select a student.</a>
+                            <a href="#" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">3 - Add Goals with +.</a>
+                            <a href="#" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
                         </div>
                     </li>
 
@@ -382,6 +382,28 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
         console.error('No group is selected.');
     }
 });
+
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('mouseenter', function() {
+        const imageUrl = this.getAttribute('data-image');
+        if (imageUrl) {
+            const preview = document.createElement('div');
+            preview.className = 'image-preview';
+            preview.style.backgroundImage = `url(${imageUrl})`;
+            preview.style.width = '200px'; // Set a fixed width
+            preview.style.height = '150px'; // Set a fixed height
+            this.appendChild(preview);
+        }
+    });
+
+    item.addEventListener('mouseleave', function() {
+        const preview = this.querySelector('.image-preview');
+        if (preview) {
+            preview.remove();
+        }
+    });
+});
+
 
 function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
