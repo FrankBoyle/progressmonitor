@@ -157,8 +157,8 @@ html {
 .image-preview {
     display: none;
     position: fixed;
-    max-width: 62%;
-    max-height: 62%;
+    max-width: 60%;
+    max-height: 60%;
     z-index: 1050;
     box-shadow: 0 8px 16px rgba(0,0,0,0.5);
     border: 1px solid #ccc;
