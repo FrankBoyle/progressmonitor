@@ -109,21 +109,34 @@
 
 <script>
 $(document).ready(function() {
+    // Function to toggle the display of the school name field based on the school UUID input
+    function toggleSchoolNameInput() {
+        var uuid = $('#school_uuid').val().trim();
+        if (uuid.length > 0) {
+            $('#new_school_container').hide();
+        } else {
+            $('#new_school_container').show();
+        }
+    }
+
+    // Check and set the correct display state on page load
+    toggleSchoolNameInput();
+
+    // Set up the event listener for changes in the school UUID input
+    $('#school_uuid').on('input', toggleSchoolNameInput);
+
     $('form[name="registration"]').on('submit', function(e) {
-        e.preventDefault(); // This line prevents the form's default submission method
+        e.preventDefault(); // Prevent the form's default submission.
 
-        var formData = $(this).serialize(); // This captures all form data
+        var formData = $(this).serialize(); // Serialize the form data for submission.
 
-        // Optional: Append the 'register' button value manually if not included
-        formData += '&register=Register';
-
+        // Make the AJAX request
         $.ajax({
             type: 'POST',
-            url: 'users/register_backend.php', // Endpoint where the form data should be submitted
+            url: 'users/register_backend.php',
             data: formData,
-            dataType: 'json', // Specify that you expect a JSON response
+            dataType: 'json',
             success: function(response) {
-                // SweetAlert to handle success
                 if (response.success) {
                     swal({
                         title: "Registration Successful!",
@@ -131,19 +144,18 @@ $(document).ready(function() {
                         icon: "success",
                         button: "Ok",
                     }).then((value) => {
-                        window.location.href = 'login.php'; // Redirect on confirmation
+                        window.location.href = 'login.php'; // Redirect to login on success
                     });
                 } else {
                     swal("Error", response.message || "There was a problem with your registration. Please try again.", "error");
                 }
             },
-            error: function(xhr, status, error) {
+            error: function() {
                 swal("Error", "Failed to process your request. Please try again.", "error");
             }
         });
     });
 });
-
 
 document.querySelectorAll('.dropdown-item').forEach(item => {
     let timer;
