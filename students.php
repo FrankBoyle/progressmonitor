@@ -275,6 +275,8 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 
 <script>
+
+    
 let quillInstances = {}; // Initialize variables globally
 
 document.addEventListener('DOMContentLoaded', function() {

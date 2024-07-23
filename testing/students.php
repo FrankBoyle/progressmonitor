@@ -298,6 +298,18 @@ document.addEventListener('DOMContentLoaded', function() {
     window.hideAddGoalModal = hideAddGoalModal;
 
     document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
+
+let quillInstances = {}; // Initialize variables globally
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadGroups();
+    loadStaff();
+    lightbox.init();
+
+    window.showAddGoalModal = showAddGoalModal;
+    window.hideAddGoalModal = hideAddGoalModal;
+
+    document.querySelector('.add-goal-btn').addEventListener('click', showAddGoalModal);
     document.querySelector('.add-group-btn').addEventListener('click', showAddGroupModal);
 
     window.hideAddGroupModal = hideAddGroupModal;
@@ -379,6 +391,12 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
     } else {
         console.error('No group is selected.');
     }
+});
+
+document.getElementById('helpDropdown').addEventListener('click', function(event) {
+    event.preventDefault();
+    var dropdownContent = this.nextElementSibling;
+    dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
 });
 
 function populateStudentsAndGoals() {
