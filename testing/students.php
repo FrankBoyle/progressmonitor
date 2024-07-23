@@ -393,12 +393,6 @@ document.querySelector('.add-student-btn').addEventListener('click', function() 
     }
 });
 
-document.getElementById('helpDropdown').addEventListener('click', function(event) {
-    event.preventDefault();
-    var dropdownContent = this.nextElementSibling;
-    dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-});
-
 function populateStudentsAndGoals() {
     const studentList = document.getElementById('student-list');
     const studentsMessage = document.getElementById('students-message');
