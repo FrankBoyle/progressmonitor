@@ -117,7 +117,7 @@ if ($school_id) {
                 <div id="approved-users-table-container"></div>
                 <div id="waiting-approval-table-container"></div>
             </div>
-            <p>Your School ID - People can register with this ID to join your school.</p>
+            <p>Your School ID - Invite others to register with this ID to join your school.</p>
             <input type="text" value="<?php echo htmlspecialchars($school_uuid); ?>" readonly>
 
         </section>

@@ -87,19 +87,14 @@ if ($school_id) {
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
                             <a href="Groups_Walkthrough.jpg" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create or add a group with +.</a>
-                            <a href="Group_Select.jpg" class="dropdown-item sub-item" data-image="Group_Select.jpg">a - Select a group.</a>
-                            <a href="Students_Walkthrough.jpg" class="dropdown-item" data-image="Students_Walkthrough.jpg">2 - Create or add students with +. </a>
-                            <a href="Students_Select.jpg" class="dropdown-item sub-item" data-image="Students_Select.jpg">a - Select a student.</a>
-                            <a href="Goal_Create_Walkthrough.jpg" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">3 - Create or add goals with +.</a>
-                            <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">a - Select a rubric.</a>
+                            <a href="Group_Select.jpg" class="dropdown-item sub-item" data-image="Group_Select.jpg">2 - Select a group.</a>
+                            <a href="Students_Walkthrough.jpg" class="dropdown-item" data-image="Students_Walkthrough.jpg">3 - Create or add students with +. </a>
+                            <a href="Students_Select.jpg" class="dropdown-item sub-item" data-image="Students_Select.jpg">4 - Select a student.</a>
+                            <a href="Goal_Create_Walkthrough.jpg" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">5 - Create or add goals with +.</a>
+                            <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">6 - Select a rubric.</a>
                         </div>
                     </li>
 
-                    <li class="luxbar-item">
-                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
-                            <a href="manage.php" class="nav-link">Manage</a>
-                        <?php endif; ?>
-                    </li>
                     <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
                     <li class="luxbar-item"><a href="students.php">Home</a></li>
                     <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
@@ -117,7 +112,7 @@ if ($school_id) {
                 <div id="approved-users-table-container"></div>
                 <div id="waiting-approval-table-container"></div>
             </div>
-            <p>Your School ID - People can register with this ID to join your school.</p>
+            <p>Your School ID - Invite others to register with this ID to join your school.</p>
             <input type="text" value="<?php echo htmlspecialchars($school_uuid); ?>" readonly>
 
         </section>
