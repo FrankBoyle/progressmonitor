@@ -470,7 +470,7 @@ function copyUUID() {
     var copyText = document.getElementById("school_uuid");
     copyText.select();
     document.execCommand("copy");
-    alert("Copied the UUID: " + copyText.value);
+    //alert("Copied the UUID: " + copyText.value);
 }
 
 // Function to join a school using a UUID
