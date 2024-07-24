@@ -153,38 +153,37 @@ function submitNewDataRow(newData, newRowDateInput) {
         },
         body: JSON.stringify(newData)
     })
-    .then(response => response.text())
-    .then(text => {
-        let result = JSON.parse(text);
+    .then(response => response.json())  // Ensure you are expecting JSON
+    .then(result => {
         if (result.success) {
-            // Google Analytics event tracking for successful row addition
+            // Google Analytics event tracking for successful data addition
             gtag('event', 'add_row', {
                 'event_category': 'Data Management',
                 'event_label': 'Success',
                 'value': 1
             });
 
-            newData.performance_id = result.performance_id; // Update the newData object
-            table.addRow(newData); // Add the new data to the table visually
-            newRowDateInput.value = ""; // Clear the input for new data entry
-            newRowDateInput.style.display = "none"; // Optionally hide the input field
-
+            newData.performance_id = result.performance_id;
+            table.addRow(newData);
+            newRowDateInput.value = "";
+            newRowDateInput.style.display = "none";
+            alert('Data added successfully!');
         } else {
-            // Google Analytics event tracking for failed row addition
+            // Google Analytics event tracking for failed data addition
             gtag('event', 'add_row', {
                 'event_category': 'Data Management',
                 'event_label': 'Failure',
                 'value': 0
             });
 
-            throw new Error('Failed to add new data: ' + result.error); // Propagate the error
+            alert('Failed to add new data: ' + result.error); // Show backend error message
         }
     })
     .catch(error => {
         console.error('Error:', error);
         alert('An error occurred while adding new data.');
 
-        // Track unexpected errors not related to the business logic
+        // Track unexpected fetch errors
         gtag('event', 'add_row', {
             'event_category': 'Data Management',
             'event_label': 'Error',
@@ -328,7 +327,7 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                     'value': 1
                 });
                 //console.log("Cell data updated successfully:", result);
-                
+
             } else {
                 // Google Analytics event tracking for failed data addition
                 gtag('event', 'add_data', {
