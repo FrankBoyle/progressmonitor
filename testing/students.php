@@ -340,40 +340,38 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const schoolSelect = document.getElementById('school-select');
-    let previousSchoolId = schoolSelect.value; // Store the initial school ID
+    let previousSchoolId = schoolSelect.value;
 
-    if (schoolSelect) {
-        schoolSelect.addEventListener('change', function() {
-            const selectedSchoolId = this.value;
-            fetch('./users/update_school_session.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `school_id=${encodeURIComponent(selectedSchoolId)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    if (!data.approved) {
-                        alert("You are not approved for the selected school.");
-                        schoolSelect.value = previousSchoolId; // Revert to the previous school
-                    } else {
-                        previousSchoolId = selectedSchoolId; // Update the previousSchoolId if the change was successful
-                    }
+    schoolSelect.addEventListener('change', function() {
+        const selectedSchoolId = this.value;
+        fetch('./users/update_school_session.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `school_id=${encodeURIComponent(selectedSchoolId)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (!data.approved) {
+                    alert("You are not approved for the selected school.");
+                    schoolSelect.value = previousSchoolId;
                 } else {
-                    console.error('Error updating school:', data.message);
-                    schoolSelect.value = previousSchoolId; // Ensure the select reverts on error
+                    previousSchoolId = selectedSchoolId;
+                    location.reload(); // Reload the page to reflect changes
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                schoolSelect.value = previousSchoolId; // Ensure the select reverts on error
-            });
+            } else {
+                console.error('Error updating school:', data.message);
+                schoolSelect.value = previousSchoolId;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            schoolSelect.value = previousSchoolId;
         });
-    }
+    });
 });
-
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
     const selectedGroup = document.querySelector('.selected-group');
