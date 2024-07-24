@@ -228,16 +228,29 @@ function activateStudent(studentId) {
 }
 
 function toggleApproval(teacherId, newStatus) {
+    const payload = {
+        teacher_id: teacherId,
+        approved: newStatus
+    };
+
+    console.log("Sending payload:", payload); // Debug: Log the payload to the console
+
     fetch('./users/toggle_approval.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ teacher_id: teacherId, approved: newStatus })
+        body: JSON.stringify(payload)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not OK');
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
+            console.log('Approval status updated successfully');
             loadUsers(); // Reload the users to reflect the change
         } else {
             console.error('Error updating approval status:', data.message);
