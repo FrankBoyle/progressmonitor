@@ -92,11 +92,6 @@ if ($studentId > 0) {
 
                     <button id="printReportBtn" class="btn btn-primary">Print Report</button>
 
-                    <li class="luxbar-item">
-                        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
-                            <a href="manage.php" class="nav-link">Manage</a>
-                        <?php endif; ?>
-                    </li>
                     <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
                     <li class="luxbar-item"><a href="students.php">Home</a></li>
                     <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
