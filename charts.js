@@ -153,10 +153,10 @@ function submitNewDataRow(newData, newRowDateInput) {
         },
         body: JSON.stringify(newData)
     })
-    .then(response => response.json())  // Ensure you are expecting JSON
+    .then(response => response.json())  // Ensure you handle the response as JSON
     .then(result => {
         if (result.success) {
-            // Google Analytics event tracking for successful data addition
+            // Google Analytics tracking for success
             gtag('event', 'add_row', {
                 'event_category': 'Data Management',
                 'event_label': 'Success',
@@ -167,23 +167,22 @@ function submitNewDataRow(newData, newRowDateInput) {
             table.addRow(newData);
             newRowDateInput.value = "";
             newRowDateInput.style.display = "none";
-            alert('Data added successfully!');
         } else {
-            // Google Analytics event tracking for failed data addition
+            // Google Analytics tracking for backend-reported failure
             gtag('event', 'add_row', {
                 'event_category': 'Data Management',
                 'event_label': 'Failure',
                 'value': 0
             });
 
-            alert('Failed to add new data: ' + result.error); // Show backend error message
+            alert('Failed to add new data: ' + result.error); // Display the error from the backend
         }
     })
     .catch(error => {
         console.error('Error:', error);
         alert('An error occurred while adding new data.');
 
-        // Track unexpected fetch errors
+        // Google Analytics tracking for unexpected errors
         gtag('event', 'add_row', {
             'event_category': 'Data Management',
             'event_label': 'Error',
