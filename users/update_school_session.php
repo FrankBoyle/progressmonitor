@@ -1,46 +1,26 @@
 <?php
 session_start();
-require_once('auth_session.php');
-require_once('db.php');
+include('auth_Session.php');
+include('db.php');  
 
-// Enable PHP error logging for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', 'error_log.log');
+$response = ['success' => false];
 
-header('Content-Type: application/json');
+if (isset($_POST['school_id'])) {
+    $_SESSION['school_id'] = $_POST['school_id'];
 
-if (!isset($_POST['school_id'])) {
-    echo json_encode(['success' => false, 'message' => 'School ID not provided.']);
-    exit;
-}
+    // Check if the user is approved for this school
+    $stmt = $connection->prepare("SELECT approved FROM Teachers WHERE account_id = ? AND school_id = ?");
+    $stmt->execute([$_SESSION['account_id'], $_POST['school_id']]);
+    $approved = $stmt->fetchColumn();
 
-$school_id = $_POST['school_id'];
-$account_id = $_SESSION['account_id'];
-
-// Update school_id in session
-$_SESSION['school_id'] = $school_id;
-
-// Fetch the corresponding teacher_id and approval status for the new school_id
-$query = $connection->prepare("SELECT teacher_id, approved FROM Teachers WHERE account_id = :account_id AND school_id = :school_id");
-$query->bindParam(":account_id", $account_id, PDO::PARAM_INT);
-$query->bindParam(":school_id", $school_id, PDO::PARAM_INT);
-
-if ($query->execute()) {
-    $result = $query->fetch(PDO::FETCH_ASSOC);
-    if ($result) {
-        $_SESSION['teacher_id'] = $result['teacher_id'];
-        $_SESSION['is_approved'] = $result['approved'];
-        echo json_encode([
-            'success' => true,
-            'approved' => $result['approved']
-        ]);
+    if ($approved) {
+        $response = ['success' => true, 'approved' => true];
     } else {
-        echo json_encode(['success' => false, 'message' => 'No teacher record found for the selected school.']);
+        $response = ['success' => true, 'approved' => false];
     }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Failed to execute query.']);
+    $response = ['success' => false, 'message' => 'No school ID provided.'];
 }
+
+echo json_encode($response);
 ?>

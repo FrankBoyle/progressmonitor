@@ -1,21 +1,3 @@
-<?php
-session_start();
-include('./users/auth_session.php');
-include('./users/db.php');
-
-// Ensure account_id is in session
-$account_id = $_SESSION['account_id'];
-$school_id = $_SESSION['school_id'];
-
-// Fetch the schools associated with the logged-in user
-$query = $connection->prepare("SELECT s.school_id, s.SchoolName FROM Schools s JOIN Teachers t ON s.school_id = t.school_id WHERE t.account_id = :account_id");
-$query->bindParam("account_id", $account_id, PDO::PARAM_INT);
-$query->execute();
-$schools = $query->fetchAll(PDO::FETCH_ASSOC);
-
-?>
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,19 +71,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </li>
 
-                    <li>
-                        <div class="school-selector">
-                            <label for="school-select">Select School:</label>
-                            <select id="school-select">
-                                <?php foreach ($schools as $school): ?>
-                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($school['SchoolName']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </li>
-
                     <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
                     <li class="luxbar-item"><a href="students.php">Home</a></li>
                     <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
@@ -116,36 +85,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const schoolSelect = document.getElementById('school-select');
-    schoolSelect.addEventListener('change', function() {
-        const selectedSchoolId = this.value;
-        fetch('./users/update_school_session.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `school_id=${encodeURIComponent(selectedSchoolId)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (data.approved) {
-                    location.reload();
-                } else {
-                    alert("You are not approved for the selected school.");
-                }
-            } else {
-                console.error('Error updating school:', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-});
-
-
 document.querySelectorAll('.dropdown-item').forEach(item => {
     let timer;
     item.addEventListener('mouseenter', function(event) {
