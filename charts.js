@@ -327,7 +327,8 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
                     'event_label': 'Success',
                     'value': 1
                 });
-                console.log("Cell data updated successfully:", result);
+                //console.log("Cell data updated successfully:", result);
+                
             } else {
                 // Google Analytics event tracking for failed data addition
                 gtag('event', 'add_data', {
