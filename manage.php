@@ -9,7 +9,7 @@ $school_id = $_SESSION['school_id'] ?? null; // Update this according to your ap
 // Fetch school UUID from the database
 $school_uuid = null;
 if ($school_id) {
-    $stmt = $connection->prepare("SELECT school_uuid FROM schools WHERE school_id = ?");
+    $stmt = $connection->prepare("SELECT school_uuid FROM Schools WHERE school_id = ?");
     $stmt->bind_param("i", $school_id);
     $stmt->execute();
     $stmt->bind_result($school_uuid);
