@@ -127,7 +127,9 @@ $(document).ready(function() {
     $('form[name="login"]').on('submit', function(e) {
         e.preventDefault();  // Prevent the default form submission
 
-        var formData = $(this).serialize(); // Serialize the form data
+        var formData = $(this).serialize(); 
+        formData += '&login=login'; // Append the 'login' button's value manually
+
         console.log('Form submitted:', formData);  // Log form data to console for debugging
 
         $.ajax({
@@ -146,7 +148,7 @@ $(document).ready(function() {
                     });
 
                     // Redirect or handle login success
-                    window.location.href = response.redirect_url; // Use the redirect URL from the response
+                    window.location.href = 'dashboard.php';
                 } else {
                     // Google Analytics event for failed login
                     gtag('event', 'login', {
