@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
     loadArchivedStudents();
 });
 
+// Event listener for joining another school
+document.getElementById('join_school_form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var joinUUID = document.getElementById('join_uuid').value;
+    joinSchool(joinUUID);
+});
+
 function loadUsers() {
     fetch('./users/fetch_staff.php')
         .then(response => response.json())
@@ -301,7 +308,7 @@ function deleteUser(teacherId) {
 }
 
 function archiveStudent(studentId) {
-    console.log('Archiving student with ID:', studentId); // Debug log
+    //console.log('Archiving student with ID:', studentId); // Debug log
     fetch('./users/archive_student.php', {
         method: 'POST',
         headers: {
@@ -310,13 +317,13 @@ function archiveStudent(studentId) {
         body: JSON.stringify({ student_id_new: studentId })
     })
     .then(response => {
-        console.log('Response status:', response.status); // Debug log
+        //console.log('Response status:', response.status); // Debug log
         return response.json();
     })
     .then(data => {
-        console.log('Response data:', data); // Debug log
+        //console.log('Response data:', data); // Debug log
         if (data.success) {
-            console.log('Student archived successfully');
+            //console.log('Student archived successfully');
             loadActiveStudents(); // Reload the active students to reflect the change
             loadArchivedStudents(); // Reload the archived students to reflect the change
         } else {
@@ -358,7 +365,7 @@ function updateUser(userData) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            console.log('User updated successfully');
+            //console.log('User updated successfully');
         } else {
             console.error('Error updating user:', data.message);
         }
@@ -370,7 +377,16 @@ function updateUser(userData) {
 
 function toggleSection(sectionId) {
     const section = document.getElementById(sectionId);
-    const button = section.previousElementSibling.querySelector('.toggle-btn');
+    if (!section) {
+        console.error('Section with id ' + sectionId + ' not found.');
+        return;
+    }
+    
+    const button = document.querySelector(`button[onclick="toggleSection('${sectionId}')"]`);
+    if (!button) {
+        console.error('Button for section ' + sectionId + ' not found.');
+        return;
+    }
 
     if (section.style.display === "none" || section.style.display === "") {
         section.style.display = "block";
@@ -446,5 +462,34 @@ function addUserToSchool(teacherId) {
     })
     .catch(error => {
         console.error('Error:', error);
+    });
+}
+
+// Function to copy UUID
+function copyUUID() {
+    var copyText = document.getElementById("school_uuid");
+    copyText.select();
+    document.execCommand("copy");
+    //alert("Copied the UUID: " + copyText.value);
+}
+
+// Function to join a school using a UUID
+function joinSchool(uuid) {
+    fetch('./users/join_school.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({uuid: uuid})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Successfully joined the school! You will need to logout and log back in to see the new school.');
+        } else {
+            alert('Failed to join the school: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
     });
 }
