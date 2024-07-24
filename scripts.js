@@ -483,7 +483,7 @@ function joinSchool(uuid) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Successfully joined the school!');
+            alert('Successfully joined the school! You will need to logout and log back in to see the new school.');
         } else {
             alert('Failed to join the school: ' + data.message);
         }
