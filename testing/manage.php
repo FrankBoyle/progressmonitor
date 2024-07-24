@@ -3,6 +3,39 @@ session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+$school_id = $_SESSION['school_id'];
+
+if ($school_id) {
+    // Prepare the statement using PDO
+    $stmt = $connection->prepare("SELECT school_uuid FROM Schools WHERE school_id = :school_id");
+    if (!$stmt) {
+        die("PDO prepare failed: " . $connection->errorInfo()[2]);
+    }
+
+    // Bind parameters using PDO
+    $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Fetch the result using PDO
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $school_uuid = $row['school_uuid'];
+        //echo "Fetched UUID: " . $school_uuid;  // Debug: Output fetched UUID
+    } else {
+        //echo "No data found for the given school ID.";
+    }
+
+    // Correctly finalize the PDO statement
+    $stmt = null; // This is the proper way to close a PDO statement
+} else {
+    //echo "School ID is not set or invalid.";
+}
+
 // Debugging: Output session variables
 //echo '<pre>';
 //echo 'Session Variables:';
@@ -78,11 +111,15 @@ include('./users/db.php');
     <main class="content-students">
         <!-- Existing Users Management Section -->
         <section class="box manage-section">
-            <h2>Manage Users <button class="toggle-btn" onclick="toggleSection('users-section')">+</button></h2>
+        <h2>Manage Users <button class="toggle-btn" onclick="toggleSection('users-section')">+</button></h2>
+
             <div id="users-section" class="collapsible-content">
                 <div id="approved-users-table-container"></div>
                 <div id="waiting-approval-table-container"></div>
             </div>
+            <p>Your School ID - People can register with this ID to join your school.</p>
+            <input type="text" value="<?php echo htmlspecialchars($school_uuid); ?>" readonly>
+
         </section>
 
         <!-- New Students Management Section -->
