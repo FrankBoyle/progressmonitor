@@ -359,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     schoolSelect.value = previousSchoolId;
                 } else {
                     previousSchoolId = selectedSchoolId;
+                    location.reload(); // Reload the page to reflect changes
                 }
             } else {
                 console.error('Error updating school:', data.message);
