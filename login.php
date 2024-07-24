@@ -1,5 +1,5 @@
 <?php
-include('./users/login_backend.php');
+session_start();
 ?>
 
 <!DOCTYPE html>
