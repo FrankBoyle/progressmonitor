@@ -44,7 +44,8 @@ function loadUsers() {
 
 // Function to setup user tables
 function setupUserTable(container, data, isWaiting = false) {
-    new Tabulator(container, {
+    // Create the Tabulator table instance
+    var table = new Tabulator(container, {
         data: data,
         layout: "fitDataStretch",
         columns: [
@@ -53,7 +54,7 @@ function setupUserTable(container, data, isWaiting = false) {
             { title: "Last Name", field: "lname", editor: "input", widthGrow: 2 },
             { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
             {
-                title: isWaiting ? "Approve?" : "Delete", 
+                title: isWaiting ? "Approve?" : "Delete",
                 formatter: (cell, formatterParams, onRendered) => {
                     const value = cell.getRow().getData().teacher_id;
                     if (isWaiting) {
@@ -66,9 +67,11 @@ function setupUserTable(container, data, isWaiting = false) {
                 width: 150
             }
         ],
-        cellEdited: function(cell) {
-            updateUser(cell.getRow().getData());
-        }
+    });
+
+    // Attach the cellEdited event using the .on() method
+    table.on("cellEdited", function(cell) {
+        updateUser(cell.getRow().getData());
     });
 }
 
