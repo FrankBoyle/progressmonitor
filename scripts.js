@@ -15,59 +15,65 @@ document.getElementById('join_school_form').addEventListener('submit', function(
 
 function loadUsers() {
     fetch('./users/fetch_staff.php')
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            console.error('Error fetching users:', data.error);
-            return;
-        }
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error fetching users:', data.error);
+                return;
+            }
 
-        const approvedUsersTableContainer = document.getElementById('approved-users-table-container');
-        const waitingApprovalTableContainer = document.getElementById('waiting-approval-table-container');
+            const approvedUsersTableContainer = document.getElementById('approved-users-table-container');
+            const waitingApprovalTableContainer = document.getElementById('waiting-approval-table-container');
 
-        if (!approvedUsersTableContainer || !waitingApprovalTableContainer) {
-            console.error('Table container elements not found');
-            return;
-        }
+            if (approvedUsersTableContainer && waitingApprovalTableContainer) {
+                approvedUsersTableContainer.innerHTML = '';
+                waitingApprovalTableContainer.innerHTML = '';
+            } else {
+                console.error('Table container elements not found');
+                return;
+            }
 
-        approvedUsersTableContainer.innerHTML = '';
-        waitingApprovalTableContainer.innerHTML = '';
+            // Ensure the 'approved' field is being interpreted as a boolean
+            const approvedTableData = data.filter(user => user.approved === "1" || user.approved === true);
+            const waitingApprovalTableData = data.filter(user => user.approved === "0" || user.approved === false);
 
-        const approvedTable = new Tabulator(approvedUsersTableContainer, {
-            data: data.filter(user => user.approved),
-            layout: "fitDataStretch",
-            columns: [
-                { title: "Admin?", field: "is_admin", editor: "select", editorParams: { values: ["Yes", "No"] } },
-                { title: "First Name", field: "fname", editor: "input" },
-                { title: "Last Name", field: "lname", editor: "input" },
-                { title: "Subject Taught", field: "subject_taught", editor: "input" },
-                { title: "Delete", formatter: "buttonCross", width: 75, align: "center", cellClick: function(e, cell) { deleteUser(cell.getRow().getData().teacher_id); } }
-            ],
+            // Setup tables for approved and waiting approval users
+            setupUserTable(approvedUsersTableContainer, approvedTableData);
+            setupUserTable(waitingApprovalTableContainer, waitingApprovalTableData, true);
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
+}
 
-        // Correctly setting the cellEdited event listener
-        approvedTable.on("cellEdited", function(cell) {
+// Function to setup user tables
+function setupUserTable(container, data, isWaiting = false) {
+    new Tabulator(container, {
+        data: data,
+        layout: "fitDataStretch",
+        columns: [
+            { title: "Admin?", field: "is_admin", formatter: "tickCross", width: 100 },
+            { title: "First Name", field: "fname", editor: "input", widthGrow: 2 },
+            { title: "Last Name", field: "lname", editor: "input", widthGrow: 2 },
+            { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
+            {
+                title: isWaiting ? "Approve?" : "Delete", 
+                formatter: function(cell, formatterParams, onRendered) {
+                    const value = cell.getValue();
+                    if (isWaiting) {
+                        return `<button class="approve-btn" onclick="toggleApproval(${value}, 1)">✅</button>` +
+                               `<button class="delete-btn" onclick="deleteUser(${value})">❌</button>`;
+                    } else {
+                        return `<button class="delete-btn" onclick="deleteUser(${value})">❌</button>`;
+                    }
+                },
+                width: 150
+            }
+        ],
+        cellEdited: function(cell) {
             updateUser(cell.getRow().getData());
-        });
-
-        const waitingApprovalTable = new Tabulator(waitingApprovalTableContainer, {
-            data: data.filter(user => !user.approved),
-            layout: "fitDataStretch",
-            columns: [
-                { title: "Is Admin", field: "is_admin", editor: "select", editorParams: { values: ["Yes", "No"] } },
-                { title: "First Name", field: "fname", editor: "input" },
-                { title: "Last Name", field: "lname", editor: "input" },
-                { title: "Subject Taught", field: "subject_taught", editor: "input" },
-                { title: "Approve?", formatter: "buttonTick", width: 75, align: "center", cellClick: function(e, cell) { toggleApproval(cell.getRow().getData().teacher_id, 1); } }
-            ],
-        });
-
-        // Correctly setting the cellEdited event listener
-        waitingApprovalTable.on("cellEdited", function(cell) {
-            updateUser(cell.getRow().getData());
-        });
-    })
-    .catch(error => console.error('Error:', error));
+        }
+    });
 }
 
 function loadActiveStudents() {
