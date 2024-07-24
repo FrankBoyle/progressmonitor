@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
     loadArchivedStudents();
 });
 
+// Event listener for joining another school
+document.getElementById('join_school_form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var joinUUID = document.getElementById('join_uuid').value;
+    joinSchool(joinUUID);
+});
+
 function loadUsers() {
     fetch('./users/fetch_staff.php')
         .then(response => response.json())
@@ -458,4 +465,31 @@ function addUserToSchool(teacherId) {
     });
 }
 
+// Function to copy UUID
+function copyUUID() {
+    var copyText = document.getElementById("school_uuid");
+    copyText.select();
+    document.execCommand("copy");
+    alert("Copied the UUID: " + copyText.value);
+}
 
+// Function to join a school using a UUID
+function joinSchool(uuid) {
+    fetch('./users/join_school.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({uuid: uuid})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Successfully joined the school!');
+        } else {
+            alert('Failed to join the school: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    });
+}
