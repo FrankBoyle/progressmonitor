@@ -25,15 +25,15 @@ if ($school_id) {
     // Fetch the result using PDO
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $school_uuid = $row['school_uuid'];
-        echo "Fetched UUID: " . $school_uuid;  // Debug: Output fetched UUID
+        //echo "Fetched UUID: " . $school_uuid;  // Debug: Output fetched UUID
     } else {
-        echo "No data found for the given school ID.";
+        //echo "No data found for the given school ID.";
     }
 
     // Correctly finalize the PDO statement
     $stmt = null; // This is the proper way to close a PDO statement
 } else {
-    echo "School ID is not set or invalid.";
+    //echo "School ID is not set or invalid.";
 }
 
 // Debugging: Output session variables
