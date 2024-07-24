@@ -25,25 +25,21 @@ function loadUsers() {
             const approvedUsersTableContainer = document.getElementById('approved-users-table-container');
             const waitingApprovalTableContainer = document.getElementById('waiting-approval-table-container');
 
-            if (approvedUsersTableContainer && waitingApprovalTableContainer) {
-                approvedUsersTableContainer.innerHTML = '';
-                waitingApprovalTableContainer.innerHTML = '';
-            } else {
+            if (!approvedUsersTableContainer || !waitingApprovalTableContainer) {
                 console.error('Table container elements not found');
                 return;
             }
 
-            // Ensure the 'approved' field is being interpreted as a boolean
+            approvedUsersTableContainer.innerHTML = '';
+            waitingApprovalTableContainer.innerHTML = '';
+
             const approvedTableData = data.filter(user => user.approved === "1" || user.approved === true);
             const waitingApprovalTableData = data.filter(user => user.approved === "0" || user.approved === false);
 
-            // Setup tables for approved and waiting approval users
             setupUserTable(approvedUsersTableContainer, approvedTableData);
             setupUserTable(waitingApprovalTableContainer, waitingApprovalTableData, true);
         })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        .catch(error => console.error('Error:', error));
 }
 
 // Function to setup user tables
