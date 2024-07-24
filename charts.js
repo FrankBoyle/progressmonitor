@@ -146,7 +146,6 @@ function createNewDataObject(studentIdNew, metadataId, newDate) {
 }
 
 function submitNewDataRow(newData, newRowDateInput) {
-    //console.log('Sending new data:', newData);
     fetch('./users/insert_performance.php', {
         method: 'POST',
         headers: {
@@ -158,17 +157,39 @@ function submitNewDataRow(newData, newRowDateInput) {
     .then(text => {
         let result = JSON.parse(text);
         if (result.success) {
-            newData.performance_id = result.performance_id;
-            table.addRow(newData);
-            newRowDateInput.value = "";
-            newRowDateInput.style.display = "none";
+            // Google Analytics event tracking for successful row addition
+            gtag('event', 'add_row', {
+                'event_category': 'Data Management',
+                'event_label': 'Success',
+                'value': 1
+            });
+
+            newData.performance_id = result.performance_id; // Update the newData object
+            table.addRow(newData); // Add the new data to the table visually
+            newRowDateInput.value = ""; // Clear the input for new data entry
+            newRowDateInput.style.display = "none"; // Optionally hide the input field
+
         } else {
-            throw new Error('Failed to add new data: ' + result.error);
+            // Google Analytics event tracking for failed row addition
+            gtag('event', 'add_row', {
+                'event_category': 'Data Management',
+                'event_label': 'Failure',
+                'value': 0
+            });
+
+            throw new Error('Failed to add new data: ' + result.error); // Propagate the error
         }
     })
     .catch(error => {
         console.error('Error:', error);
         alert('An error occurred while adding new data.');
+
+        // Track unexpected errors not related to the business logic
+        gtag('event', 'add_row', {
+            'event_category': 'Data Management',
+            'event_label': 'Error',
+            'value': 0
+        });
     });
 }
 
