@@ -1,3 +1,21 @@
+<?php
+session_start();
+include('./users/auth_session.php');
+include('./users/db.php');
+
+// Ensure account_id is in session
+$account_id = $_SESSION['account_id'];
+$school_id = $_SESSION['school_id'];
+
+// Fetch the schools associated with the logged-in user
+$query = $connection->prepare("SELECT s.school_id, s.SchoolName FROM Schools s JOIN Teachers t ON s.school_id = t.school_id WHERE t.account_id = :account_id");
+$query->bindParam("account_id", $account_id, PDO::PARAM_INT);
+$query->execute();
+$schools = $query->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,6 +116,37 @@
     </div>
 
 <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const schoolSelect = document.getElementById('school-select');
+    if (schoolSelect) {
+        schoolSelect.addEventListener('change', function() {
+            const selectedSchoolId = this.value;
+            fetch('./users/update_school_session.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `school_id=${encodeURIComponent(selectedSchoolId)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    setTimeout(function() {
+                        location.reload();
+                    }, 0);
+                } else {
+                    console.error('Error updating school:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+
+});
+
 document.querySelectorAll('.dropdown-item').forEach(item => {
     let timer;
     item.addEventListener('mouseenter', function(event) {
