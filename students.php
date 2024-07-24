@@ -459,12 +459,26 @@ function addGroup(event) {
         })
         .then(data => {
             //console.log('Group added successfully:', data);
+            // Google Analytics event tracking for successful goal addition
+            gtag('event', 'add_group', {
+                'event_category': 'Group Management',
+                'event_label': 'Success',
+                'value': 1
+            });
+
             loadGroups();
             hideAddGroupModal();
         })
         .catch(error => {
             console.error('Error:', error);
             alert('There was an error adding the group. Please try again.');
+
+            // Google Analytics event tracking for failure goal addition
+            gtag('event', 'add_group', {
+                'event_category': 'Group Management',
+                'event_label': 'Failure',
+                'value': 0
+            });
         });
 }
 
@@ -496,6 +510,13 @@ function addStudent(event, groupId) {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
+                // Google Analytics event tracking for successful student addition
+                gtag('event', 'add_new_student', {
+                    'event_category': 'Student Management',
+                    'event_label': 'Success',
+                    'value': 1
+                });
+
                 const studentSelect = document.querySelector('[name="student_id"]');
                 const option = document.createElement('option');
                 option.value = data.student_id;
@@ -505,17 +526,21 @@ function addStudent(event, groupId) {
                 $('.select2').select2(); // Reinitialize select2
                 $('.select2').trigger('change'); // Update UI
 
-                // Display success message
                 messageDiv.textContent = 'Student added successfully!';
-                messageDiv.className = 'alert success'; // Use appropriate classes for success
+                messageDiv.className = 'alert success';
                 messageDiv.style.display = 'block';
 
-                // Reload the student list for the current group
                 loadStudentsForGroupAssignment(groupId);
             } else {
-                // Display error message
+                // Google Analytics event tracking for failed student addition
+                gtag('event', 'add_new_student', {
+                    'event_category': 'Student Management',
+                    'event_label': 'Failure',
+                    'value': 0
+                });
+
                 messageDiv.textContent = 'Error adding student: ' + data.message;
-                messageDiv.className = 'alert error'; // Use appropriate classes for errors
+                messageDiv.className = 'alert error';
                 messageDiv.style.display = 'block';
             }
         })
@@ -849,8 +874,6 @@ function assignStudentsToGroup(event) {
         return;
     }
 
-    //console.log('Assigning students to group:', groupId, studentIds); // Debug log
-
     fetch('./users/assign_students_to_group.php', {
         method: 'POST',
         headers: {
@@ -861,15 +884,37 @@ function assignStudentsToGroup(event) {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
+            // Google Analytics event tracking for successful student assignment
+            gtag('event', 'add_student_group', {
+                'event_category': 'Student Management',
+                'event_label': 'Success',
+                'value': 1
+            });
+
             loadGroupStudents(groupId, 'group-students-list-add'); // Refresh the student list in the modal
             loadStudentsByGroup(groupId); // Refresh the student list on the main page
+            alert('Students successfully assigned to the group.');
         } else {
+            // Google Analytics event tracking for failed student assignment
+            gtag('event', 'add_student_group', {
+                'event_category': 'Student Management',
+                'event_label': 'Failure',
+                'value': 0
+            });
+
             alert(data.error);
         }
     })
     .catch(error => {
         console.error('Error:', error);
         alert('There was an error assigning students to the group. Please try again.');
+
+        // Google Analytics event tracking for errors during student assignment
+        gtag('event', 'add_student_group', {
+            'event_category': 'Student Management',
+            'event_label': 'Error',
+            'value': 0
+        });
     });
 }
 
@@ -888,8 +933,22 @@ function shareGroup(event) {
     .then(response => response.json())
     .then(data => {
         if (data.error) {
+            // Google Analytics event tracking for failed group sharing
+            gtag('event', 'share_group', {
+                'event_category': 'Group Management',
+                'event_label': 'Failure',
+                'value': 0
+            });
+
             alert(data.error);
         } else {
+            // Google Analytics event tracking for successful group sharing
+            gtag('event', 'share_group', {
+                'event_category': 'Group Management',
+                'event_label': 'Success',
+                'value': 1
+            });
+
             alert(data.message);
         }
         hideEditGroupModal();
@@ -898,6 +957,13 @@ function shareGroup(event) {
     .catch(error => {
         console.error('Error:', error);
         alert('There was an error sharing the group. Please try again.');
+
+        // Google Analytics event tracking for errors not related to the data conditions (network errors, etc.)
+        gtag('event', 'share_group', {
+            'event_category': 'Group Management',
+            'event_label': 'Error',
+            'value': 0
+        });
     });
 }
 
@@ -959,6 +1025,13 @@ function addGoal(event) {
                     throw new Error(data.error);
                 }
 
+                // Google Analytics event tracking for successful goal addition
+                gtag('event', 'add_goal', {
+                    'event_category': 'Goal Management',
+                    'event_label': 'Success',
+                    'value': 1
+                });
+
                 alert('Goal added successfully!');
                 hideAddGoalModal();
                 loadGoals(studentId); // Refresh the goals list
@@ -966,6 +1039,13 @@ function addGoal(event) {
             .catch(error => {
                 console.error('Error adding goal:', error);
                 alert('Error adding goal: ' + error.message);
+
+                // Google Analytics event tracking for failed goal addition
+                gtag('event', 'add_goal', {
+                    'event_category': 'Goal Management',
+                    'event_label': 'Failure',
+                    'value': 0
+                });
             });
 
         return;
@@ -994,6 +1074,13 @@ function addGoal(event) {
             throw new Error(data.error);
         }
 
+        // Google Analytics event tracking for successful goal addition
+        gtag('event', 'add_goal', {
+            'event_category': 'Goal Management',
+            'event_label': 'Success',
+            'value': 1
+        });
+
         alert('Goal added successfully!');
         hideAddGoalModal();
         loadGoals(studentId); // Refresh the goals list
@@ -1001,6 +1088,13 @@ function addGoal(event) {
     .catch(error => {
         console.error('Error adding goal:', error);
         alert('Error adding goal: ' + error.message);
+
+        // Google Analytics event tracking for failed goal addition
+        gtag('event', 'add_goal', {
+            'event_category': 'Goal Management',
+            'event_label': 'Failure',
+            'value': 0
+        });
     });
 }
 
@@ -1102,16 +1196,37 @@ function removeStudentFromGroup(studentId, groupId) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
+            // Google Analytics event tracking for successful student removal
+            gtag('event', 'remove_student_group', {
+                'event_category': 'Student Management',
+                'event_label': 'Success',
+                'value': 1
+            });
+
             // Refresh student lists both in modal and main page
             loadGroupStudents(groupId, 'group-students-list-add'); // Refresh modal list
-            loadStudentsByGroup(groupId); // Refresh main page list if applicable, ensure this function updates the main UI properly
+            loadStudentsByGroup(groupId); // Refresh main page list if applicable
         } else {
             alert('There was an error removing the student from the group. Please try again.');
+            
+            // Google Analytics event tracking for failed student removal
+            gtag('event', 'remove_student_group', {
+                'event_category': 'Student Management',
+                'event_label': 'Failure',
+                'value': 0
+            });
         }
     })
     .catch(error => {
         console.error('Error removing student from group:', error);
         alert('There was an error removing the student from the group. Please try again.');
+
+        // Google Analytics event tracking for network or processing errors
+        gtag('event', 'remove_student_group', {
+            'event_category': 'Student Management',
+            'event_label': 'Error',
+            'value': 0
+        });
     });
 }
 
@@ -1369,7 +1484,6 @@ function showAddGoalModal() {
         }
     }, 0); // A minimal timeout to ensure the modal and its contents are fully visible
 }
-
 
 function hideAddGoalModal() {
     const modal = document.getElementById('add-goal-modal');
