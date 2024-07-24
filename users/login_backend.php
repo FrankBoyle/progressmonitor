@@ -71,4 +71,7 @@ if (isset($_POST['login'])) {
         echo "Database Error: " . $e->getMessage(); // Show the exception error message
     }
 }
+
+//session_set_cookie_params(['httponly' => true, 'secure' => true, 'samesite' => 'Lax']);
+
 ?>
