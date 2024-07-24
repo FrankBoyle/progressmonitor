@@ -116,36 +116,35 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function() {
     const schoolSelect = document.getElementById('school-select');
-    if (schoolSelect) {
-        schoolSelect.addEventListener('change', function() {
-            const selectedSchoolId = this.value;
-            fetch('./users/update_school_session.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `school_id=${encodeURIComponent(selectedSchoolId)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    setTimeout(function() {
-                        location.reload();
-                    }, 0);
+    schoolSelect.addEventListener('change', function() {
+        const selectedSchoolId = this.value;
+        fetch('./users/update_school_session.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `school_id=${encodeURIComponent(selectedSchoolId)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.approved) {
+                    location.reload();
                 } else {
-                    console.error('Error updating school:', data.message);
+                    alert("You are not approved for the selected school.");
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            } else {
+                console.error('Error updating school:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
-    }
-
+    });
 });
+
 
 document.querySelectorAll('.dropdown-item').forEach(item => {
     let timer;
