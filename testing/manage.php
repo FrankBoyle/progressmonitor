@@ -86,12 +86,10 @@ if ($school_id) {
                     <li class="luxbar-item dropdown">
                         <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
                         <div class="dropdown-menu" aria-labelledby="helpDropdown">
-                            <a href="Groups_Walkthrough.jpg" class="dropdown-item" data-image="Groups_Walkthrough.jpg">1 - Create or add a group with +.</a>
-                            <a href="Group_Select.jpg" class="dropdown-item sub-item" data-image="Group_Select.jpg">2 - Select a group.</a>
-                            <a href="Students_Walkthrough.jpg" class="dropdown-item" data-image="Students_Walkthrough.jpg">3 - Create or add students with +. </a>
-                            <a href="Students_Select.jpg" class="dropdown-item sub-item" data-image="Students_Select.jpg">4 - Select a student.</a>
-                            <a href="Goal_Create_Walkthrough.jpg" class="dropdown-item" data-image="Goal_Create_Walkthrough.jpg">5 - Create or add goals with +.</a>
-                            <a href="Rubric_Select.jpg" class="dropdown-item sub-item" data-image="Rubric_Select.jpg">6 - Select a rubric.</a>
+                            <a href="Invite_Walkthrough.jpg" class="dropdown-item" data-image="Invite_Walkthrough.jpg">1 - Invite others to join your school.</a>
+                            <a href="Manage_Users_Walkthrough.jpg" class="dropdown-item" data-image="Manage_Users_Walkthrough.jpg">2 - Manage users.</a>
+                            <a href="Manage_Students_Walkthrough.jpg" class="dropdown-item" data-image="Manage_Students_Walkthrough.jpg">3 - Manage students.</a>
+                            <a href="Manage_District_Walkthrough.jpg" class="dropdown-item" data-image="Manage_District_Walkthrough.jpg">4 - Manage school district.</a>
                         </div>
                     </li>
 
