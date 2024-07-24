@@ -71,19 +71,6 @@
                         </div>
                     </li>
 
-                    <li>
-                        <div class="school-selector">
-                            <label for="school-select">Select School:</label>
-                            <select id="school-select">
-                                <?php foreach ($schools as $school): ?>
-                                    <option value="<?= htmlspecialchars($school['school_id']) ?>" <?= $school['school_id'] == $_SESSION['school_id'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($school['SchoolName']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </li>
-
                     <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
                     <li class="luxbar-item"><a href="students.php">Home</a></li>
                     <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
