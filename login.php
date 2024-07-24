@@ -132,12 +132,15 @@ $(document).ready(function() {
         e.preventDefault();  // Prevent the default form submission
 
         var formData = $(this).serialize(); // Serialize the form data
+        console.log('Form submitted:', formData);  // Log form data to console for debugging
 
         $.ajax({
             type: 'POST',
             url: 'users/login_backend.php',
             data: formData,
+            dataType: 'json',  // Expect JSON response
             success: function(response) {
+                console.log('AJAX response:', response);  // Log response to console for debugging
                 if (response.success) {
                     // Google Analytics event for successful login
                     gtag('event', 'login', {
@@ -147,7 +150,7 @@ $(document).ready(function() {
                     });
 
                     // Redirect or handle login success
-                    window.location.href = 'dashboard.php';
+                    window.location.href = response.redirect_url; // Use the redirect URL from the response
                 } else {
                     // Google Analytics event for failed login
                     gtag('event', 'login', {
@@ -160,13 +163,16 @@ $(document).ready(function() {
                     alert(response.message || 'Login failed. Please try again.');
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
                 // Google Analytics event for technical errors during login
                 gtag('event', 'login', {
                     'event_category': 'Authentication',
                     'event_label': 'Error',
                     'value': 0
                 });
+
+                // Log the error to console
+                console.error('AJAX Error:', status, error);
 
                 // Notify the user of a technical error
                 alert('There was a technical error. Please try again later.');
