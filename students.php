@@ -796,7 +796,6 @@ function showGroupOptions(event, groupId, groupName) {
     document.getElementById('share-group-id').value = groupId;
 }
 
-
 function editGroup() {
     const groupId = document.getElementById('group-options').getAttribute('data-group-id');
     const groupName = document.getElementById('group-options').getAttribute('data-group-name');
