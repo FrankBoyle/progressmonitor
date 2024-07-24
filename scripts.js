@@ -60,7 +60,7 @@ function loadUsers() {
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Delete", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
+                            return `<button class="delete-btn" onclick="deleteUser(${cell.getValue()})">❌</button>`;
                         },
                         width: 100
                     }
@@ -95,8 +95,8 @@ function loadUsers() {
                     { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
                     {
                         title: "Approve?", field: "teacher_id", formatter: function(cell, formatterParams, onRendered) {
-                            return '<button class="approve-btn" onclick="toggleApproval(' + cell.getValue() + ', 1)">✅</button>' +
-                                   '<button class="delete-btn" onclick="deleteUser(' + cell.getValue() + ')">❌</button>';
+                            return `<button class="approve-btn" onclick="toggleApproval(${cell.getValue()}, 1)">✅</button>` +
+                                   `<button class="delete-btn" onclick="deleteUser(${cell.getValue()})">❌</button>`;
                         },
                         width: 150
                     }
