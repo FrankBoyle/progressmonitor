@@ -3,6 +3,19 @@ session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
 
+// Assuming $school_id is obtained from the user session or related database query
+$school_id = $_SESSION['school_id'] ?? null; // Update this according to your application's logic
+
+// Fetch school UUID from the database
+$school_uuid = null;
+if ($school_id) {
+    $stmt = $connection->prepare("SELECT school_uuid FROM schools WHERE school_id = ?");
+    $stmt->bind_param("i", $school_id);
+    $stmt->execute();
+    $stmt->bind_result($school_uuid);
+    $stmt->fetch();
+    $stmt->close();
+}
 // Debugging: Output session variables
 //echo '<pre>';
 //echo 'Session Variables:';
@@ -79,6 +92,8 @@ include('./users/db.php');
         <!-- Existing Users Management Section -->
         <section class="box manage-section">
             <h2>Manage Users <button class="toggle-btn" onclick="toggleSection('users-section')">+</button></h2>
+            <h2>Your School ID - People can register with this ID to join your school.</h2>
+            <input type="text" value="<?php echo htmlspecialchars($school_uuid); ?>" readonly>
             <div id="users-section" class="collapsible-content">
                 <div id="approved-users-table-container"></div>
                 <div id="waiting-approval-table-container"></div>
