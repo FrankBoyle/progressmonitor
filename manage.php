@@ -3,6 +3,8 @@ session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
 
+$school_id = $_SESSION['school_id'];
+
 echo 'School ID: ' . $school_id;
 
 // Debugging: Output session variables
