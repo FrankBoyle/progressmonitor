@@ -3,19 +3,7 @@ session_start();
 include('./users/auth_session.php');
 include('./users/db.php');
 
-// Assuming $school_id is obtained from the user session or related database query
-$school_id = $_SESSION['school_id'] ?? null; // Update this according to your application's logic
 
-// Fetch school UUID from the database
-$school_uuid = null;
-if ($school_id) {
-    $stmt = $connection->prepare("SELECT school_uuid FROM Schools WHERE school_id = ?");
-    $stmt->bind_param("i", $school_id);
-    $stmt->execute();
-    $stmt->bind_result($school_uuid);
-    $stmt->fetch();
-    $stmt->close();
-}
 // Debugging: Output session variables
 //echo '<pre>';
 //echo 'Session Variables:';

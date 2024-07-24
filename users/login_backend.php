@@ -11,7 +11,11 @@ session_start();
 include('db.php');
 
 if (isset($_POST['login'])) {
-    $email = $_POST['email'];
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo '<p class="error">Invalid email format!</p>';
+        exit;
+    }
     $password = $_POST['password'];
     
     try {
