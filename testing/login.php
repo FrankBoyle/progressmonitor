@@ -1,7 +1,3 @@
-<?php
-include('./users/login_backend.php');
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -127,6 +123,62 @@ include('./users/login_backend.php');
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
+$(document).ready(function() {
+    $('form[name="login"]').on('submit', function(e) {
+        e.preventDefault();  // Prevent the default form submission
+
+        var formData = $(this).serialize(); 
+        formData += '&login=login'; // Append the 'login' button's value manually
+
+        console.log('Form submitted:', formData);  // Log form data to console for debugging
+
+        $.ajax({
+            type: 'POST',
+            url: 'users/login_backend.php',
+            data: formData,
+            dataType: 'json',  // Expect JSON response
+            success: function(response) {
+                console.log('AJAX response:', response);  // Log response to console for debugging
+                if (response.success) {
+                    // Google Analytics event for successful login
+                    gtag('event', 'login', {
+                        'event_category': 'Authentication',
+                        'event_label': 'Success',
+                        'value': 1
+                    });
+
+                    // Redirect or handle login success
+                    window.location.href = 'students.php';
+                } else {
+                    // Google Analytics event for failed login
+                    gtag('event', 'login', {
+                        'event_category': 'Authentication',
+                        'event_label': 'Failure',
+                        'value': 0
+                    });
+
+                    // Show an error message
+                    alert(response.message || 'Login failed. Please try again.');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Google Analytics event for technical errors during login
+                gtag('event', 'login', {
+                    'event_category': 'Authentication',
+                    'event_label': 'Error',
+                    'value': 0
+                });
+
+                // Log the error to console
+                console.error('AJAX Error:', status, error);
+
+                // Notify the user of a technical error
+                alert('There was a technical error. Please try again later.');
+            }
+        });
+    });
+});
+
 document.querySelectorAll('.dropdown-item').forEach(item => {
     let timer;
     item.addEventListener('mouseenter', function(event) {
