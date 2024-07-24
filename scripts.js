@@ -370,7 +370,16 @@ function updateUser(userData) {
 
 function toggleSection(sectionId) {
     const section = document.getElementById(sectionId);
-    const button = section.previousElementSibling.querySelector('.toggle-btn');
+    if (!section) {
+        console.error('Section with id ' + sectionId + ' not found.');
+        return;
+    }
+    
+    const button = document.querySelector(`button[onclick="toggleSection('${sectionId}')"]`);
+    if (!button) {
+        console.error('Button for section ' + sectionId + ' not found.');
+        return;
+    }
 
     if (section.style.display === "none" || section.style.display === "") {
         section.style.display = "block";
@@ -448,3 +457,5 @@ function addUserToSchool(teacherId) {
         console.error('Error:', error);
     });
 }
+
+
