@@ -54,8 +54,8 @@ function setupUserTable(container, data, isWaiting = false) {
             { title: "Subject Taught", field: "subject_taught", editor: "input", widthGrow: 2 },
             {
                 title: isWaiting ? "Approve?" : "Delete", 
-                formatter: function(cell, formatterParams, onRendered) {
-                    const value = cell.getValue();
+                formatter: (cell, formatterParams, onRendered) => {
+                    const value = cell.getRow().getData().teacher_id;
                     if (isWaiting) {
                         return `<button class="approve-btn" onclick="toggleApproval(${value}, 1)">✅</button>` +
                                `<button class="delete-btn" onclick="deleteUser(${value})">❌</button>`;
