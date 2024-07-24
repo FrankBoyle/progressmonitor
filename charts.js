@@ -455,33 +455,33 @@ function initializeBarChart() {
 // Extract chart data based on selected columns
 function extractChartData() {
     try {
-        const data = table.getData();
-        //console.log('Table Data:', data);
-        const categories = data.map(row => row['score_date']);
-        //console.log('Categories:', categories);
+        const data = table.getData(); // Assume 'table' is defined elsewhere in your scope
+        const categories = data.map(row => row['score_date']); // Extract categories, usually dates
 
         const selectedColumns = getSelectedColumns().map(item => ({
             field: item.getAttribute("data-column-name"),
-            name: item.textContent.trim()  // Use textContent of the item as the series name
+            name: item.textContent.trim() // Use the textContent of the item as the series name
         }));
-        //console.log('Selected Columns:', selectedColumns);
+
+        // Track the column selection in Google Analytics
+        gtag('event', 'select_column', {
+            'event_category': 'Graph Management',
+            'event_label': 'Column Selected',
+            'value': selectedColumns.length // Optional: track the number of selected columns
+        });
 
         const series = selectedColumns.map(column => {
-            let rawData = data.map(row => row[column.field]);
-            //console.log(`Raw Data for ${column.name}:`, rawData);
-            let interpolatedData = interpolateData(rawData); // Interpolate missing values
-            //console.log(`Interpolated Data for ${column.name}:`, interpolatedData);
+            const rawData = data.map(row => row[column.field]);
+            const interpolatedData = interpolateData(rawData); // Interpolate missing values if necessary
             return {
-                name: column.name,  // Using the custom name for the series
+                name: column.name, // Using the custom name for the series
                 data: interpolatedData,
-                color: seriesColors[parseInt(column.field.replace('score', '')) - 1]  // Deduce color by score index
+                color: seriesColors[parseInt(column.field.replace('score', '')) - 1] // Deduce color by score index
             };
         });
 
         const trendlineSeries = series.map(seriesData => {
             const { trendlineData, slope, intercept } = getTrendlineData(seriesData.data);
-            //console.log(`Trendline Data for ${seriesData.name}:`, trendlineData);
-            //console.log(`Trendline Slope: ${slope} Trendline Intercept: ${intercept}`);
             return {
                 name: `${seriesData.name} Trendline`,
                 data: trendlineData,
@@ -492,10 +492,11 @@ function extractChartData() {
             };
         });
 
+        // Update the chart with new data
         updateLineChart(categories, [...series, ...trendlineSeries]);
         updateBarChart(categories, series);
 
-        // Ensure the correct statistics are displayed
+        // Update the statistics display
         const tbody = document.getElementById('statsTable').getElementsByTagName('tbody')[0];
         tbody.innerHTML = ''; // Clear existing rows
         selectedColumns.forEach(column => {
@@ -504,6 +505,12 @@ function extractChartData() {
 
     } catch (error) {
         console.error("Error extracting chart data:", error);
+        // It might be useful to track errors in Google Analytics as well
+        gtag('event', 'chart_data_error', {
+            'event_category': 'Graph Management',
+            'event_label': 'Data Extraction Error',
+            'value': 0
+        });
     }
 }
 
