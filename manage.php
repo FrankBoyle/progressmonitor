@@ -111,7 +111,7 @@ if ($school_id) {
                 <div id="waiting-approval-table-container"></div>
             </div>
             <p>Your School ID - Invite others to register with this ID to join your school.</p>
-            <input type="text" value="<?php echo htmlspecialchars($school_uuid); ?>" readonly>
+            <input type="text" id="school_uuid" value="<?php echo htmlspecialchars($school_uuid); ?>" readonly>
             <button onclick="copyUUID()">Copy UUID</button>
 
             <h4>Join Another School</h4>
