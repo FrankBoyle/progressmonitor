@@ -10,16 +10,17 @@ error_reporting(E_ALL);
 $school_id = $_SESSION['school_id'];
 
 if ($school_id) {
-    $stmt = $connection->prepare("SELECT school_uuid FROM Schools WHERE school_id = ?");
+    $stmt = $connection->prepare("SELECT school_uuid FROM Schools WHERE school_id = :school_id");
     if (!$stmt) {
-        die("MySQL prepare failed: " . $connection->error);
+        die("PDO prepare failed: " . $connection->errorInfo());
     }
 
-    $stmt->bind_param("i", $school_id);
+    $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
     $stmt->execute();
-    $stmt->bind_result($school_uuid);
-    if ($stmt->fetch()) {
-        echo "Fetched UUID: " . $school_uuid;  // Debug: Output fetched UUID
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        echo "Fetched UUID: " . $result['school_uuid'];  // Debug: Output fetched UUID
     } else {
         echo "No data found for the given school ID.";
     }
