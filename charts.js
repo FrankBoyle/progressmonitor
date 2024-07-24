@@ -158,15 +158,36 @@ function submitNewDataRow(newData, newRowDateInput) {
     .then(text => {
         let result = JSON.parse(text);
         if (result.success) {
+            // Google Analytics event tracking for successful data addition
+            gtag('event', 'add_data', {
+                'event_category': 'Data Management',
+                'event_label': 'Success',
+                'value': 1
+            });
+
             newData.performance_id = result.performance_id;
             table.addRow(newData);
             newRowDateInput.value = "";
             newRowDateInput.style.display = "none";
         } else {
+            // Google Analytics event tracking for failed data addition
+            gtag('event', 'add_data', {
+                'event_category': 'Data Management',
+                'event_label': 'Failure',
+                'value': 0
+            });
+
             throw new Error('Failed to add new data: ' + result.error);
         }
     })
     .catch(error => {
+        // Google Analytics event tracking for exceptions not related to business logic
+        gtag('event', 'add_data', {
+            'event_category': 'Data Management',
+            'event_label': 'Error',
+            'value': 0
+        });
+        
         console.error('Error:', error);
         alert('An error occurred while adding new data.');
     });
@@ -1458,7 +1479,7 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
                         'event_label': 'Failure',
                         'value': 0
                     });
-                    
+
                     return response.json().then(error => {
                         throw new Error(`HTTP error! status: ${response.status}, message: ${error.message}`);
                     });
