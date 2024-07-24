@@ -9,11 +9,8 @@ if (isset($_POST['school_id'])) {
     $school_id = $_POST['school_id'];
     $account_id = $_SESSION['account_id'];
 
-    // Update school_id in session
-    $_SESSION['school_id'] = $school_id;
-
-    // Fetch the corresponding teacher_id for the new school_id
-    $query = $connection->prepare("SELECT teacher_id FROM Teachers WHERE account_id = :account_id AND school_id = :school_id");
+    // Fetch the corresponding teacher_id and approval status for the new school_id
+    $query = $connection->prepare("SELECT teacher_id, approved FROM Teachers WHERE account_id = :account_id AND school_id = :school_id");
     $query->bindParam("account_id", $account_id, PDO::PARAM_INT);
     $query->bindParam("school_id", $school_id, PDO::PARAM_INT);
     $query->execute();
@@ -21,10 +18,10 @@ if (isset($_POST['school_id'])) {
 
     if ($result) {
         $_SESSION['teacher_id'] = $result['teacher_id'];
-        echo json_encode(['success' => true]);
+        $approved = (bool) $result['approved']; // Casting to boolean
+        $_SESSION['is_approved'] = $approved; // Optional: store approval status in session if needed elsewhere
+        echo json_encode(['success' => true, 'approved' => $approved]);
     } else {
-        // This case might occur if the teacher is not found in the selected school,
-        // which could mean they are not registered or not approved.
         echo json_encode(['success' => false, 'message' => 'Teacher not found for the selected school.']);
     }
 } else {

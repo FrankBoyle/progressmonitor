@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
             selectOption(selectedOption);
         }
     });
-
+    
     const schoolSelect = document.getElementById('school-select');
     let previousSchoolId = schoolSelect.value; // Store the initial school ID
 
