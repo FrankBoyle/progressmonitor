@@ -309,11 +309,10 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
     });
 
     table.on("cellEdited", cell => {
-        //console.log("Cell edited for field:", cell.getField(), "New value:", cell.getValue());
         const updatedData = {...cell.getRow().getData(), [cell.getField()]: cell.getValue() || null};
-        updatedData.student_id_new = studentIdNew;
-        updatedData.metadata_id = metadataId;
-        //console.log("Sending update to server with data:", updatedData);
+        updatedData.student_id_new = studentIdNew;  // Ensure 'studentIdNew' is correctly defined in your scope
+        updatedData.metadata_id = metadataId;      // Ensure 'metadataId' is correctly defined in your scope
+    
         fetch('./users/update_performance.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -321,13 +320,38 @@ function initializeTable(performanceData, scoreNames, studentIdNew, metadataId) 
         })
         .then(response => response.json())
         .then(result => {
-            if (!result.success) {
+            if (result.success) {
+                // Google Analytics event tracking for successful data addition
+                gtag('event', 'add_data', {
+                    'event_category': 'Data Management',
+                    'event_label': 'Success',
+                    'value': 1
+                });
+                console.log("Cell data updated successfully:", result);
+            } else {
+                // Google Analytics event tracking for failed data addition
+                gtag('event', 'add_data', {
+                    'event_category': 'Data Management',
+                    'event_label': 'Failure',
+                    'value': 0
+                });
                 alert('Failed to update data: ' + result.message);
                 console.error('Error info:', result.errorInfo);
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error updating data:', error);
+            alert('An error occurred while updating data.');
+    
+            // Google Analytics event tracking for network or processing errors
+            gtag('event', 'add_data', {
+                'event_category': 'Data Management',
+                'event_label': 'Error',
+                'value': 0
+            });
+        });
     });
+    
 }
 
 function fetchInitialData(studentIdNew, metadataId) {
