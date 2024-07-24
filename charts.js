@@ -1452,6 +1452,13 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             })
             .then(response => {
                 if (!response.ok) {
+                    // Google Analytics event tracking for failed report generation
+                    gtag('event', 'print_report', {
+                        'event_category': 'Report Management',
+                        'event_label': 'Failure',
+                        'value': 0
+                    });
+                    
                     return response.json().then(error => {
                         throw new Error(`HTTP error! status: ${response.status}, message: ${error.message}`);
                     });
@@ -1460,6 +1467,13 @@ function generateReportImage(selectedGoal, selectedSections, reportingPeriod, no
             })
             .then(data => {
                 if (data.status === 'success') {
+                    // Google Analytics event tracking for successful report generation
+                    gtag('event', 'print_report', {
+                        'event_category': 'Report Management',
+                        'event_label': 'Success',
+                        'value': 1
+                    });
+
                     const newTab = window.open();
                     const checkReady = setInterval(() => {
                         if (newTab && newTab.document.readyState === 'complete') {
