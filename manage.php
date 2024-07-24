@@ -5,7 +5,25 @@ include('./users/db.php');
 
 $school_id = $_SESSION['school_id'];
 
-echo 'School ID: ' . $school_id;
+if ($school_id) {
+    $stmt = $connection->prepare("SELECT school_uuid FROM Schools WHERE school_id = ?");
+    if (false === $stmt) {
+        echo "MySQL prepare failed: " . $connection->error;
+    } else {
+        $stmt->bind_param("i", $school_id);
+        $stmt->execute();
+        $stmt->bind_result($school_uuid);
+        if ($stmt->fetch()) {
+            echo "Fetched UUID: " . $school_uuid;  // Debug: Output fetched UUID
+        } else {
+            echo "No data found for the given school ID.";
+        }
+        $stmt->close();
+    }
+} else {
+    echo "School ID is not set or invalid.";
+}
+
 
 // Debugging: Output session variables
 //echo '<pre>';
