@@ -344,7 +344,6 @@ function isDateDuplicate(date) {
 }
 
 function saveIEPDate(iepDate, studentIdNew) {
-    //console.log(`Saving IEP Date: ${iepDate} for Student ID: ${studentIdNew}`);
     fetch('./users/save_iep_date.php', {
         method: 'POST',
         headers: {
@@ -357,14 +356,38 @@ function saveIEPDate(iepDate, studentIdNew) {
     })
     .then(response => response.json())
     .then(data => {
-        //console.log('IEP date saved:', data);
         if (data.success) {
-            fetchInitialData(studentIdNew, metadataId);
+            // Google Analytics event tracking for successful IEP date save
+            gtag('event', 'save_iep_date', {
+                'event_category': 'Data Management',
+                'event_label': 'Success',
+                'value': 1
+            });
+
+            fetchInitialData(studentIdNew); // Assuming there is a function to fetch data after saving
         } else {
+            // Google Analytics event tracking for failed IEP date save
+            gtag('event', 'save_iep_date', {
+                'event_category': 'Data Management',
+                'event_label': 'Failure',
+                'value': 0
+            });
+
             alert(data.message);
         }
     })
-    .catch(error => console.error('Error saving IEP date:', error));
+    .catch(error => {
+        console.error('Error saving IEP date:', error);
+        
+        // Google Analytics event tracking for errors that occur during the saving process
+        gtag('event', 'save_iep_date', {
+            'event_category': 'Data Management',
+            'event_label': 'Error',
+            'value': 0
+        });
+
+        alert('There was an error saving the IEP date. Please try again.');
+    });
 }
 
 function initializeCharts() {
@@ -1053,14 +1076,14 @@ function submitColumnNames(event) {
 
 function updateColumnNamesOnServer(newColumnNames) {
     const urlParams = new URLSearchParams(window.location.search);
-    const metadataId = urlParams.get('metadata_id'); // Use the current metadataId dynamically
+    const metadataId = urlParams.get('metadata_id'); // Dynamically obtained metadataId
 
-    // Prepare the data to be sent as FormData to align with your PHP backend expectations
+    // Prepare the data as FormData for PHP backend
     const formData = new FormData();
-    formData.append('metadata_id', metadataId); // Use the current metadataId dynamically
-    formData.append('custom_column_names', JSON.stringify(newColumnNames)); // Send the updated names
+    formData.append('metadata_id', metadataId);
+    formData.append('custom_column_names', JSON.stringify(newColumnNames));
 
-    // Make an AJAX call to the PHP script
+    // AJAX call to the PHP script
     fetch('./users/edit_goal_columns.php', {
         method: 'POST',
         body: formData
@@ -1068,9 +1091,24 @@ function updateColumnNamesOnServer(newColumnNames) {
     .then(response => response.json())
     .then(data => {
         if (data.message) {
+            // Google Analytics event tracking for successful column name update
+            gtag('event', 'update_column_names', {
+                'event_category': 'Data Management',
+                'event_label': 'Success',
+                'value': 1
+            });
+
             alert('Column names updated successfully!');
-            fetchInitialData(studentIdNew, metadataId); // Refresh the table data
+            // Assuming fetchInitialData function exists to refresh data
+            fetchInitialData(); // Modify this if additional parameters are needed
         } else if (data.error) {
+            // Google Analytics event tracking for failed column name update
+            gtag('event', 'update_column_names', {
+                'event_category': 'Data Management',
+                'event_label': 'Failure',
+                'value': 0
+            });
+
             console.error('Error updating column names:', data.error);
             alert('Failed to update column names: ' + data.error);
         }
@@ -1078,6 +1116,13 @@ function updateColumnNamesOnServer(newColumnNames) {
     .catch(error => {
         console.error('Error:', error);
         alert('Network or server error occurred.');
+
+        // Google Analytics event tracking for network or server errors
+        gtag('event', 'update_column_names', {
+            'event_category': 'Data Management',
+            'event_label': 'Error',
+            'value': 0
+        });
     });
 }
 
