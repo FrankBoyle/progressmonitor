@@ -10,21 +10,28 @@ error_reporting(E_ALL);
 $school_id = $_SESSION['school_id'];
 
 if ($school_id) {
+    // Prepare the statement using PDO
     $stmt = $connection->prepare("SELECT school_uuid FROM Schools WHERE school_id = :school_id");
     if (!$stmt) {
-        die("PDO prepare failed: " . $connection->errorInfo());
+        die("PDO prepare failed: " . $connection->errorInfo()[2]);
     }
 
+    // Bind parameters using PDO
     $stmt->bindParam(':school_id', $school_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($result) {
-        echo "Fetched UUID: " . $result['school_uuid'];  // Debug: Output fetched UUID
+    // Execute the statement
+    $stmt->execute();
+
+    // Fetch the result using PDO
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $school_uuid = $row['school_uuid'];
+        echo "Fetched UUID: " . $school_uuid;  // Debug: Output fetched UUID
     } else {
         echo "No data found for the given school ID.";
     }
-    $stmt->close();
+
+    // Correctly finalize the PDO statement
+    $stmt = null; // This is the proper way to close a PDO statement
 } else {
     echo "School ID is not set or invalid.";
 }
