@@ -111,13 +111,14 @@ if ($school_id) {
     <main class="content-students">
         <!-- Existing Users Management Section -->
         <section class="box manage-section">
-            <input type="text" value="<?php echo htmlspecialchars($school_uuid); ?>" readonly>
             <div id="users-section" class="collapsible-content">
                 <div id="approved-users-table-container"></div>
                 <div id="waiting-approval-table-container"></div>
             </div>
             <h2>Manage Users <button class="toggle-btn" onclick="toggleSection('users-section')">+</button></h2>
             <p>Your School ID - People can register with this ID to join your school.</p>
+            <input type="text" value="<?php echo htmlspecialchars($school_uuid); ?>" readonly>
+
         </section>
 
         <!-- New Students Management Section -->
