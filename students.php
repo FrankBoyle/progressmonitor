@@ -790,7 +790,12 @@ function showGroupOptions(event, groupId, groupName) {
     optionsMenu.style.top = event.pageY + 'px';
     optionsMenu.setAttribute('data-group-id', groupId);
     optionsMenu.setAttribute('data-group-name', groupName);
+
+    // Set the group_id in the edit-group-id and share-group-id input fields
+    document.getElementById('edit-group-id').value = groupId;
+    document.getElementById('share-group-id').value = groupId;
 }
+
 
 function editGroup() {
     const groupId = document.getElementById('group-options').getAttribute('data-group-id');

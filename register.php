@@ -129,6 +129,13 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
+                    // Google Analytics event tracking for successful registration
+                    gtag('event', 'registration', {
+                        'event_category': 'Account',
+                        'event_label': 'Success',
+                        'value': 1
+                    });
+
                     swal({
                         title: "Registration Successful!",
                         text: "You have been registered successfully.",
@@ -138,10 +145,24 @@ $(document).ready(function() {
                         window.location.href = 'login.php';
                     });
                 } else {
+                    // Google Analytics event tracking for failed registration
+                    gtag('event', 'registration', {
+                        'event_category': 'Account',
+                        'event_label': 'Failure',
+                        'value': 0
+                    });
+
                     swal("Error", response.message || "There was a problem with your registration. Please try again.", "error");
                 }
             },
             error: function() {
+                // Google Analytics event tracking for technical errors during registration
+                gtag('event', 'registration', {
+                    'event_category': 'Account',
+                    'event_label': 'Error',
+                    'value': 0
+                });
+
                 swal("Error", "Failed to process your request. Please try again.", "error");
             }
         });
