@@ -290,7 +290,6 @@ $schools = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 
-    
 let quillInstances = {}; // Initialize variables globally
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -328,7 +327,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     populateStudentsAndGoals();
 
-    // Metadata Option Selector - for picking templates or prior used goals in goal addition
     const metadataOptionSelector = document.getElementById('metadataOptionSelector');
     metadataOptionSelector.addEventListener('click', function(event) {
         if (event.target.classList.contains('selector-item')) {
@@ -342,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const schoolSelect = document.getElementById('school-select');
-    let previousSchoolId = schoolSelect.value; // Store the initial school ID when the page loads
+    let previousSchoolId = schoolSelect.value; // Store the initial school ID
 
     if (schoolSelect) {
         schoolSelect.addEventListener('change', function() {
@@ -357,11 +355,15 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    previousSchoolId = selectedSchoolId;  // Update the previousSchoolId if the change was successful
-                    location.reload(); // Reload the page to reflect the change
+                    if (!data.approved) {
+                        alert("You are not approved for the selected school.");
+                        schoolSelect.value = previousSchoolId; // Revert to the previous school
+                    } else {
+                        previousSchoolId = selectedSchoolId; // Update the previousSchoolId if the change was successful
+                    }
                 } else {
-                    alert(data.message); // Show the message from the server as a popup
-                    schoolSelect.value = previousSchoolId; // Revert back to the previously selected school if not approved
+                    console.error('Error updating school:', data.message);
+                    schoolSelect.value = previousSchoolId; // Ensure the select reverts on error
                 }
             })
             .catch(error => {
@@ -371,6 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
 
 document.querySelector('.add-student-btn').addEventListener('click', function() {
     const selectedGroup = document.querySelector('.selected-group');
