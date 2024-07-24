@@ -148,7 +148,7 @@ $(document).ready(function() {
                     });
 
                     // Redirect or handle login success
-                    window.location.href = 'dashboard.php';
+                    window.location.href = 'students.php';
                 } else {
                     // Google Analytics event for failed login
                     gtag('event', 'login', {
