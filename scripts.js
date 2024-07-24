@@ -233,7 +233,7 @@ function toggleApproval(teacherId, newStatus) {
         approved: newStatus
     };
 
-    console.log("Sending payload:", payload); // Debug: Log the payload to the console
+    console.log("Sending payload:", JSON.stringify(payload)); // Detailed log of the payload being sent
 
     fetch('./users/toggle_approval.php', {
         method: 'POST',
@@ -244,11 +244,12 @@ function toggleApproval(teacherId, newStatus) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not OK');
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
+        console.log('Response data:', data); // Log the response data from the server
         if (data.success) {
             console.log('Approval status updated successfully');
             loadUsers(); // Reload the users to reflect the change
