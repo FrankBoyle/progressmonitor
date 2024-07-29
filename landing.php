@@ -48,7 +48,7 @@
                 <!-- Masthead Avatar Image-->
                 <img class="masthead-avatar mb-5" src="IEPreport_logo.jpg" alt="IEP Report Logo" />
                 <!-- Masthead Heading-->
-                <h4 class="text-uppercase mb-0">Progress monitoring has never been this easy!</h4>
+                <h2 class="text-uppercase mb-0">Progress monitoring has never been this easy!</h2>
                 <!-- Icon Divider-->
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
