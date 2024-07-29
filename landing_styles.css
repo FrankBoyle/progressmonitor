@@ -11001,7 +11001,7 @@ html {
 @media (min-width: 992px) {
   .masthead {
     padding-top: calc(6rem + 50px);
-    padding-bottom: 6rem;
+    padding-bottom: 4rem;
   }
   .masthead .masthead-heading {
     font-size: 4rem;
