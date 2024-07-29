@@ -188,11 +188,11 @@
             </div>
         </section>
 
-        <!-- Footer-->
+        <!-- Footer-- >
         <footer class="footer text-center">
             <div class="container">
                 <div class="row">
-                    <!-- Footer Location-- >
+                    < !-- Footer Location-- >
                     <div class="col-lg-4 mb-5 mb-lg-0">
                         <h4 class="text-uppercase mb-4">Location</h4>
                         <p class="lead mb-0">
@@ -208,8 +208,8 @@
                         <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
                         <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
                         <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
-                    </div>-->
-                    <!-- Footer About Text-->
+                    </div>-- >
+                    < !-- Footer About Text-- >
                     <div class="col-lg-4">
                         <h4 class="text-uppercase mb-4"></h4>
                         <p class="lead mb-0">
@@ -218,7 +218,7 @@
                     </div>
                 </div>
             </div>
-        </footer>
+        </footer>-->
         <!-- Copyright Section-->
         <div class="copyright py-4 text-center text-white">
             <div class="container"><small>Copyright &copy; bFactor, LLC 2023</small></div>
