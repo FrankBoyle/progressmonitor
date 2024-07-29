@@ -110,15 +110,7 @@
                 </div>
 
                 <!-- Sample Reports Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Sample Reports</h2>
-                <!-- Icon Divider-->
-                <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon">
-                        <img src="graduation_cap-dark.png" alt="Graduation Cap Icon">
-                    </div>
-                    <div class="divider-custom-line"></div>
-                </div>
+                <h3 class="page-section-heading text-center text-uppercase text-secondary mb-0">Sample Reports</h2>
 
                 <!-- Portfolio Grid Items-->
                 <div class="row justify-content-center">
