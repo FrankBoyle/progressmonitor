@@ -267,7 +267,7 @@
                                         <!-- Portfolio Modal - Text-->
                                         <p class="mb-4">The user here has chosen a report where they included collected data, a bar graph, and the statistical summary for six columns of collected data.</p>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cake.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="sample_report2.png" alt="..." />
 
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
