@@ -134,7 +134,9 @@
                 <!-- Icon Divider-->
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-icon">
+                        <img src="graduation_cap.png" alt="Graduation Cap Icon">
+                    </div> 
                     <div class="divider-custom-line"></div>
                 </div>
                 <!-- About Section Content-->
