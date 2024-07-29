@@ -53,7 +53,7 @@
                 <p class="masthead-subheading font-weight-light mb-4">Effortlessly Create Beautiful Graphs Without Any Technical Know-How.</p>
                 <!-- Call to Action -->
                 <div class="call-to-action mt-4">
-                    <h3 class="text-uppercase">Try It Now</h3>
+                    <h3 class="text-uppercase"></h3>
                     <p class="lead">Start Graphing Effortlessly</p>
                     <a class="btn btn-secondary btn-lg" href="register.php">Create My Free Account</a>
                     <p>We will never share your information with anyone.</p>
