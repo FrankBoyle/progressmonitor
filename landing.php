@@ -30,7 +30,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#portfolio">Examples</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#portfolio">Benefits</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">About Us</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Contact</a></li>
                     </ul>
@@ -61,18 +61,52 @@
                 <p class="masthead-subheading font-weight-light mb-0">Progress monitoring for IEPs has never been this easy!</p>
             </div>
         </header>
+
         <!-- Portfolio Section-->
         <section class="page-section portfolio" id="portfolio">
             <div class="container">
                 <!-- Portfolio Section Heading-->
-                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Example Reports</h2>
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Benefits</h2>
                 <!-- Icon Divider-->
                 <div class="divider-custom">
                     <div class="divider-custom-line"></div>
                     <div class="divider-custom-icon">
                         <img src="graduation_cap-dark.png" alt="Graduation Cap Icon">
-                    </div>  
+                    </div>
                     <div class="divider-custom-line"></div>
+                </div>
+                <!-- Benefits Grid Items-->
+                <div class="row justify-content-center mb-5">
+                    <!-- Benefit Item 1-->
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-clock" style="font-size: 3em; color: #1A3E55;"></i>
+                            </div>
+                            <h4 class="text-uppercase text-secondary">Maximize Your Time Efficiency</h4>
+                            <p class="text-muted">Save Up to 30% of Your Time on Progress Monitoring—Focus More on Teaching and Less on Paperwork!</p>
+                        </div>
+                    </div>
+                    <!-- Benefit Item 2-->
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-bar" style="font-size: 3em; color: #1A3E55;"></i>
+                            </div>
+                            <h4 class="text-uppercase text-secondary">Effortless Data Visualization</h4>
+                            <p class="text-muted">Generate Beautiful, Accurate Graphs Instantly—No Technical Skills Required!</p>
+                        </div>
+                    </div>
+                    <!-- Benefit Item 3-->
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-bolt" style="font-size: 3em; color: #1A3E55;"></i>
+                            </div>
+                            <h4 class="text-uppercase text-secondary">Quick and Easy IEP Reporting</h4>
+                            <p class="text-muted">Streamline IEP Reporting in Just Seconds—Create Your Free Account and Start Effortlessly!</p>
+                        </div>
+                    </div>
                 </div>
                 <!-- Portfolio Grid Items-->
                 <div class="row justify-content-center">
@@ -135,6 +169,7 @@
                 </div>
             </div>
         </section>
+
         <!-- About Section-->
         <section class="page-section bg-primary text-white mb-0" id="about">
             <div class="container">
