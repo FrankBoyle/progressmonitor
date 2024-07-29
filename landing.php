@@ -108,6 +108,18 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Sample Reports Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Sample Reports</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon">
+                        <img src="graduation_cap-dark.png" alt="Graduation Cap Icon">
+                    </div>
+                    <div class="divider-custom-line"></div>
+                </div>
+
                 <!-- Portfolio Grid Items-->
                 <div class="row justify-content-center">
                     <!-- Portfolio Item 1-->
@@ -128,8 +140,8 @@
                             <img class="img-fluid" src="sample_report2.png" alt="Sample Report 2"/>
                         </div>
                     </div>
+                    <!-- Portfolio Item 3-->
                     <!--
-                    < !-- Portfolio Item 3-- >
                     <div class="col-md-6 col-lg-4 mb-5">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal3">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
@@ -138,7 +150,6 @@
                             <img class="img-fluid" src="assets/img/portfolio/circus.png" alt="..." />
                         </div>
                     </div>
-                    < !-- Portfolio Item 4-- >
                     <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal4">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
@@ -147,7 +158,6 @@
                             <img class="img-fluid" src="assets/img/portfolio/game.png" alt="..." />
                         </div>
                     </div>
-                    < !-- Portfolio Item 5-- >
                     <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal5">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
@@ -156,7 +166,6 @@
                             <img class="img-fluid" src="assets/img/portfolio/safe.png" alt="..." />
                         </div>
                     </div>
-                    < !-- Portfolio Item 6-- >
                     <div class="col-md-6 col-lg-4">
                         <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal6">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
