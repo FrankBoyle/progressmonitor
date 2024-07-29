@@ -19,8 +19,8 @@
                 <button class="btn">Sign Up</button>
                 <button class="btn">Login</button>
             </ul>
-            <i class="fas fa-bars" id="menu-btn_open"></i>
-            <i class="fas fa-times" id="menu-btn_close"></i>
+            <i class="fa fa-bars" id="menu-btn_open"></i>
+            <i class="fa fa-times" id="menu-btn_close"></i>
         </nav>
     </div>
 
