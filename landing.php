@@ -306,10 +306,11 @@
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
+                                        <!-- Portfolio Modal - Text-->
+                                        <p class="mb-4">The user here has chosen a report where they included collected data, a bar graph, and the statistical summary for six columns of collected data.</p>
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cake.png" alt="..." />
-                                    <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">The user here has chosen a report where they included collected data, a bar graph, and the statistical summary for six columns of collected data.</p>
+
                                     <button class="btn btn-primary" data-bs-dismiss="modal">
                                         <i class="fas fa-xmark fa-fw"></i>
                                         Close Window
