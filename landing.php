@@ -145,13 +145,13 @@
                     <div class="col-lg-4 me-auto"><p class="lead">
                     Our mission is to provide a tool that anyone can use to enter goals—whether in Math, ELA, Behavior, or any other area—and easily generate reports with beautiful, accurate graphs. No matter your level of tech proficiency, our tool simplifies the process while ensuring high-quality data representation. Check us out and see how our tool, while appearing simple, is powered by robust technology to meet your needs.</p></div>
                 </div>
-                <!-- About Section Button-->
+                <!-- About Section Button
                 <div class="text-center mt-4">
                     <a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/theme/freelancer/">
                         <i class="fas fa-download me-2"></i>
                         Free Download!
                     </a>
-                </div>
+                </div> -->
             </div>
         </section>
         <!-- Contact Section-->
