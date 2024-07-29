@@ -61,7 +61,7 @@
                 <div class="divider-custom">
                     <div class="divider-custom-line"></div>
                     <div class="divider-custom-icon">
-                        <img src="graduation_cap.png" alt="Graduation Cap Icon">
+                        <img src="graduation_cap-black.png" alt="Graduation Cap Icon">
                     </div>  
                     <div class="divider-custom-line"></div>
                 </div>
