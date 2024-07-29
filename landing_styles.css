@@ -91,6 +91,21 @@
   }
 }
 
+.call-to-action h3 {
+  margin-top: 20px;
+  font-size: 1.5em;
+}
+
+.call-to-action p {
+  margin-bottom: 20px;
+  font-size: 1.2em;
+}
+
+.call-to-action .btn {
+  font-size: 1.2em;
+}
+
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
