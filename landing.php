@@ -47,17 +47,16 @@
             <div class="container d-flex align-items-center flex-column">
                 <!-- Masthead Avatar Image-->
                 <img class="masthead-avatar mb-5" src="IEPreport_logo.jpg" alt="IEP Report Logo" />
-                <!-- Icon Divider-->
+                <!-- Masthead Heading-->
+                <h2 class="text-uppercase mb-0">Progress monitoring has never been this easy!</h2>
+                <!-- Icon Divider-- >
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>
                     <div class="divider-custom-icon">
                         <img src="graduation_cap.png" alt="Graduation Cap Icon">
                     </div>                    
                     <div class="divider-custom-line"></div>
-                </div>
-                <!-- Masthead Heading-->
-                <h2 class="text-uppercase mb-0">Progress monitoring has never been this easy!</h2>
-
+                </div>-->
                 <!-- Masthead Subheading-->
                 <p class="masthead-subheading font-weight-light mb-0">Effortlessly Create Beautiful Graphs Without Any Technical Know-How</p>
             </div>
