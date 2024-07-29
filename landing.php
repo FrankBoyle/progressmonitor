@@ -50,18 +50,15 @@
                 <!-- Masthead Heading-->
                 <h2 class="text-uppercase mb-0">Progress monitoring has never been this easy!</h2>
                 <!-- Masthead Subheading-->
-                <p class="masthead-subheading font-weight-light mb-0">Effortlessly Create Beautiful Graphs Without Any Technical Know-How.</p>
+                <p class="masthead-subheading font-weight-light mb-4">Effortlessly Create Beautiful Graphs Without Any Technical Know-How.</p>
+                <!-- Call to Action -->
+                <div class="call-to-action mt-4">
+                    <h3 class="text-uppercase">Try It Now</h3>
+                    <p class="lead">Create My Free Account in Seconds and Start Graphing Effortlessly</p>
+                    <a class="btn btn-success btn-lg" href="register.php">Create My Free Account</a>
+                </div>
             </div>
         </header>
-
-        <!-- Call to Action Section -->
-        <section class="page-section bg-primary text-white text-center">
-            <div class="container">
-                <h2 class="page-section-heading text-uppercase mb-4">Try It Now</h2>
-                <p class="lead mb-4">Create My Free Account in Seconds and Start Graphing Effortlessly</p>
-                <a class="btn btn-primary btn-lg" href="register.php">Create My Free Account</a>
-            </div>
-        </section>
 
         <!-- Portfolio Section-->
         <section class="page-section portfolio" id="portfolio">
