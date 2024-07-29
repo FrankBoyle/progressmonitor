@@ -54,7 +54,7 @@
                 <!-- Call to Action -->
                 <div class="call-to-action mt-4">
                     <h3 class="text-uppercase">Try It Now</h3>
-                    <p class="lead">Create My Free Account in Seconds and Start Graphing Effortlessly</p>
+                    <p class="lead">Start Graphing Effortlessly</p>
                     <a class="btn btn-secondary btn-lg" href="register.php">Create My Free Account</a>
                     <p>We will never share your information with anyone.</p>
                 </div>
