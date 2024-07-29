@@ -55,7 +55,7 @@
         </header>
 
         <!-- Call to Action Section -->
-        <section class="page-section bg-secondary text-white text-center">
+        <section class="page-section bg-primary text-white text-center">
             <div class="container">
                 <h2 class="page-section-heading text-uppercase mb-4">Try It Now</h2>
                 <p class="lead mb-4">Create My Free Account in Seconds and Start Graphing Effortlessly</p>
