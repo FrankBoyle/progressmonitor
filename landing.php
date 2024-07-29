@@ -19,19 +19,31 @@
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand" href="#page-top">IEP Report</a>
-                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#portfolio">Examples</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">About Us</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Contact</a></li>
-                    </ul>
-                </div>
+            <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+
+            <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
+                <ul class="luxbar-navigation">
+
+                    <li class="luxbar-header">
+                        <div class="logo">
+                            <img src="IEPreport_logo.jpg" alt="Logo">
+                        </div>
+                        <label class="luxbar-hamburger luxbar-hamburger-doublespin" id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                    </li>
+
+                    <li class="luxbar-item dropdown">
+                        <a href="#" class="nav-link" id="helpDropdown" aria-haspopup="true" aria-expanded="false"><span class="question-mark">?</span></a>
+                        <div class="dropdown-menu" aria-labelledby="helpDropdown">
+                            <a href="Register_How_To.jpg" class="dropdown-item" data-image="Register_How_To.jpg">You have to register an account.</a>
+                            <a href="Reset_Password_Walkthrough.jpg" class="dropdown-item" data-image="Reset_Password_Walkthrough.jpg">Reset your password.</a>
+                        </div>
+                    </li>
+
+                    <li class="luxbar-item"><a href="mailto:dan@iepreport.com">Support</a></li>
+                    <li class="luxbar-item"><a href="students.php">Home</a></li>
+                    <li class="luxbar-item"><a href="./users/logout.php">Logout</a></li>
+
+                </ul>
             </div>
         </nav>
         <!-- Masthead-->
