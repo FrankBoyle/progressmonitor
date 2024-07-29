@@ -172,13 +172,13 @@
                 <div class="text-center mt-4">
                     <p>Email us at:</p>
                     <p>
-                        <a href="mailto:fran@iepreport.com">fran@iepreport.com</a><br>
                         <a href="mailto:dan@iepreport.com">dan@iepreport.com</a>
+                        <a href="mailto:fran@iepreport.com">fran@iepreport.com</a><br>
                     </p>
                 </div>
             </div>
         </section>
-        
+
         <!-- Footer-->
         <footer class="footer text-center">
             <div class="container">
