@@ -201,16 +201,47 @@
                     <div class="divider-custom-line"></div>
                     <div class="divider-custom-icon">
                         <img src="graduation_cap-dark.png" alt="Graduation Cap Icon">
-                    </div>  
+                    </div>
                     <div class="divider-custom-line"></div>
                 </div>
-                <!-- Contact Information-->
-                <div class="text-center mt-4">
-                    <p>Email us at:</p>
-                    <p>
-                        <a href="mailto:dan@iepreport.com">dan@iepreport.com</a><br>
-                        <a href="mailto:fran@iepreport.com">fran@iepreport.com</a><br>
-                    </p>
+                <!-- Contact Information and Testimonials-->
+                <div class="row mt-4">
+                    <!-- Testimonial 1-->
+                    <div class="col-md-4">
+                        <div class="testimonial">
+                            <div class="stars mb-2 text-center">
+                                <i class="fas fa-star text-custom"></i>
+                                <i class="fas fa-star text-custom"></i>
+                                <i class="fas fa-star text-custom"></i>
+                                <i class="fas fa-star text-custom"></i>
+                                <i class="fas fa-star text-custom"></i>
+                            </div>
+                            <p>"IEP Report has completely transformed how I track student progress. The time I save on paperwork lets me focus more on teaching and supporting my students. It's a game-changer!"<br>
+                            — Joe D., Special Education Teacher</p>
+                        </div>
+                    </div>
+                    <!-- Contact Information-->
+                    <div class="col-md-4 text-center">
+                        <p>Email us at:</p>
+                        <p>
+                            <a href="mailto:dan@iepreport.com">dan@iepreport.com</a><br>
+                            <a href="mailto:fran@iepreport.com">fran@iepreport.com</a><br>
+                        </p>
+                    </div>
+                    <!-- Testimonial 2-->
+                    <div class="col-md-4">
+                        <div class="testimonial">
+                            <div class="stars mb-2 text-center">
+                                <i class="fas fa-star text-custom"></i>
+                                <i class="fas fa-star text-custom"></i>
+                                <i class="fas fa-star text-custom"></i>
+                                <i class="fas fa-star text-custom"></i>
+                                <i class="fas fa-star text-custom"></i>
+                            </div>
+                            <p>"IEP Report has completely transformed how I track student progress. The time I save on paperwork lets me focus more on teaching and supporting my students. It's a game-changer!"<br>
+                            — Joe D., Special Education Teacher</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
