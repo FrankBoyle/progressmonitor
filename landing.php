@@ -35,7 +35,6 @@
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Contact</a></li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="register.php">Sign-Up</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="login.php">Sign-In</a></li>
                     </ul>
                 </div>
@@ -54,7 +53,7 @@
                 <!-- Call to Action -->
                 <div class="call-to-action mt-4">
                     <h3 class="text-uppercase"></h3>
-                    <p class="lead">Start Graphing Effortlessly</p>
+                    <h4 class="lead">Start Graphing Effortlessly</h4>
                     <a class="btn btn-secondary btn-lg" href="register.php">Create My Free Account</a>
                     <p>We will never share your information with anyone.</p>
                 </div>
