@@ -22,6 +22,20 @@
             <i class="fa fa-bars" id="menu-btn_open"></i>
             <i class="fa fa-times" id="menu-btn_close"></i>
         </nav>
+
+
+        <header>
+            <h2>Hi,</h2>
+            <h2>I'm Norbert!</h2>
+            <h4>Welcome to my webpage</h4>
+            <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam
+            neque pariatur officia repellat necessitatibus, animi itaque
+            laboriosam iste, laborum tempora quibusdam voluptatem. Consequuntur
+            ipsam similique, id aperiam numquam aspernatur magni.
+            </p>
+            <button class="btn">Read more...</button>
+        </header>
     </div>
 
 
