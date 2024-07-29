@@ -238,8 +238,9 @@
                                 <i class="fas fa-star text-custom"></i>
                                 <i class="fas fa-star text-custom"></i>
                             </div>
-                            <p>"IEP Report has completely transformed how I track student progress. The time I save on paperwork lets me focus more on teaching and supporting my students. It's a game-changer!"<br>
-                            — Joe D., Special Education Teacher</p>
+                            <p>"I use it for all my own progress reporting for new IEPs, IEP revisions, and quarterly reporting." - Fran Boyle
+                            <br>
+                            — Fran B., Special Education Teacher</p>
                         </div>
                     </div>
                 </div>
