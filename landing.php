@@ -135,8 +135,9 @@
                 </div>
                 <!-- About Section Content-->
                 <div class="row">
-                    <div class="col-lg-4 ms-auto"><p class="lead">Freelancer is a free bootstrap theme created by Start Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well as optional SASS stylesheets for easy customization.</p></div>
-                    <div class="col-lg-4 me-auto"><p class="lead">You can create your own custom avatar for the masthead, change the icon in the dividers, and add your email address to the contact form to make it fully functional!</p></div>
+                    <div class="col-lg-4 ms-auto"><p class="lead">IEP report was created by teachers, for teachers. As two Special Ed Teachers with a combined 40 years of experience, we saw a need for a better way to progress monitor. We understand the struggle to find smarter, more efficient methods. We've tried various tools, adapted hand-me-down spreadsheets, and dealt with inconsistent data, all of which were unsustainable, even for tech-savvy educators like us. Recognizing that not all teachers are tech-savvy, we created IEP Report to offer a user-friendly solution for reporting accurate data.</p></div>
+                    <div class="col-lg-4 me-auto"><p class="lead">
+                    Our mission is to provide a tool that anyone can use to enter goals—whether in Math, ELA, Behavior, or any other area—and easily generate reports with beautiful, accurate graphs. No matter your level of tech proficiency, our tool simplifies the process while ensuring high-quality data representation. Check us out and see how our tool, while appearing simple, is powered by robust technology to meet your needs.</p></div>
                 </div>
                 <!-- About Section Button-->
                 <div class="text-center mt-4">
