@@ -124,10 +124,6 @@ li {
     margin-left: 2rem;
 }
 
-.fa-bars, .fa-times {
-    cursor: pointer;
-    display: none;
-}
 
 * Header */
 
