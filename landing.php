@@ -110,7 +110,7 @@
                 </div>
 
                 <!-- Sample Reports Section Heading-->
-                <h3 class="page-section-heading text-center text-uppercase text-secondary mb-0">Sample Reports</h2>
+                <h2 class="text-center text-uppercase text-secondary mb-0">Sample Reports</h2>
 
                 <!-- Portfolio Grid Items-->
                 <div class="row justify-content-center">
