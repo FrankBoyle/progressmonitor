@@ -105,6 +105,24 @@
   font-size: 1.2em;
 }
 
+.testimonial {
+  background-color: #f8f9fa; /* Light gray background */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.testimonial p {
+  font-size: 1em;
+  color: #555; /* Darker text color */
+}
+
+.stars .fa-star.text-custom {
+  color: #1A3E55; /* Custom icon color */
+  font-size: 1.2em;
+}
+
 
 body {
   margin: 0;
