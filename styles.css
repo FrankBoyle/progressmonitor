@@ -233,6 +233,12 @@ body {
 
 }
 
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }  
+
 .content {
     display: flex;
     flex-direction: column;
