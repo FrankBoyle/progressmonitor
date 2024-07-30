@@ -29,7 +29,7 @@ if (isset($_GET['token'])) {
         <body>
             <div class="dashboard">
                 <header class="dashboard-header luxbar-fixed" id="luxbar">
-                    <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+                    <!--<input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>-->
 
                     <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-indigo">
                         <ul class="luxbar-navigation">
