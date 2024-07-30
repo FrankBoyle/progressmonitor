@@ -10,6 +10,8 @@ session_start();
 
 include('db.php');
 
+header('Content-Type: application/json'); // Set this at the top of your PHP script
+
 if (isset($_POST['login'])) {
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
