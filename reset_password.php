@@ -24,6 +24,7 @@ if (isset($_GET['token'])) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Reset Password</title>
             <link rel="icon" type="image/x-icon" href="IEPreport_logo.jpg" />
+            <link rel="stylesheet" href="https://cdn.rawgit.com/balzss/luxbar/ae5835e2/build/luxbar.min.css">
             <link rel="stylesheet" href="styles.css">
         </head>
         <body>
