@@ -179,14 +179,24 @@
                     <div class="divider-custom-line"></div>
                     <div class="divider-custom-icon">
                         <img src="graduation_cap.png" alt="Graduation Cap Icon">
-                    </div> 
+                    </div>
                     <div class="divider-custom-line"></div>
                 </div>
                 <!-- About Section Content-->
                 <div class="row">
-                    <div class="col-lg-4 ms-auto"><p class="lead">IEP report was created by teachers, for teachers. As two Special Ed Teachers with a combined 40 years of experience, we saw a need for a better way to progress monitor. We understand the struggle to find smarter, more efficient methods. We've tried various tools, adapted hand-me-down spreadsheets, and dealt with inconsistent data, all of which were unsustainable, even for tech-savvy educators like us. Recognizing that not all teachers are tech-savvy, we created IEP Report to offer a user-friendly solution for reporting accurate data.</p></div>
-                    <div class="col-lg-4 me-auto"><p class="lead">
-                    Our mission is to provide a tool that anyone can use to enter goals—whether in Math, ELA, Behavior, or any other area—and easily generate reports with beautiful, accurate graphs. No matter your level of tech proficiency, our tool simplifies the process while ensuring high-quality data representation. Check us out and see how our tool, while appearing simple, is powered by robust technology to meet your needs.</p></div>
+                    <!-- Founders Image Column -->
+                    <div class="col-lg-4">
+                        <img src="Dan_Fran1.jpg" alt="Founders Image" class="img-fluid">
+                    </div>
+                    <!-- About Text Column 1 -->
+                    <div class="col-lg-4">
+                        <p class="lead">IEP report was created by teachers, for teachers. As two Special Ed Teachers with a combined 40 years of experience, we saw a need for a better way to progress monitor. We understand the struggle to find smarter, more efficient methods. We've tried various tools, adapted hand-me-down spreadsheets, and dealt with inconsistent data, all of which were unsustainable, even for tech-savvy educators like us. Recognizing that not all teachers are tech-savvy, we created IEP Report to offer a user-friendly solution for reporting accurate data.</p>
+                    </div>
+                    <!-- About Text Column 2 -->
+                    <div class="col-lg-4">
+                        <p class="lead">
+                        Our mission is to provide a tool that anyone can use to enter goals—whether in Math, ELA, Behavior, or any other area—and easily generate reports with beautiful, accurate graphs. No matter your level of tech proficiency, our tool simplifies the process while ensuring high-quality data representation. Check us out and see how our tool, while appearing simple, is powered by robust technology to meet your needs.</p>
+                    </div>
                 </div>
             </div>
         </section>
