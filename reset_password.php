@@ -1,6 +1,11 @@
 <?php
 include('./users/db.php');
 
+// Error Reporting
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reset_password'])) {
@@ -8,10 +13,9 @@ if (isset($_GET['token'])) {
         // Assume a function resetPassword exists to handle password reset in db.php
         $resetSuccess = resetPassword($token, $newPassword);
         if ($resetSuccess) {
-            echo "<script>
-                    alert('Password reset successfully. Redirecting to login page...');
-                    window.location.href = 'login.php';
-                  </script>";
+            // Use header for redirection
+            header('Location: login.php?reset=1');
+            exit;
         } else {
             echo "<p>Failed to reset password. Please try again.</p>";
         }
